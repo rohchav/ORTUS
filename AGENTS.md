@@ -1,0 +1,113 @@
+# Codex Working Instructions
+
+- Keep the simulation engine independent from React, Zustand, DOM APIs, Canvas APIs, and rendering.
+- Never use `Math.random` in simulation code.
+- Use deterministic seeded RNG streams through the engine.
+- Use Zod validation for imports, snapshots, scenarios, parameters, commands, events, spaces, and template definitions.
+- Add focused tests for every behavior-changing engine update.
+- Avoid fake features. Adapter contracts may describe future Mesa, NetLogo, or MASON work, but must not pretend those runtimes are implemented.
+- Do not add backend, auth, database, dashboard, or rendering behavior in V1.
+- Keep templates as plugins registered through the template API.
+- Keep renderer concerns separate from engine state and snapshots.
+- UI consumes engine snapshots; simulation rules stay in `src/simulation`.
+- Do not render agents as React components; use canvas or another batched renderer.
+- Do not add fake Mesa, NetLogo, or MASON UI controls.
+- World backgrounds are visual context only, not simulation data unless explicitly wired through the engine.
+- Avoid a generic cold blue/cyan dashboard palette for ORTUS.
+- Use `CornerFramePanel` for major UI panels.
+- Experiment runs must create fresh engine instances through the template registry and should store metrics/outcomes, not full per-run snapshots, unless explicitly requested.
+- Keep experiment execution chunked/cancellable in the UI so local sweeps do not create unbounded browser loops.
+- Interventions must be template-defined, validated, and applied through the headless intervention executor or engine command buffer. UI and canvas code may report targets, but must not mutate agents, components, spaces, or engine internals.
+- Snapshot export may preserve applied intervention history. Scenario export must not claim mid-run intervention replay unless replay is implemented.
+- Scenario Builder scenarios are initial-condition and supported model-variant recipes, not snapshots or run summaries. Preview and apply must create fresh engine instances, scenarios must not store full world state by default, and behavior modes must be template-defined rather than arbitrary UI-authored rules.
+- Assumption profiles are structured modeling-transparency metadata, not simulation state. They must not affect engine dynamics, claim predictive validation, or duplicate full live run state inside scenarios/runs/results.
+- Network primitives are headless service-level relation artifacts unless a template explicitly declares and uses network topology. Do not mark templates as network-supported or add network claims without real runtime behavior.
+- Resource, stock, and flow primitives are headless service-level quantity artifacts unless a template explicitly declares and uses resource state or stock-flow logic. Do not mark templates as resource-supported or add resource claims without real runtime behavior.
+- Feedback, delay, and event primitives are headless service-level timing and loop artifacts unless a template explicitly declares and uses them. Do not mark templates as feedback/event/delay-supported or add causal claims without real runtime behavior.
+- Do not claim a template supports a primitive unless its runtime actually uses it.
+- Do not treat camera zoom as multi-scale modeling. Multi-scale support requires explicit scale levels, aggregation/disaggregation, cross-scale coupling, and synthetic-detail warnings.
+- Do not treat network edges as causal edges.
+- Do not treat feedback labels as causal proof.
+- Do not treat feedback loop metadata as causal proof.
+- Do not treat uncertainty ensembles as calibrated probabilities.
+- Do not add visual builder features before schema/interpreter/execution-safety foundations.
+- Do not add arbitrary code execution, user-authored formulas, or expression evaluation.
+- Do not collapse observability into internal state. Observability must distinguish simulated state and runtime metrics from measured, partial, noisy, proxy, synthetic, or empirical observation definitions.
+- Do not skip audit prompts after feature prompts.
+- Prefer small audited phases over broad rewrites, especially for reserved roadmap pillars.
+- Keep service primitives headless unless a prompt explicitly asks for UI.
+- Check `src/simulation/registry` before claiming primitive or template support.
+- Update registry entries when adding a real primitive, artifact family, or support-status change.
+- Do not mark `runtimeActive` true unless the template runtime actually uses that primitive.
+- Distinguish global service availability from template runtime support.
+- Do not add import/export support for reserved artifact families.
+- Keep registry descriptions concise and maintain audit tests when registry status changes.
+- Do not treat HybridModelComposition as a compiler.
+- Do not claim `runnableNow` unless capability checks prove runtime support.
+- Do not treat attached composition artifacts as active runtime behavior.
+- Do not use composition to bypass template capability limitations.
+- Keep composition validation strict and conservative.
+- Do not mark a template multi-scale capable unless its runtime uses explicit scale levels and cross-scale rules.
+- Do not treat aggregate metrics as multi-scale support.
+- Do not treat synthetic disaggregation as observed detail.
+- Do not implement scale-aware UI before Prompt 22.
+- Do not implement runtime aggregation/disaggregation before a specific runtime prompt.
+- Do not treat scale view state as runtime scale execution.
+- Do not treat camera zoom as model-scale zoom.
+- Do not mark templates scale-aware unless runtime/view integration truly exists.
+- Do not let scale view attachments bypass template capability checks.
+- Preserve warning semantics for information loss and synthetic detail.
+- Keep scale view state separate from scale model definitions.
+- Do not treat world bounds, grid edges, or canvas limits as full boundary models.
+- Do not mark templates boundary/environment capable unless runtime uses `BoundaryEnvironmentModel`.
+- Do not execute boundary exchanges, external forcings, or exogenous shocks without a specific runtime prompt.
+- Do not treat active boundary/environment declarations as executed behavior.
+- Do not treat boundary models as causal proof.
+- Do not treat world coordinates, grids, or positions as full spatial field support.
+- Do not mark templates spatial-field capable unless runtime uses `SpatialFieldModel`.
+- Do not execute field sampling, interpolation, diffusion, or advection without a specific runtime prompt.
+- Do not treat probability-like fields as calibrated probabilities.
+- Do not treat synthetic spatial fields as observed data.
+- Do not treat runtime metrics as empirical observations.
+- Do not mark templates observability-capable unless runtime uses `ObservabilityModel`.
+- Do not execute measurement schedules or measurement processes without a specific runtime prompt.
+- Do not treat synthetic observations as observed evidence.
+- Do not treat empirical `sourceType` as trustworthy without provenance and later calibration/validation work.
+- Do not treat runtime metrics or observations as causal evidence by themselves.
+- Do not mark templates causal-assumption-capable unless runtime uses `CausalAssumptionModel`.
+- Do not execute causal edges or intervention links without a specific runtime prompt.
+- Do not claim causal discovery, do-calculus, inference, structural equation solving, causal proof, or intervention optimization.
+- Do not treat parameter labels/ranges as full unit semantics.
+- Do not treat metric labels as measurement units unless `QuantitySemanticsModel` defines them.
+- Do not mark templates quantity-semantics-capable unless runtime uses `QuantitySemanticsModel`.
+- Do not execute conversions or dimensional equation solving without a specific runtime prompt.
+- Do not treat probabilities as calibrated probabilities.
+- Do not treat per-tick rates as physical-time rates without explicit mapping.
+- Do not treat visible patterns as emergence proof.
+- Do not treat runtime metrics as empirical pattern evidence.
+- Do not mark templates emergence-detection-capable unless runtime uses `EmergencePatternModel`.
+- Do not execute pattern detection without a specific runtime prompt.
+- Do not claim statistical significance, ML detection, validation, proof, consciousness, or intelligence.
+- Do not treat multi-scale structure as proof of emergence.
+- Do not treat causal assumptions as proof of emergence.
+- Do not treat quantity consistency as proof of emergence.
+- Do not treat visible persistence, collapse, or recovery as resilience proof.
+- Do not treat runtime metrics as empirical robustness evidence.
+- Do not treat uncertainty ensembles as robustness validation.
+- Do not mark templates robustness/resilience-capable unless runtime uses `RobustnessResilienceModel`.
+- Do not execute stressors or stress-test plans without a specific runtime prompt.
+- Do not claim statistical validation, certification, operational safety, operational readiness, or robustness proof.
+- Do not treat interventions as general robustness testing unless explicitly modeled/evaluated.
+- Do not treat template-owned interventions as general strategy/control support.
+- Do not execute `ControlStrategyModel` policies, triggers, objectives, stopping rules, or interventions without a specific runtime prompt.
+- Do not claim strategy effectiveness, optimality, safety, certification, operational readiness, or policy recommendation.
+- Do not claim causal intervention effects or treatment effects from causal assumption models.
+- Do not treat runtime metrics as empirical strategy evidence.
+- Do not treat uncertainty ensembles or robustness descriptors as policy validation.
+- Do not mark templates controlStrategy/interventionStrategy-capable unless runtime uses `ControlStrategyModel`.
+- Keep validation/calibration reserved for later prompts.
+- Do not describe the Forest Fire / Landscape Spread template as wildfire prediction, GIS/weather/wind/humidity/terrain/suppression/firefighting modeling, calibrated fire behavior, generic control strategy support, SpatialFieldModel runtime support, or BoundaryEnvironmentModel runtime support.
+- Preserve valid-vs-runnable distinction for structural primitives.
+- Run comparison stores bounded run summaries for local comparison. Do not store full snapshots by default, and do not treat comparison workspace state as authoritative simulation state.
+- Update `src/simulation/README.md` when architecture changes.
+- Do not claim scientific prediction accuracy for templates or outputs.

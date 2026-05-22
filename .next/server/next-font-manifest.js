@@ -1,0 +1,1 @@
+self.__NEXT_FONT_MANIFEST='{"pages":{},"app":{"/home/chavanro/abm/src/app/layout":[]},"appUsingSizeAdjust":true,"pagesUsingSizeAdjust":false}';

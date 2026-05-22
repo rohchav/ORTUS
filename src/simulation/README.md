@@ -1,0 +1,395 @@
+# Simulation Engine
+
+This directory contains a headless TypeScript simulation engine for visual complex systems modeling. It is independent from React, browser rendering, DOM APIs, canvas APIs, storage backends, and authentication.
+
+## Philosophy
+
+The engine owns time, scheduling, mutation, seeded randomness, validation, metrics, snapshots, and serialization. Templates own domain behavior and metadata. Rendering layers should consume snapshots later without becoming part of the simulation loop.
+
+## Architecture
+
+Entities are stable identities. Components are plain serializable data. Systems contain behavior and run through scheduler phases. Spaces provide continuous, grid, or network relationships. Templates register systems, parameters, metrics, documentation, and visual mapping metadata without modifying engine internals.
+
+The cross-cutting vocabulary for templates, scenarios, runs, snapshots, run summaries, experiments, interventions, behavior modes, agent composition, and uncertainty configuration is documented in `../../docs/concepts.md`.
+
+## Scheduler
+
+The fixed phase order is `beforeStep`, `sense`, `decide`, `act`, `resolve`, `afterStep`, and `metrics`. Systems are sorted by phase, priority, then stable system id. The engine supports staged updates by collecting commands during a phase and applying them at controlled boundaries.
+
+## Time
+
+`SimulationClock` advances one fixed timestep per `step()`. `runSteps(n)` advances exactly `n` ticks. The engine does not know about animation frames or rendering cadence.
+
+## Seeded Randomness
+
+All stochastic behavior uses `RandomService` streams derived from a root seed. Stream state is included in snapshots so restored runs can continue deterministically.
+
+Randomness in ORTUS should be explicit, seeded, and reproducible. Hidden randomness makes experiments, comparisons, calibration, and uncertainty analysis unreliable. Template initialization, systems, interventions, and experiment planning must not use `Math.random`; UI-only timestamps or ids are not simulation randomness.
+
+## Command Buffer
+
+Systems receive read-only world access and emit commands. `CommandBuffer` validates commands, applies them in deterministic order, and records debug metadata. Commands cover entity lifecycle, components, spaces, events, and globals.
+
+## Event Queue
+
+`EventQueue` schedules typed events by tick. Due events are popped at the start of each engine step and exposed to systems through context. Same-tick events are ordered by scheduled tick, priority, created tick, and id.
+
+## Spaces
+
+`Continuous2DSpace`, `Grid2DSpace`, and `NetworkSpace` implement real placement and neighbor behavior. They serialize into snapshot state and can be cloned for deterministic restore.
+
+## Metrics
+
+Templates register metric definitions. `MetricsCollector` records finite numeric metrics at a configurable interval and keeps bounded history, defaulting to 1000 records.
+
+Metric definitions are formal model metadata: id/key, label, description, value type, optional range/unit/display metadata, history support, run-comparability, source, and formatting hints. Metric emissions remain numeric in V1 and are rejected if they produce `NaN` or infinity.
+
+## Snapshots And Import/Export
+
+Scenario export stores template id, parameters, seed, and metadata for restarting from initial conditions. Snapshot export stores current time, world state, events, RNG stream states, metrics history, applied intervention history, and metadata for deterministic continuation. JSON import validates nested state and rejects invalid data.
+
+## Scenarios
+
+`src/simulation/scenarios` contains headless Scenario Builder utilities. An authored scenario is an initial-condition and supported model-variant recipe with scenario id, name, description, tags, template id/version, seed, validated parameters, initialization preset/options, agent composition, behavior mode, environment options, metadata, and creation/update timestamps. It is not a snapshot and does not store live world state, current tick state, metric history, intervention history, or run outcome data.
+
+Templates may expose `initializationPresets`, `behaviorModes`, `agentCompositionDefinitions`, `environmentOptionDefinitions`, and validation hooks for initialization or scenario options. The engine accepts optional initialization and scenario-variant context and passes it to `createInitialWorld`; this is a general extension point for template-owned setup and future model-family variants, not a UI or engine hard-code. Behavior modes are template-defined rule variants. They are not arbitrary user-authored rules. Full custom rule authoring will require the future Model Definition Schema, Rule Primitive Library, Model Compiler, and Visual Model Builder. Applying a scenario creates a fresh engine at tick 0. Preview generation also creates a separate temporary engine at tick 0, so it does not mutate the active run or advance simulation time.
+
+Scenario Builder is not a full model/rule editor. Custom model authoring will require the future Model Definition Schema, Rule Primitive Library, Model Compiler, and Visual Model Builder.
+
+Forest Fire / Landscape Spread is a template-owned abstract local-spread grid model. It demonstrates fuel density, local neighbor ignition, burnout, optional stylized regrowth, and landscape-level metrics, but it is not a wildfire predictor and does not use GIS, real terrain, wind, humidity, weather, suppression, firefighting, or calibrated fire probabilities. Its grid coordinates are implementation geometry, not SpatialFieldModel runtime support, and its boundary mode is not BoundaryEnvironmentModel runtime support.
+
+Agent composition defines the initial mix of agents, groups, or types for a run. It should not be confused with live engine state or snapshots. Current composition fields are template-owned parameter definitions. Flocking adds a `groupAware` behavior mode with deterministic boid group assignment and group-weighted alignment/cohesion. Ring Formation is an initialization preset only unless an orbit behavior mode is selected. Initial circular placement does not guarantee persistent circular motion.
+
+V1 behavior/composition support remains deliberately narrow: most templates are default-mode only, composition is template-owned setup metadata, and custom rule authoring still requires future model-definition and compiler work. `groupAware` Flocking is a real runtime variant, but it keeps the existing bounded all-pairs neighbor pass; future larger flocks may need a spatial index before expanding this family further.
+
+`SimulationRunConfig` is the generic fresh-run recipe shared by scenario authoring and experiment/uncertainty paths. It contains template id, seed, parameters, optional scenario id/name, initialization preset/options, agent composition, behavior mode, environment options, optional uncertainty config metadata for ensemble setup, and metadata. It is explicitly distinct from snapshots and run summaries.
+
+Scenario JSON uses the `ortus.scenario` artifact type and is distinct from snapshot JSON and run-summary export. Scenario validation rejects unknown top-level fields, enforces a serialized-size bound, and rejects metadata that embeds snapshot-like live run state such as world, component, space, RNG, event, metric-history, or intervention-history blobs. Scenario storage lives outside the engine in `src/lib/localScenarioStorage.ts`; it validates loaded records, salvages valid records from partially malformed libraries, and enforces a V1 limit of 50 saved scenarios.
+
+Scenarios define initial conditions and supported model variants. They do not guarantee outcomes; complex systems can behave differently across seeds, parameters, behavior modes, agent compositions, and future uncertainty settings.
+
+## Experiments
+
+`src/simulation/experiments` contains a headless experiment runner that consumes the same production template registry and creates a fresh `SimulationEngine` for each trial. It supports single-parameter sweeps and two-parameter grid sweeps, generated numeric/integer ranges, manual values for select/boolean/numeric parameters, fixed seed lists in supplied order, sequential seed generation, validation against template parameter rules, cancellation between runs, finite final-metric capture, aggregation, and progress callbacks.
+
+Experiment result sets store run metadata and final numeric metrics. They do not store snapshots or full metric histories per run by default. This keeps local browser exploration bounded while preserving deterministic behavior for a repeated experiment config.
+
+Experiment results are exploratory and depend on model assumptions, parameter choices, and random seeds. They are not calibrated predictions.
+
+## Uncertainty
+
+`src/simulation/uncertainty` contains the headless Uncertainty Layer V1. An uncertainty config is a plain JSON sampling recipe with artifact type `ortus.uncertaintyConfig`; it names uncertain variables, target paths, distributions, a deterministic sampler seed, sample count, selected output metrics, and assumption metadata. It is not a scenario, snapshot, run summary, or live engine state.
+
+Supported V1 distributions are `fixed`, `uniform`, `integerRange`, `categorical`, and `seedEnsemble`. V1 prioritizes parameter and seed uncertainty. Agent composition, environment options, initialization options, and behavior mode targets are accepted only when they reference template-defined fields and generated values pass the same RunConfig/template validation as ordinary runs.
+
+`generateUncertaintyRunConfigs` turns a base `SimulationRunConfig` plus uncertainty config into concrete deterministic RunConfigs. Generated runs do not retain unresolved distributions by default; provenance lives in metadata. `runUncertaintyEnsemble` executes those generated RunConfigs through fresh engines and records final metric summaries without storing snapshots or full metric history.
+
+`baseSeed` is the sampler seed, while a seed uncertainty variable changes generated run seeds. For `seedEnsemble`, `sampleCount` is the total number of generated samples; explicit seeds are consumed in declared order and cycle if there are fewer seeds than samples. Duplicate seeds are retained intentionally for explicit repeated-run provenance.
+
+If a sampled parameter overlaps a template-defined agent-composition, environment-option, or initialization-option field, V1 synchronizes that overlapping field and records the sync under generated run metadata. This avoids sampled parameters being overwritten by existing variant defaults, but it is a compatibility bridge rather than a general nested-object mutation system.
+
+Uncertainty ranges in ORTUS are assumptions unless calibrated against data. Ensemble results show behavior across the specified assumptions; they do not prove real-world probabilities.
+
+Uncertainty Layer V1 does not implement Bayesian calibration, MCMC, data assimilation, full sensitivity analysis, or scenario discovery. Those require later validation, observation, and calibration phases.
+
+Uncertainty Layer V1 is service-first. It supports deterministic ensemble generation and summary statistics, but it is not yet a full uncertainty workbench, calibration system, or sensitivity-analysis dashboard. There is no dedicated UI panel yet, no time-series envelopes, no grid or Latin-hypercube sampling, and p05/p95 summaries are sample percentiles rather than confidence intervals or real-world probability bands.
+
+## Assumptions, Limits + Ethics
+
+`src/simulation/assumptions` contains structured assumption profile types, validation, serialization, template-profile helpers, and summary helpers. An assumption profile uses artifact type `ortus.assumptionProfile` and records assumptions, limitations, not represented fields, appropriate use, inappropriate use, ethics notes, validation status, and validation notes.
+
+Every ORTUS model is an abstraction. The Assumptions, Limits + Ethics panel shows what the model includes, what it excludes, and what uses would be misleading without validation.
+
+Validation status describes evidence about the model, not truth about the real world. A model marked internally tested has passed software and invariant checks; it has not necessarily been calibrated or externally validated.
+
+Scenario-specific assumption, limitation, validation, and ethics notes are optional plain JSON fields on authored scenarios. They are exported/imported with scenario JSON when present, but they do not overwrite template profiles. Assumption summaries combine template profiles with scenario notes; the compact UI panel currently shows the selected template profile only. Applying a scenario records lightweight assumption provenance in run metadata through template id/version, profile id, validation status, and note counts instead of copying full profile documents into every run.
+
+Uncertainty variable notes and uncertainty metadata assumptions can be surfaced in service-level assumption summaries. Uncertainty ranges are user-specified assumptions unless calibrated against data, and uncertainty result percentiles are summaries across specified samples, not real-world probability bands.
+
+Assumption profiles are modeling-transparency artifacts. They are not simulation state, do not affect engine dynamics, do not certify predictions, and are distinct from scenario, snapshot, uncertainty, and run-summary exports. Assumption profile import/export is service-level in V1 through `ortus.assumptionProfile` helpers; there is no dedicated export UI yet.
+
+## Networks + Relations
+
+`src/simulation/networks` contains service-level network primitives. A network definition uses artifact type `ortus.networkDefinition` and stores plain JSON nodes, edges, optional relation types, weights, direction flags, and bounded metadata. Network metrics use artifact type `ortus.networkMetrics`.
+
+Network primitives represent relational structure inside a model. A network can describe who is connected to whom, but it does not by itself prove causal influence or real-world social structure.
+
+Prompt 15 adds service-level network primitives. Full visual network editing, network-based behavior modes, and hybrid models require later model schema, rule primitive, and visual builder phases.
+
+Supported V1 generators are `empty`, `complete`, `randomErdosRenyi`, and `ring`. Random generation is deterministic through `RandomService`; complete and ring generation are deterministic from options alone. Network validation rejects duplicate nodes, duplicate edge or relation type ids, missing endpoints, unsupported relation types, invalid weights, self-loops unless explicitly allowed, live-state-shaped payloads, non-plain objects, and oversized definitions.
+
+Network definitions are bounded to 500 nodes, 20,000 edges, 200 relation types, and bounded metadata/JSON payloads. `directed` on the network is the default for edges; relation-type defaults and edge-level `directed` values can make individual relations directed. Multiple edges between the same node pair are rejected unless they use different relation types. Query helpers are service-level only: `getNeighbors` returns incident neighbors, while incoming/outgoing helpers expose direction-sensitive traversal.
+
+V1 network metrics include node count, edge count, density, average degree, min/max degree, connected component count, and largest component size. Directed graphs use weak connected components for component metrics. These metrics are bounded structural summaries, not causal proof or real-world social-network evidence. Full graph layout, visual network editing, centrality dashboards, all-pairs path analysis, network uncertainty, and network-backed template behavior are future work.
+
+Current production templates remain spatial/grid templates. Their `supportsNetworkSpace`, `supportsNetworkOptions`, and `supportsNetworkMetrics` flags are false until a template actually uses network topology. Epidemic and Opinion may later use contact or influence networks, and Predator-Prey may later use food-web relations, but Prompt 15 does not change runtime dynamics.
+
+RunConfig and scenario schemas intentionally reject unsupported network fields in V1. Future network-capable templates should introduce `networkOptions` or inline network-definition references only behind explicit capability flags and should validate them with `src/simulation/networks`.
+
+## Resources, Stocks + Flows
+
+`src/simulation/resources` contains service-level resource, stock, and flow primitives. A resource system uses artifact type `ortus.resourceSystem` and stores plain JSON resource definitions, stock definitions, flow definitions, current stock states, optional bounded ledger entries, and bounded metadata. Current bounds are 200 resources, 1,000 stocks, 1,000 flows, 1,000 ledger entries, and bounded JSON/metadata payloads. Resource metrics use artifact type `ortus.resourceMetrics`.
+
+Resource, stock, and flow primitives represent quantities and movement of quantities inside a model. They do not by themselves prove real-world economic, ecological, or health outcomes.
+
+Prompt 16 adds service-level resource/stock/flow primitives. Full visual stock-flow editing, feedback loops, delayed flows, and hybrid resource-network models require later model schema, rule primitive, feedback, and visual builder phases.
+
+Stock ownership is descriptive metadata in V1. `ownerType` and `ownerId` identify whether a stock is associated with a system, agent, group, region, or environment, but resource services do not bind stocks to live engine entities unless a future template explicitly does so. Stock bounds use the most restrictive applicable upper bound across resource max, stock max, and stock capacity. Minimums default to zero unless the resource or stock explicitly allows negative values.
+
+Supported V1 operations are `produce`, `consume`, `transfer`, `regenerate`, `decay`, and `deplete`. Flow rates are numeric constants only. `produce` and `regenerate` require a target stock and add up to capacity/max. `consume`, `decay`, and `deplete` require a source stock and remove down to min/zero unless negatives are allowed. `transfer` requires source and target stocks with the same resource id and is constrained by source availability and target capacity. In V1, `decay` and `deplete` intentionally share the same constant-rate removal mechanics; they are separate flow types for future template-specific semantics.
+
+Operations are deterministic, clamp against stock minimums, maximums, and capacity, return flow results and warnings, and do not mutate their input state. There are no arbitrary equations, delayed flows, feedback-loop editors, or user-authored formulas in V1.
+
+V1 stock-flow metrics include resource count, stock count, flow count, total stock by resource, min/max stock value, depleted stock count, over-capacity stock count, total requested/applied flow by resource, net flow by resource, insufficient-stock flow count, and clamped-flow count. Metrics are finite structural summaries, not predictive evidence.
+
+Current production templates do not use these primitives at runtime. Their `supportsResources`, `supportsStocks`, `supportsFlows`, and `supportsResourceMetrics` flags are false until a template actually uses resource state or stock-flow logic. RunConfig and scenario schemas intentionally reject unsupported resource fields in V1. Future resource-capable templates should introduce resource options or resource-system references only behind explicit capability flags and validate them with `src/simulation/resources`.
+
+Resource uncertainty and resource-network hybrids are future work. Later phases may support stock/flow rate uncertainty, flows across network edges, supply chains, transportation networks, resource diffusion, and capacity-constrained networks, but Prompt 16 does not wire those concepts into runtime dynamics.
+
+## Feedback Loops, Delays + Events
+
+`src/simulation/feedback` contains service-level feedback, delay, and event primitives. Event schedules use artifact type `ortus.eventSchedule`, delay queues use `ortus.delayQueue`, feedback loop lists use `ortus.feedbackLoops`, and feedback/event metrics use `ortus.feedbackEventMetrics`. These artifacts store plain JSON scheduled events, delay queue items, feedback loop metadata, optional bounded ledgers, and bounded metadata. Current bounds are 1,000 scheduled events, 1,000 delay queue items, 500 feedback loops, 1,000 ledger entries, and bounded JSON/payload sizes.
+
+Feedback, delay, and event primitives represent model structure. They do not by themselves prove causal relationships, real-world feedback loops, or predictive validity.
+
+Prompt 17 adds service-level feedback/delay/event primitives. Full visual feedback-loop editing, delayed resource/network dynamics, and causal validation require later model schema, rule primitive, validation, and visual builder phases.
+
+Scheduled events are sorted deterministically by tick, priority, and id. Release helpers return due events with `tick <= requestedTick` and remove them from the returned queue; exact-tick lookup is available through query helpers. Events do not execute arbitrary payloads and do not mutate engine state in V1; callers receive application results for template-owned interpretation. Delay helpers schedule bounded payloads for `releaseTick = scheduledAtTick + delayTicks`, release or peek due items with `releaseTick <= requestedTick`, and never mutate input queues. Exact delay release-tick lookup is available through query helpers.
+
+Feedback loops are declared as `reinforcing`, `balancing`, or `unknown`. That classification is metadata, not causal discovery. V1 feedback helpers accept caller-provided finite numeric signals, compute `requestedAdjustment = signalValue * gain`, apply optional clamp bounds, and return adjustment results. A loop `delayTicks` value is bounded metadata for future scheduling; templates must explicitly use the delay helpers if they want delayed feedback. There are no arbitrary equations, expression parsers, feedback-loop editors, event timeline editors, causal discovery tools, or control optimization in V1.
+
+V1 metrics include scheduled/released event counts, delay queue size, released delay item count, feedback loop counts by type, enabled loop count, average/max delay ticks, ledger counts, event/delay type counts, feedback adjustments by target, and clamped feedback count. Metrics are finite structural and operational summaries, not causal proof.
+
+Current production templates do not use these primitives at runtime. Their `supportsEvents`, `supportsDelays`, `supportsFeedbackLoops`, and `supportsFeedbackMetrics` flags are false until a template actually uses event, delay, or feedback services. RunConfig and scenario schemas intentionally reject unsupported event/delay/feedback fields in V1. Future feedback-capable templates should introduce event, delay, or feedback options only behind explicit capability flags and validate them with `src/simulation/feedback`.
+
+Resource-feedback, network-feedback, feedback/delay uncertainty, delayed resource flows, network diffusion delays, edge-mediated events, and feedback-adjusted rates are future work. Prompt 17 does not wire those concepts into current runtime dynamics.
+
+## Current Capability Vs Reserved Future Capability
+
+Currently implemented as service-first primitives: networks/relations, resources/stocks/flows, feedback/delays/events, uncertainty, assumptions/limits/ethics, hybrid composition, multi-scale structure, scale view state, boundaries/environment, spatial fields/environmental layers, observability/measurement models, causal assumption/influence models, units/dimensions/quantity semantics, emergence/pattern descriptors, robustness/resilience/stress-test semantics, and strategy/control/intervention semantics.
+
+Currently not implemented: true multi-scale runtime, scale-aware renderer/UI, runtime observability measurement collection, runtime causal influence execution, runtime emergence detection, runtime robustness/resilience stress testing, runtime strategy/control execution, causal discovery/proof/inference/do-calculus/intervention optimization, runtime spatial-field sampling/diffusion/advection, runtime unit enforcement, automatic unit conversion, dimensional equation solving, multi-rate time, adaptive agents, heterogeneity layer, phase transition tools, attractor/basin tools, trace inspection, error budgets, custom model schema/compiler, visual model builder, calibration/data assimilation/MCMC, and external framework interop.
+
+Service-first primitives are foundations, not active model behavior. A template should not claim support for a primitive until its runtime actually uses that primitive.
+
+Zooming the camera is not the same as multi-scale modeling. Multi-scale ORTUS models will require explicit scale levels, aggregation rules, disaggregation rules, cross-scale coupling, and warnings when detail is synthetic or lost.
+
+Model state is not the same as observable reality. Observability V1 distinguishes internal simulated state and runtime metrics from measured, partial, noisy, proxy, synthetic, or empirical observation definitions, but it does not execute measurement, calibration, validation, inference, or data assimilation.
+
+`src/simulation/observability` contains Observability + Measurement Model V1. It validates, serializes, queries, and summarizes `ObservabilityModel` artifacts that declare observable, latent, and unobserved variables plus measurements, schedules, and measurement processes. Runtime metrics are model outputs; they are not automatically empirical observations. An observability model defines how something could be measured; it does not collect, calibrate, or validate data. Synthetic observations are generated or declared model-side; they must not be treated as observed evidence. Active measurements are structural declarations, not runtime-executed data collection. Current templates do not runtime-support observability, and validation/calibration remains future work.
+
+Relations, feedback loops, and events can encode model assumptions, but they do not by themselves prove causal relationships in the real world.
+
+`src/simulation/causality` contains Causal Assumptions + Influence Structure V1. It validates, serializes, queries, and summarizes `CausalAssumptionModel` artifacts that declare variables, influence edges, assumptions, evidence items, and intervention links. Causal assumption models declare influence assumptions; they do not prove causality. Network edges, feedback labels, runtime metrics, and observations are not causal evidence by themselves. Active causal influences are structural declarations, not runtime-executed behavior.
+
+V1 does not discover causality, perform do-calculus, infer hidden state, solve structural equations, optimize interventions, calibrate, validate, ingest external data, or make current templates causal-assumption-aware. Evidence items and empirical claims are provenance metadata, not proof.
+
+`src/simulation/quantities` contains Units, Dimensions + Quantity Semantics V1. It validates, serializes, queries, and summarizes `QuantitySemanticsModel` artifacts that declare dimensions, units, quantities, ranges, and compatibility rules. Parameter labels, metric labels, and numeric bounds are not the same as full unit and dimension semantics. Quantity semantics declarations do not enforce runtime unit conversion or dimensional consistency. Per-tick rates are model-time rates unless a physical time mapping is explicitly defined.
+
+V1 does not enforce runtime units, automatically convert values, solve equations, run symbolic algebra, calibrate, validate, or make current templates quantity-aware. Observability measurement units do not imply measurement validity, causal unit consistency does not imply causal proof, and resource/flow or feedback metadata is not unit-enforced unless future runtime work explicitly wires it in.
+
+`src/simulation/emergence` contains Emergence Detection + Pattern Descriptors V1. It validates, serializes, queries, and summarizes `EmergencePatternModel` artifacts that declare candidate patterns, signatures, thresholds, time windows, variables, and scale links. Emergence pattern descriptors describe candidate patterns; they do not prove emergence. Visual patterns and runtime metrics are model outputs, not empirical proof of emergence. Active pattern descriptors are structural declarations, not runtime-detected results.
+
+V1 does not detect patterns at runtime, compute over snapshots or metric histories, perform statistical significance testing, run ML clustering/anomaly detection, validate model output against reality, calibrate, or make current templates emergence-aware. Multi-scale structure, observability references, causal assumptions, and quantity consistency do not prove emergence.
+
+`src/simulation/robustness` contains Robustness, Resilience + Stress Testing Semantics V1. It validates, serializes, queries, and summarizes `RobustnessResilienceModel` artifacts that declare stressors, response criteria, failure modes, and stress-test plans. Robustness and resilience descriptors declare stress semantics; they do not prove a system is robust or resilient. Active stressors and stress-test plans are structural declarations, not runtime-executed perturbations. Uncertainty ensembles, runtime metrics, and visual persistence are not robustness validation by themselves.
+
+V1 does not execute stress tests at runtime, perturb active simulations, run experiments, compute over snapshots or metric histories, perform statistical validation, certify safety or operational readiness, optimize controls, calibrate, validate, or make current templates robustness-aware. Existing interventions are not general stress testing unless explicitly modeled and evaluated.
+
+`src/simulation/control` contains Strategy, Control + Intervention Semantics V1. It validates, serializes, queries, and summarizes `ControlStrategyModel` artifacts that declare strategies, intervention options, triggers, objectives, constraints, policies, stopping rules, and expected effects. Strategy and control descriptors declare intervention semantics; they do not execute or prove strategies. Template-owned runtime interventions are not the same as general strategy/control support. Active policies, triggers, and objectives are structural declarations, not runtime-executed control loops.
+
+V1 does not execute strategies at runtime, execute template interventions, run closed-loop control, optimize policies, prove intervention effectiveness, estimate causal or treatment effects, certify safety or operational readiness, calibrate, validate, or make current templates strategy/control-aware. Runtime metrics are model outputs, not empirical strategy evidence. Causal assumptions do not prove intervention effects, robustness descriptors do not prove strategy robustness, and uncertainty ensembles are not policy validation by themselves. Prompt 31 model schema/interpreter foundation remains future work unless roadmap says otherwise.
+
+Prompt 18 reserves these pillars in `../../docs/roadmap.md` and `../../docs/missing-pillars.md`.
+
+## Systems Primitive Registry
+
+`src/simulation/registry` is a headless source of truth for primitive status, support level, artifact families, and production-template capability summaries. It records implemented runtime primitives, service-only primitives, metadata-only primitives, and reserved future pillars without changing engine dynamics.
+
+Global service availability is not template support. A primitive can exist as a headless service while every current template still reports no runtime support for it.
+
+Reserved primitives are roadmap commitments, not implemented behavior. A template capability is runtime-active only when the template runtime actually uses that primitive. Prompt 20 should use the registry for hybrid composition planning and must not infer support from module presence alone.
+
+The registry does not change runtime behavior by itself. No current production template runtime uses networks, resources/stocks/flows, or feedback/events/delays.
+
+## Hybrid Model Composition
+
+`src/simulation/composition` contains Hybrid Model Composition V1. It validates, serializes, summarizes, and checks capability requirements for structural primitive combinations. It can describe a base template plus scenario, assumption, uncertainty, network, resource, event, delay, feedback, or declared future primitive attachments.
+
+Hybrid compositions can be valid without being runnable. Valid means the composition is structurally coherent; runnable means the required runtime capabilities are actually implemented.
+
+Attaching a primitive artifact to a composition does not automatically make a template use that primitive. The composition layer does not execute attached artifacts, does not compile custom models, and does not silently wire networks, resources, feedback, or events into current templates.
+
+## Multi-Scale Systems Architecture
+
+`src/simulation/multiscale` contains Multi-Scale Systems Architecture V1. It validates, serializes, summarizes, and queries structural scale models with scale levels, entity types, aggregation rules, disaggregation rules, and cross-scale links.
+
+Camera zoom is not multi-scale modeling. Camera zoom changes rendering; model-scale architecture requires explicit scale levels, aggregation/disaggregation rules, cross-scale links, and warnings about lost or synthetic detail.
+
+Aggregation can lose information, and disaggregation can create synthetic detail. Synthetic detail must not be treated as observed or already modeled detail.
+
+A valid scale model is a structural description, not proof that a template can execute multi-scale dynamics. Aggregation rules, disaggregation rules, and cross-scale links must have `executable: false` in V1. Current templates do not runtime-support multi-scale, and model schema/compiler work remains future.
+
+## Scale View State
+
+`src/simulation/scaleView` contains Multi-Scale Zoom + View System V1. It validates, serializes, summarizes, and derives deterministic model-scale transitions for a `ScaleViewState` that references a `MultiScaleModel` by id.
+
+Model-scale zoom changes the represented scale level; camera zoom only changes visual magnification.
+
+Scale transitions in V1 do not execute aggregation or disaggregation rules. They only change `currentScaleId`, preserve camera metadata by default, record bounded transition history, and surface information-loss or synthetic-detail warnings.
+
+A scale view state can navigate a scale model, but it does not make a template multi-scale capable. Current templates do not runtime-support scale-aware views, no renderer rewrite is included, and model schema/compiler work remains future.
+
+## Boundaries + Environment
+
+`src/simulation/boundaries` contains Boundaries + Environment Layer V1. It validates, serializes, queries, and summarizes `BoundaryEnvironmentModel` artifacts that declare system scope, environment scope, boundary surfaces, exchanges, external forcings, and exogenous shocks.
+
+Active boundary exchanges are structural declarations, not runtime-executed flows.
+
+World bounds, grid edges, and canvas limits are not the same as an explicit system boundary model.
+
+A valid boundary model describes model scope and environment assumptions; it does not prove the real system is closed or open. V1 does not execute exchanges, forcings, shocks, or spatial fields, and current templates do not runtime-support boundaries/environment. Model schema/compiler work remains future.
+
+Closed/open boundary contradictions are surfaced as structural warnings for review, not as proof that the model can execute environmental dynamics.
+
+## Spatial Fields + Environmental Layers
+
+`src/simulation/spatialFields` contains Spatial Fields + Environmental Layers V1. It validates, serializes, queries, and summarizes `SpatialFieldModel` artifacts that declare coordinate spaces, spatial fields, environmental layers, and sampling rules.
+
+Spatial fields are structural layer definitions, not runtime diffusion or GIS engines.
+
+World coordinates, grids, and positions are not the same as explicit environmental field layers.
+
+A probability-like field is not a calibrated probability unless calibration is explicitly implemented and documented.
+
+V1 does not execute diffusion, interpolation, advection, field sampling, terrain rendering, agent-field coupling, resource-field coupling, or boundary exchange coupling. Active fields, layers, and sampling rules are structural declarations, not runtime behavior. Measured fields require provenance to be trustworthy, synthetic fields must not be treated as observed detail, and current templates do not runtime-support spatial fields. Boundary models and spatial fields are related but distinct. Prompt 25 adds Observability + Measurement Model V1 as structural measurement metadata, and model schema/compiler work remains future.
+
+## Interventions
+
+`src/simulation/interventions` contains a headless intervention framework. Templates expose intervention definitions with ids, labels, target requirements, parameter definitions, validation, documentation, and a command builder. `executeIntervention` validates the requested template/intervention, resolves intervention parameters, builds commands from a read-only world view, and applies them through `SimulationEngine.applyCommands`.
+
+Interventions apply immediately at the current tick and do not advance engine time. They are different from parameter changes: parameters rebuild or configure a run, while interventions perturb the current run state through validated commands. Same initial snapshot plus the same intervention sequence and seed should continue deterministically.
+
+Validation rejects unsupported intervention ids, stale or destroyed selected entities, missing required components, invalid parameter ranges, non-finite points/vectors, malformed history records, and invalid template-specific transitions. Radius target sets are computed only at apply time. Intervention definitions also declare supported templates, capability requirements, mutation kinds, and event-log type metadata.
+
+V1 template interventions:
+
+- Epidemic Spread: infect selected susceptible agent; infect susceptible agents in radius.
+- Opinion Dynamics: set selected opinion; broadcast an opinion pulse in radius.
+- Predator-Prey: add prey near a target point; remove selected predator/prey.
+- Schelling Segregation: swap selected agent group. Relocation is deferred until empty-cell target workflows are stronger.
+- Flocking / Boids: apply impulse to selected boid; scatter boids in radius.
+
+Applied and failed interventions are recorded as bounded world history under engine globals, with a default maximum of 500 records. Snapshot export/import preserves applied intervention history because snapshots include world globals. Scenario export/import does not replay mid-run interventions in V1; it restarts from initial template, parameter, seed, and metadata state.
+
+## Structured Event Log
+
+`src/simulation/kernel/EventLog.ts` provides a bounded structured event log under world globals. It records run/session audit entries such as `run.initialized`, `scenario.applied`, `intervention.applied`, and `intervention.failed`. Event entries include event id, tick, type, source, deterministic order, optional target/label/payload, severity, and category.
+
+The event log is not event sourcing, not a snapshot replacement, and not authoritative simulation state. It is a bounded audit trail for explainability, run summaries, and future shocks or delayed effects. Snapshot restore sanitizes and bounds the log; run summaries may include bounded event summaries.
+
+Interventions are exploratory perturbations. They help users study model behavior under controlled changes, but they are not real-world policy predictions.
+
+## Run Summaries And Comparison
+
+`src/simulation/runs` contains headless run-summary and comparison utilities. A saved run summary is a bounded comparison artifact, not a scenario or snapshot. It records template id/name/version, seed, parameters, ISO capture timestamp, captured tick/time, finite final metrics, bounded metric history, bounded intervention summaries, source (`manual`, `experiment`, or `imported`), labels, notes, tags, and optional metadata. It does not store full world state by default.
+
+Run summaries can be built from an interactive snapshot or converted from an experiment run result. Manual summaries can include bounded metric traces from the engine snapshot. Experiment summaries preserve final metrics and swept parameter metadata, but no metric history unless a future experiment mode explicitly captures bounded history.
+
+`compareRunSummaries` chooses the first selected run as the default baseline unless a baseline id is supplied. It reports metadata, differing parameters, finite final metric deltas, percent deltas only when the baseline is nonzero, warnings for mismatched templates, and overlapping numeric metric comparison for mixed-template selections. Missing or nonnumeric metric values are kept out of numeric deltas so comparison output does not produce `NaN`.
+
+The browser storage helper lives outside the engine in `src/lib/localRunStorage.ts`. It validates loaded records, ignores corrupted storage gracefully, salvages valid records from partially malformed libraries, and enforces a V1 library limit of 50 saved summaries. This storage is UI workspace state and is not authoritative simulation state.
+
+Run comparisons are exploratory. Differences between runs can suggest patterns, but they do not prove causal relationships without careful experimental design.
+
+## Template Definition API
+
+A template exports a `SimulationTemplate` model-family definition with capability flags, explicit space metadata, entity/agent type metadata, parameter definitions, formal metric definitions, optional initialization presets, optional behavior-mode metadata, optional agent-composition and environment-option definitions, documentation, `createInitialWorld`, system registration, metric registration, visual metadata, and optional validation hooks. Production templates are listed in `src/simulation/templates/registry.ts`; UI descriptors must stay aligned with that registry but remain outside the engine.
+
+Capability flags make support explicit. Current production templates support Scenario Builder, initialization presets, behavior mode metadata, metric history, run comparison, experiment runner, snapshot export, interventions, and Uncertainty Layer V1 through RunConfig-level sampling. Future-facing capabilities such as resources, stocks, flows, resource metrics, events, delays, feedback loops, feedback metrics, environment layers, and network space are false unless actually implemented.
+
+Space metadata declares the model field shape (`continuous2d` or `grid2d` in V1). Entity/agent type metadata declares the user-facing agent categories without becoming simulation truth. Metric definitions now include history/comparison/display metadata so charts and run comparison can rely on declared metric semantics rather than guessing.
+
+Built-in templates currently include Epidemic Spread, Opinion Dynamics, Predator-Prey, Schelling Segregation, and Flocking / Boids.
+
+Schelling is a grid-based template that uses `Grid2DSpace`, command-buffered movement, seeded initialization and movement selection, and metrics for satisfaction, similarity, group counts, movement, and empty cells. Its one-agent-per-cell rule is enforced as a template invariant so the generic grid space can remain reusable for other models.
+
+Flocking / Boids is a continuous-space template that uses `Continuous2DSpace`, command-buffered velocity and position updates, deterministic seeded initialization/noise, and metrics for speed, neighbor count, local density, alignment, dispersion, and living boid count. It demonstrates that another movement-heavy model can be added through the same plugin API without a new simulation loop or engine-specific changes.
+
+To add a template:
+
+1. Create a new file under `src/simulation/templates`.
+2. Export a `SimulationTemplate`.
+3. Build initial state with `World`, entity stores, component stores, spaces, and seeded RNG from the template context.
+4. Add initialization presets only when they are meaningful for initial-condition authoring.
+5. Add behavior modes only when they are real, template-owned variants; unsupported modes must be rejected.
+6. Add agent-composition or environment-option definitions only when they map to validated template setup choices.
+7. Declare capabilities, space definition, entity/agent type definitions, metric definitions, and honest assumptions/limitations metadata.
+8. Register behavior systems through `SystemRegistry`.
+9. Register metrics through `MetricsCollector`.
+10. Add the template to `src/simulation/templates/registry.ts`.
+11. Add UI descriptor metadata in `src/lib/templateVisuals.ts` for labels, legend entries, accent, and background atmosphere.
+12. Add behavior, determinism, import/export, scenario, and visual render-model tests.
+
+No engine internals should need edits for a new template.
+
+## Adapter Strategy
+
+Adapter files are contracts only. Mesa, NetLogo, and MASON support is future work for schema mapping or external execution. V1 does not include runtime bridges or product features for those platforms.
+
+## Performance Notes
+
+V1 continuous neighbor search is O(n²) and is intended for a few hundred agents. The optimization path should stay behind `Continuous2DSpace`, such as a spatial hash or quadtree, so templates continue to call the same space query API.
+
+Schelling uses `Grid2DSpace` with a per-tick occupancy map, so neighbor lookups do not scan every entity for every neighbor. It still validates and serializes a moderate grid each tick, so V1 defaults are designed for thousands of cells, not large city-scale maps.
+
+Flocking currently uses an O(n²) deterministic pair pass once per tick to compute neighbor summaries for separation, alignment, cohesion, neighbor count, and local density. Those summaries are reused by steering and metrics, and Flocking emits batched command-buffer commands for velocity, position, and space movement updates. A future spatial hash should be added behind `Continuous2DSpace` if larger flocks are needed, but it is deferred for V1.
+
+The Flocking `dispersion` metric is a center-of-mass spread metric, computed as mean distance from the flock center. It is intentionally O(n) and is an approximate flock spread summary, not an average pairwise distance.
+
+Measured on the current development workspace with `npx vitest run src/simulation/__tests__/engine.performance.test.ts`:
+
+| Template | Ticks | Elapsed ms | Avg ms/tick | Final entities | Metrics records |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Epidemic Spread | 300 | 10204.65 | 34.0155 | 80 | 300 |
+| Opinion Dynamics | 300 | 7866.91 | 26.2230 | 100 | 300 |
+| Predator-Prey | 300 | 35296.07 | 117.6536 | 0 | 300 |
+| Schelling Segregation | 300 | 32819.62 | 109.3987 | 1339 | 300 |
+| Flocking / Boids | 300 | 7239.59 | 24.1320 | 180 | 300 |
+
+The dedicated Flocking baseline script can be run with:
+
+```bash
+./node_modules/.bin/vite-node src/simulation/testing/flockingPerformanceBaseline.ts
+```
+
+Latest direct Flocking baseline:
+
+| Scenario | Elapsed ms | Avg ms/tick | Final entities | Metrics records |
+| --- | ---: | ---: | ---: | ---: |
+| 100 ticks / 180 boids | 2435.30 | 24.3530 | 180 | 100 |
+| 300 ticks / 180 boids | 6004.59 | 20.0153 | 180 | 300 |
+| 300 ticks / 300 boids | 9447.26 | 31.4909 | 300 | 300 |
+
+These are coarse regression baselines, not portable performance guarantees. UI layers should avoid React component-per-agent rendering and should render from snapshots with batching or canvas/WebGL-style primitives.
+
+Experiment runs execute locally and are chunked between completed trials so the browser can update progress and respond to cancellation. V1 does not use Web Workers, does not store per-run snapshots, and enforces run-count limits to avoid accidental long synchronous sweeps.
+
+Interventions add no per-frame engine work. Radius target sets are computed only when the intervention is applied, and recent visual/target state stays in the UI layer.
+
+Run comparison adds no per-frame simulation work. The UI captures summaries only on explicit user actions, stores bounded metric histories and intervention summaries, plots traces on shared tick/value axes, and writes to local storage only on capture, import, edit, delete, or clear operations.
+
+Scenario Builder previews instantiate a separate tick-0 engine after a short UI debounce. They do not run the simulation forward, do not write to local storage while editing, and do not mutate the active engine until the user applies a validated scenario. Scenario variant fields are bounded JSON setup metadata and are not full world state.
+
+## Known Limitations
+
+- Continuous neighbor search is O(n²), suitable for modest test and demo populations.
+- Schelling has a simplified binary group identity and movement rule. It omits income, policy, housing price, road networks, institutional constraints, and history.
+- Flocking has simplified forces, shared rules for all boids, no obstacles, no leaders, no predation, no energy/fatigue, and no vision cones in V1.
+- Component validation is generic JSON/finite-number validation, not per-template scientific calibration.
+- The experiment runner aggregates numeric final metrics only in V1; time-series comparison, heatmaps, and Web Worker execution are future work.
+- Intervention history is inspectable and snapshot-preserved, but V1 does not include undo, scheduled future interventions, or scenario replay of intervention sequences.
+- Scenario Builder does not store snapshots by default, does not replay interventions, does not include a no-code rule editor, and is not yet wired as a base-config source for Experiment Runner.
+- Run comparison stores bounded summaries for local comparison only. It does not restore saved runs, replay histories, import external comparison files, or infer causality from deltas.
+- Templates are educational model structures and should not be treated as predictive scientific tools.
+- Rendering, interaction, dashboards, storage, and external model runtimes are intentionally outside this prompt.

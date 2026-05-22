@@ -1,0 +1,1 @@
+export { summarizeScaleView } from "./query";
