@@ -198,14 +198,24 @@ Run comparisons are exploratory. Differences between runs can suggest patterns, 
 - Snapshot export stores current tick/time, world state, events, RNG streams, metrics history, applied intervention history, and metadata. Importing a snapshot restores the current run.
 - Run summary capture stores comparison metadata and bounded metrics only. It is for comparing outcomes and does not restore or replay a run.
 
+## Runtime Performance
+
+Interactive runs step the headless engine through a fixed-tick loop, create one snapshot per animation frame when ticks advance, publish that snapshot through Zustand, and render agents through a single canvas pass. The Debug panel can show developer-only timing data when performance instrumentation is enabled with `localStorage.setItem("ortus.performanceInstrumentation.v1", "enabled")`; remove that key or set any other value to disable it. Instrumentation records bounded tick, metric, snapshot, frame/update, entity-count, neighbor-query, forest-fire, and flocking counters without changing simulation semantics.
+
+Service primitives are not runtime support unless a template explicitly uses them. Default entity counts are UX defaults, not engine limits, and scalability claims require benchmark evidence. Generic `Continuous2DSpace.queryNeighbors` uses a versioned lazy `ContinuousSpatialHashIndex` for finite local-radius queries in non-tiny worlds, with deterministic all-pairs fallback for tiny or broad/global-radius cases. Flocking uses its own deterministic tick-local pair summaries on top of the same headless spatial-index service. The spatial index is an implementation detail, not a SpatialFieldModel runtime primitive.
+
+Forest Fire / Landscape Spread uses cached grid-neighbor indices, compact numeric state arrays, active burning-cell indices, changed-component updates, and current state-count globals for metrics. It is still an abstract local-spread template, not wildfire prediction or BoundaryEnvironmentModel/SpatialFieldModel runtime support. Full snapshots, engine invariant checks, template validation, Zustand publication, and render-model rebuilding remain separate runtime costs.
+
+Run `npm run perf:simulation` for a local non-asserting performance report covering flocking, forest-fire, and predator-prey scenarios. The report includes elapsed time, ticks/sec, scheduler compute time, metrics time, validation/overhead remainder, snapshot time, render-model preparation time where accessible, entity/cell counts, neighbor counters, and forest-fire changed-cell counters.
+
 ## Limitations
 
-- Continuous neighbor search is O(n²), acceptable for a few hundred agents in V1.
+- Continuous-space templates can still have pairwise interaction costs. Flocking now avoids the default-count all-pairs path for local-radius queries, but global-radius settings and other templates may remain CPU-bound.
 - Schelling uses the existing grid space and batched canvas grid rendering; V1 still favors moderate grid sizes over very large city-scale maps.
-- Flocking uses the existing continuous space, deterministic tick-local neighbor summaries, batched command-buffer updates, and directional canvas glyphs; V1 does not include obstacles, leaders, vision cones, trails, or spatial hashing.
+- Flocking uses the existing continuous space, deterministic tick-local neighbor summaries, batched command-buffer updates, and directional canvas glyphs; V1 does not include obstacles, leaders, vision cones, or trails.
 - Experiment runs are local and chunked between completed trials, not Web Worker backed. Large sweeps can still consume CPU, so the UI blocks configurations above the V1 run limits.
 - Intervention history is preserved in snapshots, but V1 does not implement scenario-level intervention replay or undo.
-- Scenario Builder previews initial worlds only and does not run forward or predict outcomes. V1 behavior modes are default-only for the built-in templates; richer modes are a future template-owned extension. Experiment Runner integration with saved scenarios is future work.
+- Scenario Builder previews initial worlds only and does not run forward or predict outcomes. Behavior modes remain template-owned and bounded; richer custom rule authoring is future work. Experiment Runner integration with saved scenarios is future work.
 - Run comparison storage is browser-local, bounded to 50 summaries, stores at most 240 metric history records and 100 intervention summaries per run, and does not store full snapshots. V1 does not import external comparison files back into the library.
 - Canvas rendering is intentionally simple and batched.
 - The UI has no timeline rewind or pan/zoom in V1.

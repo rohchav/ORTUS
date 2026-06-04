@@ -15,7 +15,7 @@ import type {
 } from "../kernel/types";
 import { SimulationValidationError } from "../kernel/Errors";
 import { World } from "../kernel/World";
-import { Continuous2DSpace } from "../spaces/Continuous2DSpace";
+import { Continuous2DSpace, continuous2DQueryDiagnosticsDelta } from "../spaces/Continuous2DSpace";
 import type { Point2D } from "../spaces/Space";
 import { Position2D } from "./epidemic.template";
 import { createTemplateAssumptionProfile } from "../assumptions/profiles";
@@ -131,6 +131,22 @@ const spaceDefinition: TemplateSpaceDefinition = {
   boundaryMode: "wrap",
   dimensions: { width: 100, height: 100 }
 };
+
+const runtimeMetadata = {
+  expectedScaleClass: "medium",
+  neighborSearchStrategy: "continuousSpatialHash",
+  hotLoopNotes: [
+    "Opinion sensing calls Continuous2DSpace.queryNeighbors for each agent; the generic continuous reader uses a tick-local spatial index for local-radius queries.",
+    "Tiny worlds and broad/global radii still use deterministic all-pairs fallback.",
+    "Opinion updates are batched through the command buffer after target opinions are computed."
+  ],
+  defaultEntityCount: 100,
+  stressEntityCount: 500,
+  knownPerformanceLimits: [
+    "Broad influenceRadius settings can still approach O(agents^2) neighbor checks when fallback is selected.",
+    "Metric and snapshot cost grows with full entity/component serialization."
+  ]
+} as const;
 
 const entityTypeDefinitions: EntityTypeDefinition[] = [
   {
@@ -260,6 +276,7 @@ export const opinionTemplate: SimulationTemplate = {
   capabilities,
   spaceDefinition,
   entityTypeDefinitions,
+  runtimeMetadata,
   parameterDefinitions,
   metricDefinitions,
   initializationPresets,
@@ -371,6 +388,7 @@ export function createOpinionNeighborSensingSystem(): System {
         throw new SimulationValidationError("Opinion space is missing");
       }
       const targets: Record<string, number> = {};
+      const diagnosticsBefore = space.queryDiagnostics();
       for (const entityId of ctx.entityIds ?? []) {
         const own = ctx.world.getComponent<OpinionStateComponent>(entityId, OpinionState);
         if (!own) {
@@ -390,9 +408,25 @@ export function createOpinionNeighborSensingSystem(): System {
         const average = neighbors.reduce((sum, neighbor) => sum + neighbor.state.value, 0) / neighbors.length;
         targets[entityId] = average;
       }
+      recordContinuous2DCounters(ctx.performance, diagnosticsBefore, space.queryDiagnostics());
       ctx.commands.setGlobal("opinionTargets", targets, "opinion neighbor sensing");
     }
   };
+}
+
+function recordContinuous2DCounters(
+  performance: { recordCounter(counterId: string, value: number): void },
+  before: ReturnType<Continuous2DSpace["queryDiagnostics"]>,
+  after: ReturnType<Continuous2DSpace["queryDiagnostics"]>
+): void {
+  const delta = continuous2DQueryDiagnosticsDelta(before, after);
+  performance.recordCounter("continuous2DNeighborQueries", delta.queryCount);
+  performance.recordCounter("continuous2DAllPairsQueries", delta.allPairsQueries);
+  performance.recordCounter("continuous2DSpatialIndexQueries", delta.spatialIndexQueries);
+  performance.recordCounter("continuous2DSpatialIndexBuilds", delta.spatialIndexBuilds);
+  performance.recordCounter("continuous2DNeighborDistanceChecks", delta.distanceChecks);
+  performance.recordCounter("continuous2DSpatialIndexCandidateChecks", delta.spatialIndexCandidateChecks);
+  performance.recordCounter("continuous2DSpatialIndexVisitedCells", delta.spatialIndexVisitedCells);
 }
 
 function componentEntityIds(world: { allEntities(): Array<{ id: string }>; hasComponent(entityId: string, componentType: string): boolean }, componentType: string): string[] {

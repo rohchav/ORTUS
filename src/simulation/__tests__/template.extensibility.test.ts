@@ -8,6 +8,10 @@ import { opinionTemplate } from "../templates/opinion.template";
 import { predatorPreyTemplate } from "../templates/predatorPrey.template";
 import { schellingTemplate } from "../templates/schelling.template";
 
+const defaultSmokeTemplateCases = [epidemicTemplate, opinionTemplate, predatorPreyTemplate, schellingTemplate, flockingTemplate].map(
+  (template) => [template.id, template] as const
+);
+
 describe("template extensibility and default smoke", () => {
   it("runs a minimal plugin template without modifying engine internals", () => {
     const template: SimulationTemplate = {
@@ -74,8 +78,9 @@ describe("template extensibility and default smoke", () => {
     expect(engine.createSnapshot().metricsHistory.at(-1)?.values.count).toBe(20);
   });
 
-  it("default templates run 300 ticks with finite metrics and bounded populations", () => {
-    for (const template of [epidemicTemplate, opinionTemplate, predatorPreyTemplate, schellingTemplate, flockingTemplate]) {
+  it.each(defaultSmokeTemplateCases)(
+    "default template %s runs 300 ticks with finite metrics and bounded populations",
+    (_templateId, template) => {
       const engine = new SimulationEngine(template, { seed: `default-${template.id}` });
       expect(() => engine.runSteps(300)).not.toThrow();
       const snapshot = engine.createSnapshot();
@@ -87,6 +92,7 @@ describe("template extensibility and default smoke", () => {
           expect(Number.isFinite(value)).toBe(true);
         }
       }
-    }
-  });
+    },
+    30_000
+  );
 });

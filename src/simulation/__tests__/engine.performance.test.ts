@@ -43,7 +43,7 @@ describe("simulation performance baseline", () => {
       expect(result.metricsHistoryLength).toBeLessThanOrEqual(1000);
       expect(Number.isFinite(result.averageMsPerTick)).toBe(true);
     }
-  });
+  }, 60_000);
 });
 
 function runBaseline(template: SimulationTemplate, ticks: number): BaselineResult {

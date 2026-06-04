@@ -214,6 +214,25 @@ const templateCapabilitiesSchema = z.object({
   supportsUncertaintyConfig: z.boolean()
 });
 
+const runtimePerformanceMetadataSchema = z
+  .object({
+    expectedScaleClass: z.enum(["small", "medium", "large", "unknown"]),
+    neighborSearchStrategy: z.enum(["none", "gridLocal", "continuousSpatialHash", "allPairs", "templateSpecific"]),
+    hotLoopNotes: z.array(z.string().min(1)).min(1).max(20),
+    defaultEntityCount: z.number().int().positive(),
+    stressEntityCount: z.number().int().positive(),
+    knownPerformanceLimits: z.array(z.string().min(1)).min(1).max(20)
+  })
+  .superRefine((metadata, ctx) => {
+    if (metadata.stressEntityCount < metadata.defaultEntityCount) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["stressEntityCount"],
+        message: "stressEntityCount must be >= defaultEntityCount"
+      });
+    }
+  });
+
 const templateSpaceDefinitionSchema = z.object({
   type: z.enum(["continuous2d", "grid2d", "network", "hybrid"]),
   spaceId: z.string().min(1).optional(),
@@ -516,6 +535,7 @@ export function validateTemplate(template: SimulationTemplate): void {
       behaviorModes: z.array(behaviorModeSchema).optional(),
       agentCompositionDefinitions: z.array(parameterDefinitionSchema).optional(),
       environmentOptionDefinitions: z.array(parameterDefinitionSchema).optional(),
+      runtimeMetadata: runtimePerformanceMetadataSchema.optional(),
       assumptionProfile: z.unknown().optional(),
       documentation: documentationSchema
     })

@@ -20,6 +20,7 @@ import { CommandBuffer, SystemCommandSink } from "./CommandBuffer";
 import { appendSimulationEventLogToWorld, normalizeSimulationEventLogInWorld } from "./EventLog";
 import { SimulationClock } from "./SimulationClock";
 import { MetricsCollector } from "./Metrics";
+import { SimulationPerformanceMonitor, type PerformanceInstrumentationOptions, type SimulationPerformanceSnapshot } from "./Performance";
 import { RandomService } from "./Random";
 import { Scheduler } from "./Scheduler";
 import { SimulationRuntime } from "./SimulationRuntime";
@@ -47,6 +48,7 @@ export class SimulationEngine {
   rng: RandomService;
   readonly registry: SystemRegistry;
   readonly metrics: MetricsCollector;
+  readonly performanceMonitor: SimulationPerformanceMonitor;
   readonly scheduler = new Scheduler();
   readonly runtime = new SimulationRuntime();
   readonly commandBuffer = new CommandBuffer();
@@ -81,6 +83,7 @@ export class SimulationEngine {
     this.rng = new RandomService(this.seed);
     this.registry = new SystemRegistry();
     this.metrics = new MetricsCollector(options.maxMetricsHistory ?? 1000, options.metricsInterval ?? 1);
+    this.performanceMonitor = new SimulationPerformanceMonitor(options.performance);
     this.updateMode = options.updateMode ?? "staged";
     this.metadata = deepClone(options.metadata ?? {});
     this.debug = options.debug ?? false;
@@ -112,12 +115,14 @@ export class SimulationEngine {
   }
 
   step(): void {
+    const stepStarted = this.performanceMonitor.mark();
     this.clock.advanceOne();
     this.world.tick = this.clock.tick;
     this.world.time = this.clock.time;
     this.runtime.resetStep();
     this.runtime.setDueEvents(this.world.eventQueue.popDue(this.world.tick));
 
+    const schedulerStarted = this.performanceMonitor.mark();
     this.scheduler.runTick(this.world, this.registry, {
       updateMode: this.updateMode,
       debug: this.debug,
@@ -125,10 +130,21 @@ export class SimulationEngine {
       runtime: this.runtime,
       createContext: (system) => this.createSystemContext(system)
     });
+    const schedulerMs = this.performanceMonitor.elapsedSince(schedulerStarted);
 
+    const metricsStarted = this.performanceMonitor.mark();
     this.metrics.collect(this.world);
+    const metricsMs = this.performanceMonitor.elapsedSince(metricsStarted);
     assertWorldInvariants(this.world);
     this.template.validateWorld?.(this.world.view());
+    this.performanceMonitor.recordTick({
+      tick: this.world.tick,
+      time: this.world.time,
+      stepMs: this.performanceMonitor.elapsedSince(stepStarted),
+      schedulerMs,
+      metricsMs,
+      entityCount: this.performanceMonitor.enabled ? this.world.entityStore.aliveCount() : 0
+    });
   }
 
   runSteps(steps: number): void {
@@ -202,7 +218,40 @@ export class SimulationEngine {
   }
 
   createSnapshot(): SimulationSnapshotView {
-    return createSnapshotView(this.template, this.world, this.metrics);
+    const started = this.performanceMonitor.mark();
+    const snapshot = createSnapshotView(this.template, this.world, this.metrics);
+    this.performanceMonitor.recordSnapshot({
+      tick: snapshot.tick,
+      snapshotMs: this.performanceMonitor.elapsedSince(started),
+      entityCount: snapshot.entities.filter((entity) => entity.alive).length,
+      metricsHistoryLength: snapshot.metricsHistory.length
+    });
+    return snapshot;
+  }
+
+  enablePerformanceInstrumentation(options: PerformanceInstrumentationOptions = {}): void {
+    this.performanceMonitor.enable(options);
+  }
+
+  disablePerformanceInstrumentation(): void {
+    this.performanceMonitor.disable();
+  }
+
+  isPerformanceInstrumentationEnabled(): boolean {
+    return this.performanceMonitor.enabled;
+  }
+
+  performanceData(): SimulationPerformanceSnapshot {
+    return this.performanceMonitor.snapshot();
+  }
+
+  recordFramePerformance(sample: { steps: number; updateMs: number; frameIntervalMs?: number }): void {
+    this.performanceMonitor.recordFrame({
+      tick: this.world.tick,
+      steps: sample.steps,
+      updateMs: sample.updateMs,
+      ...(sample.frameIntervalMs !== undefined ? { frameIntervalMs: sample.frameIntervalMs } : {})
+    });
   }
 
   exportScenario(): string {
@@ -333,6 +382,9 @@ export class SimulationEngine {
       },
       spaces,
       metrics,
+      performance: {
+        recordCounter: (counterId, value) => this.performanceMonitor.recordCounter(counterId, value)
+      },
       ...(entityIds ? { entityIds } : {})
     };
   }

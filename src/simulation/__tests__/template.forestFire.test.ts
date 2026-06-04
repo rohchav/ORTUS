@@ -236,6 +236,36 @@ describe("forest fire / landscape spread template", () => {
     }
   });
 
+  it("publishes compact hot-loop counts and performance counters without changing cell semantics", () => {
+    const engine = new SimulationEngine(forestFireTemplate, {
+      seed: "forest-hot-loop-counters",
+      parameters: params({ initialFuelDensity: 1, initialIgnitionCount: 1, spreadProbability: 1, lightningProbability: 0, regrowthProbability: 0 }),
+      initialization: { presetId: "central-ignition", options: {} },
+      performance: { enabled: true, maxSamples: 4 }
+    });
+
+    engine.step();
+    const snapshot = engine.createSnapshot();
+    const counts = countStates(snapshot);
+    const globals = snapshot.globals as Record<string, unknown>;
+    const perfCounters = engine.performanceData().tickSamples.at(-1)?.counters ?? {};
+
+    expect(globals.forestFireStateCounts).toEqual(counts);
+    expect(globals.forestFireStateCountsTick).toBe(snapshot.tick);
+    expect(globals.forestFireChangedCellCount).toBe(5);
+    expect(globals.forestFireComponentUpdateCount).toBe(5);
+    expect(globals.forestFireNeighborCheckCount).toBe(4);
+    expect(globals.forestFireSpreadCandidateCount).toBe(4);
+    expect(globals.forestFireLightningCheckCount).toBe(95);
+    expect(globals.forestFireRegrowthCheckCount).toBe(0);
+    expect(perfCounters.forestFireChangedCells).toBe(5);
+    expect(perfCounters.forestFireComponentUpdates).toBe(5);
+    expect(perfCounters.forestFireNeighborChecks).toBe(4);
+    for (const value of Object.values(perfCounters)) {
+      expect(Number.isFinite(value)).toBe(true);
+    }
+  });
+
   it("provides deterministic, distinct initialization presets", () => {
     const base = createDefaultScenario({ template: forestFireTemplate, scenarioId: "scenario-forest-presets", now, seed: "forest-preset-seed" });
     const signatures = new Map<string, string>();

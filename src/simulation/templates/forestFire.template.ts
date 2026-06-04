@@ -53,14 +53,27 @@ interface ForestFireParams {
   burnDuration: number;
 }
 
-interface ForestFireCellRecord {
-  entityId: string;
-  cell: GridCell;
-  state: ForestFireCellStateComponent;
-}
-
 const maxCells = 19200;
 const nonPredictiveNote = "These models are exploratory simulations, not calibrated predictive tools.";
+const forestFireStateCountsGlobalKey = "forestFireStateCounts";
+const forestFireStateCountsTickGlobalKey = "forestFireStateCountsTick";
+const forestFireChangedCellCountGlobalKey = "forestFireChangedCellCount";
+const forestFireComponentUpdateCountGlobalKey = "forestFireComponentUpdateCount";
+const forestFireNeighborCheckCountGlobalKey = "forestFireNeighborCheckCount";
+const forestFireSpreadCandidateCountGlobalKey = "forestFireSpreadCandidateCount";
+const forestFireLightningCheckCountGlobalKey = "forestFireLightningCheckCount";
+const forestFireRegrowthCheckCountGlobalKey = "forestFireRegrowthCheckCount";
+const forestFireStatusCodes = {
+  empty: 0,
+  fuel: 1,
+  burning: 2,
+  burned: 3
+} as const;
+const forestFireStatesByCode = ["empty", "fuel", "burning", "burned"] as const;
+type ForestFireStateCode = (typeof forestFireStatusCodes)[ForestFireCellStatus];
+type ForestFireStateCounts = Record<ForestFireCellStatus, number>;
+const forestFireEntityIdsCache = new Map<string, readonly string[]>();
+const forestFireNeighborIndexCache = new Map<string, readonly (readonly number[])[]>();
 
 const parameterDefinitions: ParameterDefinition[] = [
   {
@@ -223,6 +236,24 @@ const spaceDefinition: TemplateSpaceDefinition = {
   dimensions: { rows: 40, cols: 60 }
 };
 
+const runtimeMetadata = {
+  expectedScaleClass: "medium",
+  neighborSearchStrategy: "gridLocal",
+  hotLoopNotes: [
+    "Spread evaluation uses cached grid-neighbor index lookups, compact per-tick state arrays, and active burning-cell indices.",
+    "The system updates only changed/burn-age cell components, while state counts are maintained incrementally for metrics.",
+    "Lightning/regrowth still scans bounded grid cells when those probabilities are enabled.",
+    "The grid projection is template-owned local-spread logic, not SpatialFieldModel runtime support."
+  ],
+  defaultEntityCount: 2400,
+  stressEntityCount: maxCells,
+  knownPerformanceLimits: [
+    "Large grids still increase validation, snapshot serialization, and lightning/regrowth scan cost.",
+    "Full snapshots and render-grid model preparation remain separate costs outside the forest-fire tick hot loop.",
+    "This template is not a wildfire predictor and does not include terrain, weather, or calibrated spread behavior."
+  ]
+} as const;
+
 const entityTypeDefinitions: EntityTypeDefinition[] = [
   {
     typeId: "emptyCell",
@@ -378,6 +409,7 @@ export const forestFireTemplate: SimulationTemplate = {
   capabilities,
   spaceDefinition,
   entityTypeDefinitions,
+  runtimeMetadata,
   parameterDefinitions,
   metricDefinitions,
   initializationPresets,
@@ -389,7 +421,7 @@ export const forestFireTemplate: SimulationTemplate = {
   createInitialWorld(ctx) {
     const params = forestFireParams(ctx.params);
     const presetId = ctx.initialization?.presetId ?? "random-forest";
-    const world = new World({ globals: { newIgnitions: 0, spreadRate: 0 } });
+    const world = new World({ globals: initialForestFireRuntimeGlobals(createStateCounts()) });
     const space = new Grid2DSpace({
       id: FOREST_FIRE_SPACE_ID,
       rows: params.gridHeight,
@@ -409,8 +441,10 @@ export const forestFireTemplate: SimulationTemplate = {
       stateByKey.set(cellKey(cell), "burning");
     }
 
+    const counts = createStateCounts();
     for (const cell of cells) {
       const state = stateByKey.get(cellKey(cell)) ?? "empty";
+      incrementStateCount(counts, state);
       const entityId = forestFireCellEntityId(cell);
       world.entityStore.create("forest-fire-cell", { id: entityId, createdAtTick: 0, label: `Cell ${cell.col},${cell.row}` });
       world.componentStore.add(entityId, ForestFireCellPosition, { x: cell.col, y: cell.row });
@@ -421,6 +455,7 @@ export const forestFireTemplate: SimulationTemplate = {
       });
       space.addEntity(entityId, cell);
     }
+    world.globals = initialForestFireRuntimeGlobals(counts);
 
     return world;
   },
@@ -486,67 +521,138 @@ export function createForestFireSpreadSystem(): System {
     update(ctx) {
       const params = forestFireParams(ctx.params);
       const space = requireForestFireGrid(ctx.spaces.grid2D(FOREST_FIRE_SPACE_ID));
-      const records = forestFireCellRecords(ctx.world, space);
-      const byCell = new Map(records.map((record) => [cellKey(record.cell), record]));
-      const tickRng = ctx.rng.fork("forestFire:tick");
-      const ignitionKeys = new Set<string>();
-      const previousBurning = records.filter((record) => record.state.state === "burning").length;
+      const totalCells = params.gridHeight * params.gridWidth;
+      if (space.rows !== params.gridHeight || space.cols !== params.gridWidth) {
+        throw new SimulationValidationError("Forest Fire grid dimensions do not match parameters");
+      }
+      const entityIds = forestFireEntityIds(params.gridHeight, params.gridWidth);
+      const neighborIndices = forestFireNeighborIndexLookup(
+        params.gridHeight,
+        params.gridWidth,
+        params.neighborMode,
+        params.boundaryMode
+      );
+      const stateCodes = new Uint8Array(totalCells);
+      const burnAges = new Uint16Array(totalCells);
+      const lastChangedTicks = new Uint32Array(totalCells);
+      const burningIndices: number[] = [];
 
-      for (const record of records) {
-        if (record.state.state !== "burning") {
-          continue;
+      for (let index = 0; index < totalCells; index += 1) {
+        const entityId = entityIds[index];
+        if (!entityId) {
+          throw new SimulationValidationError("Forest Fire cell entity id cache is incomplete");
         }
-        for (const neighbor of forestFireNeighbors(record.cell, params.gridHeight, params.gridWidth, params.neighborMode, params.boundaryMode)) {
-          const candidate = byCell.get(cellKey(neighbor));
-          if (!candidate || candidate.state.state !== "fuel" || ignitionKeys.has(cellKey(neighbor))) {
+        const state = ctx.world.getComponent<ForestFireCellStateComponent>(entityId, ForestFireCellState);
+        if (!isForestFireCellState(state)) {
+          throw new SimulationValidationError(`Invalid ForestFireCellState component on ${entityId}`);
+        }
+        const code = codeForState(state.state);
+        stateCodes[index] = code;
+        burnAges[index] = state.burnAge;
+        lastChangedTicks[index] = state.lastChangedTick;
+        if (code === forestFireStatusCodes.burning) {
+          burningIndices.push(index);
+        }
+      }
+
+      const tickRng = ctx.rng.fork("forestFire:tick");
+      const ignitionMarks = new Uint8Array(totalCells);
+      const previousBurning = burningIndices.length;
+      let neighborChecks = 0;
+      let spreadCandidateChecks = 0;
+
+      for (const burningIndex of burningIndices) {
+        for (const neighborIndex of neighborIndices[burningIndex] ?? []) {
+          neighborChecks += 1;
+          if (stateCodes[neighborIndex] !== forestFireStatusCodes.fuel || ignitionMarks[neighborIndex] === 1) {
             continue;
           }
+          spreadCandidateChecks += 1;
           if (chance(tickRng, params.spreadProbability)) {
-            ignitionKeys.add(cellKey(neighbor));
+            ignitionMarks[neighborIndex] = 1;
           }
         }
       }
 
-      for (const record of records) {
-        const key = cellKey(record.cell);
-        if (record.state.state === "fuel" && !ignitionKeys.has(key) && chance(tickRng, params.lightningProbability)) {
-          ignitionKeys.add(key);
+      let lightningChecks = 0;
+      for (let index = 0; index < totalCells; index += 1) {
+        if (stateCodes[index] === forestFireStatusCodes.fuel && ignitionMarks[index] === 0) {
+          lightningChecks += 1;
+          if (chance(tickRng, params.lightningProbability)) {
+            ignitionMarks[index] = 1;
+          }
         }
       }
 
-      const nextStates: Record<string, ForestFireCellStateComponent> = {};
+      const changedStates: Record<string, ForestFireCellStateComponent> = {};
+      const nextCounts = createStateCounts();
       let newIgnitions = 0;
-      for (const record of records) {
-        const key = cellKey(record.cell);
-        let nextState: ForestFireCellStatus = record.state.state;
-        let nextBurnAge = record.state.state === "burning" ? record.state.burnAge : 0;
+      let changedCellCount = 0;
+      let componentUpdateCount = 0;
+      let regrowthChecks = 0;
+      for (let index = 0; index < totalCells; index += 1) {
+        const currentCode = stateCodes[index] as ForestFireStateCode;
+        let nextCode = currentCode;
+        let nextBurnAge = currentCode === forestFireStatusCodes.burning ? burnAges[index] ?? 0 : 0;
 
-        if (record.state.state === "burning") {
-          nextBurnAge = record.state.burnAge + 1;
+        if (currentCode === forestFireStatusCodes.burning) {
+          nextBurnAge = (burnAges[index] ?? 0) + 1;
           if (nextBurnAge >= params.burnDuration) {
-            nextState = "burned";
+            nextCode = forestFireStatusCodes.burned;
             nextBurnAge = 0;
           }
-        } else if (record.state.state === "fuel" && ignitionKeys.has(key)) {
-          nextState = "burning";
+        } else if (currentCode === forestFireStatusCodes.fuel && ignitionMarks[index] === 1) {
+          nextCode = forestFireStatusCodes.burning;
           nextBurnAge = 0;
           newIgnitions += 1;
-        } else if ((record.state.state === "empty" || record.state.state === "burned") && chance(tickRng, params.regrowthProbability)) {
-          nextState = "fuel";
-          nextBurnAge = 0;
+        } else if (currentCode === forestFireStatusCodes.empty || currentCode === forestFireStatusCodes.burned) {
+          regrowthChecks += 1;
+          if (chance(tickRng, params.regrowthProbability)) {
+            nextCode = forestFireStatusCodes.fuel;
+            nextBurnAge = 0;
+          }
         }
 
-        const changed = nextState !== record.state.state;
-        nextStates[record.entityId] = {
-          state: nextState,
-          burnAge: nextState === "burning" ? nextBurnAge : 0,
-          lastChangedTick: changed ? ctx.tick : record.state.lastChangedTick
-        };
+        const nextState = stateForCode(nextCode);
+        incrementStateCount(nextCounts, nextState);
+        const stateChanged = nextCode !== currentCode;
+        const burnAgeChanged = nextBurnAge !== (currentCode === forestFireStatusCodes.burning ? burnAges[index] ?? 0 : 0);
+        if (stateChanged || burnAgeChanged) {
+          const entityId = entityIds[index];
+          if (!entityId) {
+            throw new SimulationValidationError("Forest Fire cell entity id cache is incomplete");
+          }
+          changedStates[entityId] = {
+            state: nextState,
+            burnAge: nextState === "burning" ? nextBurnAge : 0,
+            lastChangedTick: stateChanged ? ctx.tick : lastChangedTicks[index] ?? 0
+          };
+          componentUpdateCount += 1;
+        }
+        if (stateChanged) {
+          changedCellCount += 1;
+        }
       }
 
-      ctx.commands.setComponents(ForestFireCellState, nextStates, "forest fire two-phase cell update");
+      if (componentUpdateCount > 0) {
+        ctx.commands.setComponents(ForestFireCellState, changedStates, "forest fire changed cell update");
+      }
       ctx.commands.setGlobal("newIgnitions", newIgnitions, "forest fire new ignition count");
       ctx.commands.setGlobal("spreadRate", previousBurning === 0 ? 0 : newIgnitions / previousBurning, "forest fire spread rate");
+      ctx.commands.setGlobal(forestFireStateCountsGlobalKey, nextCounts, "forest fire state counts");
+      ctx.commands.setGlobal(forestFireStateCountsTickGlobalKey, ctx.tick, "forest fire state counts tick");
+      ctx.commands.setGlobal(forestFireChangedCellCountGlobalKey, changedCellCount, "forest fire changed cell count");
+      ctx.commands.setGlobal(forestFireComponentUpdateCountGlobalKey, componentUpdateCount, "forest fire component update count");
+      ctx.commands.setGlobal(forestFireNeighborCheckCountGlobalKey, neighborChecks, "forest fire neighbor check count");
+      ctx.commands.setGlobal(forestFireSpreadCandidateCountGlobalKey, spreadCandidateChecks, "forest fire spread candidate count");
+      ctx.commands.setGlobal(forestFireLightningCheckCountGlobalKey, lightningChecks, "forest fire lightning check count");
+      ctx.commands.setGlobal(forestFireRegrowthCheckCountGlobalKey, regrowthChecks, "forest fire regrowth check count");
+      ctx.performance.recordCounter("forestFireChangedCells", changedCellCount);
+      ctx.performance.recordCounter("forestFireComponentUpdates", componentUpdateCount);
+      ctx.performance.recordCounter("forestFireNeighborChecks", neighborChecks);
+      ctx.performance.recordCounter("forestFireSpreadCandidateChecks", spreadCandidateChecks);
+      ctx.performance.recordCounter("forestFireLightningChecks", lightningChecks);
+      ctx.performance.recordCounter("forestFireRegrowthChecks", regrowthChecks);
     }
   };
 }
@@ -699,40 +805,30 @@ export function forestFireNeighbors(
 
 function validateForestFireWorld(world: WorldView): void {
   const space = requireForestFireGrid(world.grid2D(FOREST_FIRE_SPACE_ID));
-  const cells = serializedGridCells(space);
-  const seen = new Set<string>();
   const entityIds = world.entitiesWith([ForestFireCellPosition, ForestFireCellState]);
   if (entityIds.length !== space.rows * space.cols) {
     throw new SimulationValidationError("Forest Fire world must contain exactly one cell entity per grid cell");
   }
-  for (const [entityId, cell] of Object.entries(cells)) {
-    const key = cellKey(cell);
-    if (seen.has(key)) {
-      throw new SimulationValidationError(`Forest Fire grid cell ${key} has more than one entity`);
+  const expectedEntityIds = forestFireEntityIds(space.rows, space.cols);
+  for (let index = 0; index < expectedEntityIds.length; index += 1) {
+    const entityId = expectedEntityIds[index];
+    if (!entityId) {
+      throw new SimulationValidationError("Forest Fire cell entity id cache is incomplete");
     }
-    seen.add(key);
+    const expectedCell = cellForIndex(index, space.cols);
+    const cell = space.getCell(entityId);
+    if (!cell || cell.row !== expectedCell.row || cell.col !== expectedCell.col) {
+      throw new SimulationValidationError(`Forest Fire grid cell ${cellKey(expectedCell)} is missing its expected entity`);
+    }
     const position = world.getComponent<ForestFireCellPositionComponent>(entityId, ForestFireCellPosition);
     const state = world.getComponent<ForestFireCellStateComponent>(entityId, ForestFireCellState);
-    if (!isForestFirePosition(position) || position.x !== cell.col || position.y !== cell.row) {
+    if (!isForestFirePosition(position) || position.x !== expectedCell.col || position.y !== expectedCell.row) {
       throw new SimulationValidationError(`Invalid ForestFireCellPosition component on ${entityId}`);
     }
     if (!isForestFireCellState(state)) {
       throw new SimulationValidationError(`Invalid ForestFireCellState component on ${entityId}`);
     }
   }
-}
-
-function forestFireCellRecords(world: WorldView, space: Grid2DSpaceReader): ForestFireCellRecord[] {
-  return Object.entries(serializedGridCells(space))
-    .map(([entityId, cell]) => {
-      const state = world.getComponent<ForestFireCellStateComponent>(entityId, ForestFireCellState);
-      if (!state) {
-        return undefined;
-      }
-      return { entityId, cell, state };
-    })
-    .filter((record): record is ForestFireCellRecord => record !== undefined)
-    .sort((left, right) => left.cell.row - right.cell.row || left.cell.col - right.cell.col || left.entityId.localeCompare(right.entityId));
 }
 
 function initialIgnitionCells(
@@ -776,8 +872,9 @@ function fractionMetric(key: string, label: string, description: string, state: 
     precision: 3,
     displayFormat: "percent",
     collect(world) {
-      const total = forestFireStates(world).length;
-      return total === 0 ? 0 : countStates(world, state) / total;
+      const counts = forestFireMetricCounts(world);
+      const total = totalStateCount(counts);
+      return total === 0 ? 0 : counts[state] / total;
     }
   };
 }
@@ -797,13 +894,23 @@ function countMetric(key: string, label: string, description: string, state: For
     precision: 0,
     displayFormat: "integer",
     collect(world) {
-      return countStates(world, state);
+      return forestFireMetricCounts(world)[state];
     }
   };
 }
 
 function countStates(world: WorldView, state: ForestFireCellStatus): number {
-  return forestFireStates(world).filter((cellState) => cellState.state === state).length;
+  return forestFireMetricCounts(world)[state];
+}
+
+function forestFireMetricCounts(world: WorldView): ForestFireStateCounts {
+  const globals = world.globals;
+  const counts = globals[forestFireStateCountsGlobalKey];
+  const countsTick = globals[forestFireStateCountsTickGlobalKey];
+  if (countsTick === world.tick && isForestFireStateCounts(counts)) {
+    return { ...counts };
+  }
+  return scanForestFireStateCounts(world);
 }
 
 function forestFireStates(world: WorldView): ForestFireCellStateComponent[] {
@@ -813,12 +920,111 @@ function forestFireStates(world: WorldView): ForestFireCellStateComponent[] {
     .filter((state): state is ForestFireCellStateComponent => state !== undefined);
 }
 
-function serializedGridCells(space: Grid2DSpaceReader): Record<string, GridCell> {
-  const serialized = space.serialize();
-  if (serialized.kind !== "grid2d") {
-    throw new SimulationValidationError("Expected grid2d serialized space");
+function scanForestFireStateCounts(world: WorldView): ForestFireStateCounts {
+  const counts = createStateCounts();
+  for (const state of forestFireStates(world)) {
+    incrementStateCount(counts, state.state);
   }
-  return serialized.cells;
+  return counts;
+}
+
+function initialForestFireRuntimeGlobals(counts: ForestFireStateCounts): Record<string, JsonValue> {
+  return {
+    newIgnitions: 0,
+    spreadRate: 0,
+    [forestFireStateCountsGlobalKey]: { ...counts },
+    [forestFireStateCountsTickGlobalKey]: 0,
+    [forestFireChangedCellCountGlobalKey]: 0,
+    [forestFireComponentUpdateCountGlobalKey]: 0,
+    [forestFireNeighborCheckCountGlobalKey]: 0,
+    [forestFireSpreadCandidateCountGlobalKey]: 0,
+    [forestFireLightningCheckCountGlobalKey]: 0,
+    [forestFireRegrowthCheckCountGlobalKey]: 0
+  };
+}
+
+function createStateCounts(): ForestFireStateCounts {
+  return { empty: 0, fuel: 0, burning: 0, burned: 0 };
+}
+
+function incrementStateCount(counts: ForestFireStateCounts, state: ForestFireCellStatus): void {
+  counts[state] += 1;
+}
+
+function totalStateCount(counts: ForestFireStateCounts): number {
+  return counts.empty + counts.fuel + counts.burning + counts.burned;
+}
+
+function isForestFireStateCounts(value: unknown): value is ForestFireStateCounts {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+  const candidate = value as ForestFireStateCounts;
+  return (
+    Number.isInteger(candidate.empty) &&
+    candidate.empty >= 0 &&
+    Number.isInteger(candidate.fuel) &&
+    candidate.fuel >= 0 &&
+    Number.isInteger(candidate.burning) &&
+    candidate.burning >= 0 &&
+    Number.isInteger(candidate.burned) &&
+    candidate.burned >= 0
+  );
+}
+
+function codeForState(state: ForestFireCellStatus): ForestFireStateCode {
+  return forestFireStatusCodes[state];
+}
+
+function stateForCode(code: ForestFireStateCode): ForestFireCellStatus {
+  const state = forestFireStatesByCode[code];
+  if (!state) {
+    throw new SimulationValidationError(`Invalid Forest Fire state code: ${code}`);
+  }
+  return state;
+}
+
+function forestFireEntityIds(rows: number, cols: number): readonly string[] {
+  const key = `${rows}:${cols}`;
+  const cached = forestFireEntityIdsCache.get(key);
+  if (cached) {
+    return cached;
+  }
+  const ids: string[] = [];
+  for (let row = 0; row < rows; row += 1) {
+    for (let col = 0; col < cols; col += 1) {
+      ids.push(forestFireCellEntityId({ row, col }));
+    }
+  }
+  forestFireEntityIdsCache.set(key, ids);
+  return ids;
+}
+
+function forestFireNeighborIndexLookup(
+  rows: number,
+  cols: number,
+  neighborMode: ForestFireNeighborMode,
+  boundaryMode: ForestFireBoundaryMode
+): readonly (readonly number[])[] {
+  const key = `${rows}:${cols}:${neighborMode}:${boundaryMode}`;
+  const cached = forestFireNeighborIndexCache.get(key);
+  if (cached) {
+    return cached;
+  }
+  const lookup: number[][] = [];
+  for (let index = 0; index < rows * cols; index += 1) {
+    lookup[index] = forestFireNeighbors(cellForIndex(index, cols), rows, cols, neighborMode, boundaryMode).map((cell) => indexForCell(cell, cols));
+  }
+  forestFireNeighborIndexCache.set(key, lookup);
+  return lookup;
+}
+
+function cellForIndex(index: number, cols: number): GridCell {
+  return { row: Math.floor(index / cols), col: index % cols };
+}
+
+function indexForCell(cell: GridCell, cols: number): number {
+  return cell.row * cols + cell.col;
 }
 
 function requireForestFireGrid(space: Grid2DSpaceReader | undefined): Grid2DSpaceReader {

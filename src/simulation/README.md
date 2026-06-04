@@ -60,7 +60,7 @@ Forest Fire / Landscape Spread is a template-owned abstract local-spread grid mo
 
 Agent composition defines the initial mix of agents, groups, or types for a run. It should not be confused with live engine state or snapshots. Current composition fields are template-owned parameter definitions. Flocking adds a `groupAware` behavior mode with deterministic boid group assignment and group-weighted alignment/cohesion. Ring Formation is an initialization preset only unless an orbit behavior mode is selected. Initial circular placement does not guarantee persistent circular motion.
 
-V1 behavior/composition support remains deliberately narrow: most templates are default-mode only, composition is template-owned setup metadata, and custom rule authoring still requires future model-definition and compiler work. `groupAware` Flocking is a real runtime variant, but it keeps the existing bounded all-pairs neighbor pass; future larger flocks may need a spatial index before expanding this family further.
+V1 behavior/composition support remains deliberately narrow: most templates are default-mode only, composition is template-owned setup metadata, and custom rule authoring still requires future model-definition and compiler work. `groupAware` Flocking is a real runtime variant that reuses the same deterministic boid neighbor summaries as classic flocking. The template may use a spatial hash to reduce local-radius neighbor checks, but that is an implementation detail, not a new modeling primitive.
 
 `SimulationRunConfig` is the generic fresh-run recipe shared by scenario authoring and experiment/uncertainty paths. It contains template id, seed, parameters, optional scenario id/name, initialization preset/options, agent composition, behavior mode, environment options, optional uncertainty config metadata for ensemble setup, and metadata. It is explicitly distinct from snapshots and run summaries.
 
@@ -310,7 +310,7 @@ Capability flags make support explicit. Current production templates support Sce
 
 Space metadata declares the model field shape (`continuous2d` or `grid2d` in V1). Entity/agent type metadata declares the user-facing agent categories without becoming simulation truth. Metric definitions now include history/comparison/display metadata so charts and run comparison can rely on declared metric semantics rather than guessing.
 
-Built-in templates currently include Epidemic Spread, Opinion Dynamics, Predator-Prey, Schelling Segregation, and Flocking / Boids.
+Built-in templates currently include Epidemic Spread, Opinion Dynamics, Predator-Prey, Schelling Segregation, Flocking / Boids, and Forest Fire / Landscape Spread.
 
 Schelling is a grid-based template that uses `Grid2DSpace`, command-buffered movement, seeded initialization and movement selection, and metrics for satisfaction, similarity, group counts, movement, and empty cells. Its one-agent-per-cell rule is enforced as a template invariant so the generic grid space can remain reusable for other models.
 
@@ -337,25 +337,25 @@ No engine internals should need edits for a new template.
 
 Adapter files are contracts only. Mesa, NetLogo, and MASON support is future work for schema mapping or external execution. V1 does not include runtime bridges or product features for those platforms.
 
-## Performance Notes
+## Runtime Performance Model
 
-V1 continuous neighbor search is O(n²) and is intended for a few hundred agents. The optimization path should stay behind `Continuous2DSpace`, such as a spatial hash or quadtree, so templates continue to call the same space query API.
+Service primitives such as networks, resources, feedback, spatial fields, observability, causality, quantities, emergence, robustness, and control remain service-only or metadata-only unless a production template runtime explicitly uses them. Runtime performance metadata describes current hot loops and conservative stress targets; it does not turn reserved or service primitives into active template behavior.
+
+Default entity counts are UX defaults, not engine limits. Stress counts in `runtimeMetadata` are local benchmark targets that need evidence before being treated as safe product limits. ORTUS should not claim high-scale support without benchmark data from the current runtime and template configuration.
+
+Interactive UI runs advance the headless engine through fixed ticks, create a fresh snapshot when an animation frame has one or more completed ticks, publish that snapshot through Zustand, and render the World Stage with a batched canvas pass. The engine state remains the source of truth; snapshots are cloned/serialized views for UI consumption and import/export safety.
+
+Optional performance instrumentation is available through `SimulationEngine` options or, in the browser UI, by setting `localStorage.setItem("ortus.performanceInstrumentation.v1", "enabled")` before creating/resetting a run. Removing that key disables it. Instrumentation records bounded last-N tick, metric, snapshot, frame/update, entity-count, and operation-counter samples. It does not alter model semantics and does not log every frame.
+
+Movement-heavy templates need explicit spatial/projection services when local interactions dominate runtime. `Grid2DSpace` already supports local grid neighborhoods. `src/simulation/spatialIndex` provides the headless `ContinuousSpatialHashIndex` for deterministic continuous 2D local-radius lookup. Generic `Continuous2DSpace.queryNeighbors` now uses a versioned lazy `ContinuousSpatialHashIndex` for finite local-radius queries in non-tiny worlds, reusing the index across repeated queries until positions change. Tiny worlds and broad/global-radius queries keep deterministic all-pairs fallback. Arbitrary external `queryRadius` calls remain linear so existing boundary semantics are not silently changed.
 
 Schelling uses `Grid2DSpace` with a per-tick occupancy map, so neighbor lookups do not scan every entity for every neighbor. It still validates and serializes a moderate grid each tick, so V1 defaults are designed for thousands of cells, not large city-scale maps.
 
-Flocking currently uses an O(n²) deterministic pair pass once per tick to compute neighbor summaries for separation, alignment, cohesion, neighbor count, and local density. Those summaries are reused by steering and metrics, and Flocking emits batched command-buffer commands for velocity, position, and space movement updates. A future spatial hash should be added behind `Continuous2DSpace` if larger flocks are needed, but it is deferred for V1.
+Forest Fire / Landscape Spread uses template-owned grid-local spread logic, not SpatialFieldModel or BoundaryEnvironmentModel runtime support. Its tick path uses cached neighbor-index lookup tables, compact numeric state arrays, active burning-cell indices, and changed-component updates. Metrics read current state counts from bounded world globals when available instead of rescanning every cell for every metric. Lightning and regrowth still scan bounded grid cells when enabled. Full engine invariant checks, template validation, snapshot serialization, Zustand publication, and render-grid model creation remain separate scalability costs.
+
+Flocking computes deterministic pair summaries once per tick for separation, alignment, cohesion, neighbor count, and local density. Those summaries are reused by steering, and Flocking emits batched command-buffer commands for velocity, position, and space movement updates. For local-radius queries with at least 100 boids and a perception radius smaller than half the world width/height, Flocking builds a headless `ContinuousSpatialHashIndex` and queries candidate pairs. Tiny flocks and global-radius settings use the all-pairs fallback because the grid overhead or coverage is not helpful. Pair order remains deterministic by sorted entity id.
 
 The Flocking `dispersion` metric is a center-of-mass spread metric, computed as mean distance from the flock center. It is intentionally O(n) and is an approximate flock spread summary, not an average pairwise distance.
-
-Measured on the current development workspace with `npx vitest run src/simulation/__tests__/engine.performance.test.ts`:
-
-| Template | Ticks | Elapsed ms | Avg ms/tick | Final entities | Metrics records |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| Epidemic Spread | 300 | 10204.65 | 34.0155 | 80 | 300 |
-| Opinion Dynamics | 300 | 7866.91 | 26.2230 | 100 | 300 |
-| Predator-Prey | 300 | 35296.07 | 117.6536 | 0 | 300 |
-| Schelling Segregation | 300 | 32819.62 | 109.3987 | 1339 | 300 |
-| Flocking / Boids | 300 | 7239.59 | 24.1320 | 180 | 300 |
 
 The dedicated Flocking baseline script can be run with:
 
@@ -363,15 +363,23 @@ The dedicated Flocking baseline script can be run with:
 ./node_modules/.bin/vite-node src/simulation/testing/flockingPerformanceBaseline.ts
 ```
 
+The broader local performance report can be run with:
+
+```bash
+npm run perf:simulation
+```
+
+The report is non-asserting and intended for diagnosis. It includes elapsed time, ticks/sec, average scheduler compute time, average metrics time, validation/overhead remainder, snapshot creation time, render-model preparation time where accessible, entity/cell count, metrics-history length, continuous-space query counters, flocking pair checks, and forest-fire changed-cell counters. Timing varies by machine; use operation counters and repeated runs before making scalability claims.
+
 Latest direct Flocking baseline:
 
 | Scenario | Elapsed ms | Avg ms/tick | Final entities | Metrics records |
 | --- | ---: | ---: | ---: | ---: |
-| 100 ticks / 180 boids | 2435.30 | 24.3530 | 180 | 100 |
-| 300 ticks / 180 boids | 6004.59 | 20.0153 | 180 | 300 |
-| 300 ticks / 300 boids | 9447.26 | 31.4909 | 300 | 300 |
+| 100 ticks / 180 boids | 2162.74 | 21.6274 | 180 | 100 |
+| 300 ticks / 180 boids | 4237.02 | 14.1234 | 180 | 300 |
+| 300 ticks / 300 boids | 8423.42 | 28.0781 | 300 | 300 |
 
-These are coarse regression baselines, not portable performance guarantees. UI layers should avoid React component-per-agent rendering and should render from snapshots with batching or canvas/WebGL-style primitives.
+These are coarse regression baselines, not portable performance guarantees. Structural counters are more reliable than timing for this optimization: in one default-radius run, 160 boids had 12,720 theoretical all-pairs checks and 7,278 spatial-hash candidate checks; 300 boids had 44,850 theoretical all-pairs checks and 25,847 spatial-hash candidate checks. UI layers should avoid React component-per-agent rendering and should render from snapshots with batching or canvas/WebGL-style primitives.
 
 Experiment runs execute locally and are chunked between completed trials so the browser can update progress and respond to cancellation. V1 does not use Web Workers, does not store per-run snapshots, and enforces run-count limits to avoid accidental long synchronous sweeps.
 
@@ -383,7 +391,7 @@ Scenario Builder previews instantiate a separate tick-0 engine after a short UI 
 
 ## Known Limitations
 
-- Continuous neighbor search is O(n²), suitable for modest test and demo populations.
+- Continuous-space templates can still have pairwise interaction costs. Flocking avoids the default-count all-pairs path for local-radius queries, but global-radius settings and other templates may remain CPU-bound.
 - Schelling has a simplified binary group identity and movement rule. It omits income, policy, housing price, road networks, institutional constraints, and history.
 - Flocking has simplified forces, shared rules for all boids, no obstacles, no leaders, no predation, no energy/fatigue, and no vision cones in V1.
 - Component validation is generic JSON/finite-number validation, not per-template scientific calibration.

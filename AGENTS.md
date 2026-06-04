@@ -111,3 +111,12 @@
 - Run comparison stores bounded run summaries for local comparison. Do not store full snapshots by default, and do not treat comparison workspace state as authoritative simulation state.
 - Update `src/simulation/README.md` when architecture changes.
 - Do not claim scientific prediction accuracy for templates or outputs.
+- Never add movement-heavy behavior using all-pairs search without documenting why and adding focused tests or benchmark evidence.
+- Never claim scalability or high-scale readiness without benchmark evidence from the current runtime.
+- Keep simulation hot loops headless and independent from React, Zustand, DOM, Canvas, browser storage, and renderer code.
+- Prefer reusable spatial index/projection services over template-specific neighbor-search hacks.
+- Keep rendering separate from simulation stepping; renderer optimization is not the same as engine scalability.
+- Do not treat camera, canvas, or visual optimization as multi-agent engine scalability.
+- When changing `Continuous2DSpace.queryNeighbors`, add brute-force parity tests for deterministic ordering and boundary behavior.
+- When optimizing hot loops, keep performance reports separated across scheduler compute, metrics, snapshot creation, and render-model preparation where practical.
+- Treat Forest Fire hot-loop optimizations as template implementation details, not SpatialFieldModel or BoundaryEnvironmentModel runtime support.

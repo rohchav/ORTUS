@@ -9,6 +9,8 @@ export { World, WorldView } from "./kernel/World";
 export { EntityStore } from "./kernel/EntityStore";
 export { ComponentStore } from "./kernel/ComponentStore";
 export { MetricsCollector } from "./kernel/Metrics";
+export { SimulationPerformanceMonitor } from "./kernel/Performance";
+export type * from "./kernel/Performance";
 export {
   appendSimulationEventLog,
   appendSimulationEventLogToWorld,
@@ -25,7 +27,10 @@ export type * from "./kernel/types";
 export { Continuous2DSpace } from "./spaces/Continuous2DSpace";
 export { Grid2DSpace } from "./spaces/Grid2DSpace";
 export { NetworkSpace } from "./spaces/NetworkSpace";
+export { SpatialHashGrid } from "./spaces/SpatialHashGrid";
 export type * from "./spaces/Space";
+export type * from "./spaces/SpatialHashGrid";
+export * from "./spatialIndex";
 
 export { epidemicTemplate } from "./templates/epidemic.template";
 export { opinionTemplate } from "./templates/opinion.template";

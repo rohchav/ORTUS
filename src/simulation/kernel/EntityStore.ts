@@ -66,6 +66,16 @@ export class EntityStore {
     return this.all().filter((entity) => entity.alive);
   }
 
+  aliveCount(): number {
+    let count = 0;
+    for (const entity of this.entities.values()) {
+      if (entity.alive) {
+        count += 1;
+      }
+    }
+    return count;
+  }
+
   all(): Entity[] {
     return [...this.entities.values()]
       .sort((left, right) => left.id.localeCompare(right.id))

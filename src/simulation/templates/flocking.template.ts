@@ -20,6 +20,7 @@ import { SimulationValidationError } from "../kernel/Errors";
 import { World, type WorldView } from "../kernel/World";
 import { Continuous2DSpace, type Continuous2DSpaceReader } from "../spaces/Continuous2DSpace";
 import type { BoundaryMode, Point2D, SpaceLocation } from "../spaces/Space";
+import { ContinuousSpatialHashIndex } from "../spatialIndex";
 import { Position2D, Velocity2D } from "./epidemic.template";
 import { createTemplateAssumptionProfile } from "../assumptions/profiles";
 
@@ -71,17 +72,32 @@ interface FlockingTickCache {
   data?: FlockingTickData;
 }
 
+interface FlockingNeighborPair {
+  left: CachedBoid;
+  right: CachedBoid;
+  offset: Vec2;
+  distance: number;
+  distanceSquared: number;
+}
+
+interface FlockingNeighborQuery {
+  pairs: FlockingNeighborPair[];
+  distanceChecks: number;
+  strategy: "allPairs" | "continuousSpatialHash";
+}
+
 const worldWidth = 100;
 const worldHeight = 100;
+const spatialHashMinBoids = 100;
 
 const parameterDefinitions: ParameterDefinition[] = [
   {
     key: "agentCount",
     label: "Agent count",
     type: "integer",
-    defaultValue: 180,
+    defaultValue: 160,
     min: 20,
-    max: 600,
+    max: 500,
     step: 1,
     description: "Number of boids.",
     liveUpdate: false
@@ -90,9 +106,9 @@ const parameterDefinitions: ParameterDefinition[] = [
     key: "perceptionRadius",
     label: "Perception radius",
     type: "number",
-    defaultValue: 55,
+    defaultValue: 30,
     min: 5,
-    max: 200,
+    max: 90,
     step: 1,
     description: "How far each boid can sense neighbors.",
     liveUpdate: true
@@ -101,9 +117,9 @@ const parameterDefinitions: ParameterDefinition[] = [
     key: "separationRadius",
     label: "Separation radius",
     type: "number",
-    defaultValue: 18,
+    defaultValue: 10,
     min: 2,
-    max: 80,
+    max: 45,
     step: 1,
     description: "Distance where boids strongly avoid crowding.",
     liveUpdate: true
@@ -274,6 +290,21 @@ const spaceDefinition: TemplateSpaceDefinition = {
   dimensions: { width: worldWidth, height: worldHeight }
 };
 
+const runtimeMetadata = {
+  expectedScaleClass: "medium",
+  neighborSearchStrategy: "continuousSpatialHash",
+  hotLoopNotes: [
+    "Flocking computes deterministic tick-local neighbor summaries once per tick and reuses them for steering.",
+    "Local-radius runs at or above the spatial-index threshold use ContinuousSpatialHashIndex; tiny or global-radius runs use the all-pairs fallback."
+  ],
+  defaultEntityCount: 160,
+  stressEntityCount: 500,
+  knownPerformanceLimits: [
+    "Perception radii that cover most of the world intentionally fall back to all-pairs because the spatial index provides little pruning.",
+    "Snapshots and canvas render-model rebuilding still scale with visible boid count."
+  ]
+} as const;
+
 const entityTypeDefinitions: EntityTypeDefinition[] = [
   {
     typeId: "boid",
@@ -336,7 +367,7 @@ const initializationPresets: InitializationPresetDefinition[] = [
     id: "two-opposing-flocks",
     label: "Two Opposing Flocks",
     description: "Two initial groups start on opposite sides with opposing headings.",
-    parameterOverrides: { agentCount: 180, separationWeight: 1.1 }
+    parameterOverrides: { agentCount: 160, separationWeight: 1.1 }
   },
   {
     id: "ring-formation",
@@ -441,6 +472,7 @@ export const flockingTemplate: SimulationTemplate = {
   capabilities,
   spaceDefinition,
   entityTypeDefinitions,
+  runtimeMetadata,
   parameterDefinitions,
   metricDefinitions,
   initializationPresets,
@@ -854,14 +886,14 @@ export function flockingParams(params: ParameterValues): {
     noise: Number(params.noise),
     boundaryMode: String(params.boundaryMode)
   };
-  if (!Number.isInteger(values.agentCount) || values.agentCount < 20 || values.agentCount > 600) {
-    throw new SimulationValidationError("Invalid flocking parameters: agent count must be an integer from 20 to 600");
+  if (!Number.isInteger(values.agentCount) || values.agentCount < 20 || values.agentCount > 500) {
+    throw new SimulationValidationError("Invalid flocking parameters: agent count must be an integer from 20 to 500");
   }
-  if (!Number.isFinite(values.perceptionRadius) || values.perceptionRadius < 5 || values.perceptionRadius > 200) {
-    throw new SimulationValidationError("Invalid flocking parameters: perception radius must be from 5 to 200");
+  if (!Number.isFinite(values.perceptionRadius) || values.perceptionRadius < 5 || values.perceptionRadius > 90) {
+    throw new SimulationValidationError("Invalid flocking parameters: perception radius must be from 5 to 90");
   }
-  if (!Number.isFinite(values.separationRadius) || values.separationRadius < 2 || values.separationRadius > 80) {
-    throw new SimulationValidationError("Invalid flocking parameters: separation radius must be from 2 to 80");
+  if (!Number.isFinite(values.separationRadius) || values.separationRadius < 2 || values.separationRadius > 45) {
+    throw new SimulationValidationError("Invalid flocking parameters: separation radius must be from 2 to 45");
   }
   if (values.separationRadius > values.perceptionRadius) {
     throw new SimulationValidationError("Invalid flocking parameters: separation radius must be <= perception radius");
@@ -1019,56 +1051,57 @@ function ensureFlockingTickData(
     summaries.set(boid.id, emptyNeighborSummary());
   }
 
-  const perceptionRadiusSquared = params.perceptionRadius * params.perceptionRadius;
   const separationRadiusSquared = params.separationRadius * params.separationRadius;
-  for (let leftIndex = 0; leftIndex < boids.length; leftIndex += 1) {
-    const left = boids[leftIndex]!;
+  const allPairCount = (boids.length * (boids.length - 1)) / 2;
+  const pairQuery = queryFlockingNeighborPairs(boids, space, params);
+  ctx.performance.recordCounter("flockingTheoreticalAllPairs", allPairCount);
+  ctx.performance.recordCounter("flockingPairwiseChecks", pairQuery.distanceChecks);
+  ctx.performance.recordCounter("flockingNeighborPairs", pairQuery.pairs.length);
+  ctx.performance.recordCounter("flockingSpatialHashActive", pairQuery.strategy === "continuousSpatialHash" ? 1 : 0);
+
+  for (const pair of pairQuery.pairs) {
+    const left = pair.left;
+    const right = pair.right;
     const leftSummary = summaries.get(left.id)!;
-    for (let rightIndex = leftIndex + 1; rightIndex < boids.length; rightIndex += 1) {
-      const right = boids[rightIndex]!;
-      const rightSummary = summaries.get(right.id)!;
-      const offset = delta(left.position, right.position, space);
-      const distanceSquared = offset.x * offset.x + offset.y * offset.y;
-      if (distanceSquared > perceptionRadiusSquared) {
-        continue;
-      }
+    const rightSummary = summaries.get(right.id)!;
+    const offset = pair.offset;
+    const distanceSquared = pair.distanceSquared;
 
-      leftSummary.neighborCount += 1;
-      rightSummary.neighborCount += 1;
-      const leftAffinity = groupAffinityWeight(left, right, behaviorMode);
-      const rightAffinity = groupAffinityWeight(right, left, behaviorMode);
-      leftSummary.weightedNeighborCount += leftAffinity;
-      rightSummary.weightedNeighborCount += rightAffinity;
-      addInto(leftSummary.velocitySum, right.velocity);
-      addInto(rightSummary.velocitySum, left.velocity);
-      addScaledInto(leftSummary.weightedVelocitySum, right.velocity, leftAffinity);
-      addScaledInto(rightSummary.weightedVelocitySum, left.velocity, rightAffinity);
-      addInto(leftSummary.cohesionOffsetSum, offset);
-      subtractInto(rightSummary.cohesionOffsetSum, offset);
-      addScaledInto(leftSummary.weightedCohesionOffsetSum, offset, leftAffinity);
-      subtractScaledInto(rightSummary.weightedCohesionOffsetSum, offset, rightAffinity);
+    leftSummary.neighborCount += 1;
+    rightSummary.neighborCount += 1;
+    const leftAffinity = groupAffinityWeight(left, right, behaviorMode);
+    const rightAffinity = groupAffinityWeight(right, left, behaviorMode);
+    leftSummary.weightedNeighborCount += leftAffinity;
+    rightSummary.weightedNeighborCount += rightAffinity;
+    addInto(leftSummary.velocitySum, right.velocity);
+    addInto(rightSummary.velocitySum, left.velocity);
+    addScaledInto(leftSummary.weightedVelocitySum, right.velocity, leftAffinity);
+    addScaledInto(rightSummary.weightedVelocitySum, left.velocity, rightAffinity);
+    addInto(leftSummary.cohesionOffsetSum, offset);
+    subtractInto(rightSummary.cohesionOffsetSum, offset);
+    addScaledInto(leftSummary.weightedCohesionOffsetSum, offset, leftAffinity);
+    subtractScaledInto(rightSummary.weightedCohesionOffsetSum, offset, rightAffinity);
 
-      if (distanceSquared > separationRadiusSquared) {
-        continue;
-      }
-
-      const distanceValue = Math.sqrt(distanceSquared);
-      const weight = 1 / Math.max(distanceValue, 0.001);
-      if (distanceValue < 1e-9) {
-        addScaledInto(leftSummary.separationSum, unitFromString(`${left.id}:${right.id}`), weight);
-        addScaledInto(rightSummary.separationSum, unitFromString(`${right.id}:${left.id}`), weight);
-      } else {
-        const inverseDistance = 1 / distanceValue;
-        const nx = offset.x * inverseDistance;
-        const ny = offset.y * inverseDistance;
-        leftSummary.separationSum.x -= nx * weight;
-        leftSummary.separationSum.y -= ny * weight;
-        rightSummary.separationSum.x += nx * weight;
-        rightSummary.separationSum.y += ny * weight;
-      }
-      leftSummary.separationCount += 1;
-      rightSummary.separationCount += 1;
+    if (distanceSquared > separationRadiusSquared) {
+      continue;
     }
+
+    const distanceValue = pair.distance;
+    const weight = 1 / Math.max(distanceValue, 0.001);
+    if (distanceValue < 1e-9) {
+      addScaledInto(leftSummary.separationSum, unitFromString(`${left.id}:${right.id}`), weight);
+      addScaledInto(rightSummary.separationSum, unitFromString(`${right.id}:${left.id}`), weight);
+    } else {
+      const inverseDistance = 1 / distanceValue;
+      const nx = offset.x * inverseDistance;
+      const ny = offset.y * inverseDistance;
+      leftSummary.separationSum.x -= nx * weight;
+      leftSummary.separationSum.y -= ny * weight;
+      rightSummary.separationSum.x += nx * weight;
+      rightSummary.separationSum.y += ny * weight;
+    }
+    leftSummary.separationCount += 1;
+    rightSummary.separationCount += 1;
   }
 
   const data = { tick: ctx.tick, signature, boids, summaries };
@@ -1076,6 +1109,78 @@ function ensureFlockingTickData(
     cache.data = data;
   }
   return data;
+}
+
+function queryFlockingNeighborPairs(
+  boids: readonly CachedBoid[],
+  space: Continuous2DSpaceReader,
+  params: ReturnType<typeof flockingParams>
+): FlockingNeighborQuery {
+  if (!shouldUseSpatialHash(boids.length, space, params.perceptionRadius)) {
+    return queryAllFlockingPairs(boids, space, params.perceptionRadius);
+  }
+
+  const boidsById = new Map(boids.map((boid) => [boid.id, boid]));
+  const query = createFlockingSpatialIndex(boids, space, params.perceptionRadius).queryPairsWithinRadius(params.perceptionRadius);
+  const pairs: FlockingNeighborPair[] = [];
+  for (const pair of query.pairs) {
+    const left = boidsById.get(pair.leftId);
+    const right = boidsById.get(pair.rightId);
+    if (left && right) {
+      pairs.push({
+        left,
+        right,
+        offset: pair.offset,
+        distance: pair.distance,
+        distanceSquared: pair.distanceSquared
+      });
+    }
+  }
+  return { pairs, distanceChecks: query.distanceChecks, strategy: "continuousSpatialHash" };
+}
+
+function queryAllFlockingPairs(boids: readonly CachedBoid[], space: Continuous2DSpaceReader, perceptionRadius: number): FlockingNeighborQuery {
+  const pairs: FlockingNeighborPair[] = [];
+  const perceptionRadiusSquared = perceptionRadius * perceptionRadius;
+  let distanceChecks = 0;
+  for (let leftIndex = 0; leftIndex < boids.length; leftIndex += 1) {
+    const left = boids[leftIndex]!;
+    for (let rightIndex = leftIndex + 1; rightIndex < boids.length; rightIndex += 1) {
+      const right = boids[rightIndex]!;
+      const offset = delta(left.position, right.position, space);
+      const distanceSquared = offset.x * offset.x + offset.y * offset.y;
+      distanceChecks += 1;
+      if (distanceSquared <= perceptionRadiusSquared) {
+        pairs.push({
+          left,
+          right,
+          offset,
+          distance: Math.sqrt(distanceSquared),
+          distanceSquared
+        });
+      }
+    }
+  }
+  return { pairs, distanceChecks, strategy: "allPairs" };
+}
+
+function shouldUseSpatialHash(boidCount: number, space: Continuous2DSpaceReader, perceptionRadius: number): boolean {
+  if (boidCount < spatialHashMinBoids) {
+    return false;
+  }
+  return perceptionRadius < Math.min(space.width, space.height) / 2;
+}
+
+function createFlockingSpatialIndex(boids: readonly CachedBoid[], space: Continuous2DSpaceReader, perceptionRadius: number): ContinuousSpatialHashIndex {
+  const index = new ContinuousSpatialHashIndex({
+    width: space.width,
+    height: space.height,
+    topology: space.boundaryMode === "wrap" ? "wrap" : "closed",
+    cellSize: Math.max(1, Math.min(perceptionRadius, Math.max(space.width, space.height))),
+    maxItems: Math.max(1, boids.length)
+  });
+  index.addAll(boids.map((boid) => ({ id: boid.id, x: boid.position.x, y: boid.position.y })));
+  return index;
 }
 
 function emptyNeighborSummary(): NeighborSummary {

@@ -83,6 +83,9 @@ describe("flocking boids template", () => {
 
   it("rejects invalid parameter combinations", () => {
     const invalidCases: Array<Record<string, number | string>> = [
+      { agentCount: 501 },
+      { perceptionRadius: 91 },
+      { separationRadius: 46, perceptionRadius: 90 },
       { separationRadius: 60, perceptionRadius: 20 },
       { maxSpeed: 0 },
       { maxForce: 0 },
@@ -394,6 +397,33 @@ describe("flocking boids template", () => {
     expect(first.createSnapshot()).not.toEqual(classic.createSnapshot());
     expect(first.createSnapshot().metricsHistory.at(-1)?.values.interGroupDistance).toBeGreaterThan(0);
     expect(Object.values(first.createSnapshot().metricsHistory.at(-1)?.values ?? {}).every(Number.isFinite)).toBe(true);
+  });
+
+  it("keeps group-aware behavior deterministic and distinct on the spatial-index path", () => {
+    const scenario = {
+      behaviorMode: "groupAware",
+      agentComposition: { agentCount: 120, groupCount: 2, primaryGroupRatio: 0.55 },
+      environmentOptions: { boundaryMode: "wrap" }
+    };
+    const runOptions = {
+      seed: "flocking-group-aware-spatial",
+      parameters: params({ agentCount: 120, perceptionRadius: 30, separationRadius: 10, noise: 0 }),
+      scenario
+    };
+    const first = new SimulationEngine(flockingTemplate, runOptions);
+    const second = new SimulationEngine(flockingTemplate, runOptions);
+    const classic = new SimulationEngine(flockingTemplate, {
+      seed: runOptions.seed,
+      parameters: runOptions.parameters
+    });
+
+    first.runSteps(20);
+    second.runSteps(20);
+    classic.runSteps(20);
+
+    expect(first.createSnapshot()).toEqual(second.createSnapshot());
+    expect(first.createSnapshot()).not.toEqual(classic.createSnapshot());
+    expect(first.createSnapshot().metricsHistory.at(-1)?.values.interGroupDistance).toBeGreaterThan(0);
   });
 
   it("rejects unsupported or inconsistent flocking behavior composition", () => {

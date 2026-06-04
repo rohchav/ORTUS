@@ -172,6 +172,21 @@ const spaceDefinition: TemplateSpaceDefinition = {
   dimensions: { rows: 35, cols: 45 }
 };
 
+const runtimeMetadata = {
+  expectedScaleClass: "medium",
+  neighborSearchStrategy: "gridLocal",
+  hotLoopNotes: [
+    "Satisfaction uses Grid2DSpace local-neighbor lookups backed by a per-tick occupancy map.",
+    "Relocation builds and samples bounded empty-cell candidate lists."
+  ],
+  defaultEntityCount: 1339,
+  stressEntityCount: maxCells,
+  knownPerformanceLimits: [
+    "Large grids increase validation, serialization, occupancy-map, and empty-cell scan cost.",
+    "This is grid-local neighborhood behavior, not a generic spatial-field runtime."
+  ]
+} as const;
+
 const entityTypeDefinitions: EntityTypeDefinition[] = [
   {
     typeId: "groupA",
@@ -298,6 +313,7 @@ export const schellingTemplate: SimulationTemplate = {
   capabilities,
   spaceDefinition,
   entityTypeDefinitions,
+  runtimeMetadata,
   parameterDefinitions,
   metricDefinitions,
   initializationPresets,

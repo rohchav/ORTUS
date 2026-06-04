@@ -124,6 +124,19 @@ export interface TemplateCapabilities {
   supportsUncertaintyConfig: boolean;
 }
 
+export type RuntimeScaleClass = "small" | "medium" | "large" | "unknown";
+
+export type NeighborSearchStrategy = "none" | "gridLocal" | "continuousSpatialHash" | "allPairs" | "templateSpecific";
+
+export interface RuntimePerformanceMetadata {
+  expectedScaleClass: RuntimeScaleClass;
+  neighborSearchStrategy: NeighborSearchStrategy;
+  hotLoopNotes: readonly string[];
+  defaultEntityCount: number;
+  stressEntityCount: number;
+  knownPerformanceLimits: readonly string[];
+}
+
 export interface TemplateSpaceDefinition {
   type: TemplateSpaceType;
   spaceId?: string;
@@ -256,6 +269,7 @@ export interface SystemContext {
   readonly query: QueryHelpers;
   readonly spaces: SpaceAccess;
   readonly metrics: MetricsAccess;
+  readonly performance: PerformanceAccess;
   readonly entityIds?: readonly EntityId[];
 }
 
@@ -273,6 +287,10 @@ export interface SpaceAccess {
 
 export interface MetricsAccess {
   history(): readonly MetricRecord[];
+}
+
+export interface PerformanceAccess {
+  recordCounter(counterId: string, value: number): void;
 }
 
 export interface EventAccess {
@@ -325,6 +343,7 @@ export interface SimulationTemplate {
   behaviorModes?: readonly BehaviorModeDefinition[];
   agentCompositionDefinitions?: readonly ParameterDefinition[];
   environmentOptionDefinitions?: readonly ParameterDefinition[];
+  runtimeMetadata?: RuntimePerformanceMetadata;
   assumptionProfile?: ModelAssumptionProfile;
   validateInitializationOptions?(initialization: InitializationConfig, params: ParameterValues): void;
   validateScenarioOptions?(options: ScenarioVariantConfig, params: ParameterValues): void;
@@ -535,5 +554,6 @@ export interface SimulationEngineOptions {
   maxMetricsHistory?: number;
   metricsInterval?: number;
   debug?: boolean;
+  performance?: boolean | import("./Performance").PerformanceInstrumentationOptions;
   metadata?: Record<string, JsonValue>;
 }

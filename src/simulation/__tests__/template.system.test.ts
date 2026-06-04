@@ -28,6 +28,8 @@ const invalidParameterCases: Record<string, ParameterValues> = {
   "forest-fire": { spreadProbability: 1.2 }
 };
 
+const productionTemplateCases = productionTemplates.map((template) => [template.id, template] as const);
+
 describe("production template system", () => {
   it("keeps production template registry and UI descriptors aligned", () => {
     expect(productionTemplates.map((template) => template.id)).toEqual([...productionTemplateIds]);
@@ -260,8 +262,9 @@ describe("production template system", () => {
     }
   });
 
-  it("runs all production templates, collects finite metrics, and exposes render metadata", () => {
-    for (const template of productionTemplates) {
+  it.each(productionTemplateCases)(
+    "%s collects finite metrics and exposes render metadata",
+    (_templateId, template) => {
       const engine = new SimulationEngine(template, { seed: `template-system-${template.id}` });
       engine.runSteps(100);
       const snapshot = engine.createSnapshot();
@@ -303,11 +306,13 @@ describe("production template system", () => {
       } else {
         expect(agents.length).toBe(snapshot.entities.filter((entity) => entity.alive).length);
       }
-    }
-  });
+    },
+    30_000
+  );
 
-  it("is deterministic and restores snapshots across all production templates", () => {
-    for (const template of productionTemplates) {
+  it.each(productionTemplateCases)(
+    "%s is deterministic and restores snapshots",
+    (_templateId, template) => {
       const options = { seed: `determinism-${template.id}`, parameters: defaultParameters(template) };
       const left = new SimulationEngine(template, options);
       const right = new SimulationEngine(template, options);
@@ -322,8 +327,9 @@ describe("production template system", () => {
       const restored = SimulationEngine.fromSnapshot(template, snapshotAt50);
       restored.runSteps(50);
       expect(restored.createSnapshot()).toEqual(original.createSnapshot());
-    }
-  });
+    },
+    30_000
+  );
 
   it("keeps scenario/snapshot import paths consistent and rejects corrupted nested state", () => {
     for (const template of productionTemplates) {

@@ -14,6 +14,8 @@ Production templates expose formal metadata through the `SimulationTemplate` sha
 
 Forest Fire / Landscape Spread is a production template, not a generic spatial-field runtime. It is an abstract local-spread grid model for qualitative spread, threshold, fragmentation, and emergence exploration. It is not a wildfire predictor, does not use GIS, real terrain, wind, humidity, weather, suppression, firefighting, or calibrated fire probabilities, and its grid coordinates are not SpatialFieldModel runtime support. Its template-owned boundary mode is not BoundaryEnvironmentModel runtime support.
 
+Forest-fire runtime optimizations are implementation details inside that template: cached grid-neighbor indices, compact per-tick state arrays, active burning-cell indices, changed-component updates, and current state-count globals for metrics. They do not add SpatialFieldModel runtime support, BoundaryEnvironmentModel runtime support, wildfire prediction, or calibrated fire behavior. Snapshot creation, render-model preparation, and UI publication remain separate runtime costs.
+
 ### Scenario
 
 A scenario is an initial-condition and model-variant recipe for starting a fresh run. It contains a seed, validated parameters, initialization preset/options, agent composition, behavior mode, environment options, metadata, and notes. Applying a scenario creates a fresh engine instance at tick 0.
@@ -68,7 +70,7 @@ Agent composition defines the initial mix of agents, groups, or types for a run.
 
 Flocking currently includes a `groupAware` behavior mode. In that mode, initialized boid groups weigh same-group neighbors more strongly for alignment and cohesion while separation still avoids all nearby boids. Ring Formation is an initialization preset only unless an orbit behavior mode is selected. Initial circular placement does not guarantee persistent circular motion.
 
-Current limitations are intentional: most production templates expose only `default` behavior mode, composition fields are still template-owned parameter definitions rather than a standalone model-builder schema, and no user-authored rule graph exists. `groupAware` reuses the existing boid neighbor pass; it does not add a spatial index, so large flock performance still follows the current bounded all-pairs neighbor model.
+Current limitations are intentional: most production templates expose only `default` behavior mode, composition fields are still template-owned parameter definitions rather than a standalone model-builder schema, and no user-authored rule graph exists. `groupAware` reuses the same boid neighbor summaries as classic flocking. The flocking implementation may use a deterministic spatial hash for local-radius neighbor queries, but that is a runtime optimization detail, not a new modeling primitive or evidence of spatial-field support.
 
 ### Uncertainty Config
 

@@ -106,6 +106,8 @@ interface SimulationUiState {
 const initialTemplate = templateDescriptors[0]!;
 const initialSeed = "ortus-field-001";
 const avatarModeStorageKey = "ortus.avatarMode.v1";
+const performanceInstrumentationStorageKey = "ortus.performanceInstrumentation.v1";
+let lastPerformanceFrameMark: number | null = null;
 
 export const useSimulationStore = create<SimulationUiState>((set, get) => ({
   selectedTemplateId: initialTemplate.id,
@@ -209,6 +211,7 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
 
   pause() {
     get().engine?.pause();
+    lastPerformanceFrameMark = null;
     set({ isRunning: false });
   },
 
@@ -240,11 +243,27 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
       return;
     }
     try {
+      const performanceEnabled = engine.isPerformanceInstrumentationEnabled();
+      const frameStarted = performanceEnabled ? readPerformanceNow() : 0;
+      const frameIntervalMs =
+        performanceEnabled && lastPerformanceFrameMark !== null ? Math.max(0, frameStarted - lastPerformanceFrameMark) : undefined;
+      if (performanceEnabled) {
+        lastPerformanceFrameMark = frameStarted;
+      }
       engine.runSteps(steps);
-      set({ latestSnapshot: engine.createSnapshot(), lastError: null });
+      const snapshot = engine.createSnapshot();
+      set({ latestSnapshot: snapshot, lastError: null });
+      if (performanceEnabled) {
+        engine.recordFramePerformance({
+          steps,
+          updateMs: Math.max(0, readPerformanceNow() - frameStarted),
+          ...(frameIntervalMs !== undefined ? { frameIntervalMs } : {})
+        });
+      }
       clearStaleSelection(set, get);
     } catch (error) {
       engine.pause();
+      lastPerformanceFrameMark = null;
       set({ isRunning: false, lastError: errorMessage(error) });
     }
   },
@@ -320,6 +339,7 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
     try {
       const { engine, validation } = createEngineFromScenario(scenario);
       const descriptor = requireTemplateDescriptor(validation.scenario.templateId);
+      configurePerformanceInstrumentation(engine);
       engine.setSpeed(get().speedMultiplier);
       set({
         selectedTemplateId: descriptor.id,
@@ -536,8 +556,8 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
       const descriptor = requireTemplateDescriptor(raw.templateId ?? get().selectedTemplateId);
       const engine =
         get().importMode === "scenario"
-          ? SimulationEngine.fromScenario(descriptor.template, text)
-          : SimulationEngine.fromSnapshot(descriptor.template, text);
+          ? SimulationEngine.fromScenario(descriptor.template, text, { performance: performanceInstrumentationOptions() })
+          : SimulationEngine.fromSnapshot(descriptor.template, text, { performance: performanceInstrumentationOptions() });
       engine.setSpeed(get().speedMultiplier);
       set({
         selectedTemplateId: descriptor.id,
@@ -613,7 +633,8 @@ function replaceEngine(
     const descriptor = requireTemplateDescriptor(options.templateId);
     const engine = new SimulationEngine(descriptor.template, {
       seed: options.seed,
-      parameters: options.parameters
+      parameters: options.parameters,
+      performance: performanceInstrumentationOptions()
     });
     engine.setSpeed(get().speedMultiplier);
     set({
@@ -634,6 +655,31 @@ function replaceEngine(
     const prefix = options.errorPrefix ? `${options.errorPrefix}: ` : "";
     set({ lastError: `${prefix}${errorMessage(error)}`, lastNotice: null });
   }
+}
+
+function configurePerformanceInstrumentation(engine: SimulationEngine): void {
+  const options = performanceInstrumentationOptions();
+  if (options.enabled) {
+    engine.enablePerformanceInstrumentation(options);
+  }
+}
+
+function performanceInstrumentationOptions(): { enabled: boolean; maxSamples: number } {
+  return {
+    enabled: loadPerformanceInstrumentationPreference(),
+    maxSamples: 240
+  };
+}
+
+function loadPerformanceInstrumentationPreference(): boolean {
+  if (typeof window === "undefined") {
+    return false;
+  }
+  return window.localStorage.getItem(performanceInstrumentationStorageKey) === "enabled";
+}
+
+function readPerformanceNow(): number {
+  return globalThis.performance?.now?.() ?? Date.now();
 }
 
 function clearStaleSelection(set: (partial: Partial<SimulationUiState>) => void, get: () => SimulationUiState): void {

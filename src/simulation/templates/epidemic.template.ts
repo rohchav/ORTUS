@@ -15,7 +15,7 @@ import type {
 } from "../kernel/types";
 import { SimulationValidationError } from "../kernel/Errors";
 import { World } from "../kernel/World";
-import { Continuous2DSpace } from "../spaces/Continuous2DSpace";
+import { Continuous2DSpace, continuous2DQueryDiagnosticsDelta } from "../spaces/Continuous2DSpace";
 import type { RandomStream } from "../kernel/Random";
 import type { Point2D } from "../spaces/Space";
 import { createTemplateAssumptionProfile } from "../assumptions/profiles";
@@ -144,6 +144,22 @@ const spaceDefinition: TemplateSpaceDefinition = {
   boundaryMode: "wrap",
   dimensions: { width: 100, height: 100 }
 };
+
+const runtimeMetadata = {
+  expectedScaleClass: "medium",
+  neighborSearchStrategy: "continuousSpatialHash",
+  hotLoopNotes: [
+    "Infection sensing calls Continuous2DSpace.queryNeighbors for infected agents; the generic continuous reader uses a tick-local spatial index for local-radius queries.",
+    "Tiny worlds and broad/global radii still use deterministic all-pairs fallback.",
+    "Movement uses batched command-buffer updates after sensing."
+  ],
+  defaultEntityCount: 80,
+  stressEntityCount: 500,
+  knownPerformanceLimits: [
+    "Large infected populations with broad infectionRadius can still approach O(infected * agents) contact checks when fallback is selected.",
+    "Interactive UI frames still clone and publish full snapshots."
+  ]
+} as const;
 
 const entityTypeDefinitions: EntityTypeDefinition[] = [
   {
@@ -337,6 +353,7 @@ export const epidemicTemplate: SimulationTemplate = {
   capabilities,
   spaceDefinition,
   entityTypeDefinitions,
+  runtimeMetadata,
   parameterDefinitions,
   metricDefinitions,
   initializationPresets,
@@ -561,6 +578,7 @@ export function createEpidemicTransmissionSystem(): System {
         const state = ctx.world.getComponent<InfectionStateComponent>(entityId, InfectionState);
         return state?.status === "infected";
       });
+      const diagnosticsBefore = space.queryDiagnostics();
 
       for (const infectedId of infectedIds.sort((left, right) => left.localeCompare(right))) {
         for (const neighbor of space.queryNeighbors(infectedId, params.infectionRadius)) {
@@ -593,8 +611,24 @@ export function createEpidemicTransmissionSystem(): System {
           );
         }
       }
+      recordContinuous2DCounters(ctx.performance, diagnosticsBefore, space.queryDiagnostics());
     }
   };
+}
+
+function recordContinuous2DCounters(
+  performance: { recordCounter(counterId: string, value: number): void },
+  before: ReturnType<Continuous2DSpace["queryDiagnostics"]>,
+  after: ReturnType<Continuous2DSpace["queryDiagnostics"]>
+): void {
+  const delta = continuous2DQueryDiagnosticsDelta(before, after);
+  performance.recordCounter("continuous2DNeighborQueries", delta.queryCount);
+  performance.recordCounter("continuous2DAllPairsQueries", delta.allPairsQueries);
+  performance.recordCounter("continuous2DSpatialIndexQueries", delta.spatialIndexQueries);
+  performance.recordCounter("continuous2DSpatialIndexBuilds", delta.spatialIndexBuilds);
+  performance.recordCounter("continuous2DNeighborDistanceChecks", delta.distanceChecks);
+  performance.recordCounter("continuous2DSpatialIndexCandidateChecks", delta.spatialIndexCandidateChecks);
+  performance.recordCounter("continuous2DSpatialIndexVisitedCells", delta.spatialIndexVisitedCells);
 }
 
 export function createRecoveryEventSystem(): System {

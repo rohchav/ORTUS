@@ -15,7 +15,7 @@ import type {
 } from "../kernel/types";
 import { SimulationValidationError } from "../kernel/Errors";
 import { World } from "../kernel/World";
-import { Continuous2DSpace } from "../spaces/Continuous2DSpace";
+import { Continuous2DSpace, continuous2DQueryDiagnosticsDelta } from "../spaces/Continuous2DSpace";
 import type { RandomStream } from "../kernel/Random";
 import type { Point2D } from "../spaces/Space";
 import { Position2D, Velocity2D } from "./epidemic.template";
@@ -171,6 +171,22 @@ const spaceDefinition: TemplateSpaceDefinition = {
   dimensions: { width: 100, height: 100 }
 };
 
+const runtimeMetadata = {
+  expectedScaleClass: "medium",
+  neighborSearchStrategy: "continuousSpatialHash",
+  hotLoopNotes: [
+    "Predators use Continuous2DSpace.queryNeighbors for predation; the generic continuous reader uses a tick-local spatial index for local-radius queries.",
+    "Tiny worlds and broad/global radii still use deterministic all-pairs fallback.",
+    "Population size can change during a run through reproduction and death."
+  ],
+  defaultEntityCount: 123,
+  stressEntityCount: 500,
+  knownPerformanceLimits: [
+    "High predator counts or broad predationRadius settings can still create many continuous neighbor scans and all-pairs fallback.",
+    "Extinction or reproduction can make per-run cost vary substantially by seed and parameter choice."
+  ]
+} as const;
+
 const entityTypeDefinitions: EntityTypeDefinition[] = [
   {
     typeId: "prey",
@@ -291,6 +307,7 @@ export const predatorPreyTemplate: SimulationTemplate = {
   capabilities,
   spaceDefinition,
   entityTypeDefinitions,
+  runtimeMetadata,
   parameterDefinitions,
   metricDefinitions,
   initializationPresets,
@@ -409,6 +426,8 @@ export function createPredatorPreyMovementSystem(): System {
       if (!space) {
         throw new SimulationValidationError("Predator-prey space is missing");
       }
+      const moveUpdates: Record<string, Point2D> = {};
+      const positionUpdates: Record<string, Point2D> = {};
       for (const entityId of ctx.entityIds ?? []) {
         const position = ctx.world.getComponent<Point2D>(entityId, Position2D);
         const velocity = ctx.world.getComponent<Point2D>(entityId, Velocity2D);
@@ -416,8 +435,12 @@ export function createPredatorPreyMovementSystem(): System {
           continue;
         }
         const next = { x: position.x + velocity.x * ctx.dt, y: position.y + velocity.y * ctx.dt };
-        ctx.commands.moveEntity(PREDATOR_PREY_SPACE_ID, entityId, next, "predator-prey movement");
-        ctx.commands.setComponent(entityId, Position2D, next, "sync position component");
+        moveUpdates[entityId] = next;
+        positionUpdates[entityId] = next;
+      }
+      if (Object.keys(moveUpdates).length > 0) {
+        ctx.commands.moveEntities(PREDATOR_PREY_SPACE_ID, moveUpdates, "predator-prey movement");
+        ctx.commands.setComponents(Position2D, positionUpdates, "sync position components");
       }
     }
   };
@@ -453,14 +476,20 @@ export function createPredatorPreyBoundarySystem(): System {
       if (!space) {
         throw new SimulationValidationError("Predator-prey space is missing");
       }
+      const moveUpdates: Record<string, Point2D> = {};
+      const positionUpdates: Record<string, Point2D> = {};
       for (const entityId of ctx.entityIds ?? []) {
         const position = ctx.world.getComponent<Point2D>(entityId, Position2D);
         if (!position) {
           continue;
         }
         const bounded = space.normalizePosition(position);
-        ctx.commands.moveEntity(PREDATOR_PREY_SPACE_ID, entityId, bounded, "predator-prey boundary");
-        ctx.commands.setComponent(entityId, Position2D, bounded, "sync bounded position");
+        moveUpdates[entityId] = bounded;
+        positionUpdates[entityId] = bounded;
+      }
+      if (Object.keys(moveUpdates).length > 0) {
+        ctx.commands.moveEntities(PREDATOR_PREY_SPACE_ID, moveUpdates, "predator-prey boundary");
+        ctx.commands.setComponents(Position2D, positionUpdates, "sync bounded positions");
       }
     }
   };
@@ -491,6 +520,7 @@ export function createPredationSystem(): System {
           predators.push(entityId);
         }
       }
+      const diagnosticsBefore = space.queryDiagnostics();
       for (const predatorId of predators.sort((left, right) => left.localeCompare(right))) {
         const energy = ctx.world.getComponent<EnergyComponent>(predatorId, Energy);
         if (!energy) {
@@ -511,8 +541,24 @@ export function createPredationSystem(): System {
           "predator energy gain"
         );
       }
+      recordContinuous2DCounters(ctx.performance, diagnosticsBefore, space.queryDiagnostics());
     }
   };
+}
+
+function recordContinuous2DCounters(
+  performance: { recordCounter(counterId: string, value: number): void },
+  before: ReturnType<Continuous2DSpace["queryDiagnostics"]>,
+  after: ReturnType<Continuous2DSpace["queryDiagnostics"]>
+): void {
+  const delta = continuous2DQueryDiagnosticsDelta(before, after);
+  performance.recordCounter("continuous2DNeighborQueries", delta.queryCount);
+  performance.recordCounter("continuous2DAllPairsQueries", delta.allPairsQueries);
+  performance.recordCounter("continuous2DSpatialIndexQueries", delta.spatialIndexQueries);
+  performance.recordCounter("continuous2DSpatialIndexBuilds", delta.spatialIndexBuilds);
+  performance.recordCounter("continuous2DNeighborDistanceChecks", delta.distanceChecks);
+  performance.recordCounter("continuous2DSpatialIndexCandidateChecks", delta.spatialIndexCandidateChecks);
+  performance.recordCounter("continuous2DSpatialIndexVisitedCells", delta.spatialIndexVisitedCells);
 }
 
 export function createEnergyDecaySystem(): System {
