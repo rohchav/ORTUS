@@ -13,7 +13,7 @@ Starting state:
 - `.next` and `tsconfig.tsbuildinfo` are tracked and dirty.
 - `.gitignore` only ignored `node_modules`.
 - Current uncommitted source changes appear centered on runtime performance instrumentation, continuous spatial indexing, Flocking optimization, Forest Fire hot-loop optimization, runtime metadata, tests, docs, and `npm run perf:simulation`.
-- `docs/roadmap.md` has prompt-status drift: early roadmap text says Prompts 1-17B while later source/docs indicate Prompt 30 service-first work is present and Prompt 31 remains future.
+- `docs/roadmap.md` had prompt-status drift: early roadmap text understated completed prompts while later source/docs indicated Prompt 30 service-first work was present and Prompt 31 remained future.
 
 Session guardrails:
 
@@ -73,3 +73,33 @@ Remaining work:
 - Keep the staged generated cleanup in a hygiene commit rather than mixing generated artifacts into feature work.
 - Review the uncommitted performance/instrumentation pass before proceeding to Prompt 31.
 - Fix roadmap prompt-status drift in a later docs cleanup if desired.
+
+## 2026-06-05 - R4 Roadmap Status Drift Cleanup
+
+Goal: clean up roadmap/status drift only, without source code or package-file changes.
+
+Starting state:
+
+- Worktree was clean before the docs-only patch.
+- Recent commits showed the post-30B stabilization/performance work completed: `dd6c256`, `4949b72`, and `a80d5b7`.
+- Prompt 31 had not started.
+
+Docs updated to consistently state:
+
+- ORTUS is completed and audited through Prompt 30B.
+- The post-30B repository hygiene, durable context, dependency stabilization, and performance/scalability pass is complete.
+- Prompt 31 has not started.
+- The next roadmap prompt is Prompt 31: Model Schema + Interpreter Foundation V1.
+
+R4 touched docs plus narrow test-maintenance assertions/time budgets needed to keep roadmap/status checks current. No runtime source or package files were changed.
+
+Checks run:
+
+- `npm run typecheck`: passed.
+- `npm run test -- roadmap`: initially failed on the retired 17B roadmap assertion, then passed after updating the roadmap-status assertion.
+- `npm run test -- control`: passed after updating the retired Prompt 31 wording assertion.
+- `npm run test -- predatorPrey`: passed after adding an explicit time budget to the existing 300-tick smoke test.
+- `npm run test -- template.system`: passed after adding an explicit time budget to the existing seed-difference smoke test.
+- `npm run test`: passed, 43 files and 322 tests.
+- `npm run build`: passed with Next.js 15.5.19.
+- `npm run lint`: unavailable; no lint script exists in `package.json`.

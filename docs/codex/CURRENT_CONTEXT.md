@@ -1,6 +1,6 @@
 # ORTUS Current Context
 
-Last updated: 2026-06-04 after R2 stabilization
+Last updated: 2026-06-05 after R4 roadmap status cleanup
 
 ## Project Identity
 
@@ -13,6 +13,10 @@ Built-in production templates currently include Epidemic Spread, Opinion Dynamic
 ## Completed Prompt State
 
 Durable docs and source indicate completed/audited roadmap work through Prompt 30B, with Prompt 31 not started.
+
+The post-30B repository hygiene, dependency stabilization, durable context, and performance/scalability pass has also been completed. Recent commits include `dd6c256` for repo context/generated-artifact hygiene, `4949b72` for dependency and performance script stabilization, and `a80d5b7` for simulation performance instrumentation and spatial indexing foundations.
+
+The next roadmap prompt is Prompt 31: Model Schema + Interpreter Foundation V1.
 
 Implemented runtime foundations include scenarios, snapshots, template-defined behavior modes, agent composition, interventions, experiments, run summaries/comparison, seeded randomness, metrics, spaces, and template metadata.
 
@@ -35,7 +39,7 @@ Dependency audit note: npm reports two moderate vulnerabilities and recommends `
 
 ## Performance And Scalability Work Status
 
-The current dirty worktree contains an uncommitted performance/instrumentation pass. It appears to include:
+The post-30B performance/instrumentation pass is complete and committed. It includes:
 
 - `SimulationPerformanceMonitor` and engine timing/counter hooks.
 - Debug panel display of performance samples when instrumentation is enabled.
@@ -46,7 +50,7 @@ The current dirty worktree contains an uncommitted performance/instrumentation p
 - Focused tests for spatial indexing, performance instrumentation, runtime metadata, Flocking behavior, and Forest Fire counters.
 - A non-asserting `npm run perf:simulation` report script.
 
-This work must be reviewed and tested before commit. It must not be described as SpatialFieldModel, BoundaryEnvironmentModel, multi-scale, or high-scale runtime support.
+This work must not be described as SpatialFieldModel, BoundaryEnvironmentModel, multi-scale, or high-scale runtime support.
 
 Latest observed `npm run perf:simulation` smoke results from this machine:
 
@@ -62,23 +66,21 @@ These are local smoke numbers only. They are not benchmark evidence for scalabil
 Generated artifacts have been removed from git tracking without deleting local files:
 
 - `.gitignore` now ignores `node_modules/`, `.next/`, `tsconfig.tsbuildinfo`, local env files, and package-manager debug logs.
-- `git rm --cached -r .next tsconfig.tsbuildinfo` staged removal of the previously tracked generated artifacts.
+- `git rm --cached -r .next tsconfig.tsbuildinfo` removed the previously tracked generated artifacts from git tracking.
 - `git ls-files .next tsconfig.tsbuildinfo` now returns no tracked files.
 - The local `.next` directory and local `tsconfig.tsbuildinfo` still exist after build/typecheck activity, but they are ignored.
-- The staged generated cleanup currently accounts for 226 generated files and 1097 deletions.
+- The generated cleanup accounted for 226 generated files and 1097 deletions before commit.
 
 Real source changes are now reviewable separately from generated build/cache noise.
 
 ## Current Blockers
 
-- `docs/roadmap.md` has prompt numbering/status drift: the "Current Foundation" section still references Prompts 1-17B while later docs/source describe Prompt 30.
-- The performance/instrumentation pass is still uncommitted and needs human review before it becomes the new baseline.
 - npm reports two moderate audit findings; no force fix was run.
-- Prompt 31 remains blocked until the stabilization/performance work is reviewed and committed intentionally.
+- Prompt 31 has not started and should begin only from the current clean roadmap baseline.
 
 ## Next Recommended Prompt After Stabilization
 
-Next recommended prompt: review and commit the current stabilization/performance work in a clean split, starting with repo hygiene and durable context, then dependency/test stabilization, then the performance/instrumentation pass. Only after that should ORTUS proceed toward Prompt 31.
+Next recommended prompt: Prompt 31: Model Schema + Interpreter Foundation V1.
 
 ## Critical Guardrails
 
