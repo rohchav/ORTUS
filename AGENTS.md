@@ -106,6 +106,15 @@
 - Do not treat uncertainty ensembles or robustness descriptors as policy validation.
 - Do not mark templates controlStrategy/interventionStrategy-capable unless runtime uses `ControlStrategyModel`.
 - Keep validation/calibration reserved for later prompts.
+- Do not model full human cognition by default.
+- Do not add LLM-per-agent runtime, natural-language reasoning per tick, or agent minds that depend on external model calls.
+- Do not use unbounded memory, free-text biographies, embeddings, model weights, or arbitrary documents as runtime agent state unless a later audited primitive explicitly designs that support.
+- Social/cognitive models must use bounded symbolic or numeric representations with explicit validation.
+- Crowd or stranger exposure may be represented as aggregate exposure or future structural field-style metadata, but must not imply `SpatialFieldModel` runtime support unless implemented.
+- Background initialization is compressed prior seeding, not full life-history simulation, pretraining, or real-person reconstruction.
+- Do not claim human prediction, mind simulation, psychological diagnosis, manipulation guidance, or real-person trait inference.
+- Do not encode stereotypes or protected attributes without explicit ethical review, purpose, and modeling need.
+- Social learning runtime must start narrowly, likely with Opinion Dynamics, and remain template-defined, bounded, and audited.
 - Do not describe the Forest Fire / Landscape Spread template as wildfire prediction, GIS/weather/wind/humidity/terrain/suppression/firefighting modeling, calibrated fire behavior, generic control strategy support, SpatialFieldModel runtime support, or BoundaryEnvironmentModel runtime support.
 - Preserve valid-vs-runnable distinction for structural primitives.
 - Run comparison stores bounded run summaries for local comparison. Do not store full snapshots by default, and do not treat comparison workspace state as authoritative simulation state.
