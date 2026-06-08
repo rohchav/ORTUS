@@ -885,7 +885,12 @@ describe("strategy, control, and intervention semantics services", () => {
     expect(docs).toContain("Active policies, triggers, and objectives are structural declarations, not runtime-executed control loops.");
     expect(docs).toContain("Do not treat template-owned interventions as general strategy/control support.");
     expect(docs).toContain("Do not mark templates controlStrategy/interventionStrategy-capable unless runtime uses `ControlStrategyModel`.");
-    expect(docs).toContain("Prompt 31 model schema/interpreter foundation remains future work unless roadmap says otherwise.");
+    expect(docs).toContain("Prompt 31: Model Schema + Interpreter Foundation V1, Prompt 31B: Model Schema + Interpreter Foundation Audit, Prompt 31C");
+    expect(docs).toContain("Prompt 31C: Knowledge, Memory + Social Learning Semantics V1");
+    expect(docs).toContain("Prompt 31D: Knowledge, Memory + Social Learning Audit");
+    expect(docs).toContain("Prompt 32: Visual Model Builder Planning + Workspace Schema V1");
+    expect(docs).toContain("Runtime interpreter/compiler, visual builder UI support, external framework interop, social-learning runtime, full human cognition, LLM-per-agent runtime, validation, and calibration remain future work.");
+    expect(docs).toContain("Workspace nodes and edges are visual descriptors, not executable dataflow or runtime behavior.");
 
     const controlDir = join(repoRoot, "src", "simulation", "control");
     const source = readdirSync(controlDir)

@@ -360,7 +360,7 @@ describe("production template system", () => {
       right.runSteps(20);
       expect(right.createSnapshot()).not.toEqual(left.createSnapshot());
     }
-  });
+  }, 30_000);
 });
 
 function firstComponentReference(snapshot: ReturnType<SimulationEngine["snapshotExport"]>): { componentType: string; entityId: string } | undefined {

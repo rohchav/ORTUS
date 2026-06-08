@@ -93,6 +93,11 @@ const attachmentTypeArtifactTypes: Record<PrimitiveAttachmentType, readonly stri
   emergencePatternModel: ["ortus.emergencePatternModel"],
   robustnessResilienceModel: ["ortus.robustnessResilienceModel"],
   controlStrategyModel: ["ortus.controlStrategyModel"],
+  modelSchema: ["ortus.modelSchema"],
+  knowledgeMemorySocialLearningModel: ["ortus.knowledgeMemorySocialLearningModel"],
+  visualBuilderWorkspace: ["ortus.visualBuilderWorkspace"],
+  schemaTemplateCompatibilityReport: ["ortus.schemaTemplateCompatibilityReport"],
+  templateMappingProfile: ["ortus.templateMappingProfile"],
   declaredPrimitive: [],
   reservedFuture: []
 };

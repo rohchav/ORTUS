@@ -34,6 +34,11 @@ export const primitiveAttachmentTypes = [
   "emergencePatternModel",
   "robustnessResilienceModel",
   "controlStrategyModel",
+  "modelSchema",
+  "knowledgeMemorySocialLearningModel",
+  "visualBuilderWorkspace",
+  "schemaTemplateCompatibilityReport",
+  "templateMappingProfile",
   "declaredPrimitive",
   "reservedFuture"
 ] as const;

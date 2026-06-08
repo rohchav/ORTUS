@@ -32,6 +32,42 @@
 - Do not treat uncertainty ensembles as calibrated probabilities.
 - Do not add visual builder features before schema/interpreter/execution-safety foundations.
 - Do not add arbitrary code execution, user-authored formulas, or expression evaluation.
+- Do not treat `ModelSchemaDefinition` as executable.
+- Do not parse, compile, or execute `ruleDescription`.
+- Do not accept formulas, code, scripts, function bodies, compiler payloads, visual-builder state, external-framework code, optimizer payloads, LLM payloads, or live engine state in model schemas.
+- Do not claim visual builder support from model schema support.
+- Do not treat `VisualBuilderWorkspaceDefinition` as UI.
+- Visual builder workspaces are structural planning artifacts; they do not implement the visual builder UI.
+- Workspace nodes and edges are visual descriptors, not executable dataflow or runtime behavior.
+- A valid visual builder workspace does not make a model schema runnable.
+- Prompt 32 does not add drag-and-drop modeling, visual programming, or schema execution.
+- Do not treat workspace nodes as runtime objects.
+- Do not treat workspace edges as executable dataflow.
+- Do not infer visual builder support from workspace schema support.
+- Do not add drag/drop, graph rendering, or visual programming before the proper UI prompts.
+- Do not let workspaces generate scenarios, RunConfigs, snapshots, templates, or engines.
+- Do not parse or execute node metadata.
+- Do not claim external framework compatibility from workspace references.
+- Do not claim social/cognitive runtime from social-learning workspace nodes.
+- Preserve valid-vs-runnable distinction.
+- Do not claim NetLogo, Mesa, or MASON interop from model schema support.
+- Do not claim current templates are generated from schemas.
+- Do not mark templates modelSchema-capable unless their runtime actually uses `ModelSchemaDefinition`.
+- Do not let model schemas create scenarios, RunConfigs, snapshots, engines, or template runtime behavior without a specific future runtime prompt.
+- Template/schema compatibility reports are structural fit analyses; they do not convert schemas into runnable models.
+- A strong template fit does not mean a schema can run.
+- Unsupported and lossy mappings must remain visible; they must not be silently dropped.
+- Compatibility mapping does not generate scenarios, RunConfigs, snapshots, templates, or engines.
+- Do not treat compatibility as conversion.
+- Do not treat strong fit as runnable.
+- Do not hide unsupported concepts.
+- Do not silently drop lossy mappings.
+- Do not generate scenarios/RunConfigs/snapshots/templates from compatibility reports.
+- Do not mutate templates from compatibility reports.
+- Do not claim template support for service-only primitives.
+- Do not claim validation/calibration from compatibility mapping.
+- Do not claim visual builder runtime from compatibility reports.
+- Do not treat belief, memory, or social-learning rule declarations as runtime cognition.
 - Do not collapse observability into internal state. Observability must distinguish simulated state and runtime metrics from measured, partial, noisy, proxy, synthetic, or empirical observation definitions.
 - Do not skip audit prompts after feature prompts.
 - Prefer small audited phases over broad rewrites, especially for reserved roadmap pillars.
@@ -109,12 +145,19 @@
 - Do not model full human cognition by default.
 - Do not add LLM-per-agent runtime, natural-language reasoning per tick, or agent minds that depend on external model calls.
 - Do not use unbounded memory, free-text biographies, embeddings, model weights, or arbitrary documents as runtime agent state unless a later audited primitive explicitly designs that support.
+- Knowledge, memory, and social-learning descriptors are structural semantics; they do not implement human cognition.
+- Background profiles are compressed prior descriptors, not simulated life histories.
+- Crowd and stranger exposure should usually be modeled as aggregate signals, representative agents, or fields rather than thousands of throwaway individuals.
+- LLM-per-agent runtime is not implemented and must not be implied.
 - Social/cognitive models must use bounded symbolic or numeric representations with explicit validation.
 - Crowd or stranger exposure may be represented as aggregate exposure or future structural field-style metadata, but must not imply `SpatialFieldModel` runtime support unless implemented.
 - Background initialization is compressed prior seeding, not full life-history simulation, pretraining, or real-person reconstruction.
 - Do not claim human prediction, mind simulation, psychological diagnosis, manipulation guidance, or real-person trait inference.
 - Do not encode stereotypes or protected attributes without explicit ethical review, purpose, and modeling need.
 - Social learning runtime must start narrowly, likely with Opinion Dynamics, and remain template-defined, bounded, and audited.
+- Do not treat social-learning descriptors as runtime behavior.
+- Do not use knowledge/memory/social-learning semantics for persuasion or microtargeting optimization.
+- Do not infer real-person traits, protected classes, psychological diagnoses, or real-person profiles from this structural layer.
 - Do not describe the Forest Fire / Landscape Spread template as wildfire prediction, GIS/weather/wind/humidity/terrain/suppression/firefighting modeling, calibrated fire behavior, generic control strategy support, SpatialFieldModel runtime support, or BoundaryEnvironmentModel runtime support.
 - Preserve valid-vs-runnable distinction for structural primitives.
 - Run comparison stores bounded run summaries for local comparison. Do not store full snapshots by default, and do not treat comparison workspace state as authoritative simulation state.

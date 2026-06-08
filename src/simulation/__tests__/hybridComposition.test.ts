@@ -160,6 +160,27 @@ describe("hybrid model composition layer", () => {
     });
     expect(validateCompositionCapabilities(resourceRuntime).runnableNow).toBe(false);
 
+    const modelSchemaRuntime = baseComposition({
+      baseTemplateId: "opinion-dynamics",
+      primitiveAttachments: [
+        {
+          id: "schema-ref",
+          primitiveId: "modelSchema",
+          attachmentType: "modelSchema",
+          mode: "reference",
+          artifactType: "ortus.modelSchema",
+          artifactId: "schema-1",
+          active: true,
+          required: true
+        }
+      ],
+      requiredCapabilities: [{ primitiveId: "modelSchema", requiredSupportLevel: "runtime" }]
+    });
+    const modelSchemaReport = validateCompositionCapabilities(modelSchemaRuntime);
+    expect(modelSchemaReport.valid).toBe(true);
+    expect(modelSchemaReport.runnableNow).toBe(false);
+    expect(modelSchemaReport.missingCapabilities[0]).toMatchObject({ primitiveId: "modelSchema", requiredSupportLevel: "runtime" });
+
     const feedbackRuntime = baseComposition({
       baseTemplateId: "opinion-dynamics",
       requiredCapabilities: [{ primitiveId: "feedbackEvents", requiredSupportLevel: "runtime" }]
@@ -242,7 +263,10 @@ describe("hybrid model composition layer", () => {
       "ortus.observabilityModel",
       "ortus.quantitySemanticsModel",
       "ortus.emergencePatternModel",
-      "ortus.robustnessResilienceModel"
+      "ortus.robustnessResilienceModel",
+      "ortus.visualBuilderWorkspace",
+      "ortus.schemaTemplateCompatibilityReport",
+      "ortus.templateMappingProfile"
     ]) {
       expect(() => deserializeHybridComposition(JSON.stringify({ schemaVersion: "1", artifactType }))).toThrow(/artifact type/);
     }
@@ -266,6 +290,9 @@ describe("hybrid model composition layer", () => {
     expect(getPrimitive("unitsDimensionalConsistency")).toMatchObject({ status: "serviceOnly", supportLevel: "service" });
     expect(getPrimitive("emergenceDetection")).toMatchObject({ status: "serviceOnly", supportLevel: "service" });
     expect(getPrimitive("robustnessResilience")).toMatchObject({ status: "serviceOnly", supportLevel: "service" });
+    expect(getPrimitive("modelSchema")).toMatchObject({ status: "serviceOnly", supportLevel: "service" });
+    expect(getPrimitive("visualBuilderWorkspace")).toMatchObject({ status: "serviceOnly", supportLevel: "service" });
+    expect(getPrimitive("schemaTemplateCompatibility")).toMatchObject({ status: "serviceOnly", supportLevel: "service" });
     expect(listReservedPrimitives().map((primitive) => primitive.id)).not.toContain("hybridComposition");
     for (const template of productionTemplates) {
       expect(getTemplateCapability(template.id, "hybridComposition")).toMatchObject({
@@ -280,6 +307,9 @@ describe("hybrid model composition layer", () => {
       expect(getTemplateCapability(template.id, "unitsDimensionalConsistency")).toMatchObject({ runtimeActive: false, serviceAvailable: true });
       expect(getTemplateCapability(template.id, "emergenceDetection")).toMatchObject({ runtimeActive: false, serviceAvailable: true });
       expect(getTemplateCapability(template.id, "robustnessResilience")).toMatchObject({ runtimeActive: false, serviceAvailable: true });
+      expect(getTemplateCapability(template.id, "modelSchema")).toMatchObject({ runtimeActive: false, serviceAvailable: true });
+      expect(getTemplateCapability(template.id, "visualBuilderWorkspace")).toMatchObject({ runtimeActive: false, serviceAvailable: true });
+      expect(getTemplateCapability(template.id, "schemaTemplateCompatibility")).toMatchObject({ runtimeActive: false, serviceAvailable: true });
     }
   });
 

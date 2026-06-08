@@ -519,22 +519,218 @@ export const primitiveRegistry: readonly SystemsPrimitiveEntry[] = [
     ],
     promptIntroduced: "Prompt 27"
   }),
-  reservedPrimitive("modelDefinitionSchema", "Model Definition Schema", "Versioned model schemas for future custom/hybrid models.", "Prompt 43 will define model definition schemas.", [
+  primitive({
+    id: "modelSchema",
+    label: "Model Schema",
+    description: "Headless structural model schema declarations for entities, components, attributes, spaces, parameters, metrics, rule metadata, and artifact references.",
+    status: "serviceOnly",
+    supportLevel: "service",
+    currentScope:
+      "Model schema services validate, serialize, query, summarize, and report capability gaps for structural ModelSchemaDefinition artifacts only. Model schemas declare model structure; they do not execute rules or create runnable simulations.",
+    futureScope:
+      "Future prompts may connect model schemas to visual builder planning, safe rule primitives, template-constrained mapping, and restricted interpreter work behind explicit audits.",
+    limitations: [
+      "No runtime interpreter, compiler, arbitrary rule execution, visual builder, external framework interop, NetLogo/Mesa/MASON conversion, custom simulation execution, social-learning runtime, or LLM agents are implemented.",
+      "A valid model schema is not a template, scenario, RunConfig, or snapshot.",
+      "Rule declarations are descriptive metadata, not parsed formulas or executable behavior."
+    ],
+    docsRefs: foundationDocs,
+    artifactTypes: ["ortus.modelSchema"],
+    relatedPrimitives: [
+      "modelDefinitionSchema",
+      "safeInterpreterCompiler",
+      "visualModelBuilder",
+      "hybridComposition",
+      "assumptions",
+      "validationCalibration",
+      "externalFrameworkInterop"
+    ],
+    mustNotClaimYet: [
+      "template runtime support",
+      "runtime interpreter support",
+      "compiler support",
+      "arbitrary rule execution",
+      "visual builder support",
+      "scenario or RunConfig generation",
+      "snapshot generation",
+      "external framework interop",
+      "social-learning runtime",
+      "LLM agents",
+      "validated prediction"
+    ],
+    promptIntroduced: "Prompt 31"
+  }),
+  primitive({
+    id: "knowledgeMemorySocialLearning",
+    label: "Knowledge, Memory + Social Learning Semantics",
+    description:
+      "Headless structural descriptors for symbolic knowledge, belief variables, bounded memory traces, trust/source profiles, exposure channels, norms, and social-learning rule metadata.",
+    status: "serviceOnly",
+    supportLevel: "service",
+    currentScope:
+      "Structural/service-level semantic knowledge, belief, bounded memory, trust/source, exposure, background-prior, norm, relationship-role, and learning-rule descriptors only.",
+    futureScope:
+      "Future audited prompts may connect bounded descriptors to a narrow Opinion Dynamics social-learning runtime behind explicit template capability checks.",
+    limitations: [
+      "No runtime social learning, Opinion Dynamics runtime integration, full human cognition, LLM agents, unbounded memory, free-text biographies as runtime state, real-person profiling, protected-class inference, psychological diagnosis, persuasion or microtargeting optimization, prediction, validation, or calibration claims are implemented.",
+      "Knowledge, memory, and social-learning descriptors are structural semantics; they do not implement human cognition.",
+      "Background profiles are compressed prior descriptors, not simulated life histories."
+    ],
+    docsRefs: foundationDocs,
+    artifactTypes: ["ortus.knowledgeMemorySocialLearningModel"],
+    relatedPrimitives: [
+      "modelSchema",
+      "socialLearningRuntime",
+      "observability",
+      "causalAssumptions",
+      "uncertainty",
+      "networks",
+      "feedbackEvents",
+      "assumptions",
+      "validationCalibration"
+    ],
+    mustNotClaimYet: [
+      "template runtime support",
+      "runtime social learning",
+      "Opinion Dynamics runtime integration",
+      "full human cognition",
+      "LLM agents",
+      "real-person profiling",
+      "protected-class inference",
+      "psychological diagnosis",
+      "persuasion or microtargeting optimization",
+      "prediction",
+      "validation or calibration"
+    ],
+    promptIntroduced: "Prompt 31C"
+  }),
+  primitive({
+    id: "visualBuilderWorkspace",
+    label: "Visual Builder Workspace Schema",
+    description:
+      "Headless structural planning artifacts for future visual-builder workspaces, including visual nodes, edges, panels, sections, markers, layout, selection, and artifact references.",
+    status: "serviceOnly",
+    supportLevel: "service",
+    currentScope:
+      "Structural/service-level visual builder workspace declarations only. Visual builder workspaces are structural planning artifacts; they do not implement the visual builder UI.",
+    futureScope:
+      "Future audited prompts may connect workspace schemas to a safe UI shell, template/schema compatibility mapping, and later constrained model-authoring workflows.",
+    limitations: [
+      "No visual builder UI, node editor, drag/drop modeling, graph rendering, graph execution, visual programming, schema execution, compiler/interpreter runtime, scenario/RunConfig/snapshot/template generation, external framework interop, social/cognitive runtime, LLM agents, or custom runtime are implemented.",
+      "Workspace nodes and edges are visual descriptors, not executable dataflow or runtime behavior.",
+      "A valid visual builder workspace does not make a model schema runnable."
+    ],
+    docsRefs: foundationDocs,
+    artifactTypes: ["ortus.visualBuilderWorkspace"],
+    relatedPrimitives: [
+      "modelSchema",
+      "visualModelBuilder",
+      "safeInterpreterCompiler",
+      "hybridComposition",
+      "knowledgeMemorySocialLearning",
+      "customModelRuntime",
+      "llmAgents"
+    ],
+    mustNotClaimYet: [
+      "visual builder UI",
+      "node editor",
+      "drag/drop modeling",
+      "graph execution",
+      "visual programming",
+      "schema execution",
+      "compiler/interpreter runtime",
+      "scenario or RunConfig generation",
+      "snapshot generation",
+      "template generation",
+      "external framework interop",
+      "social-learning runtime",
+      "LLM agents",
+      "custom model runtime"
+    ],
+    promptIntroduced: "Prompt 32"
+  }),
+  primitive({
+    id: "schemaTemplateCompatibility",
+    label: "Template/Schema Compatibility Mapping",
+    description:
+      "Headless structural fit reports and template mapping profiles for comparing ModelSchemaDefinition artifacts with static production-template metadata.",
+    status: "serviceOnly",
+    supportLevel: "service",
+    currentScope:
+      "Compatibility services create structural fit analyses only. They validate, serialize, query, summarize, and report unsupported/lossy schema concepts without converting schemas into runnable models.",
+    futureScope:
+      "Future audited prompts may use compatibility reports as review inputs for safe builder flows or template-constrained runtime slices behind explicit capability checks.",
+    limitations: [
+      "No schema-to-template conversion, scenario generation, RunConfig generation, snapshot generation, template generation, engine creation, schema execution, visual-builder runtime, validation, or calibration is implemented.",
+      "A strong template fit does not mean a schema can run.",
+      "Unsupported and lossy mappings must remain visible."
+    ],
+    docsRefs: foundationDocs,
+    artifactTypes: ["ortus.schemaTemplateCompatibilityReport", "ortus.templateMappingProfile"],
+    relatedPrimitives: [
+      "modelSchema",
+      "visualBuilderWorkspace",
+      "safeInterpreterCompiler",
+      "customModelRuntime",
+      "validationCalibration",
+      "externalFrameworkInterop"
+    ],
+    mustNotClaimYet: [
+      "template runtime support",
+      "schema execution",
+      "schema-to-template conversion",
+      "scenario or RunConfig generation",
+      "snapshot generation",
+      "template generation",
+      "engine creation",
+      "visual builder runtime support",
+      "external framework interop",
+      "validated prediction",
+      "calibration"
+    ],
+    promptIntroduced: "Prompt 33"
+  }),
+  reservedPrimitive("modelDefinitionSchema", "Model Definition Schema", "Executable model definition runtime schema", "Future prompts will define runtime model-definition semantics beyond Prompt 31 structural model schemas.", [
+    "modelSchema",
     "safeInterpreterCompiler",
     "visualModelBuilder"
   ]),
   reservedPrimitive("rulePrimitiveLibrary", "Rule Primitive Library", "Safe reusable rule primitives for model definitions.", "Prompt 46 will define rule primitives.", [
     "behaviorModes",
+    "modelSchema",
     "safeInterpreterCompiler"
   ]),
+  reservedPrimitive(
+    "socialLearningRuntime",
+    "Social Learning Runtime",
+    "Narrow template-defined runtime behavior for social learning, likely starting with Opinion Dynamics.",
+    "Future prompts after Prompt 31D will define bounded Opinion Dynamics social-learning runtime behavior.",
+    ["knowledgeMemorySocialLearning", "modelSchema", "safeInterpreterCompiler"]
+  ),
   reservedPrimitive("safeInterpreterCompiler", "Safe Interpreter/Compiler", "Bounded execution of validated model definitions and rule primitives.", "Prompts 47-48 will define interpretation and execution safety.", [
+    "modelSchema",
     "modelDefinitionSchema",
     "rulePrimitiveLibrary"
   ]),
   reservedPrimitive("visualModelBuilder", "Visual Model Builder", "Visual authoring over validated schemas and safe rule primitives.", "Prompts 49-59 will define visual builder features.", [
     "modelDefinitionSchema",
+    "visualBuilderWorkspace",
     "safeInterpreterCompiler"
   ]),
+  reservedPrimitive(
+    "customModelRuntime",
+    "Custom Model Runtime",
+    "Runtime execution of user-authored custom models.",
+    "Future prompts may define a tightly constrained custom model runtime only after schema, safety, validation, and UI audits.",
+    ["modelDefinitionSchema", "safeInterpreterCompiler", "visualModelBuilder"]
+  ),
+  reservedPrimitive(
+    "llmAgents",
+    "LLM Agents",
+    "Agent behavior driven by external language-model calls.",
+    "LLM-per-agent runtime is not implemented and must not be implied.",
+    ["knowledgeMemorySocialLearning", "socialLearningRuntime", "customModelRuntime"]
+  ),
   reservedPrimitive("humanModelCritique", "Human-In-The-Loop Model Critique", "Structured critique prompts for missing variables, boundaries, scale, observability, and falsification.", "Prompts 60-62 will define model critique workflows.", [
     "assumptions",
     "observability"

@@ -2,7 +2,43 @@
 
 ORTUS is organized around a small set of simulation concepts. Keeping these boundaries explicit prevents model-family definitions, live run state, exploratory comparisons, and UI workspace data from collapsing into one ambiguous artifact.
 
+Roadmap status: ORTUS has completed Prompt 33: Template/Schema Compatibility Mapping V1. The post-30B repository hygiene, durable context, dependency stabilization, and performance/scalability pass is complete. Prompt 31, Prompt 31B, Prompt 31C, Prompt 31D, Prompt 32, Prompt 32B, and Prompt 33 are complete; the next roadmap prompt is Prompt 33B: Template/Schema Compatibility Mapping Audit.
+
 ## Core Vocabulary
+
+### Model Schema
+
+A ModelSchemaDefinition is a service-level structural artifact with artifact type `ortus.modelSchema`. It declares entity types, component types, attribute types, spaces, parameters, metrics, rule declarations, and artifact references in plain JSON.
+
+Model schemas declare model structure; they do not execute rules or create runnable simulations. A valid model schema is not a template, scenario, RunConfig, or snapshot. Rule declarations are descriptive metadata, not parsed formulas or executable behavior. Active means structurally active, not runtime-executed.
+
+Production templates are hand-built runtime models, not generated from model schemas. Model schemas do not create templates, produce snapshots, generate RunConfigs, power a visual builder UI, compile rules, parse formulas, or execute custom simulations. Runtime interpreter/compiler work remains future. External framework interop, validation/calibration, visual builder UI, and social-learning runtime remain future work.
+
+Belief, memory, and social-learning rule declarations are structural placeholders; they do not implement human cognition or social-learning runtime.
+
+### Knowledge, Memory + Social Learning Semantics
+
+Knowledge, Memory + Social Learning Semantics V1 is a service-level structural artifact family with artifact type `ortus.knowledgeMemorySocialLearningModel`. It describes symbolic knowledge items, belief variables, belief-state descriptors, bounded memory trace descriptors, attention/salience descriptors, trust/source profiles, exposure channels, social signal descriptors, background prior profiles, relationship roles, norm descriptors, and social learning rule descriptors.
+
+Knowledge, memory, and social-learning descriptors are structural semantics; they do not implement human cognition. Background profiles are compressed prior descriptors, not simulated life histories. Crowd and stranger exposure should usually be modeled as aggregate signals, representative agents, or fields rather than thousands of throwaway individuals. LLM-per-agent runtime is not implemented and must not be implied.
+
+This artifact family does not execute social learning, update beliefs, update memory, sample exposure, infer real-person traits, support protected-class inference, validate psychology, predict people, optimize persuasion, provide policy targeting, or mutate Opinion Dynamics. Opinion Dynamics Social Learning Runtime remains future work.
+
+### Visual Builder Workspace
+
+Visual Builder Workspace V1 is a service-level structural artifact family with artifact type `ortus.visualBuilderWorkspace`. It describes a future visual-builder workspace: workspace identity, referenced model schema and artifact ids, visual nodes, visual edges, panels, sections, validation markers, warning markers, unsupported/future-only markers, layout metadata, selection metadata, viewport metadata, notes, summaries, and validation reports.
+
+Visual builder workspaces are structural planning artifacts; they do not implement the visual builder UI. Workspace nodes and edges are visual descriptors, not executable dataflow or runtime behavior. A valid visual builder workspace does not make a model schema runnable. Prompt 32 does not add drag-and-drop modeling, visual programming, or schema execution.
+
+Workspace references to model schemas, social-learning semantics, observability, causality, networks, resources, feedback, quantities, control, hybrid compositions, scenarios, or templates are structural references only. They do not generate scenarios, RunConfigs, snapshots, templates, or engines; they do not execute node graphs; they do not add external framework interop; and they do not implement social-learning runtime or LLM agents. Active means structurally active, not runtime-executed. Prompt 34 safe builder UI shell remains future work.
+
+### Template/Schema Compatibility Mapping
+
+Template/Schema Compatibility Mapping V1 is a service-level structural artifact family with artifact types `ortus.schemaTemplateCompatibilityReport` and `ortus.templateMappingProfile`. It compares a `ModelSchemaDefinition` against static production-template metadata such as entity kinds, space kind, parameter kinds, metric kinds, behavior-mode metadata, and recognized artifact families.
+
+Template/schema compatibility reports are structural fit analyses; they do not convert schemas into runnable models. A strong template fit does not mean a schema can run. Unsupported and lossy mappings must remain visible; they must not be silently dropped. Compatibility mapping does not generate scenarios, RunConfigs, snapshots, templates, or engines.
+
+Compatibility reports do not execute schemas, parse `ruleDescription`, mutate templates, create engines, run visual builder graphs, infer external framework interop, validate model output, calibrate parameters, prove causality or emergence, prove robustness, estimate strategy effectiveness, or implement social-learning/cognitive runtime. A template mapping profile is a static metadata profile, not a runtime adapter or template support claim.
 
 ### Template
 
@@ -164,9 +200,9 @@ RunConfig and scenario JSON do not yet include `eventScheduleOptions`, `delayOpt
 
 ### Current Capability Vs Reserved Future Capability
 
-Currently implemented as service-first primitives: networks/relations, resources/stocks/flows, feedback/delays/events, uncertainty, assumptions/limits/ethics, hybrid composition, multi-scale structure, scale view state, boundaries/environment, spatial fields/environmental layers, observability/measurement models, causal assumption/influence models, units/dimensions/quantity semantics, emergence/pattern descriptors, robustness/resilience/stress-test semantics, and strategy/control/intervention semantics.
+Currently implemented as service-first primitives: networks/relations, resources/stocks/flows, feedback/delays/events, uncertainty, assumptions/limits/ethics, hybrid composition, multi-scale structure, scale view state, boundaries/environment, spatial fields/environmental layers, observability/measurement models, causal assumption/influence models, units/dimensions/quantity semantics, emergence/pattern descriptors, robustness/resilience/stress-test semantics, strategy/control/intervention semantics, model schema declarations, knowledge/memory/social-learning semantics, visual builder workspace schemas, and template/schema compatibility mapping.
 
-Currently not implemented: true multi-scale runtime, scale-aware renderer/UI, runtime observability measurement collection, runtime causal influence execution, runtime emergence detection, runtime robustness/resilience stress testing, runtime strategy/control execution, causal discovery/proof/inference/do-calculus/intervention optimization, runtime spatial-field sampling/diffusion/advection, runtime unit enforcement, automatic unit conversion, dimensional equation solving, multi-rate time, adaptive agents, heterogeneity layer, phase transition tools, attractor/basin tools, trace inspection, error budgets, custom model schema/compiler, visual model builder, calibration/data assimilation/MCMC, and external framework interop.
+Currently not implemented: true multi-scale runtime, scale-aware renderer/UI, runtime observability measurement collection, runtime causal influence execution, runtime emergence detection, runtime robustness/resilience stress testing, runtime strategy/control execution, model schema runtime execution, model schema compiler/interpreter runtime, schema-to-template conversion, compatibility-based runtime execution, social-learning runtime, full human cognition, LLM-per-agent runtime, real-person inference, protected-class inference, causal discovery/proof/inference/do-calculus/intervention optimization, runtime spatial-field sampling/diffusion/advection, runtime unit enforcement, automatic unit conversion, dimensional equation solving, multi-rate time, adaptive agents, heterogeneity layer, phase transition tools, attractor/basin tools, trace inspection, error budgets, visual model builder, calibration/data assimilation/MCMC, and external framework interop.
 
 Service-first primitives are foundations, not active model behavior. A template should not claim support for a primitive until its runtime actually uses that primitive.
 
@@ -192,7 +228,7 @@ Emergence Detection + Pattern Descriptors V1 is a headless structural service fo
 
 Robustness, Resilience + Stress Testing Semantics V1 is a headless structural service for declaring stressors, response criteria, failure modes, and stress-test plans. It does not execute stress tests at runtime, perturb active simulations, prove robustness or resilience, perform statistical validation, certify safety or operational readiness, or make current templates robustness-aware. Robustness and resilience descriptors declare stress semantics; they do not prove a system is robust or resilient. Active stressors and stress-test plans are structural declarations, not runtime-executed perturbations. Uncertainty ensembles, runtime metrics, and visual persistence are not robustness validation by themselves. Existing interventions are not general stress testing unless explicitly modeled and evaluated. Validation/calibration remains future work.
 
-Strategy, Control + Intervention Semantics V1 is a headless structural service for declaring strategies, intervention options, triggers, objectives, constraints, policies, stopping rules, and expected effects. It does not execute strategies at runtime, execute template interventions, run closed-loop control, optimize policies, prove intervention effectiveness, estimate treatment effects, certify safety or operational readiness, or make current templates strategy/control-aware. Strategy and control descriptors declare intervention semantics; they do not execute or prove strategies. Template-owned runtime interventions are not the same as general strategy/control support. Active policies, triggers, and objectives are structural declarations, not runtime-executed control loops. Runtime metrics are model outputs, not empirical strategy evidence. Causal assumptions do not prove intervention effects, robustness descriptors do not prove strategy robustness, and uncertainty ensembles are not policy validation by themselves. Prompt 31 model schema/interpreter foundation remains future work unless roadmap says otherwise. Validation/calibration remains future work.
+Strategy, Control + Intervention Semantics V1 is a headless structural service for declaring strategies, intervention options, triggers, objectives, constraints, policies, stopping rules, and expected effects. It does not execute strategies at runtime, execute template interventions, run closed-loop control, optimize policies, prove intervention effectiveness, estimate treatment effects, certify safety or operational readiness, or make current templates strategy/control-aware. Strategy and control descriptors declare intervention semantics; they do not execute or prove strategies. Template-owned runtime interventions are not the same as general strategy/control support. Active policies, triggers, and objectives are structural declarations, not runtime-executed control loops. Runtime metrics are model outputs, not empirical strategy evidence. Causal assumptions do not prove intervention effects, robustness descriptors do not prove strategy robustness, and uncertainty ensembles are not policy validation by themselves. Validation/calibration remains future work.
 
 Prompt 18 reserves these missing pillars in `docs/roadmap.md` and `docs/missing-pillars.md`. Prompt 19 adds `src/simulation/registry` as the unified systems primitive registry and capability map.
 
@@ -212,6 +248,8 @@ Attaching a primitive artifact to a composition does not automatically make a te
 
 V1 does not execute custom hybrid models, compile model schemas, evaluate formulas, perform causal discovery, or turn service-only primitives into template runtime behavior.
 
+Hybrid compositions may reference template/schema compatibility reports and template mapping profiles structurally. Those attachments do not make a composition runnable and do not satisfy model schema execution, visual builder runtime, conversion, generation, validation, calibration, external interop, or social-learning runtime capabilities.
+
 ### Multi-Scale Systems Architecture
 
 Multi-Scale Systems Architecture V1 is a headless structural description of model-scale levels and relationships. It can define micro/meso/macro or custom scale levels, entity types, aggregation rules, disaggregation rules, and cross-scale links.
@@ -220,7 +258,7 @@ Camera zoom is not multi-scale modeling. Camera zoom changes visual scale; model
 
 Aggregation can lose information, and disaggregation can create synthetic detail. Synthetic detail must not be treated as observed or already modeled detail.
 
-A valid scale model is a structural description, not proof that a template can execute multi-scale dynamics. V1 scale rules are not executable, current templates do not runtime-use multi-scale services, and model schema/compiler work remains future.
+A valid scale model is a structural description, not proof that a template can execute multi-scale dynamics. V1 scale rules are not executable, current templates do not runtime-use multi-scale services, and runtime compiler/interpreter work remains future.
 
 ### Scale View State
 
@@ -230,7 +268,7 @@ Model-scale zoom changes the represented scale level; camera zoom only changes v
 
 Scale transitions in V1 do not execute aggregation or disaggregation rules. They only update structural view state, retain visual camera metadata, and carry information-loss or synthetic-detail warnings.
 
-A scale view state can navigate a scale model, but it does not make a template multi-scale capable. Current templates do not runtime-use scale view state, and model schema/compiler work remains future.
+A scale view state can navigate a scale model, but it does not make a template multi-scale capable. Current templates do not runtime-use scale view state, and runtime compiler/interpreter work remains future.
 
 ### Boundaries + Environment
 
@@ -252,7 +290,7 @@ World coordinates, grids, and positions are not the same as explicit environment
 
 A probability-like field is not a calibrated probability unless calibration is explicitly implemented and documented.
 
-V1 does not execute diffusion, interpolation, advection, field sampling, terrain rendering, agent-field coupling, resource-field coupling, or boundary exchange coupling. Active fields, layers, and sampling rules are structural declarations only. Measured fields require provenance to be trustworthy, and synthetic fields must not be treated as observed detail. Boundary models and field layers are related but distinct: a boundary model declares model scope and exchanges, while a field layer declares spatial/environmental context. Current templates do not runtime-support spatial fields. Prompt 25 adds Observability + Measurement Model V1 as structural measurement metadata, and model schema/compiler work remains future.
+V1 does not execute diffusion, interpolation, advection, field sampling, terrain rendering, agent-field coupling, resource-field coupling, or boundary exchange coupling. Active fields, layers, and sampling rules are structural declarations only. Measured fields require provenance to be trustworthy, and synthetic fields must not be treated as observed detail. Boundary models and field layers are related but distinct: a boundary model declares model scope and exchanges, while a field layer declares spatial/environmental context. Current templates do not runtime-support spatial fields. Prompt 25 adds Observability + Measurement Model V1 as structural measurement metadata, and runtime compiler/interpreter work remains future.
 
 ## Template Definition Metadata
 

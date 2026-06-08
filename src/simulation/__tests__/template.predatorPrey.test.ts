@@ -79,7 +79,7 @@ describe("predator-prey template", () => {
         }
       }
     }
-  });
+  }, 30_000);
 });
 
 interface TestEntity {

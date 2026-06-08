@@ -95,7 +95,11 @@ export function assertTemplateDoesNotClaimUnsupportedRuntime(templateId: string)
     "unitsDimensionalConsistency",
     "emergenceDetection",
     "robustnessResilience",
-    "interventionStrategy"
+    "interventionStrategy",
+    "modelSchema",
+    "knowledgeMemorySocialLearning",
+    "visualBuilderWorkspace",
+    "schemaTemplateCompatibility"
   ]);
   for (const capability of templatePrimitiveCapabilities.filter((entry) => entry.templateId === templateId)) {
     const primitive = primitiveById.get(capability.primitiveId);
@@ -127,8 +131,22 @@ export function getRoadmapNextPrimitivePhases(): readonly RoadmapPrimitivePhase[
       label: "Strategy, Control + Intervention Semantics",
       primitiveIds: ["interventionStrategy"]
     },
-    { prompt: "31", label: "Model Schema/Interpreter Foundation", primitiveIds: ["modelDefinitionSchema", "safeInterpreterCompiler"] },
-    { prompt: "32-37", label: "Adaptive Agents, Heterogeneity, Explainability + Error Budgets", primitiveIds: ["adaptiveAgents", "heterogeneity", "explainabilityTrace", "errorBudgets"] }
+    {
+      prompt: "31",
+      label: "Model Schema/Interpreter + Knowledge/Memory/Social Semantics",
+      primitiveIds: ["modelSchema", "knowledgeMemorySocialLearning", "socialLearningRuntime", "modelDefinitionSchema", "safeInterpreterCompiler"]
+    },
+    { prompt: "32", label: "Visual Builder Workspace Schema", primitiveIds: ["visualBuilderWorkspace"] },
+    {
+      prompt: "33",
+      label: "Template/Schema Compatibility Mapping",
+      primitiveIds: ["schemaTemplateCompatibility"]
+    },
+    {
+      prompt: "34-37",
+      label: "Safe builder shell, adaptive agents, heterogeneity, explainability + error budgets",
+      primitiveIds: ["visualModelBuilder", "adaptiveAgents", "heterogeneity", "explainabilityTrace", "errorBudgets"]
+    }
   ]);
 }
 

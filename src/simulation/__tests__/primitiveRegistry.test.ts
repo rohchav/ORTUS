@@ -122,7 +122,15 @@ describe("systems primitive registry and capability map", () => {
     expect(getPrimitive("unitsDimensionalConsistency")?.status).toBe("serviceOnly");
     expect(getPrimitive("emergenceDetection")?.status).toBe("serviceOnly");
     expect(getPrimitive("robustnessResilience")?.status).toBe("serviceOnly");
+    expect(getPrimitive("modelSchema")?.status).toBe("serviceOnly");
+    expect(getPrimitive("knowledgeMemorySocialLearning")?.status).toBe("serviceOnly");
+    expect(getPrimitive("visualBuilderWorkspace")?.status).toBe("serviceOnly");
+    expect(getPrimitive("schemaTemplateCompatibility")?.status).toBe("serviceOnly");
+    expect(getPrimitive("safeInterpreterCompiler")?.status).toBe("reserved");
+    expect(getPrimitive("socialLearningRuntime")?.status).toBe("reserved");
     expect(getPrimitive("visualModelBuilder")?.status).toBe("reserved");
+    expect(getPrimitive("customModelRuntime")?.status).toBe("reserved");
+    expect(getPrimitive("llmAgents")?.status).toBe("reserved");
   });
 
   it("keeps artifact families distinct and marks reserved artifacts as future-only", () => {
@@ -149,7 +157,12 @@ describe("systems primitive registry and capability map", () => {
       "ortus.causalAssumptionModel",
       "ortus.quantitySemanticsModel",
       "ortus.emergencePatternModel",
-      "ortus.robustnessResilienceModel"
+      "ortus.robustnessResilienceModel",
+      "ortus.modelSchema",
+      "ortus.knowledgeMemorySocialLearningModel",
+      "ortus.visualBuilderWorkspace",
+      "ortus.schemaTemplateCompatibilityReport",
+      "ortus.templateMappingProfile"
     ]) {
       const artifact = getArtifactFamily(artifactType);
       expect(artifact?.implemented).toBe(true);
@@ -194,6 +207,22 @@ describe("systems primitive registry and capability map", () => {
       expect(getTemplateCapability(template.id, "unitsDimensionalConsistency")).toMatchObject({ status: "unsupported", runtimeActive: false, serviceAvailable: true });
       expect(getTemplateCapability(template.id, "emergenceDetection")).toMatchObject({ status: "unsupported", runtimeActive: false, serviceAvailable: true });
       expect(getTemplateCapability(template.id, "robustnessResilience")).toMatchObject({ status: "unsupported", runtimeActive: false, serviceAvailable: true });
+      expect(getTemplateCapability(template.id, "modelSchema")).toMatchObject({ status: "unsupported", runtimeActive: false, serviceAvailable: true });
+      expect(getTemplateCapability(template.id, "knowledgeMemorySocialLearning")).toMatchObject({
+        status: "unsupported",
+        runtimeActive: false,
+        serviceAvailable: true
+      });
+      expect(getTemplateCapability(template.id, "visualBuilderWorkspace")).toMatchObject({
+        status: "unsupported",
+        runtimeActive: false,
+        serviceAvailable: true
+      });
+      expect(getTemplateCapability(template.id, "schemaTemplateCompatibility")).toMatchObject({
+        status: "unsupported",
+        runtimeActive: false,
+        serviceAvailable: true
+      });
 
       for (const primitive of listReservedPrimitives()) {
         expect(getTemplateCapability(template.id, primitive.id)).toMatchObject({ status: "unsupported", runtimeActive: false });
@@ -230,7 +259,11 @@ describe("systems primitive registry and capability map", () => {
         "causalAssumptions",
         "unitsDimensionalConsistency",
         "emergenceDetection",
-        "robustnessResilience"
+        "robustnessResilience",
+        "modelSchema",
+        "knowledgeMemorySocialLearning",
+        "visualBuilderWorkspace",
+        "schemaTemplateCompatibility"
       ])
     );
     expect(listArtifactFamilies().length).toBeGreaterThan(0);

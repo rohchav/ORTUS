@@ -4,6 +4,10 @@ import { causalAssumptionModelArtifactType } from "../causality/types";
 import { controlStrategyModelArtifactType } from "../control/types";
 import { emergencePatternModelArtifactType } from "../emergence/types";
 import { hybridCompositionArtifactType } from "../composition/types";
+import { modelSchemaArtifactType } from "../modelSchema/types";
+import { schemaTemplateCompatibilityReportArtifactType, templateMappingProfileArtifactType } from "../schemaTemplateCompatibility/types";
+import { knowledgeMemorySocialLearningArtifactType } from "../socialLearning/types";
+import { visualBuilderWorkspaceArtifactType } from "../visualBuilderWorkspace/types";
 import {
   delayQueueArtifactType,
   eventScheduleArtifactType,
@@ -39,6 +43,11 @@ const rejectAgainstModelingArtifacts = [
   feedbackLoopsArtifactType,
   feedbackEventMetricsArtifactType,
   hybridCompositionArtifactType,
+  modelSchemaArtifactType,
+  knowledgeMemorySocialLearningArtifactType,
+  visualBuilderWorkspaceArtifactType,
+  schemaTemplateCompatibilityReportArtifactType,
+  templateMappingProfileArtifactType,
   scaleModelArtifactType,
   scaleViewStateArtifactType,
   boundaryModelArtifactType,
@@ -205,6 +214,61 @@ export const artifactFamilyRegistry: readonly ArtifactFamilyEntry[] = [
     serviceOnly: true,
     description: "Headless hybrid composition artifact for structural primitive attachments and capability requirements.",
     mustRejectAsOtherArtifactWhereApplicable: rejectAgainstModelingArtifacts.filter((type) => type !== hybridCompositionArtifactType)
+  },
+  {
+    id: "modelSchema",
+    artifactType: modelSchemaArtifactType,
+    primitiveId: "modelSchema",
+    implemented: true,
+    importSupported: true,
+    exportSupported: true,
+    serviceOnly: true,
+    description: "Headless structural model schema artifact; no runtime interpreter, compiler, visual builder, or template generation.",
+    mustRejectAsOtherArtifactWhereApplicable: rejectAgainstModelingArtifacts.filter((type) => type !== modelSchemaArtifactType)
+  },
+  {
+    id: "knowledgeMemorySocialLearning",
+    artifactType: knowledgeMemorySocialLearningArtifactType,
+    primitiveId: "knowledgeMemorySocialLearning",
+    implemented: true,
+    importSupported: true,
+    exportSupported: true,
+    serviceOnly: true,
+    description: "Headless structural knowledge, bounded-memory, belief, trust/source, exposure, and social-learning semantics artifact; no runtime social learning or human cognition.",
+    mustRejectAsOtherArtifactWhereApplicable: rejectAgainstModelingArtifacts.filter((type) => type !== knowledgeMemorySocialLearningArtifactType)
+  },
+  {
+    id: "visualBuilderWorkspace",
+    artifactType: visualBuilderWorkspaceArtifactType,
+    primitiveId: "visualBuilderWorkspace",
+    implemented: true,
+    importSupported: true,
+    exportSupported: true,
+    serviceOnly: true,
+    description: "Headless visual builder workspace planning artifact; no visual builder UI, graph execution, schema execution, or model generation.",
+    mustRejectAsOtherArtifactWhereApplicable: rejectAgainstModelingArtifacts.filter((type) => type !== visualBuilderWorkspaceArtifactType)
+  },
+  {
+    id: "schemaTemplateCompatibilityReport",
+    artifactType: schemaTemplateCompatibilityReportArtifactType,
+    primitiveId: "schemaTemplateCompatibility",
+    implemented: true,
+    importSupported: true,
+    exportSupported: true,
+    serviceOnly: true,
+    description: "Headless structural template/schema compatibility report; no conversion, generation, schema execution, validation, or calibration.",
+    mustRejectAsOtherArtifactWhereApplicable: rejectAgainstModelingArtifacts.filter((type) => type !== schemaTemplateCompatibilityReportArtifactType)
+  },
+  {
+    id: "templateMappingProfile",
+    artifactType: templateMappingProfileArtifactType,
+    primitiveId: "schemaTemplateCompatibility",
+    implemented: true,
+    importSupported: true,
+    exportSupported: true,
+    serviceOnly: true,
+    description: "Headless static template mapping profile derived from template metadata; no template mutation or runtime support claim.",
+    mustRejectAsOtherArtifactWhereApplicable: rejectAgainstModelingArtifacts.filter((type) => type !== templateMappingProfileArtifactType)
   },
   {
     id: "modelDefinition",

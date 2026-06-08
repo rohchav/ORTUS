@@ -18,7 +18,11 @@ const globalServiceOnlyPrimitiveIds = new Set<PrimitiveId>([
   "emergenceDetection",
   "robustnessResilience",
   "interventionStrategy",
-  "unitsDimensionalConsistency"
+  "unitsDimensionalConsistency",
+  "modelSchema",
+  "knowledgeMemorySocialLearning",
+  "visualBuilderWorkspace",
+  "schemaTemplateCompatibility"
 ]);
 const reservedPrimitiveIds = new Set<PrimitiveId>(primitiveRegistry.filter((primitive) => primitive.status === "reserved").map((primitive) => primitive.id));
 
@@ -159,6 +163,30 @@ function capabilityForTemplate(template: SimulationTemplate, primitiveId: Primit
         template.id,
         primitiveId,
         "Strategy/control services exist globally, but this template does not use ControlStrategyModel at runtime. Template-owned interventions are not general strategy/control support."
+      );
+    case "modelSchema":
+      return unsupportedServiceCapability(
+        template.id,
+        primitiveId,
+        "Model schema services exist globally, but this template is hand-built and does not use ModelSchemaDefinition at runtime."
+      );
+    case "knowledgeMemorySocialLearning":
+      return unsupportedServiceCapability(
+        template.id,
+        primitiveId,
+        "Knowledge/memory/social-learning semantics services exist globally, but this template does not execute social-learning runtime, human cognition, or LLM agents."
+      );
+    case "visualBuilderWorkspace":
+      return unsupportedServiceCapability(
+        template.id,
+        primitiveId,
+        "Visual builder workspace services exist globally, but this template is hand-built and does not use workspace schemas, node graphs, or visual-builder runtime."
+      );
+    case "schemaTemplateCompatibility":
+      return unsupportedServiceCapability(
+        template.id,
+        primitiveId,
+        "Template/schema compatibility services can structurally compare this template metadata with a model schema, but the template runtime does not execute compatibility reports or ModelSchemaDefinition artifacts."
       );
     default:
       if (reservedPrimitiveIds.has(primitiveId)) {

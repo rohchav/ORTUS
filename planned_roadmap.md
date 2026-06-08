@@ -1,17 +1,17 @@
 # ORTUS Full Prompt Roadmap
 
-*Last updated after Prompt 30B and the post-30B repo/performance stabilization pass.*
+*Last updated after Prompt 33 Template/Schema Compatibility Mapping V1.*
 
 ## Current Status
 
-ORTUS has completed the core runtime/template foundation, scenario system, uncertainty layer, assumptions/limits layer, systems primitive registry, hybrid composition, multi-scale structure, scale-view state, boundary/environment models, spatial fields, observability, causality, quantity semantics, emergence pattern descriptors, robustness/resilience semantics, and strategy/control semantics.
+ORTUS has completed the core runtime/template foundation, scenario system, uncertainty layer, assumptions/limits layer, systems primitive registry, hybrid composition, multi-scale structure, scale-view state, boundary/environment models, spatial fields, observability, causality, quantity semantics, emergence pattern descriptors, robustness/resilience semantics, strategy/control semantics, model schema declarations, knowledge/memory/social-learning semantics, visual builder workspace schemas, and template/schema compatibility mapping.
 
 Current project status:
 
 ```text
-Completed roadmap prompt: Prompt 30B — Strategy, Control + Intervention Semantics Audit
+Completed roadmap prompt: Prompt 33 — Template/Schema Compatibility Mapping V1
 Post-30B stabilization completed: repo hygiene, durable Codex context, dependency repair, generated-artifact cleanup, and runtime performance/scalability baseline
-Next roadmap prompt: Prompt 31 — Model Schema + Interpreter Foundation V1
+Next roadmap prompt: Prompt 33B — Template/Schema Compatibility Mapping Audit
 ```
 
 Critical global boundary:
@@ -56,6 +56,8 @@ Manual review after the expert audit found the social/cognitive roadmap insertio
 missing from this full roadmap. Prompt 31C and Prompt 31D are now corrected below
 after Prompt 31B and before Prompt 32, with a later narrow Opinion Dynamics
 social-learning runtime slice placed after template/schema compatibility mapping.
+The social/cognitive semantics insertion was corrected after manual review, and
+Prompt 31C, Prompt 31D, Prompt 32, Prompt 32B, and Prompt 33 are now marked complete while Prompt 33B remains future audit work.
 
 ---
 
@@ -1158,17 +1160,20 @@ Boundary:
 
 ```text
 Model schemas declare model structure.
-They do not execute rules.
-They do not parse formulas.
-They do not create runnable simulations.
+A valid model schema is not a template, scenario, RunConfig, or snapshot.
+Model schemas declare model structure; they do not execute rules or create runnable simulations.
+Rule declarations are descriptive metadata, not parsed formulas or executable behavior.
 They do not generate scenarios, RunConfigs, snapshots, or templates.
+Belief, memory, and social-learning rule declarations are structural placeholders; they do not implement human cognition or social-learning runtime.
+Prompt 31C structural social/cognitive semantics and Prompt 31D audit hardening are complete; runtime social learning remains future work.
+Prompt 32 visual model-builder workspace planning is complete; visual builder UI, schema execution, and runtime compiler/interpreter work remain future.
 No compiler/interpreter runtime yet.
 ```
 
 Status:
 
 ```text
-Next roadmap prompt.
+Completed.
 ```
 
 ## Prompt 31B — Model Schema + Interpreter Foundation Audit
@@ -1183,7 +1188,7 @@ Purpose:
 Status:
 
 ```text
-Upcoming.
+Completed.
 ```
 
 ## Prompt 31C — Knowledge, Memory + Social Learning Semantics V1
@@ -1203,12 +1208,17 @@ No LLM-per-agent runtime.
 No unbounded memory.
 No real-person inference.
 No Opinion Dynamics runtime changes yet.
+Knowledge, memory, and social-learning descriptors are structural semantics; they do not implement human cognition.
+Background profiles are compressed prior descriptors, not simulated life histories.
+Crowd and stranger exposure should usually be modeled as aggregate signals, representative agents, or fields rather than thousands of throwaway individuals.
+LLM-per-agent runtime is not implemented and must not be implied.
+Opinion Dynamics Social Learning Runtime remains future work.
 ```
 
 Status:
 
 ```text
-Upcoming.
+Completed.
 ```
 
 ## Prompt 31D — Knowledge, Memory + Social Learning Audit
@@ -1223,7 +1233,7 @@ Purpose:
 Status:
 
 ```text
-Upcoming.
+Completed.
 ```
 
 ## Prompt 32 — Visual Model Builder Planning + Workspace Schema V1
@@ -1237,16 +1247,16 @@ Purpose:
 Boundary:
 
 ```text
-Visual builder workspace is not executable.
-Node graph is not runtime behavior.
-No drag-and-drop execution.
-No visual programming runtime.
+Visual builder workspaces are structural planning artifacts; they do not implement the visual builder UI.
+Workspace nodes and edges are visual descriptors, not executable dataflow or runtime behavior.
+A valid visual builder workspace does not make a model schema runnable.
+Prompt 32 does not add drag-and-drop modeling, visual programming, or schema execution.
 ```
 
 Status:
 
 ```text
-Planned.
+Completed.
 ```
 
 ## Prompt 32B — Visual Builder Workspace Audit
@@ -1261,7 +1271,7 @@ Purpose:
 Status:
 
 ```text
-Planned.
+Completed.
 ```
 
 ## Prompt 33 — Template/Schema Compatibility Mapping V1
@@ -1277,12 +1287,16 @@ Boundary:
 Schema/template similarity is not runtime compatibility.
 No schema-to-template generation.
 No scenario generation.
+Template/schema compatibility reports are structural fit analyses; they do not convert schemas into runnable models.
+A strong template fit does not mean a schema can run.
+Unsupported and lossy mappings must remain visible; they must not be silently dropped.
+Compatibility mapping does not generate scenarios, RunConfigs, snapshots, templates, or engines.
 ```
 
 Status:
 
 ```text
-Planned.
+Completed.
 ```
 
 ## Prompt 33B — Template/Schema Compatibility Mapping Audit
@@ -2841,18 +2855,16 @@ No global service availability treated as template runtime support.
 Recommended immediate next steps:
 
 ```text
-1. Finish repo hygiene/performance commits if not already committed.
-2. Run Prompt R4 — Roadmap Status Drift Cleanup.
-3. Commit R4.
-4. Start Prompt 31 — Model Schema + Interpreter Foundation V1.
-5. Immediately follow with Prompt 31B audit.
+1. Run Prompt 33B — Template/Schema Compatibility Mapping Audit.
+2. Keep Prompt 33B audit-only: no visual builder UI, graph editor, drag/drop, schema execution, runtime visual builder execution, schema-to-template generation, or Opinion Dynamics social-learning runtime.
+3. Keep Opinion Dynamics Social Learning Runtime V1 later after template/schema compatibility mapping.
 ```
 
-Do not start Prompt 31 until the repo status and roadmap docs clearly reflect:
+Do not start Prompt 33B until the repo status and roadmap docs clearly reflect:
 
 ```text
-Completed through Prompt 30B.
+Completed through Prompt 33.
 Performance stabilization completed after Prompt 30B.
-Prompt 31 has not started.
-Next roadmap prompt: Prompt 31.
+Prompt 33 is complete.
+Next roadmap prompt: Prompt 33B.
 ```

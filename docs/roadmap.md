@@ -4,7 +4,7 @@ This roadmap reserves the major complex-systems pillars that ORTUS must support 
 
 ## Current Foundation
 
-Prompts 1-17B established the current foundation:
+ORTUS has completed through Prompt 33. Prompts 1-33 established the current foundation:
 
 - Engine/runtime/UI foundation.
 - Scenario Builder.
@@ -14,12 +14,21 @@ Prompts 1-17B established the current foundation:
 - Networks and relations.
 - Resources, stocks, and flows.
 - Feedback loops, delays, and events.
+- Systems primitive registry and capability map.
+- Hybrid model composition as a structural service.
+- Multi-scale structure and scale view state as structural/view-state services.
+- Boundaries/environment and spatial fields/environmental layers as structural services.
+- Observability, causal assumptions, quantity semantics, emergence descriptors, robustness/resilience semantics, strategy/control semantics, model schema declarations, knowledge/memory/social-learning semantics, visual builder workspace schemas, and template/schema compatibility mapping as service-first or metadata-first foundations.
 
-These foundations are deliberately service-first. Networks, resources, and feedback primitives are headless structural services until a template explicitly uses them at runtime. A template must not claim support for a primitive merely because a service exists.
+These foundations are deliberately service-first or metadata-first unless documented otherwise. Networks, resources, feedback primitives, boundary/environment models, spatial fields, observability models, causal assumptions, quantity semantics, emergence descriptors, robustness/resilience descriptors, and strategy/control descriptors are headless structural services until a template explicitly uses them at runtime. A template must not claim support for a primitive merely because a service exists.
+
+After Prompt 30B, ORTUS completed a repository hygiene, durable context, dependency stabilization, and performance/scalability pass. That pass added and validated performance instrumentation and spatial-indexing foundations, but it does not turn reserved structural primitives into runtime support and is not evidence for high-scale readiness by itself.
+
+Prompt 31: Model Schema + Interpreter Foundation V1, Prompt 31B: Model Schema + Interpreter Foundation Audit, Prompt 31C: Knowledge, Memory + Social Learning Semantics V1, Prompt 31D: Knowledge, Memory + Social Learning Audit, Prompt 32: Visual Model Builder Planning + Workspace Schema V1, Prompt 32B: Visual Builder Workspace Audit, and Prompt 33: Template/Schema Compatibility Mapping V1 are complete. The next roadmap prompt is Prompt 33B: Template/Schema Compatibility Mapping Audit.
 
 ## Revised Prompt Sequence
 
-Immediate roadmap:
+Completed and audited roadmap sequence:
 
 1. 18 - Roadmap Alignment + Missing Pillar Reservation.
 2. 18B - Roadmap Alignment Audit.
@@ -43,36 +52,42 @@ Immediate roadmap:
 20. 27B - Units Audit.
 21. 28 - Emergence Detection Metrics V1.
 22. 28B - Emergence Detection Audit.
-23. 29 - Phase Transitions + Tipping Point Tools V1.
-24. 29B - Phase Transition Audit.
-25. 30 - Attractors + Basins of Attraction V1.
-26. 30B - Attractor/Basin Audit.
-27. 31 - Robustness, Resilience + Shock Testing V1.
-28. 31B - Robustness/Resilience Audit.
-29. 32 - Agent Internal State + Memory V1.
-30. 32B - Agent Internal State Audit.
-31. 33 - Adaptive Agents + Strategy Switching V1.
-32. 33B - Adaptive Agents Audit.
-33. 34 - Heterogeneity Layer V1.
-34. 34B - Heterogeneity Audit.
-35. 35 - Explainability + Trace Inspection V1.
-36. 35B - Explainability Audit.
-37. 36 - Error Budgets + Approximation Warnings V1.
-38. 36B - Error Budget Audit.
+23. 29 - Robustness, Resilience + Stress Testing Semantics V1.
+24. 29B - Robustness/Resilience Audit.
+25. 30 - Strategy, Control + Intervention Semantics V1.
+26. 30B - Strategy/Control Audit.
+
+Post-30B stabilization:
+
+- Repository hygiene and durable Codex context.
+- Dependency stabilization for the performance report script.
+- Simulation performance instrumentation and spatial-indexing foundation.
+- Local typecheck/test/build/performance validation.
+
+Completed Prompt 31 audit band:
+
+1. 31 - Model Schema + Interpreter Foundation V1.
+2. 31B - Model Schema + Interpreter Foundation Audit.
+3. 31C - Knowledge, Memory + Social Learning Semantics V1.
+4. 31D - Knowledge, Memory + Social Learning Audit.
+
+Completed Prompt 32 planning and audit foundation:
+
+1. 32 - Visual Model Builder Planning + Workspace Schema V1.
+2. 32B - Visual Builder Workspace Audit.
+
+Completed Prompt 33 compatibility foundation:
+
+1. 33 - Template/Schema Compatibility Mapping V1.
+
+Next roadmap prompt:
+
+1. 33B - Template/Schema Compatibility Mapping Audit.
 
 Later roadmap bands:
 
-- 38-42: first primitive-backed template upgrades.
-- 43-48: model definition schema, validation schema, versioning/migration, rule primitive library, safe model interpreter/compiler, and execution safety.
-- 49-59: visual model builder.
-- 60-62: human-in-the-loop model critique.
-- 63-68: pattern libraries and domain packs.
-- 69-75: validation, calibration, sensitivity analysis, MCMC, and data assimilation.
-- 76-80: intervention strategy, counterfactuals, and control.
-- 81-85: external framework adaptation.
-- 86-91: performance, scale, and runtime infrastructure.
-- 92-96: security, imports, save/load, accessibility, and recovery UX.
-- 97-102: productization.
+- Post-31 audit: validation schema, versioning/migration, rule primitive library, execution safety hardening, trace inspection, error budgets, phase/tipping tools, attractor/basin tools, agent internal state, adaptive agents, and heterogeneity.
+- Later: visual model builder, human-in-the-loop critique, pattern libraries and domain packs, validation/calibration/sensitivity/MCMC/data assimilation, intervention strategy/counterfactual/control work, external framework adaptation, performance/runtime infrastructure, security/import/save/accessibility/recovery UX, and productization.
 
 ## Ordering Rationale
 
@@ -94,7 +109,7 @@ Global service availability is not template support. A primitive can exist as a 
 
 Reserved primitives are roadmap commitments, not implemented behavior.
 
-Current production templates must not claim multi-scale systems, observability runtime support, causal-assumption runtime support, boundary/environment runtime modeling, spatial-field runtime support, quantity-semantics runtime support, emergence-detection runtime support, robustness/resilience runtime support, strategy/control runtime support, multi-rate time, adaptive agents, heterogeneity, phase transition analysis, attractor analysis, trace inspection, error budgets, model schema/compiler, visual builder, calibration, data assimilation, MCMC, or external framework interop.
+Current production templates must not claim multi-scale systems, observability runtime support, causal-assumption runtime support, boundary/environment runtime modeling, spatial-field runtime support, quantity-semantics runtime support, emergence-detection runtime support, robustness/resilience runtime support, strategy/control runtime support, model schema runtime support, multi-rate time, adaptive agents, heterogeneity, phase transition analysis, attractor analysis, trace inspection, error budgets, compiler/interpreter runtime, visual builder, calibration, data assimilation, MCMC, or external framework interop.
 
 Prompt 24C adds Forest Fire / Landscape Spread as a production template. It is an abstract local-spread grid model for qualitative spread, threshold, fragmentation, and emergence exploration; it is not a wildfire predictor, does not use GIS, wind, humidity, weather, terrain, suppression, firefighting, or calibrated fire probabilities, and does not make spatialFields or boundariesEnvironment runtime-active.
 
@@ -120,7 +135,17 @@ Prompt 28 adds Emergence Detection + Pattern Descriptors V1 as structural patter
 
 Prompt 29 adds Robustness, Resilience + Stress Testing Semantics V1 as structural stress metadata. Robustness and resilience descriptors declare stress semantics; they do not prove a system is robust or resilient. Active stressors and stress-test plans are structural declarations, not runtime-executed perturbations. Uncertainty ensembles, runtime metrics, and visual persistence are not robustness validation by themselves. It does not execute stress tests at runtime, perturb active simulations, run experiments, perform statistical validation, certify safety or operational readiness, optimize controls, validate, calibrate, or make current templates robustness-aware.
 
-Prompt 30 adds Strategy, Control + Intervention Semantics V1 as structural strategy metadata. Strategy and control descriptors declare intervention semantics; they do not execute or prove strategies. Template-owned runtime interventions are not the same as general strategy/control support. Active policies, triggers, and objectives are structural declarations, not runtime-executed control loops. It does not execute strategies at runtime, execute template interventions, run closed-loop control, optimize policies, prove intervention effectiveness, estimate causal or treatment effects, certify safety or operational readiness, validate, calibrate, or make current templates strategy/control-aware. Prompt 31 model schema/interpreter foundation remains future work unless roadmap says otherwise.
+Prompt 30 adds Strategy, Control + Intervention Semantics V1 as structural strategy metadata. Strategy and control descriptors declare intervention semantics; they do not execute or prove strategies. Template-owned runtime interventions are not the same as general strategy/control support. Active policies, triggers, and objectives are structural declarations, not runtime-executed control loops. It does not execute strategies at runtime, execute template interventions, run closed-loop control, optimize policies, prove intervention effectiveness, estimate causal or treatment effects, certify safety or operational readiness, validate, calibrate, or make current templates strategy/control-aware.
+
+Prompt 31 adds Model Schema + Interpreter Foundation V1 as a service-level structural schema layer. Model schemas declare model structure; they do not execute rules or create runnable simulations. A valid model schema is not a template, scenario, RunConfig, or snapshot. Rule declarations are descriptive metadata, not parsed formulas or executable behavior. `active` means structurally active, not runtime-executed. Production templates are hand-built runtime models, not generated from model schemas. It does not compile models, parse formulas, generate templates, generate RunConfigs, produce snapshots, power a visual builder UI, implement external framework interop, implement social-learning runtime, implement full human cognition, or add LLM agents. Belief, memory, and social-learning rule declarations are structural placeholders; they do not implement human cognition or social-learning runtime. Runtime interpreter/compiler, validation/calibration, visual builder UI, and external framework interop remain future work.
+
+Prompt 31C adds Knowledge, Memory + Social Learning Semantics V1 as a service-level structural semantic layer. Knowledge, memory, and social-learning descriptors are structural semantics; they do not implement human cognition. Background profiles are compressed prior descriptors, not simulated life histories. Crowd and stranger exposure should usually be modeled as aggregate signals, representative agents, or fields rather than thousands of throwaway individuals. LLM-per-agent runtime is not implemented and must not be implied. It does not execute social learning, update beliefs or memory at runtime, sample exposure, infer real-person traits, support protected-class inference, validate psychology, predict people, optimize persuasion, provide policy targeting, or mutate Opinion Dynamics. Opinion Dynamics Social Learning Runtime remains future work.
+
+Prompt 31D audits Knowledge, Memory + Social Learning Semantics as structural only. It hardens the no-runtime, no-cognition, no-LLM-agent, no-unbounded-memory, no-real-person-profiling, no-protected-class-inference, no-psychological-diagnosis, no-persuasion/microtargeting, no-policy-guidance, and valid-vs-runnable boundaries. Prompt 31D is audit-only; it does not start visual builder UI work, implement runtime social learning, or mutate Opinion Dynamics.
+
+Prompt 32 adds Visual Model Builder Workspace Schema V1 as a service-level structural workspace-planning layer. Visual builder workspaces are structural planning artifacts; they do not implement the visual builder UI. Workspace nodes and edges are visual descriptors, not executable dataflow or runtime behavior. A valid visual builder workspace does not make a model schema runnable. Prompt 32 does not add drag-and-drop modeling, visual programming, or schema execution. Workspace artifacts can reference model schemas, social-learning semantics, observability, causality, networks, resources, feedback, quantities, control, hybrid compositions, scenarios, or templates structurally, but they do not execute node graphs, generate scenarios, generate RunConfigs, produce snapshots, create templates, create engines, add external framework interop, implement social-learning runtime, or add LLM agents. Prompt 34 safe builder UI shell remains future work.
+
+Prompt 33 adds Template/Schema Compatibility Mapping V1 as a service-level structural fit-analysis layer. Template/schema compatibility reports are structural fit analyses; they do not convert schemas into runnable models. A strong template fit does not mean a schema can run. Unsupported and lossy mappings must remain visible; they must not be silently dropped. Compatibility mapping does not generate scenarios, RunConfigs, snapshots, templates, or engines. It does not execute schemas, parse rule descriptions, mutate templates, create engines, implement visual builder runtime, add external framework interop, run social-learning/cognitive behavior, validate science, calibrate outputs, or prove causality, emergence, robustness, strategy effectiveness, safety, or operational readiness. Prompt 33B audits these boundaries next.
 
 ## Reserved Artifact Families
 
@@ -132,4 +157,4 @@ Future artifact families may include:
 - `ortus.patternLibrary`
 - `ortus.domainPack`
 
-These artifact types are reserved names only except `ortus.scaleModel`, which Prompt 21 implements as a service-level structural artifact, `ortus.scaleViewState`, which Prompt 22 implements as a service-level view-state artifact, `ortus.boundaryModel`, which Prompt 23 implements as a service-level boundary/environment artifact, `ortus.fieldLayer`, which Prompt 24 implements as a service-level spatial field/environmental layer artifact, `ortus.observabilityModel`, which Prompt 25 implements as a service-level observability artifact, `ortus.causalAssumptionModel`, which Prompt 26 implements as a service-level causal-assumption artifact, `ortus.quantitySemanticsModel`, which Prompt 27 implements as a service-level quantity-semantics artifact, `ortus.emergencePatternModel`, which Prompt 28 implements as a service-level emergence-pattern artifact, `ortus.robustnessResilienceModel`, which Prompt 29 implements as a service-level robustness/resilience artifact, and `ortus.controlStrategyModel`, which Prompt 30 implements as a service-level strategy/control artifact. The remaining future artifacts do not have import/export support yet.
+These artifact types are reserved names only except `ortus.scaleModel`, which Prompt 21 implements as a service-level structural artifact, `ortus.scaleViewState`, which Prompt 22 implements as a service-level view-state artifact, `ortus.boundaryModel`, which Prompt 23 implements as a service-level boundary/environment artifact, `ortus.fieldLayer`, which Prompt 24 implements as a service-level spatial field/environmental layer artifact, `ortus.observabilityModel`, which Prompt 25 implements as a service-level observability artifact, `ortus.causalAssumptionModel`, which Prompt 26 implements as a service-level causal-assumption artifact, `ortus.quantitySemanticsModel`, which Prompt 27 implements as a service-level quantity-semantics artifact, `ortus.emergencePatternModel`, which Prompt 28 implements as a service-level emergence-pattern artifact, `ortus.robustnessResilienceModel`, which Prompt 29 implements as a service-level robustness/resilience artifact, `ortus.controlStrategyModel`, which Prompt 30 implements as a service-level strategy/control artifact, `ortus.modelSchema`, which Prompt 31 implements as a service-level structural model schema artifact, `ortus.knowledgeMemorySocialLearningModel`, which Prompt 31C implements as a service-level structural social/cognitive semantics artifact, `ortus.visualBuilderWorkspace`, which Prompt 32 implements as a service-level structural visual-builder workspace artifact, and `ortus.schemaTemplateCompatibilityReport` plus `ortus.templateMappingProfile`, which Prompt 33 implements as service-level structural compatibility artifacts. The remaining future artifacts do not have import/export support yet.

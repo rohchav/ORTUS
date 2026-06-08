@@ -1,6 +1,6 @@
 # ORTUS Current Context
 
-Last updated: 2026-06-05 after R4 roadmap status cleanup
+Last updated: 2026-06-07 after Prompt 33 Template/Schema Compatibility Mapping V1
 
 ## Project Identity
 
@@ -12,15 +12,23 @@ Built-in production templates currently include Epidemic Spread, Opinion Dynamic
 
 ## Completed Prompt State
 
-Durable docs and source indicate completed/audited roadmap work through Prompt 30B, with Prompt 31 not started.
+Durable docs and source indicate completed roadmap work through Prompt 33. Prompt 31: Model Schema + Interpreter Foundation V1, Prompt 31B: Model Schema + Interpreter Foundation Audit, Prompt 31C: Knowledge, Memory + Social Learning Semantics V1, Prompt 31D: Knowledge, Memory + Social Learning Audit, Prompt 32: Visual Model Builder Planning + Workspace Schema V1, Prompt 32B: Visual Builder Workspace Audit, and Prompt 33: Template/Schema Compatibility Mapping V1 are complete.
 
 The post-30B repository hygiene, dependency stabilization, durable context, and performance/scalability pass has also been completed. Recent commits include `dd6c256` for repo context/generated-artifact hygiene, `4949b72` for dependency and performance script stabilization, and `a80d5b7` for simulation performance instrumentation and spatial indexing foundations.
 
-The next roadmap prompt is Prompt 31: Model Schema + Interpreter Foundation V1.
+The next roadmap prompt is Prompt 33B: Template/Schema Compatibility Mapping Audit.
 
 Implemented runtime foundations include scenarios, snapshots, template-defined behavior modes, agent composition, interventions, experiments, run summaries/comparison, seeded randomness, metrics, spaces, and template metadata.
 
-Implemented service-first or metadata-first foundations include uncertainty, assumptions/limits/ethics, networks/relations, resources/stocks/flows, feedback/delays/events, systems primitive registry, hybrid composition, multi-scale structure, scale view state, boundaries/environment, spatial fields/environmental layers, observability/measurement models, causal assumptions/influence models, quantity semantics, emergence pattern descriptors, robustness/resilience semantics, and strategy/control/intervention semantics.
+Implemented service-first or metadata-first foundations include uncertainty, assumptions/limits/ethics, networks/relations, resources/stocks/flows, feedback/delays/events, systems primitive registry, hybrid composition, multi-scale structure, scale view state, boundaries/environment, spatial fields/environmental layers, observability/measurement models, causal assumptions/influence models, quantity semantics, emergence pattern descriptors, robustness/resilience semantics, strategy/control/intervention semantics, model schema declarations, knowledge/memory/social-learning semantics, visual builder workspace schemas, and template/schema compatibility mapping.
+
+Model schemas declare model structure; they do not execute rules or create runnable simulations. A valid model schema is not a template, scenario, RunConfig, or snapshot. Rule declarations are descriptive metadata, not parsed formulas or executable behavior. Belief, memory, and social-learning rule declarations are structural placeholders; they do not implement human cognition or social-learning runtime.
+
+Knowledge, memory, and social-learning descriptors are structural semantics; they do not implement human cognition. Background profiles are compressed prior descriptors, not simulated life histories. Crowd and stranger exposure should usually be modeled as aggregate signals, representative agents, or fields rather than thousands of throwaway individuals. LLM-per-agent runtime is not implemented and must not be implied. `ortus.knowledgeMemorySocialLearningModel` artifacts describe bounded symbolic semantics only; they do not execute social learning, update beliefs or memory, sample exposure, infer real-person traits, support protected-class inference, validate psychology, predict people, optimize persuasion, provide policy targeting, or mutate Opinion Dynamics. Opinion Dynamics Social Learning Runtime remains future work.
+
+Visual builder workspaces are structural planning artifacts; they do not implement the visual builder UI. `ortus.visualBuilderWorkspace` artifacts describe future workspace identity, referenced model schemas and artifacts, visual nodes, visual edges, panels, sections, markers, layout, selection, viewport metadata, summaries, and validation reports only. Workspace nodes and edges are visual descriptors, not executable dataflow or runtime behavior. A valid visual builder workspace does not make a model schema runnable. Prompt 32 does not add drag-and-drop modeling, visual programming, or schema execution. Workspaces do not generate scenarios, RunConfigs, snapshots, templates, or engines, do not add external framework interop, and do not implement social-learning runtime or LLM agents. Prompt 34 safe builder UI shell remains future work.
+
+Template/schema compatibility mapping is a structural fit-analysis service only. `ortus.schemaTemplateCompatibilityReport` and `ortus.templateMappingProfile` artifacts compare `ModelSchemaDefinition` structure against static production-template metadata. Template/schema compatibility reports are structural fit analyses; they do not convert schemas into runnable models. A strong template fit does not mean a schema can run. Unsupported and lossy mappings must remain visible; they must not be silently dropped. Compatibility mapping does not generate scenarios, RunConfigs, snapshots, templates, or engines. Compatibility reports do not execute schemas, parse rule descriptions, mutate templates, create engines, implement visual builder runtime, add external framework interop, run social-learning/cognitive behavior, validate science, calibrate outputs, or prove causality, emergence, robustness, strategy effectiveness, safety, or operational readiness.
 
 These foundations are not automatic runtime support for templates. A template must explicitly declare and actually use a primitive at runtime before ORTUS can claim template runtime support.
 
@@ -76,18 +84,26 @@ Real source changes are now reviewable separately from generated build/cache noi
 ## Current Blockers
 
 - npm reports two moderate audit findings; no force fix was run.
-- Prompt 31 has not started and should begin only from the current clean roadmap baseline.
+- Prompt 33B audit has not started and should begin only from the current Prompt 33-completed roadmap baseline.
 
 ## Next Recommended Prompt After Stabilization
 
-Next recommended prompt: Prompt 31: Model Schema + Interpreter Foundation V1.
+Next recommended prompt: Prompt 33B: Template/Schema Compatibility Mapping Audit.
 
 ## Critical Guardrails
 
 - Structural primitives are not runtime support.
 - Templates do not runtime-support reserved primitives unless explicitly wired into the template runtime and registry.
 - Do not add arbitrary code execution, user-authored formulas, expression evaluation, or unsafe model execution.
-- Do not add visual builder, compiler, runtime model schema execution, or schema-backed rule execution yet.
+- Do not treat ModelSchemaDefinition as executable, and do not parse, compile, or execute ruleDescription.
+- Do not treat VisualBuilderWorkspaceDefinition as UI, runtime graph execution, schema execution, or visual programming.
+- Do not treat compatibility as conversion.
+- Do not treat strong fit as runnable.
+- Do not hide unsupported concepts or silently drop lossy mappings.
+- Do not generate scenarios, RunConfigs, snapshots, templates, or engines from compatibility reports.
+- Do not mutate templates from compatibility reports.
+- Do not add visual builder UI, compiler, runtime model schema execution, or schema-backed rule execution yet.
+- Do not treat knowledge/memory/social-learning descriptors as runtime behavior, human cognition, social prediction, LLM agents, unbounded memory, or real-person inference.
 - Do not claim validation, calibration, prediction proof, causal proof, robustness proof, safety certification, operational readiness, or policy recommendation.
 - Do not treat network edges, feedback labels, observations, runtime metrics, uncertainty ensembles, visible patterns, or interventions as proof.
 - Do not treat camera zoom as multi-scale modeling.

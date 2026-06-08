@@ -103,3 +103,173 @@ Checks run:
 - `npm run test`: passed, 43 files and 322 tests.
 - `npm run build`: passed with Next.js 15.5.19.
 - `npm run lint`: unavailable; no lint script exists in `package.json`.
+
+## 2026-06-05 - Prompt 31 Model Schema + Interpreter Foundation V1
+
+Goal: add a service-first, structural ModelSchemaDefinition layer without starting Prompt 31C, visual builder work, runtime interpreter work, external framework interop, calibration, control execution, or social-learning runtime.
+
+Implemented boundaries:
+
+- Added `src/simulation/modelSchema` as a headless service for validating, serializing, querying, summarizing, and reporting capability gaps for `ortus.modelSchema` artifacts.
+- Model schemas declare entity, component, attribute, space, parameter, metric, rule-declaration, and artifact-reference structure.
+- Model schemas declare model structure; they do not execute rules or create runnable simulations.
+- A valid model schema is not a template, scenario, RunConfig, or snapshot.
+- Rule declarations are descriptive metadata, not parsed formulas or executable behavior.
+- Belief, memory, and social-learning rule declarations are structural placeholders; they do not implement human cognition or social-learning runtime.
+- Prompt 31C/31D social/cognitive semantics remained future work during Prompt 31.
+- Prompt 32 visual model-builder planning remains future work.
+
+Registry and docs status:
+
+- `modelSchema` is service-only in the primitive registry.
+- `ortus.modelSchema` is implemented with service-level import/export support.
+- Compiler/interpreter runtime, visual builder, validation/calibration, external framework interop, social-learning runtime, full human cognition, and LLM-per-agent runtime remain unavailable.
+- Current production templates remain hand-built runtime models and do not runtime-support ModelSchemaDefinition.
+
+Next recommended prompt: Prompt 31B: Model Schema + Interpreter Foundation Audit.
+
+## 2026-06-05 - Prompt 31B Model Schema + Interpreter Foundation Audit
+
+Goal: audit and harden Prompt 31 without starting Prompt 31C, visual builder work, runtime interpreter/compiler work, schema-to-template generation, external framework interop, social-learning runtime, or LLM agents.
+
+Audit results:
+
+- Confirmed `ModelSchemaDefinition` remains a bounded plain-JSON structural artifact.
+- Strengthened unsafe-key validation for external-framework import/export, framework adapter, NetLogo/Mesa/MASON import/export, and prototype/function/class-shaped payload keys.
+- Strengthened model schema warnings for structural `stateTransition` and `eventEmission` declarations.
+- Strengthened model schema tests for the full live-state and unsafe-key families, other artifact-family rejection, template-source separation, and assumption-profile distinctions.
+- Confirmed `modelSchema` remains service-only, `ortus.modelSchema` remains service import/export, and current production templates remain unsupported for modelSchema runtime behavior.
+- Confirmed hybrid compositions may reference model schemas structurally without becoming runnable.
+
+Boundary preserved:
+
+- Model schemas declare model structure; they do not execute rules or create runnable simulations.
+- A valid model schema is not a template, scenario, RunConfig, or snapshot.
+- Rule declarations are descriptive metadata, not parsed formulas or executable behavior.
+- Belief, memory, and social-learning rule declarations are structural placeholders; they do not implement human cognition or social-learning runtime.
+- Prompt 31C/31D social/cognitive semantics remained future work during Prompt 31B.
+
+Next recommended prompt: Prompt 31C: Knowledge, Memory + Social Learning Semantics V1.
+
+## 2026-06-05 - Prompt 31C Knowledge, Memory + Social Learning Semantics V1
+
+Goal: add a service-first structural semantic family for bounded knowledge, belief, memory, attention, trust/source, exposure, social signals, background priors, roles, norms, and learning-rule descriptors without starting Prompt 31D or implementing runtime social learning.
+
+Implemented boundaries:
+
+- Added `src/simulation/socialLearning` as a headless service for validating, serializing, querying, summarizing, warning about, and reporting capability gaps for `ortus.knowledgeMemorySocialLearningModel` artifacts.
+- Knowledge, memory, and social-learning descriptors are structural semantics; they do not implement human cognition.
+- Background profiles are compressed prior descriptors, not simulated life histories.
+- Crowd and stranger exposure should usually be modeled as aggregate signals, representative agents, or fields rather than thousands of throwaway individuals.
+- LLM-per-agent runtime is not implemented and must not be implied.
+- The service does not execute social learning, update runtime beliefs or memory, sample social exposure, infer real-person traits, support protected-class inference, validate psychology, predict people, optimize persuasion, provide policy targeting, or mutate Opinion Dynamics.
+
+Registry and docs status:
+
+- `knowledgeMemorySocialLearning` is service-only in the primitive registry.
+- `socialLearningRuntime` remains reserved/future.
+- `ortus.knowledgeMemorySocialLearningModel` is implemented with service-level import/export support.
+- Current production templates remain unsupported for knowledge/memory/social-learning runtime behavior.
+- Opinion Dynamics Social Learning Runtime remains future work.
+
+Next recommended prompt: Prompt 31D: Knowledge, Memory + Social Learning Audit.
+
+## 2026-06-07 - Prompt 31D Knowledge, Memory + Social Learning Audit
+
+Goal: audit and harden Prompt 31C without starting Prompt 32, visual builder work, runtime social learning, Opinion Dynamics mutation, full human cognition, LLM agents, unbounded memory, real-person profiling, protected-class inference, psychological diagnosis, persuasion/microtargeting optimization, policy guidance, validation/calibration, or arbitrary code/formula execution.
+
+Audit results:
+
+- Strengthened `src/simulation/socialLearning` unsafe-key validation for additional runtime-hook, compiler, LLM-agent, prompt-chain, embedding/vector, model-weight, training-data, dataset, biography/runtime-memory, real-person, protected-attribute, diagnosis, targeting/recommender, policy-guidance, causal/treatment-effect, calibration/validation-claim, proof/certification, operational-safety, and risk/safety-score payload shapes.
+- Strengthened social-learning warnings and validation reports so valid descriptors still report `runnableNow: false`, no runtime social learning, no belief/memory updates, no exposure sampling, no human cognition runtime, no LLM-agent runtime, no psychological validity, no empirical validation, no policy guidance, and no real-person/protected-class/persuasion support.
+- Strengthened tests for malformed arrays, duplicate ids across descriptor families, executable flags across descriptor families, unsafe social/cognitive/ML payload keys, warning coverage, helper non-mutation, validation reports, serialization rejection, registry status, hybrid composition attachment boundaries, model schema linkage, Opinion Dynamics separation, documentation phrases, and headless architecture constraints.
+- Confirmed `knowledgeMemorySocialLearning` remains service-only in the primitive registry, `socialLearningRuntime` remains reserved/future, and current production templates do not runtime-support knowledge/memory/social-learning semantics.
+- Confirmed model schemas may declare `socialLearning`, `memoryUpdate`, and `beliefUpdate` rule kinds and can reference a social-learning semantics artifact structurally, but neither artifact executes those rules or becomes runnable.
+- Confirmed Opinion Dynamics remains a hand-built stylized scalar-opinion template; it was not mutated into social-learning runtime.
+
+Boundary preserved:
+
+- Knowledge, memory, and social-learning descriptors are structural semantics; they do not implement human cognition.
+- Background profiles are compressed prior descriptors, not simulated life histories.
+- Crowd and stranger exposure should usually be modeled as aggregate signals, representative agents, or fields rather than thousands of throwaway individuals.
+- LLM-per-agent runtime is not implemented and must not be implied.
+- Prompt 32 visual model-builder planning remains future work.
+
+Next recommended prompt: Prompt 32: Visual Model Builder Planning + Workspace Schema V1.
+
+## 2026-06-07 - Prompt 32 Visual Model Builder Planning + Workspace Schema V1
+
+Goal: add a service-first, headless Visual Builder Workspace Schema V1 without implementing the visual builder UI, a node editor, drag/drop, graph rendering, schema execution, rule execution, formula/code/script execution, visual programming, compiler/interpreter runtime, schema-to-template/scenario/RunConfig/snapshot generation, external framework interop, social-learning runtime, or LLM-agent runtime.
+
+Implemented boundaries:
+
+- Added `src/simulation/visualBuilderWorkspace` as a headless service for validating, serializing, deserializing, querying, summarizing, warning about, and reporting capability gaps for `ortus.visualBuilderWorkspace` artifacts.
+- Visual builder workspaces are structural planning artifacts; they do not implement the visual builder UI.
+- Workspace nodes and edges are visual descriptors, not executable dataflow or runtime behavior.
+- A valid visual builder workspace does not make a model schema runnable.
+- Prompt 32 does not add drag-and-drop modeling, visual programming, or schema execution.
+- Workspace artifacts can reference model schemas, social-learning semantics, observability, causality, networks, resources, feedback, quantities, control, hybrid compositions, scenarios, or templates structurally, but they do not execute node graphs, generate scenarios, generate RunConfigs, produce snapshots, create templates, create engines, add external framework interop, implement social-learning runtime, or add LLM agents.
+
+Registry and composition status:
+
+- `visualBuilderWorkspace` is service-only in the primitive registry.
+- `ortus.visualBuilderWorkspace` is implemented with service-level import/export support.
+- `visualModelBuilder`, `safeInterpreterCompiler`, `customModelRuntime`, `llmAgents`, `externalFrameworkInterop`, `validationCalibration`, and `socialLearningRuntime` remain reserved/future.
+- Hybrid compositions may reference `ortus.visualBuilderWorkspace` structurally, but attachment does not make a composition runnable and does not satisfy visual model builder, schema execution, compiler/interpreter, validation/calibration, external interop, social-learning runtime, custom runtime, or LLM-agent capabilities.
+- Current production templates remain hand-built runtime models and do not runtime-support visual builder workspaces.
+
+Next recommended prompt: Prompt 32B: Visual Builder Workspace Audit.
+
+## 2026-06-07 - Prompt 32B Visual Builder Workspace Audit
+
+Goal: audit and harden Prompt 32 without adding visual builder UI, React graph-builder components, drag/drop, node canvas, toolbar/palette/save-load UI, Run Model actions, schema authoring forms, graph execution, schema execution, compiler/interpreter runtime, scenario/RunConfig/snapshot/template generation, external framework interop, social-learning runtime, or LLM agents.
+
+Audit results:
+
+- Confirmed `src/simulation/visualBuilderWorkspace` remains a headless structural service for `ortus.visualBuilderWorkspace` artifacts only.
+- Strengthened visual workspace validation to reject cyclic direct-validation payloads and additional UI/runtime-shaped metadata keys such as React component refs, DOM/canvas refs, node editor, graph renderer, toolbar/palette, save-load UI, Run Model button, schema authoring form, and drag/drop runtime payloads.
+- Strengthened warning output to state that artifact references are structural references only and do not activate behavior, and that no node editor or graph rendering exists in V1.
+- Strengthened tests for required live-state and unsafe-key families, malformed arrays/objects, cyclic and non-plain payloads, namespaced query helpers, clone-safe helper output, serialization rejection, per-doc exact boundary phrases, registry status, composition attachment boundaries, model-schema/social-learning separation, current UI absence, template capability separation, assumptions, and architecture constraints.
+- Confirmed `visualBuilderWorkspace` remains service-only in the primitive registry, `ortus.visualBuilderWorkspace` remains service-level import/export, and current production templates do not runtime-support visual builder workspaces.
+- Confirmed hybrid compositions may reference a visual builder workspace structurally, but the attachment does not make a composition runnable and does not satisfy visual model builder, schema execution, compiler/interpreter, validation/calibration, external interop, social-learning runtime, custom runtime, or LLM-agent capabilities.
+
+Boundary preserved:
+
+- Visual builder workspaces are structural planning artifacts; they do not implement the visual builder UI.
+- Workspace nodes and edges are visual descriptors, not executable dataflow or runtime behavior.
+- A valid visual builder workspace does not make a model schema runnable.
+- Prompt 32 does not add drag-and-drop modeling, visual programming, or schema execution.
+- Prompt 33 template/schema compatibility mapping remains future work.
+- Prompt 34 safe builder UI shell remains future work.
+
+Next recommended prompt: Prompt 33: Template/Schema Compatibility Mapping V1.
+
+## 2026-06-07 - Prompt 33 Template/Schema Compatibility Mapping V1
+
+Goal: add a service-first, headless compatibility mapping layer between `ModelSchemaDefinition` artifacts and production template metadata without adding schema execution, conversion, generation, visual builder UI/runtime, external framework interop, social-learning runtime, validation, or calibration.
+
+Implemented boundaries:
+
+- Added `src/simulation/schemaTemplateCompatibility` as a headless service for `ortus.schemaTemplateCompatibilityReport` and `ortus.templateMappingProfile` artifacts.
+- Template/schema compatibility reports are structural fit analyses; they do not convert schemas into runnable models.
+- A strong template fit does not mean a schema can run.
+- Unsupported and lossy mappings must remain visible; they must not be silently dropped.
+- Compatibility mapping does not generate scenarios, RunConfigs, snapshots, templates, or engines.
+- The mapper inspects validated model schema structure and static template metadata only; it does not instantiate engines, parse `ruleDescription`, execute rules, mutate templates, or create runtime artifacts.
+
+Registry and composition status:
+
+- `schemaTemplateCompatibility` is service-only in the primitive registry.
+- `ortus.schemaTemplateCompatibilityReport` and `ortus.templateMappingProfile` are implemented with service-level import/export support.
+- Current production templates remain unsupported for schemaTemplateCompatibility runtime behavior.
+- Hybrid compositions may reference compatibility reports and mapping profiles structurally, but those attachments do not make a composition runnable and do not satisfy model schema execution, visual builder runtime, conversion, generation, validation, calibration, external interop, or social-learning runtime capabilities.
+
+Boundary preserved:
+
+- Model schemas remain structural declarations, not executable models.
+- Visual builder workspaces remain structural planning artifacts, not UI or graph execution.
+- Compatibility reports do not imply NetLogo, Mesa, or MASON interop.
+- Compatibility reports do not validate, calibrate, prove causality/emergence/robustness/safety, or recommend strategy/control actions.
+- Social-learning, memory, and belief descriptors remain structural semantics, not human cognition or runtime social learning.
+
+Next recommended prompt: Prompt 33B: Template/Schema Compatibility Mapping Audit.
