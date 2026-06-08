@@ -36,18 +36,23 @@ export function getSchemaTemplateCompatibilityWarnings(report: SchemaTemplateCom
   const warnings: string[] = [
     ...requiredSchemaTemplateCompatibilityWarnings,
     "Valid compatibility reports are not runnable simulations.",
+    "Template mapping profiles are structural metadata only; they are not runtime adapters, template factories, or template support claims.",
+    "Active mappings are structurally active only; they are not runtime-executed.",
     "No ModelSchemaDefinition execution, formula parsing, compiler, interpreter, arbitrary code execution, or ruleDescription execution is available.",
+    "No scenario generation, RunConfig generation, snapshot generation, template generation, engine creation, compiler, or interpreter is available.",
     "No scientific validation, calibration, causal proof, emergence proof, robustness proof, strategy effectiveness proof, safety certification, or operational readiness is provided by compatibility mapping.",
     "Global service availability is not template runtime support.",
     "Service-only primitives in schemas or profiles remain service-only; they are not template runtime support.",
-    "Social-learning, belief, and memory descriptors are structural semantics; they do not implement human cognition or social-learning runtime.",
-    "Visual-builder references are structural planning references, not visual-builder UI or runtime support.",
-    "External framework references are documentation only; NetLogo, Mesa, and MASON interop is not implemented.",
+    "Future-only primitives remain unsupported until explicit runtime work implements and tests them.",
+    "Social-learning, belief, and memory descriptors are structural semantics; they do not implement human cognition, belief updates, memory updates, or social-learning runtime.",
+    "Visual-builder workspace references are structural planning references, not visual-builder UI or runtime support.",
+    "External framework references do not imply interop; NetLogo, Mesa, and MASON interop is not implemented.",
     "Broad compatible/convert/generate wording must be qualified as structural fit only."
   ];
 
   if (valid.templateResults.some((result) => result.fit === "strong" || result.fit === "templateExact")) {
     warnings.push("Strong or templateExact fit is still structural compatibility only, not runtime execution.");
+    warnings.push("templateExact fit is still structural compatibility only; it does not make a schema runnable.");
   }
   if (valid.templateResults.some((result) => result.unsupportedConcepts.length > 0)) {
     warnings.push("At least one template result has unsupported schema concepts that must remain visible.");

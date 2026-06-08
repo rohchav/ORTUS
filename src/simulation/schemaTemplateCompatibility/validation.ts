@@ -57,14 +57,17 @@ const templateMappingProfileSchema: z.ZodType<TemplateMappingProfile> = z
     schemaVersion: z.literal("1"),
     artifactType: z.literal(templateMappingProfileArtifactType),
     id: boundedString(160),
+    name: boundedString(180),
+    version: boundedString(80),
     templateId: boundedString(160),
-    templateName: boundedString(180),
-    templateVersion: boundedString(80),
+    templateName: boundedString(180).optional(),
+    templateVersion: boundedString(80).optional(),
     description: optionalDescription,
     supportedEntityKinds: z.array(z.enum(modelEntityKinds)).max(maxSchemaTemplateCompatibilityItems),
     supportedEntityTypeIds: stringIdArraySchema,
     supportedComponentTypeIds: stringIdArraySchema,
     supportedSpaceKinds: z.array(z.enum(modelSpaceKinds)).max(maxSchemaTemplateCompatibilityItems),
+    supportedParameterKinds: z.array(z.enum(modelParameterValueKinds)).max(maxSchemaTemplateCompatibilityItems),
     supportedParameterValueKinds: z.array(z.enum(modelParameterValueKinds)).max(maxSchemaTemplateCompatibilityItems),
     supportedParameterIds: stringIdArraySchema,
     supportedMetricKinds: z.array(z.enum(modelMetricKinds)).max(maxSchemaTemplateCompatibilityItems),
@@ -72,6 +75,9 @@ const templateMappingProfileSchema: z.ZodType<TemplateMappingProfile> = z
     supportedRuleKinds: z.array(z.enum(modelRuleKinds)).max(maxSchemaTemplateCompatibilityItems),
     supportedBehaviorModeIds: stringIdArraySchema,
     supportedArtifactTypes: z.array(boundedString(180)).max(maxSchemaTemplateCompatibilityItems),
+    unsupportedConcepts: notesSchema.optional(),
+    capabilityNotes: notesSchema.optional(),
+    limitationNotes: notesSchema.optional(),
     primitiveCapabilities: z.array(primitiveMappingCapabilitySchema).max(maxSchemaTemplateCompatibilityItems).optional(),
     active: z.boolean(),
     executable: z.literal(false),
@@ -164,6 +170,9 @@ const schemaTemplateCompatibilityReportSchema: z.ZodType<SchemaTemplateCompatibi
     schemaVersion: z.literal("1"),
     artifactType: z.literal(schemaTemplateCompatibilityReportArtifactType),
     id: boundedString(180),
+    name: boundedString(180),
+    version: boundedString(80),
+    schemaId: boundedString(160),
     modelSchemaId: boundedString(160),
     modelSchemaName: boundedString(180),
     modelSchemaVersion: boundedString(80),
@@ -176,11 +185,19 @@ const schemaTemplateCompatibilityReportSchema: z.ZodType<SchemaTemplateCompatibi
     runnableNow: z.literal(false),
     schemaExecutionAvailable: z.literal(false),
     conversionAvailable: z.literal(false),
+    scenarioGenerationAvailable: z.literal(false),
+    runConfigGenerationAvailable: z.literal(false),
+    snapshotGenerationAvailable: z.literal(false),
+    templateGenerationAvailable: z.literal(false),
+    engineCreationAvailable: z.literal(false),
     generationAvailable: z.literal(false),
     validationAvailable: z.literal(false),
     calibrationAvailable: z.literal(false),
     active: z.boolean(),
     executable: z.literal(false),
+    errors: notesSchema.optional(),
+    assumptionNotes: notesSchema.optional(),
+    limitationNotes: notesSchema.optional(),
     metadata: z.record(jsonValueSchema).optional()
   })
   .strict();
@@ -215,6 +232,7 @@ const forbiddenCompatibilityKeys = new Set([
   "typescript",
   "python",
   "functionBody",
+  "executablePayload",
   "function",
   "class",
   "prototype",
@@ -223,8 +241,12 @@ const forbiddenCompatibilityKeys = new Set([
   "runtime",
   "runtimeHook",
   "runtimeHooks",
+  "runtimeAdapter",
+  "runtimeFactory",
+  "runtimeEngine",
   "execute",
   "executor",
+  "execution",
   "compiler",
   "interpreter",
   "parser",
@@ -234,12 +256,21 @@ const forbiddenCompatibilityKeys = new Set([
   "convert",
   "converter",
   "conversionFunction",
+  "conversionPayload",
+  "generatedScenario",
+  "generatedRunConfig",
+  "generatedSnapshot",
+  "generatedTemplate",
   "generateTemplate",
   "generateScenario",
   "generateRunConfig",
   "generateSnapshot",
   "createEngine",
   "applyScenario",
+  "scenario",
+  "runConfig",
+  "snapshotState",
+  "templateDefinition",
   "templateFactory",
   "scenarioFactory",
   "runConfigFactory",
@@ -309,6 +340,9 @@ export function validateSchemaTemplateCompatibilityReport(value: unknown): Schem
   assertSchemaTemplateCompatibilityJsonBound(report, maxSchemaTemplateCompatibilityJsonLength, "Schema/template compatibility report");
   validateReportDuplicates(report);
   validateCompatibilityMetadataBounds(report);
+  if (report.schemaId !== report.modelSchemaId) {
+    throw new SimulationValidationError(`Report schemaId must match modelSchemaId: ${report.schemaId}`);
+  }
   if (report.bestTemplateId && !report.templateResults.some((result) => result.templateId === report.bestTemplateId)) {
     throw new SimulationValidationError(`Report bestTemplateId does not match any template result: ${report.bestTemplateId}`);
   }
@@ -328,10 +362,13 @@ export function parseSchemaTemplateCompatibilityReportJson(json: string | unknow
 export function normalizeTemplateMappingProfile(profile: TemplateMappingProfile): TemplateMappingProfile {
   return {
     ...profile,
+    name: profile.name,
+    version: profile.version,
     supportedEntityKinds: [...profile.supportedEntityKinds],
     supportedEntityTypeIds: [...profile.supportedEntityTypeIds],
     supportedComponentTypeIds: [...profile.supportedComponentTypeIds],
     supportedSpaceKinds: [...profile.supportedSpaceKinds],
+    supportedParameterKinds: [...profile.supportedParameterKinds],
     supportedParameterValueKinds: [...profile.supportedParameterValueKinds],
     supportedParameterIds: [...profile.supportedParameterIds],
     supportedMetricKinds: [...profile.supportedMetricKinds],
@@ -339,6 +376,9 @@ export function normalizeTemplateMappingProfile(profile: TemplateMappingProfile)
     supportedRuleKinds: [...profile.supportedRuleKinds],
     supportedBehaviorModeIds: [...profile.supportedBehaviorModeIds],
     supportedArtifactTypes: [...profile.supportedArtifactTypes],
+    ...(profile.unsupportedConcepts ? { unsupportedConcepts: [...profile.unsupportedConcepts] } : {}),
+    ...(profile.capabilityNotes ? { capabilityNotes: [...profile.capabilityNotes] } : {}),
+    ...(profile.limitationNotes ? { limitationNotes: [...profile.limitationNotes] } : {}),
     ...(profile.primitiveCapabilities ? { primitiveCapabilities: profile.primitiveCapabilities.map((capability) => cloneRecord(capability)) } : {}),
     ...(profile.notes ? { notes: [...profile.notes] } : {}),
     ...(profile.metadata ? { metadata: cloneRecord(profile.metadata) as Record<string, JsonValue> } : {})
@@ -364,6 +404,9 @@ export function normalizeSchemaTemplateCompatibilityReport(report: SchemaTemplat
     templateResults: report.templateResults.map((result) => normalizeTemplateCompatibilityResult(result)),
     requiredRuntimeCapabilities: [...report.requiredRuntimeCapabilities],
     warnings: [...report.warnings],
+    ...(report.errors ? { errors: [...report.errors] } : {}),
+    ...(report.assumptionNotes ? { assumptionNotes: [...report.assumptionNotes] } : {}),
+    ...(report.limitationNotes ? { limitationNotes: [...report.limitationNotes] } : {}),
     ...(report.metadata ? { metadata: cloneRecord(report.metadata) as Record<string, JsonValue> } : {})
   };
 }
@@ -404,6 +447,9 @@ export function assertPlainSchemaTemplateCompatibilityJson(value: unknown, label
     }
     seen.add(current);
     for (const [key, child] of Object.entries(current)) {
+      if (key.toLowerCase() === "executable" && child === true) {
+        throw new SimulationValidationError(`${label} must not contain executable true`);
+      }
       if (isForbiddenCompatibilityKey(key)) {
         throw new SimulationValidationError(
           `${label} must not contain live-state, executable, formula, code, runtime, generation, conversion, compiler, interpreter, external-framework, LLM, embedding, model-weight, training-data, real-person, protected-class, persuasion, microtargeting, proof, certification, safety, or risk key ${key}`
@@ -437,6 +483,7 @@ function validateProfileDuplicates(profile: TemplateMappingProfile): void {
   validateUniqueStrings("supported entity type id", profile.supportedEntityTypeIds);
   validateUniqueStrings("supported component type id", profile.supportedComponentTypeIds);
   validateUniqueStrings("supported space kind", profile.supportedSpaceKinds);
+  validateUniqueStrings("supported parameter kind", profile.supportedParameterKinds);
   validateUniqueStrings("supported parameter value kind", profile.supportedParameterValueKinds);
   validateUniqueStrings("supported parameter id", profile.supportedParameterIds);
   validateUniqueStrings("supported metric kind", profile.supportedMetricKinds);

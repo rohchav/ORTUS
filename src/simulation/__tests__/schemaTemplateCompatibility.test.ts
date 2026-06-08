@@ -36,6 +36,7 @@ import {
   type HybridModelComposition,
   type ModelSchemaDefinition,
   type SchemaTemplateCompatibilityReport,
+  type TemplateCompatibilityResult,
   type TemplateMappingProfile
 } from "../index";
 
@@ -321,11 +322,39 @@ function hybridComposition(overrides: Partial<HybridModelComposition> = {}): Hyb
   };
 }
 
+function minimalTemplateResult(overrides: Partial<TemplateCompatibilityResult> = {}): TemplateCompatibilityResult {
+  return {
+    id: "template-result",
+    templateId: "opinion-dynamics",
+    templateName: "Opinion Dynamics",
+    templateVersion: "1.0.0",
+    fit: "none",
+    score: 0,
+    mappedConcepts: [],
+    unsupportedConcepts: [],
+    lossyMappings: [],
+    requiredRuntimeCapabilities: ["ModelSchemaDefinition runtime interpreter"],
+    missingTemplateCapabilities: ["schema execution"],
+    warnings: ["Template opinion-dynamics compatibility result is structural only; runnableNow is false."],
+    runnableNow: false,
+    schemaExecutionSupported: false,
+    conversionSupported: false,
+    generationSupported: false,
+    templateRuntimeSupportClaimed: false,
+    active: true,
+    executable: false,
+    ...overrides
+  };
+}
+
 function minimalReport(overrides: Partial<SchemaTemplateCompatibilityReport> = {}): SchemaTemplateCompatibilityReport {
   return {
     schemaVersion: "1",
     artifactType: schemaTemplateCompatibilityReportArtifactType,
     id: "compatibility-report",
+    name: "Compatibility Report",
+    version: "1.0.0",
+    schemaId: "schema-1",
     modelSchemaId: "schema-1",
     modelSchemaName: "Schema",
     modelSchemaVersion: "1.0.0",
@@ -336,11 +365,19 @@ function minimalReport(overrides: Partial<SchemaTemplateCompatibilityReport> = {
     runnableNow: false,
     schemaExecutionAvailable: false,
     conversionAvailable: false,
+    scenarioGenerationAvailable: false,
+    runConfigGenerationAvailable: false,
+    snapshotGenerationAvailable: false,
+    templateGenerationAvailable: false,
+    engineCreationAvailable: false,
     generationAvailable: false,
     validationAvailable: false,
     calibrationAvailable: false,
     active: true,
     executable: false,
+    errors: [],
+    assumptionNotes: [],
+    limitationNotes: [],
     ...overrides
   };
 }
@@ -362,36 +399,156 @@ describe("schema/template compatibility mapping service", () => {
     const profile = createTemplateMappingProfileFromTemplate(productionTemplates[0]!);
     expect(validateTemplateMappingProfile(profile)).toMatchObject({
       artifactType: templateMappingProfileArtifactType,
+      name: expect.any(String),
+      version: expect.any(String),
+      templateId: productionTemplates[0]!.id,
       executable: false,
       runtimeActive: false,
       conversionSupported: false,
-      generationSupported: false
+      generationSupported: false,
+      supportedParameterKinds: expect.any(Array),
+      unsupportedConcepts: expect.arrayContaining(["schema-to-template conversion", "scenario generation", "RunConfig generation"]),
+      capabilityNotes: expect.arrayContaining(["Supported fields describe static template metadata only."]),
+      limitationNotes: expect.arrayContaining(["This profile is not a runtime adapter."])
     });
     expect(validateSchemaTemplateCompatibilityReport(minimalReport())).toMatchObject({
       artifactType: schemaTemplateCompatibilityReportArtifactType,
+      name: "Compatibility Report",
+      version: "1.0.0",
+      schemaId: "schema-1",
+      modelSchemaId: "schema-1",
       runnableNow: false,
       schemaExecutionAvailable: false,
       conversionAvailable: false,
+      scenarioGenerationAvailable: false,
+      runConfigGenerationAvailable: false,
+      snapshotGenerationAvailable: false,
+      templateGenerationAvailable: false,
+      engineCreationAvailable: false,
       generationAvailable: false,
       validationAvailable: false,
       calibrationAvailable: false,
       executable: false
     });
 
+    expectInvalidProfile("missing profile id", { ...profile, id: undefined }, /id/);
+    expectInvalidProfile("missing profile name", { ...profile, name: undefined }, /name/);
+    expectInvalidProfile("missing profile version", { ...profile, version: undefined }, /version/);
+    expectInvalidProfile("missing template id", { ...profile, templateId: undefined }, /templateId/);
     expectInvalidProfile("wrong artifact type", { ...profile, artifactType: schemaTemplateCompatibilityReportArtifactType }, /artifactType/);
     expectInvalidProfile("duplicate supported parameter", { ...profile, supportedParameterIds: ["agentCount", "agentCount"] }, /Duplicate supported parameter id/);
+    expectInvalidProfile("duplicate supported parameter kind", { ...profile, supportedParameterKinds: ["number", "number"] }, /Duplicate supported parameter kind/);
     expectInvalidProfile("profile executable true", { ...profile, executable: true }, /executable/);
     expectInvalidProfile("profile runtime true", { ...profile, runtimeActive: true }, /runtimeActive/);
+    expectInvalidReport("missing report id", minimalReport({ id: undefined as never }), /id/);
+    expectInvalidReport("missing report name", minimalReport({ name: undefined as never }), /name/);
+    expectInvalidReport("missing report version", minimalReport({ version: undefined as never }), /version/);
+    expectInvalidReport("missing schema id", minimalReport({ schemaId: undefined as never }), /schemaId/);
+    expectInvalidReport("schema id mismatch", minimalReport({ schemaId: "schema-2" }), /schemaId/);
     expectInvalidReport("report executable true", minimalReport({ executable: true as never }), /executable/);
     expectInvalidReport("report runnable true", minimalReport({ runnableNow: true as never }), /runnableNow/);
     expectInvalidReport("report schema execution true", minimalReport({ schemaExecutionAvailable: true as never }), /schemaExecutionAvailable/);
     expectInvalidReport("report conversion true", minimalReport({ conversionAvailable: true as never }), /conversionAvailable/);
+    expectInvalidReport("report scenario generation true", minimalReport({ scenarioGenerationAvailable: true as never }), /scenarioGenerationAvailable/);
+    expectInvalidReport("report RunConfig generation true", minimalReport({ runConfigGenerationAvailable: true as never }), /runConfigGenerationAvailable/);
+    expectInvalidReport("report snapshot generation true", minimalReport({ snapshotGenerationAvailable: true as never }), /snapshotGenerationAvailable/);
+    expectInvalidReport("report template generation true", minimalReport({ templateGenerationAvailable: true as never }), /templateGenerationAvailable/);
+    expectInvalidReport("report engine creation true", minimalReport({ engineCreationAvailable: true as never }), /engineCreationAvailable/);
     expectInvalidReport("report generation true", minimalReport({ generationAvailable: true as never }), /generationAvailable/);
     expectInvalidReport("report validation true", minimalReport({ validationAvailable: true as never }), /validationAvailable/);
     expectInvalidReport("report calibration true", minimalReport({ calibrationAvailable: true as never }), /calibrationAvailable/);
+    expectInvalidReport("invalid fit enum", minimalReport({ overallFit: "compatible" as never }), /overallFit/);
+    expectInvalidReport(
+      "invalid nested fit enum",
+      minimalReport({ templateResults: [minimalTemplateResult({ fit: "compatible" as never })] }),
+      /fit/
+    );
+    expectInvalidReport("duplicate template result ids", minimalReport({ templateResults: [minimalTemplateResult(), minimalTemplateResult({ templateId: "predator-prey" })] }), /Duplicate template compatibility result/);
+    expectInvalidReport(
+      "duplicate template result template ids",
+      minimalReport({ templateResults: [minimalTemplateResult(), minimalTemplateResult({ id: "template-result-2" })] }),
+      /Duplicate template result templateId/
+    );
+    const mapping = {
+      id: "mapping-1",
+      schemaElementId: "entity-1",
+      schemaElementKind: "entityType",
+      templateConceptKind: "agent",
+      status: "mapped",
+      confidence: "high",
+      active: true,
+      executable: false
+    } as const;
+    const unsupported = {
+      id: "unsupported-1",
+      schemaElementId: "rule-1",
+      schemaElementKind: "ruleDeclaration",
+      reason: "runtimeUnsupported",
+      active: true,
+      executable: false,
+      notes: ["No runtime support."]
+    } as const;
+    const lossy = {
+      id: "loss-1",
+      schemaElementId: "rule-1",
+      schemaElementKind: "ruleDeclaration",
+      lossKind: "behaviorLoss",
+      severity: "critical",
+      message: "Rule is not executed.",
+      active: true,
+      executable: false
+    } as const;
+    expectInvalidReport(
+      "duplicate mapping ids",
+      minimalReport({ templateResults: [minimalTemplateResult({ mappedConcepts: [mapping, { ...mapping }] as never })] }),
+      /Duplicate schema concept mapping/
+    );
+    expectInvalidReport(
+      "duplicate unsupported ids",
+      minimalReport({ templateResults: [minimalTemplateResult({ unsupportedConcepts: [unsupported, { ...unsupported }] as never })] }),
+      /Duplicate unsupported schema concept/
+    );
+    expectInvalidReport(
+      "duplicate lossy ids",
+      minimalReport({ templateResults: [minimalTemplateResult({ lossyMappings: [lossy, { ...lossy }] as never })] }),
+      /Duplicate lossy mapping note/
+    );
+    expectInvalidReport("invalid score non-finite", minimalReport({ templateResults: [minimalTemplateResult({ score: Number.POSITIVE_INFINITY })] }), /non-finite|score/);
+    expectInvalidReport("invalid score outside range", minimalReport({ templateResults: [minimalTemplateResult({ score: 1.5 })] }), /score/);
+    expectInvalidReport(
+      "invalid schema element kind",
+      minimalReport({ templateResults: [minimalTemplateResult({ mappedConcepts: [{ ...mapping, schemaElementKind: "runtimeObject" } as never] })] }),
+      /schemaElementKind/
+    );
+    expectInvalidReport(
+      "invalid template concept kind",
+      minimalReport({ templateResults: [minimalTemplateResult({ mappedConcepts: [{ ...mapping, templateConceptKind: "engine" } as never] })] }),
+      /templateConceptKind/
+    );
+    expectInvalidReport(
+      "invalid mapping status",
+      minimalReport({ templateResults: [minimalTemplateResult({ mappedConcepts: [{ ...mapping, status: "converted" } as never] })] }),
+      /status/
+    );
+    expectInvalidReport(
+      "invalid mapping confidence",
+      minimalReport({ templateResults: [minimalTemplateResult({ mappedConcepts: [{ ...mapping, confidence: "certain" } as never] })] }),
+      /confidence/
+    );
+    expectInvalidReport(
+      "invalid unsupported reason",
+      minimalReport({ templateResults: [minimalTemplateResult({ unsupportedConcepts: [{ ...unsupported, reason: "implemented" } as never] })] }),
+      /reason/
+    );
+    expectInvalidReport(
+      "invalid loss kind",
+      minimalReport({ templateResults: [minimalTemplateResult({ lossyMappings: [{ ...lossy, lossKind: "conversionLoss" } as never] })] }),
+      /lossKind/
+    );
     expectInvalidReport("best template mismatch", minimalReport({ bestTemplateId: "missing" }), /bestTemplateId/);
     expectInvalidReport("unknown top-level field", { ...minimalReport(), extra: true }, /Unrecognized key|Invalid schema/);
     expectInvalidReport("non-finite number", minimalReport({ metadata: { value: Number.NaN } as never }), /non-finite/);
+    expectInvalidReport("executable metadata true", minimalReport({ metadata: { executable: true } as never }), /executable true/);
     expectInvalidReport("function payload", minimalReport({ metadata: { handler: () => null } as never }), /plain JSON/);
     expectInvalidReport("non-plain payload", minimalReport({ metadata: { when: new Date() } as never }), /plain JSON/);
     const cyclicPayload: Record<string, unknown> = {};
@@ -415,6 +572,11 @@ describe("schema/template compatibility mapping service", () => {
     expect(report.runnableNow).toBe(false);
     expect(report.schemaExecutionAvailable).toBe(false);
     expect(report.conversionAvailable).toBe(false);
+    expect(report.scenarioGenerationAvailable).toBe(false);
+    expect(report.runConfigGenerationAvailable).toBe(false);
+    expect(report.snapshotGenerationAvailable).toBe(false);
+    expect(report.templateGenerationAvailable).toBe(false);
+    expect(report.engineCreationAvailable).toBe(false);
     expect(report.generationAvailable).toBe(false);
     expect(report.validationAvailable).toBe(false);
     expect(report.calibrationAvailable).toBe(false);
@@ -466,11 +628,23 @@ describe("schema/template compatibility mapping service", () => {
       runnableNow: false
     });
     expect(getSchemaTemplateCompatibilityWarnings(report)).toEqual(expect.arrayContaining([...requiredCompatibilityDocPhrases]));
+    expect(getSchemaTemplateCompatibilityWarnings(report)).toEqual(
+      expect.arrayContaining([
+        "Template mapping profiles are structural metadata only; they are not runtime adapters, template factories, or template support claims.",
+        "Active mappings are structurally active only; they are not runtime-executed.",
+        "No scenario generation, RunConfig generation, snapshot generation, template generation, engine creation, compiler, or interpreter is available.",
+        "Future-only primitives remain unsupported until explicit runtime work implements and tests them.",
+        "Visual-builder workspace references are structural planning references, not visual-builder UI or runtime support.",
+        "External framework references do not imply interop; NetLogo, Mesa, and MASON interop is not implemented."
+      ])
+    );
     expect(getSchemaTemplateCompatibilityValidationReport(report)).toMatchObject({
       reportId: "schema-template-compatibility:opinion-compatibility-schema",
       valid: true,
       runnableNow: false,
       conversionAvailable: false,
+      scenarioGenerationAvailable: false,
+      runConfigGenerationAvailable: false,
       generationAvailable: false,
       validationAvailable: false,
       calibrationAvailable: false
@@ -501,8 +675,13 @@ describe("schema/template compatibility mapping service", () => {
       "ortus.resourceSystem",
       "ortus.eventSchedule",
       "ortus.feedbackLoops",
+      "ortus.delayQueue",
+      "ortus.feedbackEventMetrics",
       "ortus.hybridComposition",
       "ortus.scaleModel",
+      "ortus.scaleViewState",
+      "ortus.boundaryModel",
+      "ortus.fieldLayer",
       "ortus.observabilityModel",
       "ortus.causalAssumptionModel",
       "ortus.quantitySemanticsModel",
@@ -523,7 +702,21 @@ describe("schema/template compatibility mapping service", () => {
   });
 
   it("integrates with registry, template capabilities, and hybrid composition without satisfying runtime support", () => {
-    expect(getPrimitive("schemaTemplateCompatibility")).toMatchObject({ status: "serviceOnly", supportLevel: "service" });
+    expect(getPrimitive("schemaTemplateCompatibility")).toMatchObject({
+      status: "serviceOnly",
+      supportLevel: "service",
+      currentScope: expect.stringContaining("structural schema-to-template fit reporting only"),
+      limitations: expect.arrayContaining([
+        "No schema-to-template conversion is implemented.",
+        "No schema execution, compiler, interpreter, or ruleDescription execution is implemented.",
+        "No scenario generation, RunConfig generation, snapshot generation, template generation, or engine creation is implemented.",
+        "No visual builder runtime, graph execution, or visual programming is implemented.",
+        "No external framework interop, NetLogo runtime, Mesa runtime, or MASON runtime is implemented.",
+        "No validation, calibration, scientific truth, causal proof, emergence proof, robustness proof, strategy effectiveness proof, safety certification, or operational readiness is implemented.",
+        "No social-learning runtime, human cognition runtime, LLM-agent runtime, real-person profiling, protected-class inference, persuasion optimization, or microtargeting is implemented."
+      ]),
+      promptAudit: "Prompt 33B"
+    });
     expect(listServiceOnlyPrimitives().map((primitive) => primitive.id)).toContain("schemaTemplateCompatibility");
     expect(listArtifactFamiliesForPrimitive("schemaTemplateCompatibility").map((artifact) => artifact.artifactType)).toEqual(
       expect.arrayContaining([schemaTemplateCompatibilityReportArtifactType, templateMappingProfileArtifactType])
@@ -623,11 +816,15 @@ describe("schema/template compatibility mapping service", () => {
 
     const docs = auditedDocPaths.map((docPath) => readFileSync(join(repoRoot, docPath), "utf8")).join("\n");
     expect(docs).toContain("Prompt 33B");
+    expect(docs).toContain("Prompt 33C");
+    expect(docs).toContain("Prompt 34 safe builder UI shell remains future");
     expect(docs).toContain("Do not treat compatibility as conversion.");
     expect(docs).toContain("Do not treat strong fit as runnable.");
+    expect(docs).toContain("Do not treat templateExact fit as runnable.");
     expect(docs).toContain("Do not hide unsupported concepts.");
     expect(docs).toContain("Do not silently drop lossy mappings.");
     expect(docs).toContain("Do not mutate templates from compatibility reports.");
+    expect(docs).toContain("Do not generate scenarios/RunConfigs/snapshots/templates/engines from compatibility reports.");
 
     const assumptionText = productionTemplates
       .flatMap((template) => templateAssumptionProfile(template).limitations.map((item) => item.description))

@@ -1,6 +1,6 @@
 # ORTUS Current Context
 
-Last updated: 2026-06-07 after Prompt 33 Template/Schema Compatibility Mapping V1
+Last updated: 2026-06-08 after Prompt 33B Template/Schema Compatibility Mapping Audit
 
 ## Project Identity
 
@@ -12,11 +12,11 @@ Built-in production templates currently include Epidemic Spread, Opinion Dynamic
 
 ## Completed Prompt State
 
-Durable docs and source indicate completed roadmap work through Prompt 33. Prompt 31: Model Schema + Interpreter Foundation V1, Prompt 31B: Model Schema + Interpreter Foundation Audit, Prompt 31C: Knowledge, Memory + Social Learning Semantics V1, Prompt 31D: Knowledge, Memory + Social Learning Audit, Prompt 32: Visual Model Builder Planning + Workspace Schema V1, Prompt 32B: Visual Builder Workspace Audit, and Prompt 33: Template/Schema Compatibility Mapping V1 are complete.
+Durable docs and source indicate completed roadmap work through Prompt 33B. Prompt 31: Model Schema + Interpreter Foundation V1, Prompt 31B: Model Schema + Interpreter Foundation Audit, Prompt 31C: Knowledge, Memory + Social Learning Semantics V1, Prompt 31D: Knowledge, Memory + Social Learning Audit, Prompt 32: Visual Model Builder Planning + Workspace Schema V1, Prompt 32B: Visual Builder Workspace Audit, Prompt 33: Template/Schema Compatibility Mapping V1, and Prompt 33B: Template/Schema Compatibility Mapping Audit are complete.
 
 The post-30B repository hygiene, dependency stabilization, durable context, and performance/scalability pass has also been completed. Recent commits include `dd6c256` for repo context/generated-artifact hygiene, `4949b72` for dependency and performance script stabilization, and `a80d5b7` for simulation performance instrumentation and spatial indexing foundations.
 
-The next roadmap prompt is Prompt 33B: Template/Schema Compatibility Mapping Audit.
+The next roadmap prompt is Prompt 33C: Opinion Dynamics Social Learning Runtime V1.
 
 Implemented runtime foundations include scenarios, snapshots, template-defined behavior modes, agent composition, interventions, experiments, run summaries/comparison, seeded randomness, metrics, spaces, and template metadata.
 
@@ -28,7 +28,7 @@ Knowledge, memory, and social-learning descriptors are structural semantics; the
 
 Visual builder workspaces are structural planning artifacts; they do not implement the visual builder UI. `ortus.visualBuilderWorkspace` artifacts describe future workspace identity, referenced model schemas and artifacts, visual nodes, visual edges, panels, sections, markers, layout, selection, viewport metadata, summaries, and validation reports only. Workspace nodes and edges are visual descriptors, not executable dataflow or runtime behavior. A valid visual builder workspace does not make a model schema runnable. Prompt 32 does not add drag-and-drop modeling, visual programming, or schema execution. Workspaces do not generate scenarios, RunConfigs, snapshots, templates, or engines, do not add external framework interop, and do not implement social-learning runtime or LLM agents. Prompt 34 safe builder UI shell remains future work.
 
-Template/schema compatibility mapping is a structural fit-analysis service only. `ortus.schemaTemplateCompatibilityReport` and `ortus.templateMappingProfile` artifacts compare `ModelSchemaDefinition` structure against static production-template metadata. Template/schema compatibility reports are structural fit analyses; they do not convert schemas into runnable models. A strong template fit does not mean a schema can run. Unsupported and lossy mappings must remain visible; they must not be silently dropped. Compatibility mapping does not generate scenarios, RunConfigs, snapshots, templates, or engines. Compatibility reports do not execute schemas, parse rule descriptions, mutate templates, create engines, implement visual builder runtime, add external framework interop, run social-learning/cognitive behavior, validate science, calibrate outputs, or prove causality, emergence, robustness, strategy effectiveness, safety, or operational readiness.
+Template/schema compatibility mapping is a structural fit-analysis service only. `ortus.schemaTemplateCompatibilityReport` and `ortus.templateMappingProfile` artifacts compare `ModelSchemaDefinition` structure against static production-template metadata. Template/schema compatibility reports are structural fit analyses; they do not convert schemas into runnable models. A strong template fit does not mean a schema can run. Unsupported and lossy mappings must remain visible; they must not be silently dropped. Compatibility mapping does not generate scenarios, RunConfigs, snapshots, templates, or engines. Compatibility reports do not execute schemas, parse rule descriptions, mutate templates, create engines, implement visual builder runtime, add external framework interop, run social-learning/cognitive behavior, validate science, calibrate outputs, or prove causality, emergence, robustness, strategy effectiveness, safety, or operational readiness. Prompt 33B audited these boundaries and kept compatibility mapping structural only.
 
 These foundations are not automatic runtime support for templates. A template must explicitly declare and actually use a primitive at runtime before ORTUS can claim template runtime support.
 
@@ -84,11 +84,11 @@ Real source changes are now reviewable separately from generated build/cache noi
 ## Current Blockers
 
 - npm reports two moderate audit findings; no force fix was run.
-- Prompt 33B audit has not started and should begin only from the current Prompt 33-completed roadmap baseline.
+- No active roadmap blocker is recorded after Prompt 33B, but the compatibility audit work should be reviewed and committed before Prompt 33C starts.
 
 ## Next Recommended Prompt After Stabilization
 
-Next recommended prompt: Prompt 33B: Template/Schema Compatibility Mapping Audit.
+Next recommended prompt: Prompt 33C: Opinion Dynamics Social Learning Runtime V1.
 
 ## Critical Guardrails
 

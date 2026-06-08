@@ -100,14 +100,17 @@ export interface TemplateMappingProfile {
   schemaVersion: "1";
   artifactType: typeof templateMappingProfileArtifactType;
   id: string;
+  name: string;
+  version: string;
   templateId: string;
-  templateName: string;
-  templateVersion: string;
+  templateName?: string;
+  templateVersion?: string;
   description?: string;
   supportedEntityKinds: readonly ModelEntityKind[];
   supportedEntityTypeIds: readonly string[];
   supportedComponentTypeIds: readonly string[];
   supportedSpaceKinds: readonly ModelSpaceKind[];
+  supportedParameterKinds: readonly ModelParameterValueKind[];
   supportedParameterValueKinds: readonly ModelParameterValueKind[];
   supportedParameterIds: readonly string[];
   supportedMetricKinds: readonly ModelMetricKind[];
@@ -115,6 +118,9 @@ export interface TemplateMappingProfile {
   supportedRuleKinds: readonly ModelRuleKind[];
   supportedBehaviorModeIds: readonly string[];
   supportedArtifactTypes: readonly string[];
+  unsupportedConcepts?: readonly string[];
+  capabilityNotes?: readonly string[];
+  limitationNotes?: readonly string[];
   primitiveCapabilities?: readonly TemplatePrimitiveMappingCapability[];
   active: boolean;
   executable: false;
@@ -197,6 +203,9 @@ export interface SchemaTemplateCompatibilityReport {
   schemaVersion: "1";
   artifactType: typeof schemaTemplateCompatibilityReportArtifactType;
   id: string;
+  name: string;
+  version: string;
+  schemaId: string;
   modelSchemaId: string;
   modelSchemaName: string;
   modelSchemaVersion: string;
@@ -209,11 +218,19 @@ export interface SchemaTemplateCompatibilityReport {
   runnableNow: false;
   schemaExecutionAvailable: false;
   conversionAvailable: false;
+  scenarioGenerationAvailable: false;
+  runConfigGenerationAvailable: false;
+  snapshotGenerationAvailable: false;
+  templateGenerationAvailable: false;
+  engineCreationAvailable: false;
   generationAvailable: false;
   validationAvailable: false;
   calibrationAvailable: false;
   active: boolean;
   executable: false;
+  errors?: readonly string[];
+  assumptionNotes?: readonly string[];
+  limitationNotes?: readonly string[];
   metadata?: Record<string, JsonValue>;
 }
 
@@ -237,6 +254,8 @@ export interface SchemaTemplateCompatibilityValidationReport {
   runnableNow: false;
   schemaExecutionAvailable: false;
   conversionAvailable: false;
+  scenarioGenerationAvailable: false;
+  runConfigGenerationAvailable: false;
   generationAvailable: false;
   validationAvailable: false;
   calibrationAvailable: false;

@@ -273,3 +273,25 @@ Boundary preserved:
 - Social-learning, memory, and belief descriptors remain structural semantics, not human cognition or runtime social learning.
 
 Next recommended prompt: Prompt 33B: Template/Schema Compatibility Mapping Audit.
+
+## 2026-06-08 - Prompt 33B Template/Schema Compatibility Mapping Audit
+
+Goal: audit and harden Prompt 33 without adding schema execution, schema-to-template conversion, scenario generation, RunConfig generation, snapshot generation, template generation, engine creation, visual builder UI/runtime, external framework interop, social-learning runtime, validation, calibration, or scientific-truth claims.
+
+Audit results:
+
+- Added explicit compatibility artifact fields for audit clarity: template mapping profiles now carry `name`, `version`, `supportedParameterKinds`, `unsupportedConcepts`, `capabilityNotes`, and `limitationNotes`; compatibility reports now carry `name`, `version`, `schemaId`, explicit scenario/RunConfig/snapshot/template/engine generation false flags, and bounded error/assumption/limitation notes.
+- Strengthened validation so `schemaId` must match `modelSchemaId`, all generation/execution fields are forced false, executable-true payloads are rejected recursively, and additional runtime/generation/conversion payload keys are rejected.
+- Strengthened warning output for structural-only profiles, structurally active mappings, no scenario/RunConfig/snapshot/template/engine generation, no compiler/interpreter, future-only primitives, visual-builder workspace separation, and external-framework non-interop.
+- Split the registry limitations for `schemaTemplateCompatibility` into explicit no-conversion, no-execution, no-generation, no-visual-builder-runtime, no-external-interop, no-validation/calibration/proof, and no-social-learning-runtime boundaries.
+- Strengthened compatibility tests for required artifact fields, duplicate ids, invalid enums, score bounds, unsafe payloads, wrong artifact-family imports, query/summary validation reports, registry status, hybrid-composition attachment boundaries, docs phrases, assumption-profile phrases, and architecture constraints.
+
+Boundary preserved:
+
+- Template/schema compatibility reports are structural fit analyses; they do not convert schemas into runnable models.
+- A strong template fit does not mean a schema can run.
+- Unsupported and lossy mappings must remain visible; they must not be silently dropped.
+- Compatibility mapping does not generate scenarios, RunConfigs, snapshots, templates, or engines.
+- Model schemas remain structural declarations; visual builder workspaces remain planning artifacts; social-learning descriptors remain structural semantics; current production templates remain hand-built runtime models.
+
+Next recommended prompt: Prompt 33C: Opinion Dynamics Social Learning Runtime V1, after a commit/repo hygiene checkpoint for the Prompt 33B audit work.

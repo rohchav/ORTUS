@@ -6,7 +6,7 @@ This directory contains a headless TypeScript simulation engine for visual compl
 
 The engine owns time, scheduling, mutation, seeded randomness, validation, metrics, snapshots, and serialization. Templates own domain behavior and metadata. Rendering layers should consume snapshots later without becoming part of the simulation loop.
 
-Roadmap status: ORTUS has completed Prompt 33: Template/Schema Compatibility Mapping V1. The post-30B repository hygiene, durable context, dependency stabilization, and performance/scalability pass is complete. Prompt 31, Prompt 31B, Prompt 31C, Prompt 31D, Prompt 32, Prompt 32B, and Prompt 33 are complete; the next roadmap prompt is Prompt 33B: Template/Schema Compatibility Mapping Audit.
+Roadmap status: ORTUS has completed Prompt 33B: Template/Schema Compatibility Mapping Audit. The post-30B repository hygiene, durable context, dependency stabilization, and performance/scalability pass is complete. Prompt 31, Prompt 31B, Prompt 31C, Prompt 31D, Prompt 32, Prompt 32B, Prompt 33, and Prompt 33B are complete; the next roadmap prompt is Prompt 33C: Opinion Dynamics Social Learning Runtime V1.
 
 ## Architecture
 
@@ -234,7 +234,7 @@ The service validates, serializes, deserializes, queries, summarizes, and report
 
 Template/schema compatibility reports are structural fit analyses; they do not convert schemas into runnable models. A strong template fit does not mean a schema can run. Unsupported and lossy mappings must remain visible; they must not be silently dropped. Compatibility mapping does not generate scenarios, RunConfigs, snapshots, templates, or engines.
 
-The service validates, serializes, deserializes, queries, summarizes, and reports capability gaps. It does not execute schemas, parse formulas, run `ruleDescription`, compile model definitions, mutate templates, generate runtime artifacts, create engines, implement visual builder UI/runtime, add external framework interop, run social-learning/cognitive behavior, infer real-person traits, support protected-class inference, optimize persuasion, validate science, calibrate outputs, or prove causality, emergence, robustness, strategy effectiveness, safety, or operational readiness.
+The service validates, serializes, deserializes, queries, summarizes, and reports capability gaps. It does not execute schemas, parse formulas, run `ruleDescription`, compile model definitions, mutate templates, generate runtime artifacts, create engines, implement visual builder UI/runtime, add external framework interop, run social-learning/cognitive behavior, infer real-person traits, support protected-class inference, optimize persuasion, validate science, calibrate outputs, or prove causality, emergence, robustness, strategy effectiveness, safety, or operational readiness. Prompt 33B audited these boundaries; Prompt 33C Opinion Dynamics Social Learning Runtime remains future work.
 
 Prompt 18 reserves these pillars in `../../docs/roadmap.md` and `../../docs/missing-pillars.md`.
 

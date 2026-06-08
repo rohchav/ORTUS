@@ -4,7 +4,7 @@ This roadmap reserves the major complex-systems pillars that ORTUS must support 
 
 ## Current Foundation
 
-ORTUS has completed through Prompt 33. Prompts 1-33 established the current foundation:
+ORTUS has completed through Prompt 33B. Prompts 1-33B established the current foundation:
 
 - Engine/runtime/UI foundation.
 - Scenario Builder.
@@ -24,7 +24,7 @@ These foundations are deliberately service-first or metadata-first unless docume
 
 After Prompt 30B, ORTUS completed a repository hygiene, durable context, dependency stabilization, and performance/scalability pass. That pass added and validated performance instrumentation and spatial-indexing foundations, but it does not turn reserved structural primitives into runtime support and is not evidence for high-scale readiness by itself.
 
-Prompt 31: Model Schema + Interpreter Foundation V1, Prompt 31B: Model Schema + Interpreter Foundation Audit, Prompt 31C: Knowledge, Memory + Social Learning Semantics V1, Prompt 31D: Knowledge, Memory + Social Learning Audit, Prompt 32: Visual Model Builder Planning + Workspace Schema V1, Prompt 32B: Visual Builder Workspace Audit, and Prompt 33: Template/Schema Compatibility Mapping V1 are complete. The next roadmap prompt is Prompt 33B: Template/Schema Compatibility Mapping Audit.
+Prompt 31: Model Schema + Interpreter Foundation V1, Prompt 31B: Model Schema + Interpreter Foundation Audit, Prompt 31C: Knowledge, Memory + Social Learning Semantics V1, Prompt 31D: Knowledge, Memory + Social Learning Audit, Prompt 32: Visual Model Builder Planning + Workspace Schema V1, Prompt 32B: Visual Builder Workspace Audit, Prompt 33: Template/Schema Compatibility Mapping V1, and Prompt 33B: Template/Schema Compatibility Mapping Audit are complete. The next roadmap prompt is Prompt 33C: Opinion Dynamics Social Learning Runtime V1.
 
 ## Revised Prompt Sequence
 
@@ -79,10 +79,11 @@ Completed Prompt 32 planning and audit foundation:
 Completed Prompt 33 compatibility foundation:
 
 1. 33 - Template/Schema Compatibility Mapping V1.
+2. 33B - Template/Schema Compatibility Mapping Audit.
 
 Next roadmap prompt:
 
-1. 33B - Template/Schema Compatibility Mapping Audit.
+1. 33C - Opinion Dynamics Social Learning Runtime V1.
 
 Later roadmap bands:
 
@@ -145,7 +146,7 @@ Prompt 31D audits Knowledge, Memory + Social Learning Semantics as structural on
 
 Prompt 32 adds Visual Model Builder Workspace Schema V1 as a service-level structural workspace-planning layer. Visual builder workspaces are structural planning artifacts; they do not implement the visual builder UI. Workspace nodes and edges are visual descriptors, not executable dataflow or runtime behavior. A valid visual builder workspace does not make a model schema runnable. Prompt 32 does not add drag-and-drop modeling, visual programming, or schema execution. Workspace artifacts can reference model schemas, social-learning semantics, observability, causality, networks, resources, feedback, quantities, control, hybrid compositions, scenarios, or templates structurally, but they do not execute node graphs, generate scenarios, generate RunConfigs, produce snapshots, create templates, create engines, add external framework interop, implement social-learning runtime, or add LLM agents. Prompt 34 safe builder UI shell remains future work.
 
-Prompt 33 adds Template/Schema Compatibility Mapping V1 as a service-level structural fit-analysis layer. Template/schema compatibility reports are structural fit analyses; they do not convert schemas into runnable models. A strong template fit does not mean a schema can run. Unsupported and lossy mappings must remain visible; they must not be silently dropped. Compatibility mapping does not generate scenarios, RunConfigs, snapshots, templates, or engines. It does not execute schemas, parse rule descriptions, mutate templates, create engines, implement visual builder runtime, add external framework interop, run social-learning/cognitive behavior, validate science, calibrate outputs, or prove causality, emergence, robustness, strategy effectiveness, safety, or operational readiness. Prompt 33B audits these boundaries next.
+Prompt 33 adds Template/Schema Compatibility Mapping V1 as a service-level structural fit-analysis layer. Template/schema compatibility reports are structural fit analyses; they do not convert schemas into runnable models. A strong template fit does not mean a schema can run. Unsupported and lossy mappings must remain visible; they must not be silently dropped. Compatibility mapping does not generate scenarios, RunConfigs, snapshots, templates, or engines. It does not execute schemas, parse rule descriptions, mutate templates, create engines, implement visual builder runtime, add external framework interop, run social-learning/cognitive behavior, validate science, calibrate outputs, or prove causality, emergence, robustness, strategy effectiveness, safety, or operational readiness. Prompt 33B audited these boundaries and kept compatibility mapping structural only. Prompt 33C Opinion Dynamics Social Learning Runtime is next; Prompt 34 safe builder UI shell remains future work.
 
 ## Reserved Artifact Families
 
@@ -157,4 +158,4 @@ Future artifact families may include:
 - `ortus.patternLibrary`
 - `ortus.domainPack`
 
-These artifact types are reserved names only except `ortus.scaleModel`, which Prompt 21 implements as a service-level structural artifact, `ortus.scaleViewState`, which Prompt 22 implements as a service-level view-state artifact, `ortus.boundaryModel`, which Prompt 23 implements as a service-level boundary/environment artifact, `ortus.fieldLayer`, which Prompt 24 implements as a service-level spatial field/environmental layer artifact, `ortus.observabilityModel`, which Prompt 25 implements as a service-level observability artifact, `ortus.causalAssumptionModel`, which Prompt 26 implements as a service-level causal-assumption artifact, `ortus.quantitySemanticsModel`, which Prompt 27 implements as a service-level quantity-semantics artifact, `ortus.emergencePatternModel`, which Prompt 28 implements as a service-level emergence-pattern artifact, `ortus.robustnessResilienceModel`, which Prompt 29 implements as a service-level robustness/resilience artifact, `ortus.controlStrategyModel`, which Prompt 30 implements as a service-level strategy/control artifact, `ortus.modelSchema`, which Prompt 31 implements as a service-level structural model schema artifact, `ortus.knowledgeMemorySocialLearningModel`, which Prompt 31C implements as a service-level structural social/cognitive semantics artifact, `ortus.visualBuilderWorkspace`, which Prompt 32 implements as a service-level structural visual-builder workspace artifact, and `ortus.schemaTemplateCompatibilityReport` plus `ortus.templateMappingProfile`, which Prompt 33 implements as service-level structural compatibility artifacts. The remaining future artifacts do not have import/export support yet.
+These artifact types are reserved names only except `ortus.scaleModel`, which Prompt 21 implements as a service-level structural artifact, `ortus.scaleViewState`, which Prompt 22 implements as a service-level view-state artifact, `ortus.boundaryModel`, which Prompt 23 implements as a service-level boundary/environment artifact, `ortus.fieldLayer`, which Prompt 24 implements as a service-level spatial field/environmental layer artifact, `ortus.observabilityModel`, which Prompt 25 implements as a service-level observability artifact, `ortus.causalAssumptionModel`, which Prompt 26 implements as a service-level causal-assumption artifact, `ortus.quantitySemanticsModel`, which Prompt 27 implements as a service-level quantity-semantics artifact, `ortus.emergencePatternModel`, which Prompt 28 implements as a service-level emergence-pattern artifact, `ortus.robustnessResilienceModel`, which Prompt 29 implements as a service-level robustness/resilience artifact, `ortus.controlStrategyModel`, which Prompt 30 implements as a service-level strategy/control artifact, `ortus.modelSchema`, which Prompt 31 implements as a service-level structural model schema artifact, `ortus.knowledgeMemorySocialLearningModel`, which Prompt 31C implements as a service-level structural social/cognitive semantics artifact, `ortus.visualBuilderWorkspace`, which Prompt 32 implements as a service-level structural visual-builder workspace artifact, and `ortus.schemaTemplateCompatibilityReport` plus `ortus.templateMappingProfile`, which Prompt 33 implements and Prompt 33B audits as service-level structural compatibility artifacts. The remaining future artifacts do not have import/export support yet.

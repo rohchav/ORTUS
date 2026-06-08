@@ -1,17 +1,17 @@
 # ORTUS Full Prompt Roadmap
 
-*Last updated after Prompt 33 Template/Schema Compatibility Mapping V1.*
+*Last updated after Prompt 33B Template/Schema Compatibility Mapping Audit.*
 
 ## Current Status
 
-ORTUS has completed the core runtime/template foundation, scenario system, uncertainty layer, assumptions/limits layer, systems primitive registry, hybrid composition, multi-scale structure, scale-view state, boundary/environment models, spatial fields, observability, causality, quantity semantics, emergence pattern descriptors, robustness/resilience semantics, strategy/control semantics, model schema declarations, knowledge/memory/social-learning semantics, visual builder workspace schemas, and template/schema compatibility mapping.
+ORTUS has completed the core runtime/template foundation, scenario system, uncertainty layer, assumptions/limits layer, systems primitive registry, hybrid composition, multi-scale structure, scale-view state, boundary/environment models, spatial fields, observability, causality, quantity semantics, emergence pattern descriptors, robustness/resilience semantics, strategy/control semantics, model schema declarations, knowledge/memory/social-learning semantics, visual builder workspace schemas, template/schema compatibility mapping, and the template/schema compatibility mapping audit.
 
 Current project status:
 
 ```text
-Completed roadmap prompt: Prompt 33 — Template/Schema Compatibility Mapping V1
+Completed roadmap prompt: Prompt 33B — Template/Schema Compatibility Mapping Audit
 Post-30B stabilization completed: repo hygiene, durable Codex context, dependency repair, generated-artifact cleanup, and runtime performance/scalability baseline
-Next roadmap prompt: Prompt 33B — Template/Schema Compatibility Mapping Audit
+Next roadmap prompt: Prompt 33C — Opinion Dynamics Social Learning Runtime V1
 ```
 
 Critical global boundary:
@@ -57,7 +57,7 @@ missing from this full roadmap. Prompt 31C and Prompt 31D are now corrected belo
 after Prompt 31B and before Prompt 32, with a later narrow Opinion Dynamics
 social-learning runtime slice placed after template/schema compatibility mapping.
 The social/cognitive semantics insertion was corrected after manual review, and
-Prompt 31C, Prompt 31D, Prompt 32, Prompt 32B, and Prompt 33 are now marked complete while Prompt 33B remains future audit work.
+Prompt 31C, Prompt 31D, Prompt 32, Prompt 32B, Prompt 33, and Prompt 33B are now marked complete while Prompt 33C remains future runtime work.
 
 ---
 
@@ -1310,7 +1310,7 @@ Purpose:
 Status:
 
 ```text
-Planned.
+Completed.
 ```
 
 ## Prompt 33C — Opinion Dynamics Social Learning Runtime V1
@@ -2855,16 +2855,16 @@ No global service availability treated as template runtime support.
 Recommended immediate next steps:
 
 ```text
-1. Run Prompt 33B — Template/Schema Compatibility Mapping Audit.
-2. Keep Prompt 33B audit-only: no visual builder UI, graph editor, drag/drop, schema execution, runtime visual builder execution, schema-to-template generation, or Opinion Dynamics social-learning runtime.
-3. Keep Opinion Dynamics Social Learning Runtime V1 later after template/schema compatibility mapping.
+1. Commit the Prompt 33B audit foundation after review.
+2. Run Prompt 33C — Opinion Dynamics Social Learning Runtime V1.
+3. Keep Prompt 33C narrow: Opinion Dynamics only, bounded symbolic/numeric state only, no LLM-per-agent runtime, no unbounded memory, no real-person inference, no human prediction claims, and no visual builder UI.
 ```
 
-Do not start Prompt 33B until the repo status and roadmap docs clearly reflect:
+Do not start Prompt 33C until the repo status and roadmap docs clearly reflect:
 
 ```text
-Completed through Prompt 33.
+Completed through Prompt 33B.
 Performance stabilization completed after Prompt 30B.
-Prompt 33 is complete.
-Next roadmap prompt: Prompt 33B.
+Prompt 33B is complete.
+Next roadmap prompt: Prompt 33C.
 ```

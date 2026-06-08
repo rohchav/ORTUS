@@ -2,7 +2,7 @@
 
 ORTUS is organized around a small set of simulation concepts. Keeping these boundaries explicit prevents model-family definitions, live run state, exploratory comparisons, and UI workspace data from collapsing into one ambiguous artifact.
 
-Roadmap status: ORTUS has completed Prompt 33: Template/Schema Compatibility Mapping V1. The post-30B repository hygiene, durable context, dependency stabilization, and performance/scalability pass is complete. Prompt 31, Prompt 31B, Prompt 31C, Prompt 31D, Prompt 32, Prompt 32B, and Prompt 33 are complete; the next roadmap prompt is Prompt 33B: Template/Schema Compatibility Mapping Audit.
+Roadmap status: ORTUS has completed Prompt 33B: Template/Schema Compatibility Mapping Audit. The post-30B repository hygiene, durable context, dependency stabilization, and performance/scalability pass is complete. Prompt 31, Prompt 31B, Prompt 31C, Prompt 31D, Prompt 32, Prompt 32B, Prompt 33, and Prompt 33B are complete; the next roadmap prompt is Prompt 33C: Opinion Dynamics Social Learning Runtime V1.
 
 ## Core Vocabulary
 
@@ -38,7 +38,7 @@ Template/Schema Compatibility Mapping V1 is a service-level structural artifact 
 
 Template/schema compatibility reports are structural fit analyses; they do not convert schemas into runnable models. A strong template fit does not mean a schema can run. Unsupported and lossy mappings must remain visible; they must not be silently dropped. Compatibility mapping does not generate scenarios, RunConfigs, snapshots, templates, or engines.
 
-Compatibility reports do not execute schemas, parse `ruleDescription`, mutate templates, create engines, run visual builder graphs, infer external framework interop, validate model output, calibrate parameters, prove causality or emergence, prove robustness, estimate strategy effectiveness, or implement social-learning/cognitive runtime. A template mapping profile is a static metadata profile, not a runtime adapter or template support claim.
+Compatibility reports do not execute schemas, parse `ruleDescription`, mutate templates, create engines, run visual builder graphs, infer external framework interop, validate model output, calibrate parameters, prove causality or emergence, prove robustness, estimate strategy effectiveness, or implement social-learning/cognitive runtime. A template mapping profile is a static metadata profile, not a runtime adapter or template support claim. Prompt 33B audited these boundaries; Prompt 33C Opinion Dynamics Social Learning Runtime remains future work.
 
 ### Template
 

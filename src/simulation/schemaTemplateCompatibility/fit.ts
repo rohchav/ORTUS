@@ -79,6 +79,8 @@ export function createTemplateMappingProfileFromTemplate(template: SimulationTem
     schemaVersion: "1",
     artifactType: templateMappingProfileArtifactType,
     id: `template-mapping-profile:${template.id}`,
+    name: `${template.name} Template Mapping Profile`,
+    version: template.version,
     templateId: template.id,
     templateName: template.name,
     templateVersion: template.version,
@@ -87,6 +89,7 @@ export function createTemplateMappingProfileFromTemplate(template: SimulationTem
     supportedEntityTypeIds: unique((template.entityTypeDefinitions ?? []).map((entity) => entity.typeId)),
     supportedComponentTypeIds: unique((template.entityTypeDefinitions ?? []).flatMap((entity) => entity.components ?? [])),
     supportedSpaceKinds: unique(spaceKindForTemplateSpace(template.spaceDefinition?.type)),
+    supportedParameterKinds: unique(template.parameterDefinitions.map((parameter) => parameterValueKindForTemplateParameter(parameter))),
     supportedParameterValueKinds: unique(template.parameterDefinitions.map((parameter) => parameterValueKindForTemplateParameter(parameter))),
     supportedParameterIds: unique(template.parameterDefinitions.map((parameter) => parameter.key)),
     supportedMetricKinds: unique((template.metricDefinitions ?? []).map((metric) => metricKindForTemplateMetric(metric))),
@@ -94,6 +97,26 @@ export function createTemplateMappingProfileFromTemplate(template: SimulationTem
     supportedRuleKinds: supportedRuleKindsForTemplate(template),
     supportedBehaviorModeIds: unique((template.behaviorModes ?? []).map((mode) => mode.id)),
     supportedArtifactTypes: unique(supportedArtifactTypes),
+    unsupportedConcepts: [
+      "ModelSchemaDefinition runtime execution",
+      "schema-to-template conversion",
+      "scenario generation",
+      "RunConfig generation",
+      "snapshot generation",
+      "template generation",
+      "visual builder runtime",
+      "external framework interop",
+      "social-learning runtime",
+      "validation/calibration"
+    ],
+    capabilityNotes: [
+      "Supported fields describe static template metadata only.",
+      "Template runtime capability remains governed by the primitive registry and template capability map."
+    ],
+    limitationNotes: [
+      "This profile is not a runtime adapter.",
+      "This profile does not mutate or generate template behavior."
+    ],
     primitiveCapabilities: profilePrimitiveIds.flatMap((primitiveId) => {
       const capability = getTemplateCapability(template.id, primitiveId);
       return capability
@@ -143,6 +166,9 @@ export function createCompatibilityReport(
     schemaVersion: "1",
     artifactType: schemaTemplateCompatibilityReportArtifactType,
     id: `schema-template-compatibility:${validSchema.id}`,
+    name: `${validSchema.name} Template Compatibility Report`,
+    version: "1.0.0",
+    schemaId: validSchema.id,
     modelSchemaId: validSchema.id,
     modelSchemaName: validSchema.name,
     modelSchemaVersion: validSchema.version,
@@ -159,11 +185,22 @@ export function createCompatibilityReport(
     runnableNow: false,
     schemaExecutionAvailable: false,
     conversionAvailable: false,
+    scenarioGenerationAvailable: false,
+    runConfigGenerationAvailable: false,
+    snapshotGenerationAvailable: false,
+    templateGenerationAvailable: false,
+    engineCreationAvailable: false,
     generationAvailable: false,
     validationAvailable: false,
     calibrationAvailable: false,
     active: true,
     executable: false,
+    errors: [],
+    assumptionNotes: ["Fit reports compare declared structure; they are not evidence that model assumptions are valid."],
+    limitationNotes: [
+      "Fit does not mean runnable.",
+      "Compatibility mapping does not generate scenarios, RunConfigs, snapshots, templates, or engines."
+    ],
     metadata: {
       structuralOnly: true,
       profileCount: validProfiles.length
@@ -405,8 +442,8 @@ function createTemplateCompatibilityResult(schema: ModelSchemaDefinition, profil
   const resultBase: TemplateCompatibilityResult = {
     id: `template-compatibility:${profile.templateId}`,
     templateId: profile.templateId,
-    templateName: profile.templateName,
-    templateVersion: profile.templateVersion,
+    templateName: profile.templateName ?? profile.name,
+    templateVersion: profile.templateVersion ?? profile.version,
     fit,
     score,
     mappedConcepts,

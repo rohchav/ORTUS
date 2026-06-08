@@ -657,11 +657,17 @@ export const primitiveRegistry: readonly SystemsPrimitiveEntry[] = [
     status: "serviceOnly",
     supportLevel: "service",
     currentScope:
-      "Compatibility services create structural fit analyses only. They validate, serialize, query, summarize, and report unsupported/lossy schema concepts without converting schemas into runnable models.",
+      "Compatibility services provide structural schema-to-template fit reporting only. They validate, serialize, query, summarize, and report unsupported/lossy schema concepts without converting schemas into runnable models.",
     futureScope:
       "Future audited prompts may use compatibility reports as review inputs for safe builder flows or template-constrained runtime slices behind explicit capability checks.",
     limitations: [
-      "No schema-to-template conversion, scenario generation, RunConfig generation, snapshot generation, template generation, engine creation, schema execution, visual-builder runtime, validation, or calibration is implemented.",
+      "No schema-to-template conversion is implemented.",
+      "No schema execution, compiler, interpreter, or ruleDescription execution is implemented.",
+      "No scenario generation, RunConfig generation, snapshot generation, template generation, or engine creation is implemented.",
+      "No visual builder runtime, graph execution, or visual programming is implemented.",
+      "No external framework interop, NetLogo runtime, Mesa runtime, or MASON runtime is implemented.",
+      "No validation, calibration, scientific truth, causal proof, emergence proof, robustness proof, strategy effectiveness proof, safety certification, or operational readiness is implemented.",
+      "No social-learning runtime, human cognition runtime, LLM-agent runtime, real-person profiling, protected-class inference, persuasion optimization, or microtargeting is implemented.",
       "A strong template fit does not mean a schema can run.",
       "Unsupported and lossy mappings must remain visible."
     ],
@@ -685,10 +691,13 @@ export const primitiveRegistry: readonly SystemsPrimitiveEntry[] = [
       "engine creation",
       "visual builder runtime support",
       "external framework interop",
+      "social-learning runtime",
+      "LLM agents",
       "validated prediction",
       "calibration"
     ],
-    promptIntroduced: "Prompt 33"
+    promptIntroduced: "Prompt 33",
+    promptAudit: "Prompt 33B"
   }),
   reservedPrimitive("modelDefinitionSchema", "Model Definition Schema", "Executable model definition runtime schema", "Future prompts will define runtime model-definition semantics beyond Prompt 31 structural model schemas.", [
     "modelSchema",

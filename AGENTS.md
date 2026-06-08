@@ -60,9 +60,10 @@
 - Compatibility mapping does not generate scenarios, RunConfigs, snapshots, templates, or engines.
 - Do not treat compatibility as conversion.
 - Do not treat strong fit as runnable.
+- Do not treat templateExact fit as runnable.
 - Do not hide unsupported concepts.
 - Do not silently drop lossy mappings.
-- Do not generate scenarios/RunConfigs/snapshots/templates from compatibility reports.
+- Do not generate scenarios/RunConfigs/snapshots/templates/engines from compatibility reports.
 - Do not mutate templates from compatibility reports.
 - Do not claim template support for service-only primitives.
 - Do not claim validation/calibration from compatibility mapping.
