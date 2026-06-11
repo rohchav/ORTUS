@@ -30,7 +30,7 @@ export function getKnowledgeMemorySocialLearningWarnings(model: KnowledgeMemoryS
   const valid = validateKnowledgeMemorySocialLearningModel(model);
   const warnings: string[] = [
     "Knowledge, memory, and social-learning descriptors are structural semantics; they do not implement human cognition.",
-    "No social-learning runtime exists in V1; descriptors are not executed.",
+    "No KnowledgeMemorySocialLearningModel runtime exists in V1; descriptors are not executed.",
     "No human cognition runtime exists in V1.",
     "No LLM-agent runtime exists in V1. LLM-per-agent runtime is not implemented and must not be implied.",
     "No psychological validity is implied by a valid descriptor model.",

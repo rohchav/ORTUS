@@ -1,17 +1,17 @@
 # ORTUS Full Prompt Roadmap
 
-*Last updated after Prompt 33B Template/Schema Compatibility Mapping Audit.*
+*Last updated after Prompt 33D Opinion Dynamics Social Learning Runtime Audit.*
 
 ## Current Status
 
-ORTUS has completed the core runtime/template foundation, scenario system, uncertainty layer, assumptions/limits layer, systems primitive registry, hybrid composition, multi-scale structure, scale-view state, boundary/environment models, spatial fields, observability, causality, quantity semantics, emergence pattern descriptors, robustness/resilience semantics, strategy/control semantics, model schema declarations, knowledge/memory/social-learning semantics, visual builder workspace schemas, template/schema compatibility mapping, and the template/schema compatibility mapping audit.
+ORTUS has completed the core runtime/template foundation, scenario system, uncertainty layer, assumptions/limits layer, systems primitive registry, hybrid composition, multi-scale structure, scale-view state, boundary/environment models, spatial fields, observability, causality, quantity semantics, emergence pattern descriptors, robustness/resilience semantics, strategy/control semantics, model schema declarations, knowledge/memory/social-learning semantics, visual builder workspace schemas, template/schema compatibility mapping, the template/schema compatibility mapping audit, a narrow Opinion Dynamics social-learning behavior mode, and the Opinion Dynamics social-learning runtime audit.
 
 Current project status:
 
 ```text
-Completed roadmap prompt: Prompt 33B — Template/Schema Compatibility Mapping Audit
+Completed roadmap prompt: Prompt 33D — Opinion Dynamics Social Learning Runtime Audit
 Post-30B stabilization completed: repo hygiene, durable Codex context, dependency repair, generated-artifact cleanup, and runtime performance/scalability baseline
-Next roadmap prompt: Prompt 33C — Opinion Dynamics Social Learning Runtime V1
+Next roadmap prompt: Prompt 34 — Safe Builder UI Shell V1
 ```
 
 Critical global boundary:
@@ -57,7 +57,7 @@ missing from this full roadmap. Prompt 31C and Prompt 31D are now corrected belo
 after Prompt 31B and before Prompt 32, with a later narrow Opinion Dynamics
 social-learning runtime slice placed after template/schema compatibility mapping.
 The social/cognitive semantics insertion was corrected after manual review, and
-Prompt 31C, Prompt 31D, Prompt 32, Prompt 32B, Prompt 33, and Prompt 33B are now marked complete while Prompt 33C remains future runtime work.
+Prompt 31C, Prompt 31D, Prompt 32, Prompt 32B, Prompt 33, Prompt 33B, Prompt 33C, and Prompt 33D are now marked complete while Prompt 34 remains future safe-builder UI shell work.
 
 ---
 
@@ -1165,7 +1165,7 @@ Model schemas declare model structure; they do not execute rules or create runna
 Rule declarations are descriptive metadata, not parsed formulas or executable behavior.
 They do not generate scenarios, RunConfigs, snapshots, or templates.
 Belief, memory, and social-learning rule declarations are structural placeholders; they do not implement human cognition or social-learning runtime.
-Prompt 31C structural social/cognitive semantics and Prompt 31D audit hardening are complete; runtime social learning remains future work.
+Prompt 31C structural social/cognitive semantics and Prompt 31D audit hardening are complete; generic social-learning runtime remains unavailable outside the narrow Opinion Dynamics behavior mode added in Prompt 33C.
 Prompt 32 visual model-builder workspace planning is complete; visual builder UI, schema execution, and runtime compiler/interpreter work remain future.
 No compiler/interpreter runtime yet.
 ```
@@ -1212,7 +1212,11 @@ Knowledge, memory, and social-learning descriptors are structural semantics; the
 Background profiles are compressed prior descriptors, not simulated life histories.
 Crowd and stranger exposure should usually be modeled as aggregate signals, representative agents, or fields rather than thousands of throwaway individuals.
 LLM-per-agent runtime is not implemented and must not be implied.
-Opinion Dynamics Social Learning Runtime remains future work.
+Opinion Dynamics social learning is a stylized template-owned runtime mode, not a model of full human cognition.
+Social-learning semantic artifacts are not executed directly by the Opinion Dynamics template.
+Opinion values and social-learning metrics are model outputs, not measured human beliefs.
+Information-source credibility is a model parameter, not a verified truth score.
+No LLM agents, real-person profiling, protected-class inference, persuasion optimization, or psychological diagnosis are implemented.
 ```
 
 Status:
@@ -1334,7 +1338,7 @@ No human prediction claims.
 Status:
 
 ```text
-Planned.
+Completed.
 ```
 
 ## Prompt 33D — Opinion Dynamics Social Learning Runtime Audit
@@ -1348,7 +1352,7 @@ Purpose:
 Status:
 
 ```text
-Planned.
+Completed.
 ```
 
 ## Prompt 34 — Safe Builder UI Shell V1
@@ -2855,16 +2859,16 @@ No global service availability treated as template runtime support.
 Recommended immediate next steps:
 
 ```text
-1. Commit the Prompt 33B audit foundation after review.
-2. Run Prompt 33C — Opinion Dynamics Social Learning Runtime V1.
-3. Keep Prompt 33C narrow: Opinion Dynamics only, bounded symbolic/numeric state only, no LLM-per-agent runtime, no unbounded memory, no real-person inference, no human prediction claims, and no visual builder UI.
+1. Review and commit the Prompt 33C/33D Opinion Dynamics social-learning runtime and audit work.
+2. Prepare Prompt 34 — Safe Builder UI Shell V1 only after repo hygiene.
+3. Keep Prompt 34 non-executing: no Run Model button, no schema execution, no scenario generation, no hidden compiler, and no custom runtime.
 ```
 
-Do not start Prompt 33C until the repo status and roadmap docs clearly reflect:
+Do not start Prompt 34 until the repo status and roadmap docs clearly reflect:
 
 ```text
-Completed through Prompt 33B.
+Completed through Prompt 33D.
 Performance stabilization completed after Prompt 30B.
-Prompt 33B is complete.
-Next roadmap prompt: Prompt 33C.
+Prompt 33C and Prompt 33D are complete.
+Next roadmap prompt: Prompt 34.
 ```

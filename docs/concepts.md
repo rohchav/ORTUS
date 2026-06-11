@@ -2,7 +2,7 @@
 
 ORTUS is organized around a small set of simulation concepts. Keeping these boundaries explicit prevents model-family definitions, live run state, exploratory comparisons, and UI workspace data from collapsing into one ambiguous artifact.
 
-Roadmap status: ORTUS has completed Prompt 33B: Template/Schema Compatibility Mapping Audit. The post-30B repository hygiene, durable context, dependency stabilization, and performance/scalability pass is complete. Prompt 31, Prompt 31B, Prompt 31C, Prompt 31D, Prompt 32, Prompt 32B, Prompt 33, and Prompt 33B are complete; the next roadmap prompt is Prompt 33C: Opinion Dynamics Social Learning Runtime V1.
+Roadmap status: ORTUS has completed Prompt 33D: Opinion Dynamics Social Learning Runtime Audit. The post-30B repository hygiene, durable context, dependency stabilization, and performance/scalability pass is complete. Prompt 31, Prompt 31B, Prompt 31C, Prompt 31D, Prompt 32, Prompt 32B, Prompt 33, Prompt 33B, Prompt 33C, and Prompt 33D are complete; the next roadmap prompt is Prompt 34: Safe Builder UI Shell V1.
 
 ## Core Vocabulary
 
@@ -12,7 +12,7 @@ A ModelSchemaDefinition is a service-level structural artifact with artifact typ
 
 Model schemas declare model structure; they do not execute rules or create runnable simulations. A valid model schema is not a template, scenario, RunConfig, or snapshot. Rule declarations are descriptive metadata, not parsed formulas or executable behavior. Active means structurally active, not runtime-executed.
 
-Production templates are hand-built runtime models, not generated from model schemas. Model schemas do not create templates, produce snapshots, generate RunConfigs, power a visual builder UI, compile rules, parse formulas, or execute custom simulations. Runtime interpreter/compiler work remains future. External framework interop, validation/calibration, visual builder UI, and social-learning runtime remain future work.
+Production templates are hand-built runtime models, not generated from model schemas. Model schemas do not create templates, produce snapshots, generate RunConfigs, power a visual builder UI, compile rules, parse formulas, or execute custom simulations. Runtime interpreter/compiler work remains future. External framework interop, validation/calibration, visual builder UI, and generic social-learning runtime outside the narrow Opinion Dynamics behavior mode remain future work.
 
 Belief, memory, and social-learning rule declarations are structural placeholders; they do not implement human cognition or social-learning runtime.
 
@@ -22,7 +22,9 @@ Knowledge, Memory + Social Learning Semantics V1 is a service-level structural a
 
 Knowledge, memory, and social-learning descriptors are structural semantics; they do not implement human cognition. Background profiles are compressed prior descriptors, not simulated life histories. Crowd and stranger exposure should usually be modeled as aggregate signals, representative agents, or fields rather than thousands of throwaway individuals. LLM-per-agent runtime is not implemented and must not be implied.
 
-This artifact family does not execute social learning, update beliefs, update memory, sample exposure, infer real-person traits, support protected-class inference, validate psychology, predict people, optimize persuasion, provide policy targeting, or mutate Opinion Dynamics. Opinion Dynamics Social Learning Runtime remains future work.
+This artifact family does not execute social learning, update beliefs, update memory, sample exposure, infer real-person traits, support protected-class inference, validate psychology, predict people, optimize persuasion, provide policy targeting, or mutate Opinion Dynamics.
+
+Opinion Dynamics now has a narrow template-owned `socialLearning` behavior mode. Opinion Dynamics social learning is a stylized template-owned runtime mode, not a model of full human cognition. Social-learning semantic artifacts are not executed directly by the Opinion Dynamics template. Opinion values and social-learning metrics are model outputs, not measured human beliefs. Information-source credibility is a model parameter, not a verified truth score. No LLM agents, real-person profiling, protected-class inference, persuasion optimization, or psychological diagnosis are implemented.
 
 ### Visual Builder Workspace
 
@@ -38,7 +40,7 @@ Template/Schema Compatibility Mapping V1 is a service-level structural artifact 
 
 Template/schema compatibility reports are structural fit analyses; they do not convert schemas into runnable models. A strong template fit does not mean a schema can run. Unsupported and lossy mappings must remain visible; they must not be silently dropped. Compatibility mapping does not generate scenarios, RunConfigs, snapshots, templates, or engines.
 
-Compatibility reports do not execute schemas, parse `ruleDescription`, mutate templates, create engines, run visual builder graphs, infer external framework interop, validate model output, calibrate parameters, prove causality or emergence, prove robustness, estimate strategy effectiveness, or implement social-learning/cognitive runtime. A template mapping profile is a static metadata profile, not a runtime adapter or template support claim. Prompt 33B audited these boundaries; Prompt 33C Opinion Dynamics Social Learning Runtime remains future work.
+Compatibility reports do not execute schemas, parse `ruleDescription`, mutate templates, create engines, run visual builder graphs, infer external framework interop, validate model output, calibrate parameters, prove causality or emergence, prove robustness, estimate strategy effectiveness, or implement social-learning/cognitive runtime. A template mapping profile is a static metadata profile, not a runtime adapter or template support claim. Prompt 33B audited these boundaries; Prompt 33C added only the narrow Opinion Dynamics `socialLearning` behavior mode, and Prompt 33D audited that slice without expanding it.
 
 ### Template
 
@@ -202,7 +204,7 @@ RunConfig and scenario JSON do not yet include `eventScheduleOptions`, `delayOpt
 
 Currently implemented as service-first primitives: networks/relations, resources/stocks/flows, feedback/delays/events, uncertainty, assumptions/limits/ethics, hybrid composition, multi-scale structure, scale view state, boundaries/environment, spatial fields/environmental layers, observability/measurement models, causal assumption/influence models, units/dimensions/quantity semantics, emergence/pattern descriptors, robustness/resilience/stress-test semantics, strategy/control/intervention semantics, model schema declarations, knowledge/memory/social-learning semantics, visual builder workspace schemas, and template/schema compatibility mapping.
 
-Currently not implemented: true multi-scale runtime, scale-aware renderer/UI, runtime observability measurement collection, runtime causal influence execution, runtime emergence detection, runtime robustness/resilience stress testing, runtime strategy/control execution, model schema runtime execution, model schema compiler/interpreter runtime, schema-to-template conversion, compatibility-based runtime execution, social-learning runtime, full human cognition, LLM-per-agent runtime, real-person inference, protected-class inference, causal discovery/proof/inference/do-calculus/intervention optimization, runtime spatial-field sampling/diffusion/advection, runtime unit enforcement, automatic unit conversion, dimensional equation solving, multi-rate time, adaptive agents, heterogeneity layer, phase transition tools, attractor/basin tools, trace inspection, error budgets, visual model builder, calibration/data assimilation/MCMC, and external framework interop.
+Currently not implemented: true multi-scale runtime, scale-aware renderer/UI, runtime observability measurement collection, runtime causal influence execution, runtime emergence detection, runtime robustness/resilience stress testing, runtime strategy/control execution, model schema runtime execution, model schema compiler/interpreter runtime, schema-to-template conversion, compatibility-based runtime execution, generic social-learning runtime outside the narrow Opinion Dynamics behavior mode, full human cognition, LLM-per-agent runtime, real-person inference, protected-class inference, causal discovery/proof/inference/do-calculus/intervention optimization, runtime spatial-field sampling/diffusion/advection, runtime unit enforcement, automatic unit conversion, dimensional equation solving, multi-rate time, adaptive agents, heterogeneity layer, phase transition tools, trace inspection, error budgets, visual model builder, calibration/data assimilation/MCMC, and external framework interop.
 
 Service-first primitives are foundations, not active model behavior. A template should not claim support for a primitive until its runtime actually uses that primitive.
 

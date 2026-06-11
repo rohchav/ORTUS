@@ -211,7 +211,9 @@ const templateCapabilitiesSchema = z.object({
   supportsFeedbackLoops: z.boolean(),
   supportsFeedbackMetrics: z.boolean(),
   supportsEnvironmentLayers: z.boolean(),
-  supportsUncertaintyConfig: z.boolean()
+  supportsUncertaintyConfig: z.boolean(),
+  supportsTemplateOwnedSocialLearning: z.boolean().optional(),
+  supportsInformationSourceExposure: z.boolean().optional()
 });
 
 const runtimePerformanceMetadataSchema = z

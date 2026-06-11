@@ -570,9 +570,9 @@ export const primitiveRegistry: readonly SystemsPrimitiveEntry[] = [
     currentScope:
       "Structural/service-level semantic knowledge, belief, bounded memory, trust/source, exposure, background-prior, norm, relationship-role, and learning-rule descriptors only.",
     futureScope:
-      "Future audited prompts may connect bounded descriptors to a narrow Opinion Dynamics social-learning runtime behind explicit template capability checks.",
+      "Future audited prompts may connect bounded descriptors to template-owned runtime behavior behind explicit capability checks; Prompt 33C Opinion social learning does not execute these artifacts.",
     limitations: [
-      "No runtime social learning, Opinion Dynamics runtime integration, full human cognition, LLM agents, unbounded memory, free-text biographies as runtime state, real-person profiling, protected-class inference, psychological diagnosis, persuasion or microtargeting optimization, prediction, validation, or calibration claims are implemented.",
+      "No KnowledgeMemorySocialLearningModel runtime execution, semantic artifact execution by Opinion Dynamics, full human cognition, LLM agents, unbounded memory, free-text biographies as runtime state, real-person profiling, protected-class inference, psychological diagnosis, persuasion or microtargeting optimization, prediction, validation, or calibration claims are implemented.",
       "Knowledge, memory, and social-learning descriptors are structural semantics; they do not implement human cognition.",
       "Background profiles are compressed prior descriptors, not simulated life histories."
     ],
@@ -590,9 +590,9 @@ export const primitiveRegistry: readonly SystemsPrimitiveEntry[] = [
       "validationCalibration"
     ],
     mustNotClaimYet: [
-      "template runtime support",
-      "runtime social learning",
-      "Opinion Dynamics runtime integration",
+      "template runtime support for semantic artifacts",
+      "generic runtime social learning",
+      "semantic artifact execution by Opinion Dynamics",
       "full human cognition",
       "LLM agents",
       "real-person profiling",
@@ -709,13 +709,40 @@ export const primitiveRegistry: readonly SystemsPrimitiveEntry[] = [
     "modelSchema",
     "safeInterpreterCompiler"
   ]),
-  reservedPrimitive(
-    "socialLearningRuntime",
-    "Social Learning Runtime",
-    "Narrow template-defined runtime behavior for social learning, likely starting with Opinion Dynamics.",
-    "Future prompts after Prompt 31D will define bounded Opinion Dynamics social-learning runtime behavior.",
-    ["knowledgeMemorySocialLearning", "modelSchema", "safeInterpreterCompiler"]
-  ),
+  primitive({
+    id: "socialLearningRuntime",
+    label: "Social Learning Runtime",
+    description: "Global primitive slot for future general social-learning runtime capability tracking.",
+    status: "reserved",
+    supportLevel: "documentation",
+    currentScope:
+      "Reserved in the global primitive registry. Prompt 33C adds only a narrow Opinion Dynamics template-owned behavior mode; that mode is not generic primitive support and does not execute semantic artifacts.",
+    futureScope:
+      "Future audited prompts may add explicit template-specific registry nuance or broader bounded runtime capability tracking after the Opinion runtime audit.",
+    limitations: [
+      "Global social-learning runtime support is not implemented.",
+      "Opinion Dynamics social learning is a stylized template-owned runtime mode, not a model of full human cognition.",
+      "Social-learning semantic artifacts are not executed directly by the Opinion Dynamics template.",
+      "Opinion values and social-learning metrics are model outputs, not measured human beliefs.",
+      "Information-source credibility is a model parameter, not a verified truth score.",
+      "No LLM agents, real-person profiling, protected-class inference, persuasion optimization, or psychological diagnosis are implemented."
+    ],
+    docsRefs: roadmapDocs,
+    artifactTypes: [],
+    relatedPrimitives: ["knowledgeMemorySocialLearning", "modelSchema", "safeInterpreterCompiler"],
+    mustNotClaimYet: [
+      "generic runtime support",
+      "semantic artifact execution",
+      "human cognition",
+      "LLM agents",
+      "real-person profiling",
+      "protected-class inference",
+      "persuasion or microtargeting optimization",
+      "validated prediction"
+    ],
+    promptIntroduced: "Prompt 18",
+    promptAudit: "Prompt 33D"
+  }),
   reservedPrimitive("safeInterpreterCompiler", "Safe Interpreter/Compiler", "Bounded execution of validated model definitions and rule primitives.", "Prompts 47-48 will define interpretation and execution safety.", [
     "modelSchema",
     "modelDefinitionSchema",

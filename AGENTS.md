@@ -157,6 +157,16 @@
 - Do not encode stereotypes or protected attributes without explicit ethical review, purpose, and modeling need.
 - Social learning runtime must start narrowly, likely with Opinion Dynamics, and remain template-defined, bounded, and audited.
 - Do not treat social-learning descriptors as runtime behavior.
+- Opinion Dynamics social learning is a stylized template-owned runtime mode, not a model of full human cognition.
+- Social-learning semantic artifacts are not executed directly by the Opinion Dynamics template.
+- Opinion values and social-learning metrics are model outputs, not measured human beliefs.
+- Information-source credibility is a model parameter, not a verified truth score.
+- No LLM agents, real-person profiling, protected-class inference, persuasion optimization, or psychological diagnosis are implemented.
+- Do not generalize the Opinion Dynamics `socialLearning` behavior mode into generic social-learning runtime, model-schema execution, compatibility-report execution, visual-builder execution, or human-cognition runtime.
+- Keep Opinion social-learning state bounded, numeric/symbolic, deterministic, template-defined, and validated.
+- Do not add arbitrary information-source payloads, documents, biographies, embeddings, model weights, truth-scoring, misinformation detection, recommendation logic, targeting logic, or persuasion optimization to Opinion social learning.
+- Treat Opinion information-source labels as display labels only; do not use them as identity, profiling, protected-class, truth-scoring, recommender, targeting, or persuasion fields.
+- Do not mark the global `socialLearningRuntime` primitive implemented unless a later audited registry prompt adds explicit template-specific nuance.
 - Do not use knowledge/memory/social-learning semantics for persuasion or microtargeting optimization.
 - Do not infer real-person traits, protected classes, psychological diagnoses, or real-person profiles from this structural layer.
 - Do not describe the Forest Fire / Landscape Spread template as wildfire prediction, GIS/weather/wind/humidity/terrain/suppression/firefighting modeling, calibrated fire behavior, generic control strategy support, SpatialFieldModel runtime support, or BoundaryEnvironmentModel runtime support.

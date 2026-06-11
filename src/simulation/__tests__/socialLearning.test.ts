@@ -523,7 +523,7 @@ describe("knowledge, memory, and social-learning semantics service", () => {
     expect(warnings).toContain("not measured social norms");
     expect(warnings).toContain("do not execute behavior");
     expect(warnings).toContain("aggregate signals, representative agents, or fields");
-    expect(warnings).toContain("No social-learning runtime exists");
+    expect(warnings).toContain("No KnowledgeMemorySocialLearningModel runtime exists");
     expect(warnings).toContain("No human cognition runtime exists");
     expect(warnings).toContain("No LLM-agent runtime exists");
     expect(warnings).toContain("No psychological validity is implied");
@@ -714,7 +714,7 @@ describe("knowledge, memory, and social-learning semantics service", () => {
     expect(() => deserializeKnowledgeMemorySocialLearningModel("x".repeat(300_000))).toThrow(/JSON/);
   });
 
-  it("integrates with registry, hybrid composition, model schema, and templates without runtime support", () => {
+  it("integrates with registry, hybrid composition, model schema, and templates without generic semantics runtime support", () => {
     expect(getPrimitive("knowledgeMemorySocialLearning")).toMatchObject({ status: "serviceOnly", supportLevel: "service" });
     expect(listServiceOnlyPrimitives().map((primitive) => primitive.id)).toContain("knowledgeMemorySocialLearning");
     expect(getPrimitive("socialLearningRuntime")).toMatchObject({ status: "reserved" });
@@ -806,9 +806,17 @@ describe("knowledge, memory, and social-learning semantics service", () => {
       });
     }
     expect(getTemplateCapability("opinion-dynamics", "knowledgeMemorySocialLearning")?.notes).toContain("does not execute social-learning runtime");
-    expect(opinionTemplate.behaviorModes?.map((mode) => mode.id)).toEqual(["default"]);
+    expect(getTemplateCapability("opinion-dynamics", "socialLearningRuntime")).toMatchObject({ status: "unsupported", runtimeActive: false });
+    expect(opinionTemplate.behaviorModes?.map((mode) => mode.id)).toEqual(["default", "socialLearning"]);
+    expect(opinionTemplate.capabilities?.supportsTemplateOwnedSocialLearning).toBe(true);
+    expect(opinionTemplate.capabilities?.supportsInformationSourceExposure).toBe(true);
     expect(opinionTemplate.documentation.limitations.join("\n")).toContain("not a social prediction model");
-    expect(opinionTemplate.metricDefinitions?.every((metric) => metric.source === "modelState" || metric.source === "derived")).toBe(true);
+    expect(opinionTemplate.documentation.limitations.join("\n")).toContain(
+      "Social-learning semantic artifacts are not executed directly by the Opinion Dynamics template."
+    );
+    expect(opinionTemplate.metricDefinitions?.every((metric) => metric.source === "modelState" || metric.source === "derived" || metric.source === "input")).toBe(
+      true
+    );
   });
 
   it("updates docs, assumptions, and architecture boundaries without overclaiming", () => {
@@ -829,13 +837,19 @@ describe("knowledge, memory, and social-learning semantics service", () => {
       "Crowd and stranger exposure should usually be modeled as aggregate signals, representative agents, or fields rather than thousands of throwaway individuals."
     );
     expect(docs).toContain("LLM-per-agent runtime is not implemented and must not be implied.");
-    expect(docs).toContain("Opinion Dynamics Social Learning Runtime remains future work.");
+    expect(docs).toContain("Opinion Dynamics social learning is a stylized template-owned runtime mode, not a model of full human cognition.");
+    expect(docs).toContain("Social-learning semantic artifacts are not executed directly by the Opinion Dynamics template.");
+    expect(docs).toContain("Opinion values and social-learning metrics are model outputs, not measured human beliefs.");
+    expect(docs).toContain("Information-source credibility is a model parameter, not a verified truth score.");
+    expect(docs).toContain(
+      "No LLM agents, real-person profiling, protected-class inference, persuasion optimization, or psychological diagnosis are implemented."
+    );
 
     const assumptionText = productionTemplates
       .flatMap((template) => template.assumptionProfile?.limitations.map((item) => item.description) ?? [])
       .join("\n");
-    expect(assumptionText).toContain("Current templates do not implement social-learning runtime.");
-    expect(assumptionText).toContain("Opinion Dynamics is a stylized opinion model, not a full cognitive or social-learning model.");
+    expect(assumptionText).toContain("No current template executes KnowledgeMemorySocialLearningModel artifacts as runtime cognition or LLM agents.");
+    expect(assumptionText).toContain("Opinion Dynamics social learning is a stylized template-owned runtime mode, not a model of full human cognition.");
     expect(assumptionText).toContain("Knowledge, memory, and social-learning descriptors are structural only");
 
     const source = readdirSync(join(repoRoot, "src", "simulation", "socialLearning"))

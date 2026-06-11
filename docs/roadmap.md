@@ -4,7 +4,7 @@ This roadmap reserves the major complex-systems pillars that ORTUS must support 
 
 ## Current Foundation
 
-ORTUS has completed through Prompt 33B. Prompts 1-33B established the current foundation:
+ORTUS has completed through Prompt 33D. Prompts 1-33D established the current foundation:
 
 - Engine/runtime/UI foundation.
 - Scenario Builder.
@@ -19,12 +19,13 @@ ORTUS has completed through Prompt 33B. Prompts 1-33B established the current fo
 - Multi-scale structure and scale view state as structural/view-state services.
 - Boundaries/environment and spatial fields/environmental layers as structural services.
 - Observability, causal assumptions, quantity semantics, emergence descriptors, robustness/resilience semantics, strategy/control semantics, model schema declarations, knowledge/memory/social-learning semantics, visual builder workspace schemas, and template/schema compatibility mapping as service-first or metadata-first foundations.
+- A narrow Opinion Dynamics social-learning behavior mode owned by that hand-built template, audited in Prompt 33D.
 
 These foundations are deliberately service-first or metadata-first unless documented otherwise. Networks, resources, feedback primitives, boundary/environment models, spatial fields, observability models, causal assumptions, quantity semantics, emergence descriptors, robustness/resilience descriptors, and strategy/control descriptors are headless structural services until a template explicitly uses them at runtime. A template must not claim support for a primitive merely because a service exists.
 
 After Prompt 30B, ORTUS completed a repository hygiene, durable context, dependency stabilization, and performance/scalability pass. That pass added and validated performance instrumentation and spatial-indexing foundations, but it does not turn reserved structural primitives into runtime support and is not evidence for high-scale readiness by itself.
 
-Prompt 31: Model Schema + Interpreter Foundation V1, Prompt 31B: Model Schema + Interpreter Foundation Audit, Prompt 31C: Knowledge, Memory + Social Learning Semantics V1, Prompt 31D: Knowledge, Memory + Social Learning Audit, Prompt 32: Visual Model Builder Planning + Workspace Schema V1, Prompt 32B: Visual Builder Workspace Audit, Prompt 33: Template/Schema Compatibility Mapping V1, and Prompt 33B: Template/Schema Compatibility Mapping Audit are complete. The next roadmap prompt is Prompt 33C: Opinion Dynamics Social Learning Runtime V1.
+Prompt 31: Model Schema + Interpreter Foundation V1, Prompt 31B: Model Schema + Interpreter Foundation Audit, Prompt 31C: Knowledge, Memory + Social Learning Semantics V1, Prompt 31D: Knowledge, Memory + Social Learning Audit, Prompt 32: Visual Model Builder Planning + Workspace Schema V1, Prompt 32B: Visual Builder Workspace Audit, Prompt 33: Template/Schema Compatibility Mapping V1, Prompt 33B: Template/Schema Compatibility Mapping Audit, Prompt 33C: Opinion Dynamics Social Learning Runtime V1, and Prompt 33D: Opinion Dynamics Social Learning Runtime Audit are complete. The next roadmap prompt is Prompt 34: Safe Builder UI Shell V1.
 
 ## Revised Prompt Sequence
 
@@ -80,10 +81,12 @@ Completed Prompt 33 compatibility foundation:
 
 1. 33 - Template/Schema Compatibility Mapping V1.
 2. 33B - Template/Schema Compatibility Mapping Audit.
+3. 33C - Opinion Dynamics Social Learning Runtime V1.
+4. 33D - Opinion Dynamics Social Learning Runtime Audit.
 
 Next roadmap prompt:
 
-1. 33C - Opinion Dynamics Social Learning Runtime V1.
+1. 34 - Safe Builder UI Shell V1.
 
 Later roadmap bands:
 
@@ -140,13 +143,15 @@ Prompt 30 adds Strategy, Control + Intervention Semantics V1 as structural strat
 
 Prompt 31 adds Model Schema + Interpreter Foundation V1 as a service-level structural schema layer. Model schemas declare model structure; they do not execute rules or create runnable simulations. A valid model schema is not a template, scenario, RunConfig, or snapshot. Rule declarations are descriptive metadata, not parsed formulas or executable behavior. `active` means structurally active, not runtime-executed. Production templates are hand-built runtime models, not generated from model schemas. It does not compile models, parse formulas, generate templates, generate RunConfigs, produce snapshots, power a visual builder UI, implement external framework interop, implement social-learning runtime, implement full human cognition, or add LLM agents. Belief, memory, and social-learning rule declarations are structural placeholders; they do not implement human cognition or social-learning runtime. Runtime interpreter/compiler, validation/calibration, visual builder UI, and external framework interop remain future work.
 
-Prompt 31C adds Knowledge, Memory + Social Learning Semantics V1 as a service-level structural semantic layer. Knowledge, memory, and social-learning descriptors are structural semantics; they do not implement human cognition. Background profiles are compressed prior descriptors, not simulated life histories. Crowd and stranger exposure should usually be modeled as aggregate signals, representative agents, or fields rather than thousands of throwaway individuals. LLM-per-agent runtime is not implemented and must not be implied. It does not execute social learning, update beliefs or memory at runtime, sample exposure, infer real-person traits, support protected-class inference, validate psychology, predict people, optimize persuasion, provide policy targeting, or mutate Opinion Dynamics. Opinion Dynamics Social Learning Runtime remains future work.
+Prompt 31C adds Knowledge, Memory + Social Learning Semantics V1 as a service-level structural semantic layer. Knowledge, memory, and social-learning descriptors are structural semantics; they do not implement human cognition. Background profiles are compressed prior descriptors, not simulated life histories. Crowd and stranger exposure should usually be modeled as aggregate signals, representative agents, or fields rather than thousands of throwaway individuals. LLM-per-agent runtime is not implemented and must not be implied. It does not execute social learning, update beliefs or memory at runtime, sample exposure, infer real-person traits, support protected-class inference, validate psychology, predict people, optimize persuasion, provide policy targeting, or mutate Opinion Dynamics.
 
 Prompt 31D audits Knowledge, Memory + Social Learning Semantics as structural only. It hardens the no-runtime, no-cognition, no-LLM-agent, no-unbounded-memory, no-real-person-profiling, no-protected-class-inference, no-psychological-diagnosis, no-persuasion/microtargeting, no-policy-guidance, and valid-vs-runnable boundaries. Prompt 31D is audit-only; it does not start visual builder UI work, implement runtime social learning, or mutate Opinion Dynamics.
 
 Prompt 32 adds Visual Model Builder Workspace Schema V1 as a service-level structural workspace-planning layer. Visual builder workspaces are structural planning artifacts; they do not implement the visual builder UI. Workspace nodes and edges are visual descriptors, not executable dataflow or runtime behavior. A valid visual builder workspace does not make a model schema runnable. Prompt 32 does not add drag-and-drop modeling, visual programming, or schema execution. Workspace artifacts can reference model schemas, social-learning semantics, observability, causality, networks, resources, feedback, quantities, control, hybrid compositions, scenarios, or templates structurally, but they do not execute node graphs, generate scenarios, generate RunConfigs, produce snapshots, create templates, create engines, add external framework interop, implement social-learning runtime, or add LLM agents. Prompt 34 safe builder UI shell remains future work.
 
-Prompt 33 adds Template/Schema Compatibility Mapping V1 as a service-level structural fit-analysis layer. Template/schema compatibility reports are structural fit analyses; they do not convert schemas into runnable models. A strong template fit does not mean a schema can run. Unsupported and lossy mappings must remain visible; they must not be silently dropped. Compatibility mapping does not generate scenarios, RunConfigs, snapshots, templates, or engines. It does not execute schemas, parse rule descriptions, mutate templates, create engines, implement visual builder runtime, add external framework interop, run social-learning/cognitive behavior, validate science, calibrate outputs, or prove causality, emergence, robustness, strategy effectiveness, safety, or operational readiness. Prompt 33B audited these boundaries and kept compatibility mapping structural only. Prompt 33C Opinion Dynamics Social Learning Runtime is next; Prompt 34 safe builder UI shell remains future work.
+Prompt 33 adds Template/Schema Compatibility Mapping V1 as a service-level structural fit-analysis layer. Template/schema compatibility reports are structural fit analyses; they do not convert schemas into runnable models. A strong template fit does not mean a schema can run. Unsupported and lossy mappings must remain visible; they must not be silently dropped. Compatibility mapping does not generate scenarios, RunConfigs, snapshots, templates, or engines. It does not execute schemas, parse rule descriptions, mutate templates, create engines, implement visual builder runtime, add external framework interop, run social-learning/cognitive behavior, validate science, calibrate outputs, or prove causality, emergence, robustness, strategy effectiveness, safety, or operational readiness. Prompt 33B audited these boundaries and kept compatibility mapping structural only.
+
+Prompt 33C adds a narrow Opinion Dynamics social-learning runtime mode inside the hand-built Opinion template. Prompt 33D audits that slice without expanding it. Opinion Dynamics social learning is a stylized template-owned runtime mode, not a model of full human cognition. Social-learning semantic artifacts are not executed directly by the Opinion Dynamics template. Opinion values and social-learning metrics are model outputs, not measured human beliefs. Information-source credibility is a model parameter, not a verified truth score. No LLM agents, real-person profiling, protected-class inference, persuasion optimization, or psychological diagnosis are implemented. Generic social-learning runtime, semantic artifact execution, model schema execution, visual builder runtime, validation/calibration, and external framework interop remain unavailable; Prompt 34 safe builder UI shell remains future work after the audit.
 
 ## Reserved Artifact Families
 

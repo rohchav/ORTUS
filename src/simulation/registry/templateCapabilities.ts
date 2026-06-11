@@ -198,7 +198,10 @@ function capabilityForTemplate(template: SimulationTemplate, primitiveId: Primit
           runtimeActive: false,
           serviceAvailable: false,
           metadataAvailable: false,
-          notes: "Reserved future primitive; no current production template may claim support.",
+          notes:
+            primitiveId === "socialLearningRuntime" && template.id === "opinion-dynamics"
+              ? "Global socialLearningRuntime primitive remains reserved; Opinion has only a narrow template-owned socialLearning behavior mode, not global primitive support."
+              : "Reserved future primitive; no current production template may claim global primitive support.",
           limitations: ["Prompt 19 records this as roadmap metadata only."]
         };
       }

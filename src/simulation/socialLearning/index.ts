@@ -24,7 +24,7 @@ export function getKnowledgeMemorySocialLearningValidationReport(model: Knowledg
         "runtime social learning",
         "belief and memory runtime updates",
         "social exposure sampling",
-        "Opinion Dynamics social-learning runtime integration",
+        "KnowledgeMemorySocialLearningModel execution by Opinion Dynamics",
         "human cognition runtime",
         "LLM-per-agent runtime",
         "protected-class inference safeguards",

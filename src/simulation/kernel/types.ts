@@ -122,6 +122,8 @@ export interface TemplateCapabilities {
   supportsFeedbackMetrics: boolean;
   supportsEnvironmentLayers: boolean;
   supportsUncertaintyConfig: boolean;
+  supportsTemplateOwnedSocialLearning?: boolean;
+  supportsInformationSourceExposure?: boolean;
 }
 
 export type RuntimeScaleClass = "small" | "medium" | "large" | "unknown";

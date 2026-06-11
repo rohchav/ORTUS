@@ -170,7 +170,7 @@ Registry and docs status:
 - `socialLearningRuntime` remains reserved/future.
 - `ortus.knowledgeMemorySocialLearningModel` is implemented with service-level import/export support.
 - Current production templates remain unsupported for knowledge/memory/social-learning runtime behavior.
-- Opinion Dynamics Social Learning Runtime remains future work.
+- At the time of Prompt 31C, Opinion Dynamics Social Learning Runtime remained future work; Prompt 33C later added the narrow template-owned mode and Prompt 33D audited it.
 
 Next recommended prompt: Prompt 31D: Knowledge, Memory + Social Learning Audit.
 
@@ -295,3 +295,50 @@ Boundary preserved:
 - Model schemas remain structural declarations; visual builder workspaces remain planning artifacts; social-learning descriptors remain structural semantics; current production templates remain hand-built runtime models.
 
 Next recommended prompt: Prompt 33C: Opinion Dynamics Social Learning Runtime V1, after a commit/repo hygiene checkpoint for the Prompt 33B audit work.
+
+## 2026-06-08 - Prompt 33C Opinion Dynamics Social Learning Runtime V1
+
+Goal: add a narrow deterministic social-learning runtime slice to the hand-built Opinion Dynamics template without adding generic social/cognitive runtime support, executing `KnowledgeMemorySocialLearningModel` artifacts, executing model schemas, changing compatibility reports into runtime conversion, adding visual builder UI/runtime, adding LLM agents, unbounded memory, real-person profiling, protected-class inference, persuasion/microtargeting optimization, psychological diagnosis, validation/calibration, or external framework interop.
+
+Implemented behavior:
+
+- Added a template-owned `socialLearning` behavior mode to Opinion Dynamics.
+- Added bounded fixed source exposure, aggregate crowd signal exposure, scalar memory, salience, trust, confirmation, and per-tick max-shift logic inside `src/simulation/templates/opinion.template.ts`.
+- Added bounded `OpinionSocialLearningState` components only for the `socialLearning` behavior mode.
+- Added model-output metrics for social-learning shift, neighbor/source/crowd/memory contributions, confirmation/trust weights, credibility-weighted exposure, active social-learning agents, and active information-source count.
+- Added strict fixed-source validation: source ids must be unique, labels bounded, categories enumerated, numeric values bounded, and arbitrary payload fields rejected.
+
+Boundary preserved:
+
+- Opinion Dynamics social learning is a stylized template-owned runtime mode, not a model of full human cognition.
+- Social-learning semantic artifacts are not executed directly by the Opinion Dynamics template.
+- Opinion values and social-learning metrics are model outputs, not measured human beliefs.
+- Information-source credibility is a model parameter, not a verified truth score.
+- No LLM agents, real-person profiling, protected-class inference, persuasion optimization, or psychological diagnosis are implemented.
+- `knowledgeMemorySocialLearning` remains a service-level structural primitive; `socialLearningRuntime` remains reserved in the global primitive registry.
+- Model schemas, compatibility reports, visual builder workspaces, and hybrid compositions remain structural and do not generate or execute Opinion runtime behavior.
+
+Next recommended prompt: Prompt 33D: Opinion Dynamics Social Learning Runtime Audit.
+
+## 2026-06-11 - Prompt 33D Opinion Dynamics Social Learning Runtime Audit
+
+Goal: audit the narrow Opinion Dynamics `socialLearning` behavior mode without adding generic social/cognitive runtime support, executing `KnowledgeMemorySocialLearningModel` artifacts, executing model schemas, activating compatibility reports or visual builder workspaces, adding LLM agents, unbounded memory, real-person profiling, protected-class inference, persuasion/microtargeting, psychological diagnosis, validation/calibration, or external framework interop.
+
+Audit hardening:
+
+- Kept the social-learning update rule inside `src/simulation/templates/opinion.template.ts`; it does not import `src/simulation/socialLearning`, model schema, schema/template compatibility, or visual builder services as executors.
+- Avoided unnecessary default-mode source-object construction so classic Opinion mode remains inactive for social-learning state and source exposure.
+- Strengthened fixed information-source validation to reject non-plain objects in addition to unknown unsafe fields.
+- Strengthened Opinion tests for inactive default mode, zero exposure edge cases, source-weighted influence bounds, invalid social-learning parameters, malformed/unsafe source payload fields, arbitrary social state rejection, and static architecture boundaries.
+
+Boundary preserved:
+
+- Opinion Dynamics social learning is a stylized template-owned runtime mode, not a model of full human cognition.
+- Social-learning semantic artifacts are not executed directly by the Opinion Dynamics template.
+- Opinion values and social-learning metrics are model outputs, not measured human beliefs.
+- Information-source credibility is a model parameter, not a verified truth score.
+- No LLM agents, real-person profiling, protected-class inference, persuasion optimization, or psychological diagnosis are implemented.
+- `knowledgeMemorySocialLearning` remains service-only and `socialLearningRuntime` remains reserved in the global primitive registry.
+- Model schemas, compatibility reports, visual builder workspaces, and hybrid compositions remain structural and do not generate or execute Opinion runtime behavior.
+
+Next recommended prompt after repo hygiene: Prompt 34: Safe Builder UI Shell V1.

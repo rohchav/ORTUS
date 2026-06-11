@@ -1,6 +1,6 @@
 # ORTUS Current Context
 
-Last updated: 2026-06-08 after Prompt 33B Template/Schema Compatibility Mapping Audit
+Last updated: 2026-06-11 after Prompt 33D Opinion Dynamics Social Learning Runtime Audit
 
 ## Project Identity
 
@@ -12,19 +12,21 @@ Built-in production templates currently include Epidemic Spread, Opinion Dynamic
 
 ## Completed Prompt State
 
-Durable docs and source indicate completed roadmap work through Prompt 33B. Prompt 31: Model Schema + Interpreter Foundation V1, Prompt 31B: Model Schema + Interpreter Foundation Audit, Prompt 31C: Knowledge, Memory + Social Learning Semantics V1, Prompt 31D: Knowledge, Memory + Social Learning Audit, Prompt 32: Visual Model Builder Planning + Workspace Schema V1, Prompt 32B: Visual Builder Workspace Audit, Prompt 33: Template/Schema Compatibility Mapping V1, and Prompt 33B: Template/Schema Compatibility Mapping Audit are complete.
+Durable docs and source indicate completed roadmap work through Prompt 33D. Prompt 31: Model Schema + Interpreter Foundation V1, Prompt 31B: Model Schema + Interpreter Foundation Audit, Prompt 31C: Knowledge, Memory + Social Learning Semantics V1, Prompt 31D: Knowledge, Memory + Social Learning Audit, Prompt 32: Visual Model Builder Planning + Workspace Schema V1, Prompt 32B: Visual Builder Workspace Audit, Prompt 33: Template/Schema Compatibility Mapping V1, Prompt 33B: Template/Schema Compatibility Mapping Audit, Prompt 33C: Opinion Dynamics Social Learning Runtime V1, and Prompt 33D: Opinion Dynamics Social Learning Runtime Audit are complete.
 
 The post-30B repository hygiene, dependency stabilization, durable context, and performance/scalability pass has also been completed. Recent commits include `dd6c256` for repo context/generated-artifact hygiene, `4949b72` for dependency and performance script stabilization, and `a80d5b7` for simulation performance instrumentation and spatial indexing foundations.
 
-The next roadmap prompt is Prompt 33C: Opinion Dynamics Social Learning Runtime V1.
+The next roadmap prompt is Prompt 34: Safe Builder UI Shell V1.
 
-Implemented runtime foundations include scenarios, snapshots, template-defined behavior modes, agent composition, interventions, experiments, run summaries/comparison, seeded randomness, metrics, spaces, and template metadata.
+Implemented runtime foundations include scenarios, snapshots, template-defined behavior modes, agent composition, interventions, experiments, run summaries/comparison, seeded randomness, metrics, spaces, template metadata, and a narrow Opinion Dynamics `socialLearning` behavior mode audited in Prompt 33D.
 
 Implemented service-first or metadata-first foundations include uncertainty, assumptions/limits/ethics, networks/relations, resources/stocks/flows, feedback/delays/events, systems primitive registry, hybrid composition, multi-scale structure, scale view state, boundaries/environment, spatial fields/environmental layers, observability/measurement models, causal assumptions/influence models, quantity semantics, emergence pattern descriptors, robustness/resilience semantics, strategy/control/intervention semantics, model schema declarations, knowledge/memory/social-learning semantics, visual builder workspace schemas, and template/schema compatibility mapping.
 
 Model schemas declare model structure; they do not execute rules or create runnable simulations. A valid model schema is not a template, scenario, RunConfig, or snapshot. Rule declarations are descriptive metadata, not parsed formulas or executable behavior. Belief, memory, and social-learning rule declarations are structural placeholders; they do not implement human cognition or social-learning runtime.
 
-Knowledge, memory, and social-learning descriptors are structural semantics; they do not implement human cognition. Background profiles are compressed prior descriptors, not simulated life histories. Crowd and stranger exposure should usually be modeled as aggregate signals, representative agents, or fields rather than thousands of throwaway individuals. LLM-per-agent runtime is not implemented and must not be implied. `ortus.knowledgeMemorySocialLearningModel` artifacts describe bounded symbolic semantics only; they do not execute social learning, update beliefs or memory, sample exposure, infer real-person traits, support protected-class inference, validate psychology, predict people, optimize persuasion, provide policy targeting, or mutate Opinion Dynamics. Opinion Dynamics Social Learning Runtime remains future work.
+Knowledge, memory, and social-learning descriptors are structural semantics; they do not implement human cognition. Background profiles are compressed prior descriptors, not simulated life histories. Crowd and stranger exposure should usually be modeled as aggregate signals, representative agents, or fields rather than thousands of throwaway individuals. LLM-per-agent runtime is not implemented and must not be implied. `ortus.knowledgeMemorySocialLearningModel` artifacts describe bounded symbolic semantics only; they do not execute social learning, update beliefs or memory, sample exposure, infer real-person traits, support protected-class inference, validate psychology, predict people, optimize persuasion, provide policy targeting, or mutate Opinion Dynamics.
+
+Opinion Dynamics social learning is a stylized template-owned runtime mode, not a model of full human cognition. Social-learning semantic artifacts are not executed directly by the Opinion Dynamics template. Opinion values and social-learning metrics are model outputs, not measured human beliefs. Information-source credibility is a model parameter, not a verified truth score. No LLM agents, real-person profiling, protected-class inference, persuasion optimization, or psychological diagnosis are implemented.
 
 Visual builder workspaces are structural planning artifacts; they do not implement the visual builder UI. `ortus.visualBuilderWorkspace` artifacts describe future workspace identity, referenced model schemas and artifacts, visual nodes, visual edges, panels, sections, markers, layout, selection, viewport metadata, summaries, and validation reports only. Workspace nodes and edges are visual descriptors, not executable dataflow or runtime behavior. A valid visual builder workspace does not make a model schema runnable. Prompt 32 does not add drag-and-drop modeling, visual programming, or schema execution. Workspaces do not generate scenarios, RunConfigs, snapshots, templates, or engines, do not add external framework interop, and do not implement social-learning runtime or LLM agents. Prompt 34 safe builder UI shell remains future work.
 
@@ -84,11 +86,11 @@ Real source changes are now reviewable separately from generated build/cache noi
 ## Current Blockers
 
 - npm reports two moderate audit findings; no force fix was run.
-- No active roadmap blocker is recorded after Prompt 33B, but the compatibility audit work should be reviewed and committed before Prompt 33C starts.
+- Prompt 33C and Prompt 33D work should be reviewed and committed before Prompt 34 starts.
 
 ## Next Recommended Prompt After Stabilization
 
-Next recommended prompt: Prompt 33C: Opinion Dynamics Social Learning Runtime V1.
+Next recommended prompt after a commit/repo hygiene checkpoint: Prompt 34: Safe Builder UI Shell V1.
 
 ## Critical Guardrails
 
@@ -104,6 +106,7 @@ Next recommended prompt: Prompt 33C: Opinion Dynamics Social Learning Runtime V1
 - Do not mutate templates from compatibility reports.
 - Do not add visual builder UI, compiler, runtime model schema execution, or schema-backed rule execution yet.
 - Do not treat knowledge/memory/social-learning descriptors as runtime behavior, human cognition, social prediction, LLM agents, unbounded memory, or real-person inference.
+- Do not treat the Opinion Dynamics `socialLearning` behavior mode as a generic social/cognitive runtime, semantic artifact interpreter, measured-belief model, truth-scoring system, persuasion optimizer, psychological diagnosis tool, or real-person/protected-class inference system.
 - Do not claim validation, calibration, prediction proof, causal proof, robustness proof, safety certification, operational readiness, or policy recommendation.
 - Do not treat network edges, feedback labels, observations, runtime metrics, uncertainty ensembles, visible patterns, or interventions as proof.
 - Do not treat camera zoom as multi-scale modeling.
