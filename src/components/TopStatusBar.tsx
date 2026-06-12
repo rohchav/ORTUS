@@ -1,8 +1,10 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { FileActions } from "./FileActions";
 import { PhaseStateReadout } from "./PhaseStateReadout";
+import { OrtusBrand } from "./branding";
 import { StatusPill } from "./ui/StatusPill";
 import { templateDescriptors, type TemplateId } from "../lib/templateVisuals";
 import { useSimulationStore } from "../state/simulationStore";
@@ -23,10 +25,10 @@ export function TopStatusBar() {
 
   return (
     <header className="top-status">
-      <div className="brand-lockup" aria-label="ORTUS complex systems modeler">
-        <span className="brand-mark">ORTUS</span>
-        <span className="brand-subtitle">Complex Systems Observatory</span>
-      </div>
+      <OrtusBrand href="/" showDescriptor className="top-status__brand" />
+      <Link href="/builder" className="top-status__builder-link">
+        Builder Shell
+      </Link>
       <FileActions compact />
       <label className="top-status__field">
         <span>Model</span>

@@ -204,7 +204,7 @@ Goal: add a service-first, headless Visual Builder Workspace Schema V1 without i
 Implemented boundaries:
 
 - Added `src/simulation/visualBuilderWorkspace` as a headless service for validating, serializing, deserializing, querying, summarizing, warning about, and reporting capability gaps for `ortus.visualBuilderWorkspace` artifacts.
-- Visual builder workspaces are structural planning artifacts; they do not implement the visual builder UI.
+- Visual builder workspaces are structural planning artifacts; Prompt 32 did not implement the visual builder UI, and Prompt 34 later added only a read-only shell.
 - Workspace nodes and edges are visual descriptors, not executable dataflow or runtime behavior.
 - A valid visual builder workspace does not make a model schema runnable.
 - Prompt 32 does not add drag-and-drop modeling, visual programming, or schema execution.
@@ -228,25 +228,25 @@ Audit results:
 
 - Confirmed `src/simulation/visualBuilderWorkspace` remains a headless structural service for `ortus.visualBuilderWorkspace` artifacts only.
 - Strengthened visual workspace validation to reject cyclic direct-validation payloads and additional UI/runtime-shaped metadata keys such as React component refs, DOM/canvas refs, node editor, graph renderer, toolbar/palette, save-load UI, Run Model button, schema authoring form, and drag/drop runtime payloads.
-- Strengthened warning output to state that artifact references are structural references only and do not activate behavior, and that no node editor or graph rendering exists in V1.
+- Strengthened warning output to state that artifact references are structural references only and do not activate behavior, and that no node editor, graph editing, or graph execution exists in V1.
 - Strengthened tests for required live-state and unsafe-key families, malformed arrays/objects, cyclic and non-plain payloads, namespaced query helpers, clone-safe helper output, serialization rejection, per-doc exact boundary phrases, registry status, composition attachment boundaries, model-schema/social-learning separation, current UI absence, template capability separation, assumptions, and architecture constraints.
 - Confirmed `visualBuilderWorkspace` remains service-only in the primitive registry, `ortus.visualBuilderWorkspace` remains service-level import/export, and current production templates do not runtime-support visual builder workspaces.
 - Confirmed hybrid compositions may reference a visual builder workspace structurally, but the attachment does not make a composition runnable and does not satisfy visual model builder, schema execution, compiler/interpreter, validation/calibration, external interop, social-learning runtime, custom runtime, or LLM-agent capabilities.
 
 Boundary preserved:
 
-- Visual builder workspaces are structural planning artifacts; they do not implement the visual builder UI.
+- Visual builder workspaces are structural planning artifacts; Prompt 32B did not implement the visual builder UI, and Prompt 34 later added only a read-only shell.
 - Workspace nodes and edges are visual descriptors, not executable dataflow or runtime behavior.
 - A valid visual builder workspace does not make a model schema runnable.
 - Prompt 32 does not add drag-and-drop modeling, visual programming, or schema execution.
 - Prompt 33 template/schema compatibility mapping remains future work.
-- Prompt 34 safe builder UI shell remains future work.
+- At the time of this audit entry, Prompt 34 safe builder UI shell remained future work; it is superseded by the Prompt 34 completion entry below.
 
 Next recommended prompt: Prompt 33: Template/Schema Compatibility Mapping V1.
 
 ## 2026-06-07 - Prompt 33 Template/Schema Compatibility Mapping V1
 
-Goal: add a service-first, headless compatibility mapping layer between `ModelSchemaDefinition` artifacts and production template metadata without adding schema execution, conversion, generation, visual builder UI/runtime, external framework interop, social-learning runtime, validation, or calibration.
+Goal: add a service-first, headless compatibility mapping layer between `ModelSchemaDefinition` artifacts and production template metadata without adding schema execution, conversion, generation, runnable visual builder runtime/editor support, external framework interop, social-learning runtime, validation, or calibration.
 
 Implemented boundaries:
 
@@ -276,7 +276,7 @@ Next recommended prompt: Prompt 33B: Template/Schema Compatibility Mapping Audit
 
 ## 2026-06-08 - Prompt 33B Template/Schema Compatibility Mapping Audit
 
-Goal: audit and harden Prompt 33 without adding schema execution, schema-to-template conversion, scenario generation, RunConfig generation, snapshot generation, template generation, engine creation, visual builder UI/runtime, external framework interop, social-learning runtime, validation, calibration, or scientific-truth claims.
+Goal: audit and harden Prompt 33 without adding schema execution, schema-to-template conversion, scenario generation, RunConfig generation, snapshot generation, template generation, engine creation, runnable visual builder runtime/editor support, external framework interop, social-learning runtime, validation, calibration, or scientific-truth claims.
 
 Audit results:
 
@@ -298,7 +298,7 @@ Next recommended prompt: Prompt 33C: Opinion Dynamics Social Learning Runtime V1
 
 ## 2026-06-08 - Prompt 33C Opinion Dynamics Social Learning Runtime V1
 
-Goal: add a narrow deterministic social-learning runtime slice to the hand-built Opinion Dynamics template without adding generic social/cognitive runtime support, executing `KnowledgeMemorySocialLearningModel` artifacts, executing model schemas, changing compatibility reports into runtime conversion, adding visual builder UI/runtime, adding LLM agents, unbounded memory, real-person profiling, protected-class inference, persuasion/microtargeting optimization, psychological diagnosis, validation/calibration, or external framework interop.
+Goal: add a narrow deterministic social-learning runtime slice to the hand-built Opinion Dynamics template without adding generic social/cognitive runtime support, executing `KnowledgeMemorySocialLearningModel` artifacts, executing model schemas, changing compatibility reports into runtime conversion, adding runnable visual builder runtime/editor support, adding LLM agents, unbounded memory, real-person profiling, protected-class inference, persuasion/microtargeting optimization, psychological diagnosis, validation/calibration, or external framework interop.
 
 Implemented behavior:
 
@@ -342,3 +342,48 @@ Boundary preserved:
 - Model schemas, compatibility reports, visual builder workspaces, and hybrid compositions remain structural and do not generate or execute Opinion runtime behavior.
 
 Next recommended prompt after repo hygiene: Prompt 34: Safe Builder UI Shell V1.
+
+## 2026-06-11 - Prompt 34 Safe Builder UI Shell V1
+
+Goal: implement the first safe UI step toward future visual model building without adding graph execution, schema execution, visual programming, drag-and-drop authoring, compatibility conversion, template/scenario/RunConfig/snapshot generation, engine creation, external framework interop, generic social-learning runtime, LLM agents, real-person profiling, protected-class inference, persuasion/microtargeting, validation/calibration, or scientific-truth claims.
+
+Implemented behavior:
+
+- Added a dedicated `/builder` route and local `src/components/builder` shell for `ortus.visualBuilderWorkspace` artifacts.
+- Added read-only workspace identity/status display, structural status badges, import/export text flow, file import, clear action, validation/warnings toggles, navigation/filtering, node/edge viewport, text edge list, read-only inspector, and validation/warning panels.
+- Added a deterministic UI view-model layer that consumes existing `deserializeVisualBuilderWorkspace`, `serializeVisualBuilderWorkspace`, validation, query, summary, and validation-report services without duplicating validation in React.
+- Added focused UI-shell tests for view-model behavior, import/export preservation, selection/inspector output, filters, accessibility hooks, forbidden action labels, dependency boundaries, and simulation-state separation.
+- Added a small navigation link from the simulation top bar to the safe Builder Shell without mutating simulation state.
+
+Boundary preserved:
+
+- Safe Builder UI Shell V1 displays structural workspace artifacts; it does not execute workspace nodes or edges.
+- The builder shell is not a compiler, interpreter, visual programming environment, or custom simulation runtime.
+- A structurally valid workspace is still not a runnable model.
+- Importing a workspace artifact does not activate model schemas, compatibility mappings, or social-learning semantics.
+- The shell does not create engines, mutate active simulation state, subscribe to live snapshots/ticks, generate scenarios/RunConfigs/snapshots/templates, execute compatibility reports, activate social-learning semantic artifacts, add LLM agents, or mark `visualModelBuilder` implemented.
+- `visualBuilderWorkspace` remains service-only in the primitive registry, and `visualModelBuilder` remains reserved.
+
+Next recommended prompt: Prompt 34B: Safe Builder UI Shell Audit.
+
+## 2026-06-11 - UI-BRAND-1 ORTUS Brand Integration + HCI Audit
+
+Goal: integrate the supplied ORTUS PNG marks into the app shell and Builder shell while keeping branding restrained, accessible, and isolated from simulation runtime state; produce a durable HCI/UX/visual-direction audit without redesigning the application or changing simulation behavior.
+
+Implemented behavior:
+
+- Moved the sharp primary mark and soft secondary mark into canonical public branding assets.
+- Added a reusable ORTUS brand component with text wordmark support, descriptor support, mark-only accessibility, and sharp/soft variants.
+- Placed the primary sharp mark in the global top header and reused the same ORTUS brand in the Builder header without creating a separate Builder identity.
+- Kept logos out of the simulation world and Builder graph viewport.
+- Preserved favicon metadata because small-size preview makes the current mark too thin/ambiguous at 16 px.
+- Added `docs/ui/HCI_AUDIT.md` for evidence-labeled HCI findings and visual-direction recommendations.
+
+Boundary preserved:
+
+- The sharp ORTUS mark is the primary navigation brand.
+- The soft ORTUS mark is a secondary presentation variant.
+- Do not use either mark as a simulation-world or Builder-graph watermark.
+- Builder remains an ORTUS workspace, not a separate branded product.
+- Favicon replacement remains future work until small-size legibility is deliberately optimized.
+- HCI findings must distinguish observed defects, inferred risks, subjective style preferences, and unverified concerns.

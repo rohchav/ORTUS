@@ -477,7 +477,7 @@ export const primitiveRegistry: readonly SystemsPrimitiveEntry[] = [
     "agentComposition",
     "heterogeneity"
   ]),
-  reservedPrimitive("heterogeneity", "Heterogeneity", "Agent types, group differences, parameter distributions, and structural/behavioral heterogeneity.", "Prompt 34 will define a heterogeneity layer.", [
+  reservedPrimitive("heterogeneity", "Heterogeneity", "Agent types, group differences, parameter distributions, and structural/behavioral heterogeneity.", "A later audited prompt will define a heterogeneity layer.", [
     "agentComposition",
     "adaptiveAgents"
   ]),
@@ -612,11 +612,11 @@ export const primitiveRegistry: readonly SystemsPrimitiveEntry[] = [
     status: "serviceOnly",
     supportLevel: "service",
     currentScope:
-      "Structural/service-level visual builder workspace declarations only. Visual builder workspaces are structural planning artifacts; they do not implement the visual builder UI.",
+      "Structural/service-level visual builder workspace declarations only. Prompt 34 adds a read-only UI shell for these artifacts, but workspace declarations do not implement runnable visual model authoring or a custom runtime.",
     futureScope:
-      "Future audited prompts may connect workspace schemas to a safe UI shell, template/schema compatibility mapping, and later constrained model-authoring workflows.",
+      "Future audited prompts may connect workspace schemas to constrained model-authoring workflows behind explicit capability checks.",
     limitations: [
-      "No visual builder UI, node editor, drag/drop modeling, graph rendering, graph execution, visual programming, schema execution, compiler/interpreter runtime, scenario/RunConfig/snapshot/template generation, external framework interop, social/cognitive runtime, LLM agents, or custom runtime are implemented.",
+      "No node editor, graph editing, drag/drop modeling, graph execution, visual programming, schema execution, compiler/interpreter runtime, scenario/RunConfig/snapshot/template generation, external framework interop, social/cognitive runtime, LLM agents, or custom runtime are implemented.",
       "Workspace nodes and edges are visual descriptors, not executable dataflow or runtime behavior.",
       "A valid visual builder workspace does not make a model schema runnable."
     ],
@@ -632,8 +632,8 @@ export const primitiveRegistry: readonly SystemsPrimitiveEntry[] = [
       "llmAgents"
     ],
     mustNotClaimYet: [
-      "visual builder UI",
-      "node editor",
+      "runnable visual builder runtime",
+      "node editor or graph editing",
       "drag/drop modeling",
       "graph execution",
       "visual programming",

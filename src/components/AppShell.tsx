@@ -7,6 +7,7 @@ import { RightContextDrawer } from "./RightContextDrawer";
 import { TopStatusBar } from "./TopStatusBar";
 import { WorldStage } from "./WorldStage";
 import { WorkspaceMode } from "./WorkspaceMode";
+import { OrtusBrand } from "./branding";
 import { useSimulationStore } from "../state/simulationStore";
 
 const baseTicksPerSecond = 24;
@@ -74,7 +75,7 @@ export function AppShell() {
     return (
       <main className="ortus-shell ortus-shell--hydrating" aria-busy="true">
         <div className="ortus-hydration-shell">
-          <span className="brand-mark">ORTUS</span>
+          <OrtusBrand variant="soft" showDescriptor />
           <span>Initializing simulation instrument</span>
         </div>
       </main>

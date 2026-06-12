@@ -817,7 +817,7 @@ describe("schema/template compatibility mapping service", () => {
     const docs = auditedDocPaths.map((docPath) => readFileSync(join(repoRoot, docPath), "utf8")).join("\n");
     expect(docs).toContain("Prompt 33B");
     expect(docs).toContain("Prompt 33C");
-    expect(docs).toContain("Prompt 34 safe builder UI shell remains future");
+    expect(docs).toContain("Prompt 34 safe builder UI shell is complete");
     expect(docs).toContain("Do not treat compatibility as conversion.");
     expect(docs).toContain("Do not treat strong fit as runnable.");
     expect(docs).toContain("Do not treat templateExact fit as runnable.");

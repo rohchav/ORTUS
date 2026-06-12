@@ -890,7 +890,7 @@ describe("strategy, control, and intervention semantics services", () => {
     expect(docs).toContain("Prompt 31D: Knowledge, Memory + Social Learning Audit");
     expect(docs).toContain("Prompt 32: Visual Model Builder Planning + Workspace Schema V1");
     expect(docs).toContain(
-      "Runtime interpreter/compiler, visual builder UI support, external framework interop, generic social-learning runtime outside the narrow Opinion Dynamics behavior mode, full human cognition, LLM-per-agent runtime, validation, and calibration remain future work."
+      "Runtime interpreter/compiler, runnable visual model builder support, external framework interop, generic social-learning runtime outside the narrow Opinion Dynamics behavior mode, full human cognition, LLM-per-agent runtime, validation, and calibration remain future work."
     );
     expect(docs).toContain("Workspace nodes and edges are visual descriptors, not executable dataflow or runtime behavior.");
 

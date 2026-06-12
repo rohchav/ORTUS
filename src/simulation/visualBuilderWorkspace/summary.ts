@@ -30,11 +30,11 @@ export function summarizeVisualBuilderWorkspace(workspace: VisualBuilderWorkspac
 export function getVisualBuilderWorkspaceWarnings(workspace: VisualBuilderWorkspaceDefinition): readonly string[] {
   const valid = validateVisualBuilderWorkspaceDefinition(workspace);
   const warnings: string[] = [
-    "Visual builder workspaces are structural planning artifacts; they do not implement the visual builder UI.",
+    "Visual builder workspaces are structural planning artifacts; they do not implement runnable visual model authoring.",
     "Workspace nodes and edges are visual descriptors, not executable dataflow or runtime behavior.",
     "A valid visual builder workspace does not make a model schema runnable.",
-    "Prompt 32 does not add drag-and-drop modeling, visual programming, or schema execution.",
-    "No visual builder runtime exists in V1.",
+    "Prompt 34 adds a read-only builder shell; it does not add drag-and-drop modeling, visual programming, or schema execution.",
+    "No runnable visual builder runtime exists in V1.",
     "No schema execution exists in V1.",
     "No compiler exists in V1.",
     "No external framework interop exists in V1.",
@@ -48,7 +48,7 @@ export function getVisualBuilderWorkspaceWarnings(workspace: VisualBuilderWorksp
     "Viewport and camera metadata is display-only.",
     "Selection metadata does not mutate runtime state.",
     "Artifact references are structural references only; reference or attachment does not activate behavior.",
-    "No node editor or graph rendering exists in V1.",
+    "No node editor or graph editing exists in V1.",
     "Workspace artifacts cannot generate scenarios, RunConfigs, snapshots, templates, or engines."
   ];
 
@@ -115,10 +115,10 @@ export function getVisualBuilderWorkspaceWarnings(workspace: VisualBuilderWorksp
     warnings.push("Node graph execution wording is unsupported; workspace graphs are not executed.");
   }
   if (mentionsDragDropRuntime(text)) {
-    warnings.push("Drag-and-drop runtime wording is unsupported; Prompt 32 does not add drag-and-drop modeling.");
+    warnings.push("Drag-and-drop runtime wording is unsupported; Prompt 34 does not add drag-and-drop modeling.");
   }
   if (mentionsVisualProgramming(text)) {
-    warnings.push("Visual programming wording is unsupported; Prompt 32 does not implement visual programming.");
+    warnings.push("Visual programming wording is unsupported; Prompt 34 does not implement visual programming.");
   }
   if (mentionsExternalFrameworkCompatibility(text)) {
     warnings.push("NetLogo/Mesa/MASON compatibility wording is unsupported; external framework interop is not implemented.");

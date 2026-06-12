@@ -245,7 +245,7 @@ export const artifactFamilyRegistry: readonly ArtifactFamilyEntry[] = [
     importSupported: true,
     exportSupported: true,
     serviceOnly: true,
-    description: "Headless visual builder workspace planning artifact; no visual builder UI, graph execution, schema execution, or model generation.",
+    description: "Visual builder workspace planning artifact with read-only shell support; no graph execution, schema execution, or model generation.",
     mustRejectAsOtherArtifactWhereApplicable: rejectAgainstModelingArtifacts.filter((type) => type !== visualBuilderWorkspaceArtifactType)
   },
   {

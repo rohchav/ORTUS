@@ -65,7 +65,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(existsSync(missingPillarsPath)).toBe(true);
 
     const roadmap = readFileSync(roadmapPath, "utf8");
-    expect(roadmap).toContain("completed through Prompt 33");
+    expect(roadmap).toContain("completed through Prompt 34");
     expect(roadmap).toContain("Post-30B stabilization");
     expect(roadmap).toContain("Prompt 31: Model Schema + Interpreter Foundation V1, Prompt 31B: Model Schema + Interpreter Foundation Audit, Prompt 31C");
     expect(roadmap).toContain("Prompt 31C: Knowledge, Memory + Social Learning Semantics V1");
@@ -74,6 +74,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(roadmap).toContain("Prompt 32B: Visual Builder Workspace Audit");
     expect(roadmap).toContain("Prompt 33: Template/Schema Compatibility Mapping V1");
     expect(roadmap).toContain("Prompt 33B: Template/Schema Compatibility Mapping Audit");
+    expect(roadmap).toContain("Prompt 34: Safe Builder UI Shell V1");
     expect(roadmap).toContain("31 - Model Schema + Interpreter Foundation V1");
     expect(roadmap).toContain("31B - Model Schema + Interpreter Foundation Audit");
     expect(roadmap).toContain("31C - Knowledge, Memory + Social Learning Semantics V1");
@@ -86,7 +87,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(roadmap).toContain("25 - Observability + Measurement Model V1");
     expect(roadmap).toContain("26 - Causal Assumptions + Influence Structure V1");
     expect(roadmap).toContain("27 - Units + Dimensional Consistency V1");
-    expect(roadmap).toContain("Later: visual model builder");
+    expect(roadmap).toContain("Later: runnable visual model builder");
     expect(roadmap).toContain("Prompt 19 adds `src/simulation/registry` as the unified primitive registry and capability map");
     expect(roadmap.toLowerCase()).toContain("predictive claims are prohibited");
 

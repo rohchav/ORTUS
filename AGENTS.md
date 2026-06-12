@@ -15,6 +15,20 @@
 - World backgrounds are visual context only, not simulation data unless explicitly wired through the engine.
 - Avoid a generic cold blue/cyan dashboard palette for ORTUS.
 - Use `CornerFramePanel` for major UI panels.
+- Use the sharp ORTUS mark as the primary navigation brand.
+- Use the soft ORTUS mark only for secondary presentation states.
+- Pair the mark with the ORTUS wordmark in primary navigation.
+- Do not use the mark as a world or graph watermark.
+- Do not create separate logos for ORTUS workspaces.
+- Do not stretch or distort source brand assets.
+- Do not destructively recolor source brand assets.
+- Do not replace favicon unless legibility is confirmed.
+- Keep branding isolated from simulation runtime state.
+- Do not implement broad audit recommendations during branding work.
+- Distinguish HCI evidence from aesthetic preference.
+- Preserve runtime-honesty language.
+- Preserve accessibility and keyboard-operation requirements.
+- Preserve the simulation world as the primary visual focus.
 - Experiment runs must create fresh engine instances through the template registry and should store metrics/outcomes, not full per-run snapshots, unless explicitly requested.
 - Keep experiment execution chunked/cancellable in the UI so local sweeps do not create unbounded browser loops.
 - Interventions must be template-defined, validated, and applied through the headless intervention executor or engine command buffer. UI and canvas code may report targets, but must not mutate agents, components, spaces, or engine internals.
@@ -37,14 +51,32 @@
 - Do not accept formulas, code, scripts, function bodies, compiler payloads, visual-builder state, external-framework code, optimizer payloads, LLM payloads, or live engine state in model schemas.
 - Do not claim visual builder support from model schema support.
 - Do not treat `VisualBuilderWorkspaceDefinition` as UI.
-- Visual builder workspaces are structural planning artifacts; they do not implement the visual builder UI.
+- Visual builder workspaces are structural planning artifacts; they do not implement runnable visual model authoring or a custom runtime.
 - Workspace nodes and edges are visual descriptors, not executable dataflow or runtime behavior.
 - A valid visual builder workspace does not make a model schema runnable.
 - Prompt 32 does not add drag-and-drop modeling, visual programming, or schema execution.
+- Do not treat the builder UI shell as a runnable visual builder.
+- Do not add Run, Compile, Generate Scenario, Generate RunConfig, or Apply to Template actions to the builder shell.
+- Do not execute workspace node or edge metadata.
+- Do not treat builder edges as executable dataflow.
+- Do not let builder selection mutate simulation state.
+- Do not subscribe the builder shell to live simulation ticks.
+- Do not bypass `deserializeVisualBuilderWorkspace`.
+- Do not render imported metadata as trusted HTML.
+- Do not imply schema execution from the builder shell.
+- Do not imply compatibility conversion from the builder shell.
+- Do not imply social-learning artifact execution from the builder shell.
+- Do not mark `visualModelBuilder` implemented from shell existence alone.
+- Preserve structural-validity versus runtime-readiness language in the shell.
+- Preserve builder-shell accessibility and keyboard-operation requirements.
+- Safe Builder UI Shell V1 displays structural workspace artifacts; it does not execute workspace nodes or edges.
+- The builder shell is not a compiler, interpreter, visual programming environment, or custom simulation runtime.
+- A structurally valid workspace is still not a runnable model.
+- Importing a workspace artifact does not activate model schemas, compatibility mappings, or social-learning semantics.
 - Do not treat workspace nodes as runtime objects.
 - Do not treat workspace edges as executable dataflow.
 - Do not infer visual builder support from workspace schema support.
-- Do not add drag/drop, graph rendering, or visual programming before the proper UI prompts.
+- Do not add drag/drop, graph editing, or visual programming before the proper UI prompts.
 - Do not let workspaces generate scenarios, RunConfigs, snapshots, templates, or engines.
 - Do not parse or execute node metadata.
 - Do not claim external framework compatibility from workspace references.

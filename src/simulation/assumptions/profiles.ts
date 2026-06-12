@@ -48,7 +48,7 @@ export function createTemplateAssumptionProfile(options: CreateTemplateAssumptio
         "Knowledge, memory, and social-learning descriptors are structural only; they do not implement full human cognition, LLM agents, real-person profiling, protected-class inference, persuasion, or policy guidance.",
         "Visual builder workspace schemas are structural only; current templates are not generated from builder workspaces.",
         "Builder workspaces do not execute schemas or rules; workspace graph edges are not dataflow or runtime behavior.",
-        "No visual builder UI or custom runtime exists yet.",
+        "The builder UI shell is read-only and does not implement runnable visual model authoring or a custom runtime.",
         "Template/schema compatibility reports are structural fit analyses; they do not convert schemas into runnable models.",
         "A strong template fit does not mean a schema can run.",
         "Unsupported and lossy mappings must remain visible; they must not be silently dropped.",

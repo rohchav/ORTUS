@@ -897,8 +897,8 @@ describe("model schema service", () => {
     expect(docs).toContain("A valid model schema is not a template, scenario, RunConfig, or snapshot.");
     expect(docs).toContain("Rule declarations are descriptive metadata, not parsed formulas or executable behavior.");
     expect(docs).toContain("Belief, memory, and social-learning rule declarations are structural placeholders; they do not implement human cognition or social-learning runtime.");
-    expect(docs).toContain("ORTUS has completed Prompt 33");
-    expect(docs).toContain("Visual builder workspaces are structural planning artifacts; they do not implement the visual builder UI.");
+    expect(docs).toContain("ORTUS has completed Prompt 34");
+    expect(docs).toContain("Visual builder workspaces are structural planning artifacts; they do not implement runnable visual model authoring.");
     expect(docs).toContain("Opinion Dynamics social learning is a stylized template-owned runtime mode, not a model of full human cognition.");
     expect(docs).toContain("Social-learning semantic artifacts are not executed directly by the Opinion Dynamics template.");
     expect(docs).toContain("A valid visual builder workspace does not make a model schema runnable.");

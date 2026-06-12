@@ -21,8 +21,8 @@ export function getVisualBuilderWorkspaceValidationReport(workspace: VisualBuild
       errors: [],
       warnings: getVisualBuilderWorkspaceWarnings(valid),
       missingCapabilities: [
-        "visual builder UI/runtime",
-        "node editor",
+        "runnable visual builder runtime",
+        "node editor or graph editing",
         "drag-and-drop modeling",
         "graph execution",
         "visual programming",

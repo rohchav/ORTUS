@@ -52,10 +52,10 @@ import {
 
 const repoRoot = process.cwd();
 const requiredVisualWorkspaceDocPhrases = [
-  "Visual builder workspaces are structural planning artifacts; they do not implement the visual builder UI.",
-  "Workspace nodes and edges are visual descriptors, not executable dataflow or runtime behavior.",
-  "A valid visual builder workspace does not make a model schema runnable.",
-  "Prompt 32 does not add drag-and-drop modeling, visual programming, or schema execution."
+  "Safe Builder UI Shell V1 displays structural workspace artifacts; it does not execute workspace nodes or edges.",
+  "The builder shell is not a compiler, interpreter, visual programming environment, or custom simulation runtime.",
+  "A structurally valid workspace is still not a runnable model.",
+  "Importing a workspace artifact does not activate model schemas, compatibility mappings, or social-learning semantics."
 ] as const;
 
 const requiredLiveStateForbiddenKeys = [
@@ -389,7 +389,15 @@ function fullWorkspace(overrides: Partial<VisualBuilderWorkspaceDefinition> = {}
     viewport: { x: 10, y: -20, zoom: 1.25 },
     layout: { layoutKind: "manual" },
     assumptionNotes: [{ id: "assumption-1", label: "Structural", description: "Planning metadata only.", severity: "info", confidence: "unknown" }],
-    limitationNotes: [{ id: "limit-1", label: "No UI", description: "No visual builder UI exists.", severity: "caution", confidence: "high" }],
+    limitationNotes: [
+      {
+        id: "limit-1",
+        label: "No runtime",
+        description: "No runnable visual builder runtime exists.",
+        severity: "caution",
+        confidence: "high"
+      }
+    ],
     validationNotes: [{ id: "validation-1", label: "Internal", description: "Schema validation only.", severity: "info", confidence: "medium" }],
     metadata: { purpose: "planning" },
     ...overrides
@@ -529,10 +537,10 @@ describe("visual builder workspace schema service", () => {
 
   it("surfaces structural-only warnings without implying runtime behavior", () => {
     const warnings = getVisualBuilderWorkspaceWarnings(fullWorkspace());
-    expect(warnings).toContain("Visual builder workspaces are structural planning artifacts; they do not implement the visual builder UI.");
+    expect(warnings).toContain("Visual builder workspaces are structural planning artifacts; they do not implement runnable visual model authoring.");
     expect(warnings).toContain("Workspace nodes and edges are visual descriptors, not executable dataflow or runtime behavior.");
     expect(warnings).toContain("A valid visual builder workspace does not make a model schema runnable.");
-    expect(warnings).toContain("Prompt 32 does not add drag-and-drop modeling, visual programming, or schema execution.");
+    expect(warnings).toContain("Prompt 34 adds a read-only builder shell; it does not add drag-and-drop modeling, visual programming, or schema execution.");
     expect(warnings).toContain("Active workspace declarations are structurally active only; active does not mean runtime-executed.");
     expect(warnings).toContain("Workspace nodes are visual descriptors, not runtime objects.");
     expect(warnings).toContain("Workspace edges are visual/semantic links, not dataflow execution.");
@@ -548,17 +556,17 @@ describe("visual builder workspace schema service", () => {
     expect(warnings).toContain("Resource references do not execute stock/flow behavior.");
     expect(warnings).toContain("Feedback references do not run feedback loops.");
     expect(warnings).toContain("Control references do not execute policies.");
-    expect(warnings).toContain("No visual builder runtime exists in V1.");
+    expect(warnings).toContain("No runnable visual builder runtime exists in V1.");
     expect(warnings).toContain("No schema execution exists in V1.");
     expect(warnings).toContain("No compiler exists in V1.");
     expect(warnings).toContain("No external framework interop exists in V1.");
     expect(warnings).toContain("No custom model runtime exists in V1.");
-    expect(warnings).toContain("No node editor or graph rendering exists in V1.");
+    expect(warnings).toContain("No node editor or graph editing exists in V1.");
     expect(warnings).toContain("Workspace artifacts cannot generate scenarios, RunConfigs, snapshots, templates, or engines.");
     expect(warnings).toContain("Universal builder wording is unsupported; this workspace is not a universal model builder.");
     expect(warnings).toContain("Node graph execution wording is unsupported; workspace graphs are not executed.");
-    expect(warnings).toContain("Drag-and-drop runtime wording is unsupported; Prompt 32 does not add drag-and-drop modeling.");
-    expect(warnings).toContain("Visual programming wording is unsupported; Prompt 32 does not implement visual programming.");
+    expect(warnings).toContain("Drag-and-drop runtime wording is unsupported; Prompt 34 does not add drag-and-drop modeling.");
+    expect(warnings).toContain("Visual programming wording is unsupported; Prompt 34 does not implement visual programming.");
     expect(warnings).toContain("NetLogo/Mesa/MASON compatibility wording is unsupported; external framework interop is not implemented.");
     expect(warnings).toContain("Social/cognitive runtime wording is unsupported; social-learning workspace nodes do not implement cognition or runtime learning.");
     expect(warnings).toContain("LLM-agent wording is unsupported; no LLM-agent runtime exists in V1.");
@@ -620,7 +628,7 @@ describe("visual builder workspace schema service", () => {
       visualBuilderRuntimeAvailable: false,
       schemaExecutionAvailable: false,
       compilerAvailable: false,
-      missingCapabilities: expect.arrayContaining(["visual builder UI/runtime", "schema execution", "compiler/interpreter runtime"])
+      missingCapabilities: expect.arrayContaining(["runnable visual builder runtime", "schema execution", "compiler/interpreter runtime"])
     });
     expect(getVisualBuilderWorkspaceValidationReport({ artifactType: visualBuilderWorkspaceArtifactType })).toMatchObject({
       valid: false,
@@ -791,7 +799,7 @@ describe("visual builder workspace schema service", () => {
     }
   });
 
-  it("updates docs, assumptions, and architecture boundaries without adding UI/runtime code", () => {
+  it("updates docs, assumptions, and architecture boundaries without adding simulation runtime code", () => {
     const auditedDocPaths = [
       "README.md",
       "docs/concepts.md",
@@ -811,7 +819,7 @@ describe("visual builder workspace schema service", () => {
       }
     }
     expect(docs).toContain("Prompt 33B");
-    expect(docs).toContain("Prompt 34 safe builder UI shell remains future work.");
+    expect(docs).toContain("Prompt 34B");
 
     const assumptionText = productionTemplates
       .flatMap((template) => template.assumptionProfile?.limitations.map((item) => item.description) ?? [])

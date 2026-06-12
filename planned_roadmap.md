@@ -1,17 +1,17 @@
 # ORTUS Full Prompt Roadmap
 
-*Last updated after Prompt 33D Opinion Dynamics Social Learning Runtime Audit.*
+*Last updated after Prompt 34 Safe Builder UI Shell V1.*
 
 ## Current Status
 
-ORTUS has completed the core runtime/template foundation, scenario system, uncertainty layer, assumptions/limits layer, systems primitive registry, hybrid composition, multi-scale structure, scale-view state, boundary/environment models, spatial fields, observability, causality, quantity semantics, emergence pattern descriptors, robustness/resilience semantics, strategy/control semantics, model schema declarations, knowledge/memory/social-learning semantics, visual builder workspace schemas, template/schema compatibility mapping, the template/schema compatibility mapping audit, a narrow Opinion Dynamics social-learning behavior mode, and the Opinion Dynamics social-learning runtime audit.
+ORTUS has completed the core runtime/template foundation, scenario system, uncertainty layer, assumptions/limits layer, systems primitive registry, hybrid composition, multi-scale structure, scale-view state, boundary/environment models, spatial fields, observability, causality, quantity semantics, emergence pattern descriptors, robustness/resilience semantics, strategy/control semantics, model schema declarations, knowledge/memory/social-learning semantics, visual builder workspace schemas, template/schema compatibility mapping, the template/schema compatibility mapping audit, a narrow Opinion Dynamics social-learning behavior mode, the Opinion Dynamics social-learning runtime audit, and Safe Builder UI Shell V1.
 
 Current project status:
 
 ```text
-Completed roadmap prompt: Prompt 33D — Opinion Dynamics Social Learning Runtime Audit
+Completed roadmap prompt: Prompt 34 — Safe Builder UI Shell V1
 Post-30B stabilization completed: repo hygiene, durable Codex context, dependency repair, generated-artifact cleanup, and runtime performance/scalability baseline
-Next roadmap prompt: Prompt 34 — Safe Builder UI Shell V1
+Next roadmap prompt: Prompt 34B — Safe Builder UI Shell Audit
 ```
 
 Critical global boundary:
@@ -39,7 +39,7 @@ Current major guardrails:
 ```text
 No arbitrary code execution.
 No formula/expression execution.
-No visual model builder runtime yet.
+No runnable visual model builder runtime yet.
 No model schema interpreter/runtime yet.
 No custom model execution yet.
 No NetLogo/Mesa/MASON interop yet.
@@ -57,7 +57,9 @@ missing from this full roadmap. Prompt 31C and Prompt 31D are now corrected belo
 after Prompt 31B and before Prompt 32, with a later narrow Opinion Dynamics
 social-learning runtime slice placed after template/schema compatibility mapping.
 The social/cognitive semantics insertion was corrected after manual review, and
-Prompt 31C, Prompt 31D, Prompt 32, Prompt 32B, Prompt 33, Prompt 33B, Prompt 33C, and Prompt 33D are now marked complete while Prompt 34 remains future safe-builder UI shell work.
+Prompt 31C, Prompt 31D, Prompt 32, Prompt 32B, Prompt 33, Prompt 33B, Prompt 33C, Prompt 33D, and Prompt 34 are now marked complete while Prompt 34B remains future safe-builder shell audit work.
+
+Safe Builder UI Shell V1 displays structural workspace artifacts; it does not execute workspace nodes or edges. The builder shell is not a compiler, interpreter, visual programming environment, or custom simulation runtime. A structurally valid workspace is still not a runnable model. Importing a workspace artifact does not activate model schemas, compatibility mappings, or social-learning semantics.
 
 ---
 
@@ -1166,7 +1168,7 @@ Rule declarations are descriptive metadata, not parsed formulas or executable be
 They do not generate scenarios, RunConfigs, snapshots, or templates.
 Belief, memory, and social-learning rule declarations are structural placeholders; they do not implement human cognition or social-learning runtime.
 Prompt 31C structural social/cognitive semantics and Prompt 31D audit hardening are complete; generic social-learning runtime remains unavailable outside the narrow Opinion Dynamics behavior mode added in Prompt 33C.
-Prompt 32 visual model-builder workspace planning is complete; visual builder UI, schema execution, and runtime compiler/interpreter work remain future.
+Prompt 32 visual model-builder workspace planning is complete; Prompt 34 safe builder UI shell is complete; runnable visual model authoring, schema execution, and runtime compiler/interpreter work remain future.
 No compiler/interpreter runtime yet.
 ```
 
@@ -1251,7 +1253,7 @@ Purpose:
 Boundary:
 
 ```text
-Visual builder workspaces are structural planning artifacts; they do not implement the visual builder UI.
+Visual builder workspaces are structural planning artifacts; they do not implement runnable visual model authoring.
 Workspace nodes and edges are visual descriptors, not executable dataflow or runtime behavior.
 A valid visual builder workspace does not make a model schema runnable.
 Prompt 32 does not add drag-and-drop modeling, visual programming, or schema execution.
@@ -1370,12 +1372,16 @@ No Run Model button.
 No custom runtime.
 No schema execution.
 No scenario generation.
+Safe Builder UI Shell V1 displays structural workspace artifacts; it does not execute workspace nodes or edges.
+The builder shell is not a compiler, interpreter, visual programming environment, or custom simulation runtime.
+A structurally valid workspace is still not a runnable model.
+Importing a workspace artifact does not activate model schemas, compatibility mappings, or social-learning semantics.
 ```
 
 Status:
 
 ```text
-Planned.
+Completed.
 ```
 
 ## Prompt 34B — Safe Builder UI Shell Audit
@@ -2859,16 +2865,16 @@ No global service availability treated as template runtime support.
 Recommended immediate next steps:
 
 ```text
-1. Review and commit the Prompt 33C/33D Opinion Dynamics social-learning runtime and audit work.
-2. Prepare Prompt 34 — Safe Builder UI Shell V1 only after repo hygiene.
-3. Keep Prompt 34 non-executing: no Run Model button, no schema execution, no scenario generation, no hidden compiler, and no custom runtime.
+1. Review and commit the Prompt 34 Safe Builder UI Shell V1 work.
+2. Prepare Prompt 34B — Safe Builder UI Shell Audit.
+3. Keep Prompt 34B audit-focused: no Run Model button, no schema execution, no scenario generation, no hidden compiler, no custom runtime, and no builder editing.
 ```
 
-Do not start Prompt 34 until the repo status and roadmap docs clearly reflect:
+Do not start any builder editing or runtime-mapping prompt until the repo status and roadmap docs clearly reflect:
 
 ```text
-Completed through Prompt 33D.
+Completed through Prompt 34.
 Performance stabilization completed after Prompt 30B.
-Prompt 33C and Prompt 33D are complete.
-Next roadmap prompt: Prompt 34.
+Prompt 34 safe builder shell is complete.
+Next roadmap prompt: Prompt 34B.
 ```
