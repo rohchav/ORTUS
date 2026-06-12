@@ -1,17 +1,16 @@
 "use client";
 
 import { AvatarModeControl } from "./AvatarModeControl";
-import { ParameterPanel } from "./ParameterPanel";
 import { CornerFramePanel } from "./ui/CornerFramePanel";
 import { getTemplateDescriptor } from "../lib/templateVisuals";
 import { useSimulationStore } from "../state/simulationStore";
 
 interface PanelProps {
-  collapsed: boolean;
-  onToggle: () => void;
+  collapsed?: boolean;
+  onToggle?: () => void;
 }
 
-export function MicroPanel({ collapsed, onToggle }: PanelProps) {
+export function MicroPanel({ collapsed = false, onToggle }: PanelProps) {
   const selectedTemplateId = useSimulationStore((state) => state.selectedTemplateId);
   const documentation = getTemplateDescriptor(selectedTemplateId).template.documentation;
 
@@ -31,7 +30,6 @@ export function MicroPanel({ collapsed, onToggle }: PanelProps) {
         <p>{documentation.processOverview}</p>
       </div>
       <AvatarModeControl />
-      <ParameterPanel />
     </CornerFramePanel>
   );
 }

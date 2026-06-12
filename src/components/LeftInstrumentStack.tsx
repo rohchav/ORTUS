@@ -2,63 +2,142 @@
 
 import type { ReactNode } from "react";
 import { AssumptionsPanel } from "./AssumptionsPanel";
+import { DebugPanel } from "./DebugPanel";
 import { FieldNotesPanel } from "./FieldNotesPanel";
 import { FileActions } from "./FileActions";
 import { ExperimentPanel } from "./ExperimentPanel";
 import { InterventionPanel } from "./InterventionPanel";
+import { Legend } from "./Legend";
 import { MacroPanel } from "./MacroPanel";
 import { MetricGraphPanel } from "./MetricGraphPanel";
 import { MicroPanel } from "./MicroPanel";
+import { RunSettingsPanel } from "./RunSettingsPanel";
 import { RunComparisonPanel } from "./RunComparisonPanel";
 import { ScenarioBuilderPanel } from "./ScenarioBuilderPanel";
-import { TimelineControlStrip } from "./TimelineControlStrip";
 import { CornerFramePanel } from "./ui/CornerFramePanel";
 import { getWorkspacePanelDefinition } from "../lib/workspacePanels";
-import { useSimulationStore } from "../state/simulationStore";
+import { getSimulationWorkspaceMode, simulationWorkspaceModes, type SimulationWorkspaceModeId } from "../lib/workspaceModes";
 
-export function LeftInstrumentStack() {
-  const panelState = useSimulationStore((state) => state.panelState);
-  const togglePanel = useSimulationStore((state) => state.togglePanel);
+interface LeftInstrumentStackProps {
+  activeMode: SimulationWorkspaceModeId;
+  onModeChange: (mode: SimulationWorkspaceModeId) => void;
+}
+
+export function LeftInstrumentStack({ activeMode, onModeChange }: LeftInstrumentStackProps) {
+  const mode = getSimulationWorkspaceMode(activeMode);
 
   return (
-    <aside className="left-instruments" aria-label="Model instruments">
-      <RailPanelSlot panelId="micro">
-        <MicroPanel collapsed={!panelState.micro} onToggle={() => togglePanel("micro")} />
-      </RailPanelSlot>
-      <RailPanelSlot panelId="macro">
-        <MacroPanel collapsed={!panelState.macro} onToggle={() => togglePanel("macro")} />
-      </RailPanelSlot>
-      <RailPanelSlot panelId="metrics">
-        <MetricGraphPanel collapsed={!panelState.metrics} onToggle={() => togglePanel("metrics")} />
-      </RailPanelSlot>
-      <RailPanelSlot panelId="scenarios">
-        <ScenarioBuilderPanel collapsed={!panelState.scenarios} onToggle={() => togglePanel("scenarios")} />
-      </RailPanelSlot>
-      <RailPanelSlot panelId="assumptions">
-        <AssumptionsPanel collapsed={!panelState.assumptions} onToggle={() => togglePanel("assumptions")} />
-      </RailPanelSlot>
-      <RailPanelSlot panelId="interventions">
-        <InterventionPanel collapsed={!panelState.interventions} onToggle={() => togglePanel("interventions")} />
-      </RailPanelSlot>
-      <RailPanelSlot panelId="experiments">
-        <ExperimentPanel collapsed={!panelState.experiments} onToggle={() => togglePanel("experiments")} />
-      </RailPanelSlot>
-      <RailPanelSlot panelId="comparisons">
-        <RunComparisonPanel collapsed={!panelState.comparisons} onToggle={() => togglePanel("comparisons")} />
-      </RailPanelSlot>
-      <RailPanelSlot panelId="timeline">
-        <TimelineControlStrip />
-      </RailPanelSlot>
-      <RailPanelSlot panelId="notes">
-        <FieldNotesPanel collapsed={!panelState.notes} onToggle={() => togglePanel("notes")} />
-      </RailPanelSlot>
-      <RailPanelSlot panelId="file">
-        <CornerFramePanel title="File Exchange" eyebrow="JSON" variant="compact" collapsed={!panelState.file} onToggle={() => togglePanel("file")}>
-          <FileActions />
-        </CornerFramePanel>
-      </RailPanelSlot>
+    <aside className="left-instruments" aria-label="Simulation workspace tools">
+      <nav className="workspace-navigator" aria-label="Simulation workspace modes" role="tablist">
+        {simulationWorkspaceModes.map((candidate) => (
+          <button
+            key={candidate.id}
+            id={`workspace-mode-tab-${candidate.id}`}
+            type="button"
+            role="tab"
+            aria-selected={candidate.id === activeMode}
+            aria-controls={`workspace-mode-panel-${candidate.id}`}
+            className={candidate.id === activeMode ? "is-active" : ""}
+            onClick={() => onModeChange(candidate.id)}
+            suppressHydrationWarning
+          >
+            <span>{candidate.label}</span>
+            <em>{candidate.eyebrow}</em>
+          </button>
+        ))}
+      </nav>
+      <section
+        id={`workspace-mode-panel-${activeMode}`}
+        className="workspace-context-panel"
+        role="tabpanel"
+        aria-labelledby={`workspace-mode-tab-${activeMode}`}
+      >
+        <header className="workspace-context-panel__head">
+          <span>{mode.eyebrow}</span>
+          <h2>{mode.label}</h2>
+          <p>{mode.description}</p>
+        </header>
+        <div className="workspace-context-panel__scroll" data-intentional-scroll-region="workspace-context">
+          {renderWorkspaceMode(activeMode)}
+        </div>
+      </section>
     </aside>
   );
+}
+
+function renderWorkspaceMode(mode: SimulationWorkspaceModeId): ReactNode {
+  switch (mode) {
+    case "setup":
+      return (
+        <>
+          <RailPanelSlot panelId="runSettings">
+            <RunSettingsPanel />
+          </RailPanelSlot>
+          <RailPanelSlot panelId="scenarios">
+            <ScenarioBuilderPanel />
+          </RailPanelSlot>
+        </>
+      );
+    case "understand":
+      return (
+        <>
+          <RailPanelSlot panelId="assumptions">
+            <AssumptionsPanel />
+          </RailPanelSlot>
+          <RailPanelSlot panelId="notes">
+            <FieldNotesPanel />
+          </RailPanelSlot>
+        </>
+      );
+    case "observe":
+      return (
+        <>
+          <RailPanelSlot panelId="macro">
+            <MacroPanel />
+          </RailPanelSlot>
+          <RailPanelSlot panelId="micro">
+            <MicroPanel />
+          </RailPanelSlot>
+          <RailPanelSlot panelId="metrics">
+            <MetricGraphPanel />
+          </RailPanelSlot>
+          <RailPanelSlot panelId="legend">
+            <Legend floating={false} collapsed={false} />
+          </RailPanelSlot>
+        </>
+      );
+    case "intervene":
+      return (
+        <RailPanelSlot panelId="interventions">
+          <InterventionPanel />
+        </RailPanelSlot>
+      );
+    case "experiment":
+      return (
+        <RailPanelSlot panelId="experiments">
+          <ExperimentPanel />
+        </RailPanelSlot>
+      );
+    case "compare":
+      return (
+        <>
+          <RailPanelSlot panelId="comparisons">
+            <RunComparisonPanel />
+          </RailPanelSlot>
+          <RailPanelSlot panelId="file">
+            <CornerFramePanel title="Scenario/Snapshot Exchange" eyebrow="JSON artifacts" variant="compact">
+              <FileActions />
+            </CornerFramePanel>
+          </RailPanelSlot>
+        </>
+      );
+    case "debug":
+      return (
+        <RailPanelSlot panelId="debug">
+          <DebugPanel collapsed={false} />
+        </RailPanelSlot>
+      );
+  }
 }
 
 function RailPanelSlot({ panelId, children }: { panelId: string; children: ReactNode }) {
@@ -68,8 +147,8 @@ function RailPanelSlot({ panelId, children }: { panelId: string; children: React
     <div
       className="rail-panel-slot"
       data-panel-id={panelId}
-      data-default-placement={definition?.defaultPlacement ?? "leftRail"}
-      data-supported-placements={definition?.supportedPlacements.join(" ") ?? "leftRail"}
+      data-default-placement={definition?.defaultPlacement ?? "modePanel"}
+      data-supported-placements={definition?.supportedPlacements.join(" ") ?? "modePanel"}
       data-workspace-capable={definition?.workspaceCapable ? "true" : "false"}
     >
       {children}

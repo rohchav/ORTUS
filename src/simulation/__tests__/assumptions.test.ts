@@ -298,7 +298,7 @@ describe("assumptions, limits, and ethics metadata", () => {
     const panelSource = readFileSync(new URL("../../components/AssumptionsPanel.tsx", import.meta.url), "utf8");
 
     expect(panelRegistry).toContain('id: "assumptions"');
-    expect(panelRegistry).toContain('"leftDrawer"');
+    expect(panelRegistry).toContain('"modePanel"');
     expect(panelRegistry).toContain('"workspace"');
     expect(leftStack).toContain("<AssumptionsPanel");
     expect(panelSource).toContain("Assumptions");

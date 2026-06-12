@@ -6,8 +6,8 @@ import { useSimulationStore } from "../state/simulationStore";
 import { CornerFramePanel } from "./ui/CornerFramePanel";
 
 interface AssumptionsPanelProps {
-  collapsed: boolean;
-  onToggle: () => void;
+  collapsed?: boolean;
+  onToggle?: () => void;
 }
 
 const validationStatusLabels: Record<ValidationStatus, string> = {
@@ -19,7 +19,7 @@ const validationStatusLabels: Record<ValidationStatus, string> = {
   unknown: "Unknown"
 };
 
-export function AssumptionsPanel({ collapsed, onToggle }: AssumptionsPanelProps) {
+export function AssumptionsPanel({ collapsed = false, onToggle }: AssumptionsPanelProps) {
   const selectedTemplateId = useSimulationStore((state) => state.selectedTemplateId);
   const descriptor = getTemplateDescriptor(selectedTemplateId);
   const profile = templateAssumptionProfile(descriptor.template);

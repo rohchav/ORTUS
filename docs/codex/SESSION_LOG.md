@@ -318,6 +318,61 @@ Boundary preserved:
 - `knowledgeMemorySocialLearning` remains a service-level structural primitive; `socialLearningRuntime` remains reserved in the global primitive registry.
 - Model schemas, compatibility reports, visual builder workspaces, and hybrid compositions remain structural and do not generate or execute Opinion runtime behavior.
 
+## 2026-06-12 - UI-REMEDIATION-1 Workspace Information Architecture + Drawer Layout Refactor
+
+Goal: restructure the simulation shell around user workflow stages without changing simulation engine behavior, templates, visual builder runtime boundaries, or scientific/runtime-honesty language.
+
+Starting state:
+
+- Branch `main` was clean and ahead of `origin/main` by two commits.
+- Latest commit was `357c08c feat: Introduce Safe Builder UI Shell V1 and update roadmap`, which also contained the Prompt 34 Safe Builder UI Shell and brand/HCI audit files.
+- Route probes confirmed `/` and `/builder` returned HTTP 200 from the local Next dev server on port 3000.
+- The prompt attachment directory did not contain an actual screenshot file, so clipping diagnosis used source/CSS plus route probing rather than screenshot measurement.
+
+Confirmed defects:
+
+- The header used fixed `height: 50px`, `min-height: 50px`, and `overflow-y: hidden` while hosting brand, Builder navigation, file actions, model selection, seed controls, status, and warnings.
+- `TimelineControlStrip` lived inside the left drawer and `.timeline-strip` used `position: sticky; bottom: 0` inside the same vertical scroll container as the other tools.
+- The left drawer mounted all workflow panels together, so hidden/collapsed or unrelated panels could keep unnecessary subscriptions and the user had to scan setup, observation, assumptions, interventions, experiments, comparison, timeline, notes, and file exchange in one column.
+
+Implemented:
+
+- Added task-oriented workspace modes: Setup, Understand, Observe, Intervene, Experiment, Compare, and Debug.
+- Added `RunSettingsPanel` for model template, seed, and parameter setup.
+- Refactored `LeftInstrumentStack` into a workspace mode navigator plus selected context panel with one intentional scroll container.
+- Moved the timeline/run controls into a persistent shell-level run-control dock outside the workspace scroll region.
+- Simplified the top header to brand, Simulate/Builder global navigation, current model, current scenario when available, current workspace mode, and compact run status.
+- Moved legend and debug diagnostics out of the world overlay and into Observe/Debug workspace modes.
+- Kept selected-entity inspection in the right context drawer.
+- Updated workspace panel placement metadata so timeline is bottom-dock content and simulation tools are mode-panel content.
+- Added source-level regression tests for workspace IA, drawer clipping, header clipping, accessibility semantics, state separation, and hidden panel reachability.
+- Added `docs/ui/WORKSPACE_INFORMATION_ARCHITECTURE.md` and updated HCI, README, concepts, AGENTS, and current context docs.
+
+Boundaries preserved:
+
+- No simulation engine behavior changed.
+- No template behavior changed.
+- No visual builder execution, drag/drop authoring, schema execution, scenario generation, RunConfig generation, template generation, or engine creation was added.
+- Workspace mode state remains local React UI state and does not mutate simulation state.
+- Service-only primitives were not exposed as runnable controls.
+
+Checks:
+
+- `npm run test -- workspaceInformationArchitecture layoutContainment assumptions ortusBrand builderUiShell`: passed, 5 files and 30 tests.
+- `npm run test -- template.opinion socialLearning`: passed, 2 files and 21 tests.
+- `npm run typecheck`: passed.
+- `npm run test`: passed, 50 files and 377 tests.
+- `npm run build`: passed with Next.js 15.5.19.
+- `npm run perf:simulation`: passed. Local smoke results included Flocking 100 agents at 118.82 ticks/sec, Flocking 500 agents at 16.88 ticks/sec, Forest Fire 80x60 grid at 26.86 ticks/sec, and Predator-Prey default at 81.06 ticks/sec.
+- `git diff --check`: passed after removing two trailing spaces in the HCI audit frontmatter.
+- `npm run lint`: unavailable, package.json has no lint script.
+
+Known limitations:
+
+- No real browser screenshot, DOM measurement, or zoom audit was possible in this environment.
+- Reset remains a one-click destructive run-state reset and should receive a later safety affordance.
+- Metric trace provenance/units and color-independent canvas state encoding still need dedicated visual/a11y work.
+
 Next recommended prompt: Prompt 33D: Opinion Dynamics Social Learning Runtime Audit.
 
 ## 2026-06-11 - Prompt 33D Opinion Dynamics Social Learning Runtime Audit

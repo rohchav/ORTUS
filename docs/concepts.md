@@ -351,25 +351,35 @@ Scenario previews create temporary fresh engines at tick 0 and render a read-onl
 
 ## Workspace Layout Regions
 
-ORTUS uses a fixed-height simulation workspace so the WorldStage remains the dominant stable viewport. The left rail is a compact module launcher, not the permanent home for every future complex-systems tool.
+ORTUS uses a fixed-height simulation workspace so the WorldStage remains the dominant stable viewport. The simulation shell is organized by task mode rather than one permanent scrolling drawer.
 
 Current and future workspace regions are:
 
-- Top Command Bar: model selection, seed controls, import/export commands, and run state.
-- Left Instrument Rail: compact operational modules such as Micro Field, Macro Field, Scenario Builder, Interventions, Experiment Runner, Run Comparison, Field Notes, and File Exchange.
+- Top Status Header: ORTUS brand, global route navigation, current model, current scenario when available, current workspace mode, and compact run state.
+- Workspace Navigator: task modes for Setup, Understand, Observe, Intervene, Experiment, Compare, and Debug.
+- Workspace Context Panel: the selected mode's tools, with one intentional vertical scroll region.
 - Center WorldStage: the primary simulation viewport and canvas-sized world field.
 - Right Context Drawer: contextual inspection for selected agents now, and selected cells, network nodes/edges, resources, regions, or rules later.
-- Bottom Analysis Dock: future home for metric traces, event logs, sensitivity analysis, emergence summaries, and larger run comparison views.
-- Floating Overlays: bounded WorldStage overlays such as Legend, Debug, warnings, and future lightweight target overlays.
-- Full Workspace Mode: future surface for large tools such as Scenario Builder expansion, Visual Model Builder, Rule Editor, Calibration, Report Builder, or Custom Template Library.
+- Persistent Run-Control Dock: run/pause, step, reset, tick, model time, and speed controls outside scrollable configuration panels.
+- Floating Overlays: bounded WorldStage overlays such as warnings and future lightweight target overlays. Legend and Debug are workspace-mode panels by default.
+- Full Workspace Mode: future surface for large tools such as Visual Model Builder, Rule Editor, Calibration, Report Builder, or Custom Template Library.
 
 Panel placement metadata describes each module's default placement, supported placements, size modes, and whether it is analysis-oriented, selection-contextual, or workspace-capable. This metadata is UI architecture only; it does not become simulation state.
 
+Current mode grouping:
+
+- Setup -> run settings, model selection, seed, parameters, and Scenario Builder.
+- Understand -> assumptions, limitations, validation status, ethics notes, and field notes.
+- Observe -> macro/micro readings, metric trace, and legend.
+- Intervene -> template-defined validated perturbations.
+- Experiment -> local parameter sweeps and bounded results.
+- Compare -> run summaries plus scenario/snapshot exchange.
+- Debug -> developer diagnostics and performance counters.
+
 Intended future homes:
 
-- Uncertainty Config -> drawer or workspace.
-- Assumptions and Limits -> drawer.
-- Metrics, Event Log, Sensitivity, and Emergence -> bottom dock.
+- Uncertainty Config -> Experiment or a dedicated future workspace mode.
+- Event Log, Sensitivity, and Emergence -> Observe, Compare, or a future analysis workspace depending on runtime support.
 - Agent, Node, and Resource Inspectors -> right context drawer.
 - Visual Model Builder, Rule Editor, and Calibration -> full workspace mode.
 

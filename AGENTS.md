@@ -29,6 +29,19 @@
 - Preserve runtime-honesty language.
 - Preserve accessibility and keyboard-operation requirements.
 - Preserve the simulation world as the primary visual focus.
+- Do not place all simulation tools in one permanent drawer.
+- Organize simulation tools by user task and workflow stage.
+- Keep persistent run controls outside scrollable configuration panels.
+- Keep the world viewport visually dominant.
+- Do not let fixed headers or footers cover scrollable content.
+- Use one intentional vertical scroll region per workspace panel.
+- Do not use `overflow: hidden` to conceal layout errors.
+- Distinguish setup, execution, observation, intervention, experimentation, and comparison.
+- Do not present service-only primitives as runtime controls.
+- Keep Builder navigation distinct from simulation actions.
+- Preserve keyboard access and visible focus.
+- Hidden panels must not perform expensive tick-based rendering.
+- Avoid unnecessary simulation-store subscriptions in navigation components.
 - Experiment runs must create fresh engine instances through the template registry and should store metrics/outcomes, not full per-run snapshots, unless explicitly requested.
 - Keep experiment execution chunked/cancellable in the UI so local sweeps do not create unbounded browser loops.
 - Interventions must be template-defined, validated, and applied through the headless intervention executor or engine command buffer. UI and canvas code may report targets, but must not mutate agents, components, spaces, or engine internals.

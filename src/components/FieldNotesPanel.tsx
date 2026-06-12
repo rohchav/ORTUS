@@ -5,11 +5,11 @@ import { getTemplateDescriptor, metricNotes } from "../lib/templateVisuals";
 import { useSimulationStore } from "../state/simulationStore";
 
 interface FieldNotesPanelProps {
-  collapsed: boolean;
-  onToggle: () => void;
+  collapsed?: boolean;
+  onToggle?: () => void;
 }
 
-export function FieldNotesPanel({ collapsed, onToggle }: FieldNotesPanelProps) {
+export function FieldNotesPanel({ collapsed = false, onToggle }: FieldNotesPanelProps) {
   const selectedTemplateId = useSimulationStore((state) => state.selectedTemplateId);
   const template = getTemplateDescriptor(selectedTemplateId).template;
   const documentation = template.documentation;

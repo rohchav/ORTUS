@@ -5,13 +5,13 @@ import { metricLabel } from "../lib/templateVisuals";
 import { useSimulationStore } from "../state/simulationStore";
 
 interface PanelProps {
-  collapsed: boolean;
-  onToggle: () => void;
+  collapsed?: boolean;
+  onToggle?: () => void;
 }
 
 const colors = ["#d8ff3e", "#ff4a2e", "#f3f1e8", "#6c72ff", "#c34dff"];
 
-export function MetricGraphPanel({ collapsed, onToggle }: PanelProps) {
+export function MetricGraphPanel({ collapsed = false, onToggle }: PanelProps) {
   const selectedTemplateId = useSimulationStore((state) => state.selectedTemplateId);
   const snapshot = useSimulationStore((state) => state.latestSnapshot);
   const history = snapshot?.metricsHistory ?? EMPTY_HISTORY;

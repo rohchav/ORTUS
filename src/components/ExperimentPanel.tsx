@@ -19,8 +19,8 @@ import { useSimulationStore } from "../state/simulationStore";
 import { CornerFramePanel } from "./ui/CornerFramePanel";
 
 interface ExperimentPanelProps {
-  collapsed: boolean;
-  onToggle: () => void;
+  collapsed?: boolean;
+  onToggle?: () => void;
 }
 
 type SweepInputMode = "range" | "list";
@@ -33,7 +33,7 @@ const presets: Record<string, { parameterKey: string; metricKey: string; min: nu
   "flocking-boids": { parameterKey: "alignmentWeight", metricKey: "alignmentScore", min: 0.1, max: 1.3, steps: 5 }
 };
 
-export function ExperimentPanel({ collapsed, onToggle }: ExperimentPanelProps) {
+export function ExperimentPanel({ collapsed = false, onToggle }: ExperimentPanelProps) {
   const selectedTemplateId = useSimulationStore((state) => state.selectedTemplateId);
   const parameterValues = useSimulationStore((state) => state.parameterValues);
   const seed = useSimulationStore((state) => state.seed);

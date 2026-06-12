@@ -1,7 +1,5 @@
 "use client";
 
-import { DebugPanel } from "./DebugPanel";
-import { Legend } from "./Legend";
 import { SimulationCanvas } from "./SimulationCanvas";
 import { TemplateBackgroundLayer } from "./TemplateBackgroundLayer";
 import { EmptyState } from "./EmptyState";
@@ -19,8 +17,6 @@ export function WorldStage() {
         {snapshot ? <SimulationCanvas /> : <EmptyState title="No world loaded" message="Select a model or reset the run to create a snapshot." />}
       </div>
       <div className="floating-overlay-layer" data-workspace-region="floatingOverlay">
-        <Legend />
-        <DebugPanel floating />
         {lastError ? (
           <div className="error-banner" role="alert">
             <strong>Engine message</strong>

@@ -1,6 +1,6 @@
 # ORTUS Current Context
 
-Last updated: 2026-06-11 after Prompt 34 Safe Builder UI Shell V1
+Last updated: 2026-06-12 after UI-REMEDIATION-1 Workspace Information Architecture refactor
 
 ## Project Identity
 
@@ -9,6 +9,15 @@ ORTUS is a browser-based complex-systems visual modeler backed by a deterministi
 The sharp ORTUS mark is the primary navigation brand. The soft ORTUS mark is a secondary presentation variant. The primary mark is paired with the text `ORTUS` wordmark in the global app shell, while Builder remains an ORTUS workspace rather than a separate branded product. Do not use either mark as a simulation-world or Builder-graph watermark. Favicon replacement remains future work until small-size legibility is deliberately optimized.
 
 The HCI audit is in `docs/ui/HCI_AUDIT.md`. HCI findings must distinguish observed defects, inferred risks, subjective style preferences, and unverified concerns. Broad UI remediation should be handled in dedicated prompts rather than mixed into branding integration.
+
+UI-REMEDIATION-1 replaced the monolithic simulation left drawer with a task-oriented workspace shell. The simulation workspace modes are Setup, Understand, Observe, Intervene, Experiment, Compare, and Debug. The World Stage remains mounted while switching modes, workspace mode state is local React state in `AppShell`, and persistent Run/Pause, Step, Reset, tick/time, and speed controls live in a shell-level dock outside scrollable workspace content. Model/seed/parameter editing lives in Setup; scenario/snapshot exchange lives in Compare; assumptions and notes live in Understand; metrics and legend live in Observe; interventions live in Intervene; sweeps live in Experiment; debug diagnostics live in Debug.
+
+Confirmed UI layout defects fixed in UI-REMEDIATION-1:
+
+- The header used fixed `height: 50px` with `overflow-y: hidden`, which could clip crowded lower header content.
+- The timeline was rendered inside the scrollable left drawer and styled as sticky bottom content, which could cover or clip lower drawer content.
+
+The prompt attachment directory for UI-REMEDIATION-1 did not contain a screenshot file, and local browser screenshot tooling was unavailable. Route availability was probed through HTTP, and layout causes were confirmed from source/CSS. Real rendered desktop/narrow/zoom screenshots still need a future browser-tooling audit.
 
 The engine must remain headless: no React, Zustand, DOM, Canvas, browser storage, backend, auth, or database dependencies in simulation code. The UI consumes engine snapshots and renders batched canvas/world views. Templates are registered through the template API and own domain behavior.
 
@@ -114,6 +123,9 @@ Next recommended prompt after a commit/repo hygiene checkpoint: Prompt 34B: Safe
 - Do not treat knowledge/memory/social-learning descriptors as runtime behavior, human cognition, social prediction, LLM agents, unbounded memory, or real-person inference.
 - Do not treat the Opinion Dynamics `socialLearning` behavior mode as a generic social/cognitive runtime, semantic artifact interpreter, measured-belief model, truth-scoring system, persuasion optimizer, psychological diagnosis tool, or real-person/protected-class inference system.
 - Do not claim validation, calibration, prediction proof, causal proof, robustness proof, safety certification, operational readiness, or policy recommendation.
+- Do not place all simulation tools in one permanent drawer; organize them by setup, understanding, observation, intervention, experimentation, comparison, and debug workflow stages.
+- Keep persistent run controls outside scrollable configuration panels.
+- Hidden workspace panels should not subscribe to tick-heavy snapshot/debug state.
 - Do not treat network edges, feedback labels, observations, runtime metrics, uncertainty ensembles, visible patterns, or interventions as proof.
 - Do not treat camera zoom as multi-scale modeling.
 - Do not describe Forest Fire / Landscape Spread as wildfire prediction, GIS/weather/wind/humidity/terrain/suppression/firefighting modeling, calibrated fire behavior, SpatialFieldModel runtime support, BoundaryEnvironmentModel runtime support, or generic control strategy support.

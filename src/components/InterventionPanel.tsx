@@ -8,11 +8,11 @@ import { useSimulationStore } from "../state/simulationStore";
 import { CornerFramePanel } from "./ui/CornerFramePanel";
 
 interface InterventionPanelProps {
-  collapsed: boolean;
-  onToggle: () => void;
+  collapsed?: boolean;
+  onToggle?: () => void;
 }
 
-export function InterventionPanel({ collapsed, onToggle }: InterventionPanelProps) {
+export function InterventionPanel({ collapsed = false, onToggle }: InterventionPanelProps) {
   const selectedTemplateId = useSimulationStore((state) => state.selectedTemplateId);
   const selectedEntityId = useSimulationStore((state) => state.selectedEntityId);
   const targetPoint = useSimulationStore((state) => state.interventionTargetPoint);

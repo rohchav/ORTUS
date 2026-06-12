@@ -13,8 +13,9 @@ interface DebugPanelProps {
 export function DebugPanel({ collapsed, floating = false, onToggle }: DebugPanelProps) {
   const panelState = useSimulationStore((state) => state.panelState);
   const togglePanel = useSimulationStore((state) => state.togglePanel);
+  const isControlled = collapsed !== undefined || onToggle !== undefined;
   const isCollapsed = collapsed ?? !panelState.debug;
-  const toggle = onToggle ?? (() => togglePanel("debug"));
+  const toggle = onToggle ?? (isControlled ? undefined : () => togglePanel("debug"));
 
   return (
     <div className={floating ? "debug-floating" : ""}>

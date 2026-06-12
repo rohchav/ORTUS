@@ -6,11 +6,11 @@ import { getTemplateDescriptor, metricLabel } from "../lib/templateVisuals";
 import { useSimulationStore } from "../state/simulationStore";
 
 interface PanelProps {
-  collapsed: boolean;
-  onToggle: () => void;
+  collapsed?: boolean;
+  onToggle?: () => void;
 }
 
-export function MacroPanel({ collapsed, onToggle }: PanelProps) {
+export function MacroPanel({ collapsed = false, onToggle }: PanelProps) {
   const selectedTemplateId = useSimulationStore((state) => state.selectedTemplateId);
   const snapshot = useSimulationStore((state) => state.latestSnapshot);
   const controlCount = getTemplateDescriptor(selectedTemplateId).template.parameterDefinitions.length;

@@ -25,7 +25,7 @@ ORTUS has completed Prompt 34: Safe Builder UI Shell V1. The post-30B repository
 
 ## Layout
 
-The UI is world-dominant: a compact top status bar, a left instrument stack, and a large World Stage rendered with canvas. React and Zustand coordinate UI state only. The simulation engine remains the source of truth for entities, components, spaces, metrics, time, events, and seeded randomness.
+The UI is world-dominant: a compact top status bar, a task-oriented simulation workspace navigator, a selected context panel, a large World Stage rendered with canvas, a right-side inspector for selected entities, and a persistent run-control dock. React and Zustand coordinate UI state only. The simulation engine remains the source of truth for entities, components, spaces, metrics, time, events, and seeded randomness.
 
 ## Brand
 
@@ -33,7 +33,7 @@ The sharp ORTUS mark is the primary navigation brand. The soft ORTUS mark is a s
 
 The current HCI/UX audit is documented in `docs/ui/HCI_AUDIT.md`. HCI findings must distinguish observed defects, inferred risks, subjective style preferences, and unverified concerns. Broad UI changes require dedicated remediation prompts; branding work must not smuggle in a redesign or weaken runtime-honesty language.
 
-Major workspace panels use `CornerFramePanel`, a smoky translucent panel primitive with corner accents instead of full rectangular borders. Micro, Macro, Metric Trace, Field Notes, File Exchange, Legend, Agent Inspector, and Debug are collapsible where appropriate; collapse state is stored in local browser storage.
+Major workspace panels use `CornerFramePanel`, a smoky translucent panel primitive with corner accents instead of full rectangular borders. Simulation tools are grouped by workflow mode: Setup, Understand, Observe, Intervene, Experiment, Compare, and Debug. The selected mode owns the only intended vertical scroll region in the left context panel; persistent run controls stay outside that scroll region.
 
 The visual direction is dark graphic realism: graphite and charcoal foundations, off-white structural UI, acid signal accents, restrained vermilion warnings, and sparse cobalt/violet secondary signals. Template backgrounds are lightweight CSS atmosphere layers only. They provide visual context for Epidemic, Opinion Dynamics, Predator-Prey, Schelling Segregation, Flocking / Boids, and Forest Fire / Landscape Spread runs, but they are not simulation data.
 
@@ -169,13 +169,13 @@ V1 does not execute diffusion, interpolation, advection, field sampling, agent-f
 
 ## Product Notes
 
-The World Stage is the primary workspace. Agents are rendered as a single canvas layer over template-specific atmospheric backgrounds, with a compact legend and floating inspector/debug modules. The inspector summarizes template-specific state such as infection status, opinion/stubbornness, species, energy, Schelling group, grid cell, satisfaction state, and Flocking speed/neighbor density, with raw component payloads available for debugging.
+The World Stage is the primary workspace. Agents are rendered as a single canvas layer over template-specific atmospheric backgrounds. The right-side inspector summarizes template-specific state such as infection status, opinion/stubbornness, species, energy, Schelling group, grid cell, satisfaction state, and Flocking speed/neighbor density, with raw component payloads available for debugging. Legend and debug diagnostics are available through the Observe and Debug workspace modes so they do not cover the world by default.
 
 Parameter controls are generated from template definitions. Numeric controls show current values and ranges, and changes are applied by rebuilding the run through engine validation so invalid parameter combinations do not enter the engine. The Micro panel also includes an agent avatar display preference for canvas-only rendering styles: glyphs, arrows, initials, or head markers. File exchange reports whether a scenario or snapshot export/import succeeded.
 
 ## Scenario Builder
 
-The Scenario Builder is a collapsible initial-condition and model-variant workspace in the left stack. It authors Scenario Builder JSON artifacts with scenario id, name, description, tags, template id/version, seed, validated parameters, initialization preset/options, agent composition, behavior mode, environment options, metadata, and timestamps. These scenarios do not store tick state, world snapshots, metric history, intervention history, or run outcomes.
+The Scenario Builder lives in the Setup workspace mode as an initial-condition and model-variant workspace. It authors Scenario Builder JSON artifacts with scenario id, name, description, tags, template id/version, seed, validated parameters, initialization preset/options, agent composition, behavior mode, environment options, metadata, and timestamps. These scenarios do not store tick state, world snapshots, metric history, intervention history, or run outcomes.
 
 Each production template exposes initialization presets and a supported default behavior mode through template metadata. V1 presets include outbreak layouts for Epidemic, opinion distributions for Opinion Dynamics, ecology layouts for Predator-Prey, neighborhood layouts for Schelling, heading/position layouts for Flocking, and abstract fuel/ignition layouts for Forest Fire / Landscape Spread. Agent composition fields are template-defined and backed by existing validated parameters such as agent count, predator/prey counts, density, group ratio, boid count, fuel density, or ignition count. Environment options are exposed only where there is a clean existing template option, such as Schelling grid dimensions, Flocking boundary mode, or Forest Fire grid and neighbor settings. The builder previews the initial world by creating a separate temporary engine at tick 0; preview does not mutate or advance the active simulation.
 
@@ -185,7 +185,7 @@ Scenarios define initial conditions and supported model variants. They do not gu
 
 ## Experiment Runner
 
-The Experiment Runner is a collapsible instrument in the left stack. It creates fresh headless engine instances for the selected template, runs parameter sweeps locally in the browser, records final numeric metrics, aggregates results by condition, and exports JSON or CSV. The interactive World Stage engine is not reused for experiment trials.
+The Experiment Runner lives in the Experiment workspace mode. It creates fresh headless engine instances for the selected template, runs parameter sweeps locally in the browser, records final numeric metrics, aggregates results by condition, and exports JSON or CSV. The interactive World Stage engine is not reused for experiment trials.
 
 V1 supports single-parameter sweeps in the UI with generated numeric ranges or manual value lists. The headless experiment module also supports one- or two-parameter grid sweeps, fixed seed lists, sequential seeds from a base seed, cancellation between runs, and a default `maxRuns` limit of 100 with a hard V1 limit of 500. Fixed seed lists are used in the supplied order. Results store metrics and run metadata only; full snapshots are not stored per trial by default.
 
@@ -205,7 +205,7 @@ Interventions are exploratory perturbations. They help users study model behavio
 
 ## Run Comparison Workspace
 
-The Run Comparison workspace is a collapsible instrument in the left stack. It captures bounded run summaries from the current interactive simulation and can import successful completed experiment runs into the same summary format. A run summary is not a scenario and is not a snapshot: it stores template metadata, seed, parameters, current tick/time, final numeric metrics, bounded metric history when available, intervention summaries, labels, notes, tags, and source metadata. It does not store full world snapshots by default.
+The Run Comparison workspace lives in the Compare workspace mode. It captures bounded run summaries from the current interactive simulation and can import successful completed experiment runs into the same summary format. A run summary is not a scenario and is not a snapshot: it stores template metadata, seed, parameters, current tick/time, final numeric metrics, bounded metric history when available, intervention summaries, labels, notes, tags, and source metadata. It does not store full world snapshots by default.
 
 Saved runs are kept in local browser storage under a bounded V1 library of 50 summaries. Malformed stored data is ignored with a friendly notice rather than crashing the app; when possible, valid stored records are salvaged and invalid records are skipped. Users can label, annotate, select, baseline, delete, clear, compare, and export saved summaries. Comparison shows metadata, differing parameters, final metric deltas relative to the baseline run, limited metric traces on shared tick/value axes when bounded history exists, and bounded intervention summaries. Experiment-derived summaries usually have final metrics only, so trace comparison is available mainly for captured manual runs.
 

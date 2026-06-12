@@ -1,6 +1,5 @@
 "use client";
 
-import { IconButton } from "./ui/IconButton";
 import { formatNumber, formatTick } from "../lib/format";
 import { useSimulationStore } from "../state/simulationStore";
 
@@ -14,11 +13,21 @@ export function TimelineControlStrip() {
   const snapshot = useSimulationStore((state) => state.latestSnapshot);
 
   return (
-    <div className="timeline-strip" aria-label="Simulation playback controls">
+    <section className="timeline-strip" aria-label="Persistent simulation playback controls" data-workspace-region="runControlDock">
+      <div className="timeline-strip__label">
+        <span>Run Control</span>
+        <strong>{isRunning ? "Running" : "Paused"}</strong>
+      </div>
       <div className="timeline-strip__buttons">
-        <IconButton label={isRunning ? "Pause simulation" : "Play simulation"} icon={isRunning ? "Ⅱ" : "▶"} onClick={toggleRunning} active={isRunning} />
-        <IconButton label="Step exactly one tick" icon="→" onClick={stepOnce} />
-        <IconButton label="Reset from current model, parameters, and seed" icon="↻" onClick={reset} />
+        <RunControlButton
+          label={isRunning ? "Pause" : "Run"}
+          icon={isRunning ? "Ⅱ" : "▶"}
+          ariaLabel={isRunning ? "Pause simulation" : "Run simulation"}
+          active={isRunning}
+          onClick={toggleRunning}
+        />
+        <RunControlButton label="Step" icon="→" ariaLabel="Step exactly one tick" onClick={stepOnce} />
+        <RunControlButton label="Reset" icon="↻" ariaLabel="Reset from current model, parameters, and seed" onClick={reset} />
       </div>
       <div className="timeline-strip__readout">
         <strong>{formatTick(snapshot?.tick ?? 0)}</strong>
@@ -38,6 +47,34 @@ export function TimelineControlStrip() {
           suppressHydrationWarning
         />
       </label>
-    </div>
+    </section>
+  );
+}
+
+function RunControlButton({
+  label,
+  icon,
+  ariaLabel,
+  active = false,
+  onClick
+}: {
+  label: string;
+  icon: string;
+  ariaLabel: string;
+  active?: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      className={`timeline-strip__button ${active ? "is-active" : ""}`}
+      aria-label={ariaLabel}
+      aria-pressed={active || undefined}
+      onClick={onClick}
+      suppressHydrationWarning
+    >
+      <span aria-hidden="true">{icon}</span>
+      <b>{label}</b>
+    </button>
   );
 }

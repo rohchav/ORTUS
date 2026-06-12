@@ -1,24 +1,28 @@
 # ORTUS HCI / UX / Visual-Direction Audit
 
 Date: 2026-06-11  
-Prompt: UI-BRAND-1  
+Updated: 2026-06-12 after UI-REMEDIATION-1
+Prompt: UI-BRAND-1, updated by UI-REMEDIATION-1
 Status: source-based audit with limited rendered HTTP verification, not a formal WCAG audit
 
 ## 1. Executive Verdict
 
 ORTUS has the right philosophical foundation for a scientific simulation workbench: it repeatedly separates templates, scenarios, snapshots, run summaries, structural artifacts, and runtime behavior. That is the hard part, and it matters more than visual polish.
 
-The interface is also overloaded. The current shell exposes many legitimate workbench surfaces at once: template selection, file exchange, parameters, metrics, scenarios, assumptions, interventions, experiments, comparisons, timeline, notes, debug, world stage, floating overlays, and Builder. The risk is not that ORTUS looks unfinished. The risk is that users can miss which decisions affect the current run, which are fresh-run recipes, which are structural-only artifacts, and which outputs are exploratory model outputs rather than empirical evidence.
+Before UI-REMEDIATION-1, the interface was also overloaded: the shell exposed many legitimate workbench surfaces at once, including template selection, file exchange, parameters, metrics, scenarios, assumptions, interventions, experiments, comparisons, timeline, notes, debug, world stage, floating overlays, and Builder. The remediation reduced the reachability defect, but the deeper risk remains: users can still miss which decisions affect the current run, which are fresh-run recipes, which are structural-only artifacts, and which outputs are exploratory model outputs rather than empirical evidence.
 
 Brand integration should stay restrained. The sharp mark helps identity and fits the angular panel language. The soft mark should remain secondary. Neither mark belongs in the world viewport or Builder graph.
 
 Recommended direction: a disciplined hybrid of Technical Systems Workbench and Scientific Instrument Interface. Use the sharp ORTUS geometry for navigation and panel discipline, but bias workflow language, status, provenance, warnings, and metrics toward scientific instrumentation.
 
+UI-REMEDIATION-1 update:
+The shell now uses task-oriented workspace modes instead of one permanent scrolling drawer. The confirmed clipping causes were not cosmetic: the header used fixed `50px` height plus `overflow-y: hidden`, and the timeline lived as a sticky control inside the left drawer scroll container. Both were removed. The remaining risk is interpretation and safety, not basic reachability.
+
 ## 2. Audit Scope
 
 Inspected surfaces:
 
-- Global app shell, top status bar, left instrument stack, world stage, right drawer, bottom dock, workspace mode.
+- Global app shell, top status bar, workspace mode navigator, selected context panel, world stage, right drawer, persistent run-control dock.
 - Template selection, parameter controls, simulation controls, file exchange, scenario builder, assumptions panel, interventions, experiments, run comparison, metric trace, legend, debug panel.
 - Safe Builder UI Shell files added in Prompt 34.
 - Global CSS, typography tokens, responsive rules, focus styles, animation/reduced-motion rules.
@@ -43,6 +47,7 @@ Evidence:
 - Visual inspection of source PNGs through local image viewer.
 - Generated small-size preview grid for the sharp mark at approximately 16, 24, 32, and 48 px.
 - Local Next route probe was previously available with approval for `/builder`; browser screenshot tooling is not installed in this environment.
+- For UI-REMEDIATION-1, the prompt attachment directory did not contain an actual screenshot file; route availability was verified by HTTP probing and layout causes were confirmed from source/CSS.
 
 Limitations:
 
@@ -81,7 +86,7 @@ Finding:
 The world stage is visually dominant in the desktop layout.
 
 Evidence:
-`AppShell` uses a compact header, left instrument stack, center world workspace, and overlays. `WorldStage` owns the center region and the canvas is batched rather than per-agent React components.
+`AppShell` uses a compact header, task-mode workspace panel, center world workspace, right inspector, and a persistent run-control dock. `WorldStage` owns the center region and the canvas is batched rather than per-agent React components.
 
 HCI principle:
 Visual hierarchy; task focus; scientific-workbench distinction between model state and controls.
@@ -96,7 +101,7 @@ Confidence:
 High from source.
 
 Recommended remedy:
-Preserve this world-first structure when adding branding or future panels.
+Preserve this world-first structure when adding future panels.
 
 Effort:
 XS.
@@ -134,10 +139,10 @@ Ongoing guardrail.
 ## 6. Highest-Risk HCI Violations
 
 Finding:
-The workbench exposes too many primary surfaces at once.
+The workbench previously exposed too many primary surfaces at once.
 
 Evidence:
-`LeftInstrumentStack` includes Micro, Macro, Metrics, Scenario Builder, Assumptions, Interventions, Experiments, Comparisons, Timeline, Notes, and File Exchange. Header also includes file actions, template selection, seed controls, phase readout, status, and Builder link.
+Before UI-REMEDIATION-1, `LeftInstrumentStack` included Micro, Macro, Metrics, Scenario Builder, Assumptions, Interventions, Experiments, Comparisons, Timeline, Notes, and File Exchange. Header also included file actions, template selection, seed controls, phase readout, status, and Builder link. After remediation, `LeftInstrumentStack` renders task modes and only the selected mode's panel group.
 
 HCI principle:
 Cognitive load; Hick-Hyman choice complexity; progressive disclosure; recognition over recall.
@@ -152,13 +157,67 @@ Confidence:
 High from source.
 
 Recommended remedy:
-Create a dedicated UI-remediation prompt for workflow grouping: Start/Configure, Run/Observe, Analyze/Compare, Audit/Assumptions, File/Provenance.
+Implemented in UI-REMEDIATION-1 as Setup, Understand, Observe, Intervene, Experiment, Compare, and Debug modes. Continue to audit whether users understand the mode boundaries.
 
 Effort:
 L.
 
 Timing:
-Dedicated UI-remediation prompt.
+Implemented, with follow-up validation still needed.
+
+Finding:
+The top header previously had a real clipping defect.
+
+Evidence:
+Before UI-REMEDIATION-1, `.top-status` used fixed `height: 50px`, `min-height: 50px`, horizontal overflow, and `overflow-y: hidden` while hosting brand, Builder, file actions, model selection, seed form, phase readout, run status, and warning state. UI-REMEDIATION-1 replaced that with grouped global/context/status regions, removed seed/export controls from the header, and removed fixed-height vertical clipping.
+
+HCI principle:
+Reachability; responsive resilience; status legibility.
+
+User impact:
+Header content no longer depends on one monitor-height assumption or hidden vertical overflow.
+
+Severity:
+High before remediation.
+
+Confidence:
+High from source.
+
+Recommended remedy:
+Do not reintroduce fixed-height crowded headers for mixed navigation, configuration, export, and status controls.
+
+Effort:
+Completed.
+
+Timing:
+UI-REMEDIATION-1.
+
+Finding:
+The bottom timeline previously had a real clipping and scroll-trap risk.
+
+Evidence:
+Before UI-REMEDIATION-1, `TimelineControlStrip` was rendered as a rail panel inside `LeftInstrumentStack`, and `.timeline-strip` used `position: sticky; bottom: 0` inside the same scroll container as configuration, scenario, experiment, and comparison tools. UI-REMEDIATION-1 moves it to a shell-level run-control dock outside the workspace context scroll region.
+
+HCI principle:
+Control persistence; scroll containment; keyboard reachability.
+
+User impact:
+Run/Pause, Step, Reset, tick/time, and speed controls remain visible and cannot cover lower workspace content.
+
+Severity:
+High before remediation.
+
+Confidence:
+High from source.
+
+Recommended remedy:
+Keep persistent run controls outside scrollable configuration/content panels.
+
+Effort:
+Completed.
+
+Timing:
+UI-REMEDIATION-1.
 
 Finding:
 Reset is easy to trigger but not visibly staged.
@@ -283,7 +342,7 @@ Finding:
 Navigation is stable but crowded.
 
 Evidence:
-The header contains brand, Builder link, file actions, model select, seed form, phase readout, run status, warning status.
+Before UI-REMEDIATION-1, the header contained brand, Builder link, file actions, model select, seed form, phase readout, run status, and warning status. After remediation it contains brand, Simulate/Builder global navigation, current model, scenario, workspace mode, and compact run status.
 
 HCI principle:
 Discoverability; visual hierarchy; Fitts's Law; information scent.
@@ -298,19 +357,19 @@ Confidence:
 High from source.
 
 Recommended remedy:
-Future prompt should separate navigation from high-frequency run controls and file exchange, or introduce a clearer workbench mode grouping.
+Completed for UI-REMEDIATION-1. Keep exports and seed editing out of the primary header unless a future design prompt adds a deliberate menu.
 
 Effort:
 M.
 
 Timing:
-Dedicated UI-remediation prompt.
+Implemented, with visual validation still needed.
 
 Finding:
-The app uses a top header and a left instrument stack, not a permanent navigation sidebar.
+The app now uses a top header and task-mode workspace navigator.
 
 Evidence:
-`AppShell` renders `TopStatusBar`, `LeftInstrumentStack`, and `WorldStage`.
+`AppShell` renders `TopStatusBar`, `LeftInstrumentStack` as a mode navigator/context panel, `WorldStage`, `RightContextDrawer`, and `TimelineControlStrip` as a persistent dock.
 
 HCI principle:
 Spatial consistency.
@@ -1155,4 +1214,3 @@ Hard boundaries:
 - No Builder editing or graph execution.
 - No broad redesign.
 - No validation/calibration claims.
-

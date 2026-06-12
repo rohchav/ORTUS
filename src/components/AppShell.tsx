@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { BottomAnalysisDock } from "./BottomAnalysisDock";
 import { LeftInstrumentStack } from "./LeftInstrumentStack";
 import { RightContextDrawer } from "./RightContextDrawer";
+import { TimelineControlStrip } from "./TimelineControlStrip";
 import { TopStatusBar } from "./TopStatusBar";
 import { WorldStage } from "./WorldStage";
-import { WorkspaceMode } from "./WorkspaceMode";
 import { OrtusBrand } from "./branding";
+import { defaultSimulationWorkspaceModeId, type SimulationWorkspaceModeId } from "../lib/workspaceModes";
 import { useSimulationStore } from "../state/simulationStore";
 
 const baseTicksPerSecond = 24;
@@ -19,6 +19,7 @@ export function AppShell() {
   const speedMultiplier = useSimulationStore((state) => state.speedMultiplier);
   const engine = useSimulationStore((state) => state.engine);
   const [mounted, setMounted] = useState(false);
+  const [activeWorkspaceMode, setActiveWorkspaceMode] = useState<SimulationWorkspaceModeId>(defaultSimulationWorkspaceModeId);
   const frameRef = useRef<number | null>(null);
   const lastTimeRef = useRef<number | null>(null);
   const accumulatedRef = useRef(0);
@@ -84,18 +85,17 @@ export function AppShell() {
 
   return (
     <main className="ortus-shell">
-      <TopStatusBar />
+      <TopStatusBar activeWorkspaceMode={activeWorkspaceMode} />
       <div className="ortus-layout">
-        <LeftInstrumentStack />
+        <LeftInstrumentStack activeMode={activeWorkspaceMode} onModeChange={setActiveWorkspaceMode} />
         <section className="workspace-center" aria-label="Simulation workspace" data-workspace-region="center">
           <div className="world-workspace">
             <WorldStage />
-            <BottomAnalysisDock />
           </div>
           <RightContextDrawer />
-          <WorkspaceMode />
         </section>
       </div>
+      <TimelineControlStrip />
     </main>
   );
 }

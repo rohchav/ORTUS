@@ -9,13 +9,13 @@ import { useSimulationStore } from "../state/simulationStore";
 import { CornerFramePanel } from "./ui/CornerFramePanel";
 
 interface RunComparisonPanelProps {
-  collapsed: boolean;
-  onToggle: () => void;
+  collapsed?: boolean;
+  onToggle?: () => void;
 }
 
 const traceColors = ["#d8ff3e", "#ff4a2e", "#f3f1e8", "#6c72ff", "#c34dff", "#9a9b94"];
 
-export function RunComparisonPanel({ collapsed, onToggle }: RunComparisonPanelProps) {
+export function RunComparisonPanel({ collapsed = false, onToggle }: RunComparisonPanelProps) {
   const savedRuns = useSimulationStore((state) => state.savedRuns);
   const selectedRunIds = useSimulationStore((state) => state.selectedComparisonRunIds);
   const baselineRunId = useSimulationStore((state) => state.baselineRunId);

@@ -5,6 +5,7 @@ import { isWorkspacePanelPlacement, workspacePanelDefinitions, workspacePlacemen
 const css = readFileSync(new URL("../../app/globals.css", import.meta.url), "utf8");
 const appShellSource = readFileSync(new URL("../../components/AppShell.tsx", import.meta.url), "utf8");
 const worldStageSource = readFileSync(new URL("../../components/WorldStage.tsx", import.meta.url), "utf8");
+const leftStackSource = readFileSync(new URL("../../components/LeftInstrumentStack.tsx", import.meta.url), "utf8");
 
 function cssBlock(selector: string): string {
   const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/\s+/g, "\\s*");
@@ -25,28 +26,36 @@ describe("viewport layout containment", () => {
       "height: 100dvh;",
       "overflow: hidden;",
       "display: grid;",
-      "grid-template-rows: auto minmax(0, 1fr);"
+      "grid-template-rows: auto minmax(0, 1fr) auto;"
     ]);
   });
 
-  it("keeps expanded left panels inside the left rail scroll area", () => {
+  it("keeps workspace context scrolling inside one intentional panel body", () => {
     expectDeclarations(cssBlock(".ortus-layout"), ["min-height: 0;", "overflow: hidden;", "display: grid;"]);
-    expectDeclarations(cssBlock(".left-instruments"), ["min-height: 0;", "height: 100%;", "overflow-x: hidden;", "overflow-y: auto;"]);
+    expectDeclarations(cssBlock(".left-instruments"), ["min-height: 0;", "height: 100%;", "overflow: hidden;", "display: grid;"]);
+    expectDeclarations(cssBlock(".workspace-context-panel"), ["min-height: 0;", "overflow: hidden;", "display: grid;"]);
+    expectDeclarations(cssBlock(".workspace-context-panel__scroll"), [
+      "min-height: 0;",
+      "overflow-x: hidden;",
+      "overflow-y: auto;",
+      "overscroll-behavior: contain;"
+    ]);
+    expect(leftStackSource).toContain('data-intentional-scroll-region="workspace-context"');
   });
 
-  it("defines future workspace regions without putting them in document flow", () => {
-    expect(appShellSource).toContain("<TopStatusBar />");
-    expect(appShellSource).toContain("<LeftInstrumentStack />");
+  it("keeps persistent run controls outside the workspace scroll region", () => {
+    expect(appShellSource).toContain("<TopStatusBar activeWorkspaceMode={activeWorkspaceMode} />");
+    expect(appShellSource).toContain("<LeftInstrumentStack activeMode={activeWorkspaceMode} onModeChange={setActiveWorkspaceMode} />");
     expect(appShellSource).toContain("<WorldStage />");
     expect(appShellSource).toContain("<RightContextDrawer />");
-    expect(appShellSource).toContain("<BottomAnalysisDock />");
-    expect(appShellSource).toContain("<WorkspaceMode />");
+    expect(appShellSource).toContain("<TimelineControlStrip />");
+    expect(leftStackSource).not.toContain("<TimelineControlStrip");
 
     expectDeclarations(cssBlock(".workspace-center"), ["min-height: 0;", "overflow: hidden;", "display: grid;"]);
     expectDeclarations(cssBlock(".world-workspace"), ["min-height: 0;", "overflow: hidden;", "display: grid;"]);
     expectDeclarations(cssBlock(".right-context-drawer"), ["position: absolute;", "overflow-y: auto;", "pointer-events: none;"]);
-    expect(css).toContain('.bottom-analysis-dock[data-state="collapsed"]');
-    expect(css).toContain("display: none;");
+    expectDeclarations(cssBlock(".timeline-strip"), ["position: relative;", "display: grid;", "margin: 0 14px 14px;"]);
+    expect(cssBlock(".timeline-strip")).not.toContain("position: sticky;");
   });
 
   it("keeps the world stage and simulation canvas sized by their container", () => {
@@ -60,8 +69,8 @@ describe("viewport layout containment", () => {
 
   it("keeps floating overlays absolute inside the world stage", () => {
     expect(worldStageSource).toContain('data-workspace-region="floatingOverlay"');
-    expect(worldStageSource).toContain("<Legend />");
-    expect(worldStageSource).toContain("<DebugPanel floating />");
+    expect(worldStageSource).not.toContain("<Legend");
+    expect(worldStageSource).not.toContain("<DebugPanel");
     expect(worldStageSource).not.toContain("<AgentInspector");
     expectDeclarations(cssBlock(".floating-overlay-layer"), ["position: absolute;", "inset: 0;", "pointer-events: none;"]);
   });
@@ -85,19 +94,22 @@ describe("workspace panel placement metadata", () => {
       ids.add(panel.id);
     }
 
-    expect(workspacePlacements).toEqual(["leftRail", "leftDrawer", "rightDrawer", "bottomDock", "floatingOverlay", "workspace"]);
+    expect(workspacePlacements).toEqual(["leftRail", "modePanel", "leftDrawer", "rightDrawer", "bottomDock", "floatingOverlay", "workspace"]);
   });
 
-  it("marks large analytical modules as drawer, dock, or workspace capable without moving them out of the rail by default", () => {
+  it("marks major modules as mode-panel content and keeps timeline in the persistent dock", () => {
     const byId = new Map(workspacePanelDefinitions.map((panel) => [panel.id, panel]));
 
-    expect(byId.get("scenarios")?.defaultPlacement).toBe("leftRail");
-    expect(byId.get("scenarios")?.supportedPlacements).toEqual(expect.arrayContaining(["leftDrawer", "workspace"]));
-    expect(byId.get("assumptions")?.defaultPlacement).toBe("leftRail");
-    expect(byId.get("assumptions")?.supportedPlacements).toEqual(expect.arrayContaining(["leftDrawer", "workspace"]));
-    expect(byId.get("experiments")?.supportedPlacements).toEqual(expect.arrayContaining(["leftDrawer", "workspace"]));
+    expect(byId.get("runSettings")?.defaultPlacement).toBe("modePanel");
+    expect(byId.get("scenarios")?.defaultPlacement).toBe("modePanel");
+    expect(byId.get("scenarios")?.supportedPlacements).toEqual(expect.arrayContaining(["modePanel", "workspace"]));
+    expect(byId.get("assumptions")?.defaultPlacement).toBe("modePanel");
+    expect(byId.get("assumptions")?.supportedPlacements).toEqual(expect.arrayContaining(["modePanel", "workspace"]));
+    expect(byId.get("experiments")?.supportedPlacements).toEqual(expect.arrayContaining(["modePanel", "workspace"]));
     expect(byId.get("comparisons")?.supportedPlacements).toEqual(expect.arrayContaining(["bottomDock", "workspace"]));
-    expect(byId.get("metrics")?.supportedPlacements).toEqual(expect.arrayContaining(["bottomDock"]));
+    expect(byId.get("metrics")?.supportedPlacements).toEqual(expect.arrayContaining(["modePanel", "bottomDock"]));
+    expect(byId.get("timeline")?.defaultPlacement).toBe("bottomDock");
+    expect(byId.get("timeline")?.supportedPlacements).toEqual(["bottomDock"]);
     expect(byId.get("agentInspector")?.defaultPlacement).toBe("rightDrawer");
     expect(byId.get("agentInspector")?.selectionContextual).toBe(true);
   });

@@ -32,11 +32,11 @@ import { useSimulationStore } from "../state/simulationStore";
 import { CornerFramePanel } from "./ui/CornerFramePanel";
 
 interface ScenarioBuilderPanelProps {
-  collapsed: boolean;
-  onToggle: () => void;
+  collapsed?: boolean;
+  onToggle?: () => void;
 }
 
-export function ScenarioBuilderPanel({ collapsed, onToggle }: ScenarioBuilderPanelProps) {
+export function ScenarioBuilderPanel({ collapsed = false, onToggle }: ScenarioBuilderPanelProps) {
   const selectedTemplateId = useSimulationStore((state) => state.selectedTemplateId);
   const seed = useSimulationStore((state) => state.seed);
   const applyScenario = useSimulationStore((state) => state.applyScenario);
