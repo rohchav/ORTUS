@@ -1,17 +1,17 @@
 # ORTUS Full Prompt Roadmap
 
-*Last updated after Prompt 34B Safe Builder UI Shell Audit.*
+*Last updated after Prompt 35B Model Schema Authoring Forms Audit.*
 
 ## Current Status
 
-ORTUS has completed the core runtime/template foundation, scenario system, uncertainty layer, assumptions/limits layer, systems primitive registry, hybrid composition, multi-scale structure, scale-view state, boundary/environment models, spatial fields, observability, causality, quantity semantics, emergence pattern descriptors, robustness/resilience semantics, strategy/control semantics, model schema declarations, knowledge/memory/social-learning semantics, visual builder workspace schemas, template/schema compatibility mapping, the template/schema compatibility mapping audit, a narrow Opinion Dynamics social-learning behavior mode, the Opinion Dynamics social-learning runtime audit, Safe Builder UI Shell V1, and the Safe Builder UI Shell + workspace information architecture audit.
+ORTUS has completed the core runtime/template foundation, scenario system, uncertainty layer, assumptions/limits layer, systems primitive registry, hybrid composition, multi-scale structure, scale-view state, boundary/environment models, spatial fields, observability, causality, quantity semantics, emergence pattern descriptors, robustness/resilience semantics, strategy/control semantics, model schema declarations, knowledge/memory/social-learning semantics, visual builder workspace schemas, template/schema compatibility mapping, the template/schema compatibility mapping audit, a narrow Opinion Dynamics social-learning behavior mode, the Opinion Dynamics social-learning runtime audit, Safe Builder UI Shell V1, the Safe Builder UI Shell + workspace information architecture audit, Model Schema Authoring Forms V1, and the Model Schema Authoring Forms Audit.
 
 Current project status:
 
 ```text
-Completed roadmap prompt: Prompt 34B — Safe Builder UI Shell Audit
+Completed roadmap prompt: Prompt 35B — Model Schema Authoring Forms Audit
 Post-30B stabilization completed: repo hygiene, durable Codex context, dependency repair, generated-artifact cleanup, and runtime performance/scalability baseline
-Next roadmap prompt: Prompt 35 — Model Schema Authoring Forms V1
+Next roadmap prompt after commit/repo hygiene: Prompt 36 — Visual Builder Graph View V1
 ```
 
 Critical global boundary:
@@ -57,7 +57,7 @@ missing from this full roadmap. Prompt 31C and Prompt 31D are now corrected belo
 after Prompt 31B and before Prompt 32, with a later narrow Opinion Dynamics
 social-learning runtime slice placed after template/schema compatibility mapping.
 The social/cognitive semantics insertion was corrected after manual review, and
-Prompt 31C, Prompt 31D, Prompt 32, Prompt 32B, Prompt 33, Prompt 33B, Prompt 33C, Prompt 33D, Prompt 34, and Prompt 34B are now marked complete while Prompt 35 remains future structural form-authoring work.
+Prompt 31C, Prompt 31D, Prompt 32, Prompt 32B, Prompt 33, Prompt 33B, Prompt 33C, Prompt 33D, Prompt 34, Prompt 34B, Prompt 35, and Prompt 35B are now marked complete while Prompt 36 remains the next roadmap step after repository hygiene.
 
 Safe Builder UI Shell V1 displays structural workspace artifacts; it does not execute workspace nodes or edges. The builder shell is not a compiler, interpreter, visual programming environment, or custom simulation runtime. A structurally valid workspace is still not a runnable model. Importing a workspace artifact does not activate model schemas, compatibility mappings, or social-learning semantics.
 
@@ -1425,8 +1425,10 @@ No executable behavior.
 Status:
 
 ```text
-Planned.
+Completed.
 ```
+
+Model Schema Authoring Forms V1 creates structural model-schema artifacts; it does not execute schemas. Rule declarations authored in the Builder are descriptive only and remain non-executable. A valid authored schema is not a runnable simulation. The schema authoring UI does not generate templates, scenarios, RunConfigs, snapshots, or engines.
 
 ## Prompt 35B — Model Schema Authoring Forms Audit
 
@@ -1439,7 +1441,7 @@ Purpose:
 Status:
 
 ```text
-Planned.
+Completed.
 ```
 
 ## Prompt 36 — Visual Builder Graph View V1
@@ -2866,17 +2868,19 @@ No global service availability treated as template runtime support.
 Recommended immediate next steps:
 
 ```text
-1. Review and commit the Prompt 34B Safe Builder UI Shell Audit work.
-2. Prepare Prompt 35 — Model Schema Authoring Forms V1 only if its scope remains structural and non-executing.
+1. Review and commit the combined Prompt 35 and Prompt 35B Model Schema Authoring Forms work.
+2. Prepare Prompt 36 — Visual Builder Graph View V1 only after the worktree is clean.
 3. Run a dedicated rendered responsive/design-system audit before making mobile-readiness, WCAG, or polished visual-workbench claims.
 ```
 
-Do not start any builder editing or runtime-mapping prompt until the repo status and roadmap docs clearly reflect:
+Do not start graph editing, visual programming, or runtime-mapping prompts until the repo status and roadmap docs clearly reflect:
 
 ```text
-Completed through Prompt 34B.
+Completed through Prompt 35B.
 Performance stabilization completed after Prompt 30B.
 Prompt 34 safe builder shell is complete.
 Prompt 34B safe builder shell audit is complete.
-Next roadmap prompt: Prompt 35.
+Prompt 35 structural model-schema authoring forms are complete.
+Prompt 35B model-schema authoring audit is complete.
+Next roadmap prompt after commit/repo hygiene: Prompt 36.
 ```

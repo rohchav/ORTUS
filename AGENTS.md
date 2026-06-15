@@ -86,6 +86,20 @@
 - Do not mark `visualModelBuilder` implemented from shell existence alone.
 - Preserve structural-validity versus runtime-readiness language in the shell.
 - Preserve builder-shell accessibility and keyboard-operation requirements.
+- Do not treat schema authoring forms as schema execution.
+- Do not add Run, Compile, Preview Simulation, Generate Scenario, Generate RunConfig, Generate Template, or Apply to Simulation actions to schema authoring.
+- Do not add formula, code, script, function-body, runtime-hook, or expression authoring fields.
+- Do not execute rule declarations or parse `ruleDescription`.
+- Do not bypass model-schema validation, summary, serialization, or deserialization services.
+- Do not duplicate core model-schema validation logic in React components.
+- Preserve the current draft and last valid artifact when an import fails.
+- Keep Builder schema authoring separate from simulation Setup and active simulation state.
+- Do not claim a structurally valid authored schema is runnable.
+- Keep repeated-form editing keyboard-accessible, focus-aware, and confirmation-protected when destructive.
+- Keep unsupported, service-only, and future-only warnings visible near authored structure.
+- Reject oversized model-schema files before full browser reads, then still use the headless deserializer as the authority.
+- Preserve imported non-text JSON value types; do not silently coerce them into strings to fit form controls.
+- Destructive schema confirmations must block background editing and support Escape, focus cycling, and focus return.
 - Safe Builder UI Shell V1 displays structural workspace artifacts; it does not execute workspace nodes or edges.
 - The builder shell is not a compiler, interpreter, visual programming environment, or custom simulation runtime.
 - A structurally valid workspace is still not a runnable model.

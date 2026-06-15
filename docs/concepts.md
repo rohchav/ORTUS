@@ -2,7 +2,7 @@
 
 ORTUS is organized around a small set of simulation concepts. Keeping these boundaries explicit prevents model-family definitions, live run state, exploratory comparisons, and UI workspace data from collapsing into one ambiguous artifact.
 
-Roadmap status: ORTUS has completed Prompt 34B: Safe Builder UI Shell Audit. The post-30B repository hygiene, durable context, dependency stabilization, and performance/scalability pass is complete. Prompt 31, Prompt 31B, Prompt 31C, Prompt 31D, Prompt 32, Prompt 32B, Prompt 33, Prompt 33B, Prompt 33C, Prompt 33D, Prompt 34, and Prompt 34B are complete; the next roadmap prompt is Prompt 35: Model Schema Authoring Forms V1.
+Roadmap status: ORTUS has completed Prompt 35B: Model Schema Authoring Forms Audit. The post-30B repository hygiene, durable context, dependency stabilization, and performance/scalability pass is complete. The next roadmap prompt is Prompt 36: Visual Builder Graph View V1 after a commit/repo-hygiene checkpoint.
 
 ## Brand And Workbench Identity
 
@@ -22,6 +22,12 @@ Production templates are hand-built runtime models, not generated from model sch
 
 Belief, memory, and social-learning rule declarations are structural placeholders; they do not implement human cognition or social-learning runtime.
 
+Prompt 35 adds bounded model-schema authoring forms inside the existing Builder area. The current draft, last valid imported/exported artifact, validation report, and file-exchange state are local UI state; they do not enter the simulation store or engine. Import/export uses the existing model-schema service, invalid drafts remain editable, and failed imports preserve the current draft.
+
+Model Schema Authoring Forms V1 creates structural model-schema artifacts; it does not execute schemas. Rule declarations authored in the Builder are descriptive only and remain non-executable. A valid authored schema is not a runnable simulation. The schema authoring UI does not generate templates, scenarios, RunConfigs, snapshots, or engines. Prompt 36 Visual Builder Graph View remains future work.
+
+Prompt 35B hardened import size checks, unsafe profiling/persuasion/targeting payload rejection, destructive confirmations, tab semantics, validation announcements, non-text JSON preservation, and medium-width layout behavior. The audit did not add schema execution, compatibility conversion, graph authoring, runtime preview, or simulation-state mutation.
+
 ### Knowledge, Memory + Social Learning Semantics
 
 Knowledge, Memory + Social Learning Semantics V1 is a service-level structural artifact family with artifact type `ortus.knowledgeMemorySocialLearningModel`. It describes symbolic knowledge items, belief variables, belief-state descriptors, bounded memory trace descriptors, attention/salience descriptors, trust/source profiles, exposure channels, social signal descriptors, background prior profiles, relationship roles, norm descriptors, and social learning rule descriptors.
@@ -38,7 +44,7 @@ Visual Builder Workspace V1 is a service-level structural artifact family with a
 
 Visual builder workspaces are structural planning artifacts; they do not implement runnable visual model authoring. Workspace nodes and edges are visual descriptors, not executable dataflow or runtime behavior. A valid visual builder workspace does not make a model schema runnable. Prompt 32 does not add drag-and-drop modeling, visual programming, or schema execution.
 
-Prompt 34 adds a dedicated safe UI shell for displaying and inspecting `ortus.visualBuilderWorkspace` artifacts, and Prompt 34B audits and hardens that shell plus the simulation workspace information architecture. Safe Builder UI Shell V1 displays structural workspace artifacts; it does not execute workspace nodes or edges. The builder shell is not a compiler, interpreter, visual programming environment, or custom simulation runtime. A structurally valid workspace is still not a runnable model. Importing a workspace artifact does not activate model schemas, compatibility mappings, or social-learning semantics.
+Prompt 34 adds a dedicated safe UI shell for displaying and inspecting `ortus.visualBuilderWorkspace` artifacts, Prompt 34B audits and hardens that shell plus the simulation workspace information architecture, and Prompt 35 adds a separate structural schema-authoring mode without turning the workspace inspector into an editor. Safe Builder UI Shell V1 displays structural workspace artifacts; it does not execute workspace nodes or edges. The builder shell is not a compiler, interpreter, visual programming environment, or custom simulation runtime. A structurally valid workspace is still not a runnable model. Importing a workspace artifact does not activate model schemas, compatibility mappings, or social-learning semantics. Workspace import also does not replace or activate the separate schema-authoring draft.
 
 Workspace references to model schemas, social-learning semantics, observability, causality, networks, resources, feedback, quantities, control, hybrid compositions, scenarios, or templates are structural references only. They do not generate scenarios, RunConfigs, snapshots, templates, or engines; they do not execute node graphs; they do not add external framework interop; and they do not implement social-learning runtime or LLM agents. Active means structurally active, not runtime-executed. The shell does not add drag-and-drop model construction, arbitrary schema editing, rule editing, formula editing, node/edge execution, compatibility conversion, template mutation, or runtime state mutation.
 

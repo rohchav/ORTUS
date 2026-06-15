@@ -1,6 +1,6 @@
 # ORTUS Current Context
 
-Last updated: 2026-06-12 after Prompt 34B Safe Builder UI Shell Audit
+Last updated: 2026-06-15 after Prompt 35B Model Schema Authoring Forms Audit
 
 ## Project Identity
 
@@ -13,6 +13,10 @@ The HCI audit is in `docs/ui/HCI_AUDIT.md`. HCI findings must distinguish observ
 UI-REMEDIATION-1 replaced the monolithic simulation left drawer with a task-oriented workspace shell. The simulation workspace modes are Setup, Understand, Observe, Intervene, Experiment, Compare, and Debug. The World Stage remains mounted while switching modes, workspace mode state is local React state in `AppShell`, and persistent Run/Pause, Step, Reset, tick/time, and speed controls live in a shell-level dock outside scrollable workspace content. Model/seed/parameter editing lives in Setup; scenario/snapshot exchange lives in Compare; assumptions and notes live in Understand; metrics and legend live in Observe; interventions live in Intervene; sweeps live in Experiment; debug diagnostics live in Debug.
 
 Prompt 34B audited and hardened the safe Builder shell plus workspace information architecture. Reset now requires press-and-confirm when current run state would be discarded. Workspace tabs support arrow/Home/End keyboard behavior. Setup copy states that model, parameter, Apply Seed, and Regenerate Seed actions rebuild fresh tick-0 runs. Metric Trace states near the chart that traces are bounded model-output history over simulated ticks, not empirical measurements, calibrated probabilities, or validation evidence. Builder viewport node and edge buttons select structural items for read-only inspection only.
+
+Prompt 35 adds an accessible `Author Schema` mode beside `Workspace Inspector` in `/builder`. The form authors structural `ortus.modelSchema` identity, entity, component, attribute, space, parameter, metric, rule-declaration, artifact-reference, assumption/limitation/validation-note, scope, and inert metadata fields. The UI uses the existing model-schema validation, capability-report, summary, serialization, deserialization, and registry query services rather than reimplementing schema rules in React. Drafts and last-valid checkpoints remain local UI state, remain mounted across Builder mode switches, and never enter the simulation store or engine.
+
+Prompt 35B audited and hardened the authoring surface. Confirmed defects included medium-width three-column overflow risk, non-modal destructive confirmations that allowed background editing, metadata removal without confirmation, over-broad validation live announcements, incomplete unsafe-key coverage for profiling/persuasion/targeting payloads, and possible string coercion of imported non-text JSON values. The audit added an earlier stacking breakpoint, modal focus-cycling confirmations with Escape cancellation, metadata-removal confirmation, roving tab stops, concise validation announcements, pre-read oversized-file rejection, broader headless unsafe-key rejection, and conservative read-only preservation of imported non-text values.
 
 Confirmed UI layout defects fixed in UI-REMEDIATION-1:
 
@@ -27,17 +31,32 @@ Built-in production templates currently include Epidemic Spread, Opinion Dynamic
 
 ## Completed Prompt State
 
-Durable docs and source indicate completed roadmap work through Prompt 34B. Prompt 31: Model Schema + Interpreter Foundation V1, Prompt 31B: Model Schema + Interpreter Foundation Audit, Prompt 31C: Knowledge, Memory + Social Learning Semantics V1, Prompt 31D: Knowledge, Memory + Social Learning Audit, Prompt 32: Visual Model Builder Planning + Workspace Schema V1, Prompt 32B: Visual Builder Workspace Audit, Prompt 33: Template/Schema Compatibility Mapping V1, Prompt 33B: Template/Schema Compatibility Mapping Audit, Prompt 33C: Opinion Dynamics Social Learning Runtime V1, Prompt 33D: Opinion Dynamics Social Learning Runtime Audit, Prompt 34: Safe Builder UI Shell V1, and Prompt 34B: Safe Builder UI Shell Audit are complete.
+Durable docs and source indicate completed roadmap work through Prompt 35B. Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 35B: Model Schema Authoring Forms Audit are complete.
 
 The post-30B repository hygiene, dependency stabilization, durable context, and performance/scalability pass has also been completed. Recent commits include `dd6c256` for repo context/generated-artifact hygiene, `4949b72` for dependency and performance script stabilization, and `a80d5b7` for simulation performance instrumentation and spatial indexing foundations.
 
-The next roadmap prompt is Prompt 35: Model Schema Authoring Forms V1. A separate rendered responsive/design-system audit is still recommended before making mobile-readiness, WCAG, or polished visual-workbench claims.
+The next roadmap prompt is Prompt 36: Visual Builder Graph View V1 after a commit/repo-hygiene checkpoint. A separate rendered responsive/design-system audit is still recommended before making mobile-readiness, WCAG, or polished visual-workbench claims.
 
 Implemented runtime foundations include scenarios, snapshots, template-defined behavior modes, agent composition, interventions, experiments, run summaries/comparison, seeded randomness, metrics, spaces, template metadata, and a narrow Opinion Dynamics `socialLearning` behavior mode audited in Prompt 33D.
 
 Implemented service-first or metadata-first foundations include uncertainty, assumptions/limits/ethics, networks/relations, resources/stocks/flows, feedback/delays/events, systems primitive registry, hybrid composition, multi-scale structure, scale view state, boundaries/environment, spatial fields/environmental layers, observability/measurement models, causal assumptions/influence models, quantity semantics, emergence pattern descriptors, robustness/resilience semantics, strategy/control/intervention semantics, model schema declarations, knowledge/memory/social-learning semantics, visual builder workspace schemas, and template/schema compatibility mapping.
 
 Model schemas declare model structure; they do not execute rules or create runnable simulations. A valid model schema is not a template, scenario, RunConfig, or snapshot. Rule declarations are descriptive metadata, not parsed formulas or executable behavior. Belief, memory, and social-learning rule declarations are structural placeholders; they do not implement human cognition or social-learning runtime.
+
+Model Schema Authoring Forms V1 creates structural model-schema artifacts; it does not execute schemas. Rule declarations authored in the Builder are descriptive only and remain non-executable. A valid authored schema is not a runnable simulation. The schema authoring UI does not generate templates, scenarios, RunConfigs, snapshots, or engines.
+
+Prompt 35/35B draft behavior:
+
+- Initial identity and required entity fields may be invalid while the user edits; failed validation never destroys the draft.
+- Only service-validated schemas can be exported through `serializeModelSchema`.
+- Failed, malformed, wrong-family, oversized, or unsafe imports preserve the current draft and last valid artifact.
+- Oversized files are rejected before full file reads; pasted JSON is still rejected by the headless deserializer limit.
+- Successful imports that would replace dirty edits require confirmation.
+- Dirty reset, last-valid restore, repeated-item removal, and metadata removal use modal confirmation with focus cycling, Escape cancellation, and focus return.
+- Builder mode switches hide rather than unmount the schema-authoring surface, so draft state is preserved in memory.
+- Imported non-text allowed values and metadata remain inert and read-only rather than being silently coerced to strings.
+- No browser or backend persistence is added.
+- Prompt 36 Visual Builder Graph View remains future work.
 
 Knowledge, memory, and social-learning descriptors are structural semantics; they do not implement human cognition. Background profiles are compressed prior descriptors, not simulated life histories. Crowd and stranger exposure should usually be modeled as aggregate signals, representative agents, or fields rather than thousands of throwaway individuals. LLM-per-agent runtime is not implemented and must not be implied. `ortus.knowledgeMemorySocialLearningModel` artifacts describe bounded symbolic semantics only; they do not execute social learning, update beliefs or memory, sample exposure, infer real-person traits, support protected-class inference, validate psychology, predict people, optimize persuasion, provide policy targeting, or mutate Opinion Dynamics.
 
@@ -104,11 +123,11 @@ Real source changes are now reviewable separately from generated build/cache noi
 
 - npm reports two moderate audit findings; no force fix was run.
 - No browser screenshot/DOM measurement/zoom audit was possible in this environment, so rendered layout and 125%/150%/200% zoom behavior remain unverified.
-- Prompt 35 must remain structural-only form authoring: no schema execution, compatibility conversion, runtime mapping, compiler/interpreter behavior, or visual-builder execution.
+- Prompt 35 and Prompt 35B changes remain uncommitted and require a repository-hygiene checkpoint before Prompt 36.
 
 ## Next Recommended Prompt After Stabilization
 
-Next roadmap prompt after a commit/repo hygiene checkpoint: Prompt 35: Model Schema Authoring Forms V1.
+Next roadmap prompt after a commit/repo hygiene checkpoint: Prompt 36: Visual Builder Graph View V1.
 
 Next recommended UI/design-system prompt: `UI-DESIGN-SYSTEM-1: Rendered Responsive, Typography + Visualization Accessibility Audit`.
 
@@ -124,7 +143,7 @@ Next recommended UI/design-system prompt: `UI-DESIGN-SYSTEM-1: Rendered Responsi
 - Do not hide unsupported concepts or silently drop lossy mappings.
 - Do not generate scenarios, RunConfigs, snapshots, templates, or engines from compatibility reports.
 - Do not mutate templates from compatibility reports.
-- Do not add builder editing, drag-and-drop authoring, compiler/interpreter behavior, runtime model schema execution, schema-backed rule execution, scenario/RunConfig/template/snapshot generation, or Apply-to-Template behavior yet.
+- Schema editing is limited to bounded Prompt 35 forms. Do not add graph editing, drag-and-drop authoring, compiler/interpreter behavior, runtime model schema execution, schema-backed rule execution, scenario/RunConfig/template/snapshot generation, or Apply-to-Template behavior.
 - Do not treat knowledge/memory/social-learning descriptors as runtime behavior, human cognition, social prediction, LLM agents, unbounded memory, or real-person inference.
 - Do not treat the Opinion Dynamics `socialLearning` behavior mode as a generic social/cognitive runtime, semantic artifact interpreter, measured-belief model, truth-scoring system, persuasion optimizer, psychological diagnosis tool, or real-person/protected-class inference system.
 - Do not claim validation, calibration, prediction proof, causal proof, robustness proof, safety certification, operational readiness, or policy recommendation.

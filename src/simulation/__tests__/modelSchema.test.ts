@@ -489,7 +489,13 @@ describe("model schema service", () => {
       ["training data payload", minimalSchema({ metadata: { trainingData: [] } }), /trainingData/],
       ["free-text memory payload", minimalSchema({ metadata: { freeTextMemory: "biography" } }), /freeTextMemory/],
       ["real-person payload", minimalSchema({ metadata: { realPersonProfile: {} } }), /realPersonProfile/],
-      ["protected-class payload", minimalSchema({ metadata: { protectedAttributeInference: {} } }), /protectedAttributeInference/]
+      ["protected-class payload", minimalSchema({ metadata: { protectedAttributeInference: {} } }), /protectedAttributeInference/],
+      ["protected-class inference payload", minimalSchema({ metadata: { protectedClassInference: {} } }), /protectedClassInference/],
+      ["psychological diagnosis payload", minimalSchema({ metadata: { psychologicalDiagnosis: {} } }), /psychologicalDiagnosis/],
+      ["persuasion payload", minimalSchema({ metadata: { persuasionOptimization: {} } }), /persuasionOptimization/],
+      ["microtargeting payload", minimalSchema({ metadata: { microtargeting: {} } }), /microtargeting/],
+      ["normalized protected-class payload", minimalSchema({ metadata: { "Protected-Class-Inference": {} } }), /Protected-Class-Inference/],
+      ["normalized persuasion payload", minimalSchema({ metadata: { persuasion_optimization: {} } }), /persuasion_optimization/]
     ];
 
     for (const [label, schema, expected] of cases) {
@@ -590,7 +596,20 @@ describe("model schema service", () => {
       "agentBiography",
       "freeTextMemory",
       "realPersonProfile",
+      "realPersonInference",
+      "personProfile",
       "protectedAttributeInference",
+      "protectedClassInference",
+      "protectedGroupInference",
+      "demographicInference",
+      "psychologicalDiagnosis",
+      "psychographicProfile",
+      "persuasion",
+      "persuasionTargeting",
+      "persuasionOptimization",
+      "microtargeting",
+      "targeting",
+      "recommendationTargeting",
       "function",
       "class",
       "prototype",
@@ -754,7 +773,11 @@ describe("model schema service", () => {
       { embedding: [] },
       { freeTextMemory: "biography" },
       { realPersonProfile: {} },
-      { protectedAttributeInference: {} }
+      { protectedAttributeInference: {} },
+      { protectedClassInference: {} },
+      { psychologicalDiagnosis: {} },
+      { persuasionOptimization: {} },
+      { microtargeting: {} }
     ]) {
       expect(() => deserializeModelSchema(JSON.stringify(minimalSchema({ metadata: metadata as unknown as Record<string, never> })))).toThrow();
     }
@@ -897,7 +920,11 @@ describe("model schema service", () => {
     expect(docs).toContain("A valid model schema is not a template, scenario, RunConfig, or snapshot.");
     expect(docs).toContain("Rule declarations are descriptive metadata, not parsed formulas or executable behavior.");
     expect(docs).toContain("Belief, memory, and social-learning rule declarations are structural placeholders; they do not implement human cognition or social-learning runtime.");
-    expect(docs).toContain("ORTUS has completed Prompt 34");
+    expect(docs).toContain("ORTUS has completed Prompt 35");
+    expect(docs).toContain("Model Schema Authoring Forms V1 creates structural model-schema artifacts; it does not execute schemas.");
+    expect(docs).toContain("Rule declarations authored in the Builder are descriptive only and remain non-executable.");
+    expect(docs).toContain("A valid authored schema is not a runnable simulation.");
+    expect(docs).toContain("The schema authoring UI does not generate templates, scenarios, RunConfigs, snapshots, or engines.");
     expect(docs).toContain("Visual builder workspaces are structural planning artifacts; they do not implement runnable visual model authoring.");
     expect(docs).toContain("Opinion Dynamics social learning is a stylized template-owned runtime mode, not a model of full human cognition.");
     expect(docs).toContain("Social-learning semantic artifacts are not executed directly by the Opinion Dynamics template.");

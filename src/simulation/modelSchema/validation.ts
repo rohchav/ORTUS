@@ -309,13 +309,27 @@ const forbiddenModelSchemaKeys = new Set([
   "agentBiography",
   "freeTextMemory",
   "realPersonProfile",
+  "realPersonInference",
+  "personProfile",
   "protectedAttributeInference",
+  "protectedClassInference",
+  "protectedGroupInference",
+  "demographicInference",
+  "psychologicalDiagnosis",
+  "psychographicProfile",
+  "persuasion",
+  "persuasionTargeting",
+  "persuasionOptimization",
+  "microtargeting",
+  "targeting",
+  "recommendationTargeting",
   "function",
   "class",
   "prototype",
   "constructor",
   "__proto__"
 ]);
+const normalizedForbiddenModelSchemaKeys = new Set(Array.from(forbiddenModelSchemaKeys, normalizeUnsafeKey));
 
 const allowedTopLevelModelSchemaKeys = new Set([
   "artifactType",
@@ -524,14 +538,18 @@ export function assertPlainModelSchemaJson(value: unknown, label: string): void 
       throw new SimulationValidationError(`${label} must be plain JSON`);
     }
     for (const [key, child] of Object.entries(current)) {
-      if (forbiddenModelSchemaKeys.has(key) && !(depth === 0 && allowedTopLevelModelSchemaKeys.has(key))) {
+      if (normalizedForbiddenModelSchemaKeys.has(normalizeUnsafeKey(key)) && !(depth === 0 && allowedTopLevelModelSchemaKeys.has(key))) {
         throw new SimulationValidationError(
-          `${label} must not contain live-state, executable, formula, compiler, visual-builder, external-framework, optimizer, proof, calibration, dataset, LLM, biography, real-person profiling, or protected-attribute-inference key ${key}`
+          `${label} must not contain live-state, executable, formula, compiler, visual-builder, external-framework, optimizer, proof, calibration, dataset, LLM, biography, real-person profiling, protected-class inference, psychological diagnosis, persuasion, or targeting key ${key}`
         );
       }
       stack.push({ value: child, depth: depth + 1 });
     }
   }
+}
+
+function normalizeUnsafeKey(key: string): string {
+  return key.replace(/[^a-z0-9]/gi, "").toLowerCase();
 }
 
 function cloneRecord<T>(value: T): T {

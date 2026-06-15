@@ -4,9 +4,11 @@ import { useMemo, useState } from "react";
 import { validateVisualBuilderWorkspaceDefinition, type VisualBuilderWorkspaceDefinition } from "../../simulation/visualBuilderWorkspace";
 import { BuilderHeader } from "./BuilderHeader";
 import { BuilderInspector } from "./BuilderInspector";
+import { BuilderModeTabs, type BuilderModeId } from "./BuilderModeTabs";
 import { BuilderNavigator } from "./BuilderNavigator";
 import { BuilderValidationPanel } from "./BuilderValidationPanel";
 import { BuilderViewport } from "./BuilderViewport";
+import { ModelSchemaAuthoringShell } from "./ModelSchemaAuthoringShell";
 import {
   createBuilderWorkspaceViewModel,
   defaultBuilderWorkspaceFilters,
@@ -21,6 +23,7 @@ interface BuilderShellProps {
 }
 
 export function BuilderShell({ initialWorkspace }: BuilderShellProps) {
+  const [activeMode, setActiveMode] = useState<BuilderModeId>("workspace");
   const [workspace, setWorkspace] = useState<VisualBuilderWorkspaceDefinition | null>(() =>
     initialWorkspace ? validateVisualBuilderWorkspaceDefinition(initialWorkspace) : null
   );
@@ -55,8 +58,9 @@ export function BuilderShell({ initialWorkspace }: BuilderShellProps) {
   }
 
   return (
-    <main className="builder-shell" aria-label="Safe visual builder shell">
+    <main className="builder-shell" aria-label="Safe visual builder shell" data-product-context="ORTUS structural Builder">
       <BuilderHeader
+        activeMode={activeMode}
         viewModel={viewModel}
         canExport={Boolean(workspace)}
         showValidation={showValidation}
@@ -82,7 +86,14 @@ export function BuilderShell({ initialWorkspace }: BuilderShellProps) {
         onToggleValidation={() => setShowValidation((value) => !value)}
         onToggleWarnings={() => setShowWarnings((value) => !value)}
       />
-      <div className="builder-shell__body">
+      <BuilderModeTabs activeMode={activeMode} onModeChange={setActiveMode} />
+      <section
+        id="builder-mode-panel-workspace"
+        className="builder-shell__body"
+        role="tabpanel"
+        aria-labelledby="builder-mode-tab-workspace"
+        hidden={activeMode !== "workspace"}
+      >
         <BuilderNavigator
           viewModel={viewModel}
           filters={filters}
@@ -112,7 +123,8 @@ export function BuilderShell({ initialWorkspace }: BuilderShellProps) {
           />
           <BuilderValidationPanel viewModel={viewModel} showValidation={showValidation} showWarnings={showWarnings} />
         </aside>
-      </div>
+      </section>
+      <ModelSchemaAuthoringShell hidden={activeMode !== "authorSchema"} />
     </main>
   );
 }

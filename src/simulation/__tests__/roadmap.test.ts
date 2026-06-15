@@ -65,16 +65,16 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(existsSync(missingPillarsPath)).toBe(true);
 
     const roadmap = readFileSync(roadmapPath, "utf8");
-    expect(roadmap).toContain("completed through Prompt 34");
+    expect(roadmap).toContain("completed through Prompt 35B");
     expect(roadmap).toContain("Post-30B stabilization");
-    expect(roadmap).toContain("Prompt 31: Model Schema + Interpreter Foundation V1, Prompt 31B: Model Schema + Interpreter Foundation Audit, Prompt 31C");
-    expect(roadmap).toContain("Prompt 31C: Knowledge, Memory + Social Learning Semantics V1");
-    expect(roadmap).toContain("Prompt 31D: Knowledge, Memory + Social Learning Audit");
-    expect(roadmap).toContain("Prompt 32: Visual Model Builder Planning + Workspace Schema V1");
-    expect(roadmap).toContain("Prompt 32B: Visual Builder Workspace Audit");
-    expect(roadmap).toContain("Prompt 33: Template/Schema Compatibility Mapping V1");
-    expect(roadmap).toContain("Prompt 33B: Template/Schema Compatibility Mapping Audit");
-    expect(roadmap).toContain("Prompt 34: Safe Builder UI Shell V1");
+    expect(roadmap).toContain("Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 35B: Model Schema Authoring Forms Audit are complete.");
+    expect(roadmap).toContain("Completed Prompt 31 audit band");
+    expect(roadmap).toContain("Completed Prompt 32 planning and audit foundation");
+    expect(roadmap).toContain("Completed Prompt 33 compatibility foundation");
+    expect(roadmap).toContain("Completed Prompt 34 shell and audit foundation");
+    expect(roadmap).toContain("Completed Prompt 35 authoring and audit foundation");
+    expect(roadmap).toContain("Prompt 35 adds a separate `Author Schema` Builder mode");
+    expect(roadmap).toContain("The next roadmap prompt is Prompt 36: Visual Builder Graph View V1 after a commit/repo-hygiene checkpoint.");
     expect(roadmap).toContain("31 - Model Schema + Interpreter Foundation V1");
     expect(roadmap).toContain("31B - Model Schema + Interpreter Foundation Audit");
     expect(roadmap).toContain("31C - Knowledge, Memory + Social Learning Semantics V1");
@@ -82,6 +82,8 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(roadmap).toContain("32 - Visual Model Builder Planning + Workspace Schema V1");
     expect(roadmap).toContain("32B - Visual Builder Workspace Audit");
     expect(roadmap).toContain("33 - Template/Schema Compatibility Mapping V1");
+    expect(roadmap).toContain("35 - Model Schema Authoring Forms V1");
+    expect(roadmap).toContain("35B - Model Schema Authoring Forms Audit");
     expect(roadmap).toContain("18B - Roadmap Alignment Audit");
     expect(roadmap).toContain("21 - Multi-Scale Systems Architecture V1");
     expect(roadmap).toContain("25 - Observability + Measurement Model V1");

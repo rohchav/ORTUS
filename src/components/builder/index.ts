@@ -1,8 +1,11 @@
 export { BuilderShell } from "./BuilderShell";
 export { BuilderHeader } from "./BuilderHeader";
 export { BuilderInspector } from "./BuilderInspector";
+export { BuilderModeTabs } from "./BuilderModeTabs";
 export { BuilderNavigator } from "./BuilderNavigator";
 export { BuilderStatusBadge } from "./BuilderStatusBadge";
 export { BuilderValidationPanel } from "./BuilderValidationPanel";
 export { BuilderViewport } from "./BuilderViewport";
+export { ModelSchemaAuthoringShell } from "./ModelSchemaAuthoringShell";
 export * from "./builderViewModel";
+export * from "./modelSchemaAuthoring";

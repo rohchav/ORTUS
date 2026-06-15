@@ -1,8 +1,8 @@
 # ORTUS Workspace Information Architecture
 
-Date: 2026-06-12  
-Prompt: UI-REMEDIATION-1, audited and hardened by Prompt 34B
-Status: implemented and source-audited; HTTP route probes passed, but rendered screenshot and browser zoom tooling was unavailable in this environment
+Date: 2026-06-15
+Prompt: UI-REMEDIATION-1, audited and hardened by Prompt 34B, extended by Prompt 35 and audited by Prompt 35B
+Status: implemented and source-audited; rendered screenshot and browser zoom tooling remain unavailable in this environment
 
 ## Problem
 
@@ -21,6 +21,7 @@ ORTUS now uses three levels:
 
 - Global destinations: Simulate and Builder.
 - Simulation workspace modes: Setup, Understand, Observe, Intervene, Experiment, Compare, and Debug.
+- Builder modes: Workspace Inspector and Author Schema.
 - Panels inside the selected mode.
 
 The World Stage remains mounted while the user changes simulation workspace modes. Workspace mode selection is local React UI state in `AppShell`; it is not simulation state and does not reset, regenerate, or mutate the engine.
@@ -38,6 +39,8 @@ The World Stage remains mounted while the user changes simulation workspace mode
 - Right context drawer: selected entity inspection.
 
 Service-only primitives are not exposed as runnable controls by this IA change.
+
+Builder `Workspace Inspector` remains read-only for `ortus.visualBuilderWorkspace` artifacts. Builder `Author Schema` edits only structural `ortus.modelSchema` drafts through bounded forms. It is intentionally separate from simulation Setup, which configures hand-built runnable templates.
 
 ## Header
 
@@ -90,6 +93,9 @@ Medium and narrow viewports:
 - The workspace navigator becomes horizontally scrollable.
 - The selected workspace context becomes a sheet below the world.
 - The run dock stacks its controls into rows.
+- Builder mode tabs become horizontally scrollable.
+- Schema authoring stacks outline/import, form editor, and validation regions without hiding errors.
+- Prompt 35B moves Builder stacking to `1120px`, before the three-column minimum tracks can force horizontal overflow.
 
 This is a source/CSS implementation. Browser zoom at 125% and 200% still needs a real rendered audit.
 
@@ -98,6 +104,9 @@ This is a source/CSS implementation. Browser zoom at 125% and 200% still needs a
 - Workspace modes use semantic tab controls with `role="tablist"`, `role="tab"`, `aria-selected`, `aria-controls`, and a `role="tabpanel"` context panel.
 - Current mode is communicated by text and ARIA state.
 - Workspace tabs support Arrow Left/Right/Up/Down plus Home/End navigation and move focus to the selected tab.
+- Builder mode tabs and schema section tabs use roving tab stops and support Arrow Left/Right/Up/Down plus Home/End navigation.
+- Schema fields use associated labels, textual required/error state, and a linked error summary where the service error maps to a field.
+- Dirty reset/import/restore, repeated-item removal, and metadata removal use a modal `alertdialog` with focus cycling, Escape cancellation, and focus return.
 - Run controls have visible text labels and accessible names.
 - The header and dock state use text, not color alone.
 - Focus styles remain global through existing focus-visible CSS.
@@ -111,6 +120,9 @@ This is not a formal WCAG conformance claim.
 - Hidden workspace panels are not rendered, reducing tick-driven subscriptions from inactive Macro, Metric, Debug, Experiment, and Comparison panels.
 - The world renderer and simulation stepping loop are unchanged.
 - Builder viewport node and edge buttons select structural items for read-only inspection only; they do not execute nodes or edges.
+- Builder schema drafts, last-valid checkpoints, active form section, and import/export text are local React state and do not mutate the simulation store.
+- Builder mode panels stay mounted but hidden so switching between Workspace Inspector and Author Schema does not discard an in-memory draft.
+- Hidden Builder panels have no simulation tick subscriptions or engine work.
 - Metric Trace now states near the chart that trace values are bounded model-output history over simulated ticks, not empirical measurements, calibrated probabilities, or validation evidence.
 
 ## Unresolved Limitations
@@ -120,7 +132,8 @@ This is not a formal WCAG conformance claim.
 - The dense technical visual language still needs a broader design-system pass.
 - Pending-change detection is not implemented because the current runtime immediately rebuilds for template, seed, and parameter changes.
 - Browser zoom at 125%, 150%, and 200% remains unverified.
+- Prompt 35B form focus behavior is source-tested but not verified with a screen reader or real browser keyboard walkthrough.
 
 ## Future Design-System Work
 
-A dedicated visual design-system prompt is still recommended after Prompt 34B. It should address typography scale, color-independent state encoding, richer chart semantics and units where model definitions support them, responsive screenshot testing, keyboard walkthroughs, and zoom behavior without changing simulation semantics.
+A dedicated visual design-system prompt is still recommended after Prompt 35B. It should address typography scale, color-independent state encoding, richer chart semantics and units where model definitions support them, responsive screenshot testing, keyboard walkthroughs, and zoom behavior without changing simulation semantics.

@@ -497,3 +497,122 @@ Remaining limitations:
 Next roadmap prompt: Prompt 35: Model Schema Authoring Forms V1, provided it remains structural-only and non-executing.
 
 Next recommended UI/design-system prompt: `UI-DESIGN-SYSTEM-1: Rendered Responsive, Typography + Visualization Accessibility Audit`.
+
+## 2026-06-15 - Prompt 35 Model Schema Authoring Forms V1
+
+Goal: add bounded, non-executing `ModelSchemaDefinition` authoring inside the existing Builder without adding schema execution, rule execution, formulas, code/script editors, graph authoring, drag/drop, compiler/interpreter behavior, template/scenario/RunConfig/snapshot/engine generation, compatibility conversion, external framework interop, social-learning artifact execution, LLM agents, backend persistence, or active simulation mutation.
+
+Starting state:
+
+- Branch `main` was clean and ahead of `origin/main` by four commits.
+- Latest commit was `6ba4d75 feat: Complete Prompt 34B - Safe Builder UI Shell Audit and enhancements`.
+- Prompt 34B was committed; no unrelated dirty files existed.
+
+Implemented:
+
+- Added accessible Builder modes for `Workspace Inspector` and `Author Schema`, including Arrow/Home/End keyboard behavior.
+- Kept both Builder mode panels mounted but hidden so in-memory authoring drafts survive mode switches.
+- Added bounded form sections for schema identity/scope, entities, components, attributes, spaces, parameters, metrics, descriptive rule declarations, artifact references, assumptions, limitations, validation notes, and inert metadata.
+- Added a pure UI adapter using existing model-schema validation, interpreter-capability report, summary, serializer, deserializer, and registry query helpers.
+- Added continuous structural validation, linked error summary, warnings, missing-runtime-capability display, declaration counts, fixed `executable: false` fields, and persistent non-runnable/no-generation language.
+- Added current-draft versus last-valid-artifact separation, dirty-state display, `beforeunload` warning, valid-only export, failed-import preservation, staged dirty import replacement, reset/restore confirmation, repeated-item removal confirmation, and focus return.
+- Added structural artifact status display for registry-known references without treating service availability as template runtime support.
+- Added responsive wide/medium/narrow/short-height source styling with one intentional scroll region per Builder column at desktop widths.
+- Updated roadmap, concepts, current context, HCI, workspace IA, simulation architecture docs, README, and AGENTS guardrails.
+
+Boundary preserved:
+
+- Model Schema Authoring Forms V1 creates structural model-schema artifacts; it does not execute schemas.
+- Rule declarations authored in the Builder are descriptive only and remain non-executable.
+- A valid authored schema is not a runnable simulation.
+- The schema authoring UI does not generate templates, scenarios, RunConfigs, snapshots, or engines.
+- Workspace inspection remains read-only and separate from schema authoring.
+- Compatibility reports are not generated or executed.
+- Social-learning rule kinds remain structural placeholders and do not activate Opinion Dynamics or social-learning semantic artifacts.
+- Authoring components import no engine, template runtime, simulation store, compiler/parser/codegen, LLM, or external framework adapter.
+
+Checks:
+
+- `npm run test -- modelSchemaAuthoring builderUiShell modelSchema roadmap assumptions`: passed, 5 files and 43 tests.
+- `npm run test -- visualBuilderWorkspace schemaTemplateCompatibility socialLearning opinion primitiveRegistry hybridComposition roadmap assumptions builderUiShell ortusBrand workspaceInformationArchitecture`: passed, 11 files and 75 tests.
+- `npm run test -- control`: passed, 1 file and 8 tests.
+- `npm run test -- uncertainty`: passed, 1 file and 9 tests. A prior run timed out only while the full suite competed with a concurrent production build; the isolated rerun and later full-suite rerun passed.
+- `npm run typecheck`: passed.
+- `npm run test`: passed, 51 files and 392 tests.
+- `npm run build`: passed with Next.js 15.5.19; `/builder` prerendered successfully.
+- `npm run perf:simulation`: passed. Local smoke results included Flocking 100 agents at 83.22 ticks/sec, Flocking 500 agents at 16.32 ticks/sec, Forest Fire 80x60 grid at 26.17 ticks/sec, and Predator-Prey default at 78.23 ticks/sec.
+- `git diff --check`: passed.
+- `npm run lint: unavailable, package.json has no lint script.`
+
+Remaining limitations:
+
+- No Chromium/Playwright/browser screenshot, DOM measurement, screen-reader, or zoom audit was available.
+- Accessibility behavior is source- and unit-tested, not a formal WCAG claim.
+- Metadata form editing is deliberately conservative: imported complex JSON metadata is preserved and displayed as inert read-only text.
+- Invalid drafts remain in memory only and are not exportable or persisted across reloads.
+- Prompt 36 Visual Builder Graph View remains future work.
+
+Next roadmap prompt: Prompt 35B: Model Schema Authoring Forms Audit.
+
+## 2026-06-15 - Prompt 35B Model Schema Authoring Forms Audit
+
+Goal: audit and harden Model Schema Authoring Forms V1 without adding schema or rule execution, formulas/code/scripts, compiler/interpreter behavior, simulation preview, graph authoring, generated runtime artifacts, active simulation mutation, backend persistence, or broader visual-builder claims.
+
+Starting state:
+
+- Branch `main` was ahead of `origin/main` by four commits.
+- Latest commit was `6ba4d75 feat: Complete Prompt 34B - Safe Builder UI Shell Audit and enhancements`.
+- Prompt 35 source, documentation, and tests were staged but intentionally uncommitted; no unrelated dirty files were present.
+- The running Prompt 35 development server returned HTTP 200 for `/builder`.
+- No Chromium, Chrome, Firefox, Playwright, or equivalent browser inspection tool was available.
+
+Confirmed defects:
+
+- The three-column authoring layout could remain active below its practical minimum width and force horizontal overflow at common medium viewports.
+- Destructive confirmations were visually prominent but non-modal, allowing background editing while replacement or removal was pending.
+- Metadata removal bypassed the repeated-item confirmation used elsewhere.
+- The full validation report acted as a live region, creating excessively broad announcements.
+- Imported non-text metadata and allowed values could be silently coerced into strings by ordinary form edits.
+- Unsafe schema-key validation used exact spelling and did not cover several profiling, protected-class inference, diagnosis, persuasion, targeting, and microtargeting payload names.
+- The file input had no gross pre-read size rejection before handing content to the authoritative deserializer.
+
+Audit hardening:
+
+- Moved the Builder stacking breakpoint to `1120px`, before the three-column minimum tracks can overflow.
+- Made destructive confirmation a blocking modal with focus cycling, Escape cancellation, and focus return; metadata removal now uses the same confirmation path.
+- Added roving tab stops to Builder mode and schema-section tabs.
+- Scoped live announcements to a concise validation status and retained text-readable field and summary errors.
+- Added gross pre-read file-size rejection while keeping exact character limits and all schema authority in `deserializeModelSchema`.
+- Preserved imported non-text metadata and allowed values as inert read-only JSON rather than silently changing their types.
+- Expanded and normalized headless unsafe-key rejection for real-person profiling, protected-class inference, psychological diagnosis, persuasion, recommendation targeting, and microtargeting payloads.
+- Kept formula/code payload rejection, artifact-family rejection, import/export validation, and runtime boundary checks in headless services and architecture tests rather than duplicating schema validation in React.
+
+Boundary preserved:
+
+- Model Schema Authoring Forms V1 creates structural model-schema artifacts; it does not execute schemas.
+- Rule declarations authored in the Builder are descriptive only and remain non-executable.
+- A valid authored schema is not a runnable simulation.
+- The schema authoring UI does not generate templates, scenarios, RunConfigs, snapshots, or engines.
+- The audit added no execution controls, graph authoring, compatibility conversion, social-learning activation, simulation-store mutation, template runtime import, LLM call, external API call, unsafe HTML rendering, or external framework adapter.
+
+Checks:
+
+- Focused cross-feature regression: passed, 14 files and 113 tests.
+- `npm run test`: passed, 51 files and 396 tests.
+- `npm run typecheck`: passed.
+- `npm run build`: passed with Next.js 15.5.19; `/builder` prerendered successfully at 21.3 kB route size and 218 kB first-load JS.
+- `npm run perf:simulation`: passed as a smoke check. Local results included Flocking 100 agents at 114.9 ticks/sec, Flocking 500 agents at 16.59 ticks/sec, Forest Fire 80x60 at 26.99 ticks/sec, and Predator-Prey default at 81.23 ticks/sec.
+- `git diff --check` and `git diff --cached --check`: passed.
+- `npm run lint: unavailable, package.json has no lint script.`
+
+Remaining limitations:
+
+- Browser rendering, screenshots, DOM measurement, real keyboard walkthroughs, screen-reader behavior, and 125%/150%/200% zoom remain unverified.
+- Accessibility and responsive conclusions are source- and unit-test evidence, not WCAG conformance or rendered mobile-readiness claims.
+- Imported non-text values are preserved read-only; V1 does not provide a general structured JSON editor.
+- Invalid drafts remain memory-only and are not persisted across reloads.
+- Natural-language rule descriptions remain inert text and are never parsed or executed; the UI does not pretend a heuristic code-language classifier provides an execution-security boundary.
+- Performance smoke does not prove Builder performance or engine scalability. The 500-agent flocking smoke still recorded 7.72 million pairwise checks and only 16.59 ticks/sec.
+- Prompt 35 and Prompt 35B remain uncommitted in a mixed staged/unstaged worktree.
+
+Next roadmap prompt: Prompt 36 Visual Builder Graph View V1 only after reviewing and committing the combined Prompt 35/35B work and restoring a clean repository checkpoint.

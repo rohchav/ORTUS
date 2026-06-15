@@ -4,7 +4,7 @@ This roadmap reserves the major complex-systems pillars that ORTUS must support 
 
 ## Current Foundation
 
-ORTUS has completed through Prompt 34B. Prompts 1-34B established the current foundation:
+ORTUS has completed through Prompt 35B. Prompts 1-35B established the current foundation:
 
 - Engine/runtime/UI foundation.
 - Scenario Builder.
@@ -22,12 +22,14 @@ ORTUS has completed through Prompt 34B. Prompts 1-34B established the current fo
 - A narrow Opinion Dynamics social-learning behavior mode owned by that hand-built template, audited in Prompt 33D.
 - A safe, read-only visual builder UI shell for structural `ortus.visualBuilderWorkspace` inspection, added in Prompt 34.
 - Prompt 34B audit hardening for Reset safety, workspace tab keyboard behavior, Metric Trace provenance language, Builder read-only inspection affordances, and workspace information architecture documentation.
+- Prompt 35 bounded, non-executing `ortus.modelSchema` authoring forms inside the Builder.
+- Prompt 35B audit hardening for import safety, destructive confirmation, data preservation, tab semantics, validation announcements, responsive stacking, and source-level architecture boundaries.
 
 These foundations are deliberately service-first or metadata-first unless documented otherwise. Networks, resources, feedback primitives, boundary/environment models, spatial fields, observability models, causal assumptions, quantity semantics, emergence descriptors, robustness/resilience descriptors, and strategy/control descriptors are headless structural services until a template explicitly uses them at runtime. A template must not claim support for a primitive merely because a service exists.
 
 After Prompt 30B, ORTUS completed a repository hygiene, durable context, dependency stabilization, and performance/scalability pass. That pass added and validated performance instrumentation and spatial-indexing foundations, but it does not turn reserved structural primitives into runtime support and is not evidence for high-scale readiness by itself.
 
-Prompt 31: Model Schema + Interpreter Foundation V1, Prompt 31B: Model Schema + Interpreter Foundation Audit, Prompt 31C: Knowledge, Memory + Social Learning Semantics V1, Prompt 31D: Knowledge, Memory + Social Learning Audit, Prompt 32: Visual Model Builder Planning + Workspace Schema V1, Prompt 32B: Visual Builder Workspace Audit, Prompt 33: Template/Schema Compatibility Mapping V1, Prompt 33B: Template/Schema Compatibility Mapping Audit, Prompt 33C: Opinion Dynamics Social Learning Runtime V1, Prompt 33D: Opinion Dynamics Social Learning Runtime Audit, Prompt 34: Safe Builder UI Shell V1, and Prompt 34B: Safe Builder UI Shell Audit are complete. The next roadmap prompt is Prompt 35: Model Schema Authoring Forms V1.
+Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 35B: Model Schema Authoring Forms Audit are complete. The next roadmap prompt is Prompt 36: Visual Builder Graph View V1 after a commit/repo-hygiene checkpoint.
 
 ## Revised Prompt Sequence
 
@@ -91,9 +93,14 @@ Completed Prompt 34 shell and audit foundation:
 1. 34 - Safe Builder UI Shell V1.
 2. 34B - Safe Builder UI Shell Audit.
 
-Next roadmap prompt:
+Completed Prompt 35 authoring and audit foundation:
 
 1. 35 - Model Schema Authoring Forms V1.
+2. 35B - Model Schema Authoring Forms Audit.
+
+Next roadmap prompt after a commit/repo-hygiene checkpoint:
+
+1. 36 - Visual Builder Graph View V1.
 
 Later roadmap bands:
 
@@ -161,6 +168,10 @@ Prompt 33 adds Template/Schema Compatibility Mapping V1 as a service-level struc
 Prompt 33C adds a narrow Opinion Dynamics social-learning runtime mode inside the hand-built Opinion template. Prompt 33D audits that slice without expanding it. Opinion Dynamics social learning is a stylized template-owned runtime mode, not a model of full human cognition. Social-learning semantic artifacts are not executed directly by the Opinion Dynamics template. Opinion values and social-learning metrics are model outputs, not measured human beliefs. Information-source credibility is a model parameter, not a verified truth score. No LLM agents, real-person profiling, protected-class inference, persuasion optimization, or psychological diagnosis are implemented. Generic social-learning runtime, semantic artifact execution, model schema execution, runnable visual builder runtime, validation/calibration, and external framework interop remain unavailable.
 
 Prompt 34 adds Safe Builder UI Shell V1 as a dedicated read-only UI surface for `ortus.visualBuilderWorkspace` artifacts. Prompt 34B audits and hardens this shell and the simulation workspace information architecture. Safe Builder UI Shell V1 displays structural workspace artifacts; it does not execute workspace nodes or edges. The builder shell is not a compiler, interpreter, visual programming environment, or custom simulation runtime. A structurally valid workspace is still not a runnable model. Importing a workspace artifact does not activate model schemas, compatibility mappings, or social-learning semantics. The shell can import, validate, display, filter, select, inspect, and export a visual-builder workspace artifact, but it does not add drag-and-drop model construction, arbitrary node/edge authoring, graph execution, schema execution, compatibility conversion, template generation, scenario generation, RunConfig generation, snapshot generation, engine creation, external framework interop, generic social-learning runtime, LLM agents, real-person profiling, protected-class inference, or persuasion/targeting logic.
+
+Prompt 35 adds a separate `Author Schema` Builder mode for bounded `ortus.modelSchema` form authoring. It uses the existing model-schema service for validation, warnings, summaries, import, and export; keeps drafts and last-valid checkpoints in local UI state; preserves dirty work across Builder mode switches; and confirms destructive replacement/removal. Model Schema Authoring Forms V1 creates structural model-schema artifacts; it does not execute schemas. Rule declarations authored in the Builder are descriptive only and remain non-executable. A valid authored schema is not a runnable simulation. The schema authoring UI does not generate templates, scenarios, RunConfigs, snapshots, or engines. Prompt 36 Visual Builder Graph View remains future work.
+
+Prompt 35B audits and hardens the form surface without adding runtime behavior. It rejects oversized files before full reads, extends headless unsafe-key rejection for profiling/diagnosis/persuasion/targeting payloads, makes destructive confirmations modal and focus-contained, confirms metadata removal, preserves imported non-text JSON values without silent coercion, scopes validation announcements, adds roving tab stops, and stacks the Builder before three-column minimum tracks overflow.
 
 ## Reserved Artifact Families
 

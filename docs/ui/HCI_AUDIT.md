@@ -1,9 +1,9 @@
 # ORTUS HCI / UX / Visual-Direction Audit
 
 Date: 2026-06-11  
-Updated: 2026-06-12 after Prompt 34B
-Prompt: UI-BRAND-1, UI-REMEDIATION-1, Prompt 34B
-Status: source-based audit with HTTP route verification, not a formal WCAG audit
+Updated: 2026-06-15 after Prompt 35B
+Prompt: UI-BRAND-1, UI-REMEDIATION-1, Prompt 34B, Prompt 35, Prompt 35B
+Status: source-based audit, not a formal WCAG audit
 
 ## 1. Executive Verdict
 
@@ -21,6 +21,12 @@ The shell now uses task-oriented workspace modes instead of one permanent scroll
 Prompt 34B update:
 The audit hardened the highest-confidence defects that could be fixed without a redesign: destructive Reset now uses press-and-confirm when meaningful run state exists, workspace tabs have arrow/Home/End keyboard behavior, Setup copy states that model/seed/parameter changes rebuild fresh tick-0 runs, Metric Trace carries local model-output provenance language, and Builder viewport buttons now say they select structural nodes/edges for read-only inspection. Browser screenshot, zoom, and assistive-technology verification still did not happen in this environment.
 
+Prompt 35 update:
+The Builder now separates read-only Workspace Inspector from bounded Author Schema forms. The strongest design choice is persistent refusal to equate structural validity with run readiness: status, validation, rule editing, artifact references, and export all repeat the non-runnable boundary. Draft preservation is materially safer than a naive form: mode switches do not unmount the draft, failed imports preserve work, valid dirty imports require confirmation, and destructive removal/reset/restore uses an accessible confirmation surface. The remaining weakness is evidence, not intent: no rendered narrow/short-height pass, screen-reader test, browser keyboard walkthrough, or formal accessibility audit has occurred.
+
+Prompt 35B update:
+The audit found real defects rather than treating passing source tests as proof. The three-column authoring minimum could overflow at common medium widths; confirmations were visually prominent but non-modal, so background edits could continue while a destructive replacement was pending; metadata deletion bypassed confirmation; the full validation panel was an overly broad live region; and imported non-text JSON values could be silently coerced by form editing. Prompt 35B adds an earlier stacking breakpoint, a modal focus-cycling confirmation with Escape cancellation, metadata-removal confirmation, roving tab stops, concise validation announcements, pre-read oversized-file rejection, and conservative read-only preservation for imported non-text values. Browser rendering and assistive-technology behavior remain unverified.
+
 ## 2. Audit Scope
 
 Inspected surfaces:
@@ -28,6 +34,7 @@ Inspected surfaces:
 - Global app shell, top status bar, workspace mode navigator, selected context panel, world stage, right drawer, persistent run-control dock.
 - Template selection, parameter controls, simulation controls, file exchange, scenario builder, assumptions panel, interventions, experiments, run comparison, metric trace, legend, debug panel.
 - Safe Builder UI Shell files added in Prompt 34.
+- Model Schema Authoring Forms files added in Prompt 35.
 - Global CSS, typography tokens, responsive rules, focus styles, animation/reduced-motion rules.
 - Metadata and favicon/icon configuration.
 - Existing component and simulation tests.
@@ -38,6 +45,7 @@ Out of scope:
 - Runtime simulation behavior changes.
 - Broad navigation redesign.
 - Visual Builder execution, editing, graph programming, schema execution, or generation.
+- Model schema compiler/interpreter behavior, simulation preview, template/scenario/RunConfig/snapshot generation, or compatibility conversion.
 - Formal WCAG conformance certification.
 - User testing.
 
