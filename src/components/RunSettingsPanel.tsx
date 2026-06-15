@@ -30,7 +30,8 @@ export function RunSettingsPanel({ collapsed = false, onToggle }: RunSettingsPan
     <CornerFramePanel title="Run Settings" eyebrow="Fresh run setup" variant="compact" collapsed={collapsed} onToggle={onToggle}>
       <div className="run-settings-panel">
         <p className="run-settings-note">
-          Model, seed, and parameter changes rebuild the current run through template validation. Scenarios remain initial-condition recipes, not snapshots.
+          Model and parameter changes rebuild a fresh tick-0 run immediately through template validation. Apply Seed rebuilds with the typed seed; Regenerate Seed
+          creates a new seed and fresh run. Scenarios remain initial-condition recipes, not snapshots.
         </p>
         <label className="run-settings-field">
           <span>Model template</span>
@@ -64,11 +65,11 @@ export function RunSettingsPanel({ collapsed = false, onToggle }: RunSettingsPan
               suppressHydrationWarning
             />
           </label>
-          <div className="run-settings-actions">
-            <button type="submit" suppressHydrationWarning>
+        <div className="run-settings-actions">
+            <button type="submit" aria-label="Apply typed seed and rebuild a fresh run" suppressHydrationWarning>
               Apply Seed
             </button>
-            <button type="button" onClick={regenerateSeed} suppressHydrationWarning>
+            <button type="button" onClick={regenerateSeed} aria-label="Generate a new seed and rebuild a fresh run" suppressHydrationWarning>
               Regenerate Seed
             </button>
           </div>

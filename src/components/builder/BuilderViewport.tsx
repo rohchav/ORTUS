@@ -125,7 +125,7 @@ export function BuilderViewport({ viewModel, filters, selection, viewport, onVie
                         height: nodeLayout.height
                       }}
                       aria-pressed={selected}
-                      aria-label={`Node ${node.label}, ${formatNodeKind(node.nodeKind)}, ${formatNodeStatus(node.status)}`}
+                      aria-label={`Select structural node ${node.label} for read-only inspection; ${formatNodeKind(node.nodeKind)}; ${formatNodeStatus(node.status)}`}
                       onClick={() => onSelect({ type: "node", id: node.id })}
                       suppressHydrationWarning
                     >
@@ -146,12 +146,13 @@ export function BuilderViewport({ viewModel, filters, selection, viewport, onVie
                     type="button"
                     className={selection?.type === "edge" && selection.id === edge.id ? "is-active" : ""}
                     aria-pressed={selection?.type === "edge" && selection.id === edge.id}
+                    aria-label={`Select structural edge ${edge.label ?? edge.id} for read-only inspection; not executable dataflow`}
                     onClick={() => onSelect({ type: "edge", id: edge.id })}
                     suppressHydrationWarning
                   >
                     <span>{edge.label ?? edge.id}</span>
                     <em>
-                      {edge.sourceNodeId} → {edge.targetNodeId} · {edge.edgeKind} · executable {String(edge.executable)}
+                      {edge.sourceNodeId} → {edge.targetNodeId} · {edge.edgeKind} · structural link, not executable dataflow
                     </em>
                   </button>
                 ))

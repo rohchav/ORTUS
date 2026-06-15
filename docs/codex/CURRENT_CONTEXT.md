@@ -1,6 +1,6 @@
 # ORTUS Current Context
 
-Last updated: 2026-06-12 after UI-REMEDIATION-1 Workspace Information Architecture refactor
+Last updated: 2026-06-12 after Prompt 34B Safe Builder UI Shell Audit
 
 ## Project Identity
 
@@ -11,6 +11,8 @@ The sharp ORTUS mark is the primary navigation brand. The soft ORTUS mark is a s
 The HCI audit is in `docs/ui/HCI_AUDIT.md`. HCI findings must distinguish observed defects, inferred risks, subjective style preferences, and unverified concerns. Broad UI remediation should be handled in dedicated prompts rather than mixed into branding integration.
 
 UI-REMEDIATION-1 replaced the monolithic simulation left drawer with a task-oriented workspace shell. The simulation workspace modes are Setup, Understand, Observe, Intervene, Experiment, Compare, and Debug. The World Stage remains mounted while switching modes, workspace mode state is local React state in `AppShell`, and persistent Run/Pause, Step, Reset, tick/time, and speed controls live in a shell-level dock outside scrollable workspace content. Model/seed/parameter editing lives in Setup; scenario/snapshot exchange lives in Compare; assumptions and notes live in Understand; metrics and legend live in Observe; interventions live in Intervene; sweeps live in Experiment; debug diagnostics live in Debug.
+
+Prompt 34B audited and hardened the safe Builder shell plus workspace information architecture. Reset now requires press-and-confirm when current run state would be discarded. Workspace tabs support arrow/Home/End keyboard behavior. Setup copy states that model, parameter, Apply Seed, and Regenerate Seed actions rebuild fresh tick-0 runs. Metric Trace states near the chart that traces are bounded model-output history over simulated ticks, not empirical measurements, calibrated probabilities, or validation evidence. Builder viewport node and edge buttons select structural items for read-only inspection only.
 
 Confirmed UI layout defects fixed in UI-REMEDIATION-1:
 
@@ -25,11 +27,11 @@ Built-in production templates currently include Epidemic Spread, Opinion Dynamic
 
 ## Completed Prompt State
 
-Durable docs and source indicate completed roadmap work through Prompt 34. Prompt 31: Model Schema + Interpreter Foundation V1, Prompt 31B: Model Schema + Interpreter Foundation Audit, Prompt 31C: Knowledge, Memory + Social Learning Semantics V1, Prompt 31D: Knowledge, Memory + Social Learning Audit, Prompt 32: Visual Model Builder Planning + Workspace Schema V1, Prompt 32B: Visual Builder Workspace Audit, Prompt 33: Template/Schema Compatibility Mapping V1, Prompt 33B: Template/Schema Compatibility Mapping Audit, Prompt 33C: Opinion Dynamics Social Learning Runtime V1, Prompt 33D: Opinion Dynamics Social Learning Runtime Audit, and Prompt 34: Safe Builder UI Shell V1 are complete.
+Durable docs and source indicate completed roadmap work through Prompt 34B. Prompt 31: Model Schema + Interpreter Foundation V1, Prompt 31B: Model Schema + Interpreter Foundation Audit, Prompt 31C: Knowledge, Memory + Social Learning Semantics V1, Prompt 31D: Knowledge, Memory + Social Learning Audit, Prompt 32: Visual Model Builder Planning + Workspace Schema V1, Prompt 32B: Visual Builder Workspace Audit, Prompt 33: Template/Schema Compatibility Mapping V1, Prompt 33B: Template/Schema Compatibility Mapping Audit, Prompt 33C: Opinion Dynamics Social Learning Runtime V1, Prompt 33D: Opinion Dynamics Social Learning Runtime Audit, Prompt 34: Safe Builder UI Shell V1, and Prompt 34B: Safe Builder UI Shell Audit are complete.
 
 The post-30B repository hygiene, dependency stabilization, durable context, and performance/scalability pass has also been completed. Recent commits include `dd6c256` for repo context/generated-artifact hygiene, `4949b72` for dependency and performance script stabilization, and `a80d5b7` for simulation performance instrumentation and spatial indexing foundations.
 
-The next roadmap prompt is Prompt 34B: Safe Builder UI Shell Audit.
+The next roadmap prompt is Prompt 35: Model Schema Authoring Forms V1. A separate rendered responsive/design-system audit is still recommended before making mobile-readiness, WCAG, or polished visual-workbench claims.
 
 Implemented runtime foundations include scenarios, snapshots, template-defined behavior modes, agent composition, interventions, experiments, run summaries/comparison, seeded randomness, metrics, spaces, template metadata, and a narrow Opinion Dynamics `socialLearning` behavior mode audited in Prompt 33D.
 
@@ -101,11 +103,14 @@ Real source changes are now reviewable separately from generated build/cache noi
 ## Current Blockers
 
 - npm reports two moderate audit findings; no force fix was run.
-- Prompt 34 work should be audited in Prompt 34B before any builder editing, drag-and-drop, schema execution, compatibility conversion, or runtime mapping work starts.
+- No browser screenshot/DOM measurement/zoom audit was possible in this environment, so rendered layout and 125%/150%/200% zoom behavior remain unverified.
+- Prompt 35 must remain structural-only form authoring: no schema execution, compatibility conversion, runtime mapping, compiler/interpreter behavior, or visual-builder execution.
 
 ## Next Recommended Prompt After Stabilization
 
-Next recommended prompt after a commit/repo hygiene checkpoint: Prompt 34B: Safe Builder UI Shell Audit.
+Next roadmap prompt after a commit/repo hygiene checkpoint: Prompt 35: Model Schema Authoring Forms V1.
+
+Next recommended UI/design-system prompt: `UI-DESIGN-SYSTEM-1: Rendered Responsive, Typography + Visualization Accessibility Audit`.
 
 ## Critical Guardrails
 

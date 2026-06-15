@@ -1,9 +1,9 @@
 # ORTUS HCI / UX / Visual-Direction Audit
 
 Date: 2026-06-11  
-Updated: 2026-06-12 after UI-REMEDIATION-1
-Prompt: UI-BRAND-1, updated by UI-REMEDIATION-1
-Status: source-based audit with limited rendered HTTP verification, not a formal WCAG audit
+Updated: 2026-06-12 after Prompt 34B
+Prompt: UI-BRAND-1, UI-REMEDIATION-1, Prompt 34B
+Status: source-based audit with HTTP route verification, not a formal WCAG audit
 
 ## 1. Executive Verdict
 
@@ -17,6 +17,9 @@ Recommended direction: a disciplined hybrid of Technical Systems Workbench and S
 
 UI-REMEDIATION-1 update:
 The shell now uses task-oriented workspace modes instead of one permanent scrolling drawer. The confirmed clipping causes were not cosmetic: the header used fixed `50px` height plus `overflow-y: hidden`, and the timeline lived as a sticky control inside the left drawer scroll container. Both were removed. The remaining risk is interpretation and safety, not basic reachability.
+
+Prompt 34B update:
+The audit hardened the highest-confidence defects that could be fixed without a redesign: destructive Reset now uses press-and-confirm when meaningful run state exists, workspace tabs have arrow/Home/End keyboard behavior, Setup copy states that model/seed/parameter changes rebuild fresh tick-0 runs, Metric Trace carries local model-output provenance language, and Builder viewport buttons now say they select structural nodes/edges for read-only inspection. Browser screenshot, zoom, and assistive-technology verification still did not happen in this environment.
 
 ## 2. Audit Scope
 
@@ -48,6 +51,8 @@ Evidence:
 - Generated small-size preview grid for the sharp mark at approximately 16, 24, 32, and 48 px.
 - Local Next route probe was previously available with approval for `/builder`; browser screenshot tooling is not installed in this environment.
 - For UI-REMEDIATION-1, the prompt attachment directory did not contain an actual screenshot file; route availability was verified by HTTP probing and layout causes were confirmed from source/CSS.
+- For Prompt 34B, HTTP route probes returned 200 for `/` and `/builder`. Local socket access required an approved unsandboxed `curl` because the sandbox blocks local sockets.
+- No Chromium, Chrome, Firefox, `wkhtmltoimage`, or Playwright dependency was available, so viewport, zoom, and rendered overlap findings remain source-based.
 
 Limitations:
 
@@ -55,6 +60,7 @@ Limitations:
 - Findings about visual overlap, target size, and responsive rendering are source-based unless explicitly marked as rendered.
 - Accessibility findings are implementation-visible issues, not a formal assistive-technology audit.
 - Performance findings are source and architecture risks, not profiler traces.
+- Route probes verify that pages respond; they do not verify rendered layout, zoom behavior, focus movement, or screen-reader comprehension.
 
 ## 4. Product And User-Task Model
 
@@ -238,13 +244,13 @@ Confidence:
 High from source.
 
 Recommended remedy:
-Add a reset confirmation affordance or two-step reset for non-tick-0 runs; keep it separate from Prompt UI-BRAND-1.
+Prompt 34B added press-and-confirm reset when current run state would be discarded. A true undo/recovery path remains future work.
 
 Effort:
 S.
 
 Timing:
-Dedicated UI-remediation prompt.
+Prompt 34B for staged reset; future prompt for undo/recovery.
 
 Finding:
 Metrics can be mistaken for empirical measurements.
@@ -265,13 +271,165 @@ Confidence:
 Medium-high from source.
 
 Recommended remedy:
-Add compact metric provenance labels, model-time semantics, and "model output, not empirical measurement" near chart headings.
+Prompt 34B added compact model-output provenance language near Metric Trace. Richer model-time and unit semantics should wait for a dedicated chart/quantity-semantics pass.
 
 Effort:
 M.
 
 Timing:
-Dedicated UI-remediation prompt.
+Prompt 34B for provenance copy; future design-system/chart prompt for richer units and axis semantics.
+
+## 6A. Prompt 34B Significant Findings
+
+Finding:
+One-click Reset was destructive for non-trivial runs.
+
+Evidence:
+`TimelineControlStrip` called `reset` directly. `simulationStore.reset()` replaces the engine with a fresh tick-0 engine from the current template, parameters, and seed, clears selection and intervention targets, clears current intervention history through the new engine, and loses current metric history.
+
+HCI principle:
+Error prevention; destructive action clarity; user control and freedom.
+
+User impact:
+A user could accidentally discard the current run while thinking Reset was a reversible view action.
+
+Severity:
+High.
+
+Confidence:
+High from source.
+
+Recommended remedy:
+Use staged confirmation when tick, metric history, or intervention history indicates meaningful state.
+
+Effort:
+S.
+
+Timing:
+Prompt 34B.
+
+Status:
+Fixed for non-trivial run state with press-and-confirm reset. No undo stack was added.
+
+Finding:
+Workspace tabs used tab roles without tab-style keyboard behavior.
+
+Evidence:
+`LeftInstrumentStack` used `role="tablist"` and `role="tab"` but only click handlers before Prompt 34B.
+
+HCI principle:
+Keyboard accessibility; semantic consistency; focus predictability.
+
+User impact:
+Keyboard users could tab through controls, but arrow-key expectations for tabs were not met.
+
+Severity:
+Medium.
+
+Confidence:
+High from source.
+
+Recommended remedy:
+Add Arrow Left/Right/Up/Down plus Home/End navigation and move focus to the selected tab.
+
+Effort:
+S.
+
+Timing:
+Prompt 34B.
+
+Status:
+Fixed in source and covered by focused tests. This is still not a screen-reader audit.
+
+Finding:
+Metric Trace lacked local provenance language.
+
+Evidence:
+`MetricGraphPanel` previously displayed a chart or empty-state text without saying the trace is model-output history over simulated ticks.
+
+HCI principle:
+Proximity of warnings; metric interpretation; prevention of empirical overclaiming.
+
+User impact:
+Users could read chart traces as empirical measurement, calibrated probability, or validation evidence.
+
+Severity:
+High.
+
+Confidence:
+High from source.
+
+Recommended remedy:
+Add compact provenance language near the chart and distinguish current Macro values from historical traces.
+
+Effort:
+S.
+
+Timing:
+Prompt 34B.
+
+Status:
+Partially fixed. The chart now says it is bounded model-output history over simulated ticks, not empirical measurement, calibrated probability, or validation evidence. Richer units/quantity semantics remain future work.
+
+Finding:
+Builder graph controls risked looking executable.
+
+Evidence:
+Builder viewport nodes and edge-list rows were buttons, while safety language lived mostly in the header, inspector, and validation panel.
+
+HCI principle:
+Affordance clarity; prevention of mode errors; runtime honesty.
+
+User impact:
+Users could mistake selecting a graph item for executing or activating a node/edge.
+
+Severity:
+High.
+
+Confidence:
+Medium-high from source; rendered user perception remains untested.
+
+Recommended remedy:
+Keep buttons but label them as read-only structural inspection controls.
+
+Effort:
+S.
+
+Timing:
+Prompt 34B.
+
+Status:
+Fixed in accessible labels and edge-list visible text. A broader visual-language study is still needed.
+
+Finding:
+Rendered responsive and zoom behavior remains unverified.
+
+Evidence:
+The app responded with HTTP 200 on `/` and `/builder`, but this environment lacks Chromium, Chrome, Firefox, `wkhtmltoimage`, and Playwright.
+
+HCI principle:
+Evidence labeling; responsive resilience; accessibility humility.
+
+User impact:
+Source/CSS can prevent obvious defects, but it cannot prove 125%, 150%, or 200% zoom readability, actual overlap, or keyboard task success.
+
+Severity:
+High for claims, medium for current implementation risk.
+
+Confidence:
+High.
+
+Recommended remedy:
+Run a dedicated rendered responsive and accessibility pass with browser tooling before claiming mobile or WCAG readiness.
+
+Effort:
+M.
+
+Timing:
+Next UI/design-system prompt.
+
+Status:
+Unverified.
 
 ## 7. Product Identity And Branding Findings
 
@@ -1126,15 +1284,15 @@ Implementation posture:
 
 | Priority | Finding | Severity | Effort | Timing |
 | --- | --- | --- | --- | --- |
-| 1 | Reset lacks staged/destructive-state clarity | High | S | Dedicated UI-remediation prompt |
-| 2 | Metrics can be overread as empirical evidence | High | M | Dedicated UI-remediation prompt |
-| 3 | Parameter changes rebuild runs but could be missed | High | M | Dedicated UI-remediation prompt |
+| 1 | Reset lacks staged/destructive-state clarity | High | S | Fixed in Prompt 34B for non-trivial run state; undo remains future |
+| 2 | Metrics can be overread as empirical evidence | High | M | Partially fixed in Prompt 34B; richer units remain future |
+| 3 | Parameter changes rebuild runs but could be missed | High | M | Partially fixed in Prompt 34B with explicit Setup copy |
 | 4 | Too many primary surfaces visible at once | High | L | Dedicated UI-remediation prompt |
-| 5 | Builder nodes/edges may still imply executable graphs | High | S | Prompt 34B audit |
+| 5 | Builder nodes/edges may still imply executable graphs | High | S | Partially fixed in Prompt 34B; rendered perception remains untested |
 | 6 | Mobile is compressed desktop | High/Medium | L | Dedicated responsive prompt |
 | 7 | Scenario Builder mixes draft, preview, apply, library, import/export | High | M | Dedicated UI-remediation prompt |
 | 8 | Header hierarchy is crowded | Medium | M | Dedicated UI-remediation prompt |
-| 9 | Chart semantics need units/provenance/model-time labels | High | M | Dedicated UI-remediation prompt |
+| 9 | Chart semantics need units/provenance/model-time labels | High | M | Provenance copy added in Prompt 34B; unit semantics remain future |
 | 10 | Panel subscriptions may cause avoidable rerenders | Medium | M | Long-term performance/UI prompt |
 
 ## 22. Quick Wins
@@ -1150,9 +1308,7 @@ Applied or safe in this prompt:
 
 Recommended next quick wins, not implemented here:
 
-- Add visible reset text or confirmation for non-tick-0 runs.
-- Add model-output note beside Metric Trace.
-- Add "rebuilds run" transient notice when parameters change.
+- Add transient rebuild notices if the UI later gains reliable pending/change-state detection.
 - Add visible tooltips/help text for playback icons.
 
 ## 23. Deferred Architectural Changes
@@ -1196,16 +1352,15 @@ No model output is empirical truth merely because the UI is polished.
 ## 26. Recommended Next UI Prompt
 
 Recommended prompt:
-`UI-REMEDIATION-1: Runtime-Honest Workflow Clarity Audit + Targeted Fixes`
+`UI-DESIGN-SYSTEM-1: Rendered Responsive, Typography + Visualization Accessibility Audit`
 
 Scope:
 
-- Reset confirmation/status.
-- Parameter-change rebuild visibility.
-- Metric provenance and model-output labeling.
-- Header control hierarchy.
-- Scenario/snapshot/run-summary distinction in UI.
-- Builder edge/node non-execution visual language audit.
+- Install or provide browser inspection tooling and capture desktop, short-height, medium, narrow, and 125%/150%/200% zoom evidence.
+- Audit typography scale, dense uppercase usage, focus visibility, target sizes, and scroll behavior against actual rendered screens.
+- Audit canvas state encoding for color-independent interpretation and agent-label density.
+- Extend metric chart semantics only where template metric definitions provide real units or quantity metadata.
+- Revisit Scenario Builder workflow splitting and header density using rendered evidence.
 
 Hard boundaries:
 

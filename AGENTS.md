@@ -40,6 +40,10 @@
 - Do not present service-only primitives as runtime controls.
 - Keep Builder navigation distinct from simulation actions.
 - Preserve keyboard access and visible focus.
+- Preserve runtime-honest metric and capability language near relevant controls and outputs.
+- Do not treat responsive stacking as a complete mobile workflow.
+- Do not let branding obscure current model, scenario, workspace, or runtime state.
+- Destructive run controls must state what is discarded and use staged confirmation when non-trivial run state exists.
 - Hidden panels must not perform expensive tick-based rendering.
 - Avoid unnecessary simulation-store subscriptions in navigation components.
 - Experiment runs must create fresh engine instances through the template registry and should store metrics/outcomes, not full per-run snapshots, unless explicitly requested.

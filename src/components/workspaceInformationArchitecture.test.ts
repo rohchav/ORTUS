@@ -55,6 +55,12 @@ describe("simulation workspace information architecture", () => {
     expect(leftStack).toContain('role="tab"');
     expect(leftStack).toContain("aria-selected={candidate.id === activeMode}");
     expect(leftStack).toContain('role="tabpanel"');
+    expect(leftStack).toContain("onKeyDown={(event) => handleModeKeyDown(event, candidate.id)}");
+    expect(leftStack).toContain('event.key === "ArrowRight"');
+    expect(leftStack).toContain('event.key === "ArrowLeft"');
+    expect(leftStack).toContain('event.key === "Home"');
+    expect(leftStack).toContain('event.key === "End"');
+    expect(leftStack).toContain("focusModeTab(nextMode.id)");
     expect(leftStack).toContain("renderWorkspaceMode(activeMode)");
     expect(leftStack).toContain('case "setup"');
     expect(leftStack).toContain('case "understand"');
@@ -110,10 +116,15 @@ describe("simulation workspace information architecture", () => {
     expect(timeline).toContain("Persistent simulation playback controls");
     expect(timeline).toContain('label={isRunning ? "Pause" : "Run"}');
     expect(timeline).toContain('label="Step"');
-    expect(timeline).toContain('label="Reset"');
+    expect(timeline).toContain('label={resetArmed ? "Confirm Reset" : "Reset"}');
+    expect(timeline).toContain("const resetIsDestructive");
+    expect(timeline).toContain("interventionHistory.length");
+    expect(timeline).toContain("Confirm reset and discard current run state");
+    expect(timeline).toContain("Confirm Reset to rebuild a fresh tick-0 run");
     expect(timeline).toContain("ariaLabel");
     expect(cssBlock(".timeline-strip")).toContain("position: relative;");
     expect(cssBlock(".timeline-strip")).not.toContain("position: sticky;");
+    expect(cssBlock(".timeline-strip__warning")).toContain("grid-column: 1 / -1;");
     expect(css).not.toMatch(/\.left-instruments\s*\{[^}]*overflow-y:\s*auto;/m);
   });
 
@@ -130,5 +141,22 @@ describe("simulation workspace information architecture", () => {
     expect(topStatusSource).not.toContain(">Run Model<");
     expect(topStatusSource).not.toContain(">Compile<");
     expect(topStatusSource).not.toContain(">Apply to Template<");
+  });
+
+  it("keeps Apply, Regenerate, Reset, and metric-trace semantics explicit", () => {
+    const runSettings = source("src/components/RunSettingsPanel.tsx");
+    const parameterPanel = source("src/components/ParameterPanel.tsx");
+    const metricGraph = source("src/components/MetricGraphPanel.tsx");
+
+    expect(runSettings).toContain("Apply Seed rebuilds with the typed seed");
+    expect(runSettings).toContain("Regenerate Seed");
+    expect(runSettings).toContain("creates a new seed and fresh run");
+    expect(runSettings).toContain("aria-label=\"Apply typed seed and rebuild a fresh run\"");
+    expect(runSettings).toContain("aria-label=\"Generate a new seed and rebuild a fresh run\"");
+    expect(parameterPanel).toContain("Parameter changes rebuild a fresh tick-0 run immediately");
+    expect(metricGraph).toContain("Current aggregate values live in Macro Field");
+    expect(metricGraph).toContain("bounded model-output history over simulated ticks");
+    expect(metricGraph).toContain("not empirical measurement");
+    expect(metricGraph).toContain("Metric history line chart of model-output values over simulated ticks");
   });
 });

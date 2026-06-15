@@ -14,7 +14,7 @@ export function ParameterPanel() {
   return (
     <div className="parameter-panel">
       <p className="parameter-panel__note">
-        Control changes rebuild the current run through template validation. Invalid combinations are rejected before the engine is replaced.
+        Parameter changes rebuild a fresh tick-0 run immediately through template validation. Invalid combinations are rejected before the engine is replaced.
       </p>
       {definitions.map((definition) => (
         <ParameterControl

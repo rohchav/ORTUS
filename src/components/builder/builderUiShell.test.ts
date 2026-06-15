@@ -326,8 +326,10 @@ describe("safe builder UI shell", () => {
     expect(componentSource).toContain('aria-label="Selected workspace item inspector"');
     expect(componentSource).toContain('role="status"');
     expect(componentSource).toContain('role="alert"');
-    expect(componentSource).toContain("aria-label={`Node ${node.label}, ${formatNodeKind(node.nodeKind)}, ${formatNodeStatus(node.status)}`}");
+    expect(componentSource).toContain("aria-label={`Select structural node ${node.label} for read-only inspection");
+    expect(componentSource).toContain("aria-label={`Select structural edge ${edge.label ?? edge.id} for read-only inspection; not executable dataflow`}");
     expect(componentSource).toContain("{edge.sourceNodeId} → {edge.targetNodeId}");
+    expect(componentSource).toContain("structural link, not executable dataflow");
     expect(componentSource).toContain("Reset View");
     expect(getVisibleWorkspaceNodes(viewModel, defaultBuilderWorkspaceFilters)).toHaveLength(5);
   });

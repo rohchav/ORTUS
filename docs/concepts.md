@@ -2,7 +2,7 @@
 
 ORTUS is organized around a small set of simulation concepts. Keeping these boundaries explicit prevents model-family definitions, live run state, exploratory comparisons, and UI workspace data from collapsing into one ambiguous artifact.
 
-Roadmap status: ORTUS has completed Prompt 34: Safe Builder UI Shell V1. The post-30B repository hygiene, durable context, dependency stabilization, and performance/scalability pass is complete. Prompt 31, Prompt 31B, Prompt 31C, Prompt 31D, Prompt 32, Prompt 32B, Prompt 33, Prompt 33B, Prompt 33C, Prompt 33D, and Prompt 34 are complete; the next roadmap prompt is Prompt 34B: Safe Builder UI Shell Audit.
+Roadmap status: ORTUS has completed Prompt 34B: Safe Builder UI Shell Audit. The post-30B repository hygiene, durable context, dependency stabilization, and performance/scalability pass is complete. Prompt 31, Prompt 31B, Prompt 31C, Prompt 31D, Prompt 32, Prompt 32B, Prompt 33, Prompt 33B, Prompt 33C, Prompt 33D, Prompt 34, and Prompt 34B are complete; the next roadmap prompt is Prompt 35: Model Schema Authoring Forms V1.
 
 ## Brand And Workbench Identity
 
@@ -38,9 +38,11 @@ Visual Builder Workspace V1 is a service-level structural artifact family with a
 
 Visual builder workspaces are structural planning artifacts; they do not implement runnable visual model authoring. Workspace nodes and edges are visual descriptors, not executable dataflow or runtime behavior. A valid visual builder workspace does not make a model schema runnable. Prompt 32 does not add drag-and-drop modeling, visual programming, or schema execution.
 
-Prompt 34 adds a dedicated safe UI shell for displaying and inspecting `ortus.visualBuilderWorkspace` artifacts. Safe Builder UI Shell V1 displays structural workspace artifacts; it does not execute workspace nodes or edges. The builder shell is not a compiler, interpreter, visual programming environment, or custom simulation runtime. A structurally valid workspace is still not a runnable model. Importing a workspace artifact does not activate model schemas, compatibility mappings, or social-learning semantics.
+Prompt 34 adds a dedicated safe UI shell for displaying and inspecting `ortus.visualBuilderWorkspace` artifacts, and Prompt 34B audits and hardens that shell plus the simulation workspace information architecture. Safe Builder UI Shell V1 displays structural workspace artifacts; it does not execute workspace nodes or edges. The builder shell is not a compiler, interpreter, visual programming environment, or custom simulation runtime. A structurally valid workspace is still not a runnable model. Importing a workspace artifact does not activate model schemas, compatibility mappings, or social-learning semantics.
 
-Workspace references to model schemas, social-learning semantics, observability, causality, networks, resources, feedback, quantities, control, hybrid compositions, scenarios, or templates are structural references only. They do not generate scenarios, RunConfigs, snapshots, templates, or engines; they do not execute node graphs; they do not add external framework interop; and they do not implement social-learning runtime or LLM agents. Active means structurally active, not runtime-executed. The shell does not add drag-and-drop model construction, arbitrary schema editing, rule editing, formula editing, node/edge execution, compatibility conversion, template mutation, or runtime state mutation. Prompt 34B safe builder shell audit is next.
+Workspace references to model schemas, social-learning semantics, observability, causality, networks, resources, feedback, quantities, control, hybrid compositions, scenarios, or templates are structural references only. They do not generate scenarios, RunConfigs, snapshots, templates, or engines; they do not execute node graphs; they do not add external framework interop; and they do not implement social-learning runtime or LLM agents. Active means structurally active, not runtime-executed. The shell does not add drag-and-drop model construction, arbitrary schema editing, rule editing, formula editing, node/edge execution, compatibility conversion, template mutation, or runtime state mutation.
+
+Builder viewport node and edge controls select read-only structural items for inspection only. They do not execute graph dataflow, activate model schemas, activate compatibility mappings, mutate templates, or mutate simulation runtime state.
 
 ### Template/Schema Compatibility Mapping
 

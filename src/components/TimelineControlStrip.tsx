@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { formatNumber, formatTick } from "../lib/format";
 import { useSimulationStore } from "../state/simulationStore";
 
@@ -11,6 +12,25 @@ export function TimelineControlStrip() {
   const speedMultiplier = useSimulationStore((state) => state.speedMultiplier);
   const setSpeedMultiplier = useSimulationStore((state) => state.setSpeedMultiplier);
   const snapshot = useSimulationStore((state) => state.latestSnapshot);
+  const interventionHistoryCount = useSimulationStore((state) => state.interventionHistory.length);
+  const [resetArmed, setResetArmed] = useState(false);
+  const metricHistoryCount = snapshot?.metricsHistory.length ?? 0;
+  const resetIsDestructive = (snapshot?.tick ?? 0) > 0 || metricHistoryCount > 1 || interventionHistoryCount > 0;
+
+  useEffect(() => {
+    if (!resetIsDestructive) {
+      setResetArmed(false);
+    }
+  }, [resetIsDestructive]);
+
+  function handleReset() {
+    if (resetIsDestructive && !resetArmed) {
+      setResetArmed(true);
+      return;
+    }
+    reset();
+    setResetArmed(false);
+  }
 
   return (
     <section className="timeline-strip" aria-label="Persistent simulation playback controls" data-workspace-region="runControlDock">
@@ -27,7 +47,19 @@ export function TimelineControlStrip() {
           onClick={toggleRunning}
         />
         <RunControlButton label="Step" icon="→" ariaLabel="Step exactly one tick" onClick={stepOnce} />
-        <RunControlButton label="Reset" icon="↻" ariaLabel="Reset from current model, parameters, and seed" onClick={reset} />
+        <RunControlButton
+          label={resetArmed ? "Confirm Reset" : "Reset"}
+          icon="↻"
+          ariaLabel={
+            resetArmed
+              ? "Confirm reset and discard current run state"
+              : resetIsDestructive
+                ? "Prepare reset; current tick, metrics, selection, targets, and intervention history may be discarded"
+                : "Reset from current model, parameters, and seed"
+          }
+          active={resetArmed}
+          onClick={handleReset}
+        />
       </div>
       <div className="timeline-strip__readout">
         <strong>{formatTick(snapshot?.tick ?? 0)}</strong>
@@ -47,6 +79,12 @@ export function TimelineControlStrip() {
           suppressHydrationWarning
         />
       </label>
+      {resetArmed ? (
+        <p className="timeline-strip__warning" role="status">
+          Confirm Reset to rebuild a fresh tick-0 run from the current model, parameters, and seed. Current tick, metric history, selection, targets, and
+          intervention history will be cleared.
+        </p>
+      ) : null}
     </section>
   );
 }

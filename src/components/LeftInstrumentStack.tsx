@@ -1,6 +1,6 @@
 "use client";
 
-import type { ReactNode } from "react";
+import type { KeyboardEvent, ReactNode } from "react";
 import { AssumptionsPanel } from "./AssumptionsPanel";
 import { DebugPanel } from "./DebugPanel";
 import { FieldNotesPanel } from "./FieldNotesPanel";
@@ -26,6 +26,29 @@ interface LeftInstrumentStackProps {
 export function LeftInstrumentStack({ activeMode, onModeChange }: LeftInstrumentStackProps) {
   const mode = getSimulationWorkspaceMode(activeMode);
 
+  function handleModeKeyDown(event: KeyboardEvent<HTMLButtonElement>, modeId: SimulationWorkspaceModeId) {
+    const currentIndex = simulationWorkspaceModes.findIndex((candidate) => candidate.id === modeId);
+    const lastIndex = simulationWorkspaceModes.length - 1;
+    const nextIndex =
+      event.key === "ArrowRight" || event.key === "ArrowDown"
+        ? (currentIndex + 1) % simulationWorkspaceModes.length
+        : event.key === "ArrowLeft" || event.key === "ArrowUp"
+          ? (currentIndex - 1 + simulationWorkspaceModes.length) % simulationWorkspaceModes.length
+          : event.key === "Home"
+            ? 0
+            : event.key === "End"
+              ? lastIndex
+              : null;
+
+    if (nextIndex === null) {
+      return;
+    }
+    event.preventDefault();
+    const nextMode = simulationWorkspaceModes[nextIndex]!;
+    onModeChange(nextMode.id);
+    focusModeTab(nextMode.id);
+  }
+
   return (
     <aside className="left-instruments" aria-label="Simulation workspace tools">
       <nav className="workspace-navigator" aria-label="Simulation workspace modes" role="tablist">
@@ -39,6 +62,7 @@ export function LeftInstrumentStack({ activeMode, onModeChange }: LeftInstrument
             aria-controls={`workspace-mode-panel-${candidate.id}`}
             className={candidate.id === activeMode ? "is-active" : ""}
             onClick={() => onModeChange(candidate.id)}
+            onKeyDown={(event) => handleModeKeyDown(event, candidate.id)}
             suppressHydrationWarning
           >
             <span>{candidate.label}</span>
@@ -63,6 +87,15 @@ export function LeftInstrumentStack({ activeMode, onModeChange }: LeftInstrument
       </section>
     </aside>
   );
+}
+
+function focusModeTab(modeId: SimulationWorkspaceModeId): void {
+  if (typeof document === "undefined") {
+    return;
+  }
+  window.requestAnimationFrame(() => {
+    document.getElementById(`workspace-mode-tab-${modeId}`)?.focus();
+  });
 }
 
 function renderWorkspaceMode(mode: SimulationWorkspaceModeId): ReactNode {

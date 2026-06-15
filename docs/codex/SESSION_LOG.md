@@ -373,7 +373,7 @@ Known limitations:
 - Reset remains a one-click destructive run-state reset and should receive a later safety affordance.
 - Metric trace provenance/units and color-independent canvas state encoding still need dedicated visual/a11y work.
 
-Next recommended prompt: Prompt 33D: Opinion Dynamics Social Learning Runtime Audit.
+Next recommended prompt: Prompt 34B: Safe Builder UI Shell Audit.
 
 ## 2026-06-11 - Prompt 33D Opinion Dynamics Social Learning Runtime Audit
 
@@ -442,3 +442,58 @@ Boundary preserved:
 - Builder remains an ORTUS workspace, not a separate branded product.
 - Favicon replacement remains future work until small-size legibility is deliberately optimized.
 - HCI findings must distinguish observed defects, inferred risks, subjective style preferences, and unverified concerns.
+
+## 2026-06-12 - Prompt 34B Safe Builder UI Shell + Workspace Information Architecture Audit
+
+Goal: audit and harden the Safe Builder UI Shell and simulation workspace information architecture without adding visual-builder execution, graph execution, schema execution, drag/drop authoring, compiler/interpreter behavior, scenario/RunConfig/snapshot/template generation, engine creation, simulation behavior changes, or broad design-system redesign.
+
+Starting state:
+
+- Branch `main` was clean and ahead of `origin/main` by three commits.
+- Latest commit was `9bf264d Refactor workspace panel structure and improve component flexibility`.
+- Prompt 34 Safe Builder UI Shell V1, ORTUS brand integration, and UI-REMEDIATION-1 workspace IA changes were committed.
+- Local route probes returned HTTP 200 for `/` and `/builder` from the running Next app on port 3000. Sandbox local socket access required approved unsandboxed `curl`.
+- No Chromium, Chrome, Firefox, `wkhtmltoimage`, or Playwright dependency was available, so rendered viewport, browser zoom, and screenshot inspection remained unverified.
+
+Audit results and hardening:
+
+- Confirmed the task-oriented workspace modes remain Setup, Understand, Observe, Intervene, Experiment, Compare, and Debug.
+- Confirmed the World Stage remains mounted across workspace-mode changes and workspace mode state remains local React UI state.
+- Confirmed persistent run controls live outside the scrollable workspace context panel and the top header no longer uses the old fixed `50px`/`overflow-y: hidden` clipping pattern.
+- Added press-and-confirm Reset behavior when the current run has advanced, accumulated more than initial metric history, or recorded interventions. Reset still rebuilds a fresh tick-0 run from the current model, parameters, and seed and clears current tick, metric history, selection, targets, and intervention history.
+- Added Arrow Left/Right/Up/Down plus Home/End behavior for workspace tabs.
+- Clarified Setup copy: model, parameter, Apply Seed, and Regenerate Seed actions rebuild fresh tick-0 runs through template validation.
+- Added Metric Trace provenance text: traces are bounded model-output history over simulated ticks, not empirical measurements, calibrated probabilities, or validation evidence.
+- Tightened Builder viewport node and edge controls so they select structural items for read-only inspection and do not imply executable dataflow.
+- Updated HCI, workspace IA, roadmap/status, current context, session log, simulation README, README, concepts, planned roadmap, and AGENTS guardrails.
+
+Boundary preserved:
+
+- No simulation engine or template behavior changed.
+- No Builder execution, schema execution, compatibility conversion, visual programming, drag/drop authoring, template mutation, engine creation, scenario generation, RunConfig generation, snapshot generation, or LLM-agent behavior was added.
+- Builder remains a read-only shell for `ortus.visualBuilderWorkspace` artifacts.
+- Structural validity remains distinct from runtime readiness.
+
+Checks:
+
+- `git status --short`: dirty only with Prompt 34B source/docs/test files.
+- `npm run test -- workspaceInformationArchitecture builderUiShell layoutContainment ortusBrand`: passed, 4 files and 23 tests.
+- `npm run typecheck`: passed.
+- `npm run test -- visualBuilderWorkspace roadmap assumptions`: passed, 3 files and 19 tests.
+- `npm run test`: passed, 50 files and 378 tests.
+- `npm run test -- ortusBrand roadmap`: passed after the session-log update, 2 files and 8 tests.
+- `npm run build`: passed with Next.js 15.5.19.
+- `npm run perf:simulation`: passed. Local smoke results included Flocking 100 agents at 99.61 ticks/sec, Flocking 500 agents at 16.24 ticks/sec, Forest Fire 80x60 grid at 22.73 ticks/sec, and Predator-Prey default at 71.76 ticks/sec.
+- `git diff --check`: passed after removing one trailing-space line in the workspace IA doc.
+- `npm run lint`: unavailable, package.json has no lint script.
+
+Remaining limitations:
+
+- Browser screenshot, DOM measurement, and 125%/150%/200% zoom inspection were not possible in this environment.
+- No formal WCAG, screen-reader, or user-study evidence was produced.
+- Canvas color/glyph state encoding, dense typography, target sizing, and mobile workflow still need rendered design-system work.
+- Metric unit semantics remain limited to what template metric definitions actually provide; no units were invented.
+
+Next roadmap prompt: Prompt 35: Model Schema Authoring Forms V1, provided it remains structural-only and non-executing.
+
+Next recommended UI/design-system prompt: `UI-DESIGN-SYSTEM-1: Rendered Responsive, Typography + Visualization Accessibility Audit`.

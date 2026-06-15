@@ -1,8 +1,8 @@
 # ORTUS Workspace Information Architecture
 
 Date: 2026-06-12  
-Prompt: UI-REMEDIATION-1  
-Status: implemented as a source-level UI layout remediation; rendered screenshot tooling was unavailable in this environment
+Prompt: UI-REMEDIATION-1, audited and hardened by Prompt 34B
+Status: implemented and source-audited; HTTP route probes passed, but rendered screenshot and browser zoom tooling was unavailable in this environment
 
 ## Problem
 
@@ -60,7 +60,9 @@ Lower-frequency actions moved out of the header:
 
 Playback controls live in a persistent shell-level run-control dock outside the workspace context scroll region. The dock has visible labels and accessible names for Run/Pause, Step, and Reset. It does not cover world content and is not sticky inside the drawer.
 
-Reset is still a one-click reset from current model, parameters, and seed. That remains a red-flag candidate for a later safety prompt because non-tick-0 reset can discard current run state.
+Reset rebuilds a fresh tick-0 run from the current model, parameters, and seed. That clears the current tick, metric history, selection, intervention targets, and intervention history. Prompt 34B added press-and-confirm behavior when the current run has advanced, accumulated more than initial metric history, or recorded interventions. Reset remains one-click only when there is no meaningful run state to discard.
+
+Regenerate Seed is separate from Reset. It creates a new seed and rebuilds a fresh tick-0 run. Apply Seed rebuilds with the typed seed. Model and parameter changes also rebuild a fresh tick-0 run immediately through template validation; there is no reliable pending-change state in the current architecture.
 
 ## Scrolling Rules
 
@@ -95,6 +97,7 @@ This is a source/CSS implementation. Browser zoom at 125% and 200% still needs a
 
 - Workspace modes use semantic tab controls with `role="tablist"`, `role="tab"`, `aria-selected`, `aria-controls`, and a `role="tabpanel"` context panel.
 - Current mode is communicated by text and ARIA state.
+- Workspace tabs support Arrow Left/Right/Up/Down plus Home/End navigation and move focus to the selected tab.
 - Run controls have visible text labels and accessible names.
 - The header and dock state use text, not color alone.
 - Focus styles remain global through existing focus-visible CSS.
@@ -107,16 +110,17 @@ This is not a formal WCAG conformance claim.
 - Workspace navigation does not import `SimulationEngine`, subscribe to snapshots, or mutate the simulation store.
 - Hidden workspace panels are not rendered, reducing tick-driven subscriptions from inactive Macro, Metric, Debug, Experiment, and Comparison panels.
 - The world renderer and simulation stepping loop are unchanged.
+- Builder viewport node and edge buttons select structural items for read-only inspection only; they do not execute nodes or edges.
+- Metric Trace now states near the chart that trace values are bounded model-output history over simulated ticks, not empirical measurements, calibrated probabilities, or validation evidence.
 
 ## Unresolved Limitations
 
 - No browser screenshot/DOM measurement pass was possible in this environment.
-- Reset still lacks a staged confirmation.
-- Metric traces still need stronger units/provenance and "model output, not empirical measurement" labeling.
 - Canvas agent states still rely partly on color/glyph conventions and need a dedicated visualization accessibility pass.
 - The dense technical visual language still needs a broader design-system pass.
 - Pending-change detection is not implemented because the current runtime immediately rebuilds for template, seed, and parameter changes.
+- Browser zoom at 125%, 150%, and 200% remains unverified.
 
 ## Future Design-System Work
 
-A dedicated visual design-system prompt is still recommended after Prompt 34B. It should address typography scale, color-independent state encoding, chart semantics, reset confirmation, responsive screenshot testing, keyboard walkthroughs, and zoom behavior without changing simulation semantics.
+A dedicated visual design-system prompt is still recommended after Prompt 34B. It should address typography scale, color-independent state encoding, richer chart semantics and units where model definitions support them, responsive screenshot testing, keyboard walkthroughs, and zoom behavior without changing simulation semantics.

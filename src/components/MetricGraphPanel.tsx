@@ -20,8 +20,12 @@ export function MetricGraphPanel({ collapsed = false, onToggle }: PanelProps) {
 
   return (
     <CornerFramePanel title="Metric Trace" eyebrow="History" variant="compact" collapsed={collapsed} onToggle={onToggle}>
+      <p className="microcopy">
+        Current aggregate values live in Macro Field. This chart is bounded model-output history over simulated ticks, not empirical measurement,
+        calibrated probability, or validation evidence.
+      </p>
       {sample.length > 1 && keys.length > 0 ? (
-        <svg className="metric-chart" viewBox="0 0 320 128" role="img" aria-label="Metric history line chart">
+        <svg className="metric-chart" viewBox="0 0 320 128" role="img" aria-label="Metric history line chart of model-output values over simulated ticks">
           <defs>
             <linearGradient id="chartFade" x1="0" x2="0" y1="0" y2="1">
               <stop offset="0%" stopColor="rgba(216,255,62,.16)" />

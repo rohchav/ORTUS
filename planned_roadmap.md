@@ -1,17 +1,17 @@
 # ORTUS Full Prompt Roadmap
 
-*Last updated after Prompt 34 Safe Builder UI Shell V1.*
+*Last updated after Prompt 34B Safe Builder UI Shell Audit.*
 
 ## Current Status
 
-ORTUS has completed the core runtime/template foundation, scenario system, uncertainty layer, assumptions/limits layer, systems primitive registry, hybrid composition, multi-scale structure, scale-view state, boundary/environment models, spatial fields, observability, causality, quantity semantics, emergence pattern descriptors, robustness/resilience semantics, strategy/control semantics, model schema declarations, knowledge/memory/social-learning semantics, visual builder workspace schemas, template/schema compatibility mapping, the template/schema compatibility mapping audit, a narrow Opinion Dynamics social-learning behavior mode, the Opinion Dynamics social-learning runtime audit, and Safe Builder UI Shell V1.
+ORTUS has completed the core runtime/template foundation, scenario system, uncertainty layer, assumptions/limits layer, systems primitive registry, hybrid composition, multi-scale structure, scale-view state, boundary/environment models, spatial fields, observability, causality, quantity semantics, emergence pattern descriptors, robustness/resilience semantics, strategy/control semantics, model schema declarations, knowledge/memory/social-learning semantics, visual builder workspace schemas, template/schema compatibility mapping, the template/schema compatibility mapping audit, a narrow Opinion Dynamics social-learning behavior mode, the Opinion Dynamics social-learning runtime audit, Safe Builder UI Shell V1, and the Safe Builder UI Shell + workspace information architecture audit.
 
 Current project status:
 
 ```text
-Completed roadmap prompt: Prompt 34 — Safe Builder UI Shell V1
+Completed roadmap prompt: Prompt 34B — Safe Builder UI Shell Audit
 Post-30B stabilization completed: repo hygiene, durable Codex context, dependency repair, generated-artifact cleanup, and runtime performance/scalability baseline
-Next roadmap prompt: Prompt 34B — Safe Builder UI Shell Audit
+Next roadmap prompt: Prompt 35 — Model Schema Authoring Forms V1
 ```
 
 Critical global boundary:
@@ -57,7 +57,7 @@ missing from this full roadmap. Prompt 31C and Prompt 31D are now corrected belo
 after Prompt 31B and before Prompt 32, with a later narrow Opinion Dynamics
 social-learning runtime slice placed after template/schema compatibility mapping.
 The social/cognitive semantics insertion was corrected after manual review, and
-Prompt 31C, Prompt 31D, Prompt 32, Prompt 32B, Prompt 33, Prompt 33B, Prompt 33C, Prompt 33D, and Prompt 34 are now marked complete while Prompt 34B remains future safe-builder shell audit work.
+Prompt 31C, Prompt 31D, Prompt 32, Prompt 32B, Prompt 33, Prompt 33B, Prompt 33C, Prompt 33D, Prompt 34, and Prompt 34B are now marked complete while Prompt 35 remains future structural form-authoring work.
 
 Safe Builder UI Shell V1 displays structural workspace artifacts; it does not execute workspace nodes or edges. The builder shell is not a compiler, interpreter, visual programming environment, or custom simulation runtime. A structurally valid workspace is still not a runnable model. Importing a workspace artifact does not activate model schemas, compatibility mappings, or social-learning semantics.
 
@@ -1391,11 +1391,12 @@ Purpose:
 * Audit UI copy and affordances.
 * Confirm UI does not imply custom models can run.
 * Confirm no hidden compiler or engine mutation.
+* Audit and harden workspace information architecture, run-control semantics, metric provenance, tab accessibility, and Builder inspection affordances.
 
 Status:
 
 ```text
-Planned.
+Completed.
 ```
 
 ## Prompt 35 — Model Schema Authoring Forms V1
@@ -2865,16 +2866,17 @@ No global service availability treated as template runtime support.
 Recommended immediate next steps:
 
 ```text
-1. Review and commit the Prompt 34 Safe Builder UI Shell V1 work.
-2. Prepare Prompt 34B — Safe Builder UI Shell Audit.
-3. Keep Prompt 34B audit-focused: no Run Model button, no schema execution, no scenario generation, no hidden compiler, no custom runtime, and no builder editing.
+1. Review and commit the Prompt 34B Safe Builder UI Shell Audit work.
+2. Prepare Prompt 35 — Model Schema Authoring Forms V1 only if its scope remains structural and non-executing.
+3. Run a dedicated rendered responsive/design-system audit before making mobile-readiness, WCAG, or polished visual-workbench claims.
 ```
 
 Do not start any builder editing or runtime-mapping prompt until the repo status and roadmap docs clearly reflect:
 
 ```text
-Completed through Prompt 34.
+Completed through Prompt 34B.
 Performance stabilization completed after Prompt 30B.
 Prompt 34 safe builder shell is complete.
-Next roadmap prompt: Prompt 34B.
+Prompt 34B safe builder shell audit is complete.
+Next roadmap prompt: Prompt 35.
 ```
