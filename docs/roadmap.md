@@ -4,7 +4,7 @@ This roadmap reserves the major complex-systems pillars that ORTUS must support 
 
 ## Current Foundation
 
-ORTUS has completed through Prompt 36B. Prompts 1-36B established the current foundation:
+ORTUS has completed through Prompt 37B. Prompts 1-37B established the current foundation:
 
 - Engine/runtime/UI foundation.
 - Scenario Builder.
@@ -26,12 +26,14 @@ ORTUS has completed through Prompt 36B. Prompts 1-36B established the current fo
 - Prompt 35B audit hardening for import safety, destructive confirmation, data preservation, tab semantics, validation announcements, responsive stacking, and source-level architecture boundaries.
 - Prompt 36 read-only visual graph inspection for loaded workspace artifacts with deterministic layout, accessible outline/edge alternatives, UI-only exploration state, marker preservation, and bounded rendering.
 - Prompt 36B graph-view audit hardening for structural-only affordances, explicit marker/notice counts, filtered selection coherence, deterministic layout/DOM ids, text-only metadata, source-level accessibility, and runtime-boundary tests.
+- Prompt 37 validation UX and bounded repair suggestions for `ortus.modelSchema` authoring, with grouped issue cards, copyable diagnostics, section jumps, stale-suggestion protection, confirmation for content-removing repairs, and manual-only handling for ambiguous modeling intent.
+- Prompt 37B audit hardening for helper-level confirmation enforcement, explicit `canApply` suggestion classification, malformed/prototype-like patch rejection, deterministic issue grouping, rule-repair boundary copy, stale list-target rejection, and export-after-repair tests.
 
 These foundations are deliberately service-first or metadata-first unless documented otherwise. Networks, resources, feedback primitives, boundary/environment models, spatial fields, observability models, causal assumptions, quantity semantics, emergence descriptors, robustness/resilience descriptors, and strategy/control descriptors are headless structural services until a template explicitly uses them at runtime. A template must not claim support for a primitive merely because a service exists.
 
 After Prompt 30B, ORTUS completed a repository hygiene, durable context, dependency stabilization, and performance/scalability pass. That pass added and validated performance instrumentation and spatial-indexing foundations, but it does not turn reserved structural primitives into runtime support and is not evidence for high-scale readiness by itself.
 
-Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 36B: Visual Builder Graph View Audit are complete. The next roadmap prompt is Prompt 37: Schema Validation UX + Repair Suggestions V1.
+Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 37B: Schema Validation UX + Repair Suggestions Audit are complete. The next roadmap prompt is Prompt 38: Schema-to-Template Fit Report V1.
 
 ## Revised Prompt Sequence
 
@@ -105,9 +107,14 @@ Completed Prompt 36 graph-view foundation and audit:
 1. 36 - Visual Builder Graph View V1.
 2. 36B - Visual Builder Graph View Audit.
 
-Next roadmap prompt:
+Completed Prompt 37 validation-assistance foundation and audit:
 
 1. 37 - Schema Validation UX + Repair Suggestions V1.
+2. 37B - Schema Validation UX + Repair Suggestions Audit.
+
+Next roadmap prompt:
+
+1. 38 - Schema-to-Template Fit Report V1.
 
 Later roadmap bands:
 
@@ -185,6 +192,10 @@ Prompt 36 adds a third Builder mode for read-only visualization of the currently
 Visual Builder Graph View V1 visualizes structural relationships; it does not execute nodes or edges. Graph selection, filtering, panning, and zooming are UI-only state. Graph View is not visual programming, schema execution, or runtime generation. A graph that looks complete is still not a runnable model.
 
 Prompt 36B audits and hardens the graph-view surface without adding graph authoring, edge creation, drag/drop, schema execution, runtime preview, generated scenarios, generated RunConfigs, generated templates, generated snapshots, or engine creation. It separates marker counts from global notices, keeps hidden filtered connections from acting like visible graph targets, derives Fit Graph from the actual graph surface when available, preserves deterministic text-only inspection, and adds source/static tests for unsafe rendering and runtime-boundary drift. Rendered responsive behavior and WCAG-level accessibility remain unverified until browser and assistive-technology testing is available.
+
+Prompt 37 adds Schema Validation UX + Repair Suggestions V1 to Author Schema without adding runtime behavior. It presents structural status, error/warning/suggestion/manual counts, grouped issue cards, section jumps, original validation messages, copyable text diagnostics, and explicit service-only/future-only/runtime-boundary notices. Repair suggestions are structural editing assistance only. They do not make a schema runnable, infer correct model behavior, validate scientific meaning, or generate templates, scenarios, RunConfigs, snapshots, engines, compatibility conversions, visual-builder workspaces, or social-learning runtime. Safe repairs require an explicit click, destructive/content-removing repairs require confirmation, stale suggestions are rejected, and ambiguous modeling intent remains manual-only.
+
+Prompt 37B audits and hardens the validation-assistance surface without adding schema execution or generation. Repair suggestions are structural editing assistance. They do not make a schema runnable. A repaired schema may be structurally valid and still have no runtime implementation. ORTUS does not infer the correct model behavior from validation repairs. Validation repairs do not generate templates, scenarios, RunConfigs, snapshots, or engines. Confirmation-required repairs are now enforced by the repair helper itself, suggestions expose `canApply`, malformed and prototype-like patches are rejected, unknown issues fall into a safe structural group, and rule repair copy states that rule suggestions do not execute or validate behavior. Rendered responsive behavior, clipboard behavior, browser zoom behavior, focus-return behavior, assistive-technology behavior, and WCAG-level accessibility remain unverified until browser and assistive-technology testing is available.
 
 ## Reserved Artifact Families
 

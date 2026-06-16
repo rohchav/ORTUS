@@ -22,6 +22,10 @@ const requiredDocPhrases = [
   "Graph selection, filtering, panning, and zooming are UI-only state.",
   "Graph View is not visual programming, schema execution, or runtime generation.",
   "A graph that looks complete is still not a runnable model.",
+  "Repair suggestions are structural editing assistance. They do not make a schema runnable.",
+  "A repaired schema may be structurally valid and still have no runtime implementation.",
+  "ORTUS does not infer the correct model behavior from validation repairs.",
+  "Validation repairs do not generate templates, scenarios, RunConfigs, snapshots, or engines.",
   "Rendered responsive behavior and WCAG-level accessibility remain unverified until browser and assistive-technology testing is available."
 ];
 
@@ -70,17 +74,20 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(existsSync(missingPillarsPath)).toBe(true);
 
     const roadmap = readFileSync(roadmapPath, "utf8");
-    expect(roadmap).toContain("completed through Prompt 36B");
+    expect(roadmap).toContain("completed through Prompt 37B");
     expect(roadmap).toContain("Post-30B stabilization");
-    expect(roadmap).toContain("Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 36B: Visual Builder Graph View Audit are complete.");
+    expect(roadmap).toContain(
+      "Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 37B: Schema Validation UX + Repair Suggestions Audit are complete."
+    );
     expect(roadmap).toContain("Completed Prompt 31 audit band");
     expect(roadmap).toContain("Completed Prompt 32 planning and audit foundation");
     expect(roadmap).toContain("Completed Prompt 33 compatibility foundation");
     expect(roadmap).toContain("Completed Prompt 34 shell and audit foundation");
     expect(roadmap).toContain("Completed Prompt 35 authoring and audit foundation");
     expect(roadmap).toContain("Completed Prompt 36 graph-view foundation and audit");
+    expect(roadmap).toContain("Completed Prompt 37 validation-assistance foundation and audit");
     expect(roadmap).toContain("Prompt 35 adds a separate `Author Schema` Builder mode");
-    expect(roadmap).toContain("The next roadmap prompt is Prompt 37: Schema Validation UX + Repair Suggestions V1.");
+    expect(roadmap).toContain("The next roadmap prompt is Prompt 38: Schema-to-Template Fit Report V1.");
     expect(roadmap).toContain("31 - Model Schema + Interpreter Foundation V1");
     expect(roadmap).toContain("31B - Model Schema + Interpreter Foundation Audit");
     expect(roadmap).toContain("31C - Knowledge, Memory + Social Learning Semantics V1");
@@ -92,6 +99,9 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(roadmap).toContain("35B - Model Schema Authoring Forms Audit");
     expect(roadmap).toContain("36 - Visual Builder Graph View V1");
     expect(roadmap).toContain("36B - Visual Builder Graph View Audit");
+    expect(roadmap).toContain("37 - Schema Validation UX + Repair Suggestions V1");
+    expect(roadmap).toContain("37B - Schema Validation UX + Repair Suggestions Audit");
+    expect(roadmap).toContain("38 - Schema-to-Template Fit Report V1");
     expect(roadmap).toContain("18B - Roadmap Alignment Audit");
     expect(roadmap).toContain("21 - Multi-Scale Systems Architecture V1");
     expect(roadmap).toContain("25 - Observability + Measurement Model V1");

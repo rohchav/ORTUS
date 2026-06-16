@@ -722,3 +722,110 @@ Remaining limitations:
 - Prompt 36 and Prompt 36B changes remain uncommitted and should be reviewed together.
 
 Next roadmap prompt after commit: Prompt 37 Schema Validation UX + Repair Suggestions V1.
+
+## 2026-06-16 - Prompt 37 Schema Validation UX + Repair Suggestions V1
+
+Goal: add schema validation UX and bounded repair suggestions to Author Schema without adding schema execution, formula/code parsing, compatibility conversion, generated artifacts, visual-builder authoring, runtime preview, LLM repair, or simulation-state mutation.
+
+Starting state:
+
+- Latest commit was `6eeaffe feat: add Builder Graph View and ViewModel`.
+- Worktree was clean before Prompt 37 began.
+- Prompt 36 and Prompt 36B were already committed.
+
+Implementation:
+
+- Added `src/components/builder/validation/schemaValidationUx.ts` as a pure validation-assistance adapter over the existing model-schema capability report.
+- Added grouped issue modeling with structural status, error/warning/suggestion/manual counts, unsupported capability counts, service-only/future-only notices, original validation messages, paths, section mapping, copyable text diagnostics, and persistent repair-boundary phrases.
+- Added bounded named repair operations only: top-level string trim, declaration-id trim, unsafe top-level metadata-key removal, and executable-flag reset to false.
+- Added stale-suggestion hashing so suggestions computed for an older draft are rejected without mutation.
+- Added post-apply validation through the existing model-schema service.
+- Kept ambiguous duplicate ids, unknown references, invalid enum/model intent, oversized content, unsupported capabilities, and runtime-boundary warnings manual-only.
+- Integrated the Author Schema validation panel with expandable issue groups, issue cards, section/field jumps, confirmation-gated content-removing repairs, disabled reasons, manual guidance, copyable issue details, and a polite status region.
+- Preserved current draft/local UI state only. Repair suggestions do not mutate last-valid artifacts, active simulation state, loaded visual workspaces, templates, scenarios, RunConfigs, snapshots, engines, compatibility reports, or social-learning artifacts.
+- Updated README, roadmap, concepts, simulation docs, HCI audit, workspace IA, current context, AGENTS guardrails, planned roadmap, and roadmap/model-schema/control tests. Prompt 37 is now marked complete and Prompt 37B is next.
+
+Boundary preserved:
+
+- Repair suggestions are structural editing assistance. They do not make a schema runnable.
+- A repaired schema may be structurally valid and still have no runtime implementation.
+- ORTUS does not infer the correct model behavior from validation repairs.
+- Validation repairs do not generate templates, scenarios, RunConfigs, snapshots, or engines.
+- No LLM repair, automatic model generation, arbitrary JSON Patch/path interpreter, schema execution, formula parsing, code/script execution, dynamic import, external API call, compatibility conversion, social-learning artifact execution, visual-builder workspace generation, runtime preview, or simulation mutation was added.
+
+Checks:
+
+- Focused schema validation adapter and authoring tests: passed, 2 files and 27 tests.
+- Roadmap alignment test: passed, 1 file and 4 tests.
+- Focused regression pack for modelSchema, modelSchemaAuthoring, builderUiShell, visualBuilderWorkspace, schemaTemplateCompatibility, socialLearning, opinion, primitiveRegistry, hybridComposition, and roadmap: passed, 10 files and 87 tests.
+- `npm run typecheck`: passed.
+- `npm test`: passed, 54 files and 421 tests.
+- `npm run build`: passed with Next.js 15.5.19; `/builder` prerendered successfully at 34.6 kB route size and 231 kB first-load JS.
+- `npm run perf:simulation`: passed. Local smoke results included Flocking 100 agents at 158.4 ticks/sec, Flocking 500 agents at 20.71 ticks/sec, Forest Fire 80x60 at 33.3 ticks/sec, and Predator-Prey default at 96.07 ticks/sec.
+- `git diff --check`: passed.
+- `npm run lint`: unavailable, package.json has no lint script.
+- Sandboxed dev server failed with `listen EPERM`; escalated `npm run dev -- --hostname 127.0.0.1 --port 38037` succeeded.
+- Escalated `curl -I http://127.0.0.1:38037/builder` returned HTTP 200.
+
+Remaining limitations:
+
+- Browser screenshots, DOM measurement, responsive viewport inspection, browser zoom inspection, clipboard behavior, focus-return behavior, and assistive-technology behavior remain unverified.
+- Source and unit tests cover the accessibility hooks, but they are not a WCAG conformance claim.
+- Prompt 37 validation UX has not yet had the required Prompt 37B audit.
+- Prompt 37 changes remain uncommitted.
+
+Next roadmap prompt after commit: Prompt 37B Schema Validation UX + Repair Suggestions Audit.
+
+## 2026-06-16 - Prompt 37B Schema Validation UX + Repair Suggestions Audit
+
+Goal: audit and harden Prompt 37 validation UX and repair suggestions without adding schema execution, rule execution, generated artifacts, compatibility conversion, visual programming, runtime preview, LLM repair, or simulation-state mutation.
+
+Starting state:
+
+- Prompt 37 changes were dirty and uncommitted.
+- Dirty worktree files matched the Prompt 37 feature/docs/test band plus the new `src/components/builder/validation/` directory.
+- The requested `src/simulation/hybridComposition` path does not exist in this repo; the implemented hybrid composition service is `src/simulation/composition`.
+- A local `/builder` route probe before edits returned HTTP 200 through approved unsandboxed `curl -I`.
+
+Audit findings and fixes:
+
+- Found and fixed a real boundary defect: confirmation-required repair suggestions were gated by the UI but could still be applied by the shared helper.
+- Added explicit `canApply` classification to repair suggestions and counted suggestions from that applyability contract.
+- Required `{ confirmed: true }` for confirmation-level repairs in `applySchemaRepairSuggestion`.
+- Rejected malformed fabricated patches and prototype-like metadata patch targets before draft mutation.
+- Kept prototype-like unsafe metadata manual-only rather than offering automatic deletion.
+- Made issue group order deterministic and routed unknown validation messages to `Other structural issues`.
+- Added required rule repair copy: `Rule repair suggestions only edit structural declarations. They do not execute or validate behavior.`
+- Added missing/stale field-focus fallback copy for issue jumps.
+- Strengthened export/import-after-repair coverage so repaired drafts serialize through the model-schema serializer and do not include repair UI state.
+- Updated README, roadmap, concepts, simulation docs, HCI audit, workspace IA, current context, AGENTS guardrails, planned roadmap, and roadmap/model-schema/control tests. Prompt 37B is now marked complete and Prompt 38 is next after commit.
+
+Boundary preserved:
+
+- Repair suggestions are structural editing assistance. They do not make a schema runnable.
+- A repaired schema may be structurally valid and still have no runtime implementation.
+- ORTUS does not infer the correct model behavior from validation repairs.
+- Validation repairs do not generate templates, scenarios, RunConfigs, snapshots, or engines.
+- No LLM repair, automatic model generation, arbitrary JSON Patch/path interpreter, schema execution, rule execution, formula parsing, code/script execution, dynamic import, external API call, compatibility conversion, social-learning artifact execution, visual-builder workspace generation, runtime preview, or simulation mutation was added.
+
+Checks:
+
+- Focused validation UX and authoring tests before docs: passed, 2 files and 34 tests.
+- Focused audit/doc pack: passed, 5 files and 58 tests.
+- Focused regression pack for modelSchema, visualBuilderWorkspace, schemaTemplateCompatibility, socialLearning, opinion, primitiveRegistry, hybridComposition, roadmap, assumptions, builderUiShell, builderGraph, schemaValidationUx, and modelSchemaAuthoring: passed, 14 files and 126 tests.
+- `npm run typecheck`: failed once on a widened test fixture type, then passed after the fixture was typed as a model-schema entity declaration.
+- `npm test`: passed, 54 files and 428 tests.
+- `npm run build`: passed with Next.js 15.5.19; `/builder` prerendered successfully at 35.4 kB route size and 232 kB first-load JS.
+- `npm run perf:simulation`: passed. Local smoke results included Flocking 100 agents at 104.36 ticks/sec, Flocking 500 agents at 16.15 ticks/sec, Forest Fire 80x60 at 25.54 ticks/sec, and Predator-Prey default at 74.59 ticks/sec.
+- `git diff --check`: passed.
+- `npm run lint`: unavailable, package.json has no lint script.
+- Browser binaries checked with `command -v chromium`, `chromium-browser`, `google-chrome`, and `firefox`; none were available.
+
+Remaining limitations:
+
+- Post-edit local HTTP route probing could not be repeated because the escalation request was rejected by the environment usage-limit gate. Earlier same-session `/builder` HTTP probe returned 200, and the post-edit production build prerendered `/builder`.
+- Browser screenshots, DOM measurement, responsive viewport inspection, browser zoom inspection, clipboard behavior, focus-return behavior, keyboard walkthrough quality, and assistive-technology behavior remain unverified.
+- Source and unit tests cover the accessibility hooks, but they are not a WCAG conformance claim.
+- Prompt 37 and 37B changes remain uncommitted.
+
+Next roadmap prompt after commit: Prompt 38 Schema-to-Template Fit Report V1.

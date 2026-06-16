@@ -1,7 +1,7 @@
 "use client";
 
 import { useDeferredValue, useEffect, useMemo, useRef, useState, type ChangeEvent, type KeyboardEvent } from "react";
-import { maxModelSchemaJsonLength, type ModelSchemaDefinition } from "../../simulation/modelSchema";
+import { maxModelSchemaJsonLength, type ModelSchemaDefinition, type ModelSchemaSummary } from "../../simulation/modelSchema";
 import { CornerFramePanel } from "../ui/CornerFramePanel";
 import { ModelSchemaSectionEditor, type RemovalRequest } from "./ModelSchemaSectionEditor";
 import {
@@ -10,17 +10,28 @@ import {
   exportModelSchemaDraft,
   importModelSchemaDraft,
   isModelSchemaDraftDirty,
-  mapModelSchemaErrorToFieldId,
   modelSchemaAuthoringSections,
   removeModelSchemaDeclaration,
   type ModelSchemaAuthoringSectionId
 } from "./modelSchemaAuthoring";
+import {
+  applySchemaRepairSuggestion,
+  createSchemaValidationUxModel,
+  formatSchemaValidationIssueDetails,
+  schemaValidationEmptyState,
+  schemaValidationRuleRepairBoundaryPhrase,
+  type SchemaRepairSuggestion,
+  type SchemaValidationIssue,
+  type SchemaValidationIssueGroup,
+  type SchemaValidationUxModel
+} from "./validation/schemaValidationUx";
 
 type PendingAction =
   | { type: "reset"; triggerId: string; focusAfterId: string }
   | { type: "restore"; triggerId: string; focusAfterId: string }
   | { type: "import"; artifact: ModelSchemaDefinition; triggerId: string; focusAfterId: string }
   | { type: "removeMetadata"; metadataKey: string; triggerId: string; focusAfterId: string }
+  | { type: "repair"; suggestion: SchemaRepairSuggestion; triggerId: string; focusAfterId: string }
   | ({ type: "remove" } & RemovalRequest);
 
 interface ModelSchemaAuthoringShellProps {
@@ -39,11 +50,13 @@ export function ModelSchemaAuthoringShell({ hidden = false }: ModelSchemaAuthori
   const [exportError, setExportError] = useState<string | null>(null);
   const [statusMessage, setStatusMessage] = useState("Empty structural draft created in memory.");
   const [pendingAction, setPendingAction] = useState<PendingAction | null>(null);
+  const [collapsedValidationGroups, setCollapsedValidationGroups] = useState<ReadonlySet<string>>(() => new Set());
   const confirmButtonRef = useRef<HTMLButtonElement>(null);
   const cancelButtonRef = useRef<HTMLButtonElement>(null);
   const deferredDraft = useDeferredValue(draft);
   const validationPending = deferredDraft !== draft;
   const view = useMemo(() => createModelSchemaDraftView(deferredDraft), [deferredDraft]);
+  const validationUx = useMemo(() => createSchemaValidationUxModel(deferredDraft, view.report), [deferredDraft, view.report]);
   const dirty = useMemo(() => isModelSchemaDraftDirty(draft, baseline), [draft, baseline]);
 
   useEffect(() => {
@@ -159,6 +172,78 @@ export function ModelSchemaAuthoringShell({ hidden = false }: ModelSchemaAuthori
     setPendingAction({ type: "restore", triggerId: "schema-restore-last-valid", focusAfterId: "schema-restore-last-valid" });
   }
 
+  function toggleValidationGroup(groupId: string) {
+    setCollapsedValidationGroups((current) => {
+      const next = new Set(current);
+      if (next.has(groupId)) {
+        next.delete(groupId);
+      } else {
+        next.add(groupId);
+      }
+      return next;
+    });
+  }
+
+  function requestRepairSuggestion(suggestion: SchemaRepairSuggestion, triggerId: string, focusAfterId: string) {
+    if (validationPending) {
+      setStatusMessage("Structural validation is updating. Repair suggestions are disabled until the current draft is checked.");
+      focusAfterRender(triggerId);
+      return;
+    }
+    if (!suggestion.canApply || !suggestion.patch || suggestion.riskLevel === "manualOnly") {
+      setStatusMessage(suggestion.disabledReason ?? "This issue requires manual review. No draft changes were applied.");
+      focusAfterRender(triggerId);
+      return;
+    }
+    if (suggestion.requiresConfirmation) {
+      setPendingAction({ type: "repair", suggestion, triggerId, focusAfterId });
+      setStatusMessage("Structural repair staged. Confirm before changing the current draft.");
+      return;
+    }
+    applyRepairSuggestionNow(suggestion, focusAfterId);
+  }
+
+  function applyRepairSuggestionNow(suggestion: SchemaRepairSuggestion, focusAfterId: string, confirmed = false) {
+    const result = applySchemaRepairSuggestion(draft, suggestion, { confirmed });
+    if (!result.applied) {
+      setStatusMessage(result.message);
+      focusAfterRender(focusAfterId);
+      return;
+    }
+    setDraft(result.draft);
+    setExportText("");
+    setExportError(null);
+    setStatusMessage(result.message);
+    focusAfterRender(focusAfterId);
+  }
+
+  function jumpToValidationIssue(issue: SchemaValidationIssue) {
+    const sectionTargetId = `schema-section-${issue.sectionId}`;
+    const targetId = issue.fieldId ?? sectionTargetId;
+    setActiveSection(issue.sectionId);
+    focusAfterRender(targetId, () => {
+      setStatusMessage(`Validation path ${issue.path} is not currently focusable. The ${issue.sectionId} section is open; use the issue path and original message.`);
+      if (targetId !== sectionTargetId) {
+        focusAfterRender(sectionTargetId);
+      }
+    });
+  }
+
+  async function copyValidationIssueDetails(issue: SchemaValidationIssue) {
+    const details = formatSchemaValidationIssueDetails(issue);
+    if (typeof navigator !== "undefined" && navigator.clipboard?.writeText) {
+      try {
+        await navigator.clipboard.writeText(details);
+        setStatusMessage("Validation issue details copied as text. The schema remains structural and not runnable.");
+        return;
+      } catch {
+        setStatusMessage("Clipboard copy failed. Use the copyable issue details text in the issue card.");
+        return;
+      }
+    }
+    setStatusMessage("Clipboard copy is unavailable. Use the copyable issue details text in the issue card.");
+  }
+
   function confirmPendingAction() {
     const action = pendingAction;
     if (!action) {
@@ -173,6 +258,9 @@ export function ModelSchemaAuthoringShell({ hidden = false }: ModelSchemaAuthori
       applyImportedArtifact(action.artifact);
     } else if (action.type === "removeMetadata") {
       removeMetadataItem(action.metadataKey);
+    } else if (action.type === "repair") {
+      applyRepairSuggestionNow(action.suggestion, action.focusAfterId, true);
+      return;
     } else {
       removeDraftItem(action);
     }
@@ -380,142 +468,17 @@ export function ModelSchemaAuthoringShell({ hidden = false }: ModelSchemaAuthori
 
       <aside className="schema-authoring-validation" aria-label="Schema validation and limits">
         <CornerFramePanel title="Validation + Limits" eyebrow="Service Report" variant="compact">
-          <section className="schema-validation-report">
-            <p className="schema-risk-note">A valid model schema is still not a runnable simulation.</p>
-            <p className="schema-validation-status" role="status" aria-live="polite" aria-atomic="true">
-              {validationPending
-                ? "Structural validation updating."
-                : `${view.report.valid ? "Structurally valid" : "Structurally invalid"}. ${view.report.errors.length} errors and ${view.report.warnings.length} warnings.`}
-            </p>
-            <dl className="builder-inspector__rows">
-              <div>
-                <dt>Structural status</dt>
-                <dd>{view.report.valid ? "Structurally valid" : "Structurally invalid"}</dd>
-              </div>
-              <div>
-                <dt>Runnable now</dt>
-                <dd>{view.report.runnableNow ? "Yes" : "No"}</dd>
-              </div>
-              <div>
-                <dt>Interpreter</dt>
-                <dd>{view.report.interpreterAvailable ? "Available" : "Unavailable"}</dd>
-              </div>
-              <div>
-                <dt>Executable rules</dt>
-                <dd>{view.report.executableRuleCount}</dd>
-              </div>
-              <div>
-                <dt>Error count</dt>
-                <dd>{view.report.errors.length}</dd>
-              </div>
-              <div>
-                <dt>Warning count</dt>
-                <dd>{view.report.warnings.length}</dd>
-              </div>
-            </dl>
-            {view.report.errors.length > 0 ? (
-              <section className="schema-validation-block" aria-labelledby="schema-error-summary-title">
-                <h3 id="schema-error-summary-title">Error Summary</h3>
-                <ul className="builder-message-list builder-message-list--error">
-	                  {view.report.errors.map((error, index) => {
-	                    const targetId = mapModelSchemaErrorToFieldId(error);
-	                    return (
-	                      <li key={`${error}-${index}`}>
-	                        {targetId ? (
-	                          <a
-	                            href={`#${validationErrorTarget(targetId, activeSection)}`}
-	                            onClick={(event) => {
-	                              event.preventDefault();
-	                              const section = sectionForFieldError(targetId);
-	                              setActiveSection(section);
-	                              focusAfterRender(targetId);
-	                            }}
-	                          >
-	                            {error}
-	                          </a>
-	                        ) : (
-	                          error
-	                        )}
-	                      </li>
-	                    );
-	                  })}
-                </ul>
-              </section>
-            ) : null}
-            <section className="schema-validation-block" aria-labelledby="schema-missing-capabilities-title">
-              <h3 id="schema-missing-capabilities-title">Missing Runtime Capabilities</h3>
-              <ul className="builder-message-list">
-                {view.report.missingRuntimeCapabilities.map((capability) => (
-                  <li key={capability}>{capability}</li>
-                ))}
-              </ul>
-            </section>
-            <section className="schema-validation-block" aria-labelledby="schema-warning-summary-title">
-              <h3 id="schema-warning-summary-title">Warnings</h3>
-              <ul className="builder-message-list">
-                {view.report.warnings.map((warning) => (
-                  <li key={warning}>{warning}</li>
-                ))}
-              </ul>
-            </section>
-            {view.summary ? (
-              <section className="schema-validation-block" aria-labelledby="schema-summary-title">
-                <h3 id="schema-summary-title">Structural Summary</h3>
-                <dl className="builder-inspector__rows">
-                  <div>
-                    <dt>Entities</dt>
-                    <dd>{view.summary.entityTypeCount}</dd>
-                  </div>
-                  <div>
-                    <dt>Components</dt>
-                    <dd>{view.summary.componentTypeCount}</dd>
-                  </div>
-                  <div>
-                    <dt>Attributes</dt>
-                    <dd>{view.summary.attributeTypeCount}</dd>
-                  </div>
-                  <div>
-                    <dt>Spaces</dt>
-                    <dd>{view.summary.spaceCount}</dd>
-                  </div>
-                  <div>
-                    <dt>Parameters</dt>
-                    <dd>{view.summary.parameterCount}</dd>
-                  </div>
-                  <div>
-                    <dt>Metrics</dt>
-                    <dd>{view.summary.metricCount}</dd>
-                  </div>
-                  <div>
-                    <dt>Rules</dt>
-                    <dd>{view.summary.ruleDeclarationCount}</dd>
-                  </div>
-                  <div>
-                    <dt>Artifact refs</dt>
-                    <dd>{view.summary.artifactReferenceCount}</dd>
-                  </div>
-                </dl>
-              </section>
-            ) : null}
-            <section className="schema-validation-block" aria-labelledby="schema-hard-limits-title">
-              <h3 id="schema-hard-limits-title">Hard Limits</h3>
-              <ul className="builder-message-list">
-                <li>No schema execution.</li>
-                <li>No compiler.</li>
-                <li>No template generation.</li>
-                <li>No scenario generation.</li>
-                <li>No RunConfig generation.</li>
-                <li>No snapshot generation.</li>
-                <li>No engine generation.</li>
-                <li>No visual graph authoring.</li>
-                <li>No compatibility conversion.</li>
-                <li>No social-learning artifact execution.</li>
-              </ul>
-            </section>
-            <p className="builder-muted">
-              Last valid artifact: {lastValidArtifact ? `${lastValidArtifact.name} (${lastValidArtifact.id})` : "none imported or exported yet"}.
-            </p>
-          </section>
+          <SchemaValidationAssistance
+            ux={validationUx}
+            validationPending={validationPending}
+            summary={view.summary}
+            lastValidArtifact={lastValidArtifact}
+            collapsedGroups={collapsedValidationGroups}
+            onToggleGroup={toggleValidationGroup}
+            onIssueJump={jumpToValidationIssue}
+            onRepairSuggestion={requestRepairSuggestion}
+            onCopyIssueDetails={copyValidationIssueDetails}
+          />
         </CornerFramePanel>
       </aside>
 
@@ -600,6 +563,335 @@ function SchemaSectionNavigation({
   );
 }
 
+function SchemaValidationAssistance({
+  ux,
+  validationPending,
+  summary,
+  lastValidArtifact,
+  collapsedGroups,
+  onToggleGroup,
+  onIssueJump,
+  onRepairSuggestion,
+  onCopyIssueDetails
+}: {
+  ux: SchemaValidationUxModel;
+  validationPending: boolean;
+  summary: ModelSchemaSummary | null;
+  lastValidArtifact: ModelSchemaDefinition | null;
+  collapsedGroups: ReadonlySet<string>;
+  onToggleGroup: (groupId: string) => void;
+  onIssueJump: (issue: SchemaValidationIssue) => void;
+  onRepairSuggestion: (suggestion: SchemaRepairSuggestion, triggerId: string, focusAfterId: string) => void;
+  onCopyIssueDetails: (issue: SchemaValidationIssue) => Promise<void>;
+}) {
+  const statusText = validationPending
+    ? "Structural validation updating."
+    : `${ux.overview.structuralStatus}. ${ux.overview.errorCount} errors, ${ux.overview.warningCount} warnings, ${ux.overview.suggestionCount} repair suggestions, and ${ux.overview.manualOnlyCount} manual review items.`;
+
+  return (
+    <section className="schema-validation-report">
+      <p className="schema-risk-note">A valid model schema is still not a runnable simulation.</p>
+      <ul className="schema-validation-boundaries" aria-label="Validation repair boundaries">
+        {ux.boundaryPhrases.map((phrase) => (
+          <li key={phrase}>{phrase}</li>
+        ))}
+      </ul>
+      <p className="schema-validation-status" role="status" aria-live="polite" aria-atomic="true">
+        {statusText}
+      </p>
+      <dl className="builder-inspector__rows schema-validation-overview">
+        <div>
+          <dt>Structural status</dt>
+          <dd>{ux.overview.structuralStatus}</dd>
+        </div>
+        <div>
+          <dt>Runnable now</dt>
+          <dd>{ux.overview.runnableStatus}</dd>
+        </div>
+        <div>
+          <dt>Compiler / interpreter</dt>
+          <dd>{ux.overview.compilerStatus}</dd>
+        </div>
+        <div>
+          <dt>Error count</dt>
+          <dd>{ux.overview.errorCount}</dd>
+        </div>
+        <div>
+          <dt>Warning count</dt>
+          <dd>{ux.overview.warningCount}</dd>
+        </div>
+        <div>
+          <dt>Repair suggestions</dt>
+          <dd>{ux.overview.suggestionCount}</dd>
+        </div>
+        <div>
+          <dt>Manual review</dt>
+          <dd>{ux.overview.manualOnlyCount}</dd>
+        </div>
+        <div>
+          <dt>Unsupported capabilities</dt>
+          <dd>{ux.overview.unsupportedCapabilityCount}</dd>
+        </div>
+      </dl>
+
+      <section className="schema-validation-block" aria-labelledby="schema-support-boundary-title">
+        <h3 id="schema-support-boundary-title">Support Boundary</h3>
+        <ul className="builder-message-list">
+          <li>{ux.overview.serviceOnlyNotice}</li>
+          <li>{ux.overview.futureOnlyNotice}</li>
+          <li>Unsupported, future-only, and service-only markers are disclosure markers, not repair targets.</li>
+        </ul>
+      </section>
+
+      {ux.overview.errorCount > 0 ? (
+        <section className="schema-validation-block" aria-labelledby="schema-error-summary-title">
+          <h3 id="schema-error-summary-title">Error Summary</h3>
+          <p className="builder-muted">Grouped issue cards below include paths, original validation messages, section jumps, and repair guidance.</p>
+        </section>
+      ) : (
+        <p className="schema-validation-empty">{schemaValidationEmptyState}</p>
+      )}
+
+      <section className="schema-validation-block" aria-labelledby="schema-issue-groups-title">
+        <h3 id="schema-issue-groups-title">Issue Groups</h3>
+        <div className="schema-validation-groups">
+          {ux.groups.map((group) => (
+            <SchemaValidationIssueGroupPanel
+              key={group.id}
+              group={group}
+              collapsed={collapsedGroups.has(group.id)}
+              validationPending={validationPending}
+              onToggleGroup={onToggleGroup}
+              onIssueJump={onIssueJump}
+              onRepairSuggestion={onRepairSuggestion}
+              onCopyIssueDetails={onCopyIssueDetails}
+            />
+          ))}
+        </div>
+      </section>
+
+      <section className="schema-validation-block" aria-labelledby="schema-missing-capabilities-title">
+        <h3 id="schema-missing-capabilities-title">Missing Runtime Capabilities</h3>
+        <p className="builder-muted">Capability gaps remain visible in the issue groups. They do not authorize runtime controls.</p>
+      </section>
+
+      <section className="schema-validation-block" aria-labelledby="schema-warning-summary-title">
+        <h3 id="schema-warning-summary-title">Warnings</h3>
+        <p className="builder-muted">Warnings are structural and epistemic boundaries. They are not scientific validation, calibration, or proof.</p>
+      </section>
+
+      {summary ? (
+        <section className="schema-validation-block" aria-labelledby="schema-summary-title">
+          <h3 id="schema-summary-title">Structural Summary</h3>
+          <dl className="builder-inspector__rows">
+            <div>
+              <dt>Entities</dt>
+              <dd>{summary.entityTypeCount}</dd>
+            </div>
+            <div>
+              <dt>Components</dt>
+              <dd>{summary.componentTypeCount}</dd>
+            </div>
+            <div>
+              <dt>Attributes</dt>
+              <dd>{summary.attributeTypeCount}</dd>
+            </div>
+            <div>
+              <dt>Spaces</dt>
+              <dd>{summary.spaceCount}</dd>
+            </div>
+            <div>
+              <dt>Parameters</dt>
+              <dd>{summary.parameterCount}</dd>
+            </div>
+            <div>
+              <dt>Metrics</dt>
+              <dd>{summary.metricCount}</dd>
+            </div>
+            <div>
+              <dt>Rules</dt>
+              <dd>{summary.ruleDeclarationCount}</dd>
+            </div>
+            <div>
+              <dt>Artifact refs</dt>
+              <dd>{summary.artifactReferenceCount}</dd>
+            </div>
+          </dl>
+        </section>
+      ) : null}
+
+      <section className="schema-validation-block" aria-labelledby="schema-hard-limits-title">
+        <h3 id="schema-hard-limits-title">Hard Limits</h3>
+        <ul className="builder-message-list">
+          <li>No schema execution.</li>
+          <li>No compiler.</li>
+          <li>No template generation.</li>
+          <li>No scenario generation.</li>
+          <li>No RunConfig generation.</li>
+          <li>No snapshot generation.</li>
+          <li>No engine generation.</li>
+          <li>No visual graph authoring.</li>
+          <li>No compatibility conversion.</li>
+          <li>No social-learning artifact execution.</li>
+        </ul>
+      </section>
+      <p className="builder-muted">
+        Last valid artifact: {lastValidArtifact ? `${lastValidArtifact.name} (${lastValidArtifact.id})` : "none imported or exported yet"}.
+      </p>
+    </section>
+  );
+}
+
+function SchemaValidationIssueGroupPanel({
+  group,
+  collapsed,
+  validationPending,
+  onToggleGroup,
+  onIssueJump,
+  onRepairSuggestion,
+  onCopyIssueDetails
+}: {
+  group: SchemaValidationIssueGroup;
+  collapsed: boolean;
+  validationPending: boolean;
+  onToggleGroup: (groupId: string) => void;
+  onIssueJump: (issue: SchemaValidationIssue) => void;
+  onRepairSuggestion: (suggestion: SchemaRepairSuggestion, triggerId: string, focusAfterId: string) => void;
+  onCopyIssueDetails: (issue: SchemaValidationIssue) => Promise<void>;
+}) {
+  const bodyId = `schema-validation-group-body-${group.id}`;
+  return (
+    <section className="schema-validation-group" aria-labelledby={`schema-validation-group-title-${group.id}`}>
+      <button
+        id={`schema-validation-group-title-${group.id}`}
+        type="button"
+        className="schema-validation-group__button"
+        aria-expanded={!collapsed}
+        aria-controls={bodyId}
+        onClick={() => onToggleGroup(group.id)}
+        suppressHydrationWarning
+      >
+        <span>{group.title}</span>
+        <em>
+          {group.count} items · highest severity {group.highestSeverity}
+        </em>
+      </button>
+      {!collapsed ? (
+        <div id={bodyId} className="schema-validation-issue-list">
+          {group.issues.map((issue) => (
+            <SchemaValidationIssueCard
+              key={issue.id}
+              issue={issue}
+              validationPending={validationPending}
+              onIssueJump={onIssueJump}
+              onRepairSuggestion={onRepairSuggestion}
+              onCopyIssueDetails={onCopyIssueDetails}
+            />
+          ))}
+        </div>
+      ) : null}
+    </section>
+  );
+}
+
+function SchemaValidationIssueCard({
+  issue,
+  validationPending,
+  onIssueJump,
+  onRepairSuggestion,
+  onCopyIssueDetails
+}: {
+  issue: SchemaValidationIssue;
+  validationPending: boolean;
+  onIssueJump: (issue: SchemaValidationIssue) => void;
+  onRepairSuggestion: (suggestion: SchemaRepairSuggestion, triggerId: string, focusAfterId: string) => void;
+  onCopyIssueDetails: (issue: SchemaValidationIssue) => Promise<void>;
+}) {
+  const suggestion = issue.suggestion;
+  const repairButtonId = `schema-repair-action-${issue.id}`;
+  const disabledReasonId = `schema-repair-disabled-${issue.id}`;
+  const actionable = Boolean(suggestion?.canApply && suggestion.patch && suggestion.riskLevel !== "manualOnly");
+  const disabledReason = validationPending
+    ? "Structural validation is updating."
+    : suggestion?.disabledReason;
+  const focusAfterId = issue.fieldId ?? `schema-section-${issue.sectionId}`;
+  const ruleRelated = issue.sectionId === "rules" || issue.path.includes("ruleDeclarations");
+
+  return (
+    <article className={`schema-validation-issue-card schema-validation-issue-card--${issue.severity}`}>
+      <header>
+        <div>
+          <h4>{issue.title}</h4>
+          <p>
+            {issue.severity} · {issue.sectionId}
+          </p>
+        </div>
+        <button type="button" onClick={() => onIssueJump(issue)} suppressHydrationWarning>
+          {issue.fieldId ? "Jump to field" : "Jump to section"}
+        </button>
+      </header>
+      <dl className="schema-validation-issue-card__facts">
+        <div>
+          <dt>Path</dt>
+          <dd>{issue.path}</dd>
+        </div>
+        <div>
+          <dt>Category</dt>
+          <dd>{issue.category}</dd>
+        </div>
+      </dl>
+      <p>{issue.explanation}</p>
+      <p>{issue.whyItMatters}</p>
+      <div className="schema-validation-original-message">
+        <span>Original validation message</span>
+        <code>{issue.originalMessage}</code>
+      </div>
+      {suggestion ? (
+        <div className="schema-validation-repair">
+          <span>Suggestion</span>
+          <p>{suggestion.summary}</p>
+          <p>{suggestion.preview}</p>
+          {actionable ? (
+            <>
+              <button
+                id={repairButtonId}
+                type="button"
+                disabled={validationPending}
+                aria-describedby={validationPending || disabledReason ? disabledReasonId : undefined}
+                onClick={() => onRepairSuggestion(suggestion, repairButtonId, focusAfterId)}
+                suppressHydrationWarning
+              >
+                {suggestion.actionLabel}
+              </button>
+              {validationPending || disabledReason ? (
+                <p id={disabledReasonId} className="builder-muted">
+                  {disabledReason}
+                </p>
+              ) : null}
+            </>
+          ) : (
+            <p className="builder-muted">{issue.manualGuidance}</p>
+          )}
+          {ruleRelated ? <p className="schema-validation-rule-note">{schemaValidationRuleRepairBoundaryPhrase}</p> : null}
+        </div>
+      ) : (
+        <>
+          <p className="builder-muted">{issue.manualGuidance}</p>
+          {ruleRelated ? <p className="schema-validation-rule-note">{schemaValidationRuleRepairBoundaryPhrase}</p> : null}
+        </>
+      )}
+      <p className="schema-validation-boundary-note">{issue.boundaryNotice}</p>
+      <details className="schema-validation-copyable">
+        <summary>Copyable issue details</summary>
+        <pre>{formatSchemaValidationIssueDetails(issue)}</pre>
+      </details>
+      <button type="button" onClick={() => void onCopyIssueDetails(issue)} suppressHydrationWarning>
+        Copy issue details
+      </button>
+    </article>
+  );
+}
+
 function sectionCount(draft: ModelSchemaDefinition, section: ModelSchemaAuthoringSectionId): string {
   switch (section) {
     case "identity":
@@ -638,6 +930,9 @@ function confirmationTitle(action: PendingAction): string {
   if (action.type === "removeMetadata") {
     return `Remove metadata ${action.metadataKey}?`;
   }
+  if (action.type === "repair") {
+    return `${action.suggestion.label}?`;
+  }
   return `Remove ${action.label}?`;
 }
 
@@ -654,57 +949,24 @@ function confirmationDescription(action: PendingAction): string {
   if (action.type === "removeMetadata") {
     return "This removes the selected inert metadata entry from the draft. The action does not affect simulation state.";
   }
+  if (action.type === "repair") {
+    return `${action.suggestion.preview} The repair changes the current draft only, validates afterward, and does not make the schema runnable.`;
+  }
   return "This removes the selected structural item from the draft. Cross-references may become invalid and will be reported by the model-schema service.";
 }
 
-function focusAfterRender(id: string): void {
+function focusAfterRender(id: string, onMissing?: () => void): void {
   if (typeof document === "undefined") {
     return;
   }
   window.requestAnimationFrame(() => {
-    document.getElementById(id)?.focus();
+    const element = document.getElementById(id);
+    if (element) {
+      element.focus();
+      return;
+    }
+    onMissing?.();
   });
-}
-
-function validationErrorTarget(fieldErrorId: string, activeSection: ModelSchemaAuthoringSectionId): string {
-  const section = sectionForFieldError(fieldErrorId);
-  return section === activeSection ? fieldErrorId : `schema-section-tab-${section}`;
-}
-
-function sectionForFieldError(fieldErrorId: string): ModelSchemaAuthoringSectionId {
-  if (fieldErrorId.includes("entityTypes") || fieldErrorId.endsWith("-entities")) {
-    return "entities";
-  }
-  if (fieldErrorId.includes("componentTypes") || fieldErrorId.endsWith("-components")) {
-    return "components";
-  }
-  if (fieldErrorId.includes("attributeTypes") || fieldErrorId.endsWith("-attributes")) {
-    return "attributes";
-  }
-  if (fieldErrorId.includes("-spaces")) {
-    return "spaces";
-  }
-  if (fieldErrorId.includes("-parameters")) {
-    return "parameters";
-  }
-  if (fieldErrorId.includes("-metrics")) {
-    return "metrics";
-  }
-  if (fieldErrorId.includes("ruleDeclarations") || fieldErrorId.endsWith("-rules")) {
-    return "rules";
-  }
-  if (fieldErrorId.includes("artifactReferences") || fieldErrorId.endsWith("-artifacts")) {
-    return "artifacts";
-  }
-  if (
-    fieldErrorId.includes("assumptionNotes") ||
-    fieldErrorId.includes("limitationNotes") ||
-    fieldErrorId.includes("validationNotes") ||
-    fieldErrorId.endsWith("-notes")
-  ) {
-    return "notes";
-  }
-  return "identity";
 }
 
 function isAssumptionNoteKey(

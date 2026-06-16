@@ -1,8 +1,8 @@
 # ORTUS HCI / UX / Visual-Direction Audit
 
 Date: 2026-06-11  
-Updated: 2026-06-15 after Prompt 36B
-Prompt: UI-BRAND-1, UI-REMEDIATION-1, Prompt 34B, Prompt 35, Prompt 35B, Prompt 36, Prompt 36B
+Updated: 2026-06-16 after Prompt 37B
+Prompt: UI-BRAND-1, UI-REMEDIATION-1, Prompt 34B, Prompt 35, Prompt 35B, Prompt 36, Prompt 36B, Prompt 37, Prompt 37B
 Status: source-based audit, not a formal WCAG audit
 
 ## 1. Executive Verdict
@@ -33,6 +33,12 @@ The Builder now has a dedicated Graph View for the loaded visual-workspace artif
 Prompt 36B update:
 The graph audit found and hardened several source-level risks: generic warning counts conflated marker counts with global runtime-boundary notices, filtered inspector links could point at hidden targets as if visible, static runtime-boundary copy used live-region semantics, Fit Graph used fixed assumed dimensions, sanitized node ids could collide, and exact required non-execution copy was incomplete. Prompt 36B separates marker/notice counts, renders filtered connections as hidden-by-filter text, changes the safety block to a note, uses actual surface dimensions for fit when available, adds collision-free DOM ids, strengthens deterministic layout and mutation-isolation tests, and locks the required copy. Browser rendering, zoom behavior, screen-reader behavior, and WCAG conformance remain unverified.
 
+Prompt 37 update:
+Author Schema validation is now more usable and more dangerous if misread. The good part: grouped issue cards expose severity, paths, original validation messages, copyable diagnostics, section jumps, manual guidance, and explicit service-only/future-only boundaries. Repair suggestions are intentionally narrow: safe edits require an explicit click, destructive/content-removing edits require confirmation, stale suggestions are rejected, and ambiguous modeling intent remains manual-only. The risk to keep watching is product language: a repaired schema is still not runnable, scientifically validated, calibrated, or semantically correct. Browser rendering, keyboard walkthrough quality, screen-reader behavior, focus-return behavior in actual browsers, and WCAG conformance remain unverified.
+
+Prompt 37B update:
+The audit found a real enforcement weakness: confirmation-required repairs were blocked by the visible UI but could still be applied by the shared repair helper. Prompt 37B moves that boundary into the helper itself, adds explicit `canApply` classification, rejects malformed and prototype-like patches, makes group order deterministic, routes unknown validation messages to a safe structural group, adds rule-repair non-execution copy, reports missing/stale focus targets, and proves export-after-repair does not carry repair UI state. This is source- and unit-tested hardening. Browser clipboard behavior, rendered responsive behavior, browser zoom behavior, focus-return behavior, screen-reader behavior, and WCAG conformance remain unverified.
+
 ## 2. Audit Scope
 
 Inspected surfaces:
@@ -42,6 +48,7 @@ Inspected surfaces:
 - Safe Builder UI Shell files added in Prompt 34.
 - Model Schema Authoring Forms files added in Prompt 35.
 - Visual Builder Graph View components, pure graph adapter, keyboard outline, text edge list, bounded layout, and Prompt 36B source-level audit hardening.
+- Schema validation assistance adapter and Author Schema validation panel changes added in Prompt 37 and hardened in Prompt 37B.
 - Global CSS, typography tokens, responsive rules, focus styles, animation/reduced-motion rules.
 - Metadata and favicon/icon configuration.
 - Existing component and simulation tests.
@@ -54,6 +61,7 @@ Out of scope:
 - Visual Builder execution, editing, graph programming, schema execution, or generation.
 - Drag/drop graph authoring, node or edge mutation, force-layout animation, schema-derived workspace generation, or runtime graph execution.
 - Model schema compiler/interpreter behavior, simulation preview, template/scenario/RunConfig/snapshot generation, or compatibility conversion.
+- LLM repair, automatic model generation, arbitrary patch interpretation, or validation repairs that infer model behavior.
 - Formal WCAG conformance certification.
 - User testing.
 

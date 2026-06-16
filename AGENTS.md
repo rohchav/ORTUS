@@ -100,6 +100,22 @@
 - Reject oversized model-schema files before full browser reads, then still use the headless deserializer as the authority.
 - Preserve imported non-text JSON value types; do not silently coerce them into strings to fit form controls.
 - Destructive schema confirmations must block background editing and support Escape, focus cycling, and focus return.
+- Schema validation repair suggestions are structural editing assistance only; they do not make a schema runnable.
+- A repaired schema may be structurally valid and still have no runtime implementation.
+- Do not infer correct model behavior from validation repairs.
+- Do not generate templates, scenarios, RunConfigs, snapshots, engines, visual-builder workspaces, compatibility conversions, or social-learning runtime from validation repairs.
+- Validation repairs must mutate only the current Author Schema draft and must validate afterward.
+- Validation repairs must not mutate the last valid artifact, active simulation state, loaded visual workspace, templates, scenarios, RunConfigs, snapshots, engines, compatibility reports, or social-learning artifacts.
+- Every repair suggestion must expose whether it can be applied; manual-only suggestions must not render or execute apply behavior.
+- Safe repair suggestions require an explicit user click; destructive or content-removing repair suggestions require confirmation.
+- Do not apply destructive or content-removing repair suggestions through helper APIs unless confirmation is explicitly supplied.
+- Ambiguous modeling intent, duplicate semantics, broken references, unsupported modeling choices, and missing runtime capabilities must remain manual-only.
+- Reject stale repair suggestions without changing the draft.
+- Keep repair patches deterministic, bounded, named, data-only operations; reject malformed patches and prototype-like targets.
+- Field jumps from validation issues must fail visibly with path text when a target is missing or stale.
+- Do not claim clipboard, browser zoom, rendered responsive, focus-return, screen-reader, assistive-technology, or WCAG readiness without direct verification.
+- Do not add LLM repair, automatic model generation, arbitrary patch/path interpreters, JSON Patch execution, formula parsing, code/script execution, dynamic imports, external API calls, or hidden schema interpreter behavior to validation repairs.
+- Render validation messages, metadata, paths, and repair diagnostics as text only.
 - Do not treat Visual Builder Graph View as visual programming.
 - Do not add drag/drop node authoring, edge creation, connect handles, or graph mutation without an explicit future prompt.
 - Do not execute graph nodes or edges, and do not interpret graph edges as runtime dataflow.

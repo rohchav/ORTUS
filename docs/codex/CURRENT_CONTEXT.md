@@ -1,6 +1,6 @@
 # ORTUS Current Context
 
-Last updated: 2026-06-15 after Prompt 36B Visual Builder Graph View Audit
+Last updated: 2026-06-16 after Prompt 37B Schema Validation UX + Repair Suggestions Audit
 
 ## Project Identity
 
@@ -22,6 +22,10 @@ Prompt 36 adds a third Builder mode, `Graph View`, for the currently loaded vali
 
 Prompt 36B audits and hardens Graph View before the combined Prompt 36/36B commit. It separates validation, warning, unsupported, future-only, service-only, global notice, and missing-runtime-capability counts; keeps filtered-out inspector connections non-actionable; uses collision-free DOM ids for node focus; derives Fit Graph from the actual graph surface where available; strengthens deterministic layout and immutability tests; and keeps persistent copy explicit that Graph View is structural inspection only. It adds no graph authoring, node/edge creation, drag/drop, schema execution, runtime preview, generated scenarios, generated RunConfigs, generated templates, generated snapshots, engine creation, or simulation-state mutation.
 
+Prompt 37 adds Schema Validation UX + Repair Suggestions V1 to the `Author Schema` Builder mode. A pure validation-assistance adapter consumes the existing model-schema capability report and current draft, groups issues by category, exposes severity/counts, preserves original validation messages, provides copyable text diagnostics, and offers only bounded named repair operations. Safe suggestions require an explicit click; content-removing repairs require confirmation; stale suggestions are rejected; ambiguous model intent, broken references, duplicate semantics, unsupported concepts, and missing runtime capabilities remain manual-only. Repairs mutate only the current draft and validate afterward. They do not mutate the last-valid artifact, active simulation state, loaded visual workspace, templates, scenarios, RunConfigs, snapshots, engines, compatibility reports, or social-learning artifacts.
+
+Prompt 37B audits and hardens the validation-assistance surface before the combined Prompt 37/37B commit. Confirmation-required repairs are enforced by `applySchemaRepairSuggestion` itself through an explicit confirmation option, every suggestion exposes `canApply`, malformed fabricated patches are rejected, prototype-like metadata patch targets are blocked, stale list-item suggestions are rejected after draft mutation, issue group order is deterministic, unknown validator messages fall into a safe structural group, rule repair cards carry explicit non-execution copy, field jumps report missing/stale focus targets, and export-after-repair remains ordinary model-schema serialization. The audit added no schema execution, rule execution, LLM repair, model generation, compatibility conversion, visual-builder generation, runtime preview, templates, scenarios, RunConfigs, snapshots, or engines.
+
 Confirmed UI layout defects fixed in UI-REMEDIATION-1:
 
 - The header used fixed `height: 50px` with `overflow-y: hidden`, which could clip crowded lower header content.
@@ -35,11 +39,11 @@ Built-in production templates currently include Epidemic Spread, Opinion Dynamic
 
 ## Completed Prompt State
 
-Durable docs and source indicate completed roadmap work through Prompt 36B. Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 36B: Visual Builder Graph View Audit are complete.
+Durable docs and source indicate completed roadmap work through Prompt 37B. Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 37B: Schema Validation UX + Repair Suggestions Audit are complete.
 
 The post-30B repository hygiene, dependency stabilization, durable context, and performance/scalability pass has also been completed. Recent commits include `dd6c256` for repo context/generated-artifact hygiene, `4949b72` for dependency and performance script stabilization, and `a80d5b7` for simulation performance instrumentation and spatial indexing foundations.
 
-The next roadmap prompt is Prompt 37: Schema Validation UX + Repair Suggestions V1, after the combined Prompt 36 and Prompt 36B changes are reviewed and committed. A separate rendered responsive/design-system audit is still recommended before making mobile-readiness, WCAG, or polished visual-workbench claims.
+The next roadmap prompt is Prompt 38: Schema-to-Template Fit Report V1, after the combined Prompt 37/37B changes are reviewed and committed. A separate rendered responsive/design-system audit is still recommended before making mobile-readiness, WCAG, clipboard, focus-return, or polished visual-workbench claims.
 
 Implemented runtime foundations include scenarios, snapshots, template-defined behavior modes, agent composition, interventions, experiments, run summaries/comparison, seeded randomness, metrics, spaces, template metadata, and a narrow Opinion Dynamics `socialLearning` behavior mode audited in Prompt 33D.
 
@@ -48,6 +52,10 @@ Implemented service-first or metadata-first foundations include uncertainty, ass
 Model schemas declare model structure; they do not execute rules or create runnable simulations. A valid model schema is not a template, scenario, RunConfig, or snapshot. Rule declarations are descriptive metadata, not parsed formulas or executable behavior. Belief, memory, and social-learning rule declarations are structural placeholders; they do not implement human cognition or social-learning runtime.
 
 Model Schema Authoring Forms V1 creates structural model-schema artifacts; it does not execute schemas. Rule declarations authored in the Builder are descriptive only and remain non-executable. A valid authored schema is not a runnable simulation. The schema authoring UI does not generate templates, scenarios, RunConfigs, snapshots, or engines.
+
+Schema Validation UX + Repair Suggestions V1 is structural assistance only. Required persistent boundary language: repair suggestions do not make a schema runnable; a repaired schema may still have no runtime implementation; ORTUS does not infer correct model behavior from validation repairs; validation repairs do not generate templates, scenarios, RunConfigs, snapshots, or engines. Validation repairs do not prove scientific correctness, calibration, causal validity, robustness, safety, strategy effectiveness, or operational readiness.
+
+Prompt 37B preserved the same exact boundary language and strengthened enforcement: Repair suggestions are structural editing assistance. They do not make a schema runnable. A repaired schema may be structurally valid and still have no runtime implementation. ORTUS does not infer the correct model behavior from validation repairs. Validation repairs do not generate templates, scenarios, RunConfigs, snapshots, or engines.
 
 Prompt 35/35B draft behavior:
 
@@ -61,6 +69,12 @@ Prompt 35/35B draft behavior:
 - Imported non-text allowed values and metadata remain inert and read-only rather than being silently coerced to strings.
 - No browser or backend persistence is added.
 - Prompt 36 Graph View does not read or mutate the Author Schema draft.
+- Prompt 37 repair suggestions patch only the current draft through named structural operations and re-run validation after application.
+- Prompt 37B requires confirmation in the helper API for confirmation-level repairs; UI confirmation alone is not treated as sufficient enforcement.
+- Malformed repair patches, prototype-like metadata targets, and stale list-index suggestions are rejected without draft mutation.
+- Stale repair suggestions are rejected without draft mutation.
+- Safe low-risk edits require explicit clicks; destructive/content-removing edits require confirmation; ambiguous intent remains manual-only.
+- Repair suggestions never parse or execute `ruleDescription`, formulas, code, scripts, graph metadata, compatibility reports, or social-learning artifacts.
 
 Knowledge, memory, and social-learning descriptors are structural semantics; they do not implement human cognition. Background profiles are compressed prior descriptors, not simulated life histories. Crowd and stranger exposure should usually be modeled as aggregate signals, representative agents, or fields rather than thousands of throwaway individuals. LLM-per-agent runtime is not implemented and must not be implied. `ortus.knowledgeMemorySocialLearningModel` artifacts describe bounded symbolic semantics only; they do not execute social learning, update beliefs or memory, sample exposure, infer real-person traits, support protected-class inference, validate psychology, predict people, optimize persuasion, provide policy targeting, or mutate Opinion Dynamics.
 
@@ -136,7 +150,7 @@ Prompt 35 and Prompt 35B were committed together in `7696381 feat: Implement Mod
 
 ## Next Recommended Prompt After Stabilization
 
-Next roadmap prompt: Prompt 37: Schema Validation UX + Repair Suggestions V1.
+Next roadmap prompt: Prompt 38: Schema-to-Template Fit Report V1.
 
 Next recommended UI/design-system prompt: `UI-DESIGN-SYSTEM-1: Rendered Responsive, Typography + Visualization Accessibility Audit`.
 
@@ -154,6 +168,10 @@ Next recommended UI/design-system prompt: `UI-DESIGN-SYSTEM-1: Rendered Responsi
 - Do not mutate templates from compatibility reports.
 - Schema editing is limited to bounded Prompt 35 forms. Do not add graph editing, drag-and-drop authoring, compiler/interpreter behavior, runtime model schema execution, schema-backed rule execution, scenario/RunConfig/template/snapshot generation, or Apply-to-Template behavior.
 - Prompt 36/36B Graph View is read-only presentation. Do not add node/edge authoring, connect handles, drag/drop mutation, graph execution, runtime dataflow interpretation, source-artifact mutation, simulation-state mutation, or Run/Compile/Preview/Generate/Apply actions.
+- Prompt 37 validation repairs are structural editing assistance only. Do not treat repairs as schema execution, model inference, scientific validation, compatibility conversion, generated artifacts, runtime preview, or visual-builder authoring.
+- Do not add LLM repair, automatic model generation, arbitrary JSON Patch/path interpreters, formula parsing, code execution, dynamic imports, external API calls, or hidden schema interpreter behavior to validation repairs.
+- Do not claim clipboard, browser zoom, rendered responsive, focus-return, screen-reader, assistive-technology, or WCAG readiness without direct verification.
+- Do not let repair suggestions mutate last-valid artifacts, active simulation state, loaded visual workspaces, templates, scenarios, RunConfigs, snapshots, engines, compatibility reports, or social-learning artifacts.
 - Do not claim rendered responsive or WCAG readiness for Graph View without browser and assistive-technology verification.
 - Do not treat knowledge/memory/social-learning descriptors as runtime behavior, human cognition, social prediction, LLM agents, unbounded memory, or real-person inference.
 - Do not treat the Opinion Dynamics `socialLearning` behavior mode as a generic social/cognitive runtime, semantic artifact interpreter, measured-belief model, truth-scoring system, persuasion optimizer, psychological diagnosis tool, or real-person/protected-class inference system.

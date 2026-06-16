@@ -3375,6 +3375,188 @@ textarea {
   text-underline-offset: 2px;
 }
 
+.schema-validation-boundaries,
+.schema-validation-groups,
+.schema-validation-issue-list {
+  display: grid;
+  gap: 8px;
+}
+
+.schema-validation-boundaries {
+  margin: 0;
+  padding: 9px 9px 9px 24px;
+  color: var(--text-secondary);
+  background: rgba(243, 241, 232, 0.045);
+  box-shadow: inset 3px 0 0 rgba(216, 255, 62, 0.38);
+  font-size: 11.5px;
+  line-height: 1.45;
+}
+
+.schema-validation-overview dd {
+  overflow-wrap: anywhere;
+}
+
+.schema-validation-empty,
+.schema-validation-boundary-note,
+.schema-validation-rule-note {
+  margin: 0;
+  padding: 8px 9px;
+  color: var(--text-secondary);
+  background: rgba(216, 255, 62, 0.07);
+  box-shadow: inset 3px 0 0 rgba(216, 255, 62, 0.42);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.schema-validation-rule-note {
+  color: #ffdecf;
+  background: rgba(255, 192, 88, 0.09);
+  box-shadow: inset 3px 0 0 rgba(255, 192, 88, 0.54);
+}
+
+.schema-validation-group {
+  display: grid;
+  gap: 8px;
+}
+
+.schema-validation-group__button {
+  width: 100%;
+  min-height: 42px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: start;
+  gap: 4px;
+  text-align: left;
+}
+
+.schema-validation-group__button span {
+  overflow-wrap: anywhere;
+}
+
+.schema-validation-group__button em {
+  color: var(--text-muted);
+  font-size: 10px;
+  font-style: normal;
+  text-transform: none;
+}
+
+.schema-validation-issue-card {
+  display: grid;
+  gap: 9px;
+  padding: 10px;
+  background: rgba(8, 10, 10, 0.74);
+  box-shadow: inset 0 0 0 1px rgba(243, 241, 232, 0.11);
+}
+
+.schema-validation-issue-card--error {
+  box-shadow: inset 3px 0 0 rgba(255, 74, 46, 0.78), inset 0 0 0 1px rgba(255, 74, 46, 0.22);
+}
+
+.schema-validation-issue-card--warning {
+  box-shadow: inset 3px 0 0 rgba(255, 192, 88, 0.72), inset 0 0 0 1px rgba(255, 192, 88, 0.18);
+}
+
+.schema-validation-issue-card--info {
+  box-shadow: inset 3px 0 0 rgba(216, 255, 62, 0.46), inset 0 0 0 1px rgba(216, 255, 62, 0.14);
+}
+
+.schema-validation-issue-card > header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.schema-validation-issue-card h4 {
+  margin: 0;
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-size: 12.5px;
+  font-weight: var(--weight-display);
+  line-height: 1.15;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+
+.schema-validation-issue-card p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 11.5px;
+  line-height: 1.45;
+}
+
+.schema-validation-issue-card > header p,
+.schema-validation-original-message > span,
+.schema-validation-repair > span {
+  color: var(--text-muted);
+  font-family: var(--font-label);
+  font-size: 9.5px;
+  text-transform: uppercase;
+}
+
+.schema-validation-issue-card__facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+  margin: 0;
+}
+
+.schema-validation-issue-card__facts div,
+.schema-validation-original-message,
+.schema-validation-repair {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+  padding: 7px;
+  background: rgba(243, 241, 232, 0.035);
+}
+
+.schema-validation-issue-card__facts dt {
+  color: var(--text-muted);
+  font-family: var(--font-label);
+  font-size: 9.5px;
+  text-transform: uppercase;
+}
+
+.schema-validation-issue-card__facts dd {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 11px;
+  overflow-wrap: anywhere;
+}
+
+.schema-validation-original-message code,
+.schema-validation-copyable pre {
+  max-width: 100%;
+  color: var(--text-secondary);
+  font-family: var(--font-signal);
+  font-size: 10.5px;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.schema-validation-repair button {
+  justify-self: start;
+}
+
+.schema-validation-copyable {
+  padding: 7px;
+  background: rgba(243, 241, 232, 0.035);
+}
+
+.schema-validation-copyable summary {
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-family: var(--font-label);
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+.schema-validation-copyable pre {
+  margin: 7px 0 0;
+}
+
 .schema-confirmation-backdrop {
   position: fixed;
   z-index: 80;
@@ -4607,7 +4789,8 @@ textarea {
   .schema-authoring-editor__status,
   .schema-editor-section__heading,
   .schema-declaration-card > header,
-  .schema-note-group > header {
+  .schema-note-group > header,
+  .schema-validation-issue-card > header {
     align-items: stretch;
     flex-direction: column;
   }
@@ -4622,7 +4805,8 @@ textarea {
 
   .schema-form-grid,
   .schema-reference-status,
-  .schema-metadata-row {
+  .schema-metadata-row,
+  .schema-validation-issue-card__facts {
     grid-template-columns: 1fr;
   }
 

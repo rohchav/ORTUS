@@ -1,17 +1,17 @@
 # ORTUS Full Prompt Roadmap
 
-*Last updated after Prompt 36B Visual Builder Graph View Audit.*
+*Last updated after Prompt 37B Schema Validation UX + Repair Suggestions Audit.*
 
 ## Current Status
 
-ORTUS has completed the core runtime/template foundation, scenario system, uncertainty layer, assumptions/limits layer, systems primitive registry, hybrid composition, multi-scale structure, scale-view state, boundary/environment models, spatial fields, observability, causality, quantity semantics, emergence pattern descriptors, robustness/resilience semantics, strategy/control semantics, model schema declarations, knowledge/memory/social-learning semantics, visual builder workspace schemas, template/schema compatibility mapping, the template/schema compatibility mapping audit, a narrow Opinion Dynamics social-learning behavior mode, the Opinion Dynamics social-learning runtime audit, Safe Builder UI Shell V1, the Safe Builder UI Shell + workspace information architecture audit, Model Schema Authoring Forms V1, the Model Schema Authoring Forms Audit, Visual Builder Graph View V1, and the Visual Builder Graph View Audit.
+ORTUS has completed the core runtime/template foundation, scenario system, uncertainty layer, assumptions/limits layer, systems primitive registry, hybrid composition, multi-scale structure, scale-view state, boundary/environment models, spatial fields, observability, causality, quantity semantics, emergence pattern descriptors, robustness/resilience semantics, strategy/control semantics, model schema declarations, knowledge/memory/social-learning semantics, visual builder workspace schemas, template/schema compatibility mapping, the template/schema compatibility mapping audit, a narrow Opinion Dynamics social-learning behavior mode, the Opinion Dynamics social-learning runtime audit, Safe Builder UI Shell V1, the Safe Builder UI Shell + workspace information architecture audit, Model Schema Authoring Forms V1, the Model Schema Authoring Forms Audit, Visual Builder Graph View V1, the Visual Builder Graph View Audit, Schema Validation UX + Repair Suggestions V1, and the Schema Validation UX + Repair Suggestions Audit.
 
 Current project status:
 
 ```text
-Completed roadmap prompt: Prompt 36B — Visual Builder Graph View Audit
+Completed roadmap prompt: Prompt 37B — Schema Validation UX + Repair Suggestions Audit
 Post-30B stabilization completed: repo hygiene, durable Codex context, dependency repair, generated-artifact cleanup, and runtime performance/scalability baseline
-Next roadmap prompt: Prompt 37 — Schema Validation UX + Repair Suggestions V1
+Next roadmap prompt: Prompt 38 — Schema-to-Template Fit Report V1
 ```
 
 Critical global boundary:
@@ -57,7 +57,7 @@ missing from this full roadmap. Prompt 31C and Prompt 31D are now corrected belo
 after Prompt 31B and before Prompt 32, with a later narrow Opinion Dynamics
 social-learning runtime slice placed after template/schema compatibility mapping.
 The social/cognitive semantics insertion was corrected after manual review, and
-Prompt 31C, Prompt 31D, Prompt 32, Prompt 32B, Prompt 33, Prompt 33B, Prompt 33C, Prompt 33D, Prompt 34, Prompt 34B, Prompt 35, Prompt 35B, Prompt 36, and Prompt 36B are now marked complete while Prompt 37 is the next roadmap prompt.
+Prompt 31C, Prompt 31D, Prompt 32, Prompt 32B, Prompt 33, Prompt 33B, Prompt 33C, Prompt 33D, Prompt 34, Prompt 34B, Prompt 35, Prompt 35B, Prompt 36, Prompt 36B, Prompt 37, and Prompt 37B are now marked complete while Prompt 38 is the next roadmap prompt.
 
 Safe Builder UI Shell V1 displays structural workspace artifacts; it does not execute workspace nodes or edges. The builder shell is not a compiler, interpreter, visual programming environment, or custom simulation runtime. A structurally valid workspace is still not a runnable model. Importing a workspace artifact does not activate model schemas, compatibility mappings, or social-learning semantics.
 
@@ -1501,21 +1501,57 @@ Rendered responsive and WCAG-level accessibility readiness remain unverified wit
 
 Purpose:
 
-* Add user-facing validation panel for schemas and workspaces.
-* Show missing, unsafe, unsupported, future-only parts.
-* Suggest safe repairs.
+* Add user-facing validation assistance to `ortus.modelSchema` authoring.
+* Show structural status, errors, warnings, suggestions, manual-review items, unsupported capabilities, service-only boundaries, and future-only gaps.
+* Group issues by category with section jumps, original validation messages, copyable diagnostics, and bounded repair suggestions.
 
 Boundary:
 
 ```text
-Suggestions are advisory only.
+Repair suggestions are structural editing assistance only.
+They do not make schemas runnable, infer correct model behavior, validate science, or generate templates, scenarios, RunConfigs, snapshots, or engines.
 No automatic executable rule generation.
+No arbitrary patch interpreter.
+Ambiguous modeling intent remains manual-only.
 ```
 
 Status:
 
 ```text
-Planned.
+Complete.
+```
+
+## Prompt 37B — Schema Validation UX + Repair Suggestions Audit
+
+Purpose:
+
+* Audit repair-suggestion safety, stale-patch behavior, confirmation boundaries, manual-only classification, rendered validation UX, and source-level runtime-honesty language.
+* Confirm repairs mutate only the current Author Schema draft and never mutate last-valid artifacts, active simulation state, visual workspaces, templates, scenarios, RunConfigs, snapshots, engines, or compatibility/social-learning artifacts.
+* Confirm accessibility affordances remain source-tested and identify any browser/assistive-technology gaps honestly.
+
+Boundary:
+
+```text
+Audit only.
+No schema execution, compatibility conversion, visual programming, rule parsing, formula execution, generated artifacts, LLM repair, or runtime preview.
+Do not claim rendered WCAG readiness without browser and assistive-technology verification.
+```
+
+Status:
+
+```text
+Complete.
+```
+
+Audit result:
+
+```text
+Repair suggestions are structural editing assistance. They do not make a schema runnable.
+A repaired schema may be structurally valid and still have no runtime implementation.
+ORTUS does not infer the correct model behavior from validation repairs.
+Validation repairs do not generate templates, scenarios, RunConfigs, snapshots, or engines.
+Confirmation-required repairs are enforced by the repair helper, applyability is explicit, stale and malformed patches are rejected, prototype-like patch targets are blocked, rule repair copy remains structural-only, and export-after-repair remains ordinary model-schema serialization.
+Rendered responsive behavior, browser zoom behavior, clipboard behavior, focus-return behavior, assistive-technology behavior, and WCAG readiness remain unverified without browser/assistive tooling.
 ```
 
 ## Prompt 38 — Schema-to-Template Fit Report V1
@@ -2880,20 +2916,22 @@ No global service availability treated as template runtime support.
 Recommended immediate next steps:
 
 ```text
-1. Commit the combined Prompt 36 and Prompt 36B work after review.
-2. Start Prompt 37 — Schema Validation UX + Repair Suggestions V1 after the commit checkpoint.
-3. Run a dedicated rendered responsive/design-system audit before making mobile-readiness, WCAG, or polished visual-workbench claims.
+1. Review and commit Prompt 37 + Prompt 37B together.
+2. Start Prompt 38 — Schema-to-Template Fit Report V1 after the commit checkpoint.
+3. Run a dedicated rendered responsive/design-system audit before making mobile-readiness, WCAG, clipboard, focus-return, or polished visual-workbench claims.
 ```
 
 Do not start graph editing, visual programming, or runtime-mapping prompts until the repo status and roadmap docs clearly reflect:
 
 ```text
-Completed through Prompt 36B.
+Completed through Prompt 37B.
 Performance stabilization completed after Prompt 30B.
 Prompt 34 safe builder shell is complete.
 Prompt 34B safe builder shell audit is complete.
 Prompt 35 structural model-schema authoring forms are complete.
 Prompt 36 read-only structural graph view is complete.
 Prompt 36B visual builder graph view audit is complete.
-Next roadmap prompt: Prompt 37.
+Prompt 37 schema validation UX and repair suggestions are complete.
+Prompt 37B schema validation UX and repair suggestions audit is complete.
+Next roadmap prompt: Prompt 38.
 ```

@@ -3,6 +3,7 @@ import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import {
   deserializeModelSchema,
+  getModelInterpreterCapabilityReport,
   maxModelSchemaJsonLength,
   modelSchemaArtifactType,
   type ModelSchemaDefinition
@@ -23,6 +24,11 @@ import {
   removeModelSchemaDeclaration,
   updateModelSchemaDeclaration
 } from "./modelSchemaAuthoring";
+import {
+  applySchemaRepairSuggestion,
+  createSchemaValidationUxModel,
+  schemaValidationRuleRepairBoundaryPhrase
+} from "./validation/schemaValidationUx";
 
 const repoRoot = process.cwd();
 
@@ -220,6 +226,43 @@ describe("model schema authoring adapter", () => {
     expect(result.json).not.toContain("generatedCode");
   });
 
+  it("exports and imports repaired drafts without repair UI or suggestion state", () => {
+    const draft = validDraft({ id: " authored-schema " });
+    const ux = createSchemaValidationUxModel(draft, getModelInterpreterCapabilityReport(draft));
+    const suggestion = ux.issues.find((issue) => issue.suggestion?.patch?.kind === "trimTopLevelString")!.suggestion!;
+    const repaired = applySchemaRepairSuggestion(draft, suggestion);
+
+    expect(repaired.applied).toBe(true);
+    expect(repaired.draft.id).toBe("authored-schema");
+
+    const exported = exportModelSchemaDraft(repaired.draft);
+    const roundTrip = deserializeModelSchema(exported.json);
+    const failedImportAfterRepair = importModelSchemaDraft(repaired.draft, "{");
+    const successfulImportAfterRepair = importModelSchemaDraft(repaired.draft, exported.json);
+
+    expect(exported.error).toBeNull();
+    expect(roundTrip.id).toBe("authored-schema");
+    expect(failedImportAfterRepair.changed).toBe(false);
+    expect(failedImportAfterRepair.draft).toBe(repaired.draft);
+    expect(successfulImportAfterRepair.changed).toBe(true);
+    expect(successfulImportAfterRepair.draft.id).toBe("authored-schema");
+    for (const forbidden of [
+      "schema-validation",
+      "schema-repair",
+      "canApply",
+      "requiresConfirmation",
+      "activeSection",
+      "lastValidArtifact",
+      "validation-panel",
+      "clipboard",
+      "runState",
+      "RunConfig",
+      "snapshot"
+    ]) {
+      expect(exported.json).not.toContain(forbidden);
+    }
+  });
+
   it("preserves imported non-text allowed values and metadata through unrelated edits and export", () => {
     const imported = deserializeModelSchema(
       JSON.stringify(
@@ -364,6 +407,38 @@ describe("model schema authoring UI architecture", () => {
     expect(source).not.toContain('className="schema-validation-report" aria-live="polite"');
   });
 
+  it("surfaces Prompt 37 validation assistance without implying repairs create runnable models", () => {
+    const source = readAuthoringSource();
+    for (const phrase of [
+      "Repair suggestions are structural editing assistance. They do not make a schema runnable.",
+      "A repaired schema may be structurally valid and still have no runtime implementation.",
+      "ORTUS does not infer the correct model behavior from validation repairs.",
+      "Validation repairs do not generate templates, scenarios, RunConfigs, snapshots, or engines.",
+      "Structurally valid. This does not make the schema runnable.",
+      schemaValidationRuleRepairBoundaryPhrase,
+      "Apply structural edit",
+      "Normalize identifier",
+      "Clear unsafe payload",
+      "Remove unsafe metadata key",
+      "Manual-only: modeling intent is ambiguous.",
+      "Repair suggestion is stale because the draft changed. No draft changes were applied.",
+      "Repair suggestion requires confirmation before changing the draft. No draft changes were applied.",
+      "Validation path",
+      "is not currently focusable"
+    ]) {
+      expect(source).toContain(phrase);
+    }
+    expect(source).toContain("aria-expanded={!collapsed}");
+    expect(source).toContain("Copy issue details");
+    expect(source).toContain("Copyable issue details");
+    expect(source).toContain("suggestion?.canApply");
+    expect(source).toContain("aria-describedby={validationPending || disabledReason ? disabledReasonId : undefined}");
+    expect(source).toContain("applySchemaRepairSuggestion(draft, suggestion, { confirmed })");
+    expect(source).not.toContain("Fix model");
+    expect(source).not.toContain("Make runnable");
+    expect(source).not.toContain("Generate runnable");
+  });
+
   it("stacks the three-column Builder before its minimum tracks can overflow", () => {
     const css = readFileSync(join(repoRoot, "src", "app", "globals.css"), "utf8");
     expect(css).toContain("@media (max-width: 1120px)");
@@ -417,7 +492,8 @@ function readAuthoringSource(): string {
     "BuilderModeTabs.tsx",
     "ModelSchemaAuthoringShell.tsx",
     "ModelSchemaSectionEditor.tsx",
-    "modelSchemaAuthoring.ts"
+    "modelSchemaAuthoring.ts",
+    join("validation", "schemaValidationUx.ts")
   ]
     .map((file) => readFileSync(join(repoRoot, "src", "components", "builder", file), "utf8"))
     .join("\n");

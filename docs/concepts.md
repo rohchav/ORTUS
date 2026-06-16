@@ -2,7 +2,7 @@
 
 ORTUS is organized around a small set of simulation concepts. Keeping these boundaries explicit prevents model-family definitions, live run state, exploratory comparisons, and UI workspace data from collapsing into one ambiguous artifact.
 
-Roadmap status: ORTUS has completed Prompt 36B: Visual Builder Graph View Audit. The post-30B repository hygiene, durable context, dependency stabilization, and performance/scalability pass is complete. The next roadmap prompt is Prompt 37: Schema Validation UX + Repair Suggestions V1.
+Roadmap status: ORTUS has completed Prompt 37B: Schema Validation UX + Repair Suggestions Audit. The post-30B repository hygiene, durable context, dependency stabilization, and performance/scalability pass is complete. The next roadmap prompt is Prompt 38: Schema-to-Template Fit Report V1.
 
 ## Brand And Workbench Identity
 
@@ -33,6 +33,10 @@ Prompt 36 adds a read-only structural Graph View for a loaded `ortus.visualBuild
 Visual Builder Graph View V1 visualizes structural relationships; it does not execute nodes or edges. Graph selection, filtering, panning, and zooming are UI-only state. Graph View is not visual programming, schema execution, or runtime generation. A graph that looks complete is still not a runnable model.
 
 Prompt 36B audits and hardens the Graph View as a structural inspection surface. It keeps marker counts explicit, treats global runtime-boundary notices separately from warning markers, prevents filtered-out inspector connections from masquerading as selectable visible targets, bounds deterministic layout and DOM ids, and preserves text-only metadata. It still does not add graph authoring, node/edge creation, drag/drop, scenario generation, RunConfig generation, template generation, snapshot generation, engine creation, schema execution, or simulation preview. Rendered responsive and accessibility behavior remain source-tested but browser-unverified.
+
+Prompt 37 adds validation UX and bounded repair suggestions to Author Schema. It groups issues by category, exposes severity/counts, links issues back to fields or sections, preserves original validation messages, offers copyable diagnostics, and shows persistent service-only/future-only/runtime-boundary notices. Repair suggestions are structural editing assistance only. They do not make a schema runnable, infer correct model behavior, validate scientific meaning, execute rules, parse formulas, generate templates, scenarios, RunConfigs, snapshots, engines, compatibility conversions, visual-builder workspaces, or activate social-learning runtime. Safe suggestions require explicit clicks, content-removing repairs require confirmation, stale suggestions are rejected, and ambiguous modeling intent remains manual-only.
+
+Prompt 37B audits and hardens repair suggestions before the combined commit. Repair suggestions are structural editing assistance. They do not make a schema runnable. A repaired schema may be structurally valid and still have no runtime implementation. ORTUS does not infer the correct model behavior from validation repairs. Validation repairs do not generate templates, scenarios, RunConfigs, snapshots, or engines. Confirmation-required repairs are enforced by the repair helper, each suggestion exposes whether it can apply, malformed and prototype-like patches are rejected, issue grouping is deterministic, rule repair suggestions state that they do not execute or validate behavior, and export-after-repair remains ordinary model-schema serialization. Browser clipboard behavior, rendered responsive behavior, browser zoom behavior, focus-return behavior, assistive-technology behavior, and WCAG-level readiness remain unverified.
 
 ### Knowledge, Memory + Social Learning Semantics
 
