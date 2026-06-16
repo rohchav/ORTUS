@@ -1,6 +1,6 @@
 # ORTUS Current Context
 
-Last updated: 2026-06-15 after Prompt 35B Model Schema Authoring Forms Audit
+Last updated: 2026-06-15 after Prompt 36B Visual Builder Graph View Audit
 
 ## Project Identity
 
@@ -18,6 +18,10 @@ Prompt 35 adds an accessible `Author Schema` mode beside `Workspace Inspector` i
 
 Prompt 35B audited and hardened the authoring surface. Confirmed defects included medium-width three-column overflow risk, non-modal destructive confirmations that allowed background editing, metadata removal without confirmation, over-broad validation live announcements, incomplete unsafe-key coverage for profiling/persuasion/targeting payloads, and possible string coercion of imported non-text JSON values. The audit added an earlier stacking breakpoint, modal focus-cycling confirmations with Escape cancellation, metadata-removal confirmation, roving tab stops, concise validation announcements, pre-read oversized-file rejection, broader headless unsafe-key rejection, and conservative read-only preservation of imported non-text values.
 
+Prompt 36 adds a third Builder mode, `Graph View`, for the currently loaded validated `ortus.visualBuilderWorkspace`. A pure presentation adapter preserves structural ids, kinds, statuses, artifact references, markers, warnings, unsupported/future/service-only distinctions, and missing runtime capabilities. Layout is deterministic, source coordinates are bounded and normalized, and no force simulation or major graph dependency is used. Search, filters, neighborhood highlighting, selection, pan, zoom, fit, and reset are local React state. The visual graph is limited to 120 nodes and 240 edges; larger artifacts use the filtered outline and text edge list. Author Schema drafts are not converted to workspaces or graph artifacts.
+
+Prompt 36B audits and hardens Graph View before the combined Prompt 36/36B commit. It separates validation, warning, unsupported, future-only, service-only, global notice, and missing-runtime-capability counts; keeps filtered-out inspector connections non-actionable; uses collision-free DOM ids for node focus; derives Fit Graph from the actual graph surface where available; strengthens deterministic layout and immutability tests; and keeps persistent copy explicit that Graph View is structural inspection only. It adds no graph authoring, node/edge creation, drag/drop, schema execution, runtime preview, generated scenarios, generated RunConfigs, generated templates, generated snapshots, engine creation, or simulation-state mutation.
+
 Confirmed UI layout defects fixed in UI-REMEDIATION-1:
 
 - The header used fixed `height: 50px` with `overflow-y: hidden`, which could clip crowded lower header content.
@@ -31,11 +35,11 @@ Built-in production templates currently include Epidemic Spread, Opinion Dynamic
 
 ## Completed Prompt State
 
-Durable docs and source indicate completed roadmap work through Prompt 35B. Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 35B: Model Schema Authoring Forms Audit are complete.
+Durable docs and source indicate completed roadmap work through Prompt 36B. Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 36B: Visual Builder Graph View Audit are complete.
 
 The post-30B repository hygiene, dependency stabilization, durable context, and performance/scalability pass has also been completed. Recent commits include `dd6c256` for repo context/generated-artifact hygiene, `4949b72` for dependency and performance script stabilization, and `a80d5b7` for simulation performance instrumentation and spatial indexing foundations.
 
-The next roadmap prompt is Prompt 36: Visual Builder Graph View V1 after a commit/repo-hygiene checkpoint. A separate rendered responsive/design-system audit is still recommended before making mobile-readiness, WCAG, or polished visual-workbench claims.
+The next roadmap prompt is Prompt 37: Schema Validation UX + Repair Suggestions V1, after the combined Prompt 36 and Prompt 36B changes are reviewed and committed. A separate rendered responsive/design-system audit is still recommended before making mobile-readiness, WCAG, or polished visual-workbench claims.
 
 Implemented runtime foundations include scenarios, snapshots, template-defined behavior modes, agent composition, interventions, experiments, run summaries/comparison, seeded randomness, metrics, spaces, template metadata, and a narrow Opinion Dynamics `socialLearning` behavior mode audited in Prompt 33D.
 
@@ -56,7 +60,7 @@ Prompt 35/35B draft behavior:
 - Builder mode switches hide rather than unmount the schema-authoring surface, so draft state is preserved in memory.
 - Imported non-text allowed values and metadata remain inert and read-only rather than being silently coerced to strings.
 - No browser or backend persistence is added.
-- Prompt 36 Visual Builder Graph View remains future work.
+- Prompt 36 Graph View does not read or mutate the Author Schema draft.
 
 Knowledge, memory, and social-learning descriptors are structural semantics; they do not implement human cognition. Background profiles are compressed prior descriptors, not simulated life histories. Crowd and stranger exposure should usually be modeled as aggregate signals, representative agents, or fields rather than thousands of throwaway individuals. LLM-per-agent runtime is not implemented and must not be implied. `ortus.knowledgeMemorySocialLearningModel` artifacts describe bounded symbolic semantics only; they do not execute social learning, update beliefs or memory, sample exposure, infer real-person traits, support protected-class inference, validate psychology, predict people, optimize persuasion, provide policy targeting, or mutate Opinion Dynamics.
 
@@ -65,6 +69,10 @@ Opinion Dynamics social learning is a stylized template-owned runtime mode, not 
 Visual builder workspaces are structural planning artifacts; they do not implement runnable visual model authoring. `ortus.visualBuilderWorkspace` artifacts describe future workspace identity, referenced model schemas and artifacts, visual nodes, visual edges, panels, sections, markers, layout, selection, viewport metadata, summaries, and validation reports only. Workspace nodes and edges are visual descriptors, not executable dataflow or runtime behavior. A valid visual builder workspace does not make a model schema runnable. Prompt 32 does not add drag-and-drop modeling, visual programming, or schema execution. Workspaces do not generate scenarios, RunConfigs, snapshots, templates, or engines, do not add external framework interop, and do not implement social-learning runtime or LLM agents.
 
 Prompt 34 adds a separate `/builder` UI shell for safe, read-only structural inspection of `ortus.visualBuilderWorkspace` artifacts. Safe Builder UI Shell V1 displays structural workspace artifacts; it does not execute workspace nodes or edges. The builder shell is not a compiler, interpreter, visual programming environment, or custom simulation runtime. A structurally valid workspace is still not a runnable model. Importing a workspace artifact does not activate model schemas, compatibility mappings, or social-learning semantics. The shell imports and exports only visual-builder workspace artifacts through existing serializer/deserializer services, stores only UI-local selection/filter/viewport/import/export state, and does not subscribe to live snapshots, create engines, mutate templates, generate scenarios/RunConfigs/snapshots/templates, or activate social-learning artifacts.
+
+Visual Builder Graph View V1 visualizes structural relationships; it does not execute nodes or edges. Graph selection, filtering, panning, and zooming are UI-only state. Graph View is not visual programming, schema execution, or runtime generation. A graph that looks complete is still not a runnable model. SVG relationship lines are visual only; edges are also represented as keyboard-accessible text. Metadata is rendered as read-only JSON text. The graph mode is unmounted while inactive so it performs no hidden layout work.
+
+Prompt 36B source-level findings are hardened, but browser rendering remains unverified. Do not claim Graph View visual polish, responsive readiness, browser zoom quality, screen-reader quality, or WCAG conformance until an actual browser and assistive-technology audit is run.
 
 Template/schema compatibility mapping is a structural fit-analysis service only. `ortus.schemaTemplateCompatibilityReport` and `ortus.templateMappingProfile` artifacts compare `ModelSchemaDefinition` structure against static production-template metadata. Template/schema compatibility reports are structural fit analyses; they do not convert schemas into runnable models. A strong template fit does not mean a schema can run. Unsupported and lossy mappings must remain visible; they must not be silently dropped. Compatibility mapping does not generate scenarios, RunConfigs, snapshots, templates, or engines. Compatibility reports do not execute schemas, parse rule descriptions, mutate templates, create engines, implement visual builder runtime, add external framework interop, run social-learning/cognitive behavior, validate science, calibrate outputs, or prove causality, emergence, robustness, strategy effectiveness, safety, or operational readiness. Prompt 33B audited these boundaries and kept compatibility mapping structural only.
 
@@ -119,15 +127,16 @@ Generated artifacts have been removed from git tracking without deleting local f
 
 Real source changes are now reviewable separately from generated build/cache noise.
 
+Prompt 35 and Prompt 35B were committed together in `7696381 feat: Implement Model Schema Authoring Forms V1` before Prompt 36 began.
+
 ## Current Blockers
 
 - npm reports two moderate audit findings; no force fix was run.
 - No browser screenshot/DOM measurement/zoom audit was possible in this environment, so rendered layout and 125%/150%/200% zoom behavior remain unverified.
-- Prompt 35 and Prompt 35B changes remain uncommitted and require a repository-hygiene checkpoint before Prompt 36.
 
 ## Next Recommended Prompt After Stabilization
 
-Next roadmap prompt after a commit/repo hygiene checkpoint: Prompt 36: Visual Builder Graph View V1.
+Next roadmap prompt: Prompt 37: Schema Validation UX + Repair Suggestions V1.
 
 Next recommended UI/design-system prompt: `UI-DESIGN-SYSTEM-1: Rendered Responsive, Typography + Visualization Accessibility Audit`.
 
@@ -144,6 +153,8 @@ Next recommended UI/design-system prompt: `UI-DESIGN-SYSTEM-1: Rendered Responsi
 - Do not generate scenarios, RunConfigs, snapshots, templates, or engines from compatibility reports.
 - Do not mutate templates from compatibility reports.
 - Schema editing is limited to bounded Prompt 35 forms. Do not add graph editing, drag-and-drop authoring, compiler/interpreter behavior, runtime model schema execution, schema-backed rule execution, scenario/RunConfig/template/snapshot generation, or Apply-to-Template behavior.
+- Prompt 36/36B Graph View is read-only presentation. Do not add node/edge authoring, connect handles, drag/drop mutation, graph execution, runtime dataflow interpretation, source-artifact mutation, simulation-state mutation, or Run/Compile/Preview/Generate/Apply actions.
+- Do not claim rendered responsive or WCAG readiness for Graph View without browser and assistive-technology verification.
 - Do not treat knowledge/memory/social-learning descriptors as runtime behavior, human cognition, social prediction, LLM agents, unbounded memory, or real-person inference.
 - Do not treat the Opinion Dynamics `socialLearning` behavior mode as a generic social/cognitive runtime, semantic artifact interpreter, measured-belief model, truth-scoring system, persuasion optimizer, psychological diagnosis tool, or real-person/protected-class inference system.
 - Do not claim validation, calibration, prediction proof, causal proof, robustness proof, safety certification, operational readiness, or policy recommendation.

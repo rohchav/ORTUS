@@ -1,8 +1,8 @@
 # ORTUS HCI / UX / Visual-Direction Audit
 
 Date: 2026-06-11  
-Updated: 2026-06-15 after Prompt 35B
-Prompt: UI-BRAND-1, UI-REMEDIATION-1, Prompt 34B, Prompt 35, Prompt 35B
+Updated: 2026-06-15 after Prompt 36B
+Prompt: UI-BRAND-1, UI-REMEDIATION-1, Prompt 34B, Prompt 35, Prompt 35B, Prompt 36, Prompt 36B
 Status: source-based audit, not a formal WCAG audit
 
 ## 1. Executive Verdict
@@ -27,6 +27,12 @@ The Builder now separates read-only Workspace Inspector from bounded Author Sche
 Prompt 35B update:
 The audit found real defects rather than treating passing source tests as proof. The three-column authoring minimum could overflow at common medium widths; confirmations were visually prominent but non-modal, so background edits could continue while a destructive replacement was pending; metadata deletion bypassed confirmation; the full validation panel was an overly broad live region; and imported non-text JSON values could be silently coerced by form editing. Prompt 35B adds an earlier stacking breakpoint, a modal focus-cycling confirmation with Escape cancellation, metadata-removal confirmation, roving tab stops, concise validation announcements, pre-read oversized-file rejection, and conservative read-only preservation for imported non-text values. Browser rendering and assistive-technology behavior remain unverified.
 
+Prompt 36 update:
+The Builder now has a dedicated Graph View for the loaded visual-workspace artifact. The design deliberately avoids editable ports, handles, drag behavior, animated wires, execution arrows, and runtime language. Node buttons, a grouped outline, and a text edge list provide redundant access to graph structure; selection feeds a read-only inspector; warning, unsupported, future-only, service-only, and missing-capability information stays textual. Visual rendering stops above 120 nodes or 240 edges and retains the outline rather than pretending an unreadable graph is useful. This is a source- and unit-tested information-visualization implementation, not a rendered graph-accessibility or mobile-polish finding.
+
+Prompt 36B update:
+The graph audit found and hardened several source-level risks: generic warning counts conflated marker counts with global runtime-boundary notices, filtered inspector links could point at hidden targets as if visible, static runtime-boundary copy used live-region semantics, Fit Graph used fixed assumed dimensions, sanitized node ids could collide, and exact required non-execution copy was incomplete. Prompt 36B separates marker/notice counts, renders filtered connections as hidden-by-filter text, changes the safety block to a note, uses actual surface dimensions for fit when available, adds collision-free DOM ids, strengthens deterministic layout and mutation-isolation tests, and locks the required copy. Browser rendering, zoom behavior, screen-reader behavior, and WCAG conformance remain unverified.
+
 ## 2. Audit Scope
 
 Inspected surfaces:
@@ -35,6 +41,7 @@ Inspected surfaces:
 - Template selection, parameter controls, simulation controls, file exchange, scenario builder, assumptions panel, interventions, experiments, run comparison, metric trace, legend, debug panel.
 - Safe Builder UI Shell files added in Prompt 34.
 - Model Schema Authoring Forms files added in Prompt 35.
+- Visual Builder Graph View components, pure graph adapter, keyboard outline, text edge list, bounded layout, and Prompt 36B source-level audit hardening.
 - Global CSS, typography tokens, responsive rules, focus styles, animation/reduced-motion rules.
 - Metadata and favicon/icon configuration.
 - Existing component and simulation tests.
@@ -45,6 +52,7 @@ Out of scope:
 - Runtime simulation behavior changes.
 - Broad navigation redesign.
 - Visual Builder execution, editing, graph programming, schema execution, or generation.
+- Drag/drop graph authoring, node or edge mutation, force-layout animation, schema-derived workspace generation, or runtime graph execution.
 - Model schema compiler/interpreter behavior, simulation preview, template/scenario/RunConfig/snapshot generation, or compatibility conversion.
 - Formal WCAG conformance certification.
 - User testing.

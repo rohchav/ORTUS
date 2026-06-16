@@ -885,10 +885,10 @@ describe("strategy, control, and intervention semantics services", () => {
     expect(docs).toContain("Active policies, triggers, and objectives are structural declarations, not runtime-executed control loops.");
     expect(docs).toContain("Do not treat template-owned interventions as general strategy/control support.");
     expect(docs).toContain("Do not mark templates controlStrategy/interventionStrategy-capable unless runtime uses `ControlStrategyModel`.");
-    expect(docs).toContain("ORTUS has completed Prompt 35");
+    expect(docs).toContain("ORTUS has completed Prompt 36");
     expect(docs).toContain("Model Schema Authoring Forms V1 creates structural model-schema artifacts; it does not execute schemas.");
     expect(docs).toContain("Rule declarations authored in the Builder are descriptive only and remain non-executable.");
-    expect(docs).toContain("Prompt 36 Visual Builder Graph View remains future work.");
+    expect(docs).toContain("Visual Builder Graph View V1 visualizes structural relationships; it does not execute nodes or edges.");
     expect(docs).toContain(
       "Runtime interpreter/compiler, runnable visual model builder support, external framework interop, generic social-learning runtime outside the narrow Opinion Dynamics behavior mode, full human cognition, LLM-per-agent runtime, validation, and calibration remain future work."
     );

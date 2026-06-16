@@ -616,3 +616,109 @@ Remaining limitations:
 - Prompt 35 and Prompt 35B remain uncommitted in a mixed staged/unstaged worktree.
 
 Next roadmap prompt: Prompt 36 Visual Builder Graph View V1 only after reviewing and committing the combined Prompt 35/35B work and restoring a clean repository checkpoint.
+
+## 2026-06-15 - Prompt 36 Visual Builder Graph View V1
+
+Goal: add bounded, deterministic, read-only structural graph visualization to Builder without graph authoring, schema execution, runtime generation, compatibility conversion, social-learning activation, or simulation-state mutation.
+
+Starting state:
+
+- Branch `main` was clean and ahead of `origin/main` by five commits.
+- Latest commit was `7696381 feat: Implement Model Schema Authoring Forms V1`, containing the completed Prompt 35 and Prompt 35B work.
+- No unrelated dirty files were present.
+
+Implementation:
+
+- Added a third Builder mode, `Graph View`, for the currently loaded validated `ortus.visualBuilderWorkspace`.
+- Added a pure UI presentation adapter that clones validated workspace data, preserves ids, kinds, statuses, references, markers, warnings, notes, and inert metadata, and marks the graph, every node, and every edge non-executable.
+- Uses bounded source coordinates where present and deterministic layered fallback coordinates otherwise. No force simulation, randomness, animation loop, canvas, WebGL, or major graph dependency was added.
+- Added local-only search, node-kind/status/warning filters, unsupported/future visibility controls, selected-neighborhood highlighting, pan, zoom, fit, reset, node selection, edge selection, and read-only inspection.
+- Added HTML node controls, visual-only SVG relationship lines, a grouped keyboard-accessible node outline, and a keyboard-accessible text edge list.
+- Added explicit “Workspace claim” presentation for `templateRuntimeSupported` so artifact metadata is not mistaken for proven runtime support.
+- Added a visual drawing limit of 120 nodes and 240 edges. Larger artifacts retain the full filtered outline and text edge list.
+- Graph View is mounted only while active, does not read or mutate the Author Schema draft, and does not subscribe to simulation ticks.
+- Schema-derived graphs and compatibility-report graphs remain deferred. No workspace is generated from a schema.
+
+Boundary preserved:
+
+- Visual Builder Graph View V1 visualizes structural relationships; it does not execute nodes or edges.
+- Graph selection, filtering, panning, and zooming are UI-only state.
+- Graph View is not visual programming, schema execution, or runtime generation.
+- A graph that looks complete is still not a runnable model.
+- No Run, Compile, Preview, Generate, Apply, drag/drop, connect-handle, graph mutation, formula/code execution, external call, LLM call, template-runtime import, engine import, or simulation-store mutation was added.
+
+Checks:
+
+- Focused graph, Builder, roadmap, brand, workspace-IA, model-schema authoring, and visual-workspace checks passed.
+- Cross-feature structural/runtime-boundary regression passed, 15 files and 118 tests.
+- `npm run typecheck`: passed.
+- `npm run test`: passed on the final uncontended run, 53 files and 409 tests.
+- One earlier full-suite run timed out only in the existing uncertainty integration test at its 5-second limit; `npm run test -- uncertainty` then passed, 1 file and 9 tests, and the final full suite passed.
+- `npm run build`: passed with Next.js 15.5.19; `/builder` prerendered successfully at 27.7 kB route size and 224 kB first-load JS.
+- `npm run perf:simulation`: passed. Local smoke results included Flocking 100 agents at 115.49 ticks/sec, Flocking 500 agents at 20.96 ticks/sec, Forest Fire 80x60 at 33.57 ticks/sec, and Predator-Prey default at 102.19 ticks/sec.
+- `git diff --check`: passed.
+- `npm run lint: unavailable, package.json has no lint script.`
+
+Remaining limitations:
+
+- No Chromium, Firefox, Playwright, screenshot, DOM measurement, screen-reader, or browser zoom tooling was available.
+- The sandbox denied local socket access, and the escalated dev-server request was rejected by the environment usage gate. A live `/builder` route probe was therefore unavailable; only the successful production prerender is verified.
+- Accessibility, responsive behavior, node/edge hit targets, and SVG/text equivalence are source- and unit-tested, not formally browser-audited or WCAG-certified.
+- V1 graphs only the currently loaded visual-builder workspace. It does not graph the in-memory Author Schema draft.
+- Fit uses a conservative 10% minimum zoom for widely spaced bounded source coordinates; very large visual graphs use the outline fallback.
+- Prompt 36 changes remain uncommitted.
+
+Next roadmap prompt: Prompt 36B Visual Builder Graph View Audit.
+
+## 2026-06-15 - Prompt 36B Visual Builder Graph View Audit
+
+Goal: audit and harden Prompt 36 Graph View without adding graph authoring, drag/drop, connect handles, edge/node creation, schema execution, runtime preview, artifact generation, simulation mutation, or a major graph library.
+
+Starting state:
+
+- Latest commit remained `7696381 feat: Implement Model Schema Authoring Forms V1`.
+- Prompt 36 source, tests, CSS, and documentation were dirty and uncommitted.
+- No unrelated dirty files were identified beyond the Prompt 36/36B working set.
+
+Confirmed defects:
+
+- Graph summary counts collapsed marker counts and global runtime-boundary report notices under generic warning-style language.
+- Inspector connection links could select nodes or edges hidden by the current filters, causing incoherent selection recovery.
+- Required persistent copy was incomplete, and static runtime-boundary copy used live-region semantics.
+- Fit Graph used fixed assumed dimensions instead of the actual graph surface.
+- Sanitized DOM ids could collide for distinct node ids.
+- Layout and adapter tests did not fully exercise mutation isolation, edge-threshold fallback, stale selections, single/disconnected/repeated-kind graphs, or collision-free focus ids.
+
+Hardening:
+
+- Separated validation markers, warning markers, unsupported markers, future-only markers, unsupported items, future-only items, service-only items, global notices, and missing runtime capabilities.
+- Rendered hidden connected inspector targets as text marked `hidden by current filters`.
+- Added exact required Graph View non-execution copy and changed static safety copy to `role="note"`.
+- Fit Graph now derives zoom from the actual graph surface dimensions when available.
+- Added collision-free graph-node DOM ids, deterministic code-unit sorting, grouped marker lookup, explicit cloning of notes/metadata/position data, and a bounded O(n) fallback layout pass by kind.
+- Kept graph metadata text-only and non-executing, with no engine/template/store/runtime imports or graph authoring controls.
+- Updated README, roadmap, concepts, simulation docs, HCI audit, workspace IA, current context, AGENTS guardrails, and roadmap tests to mark Prompt 36B complete and Prompt 37 next after commit.
+
+Checks:
+
+- Focused graph tests: passed, 2 files and 16 tests.
+- Focused graph/builder/schema/visual-workspace/roadmap/assumptions checks passed, 7 files and 58 tests.
+- `npm run test -- modelSchema`: passed, 2 files and 30 tests.
+- `npm run test -- schemaTemplateCompatibility`: passed, 1 file and 5 tests.
+- `npm run test -- socialLearning opinion primitiveRegistry hybridComposition`: passed, 4 files and 35 tests.
+- `npm run typecheck`: passed.
+- `npm run test`: passed, 53 files and 412 tests.
+- `npm run build`: passed with Next.js 15.5.19; `/builder` prerendered successfully at 28.5 kB route size and 225 kB first-load JS.
+- `npm run perf:simulation`: passed. Local smoke results included Flocking 100 agents at 107.61 ticks/sec, Flocking 500 agents at 15.68 ticks/sec, Forest Fire 80x60 at 24.73 ticks/sec, and Predator-Prey default at 72.85 ticks/sec.
+- `git diff --check`: passed.
+- `npm run lint: unavailable, package.json has no lint script.`
+- Initial sandboxed dev server failed with `listen EPERM`; escalated dev server succeeded on `127.0.0.1:38017`, and escalated `curl -I http://127.0.0.1:38017/builder` returned HTTP 200. The dev server was stopped.
+
+Remaining limitations:
+
+- Browser screenshots, DOM measurement, responsive viewport inspection, browser zoom inspection, and assistive-technology behavior remain unverified.
+- The HTTP 200 route probe and production prerender do not prove visual layout, keyboard walkthrough quality, or WCAG conformance.
+- Graph View still graphs only the loaded `ortus.visualBuilderWorkspace`; it does not graph the in-memory Author Schema draft, generate workspaces from schemas, or execute compatibility/social-learning artifacts.
+- Prompt 36 and Prompt 36B changes remain uncommitted and should be reviewed together.
+
+Next roadmap prompt after commit: Prompt 37 Schema Validation UX + Repair Suggestions V1.

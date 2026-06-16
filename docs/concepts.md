@@ -2,7 +2,7 @@
 
 ORTUS is organized around a small set of simulation concepts. Keeping these boundaries explicit prevents model-family definitions, live run state, exploratory comparisons, and UI workspace data from collapsing into one ambiguous artifact.
 
-Roadmap status: ORTUS has completed Prompt 35B: Model Schema Authoring Forms Audit. The post-30B repository hygiene, durable context, dependency stabilization, and performance/scalability pass is complete. The next roadmap prompt is Prompt 36: Visual Builder Graph View V1 after a commit/repo-hygiene checkpoint.
+Roadmap status: ORTUS has completed Prompt 36B: Visual Builder Graph View Audit. The post-30B repository hygiene, durable context, dependency stabilization, and performance/scalability pass is complete. The next roadmap prompt is Prompt 37: Schema Validation UX + Repair Suggestions V1.
 
 ## Brand And Workbench Identity
 
@@ -24,9 +24,15 @@ Belief, memory, and social-learning rule declarations are structural placeholder
 
 Prompt 35 adds bounded model-schema authoring forms inside the existing Builder area. The current draft, last valid imported/exported artifact, validation report, and file-exchange state are local UI state; they do not enter the simulation store or engine. Import/export uses the existing model-schema service, invalid drafts remain editable, and failed imports preserve the current draft.
 
-Model Schema Authoring Forms V1 creates structural model-schema artifacts; it does not execute schemas. Rule declarations authored in the Builder are descriptive only and remain non-executable. A valid authored schema is not a runnable simulation. The schema authoring UI does not generate templates, scenarios, RunConfigs, snapshots, or engines. Prompt 36 Visual Builder Graph View remains future work.
+Model Schema Authoring Forms V1 creates structural model-schema artifacts; it does not execute schemas. Rule declarations authored in the Builder are descriptive only and remain non-executable. A valid authored schema is not a runnable simulation. The schema authoring UI does not generate templates, scenarios, RunConfigs, snapshots, or engines. Prompt 36 Graph View does not read, convert, or mutate the Author Schema draft.
 
 Prompt 35B hardened import size checks, unsafe profiling/persuasion/targeting payload rejection, destructive confirmations, tab semantics, validation announcements, non-text JSON preservation, and medium-width layout behavior. The audit did not add schema execution, compatibility conversion, graph authoring, runtime preview, or simulation-state mutation.
+
+Prompt 36 adds a read-only structural Graph View for a loaded `ortus.visualBuilderWorkspace`. The graph adapter validates and clones the workspace, preserves node/edge ids, statuses, artifact references, markers, warnings, and missing-capability language, and assigns deterministic display coordinates without force simulation. Search, filters, neighborhood highlighting, selection, pan, and zoom remain local presentation state. The visual plane is bounded to 120 nodes and 240 edges; larger artifacts retain a filtered outline and text edge list instead of attempting an unbounded drawing. Author Schema drafts are not converted into workspaces or graph artifacts in V1.
+
+Visual Builder Graph View V1 visualizes structural relationships; it does not execute nodes or edges. Graph selection, filtering, panning, and zooming are UI-only state. Graph View is not visual programming, schema execution, or runtime generation. A graph that looks complete is still not a runnable model.
+
+Prompt 36B audits and hardens the Graph View as a structural inspection surface. It keeps marker counts explicit, treats global runtime-boundary notices separately from warning markers, prevents filtered-out inspector connections from masquerading as selectable visible targets, bounds deterministic layout and DOM ids, and preserves text-only metadata. It still does not add graph authoring, node/edge creation, drag/drop, scenario generation, RunConfig generation, template generation, snapshot generation, engine creation, schema execution, or simulation preview. Rendered responsive and accessibility behavior remain source-tested but browser-unverified.
 
 ### Knowledge, Memory + Social Learning Semantics
 

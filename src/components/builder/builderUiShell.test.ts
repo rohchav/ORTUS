@@ -1,4 +1,4 @@
-import { readFileSync, readdirSync } from "node:fs";
+import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import {
@@ -370,9 +370,21 @@ describe("safe builder UI shell", () => {
 function readBuilderSource(): string {
   const builderDir = join(repoRoot, "src", "components", "builder");
   return [
-    ...readdirSync(builderDir)
-      .filter((file) => (file.endsWith(".ts") || file.endsWith(".tsx")) && !file.endsWith(".test.ts"))
-      .map((file) => readFileSync(join(builderDir, file), "utf8")),
+    readBuilderSourceTree(builderDir),
     readFileSync(join(repoRoot, "src", "app", "builder", "page.tsx"), "utf8")
   ].join("\n");
+}
+
+function readBuilderSourceTree(directory: string): string {
+  return readdirSync(directory)
+    .flatMap((entry) => {
+      const path = join(directory, entry);
+      if (statSync(path).isDirectory()) {
+        return [readBuilderSourceTree(path)];
+      }
+      return (entry.endsWith(".ts") || entry.endsWith(".tsx")) && !entry.endsWith(".test.ts")
+        ? [readFileSync(path, "utf8")]
+        : [];
+    })
+    .join("\n");
 }

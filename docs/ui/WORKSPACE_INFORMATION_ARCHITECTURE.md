@@ -1,7 +1,7 @@
 # ORTUS Workspace Information Architecture
 
 Date: 2026-06-15
-Prompt: UI-REMEDIATION-1, audited and hardened by Prompt 34B, extended by Prompt 35 and audited by Prompt 35B
+Prompt: UI-REMEDIATION-1, audited and hardened by Prompt 34B, extended by Prompt 35, audited by Prompt 35B, extended by Prompt 36, and audited by Prompt 36B
 Status: implemented and source-audited; rendered screenshot and browser zoom tooling remain unavailable in this environment
 
 ## Problem
@@ -21,7 +21,7 @@ ORTUS now uses three levels:
 
 - Global destinations: Simulate and Builder.
 - Simulation workspace modes: Setup, Understand, Observe, Intervene, Experiment, Compare, and Debug.
-- Builder modes: Workspace Inspector and Author Schema.
+- Builder modes: Workspace Inspector, Author Schema, and Graph View.
 - Panels inside the selected mode.
 
 The World Stage remains mounted while the user changes simulation workspace modes. Workspace mode selection is local React UI state in `AppShell`; it is not simulation state and does not reset, regenerate, or mutate the engine.
@@ -41,6 +41,10 @@ The World Stage remains mounted while the user changes simulation workspace mode
 Service-only primitives are not exposed as runnable controls by this IA change.
 
 Builder `Workspace Inspector` remains read-only for `ortus.visualBuilderWorkspace` artifacts. Builder `Author Schema` edits only structural `ortus.modelSchema` drafts through bounded forms. It is intentionally separate from simulation Setup, which configures hand-built runnable templates.
+
+Builder `Graph View` visualizes the currently loaded validated workspace artifact through a presentation-only view model. It does not merge that artifact with the Author Schema draft, create workspace artifacts from schemas, or mutate either source. Graph selection, filtering, panning, zooming, and neighborhood highlighting are local UI state.
+
+Prompt 36B hardens Graph View as inspection rather than authoring. Marker counts distinguish validation, warning, unsupported, future-only, service-only, global runtime-boundary notices, and missing runtime capabilities. Filtered-out connected nodes and edges are disclosed as hidden by current filters rather than selectable visible graph targets. Fit Graph, selection, filtering, panning, and zooming remain UI-only and do not mutate the loaded workspace or simulation state.
 
 ## Header
 
@@ -96,6 +100,8 @@ Medium and narrow viewports:
 - Builder mode tabs become horizontally scrollable.
 - Schema authoring stacks outline/import, form editor, and validation regions without hiding errors.
 - Prompt 35B moves Builder stacking to `1120px`, before the three-column minimum tracks can force horizontal overflow.
+- Graph View uses controls/outline, graph, and inspector columns on wide screens and stacks them at `1120px`.
+- Narrow users retain the node outline, text edge list, warnings, and inspector even when the visual relationship plane is constrained.
 
 This is a source/CSS implementation. Browser zoom at 125% and 200% still needs a real rendered audit.
 
@@ -105,6 +111,9 @@ This is a source/CSS implementation. Browser zoom at 125% and 200% still needs a
 - Current mode is communicated by text and ARIA state.
 - Workspace tabs support Arrow Left/Right/Up/Down plus Home/End navigation and move focus to the selected tab.
 - Builder mode tabs and schema section tabs use roving tab stops and support Arrow Left/Right/Up/Down plus Home/End navigation.
+- Graph nodes support Arrow Left/Right/Up/Down plus Home/End navigation; all nodes also appear in a grouped button outline.
+- Graph edges are available as keyboard-reachable text buttons rather than relying on SVG line focus.
+- Graph source, status counts, warnings, missing capabilities, selected item, and non-executable state are text-readable.
 - Schema fields use associated labels, textual required/error state, and a linked error summary where the service error maps to a field.
 - Dirty reset/import/restore, repeated-item removal, and metadata removal use a modal `alertdialog` with focus cycling, Escape cancellation, and focus return.
 - Run controls have visible text labels and accessible names.
@@ -122,6 +131,7 @@ This is not a formal WCAG conformance claim.
 - Builder viewport node and edge buttons select structural items for read-only inspection only; they do not execute nodes or edges.
 - Builder schema drafts, last-valid checkpoints, active form section, and import/export text are local React state and do not mutate the simulation store.
 - Builder mode panels stay mounted but hidden so switching between Workspace Inspector and Author Schema does not discard an in-memory draft.
+- Graph View is mounted only while active, preventing hidden graph layout/filter work; entering or leaving it does not mutate the loaded workspace or schema draft.
 - Hidden Builder panels have no simulation tick subscriptions or engine work.
 - Metric Trace now states near the chart that trace values are bounded model-output history over simulated ticks, not empirical measurements, calibrated probabilities, or validation evidence.
 
@@ -133,7 +143,10 @@ This is not a formal WCAG conformance claim.
 - Pending-change detection is not implemented because the current runtime immediately rebuilds for template, seed, and parameter changes.
 - Browser zoom at 125%, 150%, and 200% remains unverified.
 - Prompt 35B form focus behavior is source-tested but not verified with a screen reader or real browser keyboard walkthrough.
+- Prompt 36/36B graph keyboard, responsive, SVG/text equivalence, target sizing, fit behavior, filtered-selection behavior, and zoom behavior are source-tested but not verified in a real browser or screen reader.
 
 ## Future Design-System Work
 
-A dedicated visual design-system prompt is still recommended after Prompt 35B. It should address typography scale, color-independent state encoding, richer chart semantics and units where model definitions support them, responsive screenshot testing, keyboard walkthroughs, and zoom behavior without changing simulation semantics.
+A dedicated visual design-system prompt is still recommended after Prompt 36B. It should address typography scale, color-independent state encoding, richer chart semantics and units where model definitions support them, responsive screenshot testing, keyboard walkthroughs, and zoom behavior without changing simulation semantics.
+
+Visual Builder Graph View V1 visualizes structural relationships; it does not execute nodes or edges. Graph selection, filtering, panning, and zooming are UI-only state. Graph View is not visual programming, schema execution, or runtime generation. A graph that looks complete is still not a runnable model.

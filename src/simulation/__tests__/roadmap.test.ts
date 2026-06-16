@@ -17,7 +17,12 @@ const requiredDocPhrases = [
   "Service-first primitives are foundations, not active model behavior. A template should not claim support for a primitive until its runtime actually uses that primitive.",
   "Zooming the camera is not the same as multi-scale modeling. Multi-scale ORTUS models will require explicit scale levels, aggregation rules, disaggregation rules, cross-scale coupling, and warnings when detail is synthetic or lost.",
   "Model state is not the same as observable reality. Observability V1 distinguishes internal simulated state and runtime metrics from measured, partial, noisy, proxy, synthetic, or empirical observation definitions, but it does not execute measurement, calibration, validation, inference, or data assimilation.",
-  "Relations, feedback loops, and events can encode model assumptions, but they do not by themselves prove causal relationships in the real world."
+  "Relations, feedback loops, and events can encode model assumptions, but they do not by themselves prove causal relationships in the real world.",
+  "Visual Builder Graph View V1 visualizes structural relationships; it does not execute nodes or edges.",
+  "Graph selection, filtering, panning, and zooming are UI-only state.",
+  "Graph View is not visual programming, schema execution, or runtime generation.",
+  "A graph that looks complete is still not a runnable model.",
+  "Rendered responsive behavior and WCAG-level accessibility remain unverified until browser and assistive-technology testing is available."
 ];
 
 const futureTopLevelFields = [
@@ -65,16 +70,17 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(existsSync(missingPillarsPath)).toBe(true);
 
     const roadmap = readFileSync(roadmapPath, "utf8");
-    expect(roadmap).toContain("completed through Prompt 35B");
+    expect(roadmap).toContain("completed through Prompt 36B");
     expect(roadmap).toContain("Post-30B stabilization");
-    expect(roadmap).toContain("Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 35B: Model Schema Authoring Forms Audit are complete.");
+    expect(roadmap).toContain("Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 36B: Visual Builder Graph View Audit are complete.");
     expect(roadmap).toContain("Completed Prompt 31 audit band");
     expect(roadmap).toContain("Completed Prompt 32 planning and audit foundation");
     expect(roadmap).toContain("Completed Prompt 33 compatibility foundation");
     expect(roadmap).toContain("Completed Prompt 34 shell and audit foundation");
     expect(roadmap).toContain("Completed Prompt 35 authoring and audit foundation");
+    expect(roadmap).toContain("Completed Prompt 36 graph-view foundation and audit");
     expect(roadmap).toContain("Prompt 35 adds a separate `Author Schema` Builder mode");
-    expect(roadmap).toContain("The next roadmap prompt is Prompt 36: Visual Builder Graph View V1 after a commit/repo-hygiene checkpoint.");
+    expect(roadmap).toContain("The next roadmap prompt is Prompt 37: Schema Validation UX + Repair Suggestions V1.");
     expect(roadmap).toContain("31 - Model Schema + Interpreter Foundation V1");
     expect(roadmap).toContain("31B - Model Schema + Interpreter Foundation Audit");
     expect(roadmap).toContain("31C - Knowledge, Memory + Social Learning Semantics V1");
@@ -84,6 +90,8 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(roadmap).toContain("33 - Template/Schema Compatibility Mapping V1");
     expect(roadmap).toContain("35 - Model Schema Authoring Forms V1");
     expect(roadmap).toContain("35B - Model Schema Authoring Forms Audit");
+    expect(roadmap).toContain("36 - Visual Builder Graph View V1");
+    expect(roadmap).toContain("36B - Visual Builder Graph View Audit");
     expect(roadmap).toContain("18B - Roadmap Alignment Audit");
     expect(roadmap).toContain("21 - Multi-Scale Systems Architecture V1");
     expect(roadmap).toContain("25 - Observability + Measurement Model V1");

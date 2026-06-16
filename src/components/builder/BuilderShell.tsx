@@ -9,6 +9,7 @@ import { BuilderNavigator } from "./BuilderNavigator";
 import { BuilderValidationPanel } from "./BuilderValidationPanel";
 import { BuilderViewport } from "./BuilderViewport";
 import { ModelSchemaAuthoringShell } from "./ModelSchemaAuthoringShell";
+import { BuilderGraphView } from "./graph";
 import {
   createBuilderWorkspaceViewModel,
   defaultBuilderWorkspaceFilters,
@@ -125,6 +126,7 @@ export function BuilderShell({ initialWorkspace }: BuilderShellProps) {
         </aside>
       </section>
       <ModelSchemaAuthoringShell hidden={activeMode !== "authorSchema"} />
+      {activeMode === "graph" ? <BuilderGraphView workspace={workspace} /> : null}
     </main>
   );
 }

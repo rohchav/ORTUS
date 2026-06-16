@@ -12,6 +12,11 @@ export const builderModes = [
     id: "authorSchema",
     label: "Author Schema",
     description: "Author structural model-schema artifacts through bounded forms."
+  },
+  {
+    id: "graph",
+    label: "Graph View",
+    description: "Explore read-only structural relationships without execution."
   }
 ] as const;
 

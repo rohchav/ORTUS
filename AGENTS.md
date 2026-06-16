@@ -100,6 +100,20 @@
 - Reject oversized model-schema files before full browser reads, then still use the headless deserializer as the authority.
 - Preserve imported non-text JSON value types; do not silently coerce them into strings to fit form controls.
 - Destructive schema confirmations must block background editing and support Escape, focus cycling, and focus return.
+- Do not treat Visual Builder Graph View as visual programming.
+- Do not add drag/drop node authoring, edge creation, connect handles, or graph mutation without an explicit future prompt.
+- Do not execute graph nodes or edges, and do not interpret graph edges as runtime dataflow.
+- Do not add Run, Compile, Preview, Generate, or Apply actions to Graph View.
+- Graph selection, filtering, neighborhood highlighting, panning, and zooming must remain UI-only state and must not mutate source artifacts.
+- Do not mutate active simulation state, templates, scenarios, RunConfigs, snapshots, engines, or schema drafts from Graph View.
+- Keep graph layout deterministic; do not add force-layout randomness or continuous graph animation.
+- Render graph labels, notes, warnings, and metadata as text only.
+- Preserve unsupported, future-only, service-only, warning, and missing-capability markers in graph summaries and inspectors.
+- Provide keyboard-accessible node inspection and a text edge list or equivalent accessible graph outline.
+- Use bounded visual graph thresholds with an outline fallback instead of rendering unbounded graphs.
+- Do not add a major graph dependency unless an explicit prompt approves it.
+- Do not imply runtime support, validation, or run readiness from graph completeness.
+- Do not claim rendered responsive or WCAG readiness for Graph View without browser and assistive-technology verification.
 - Safe Builder UI Shell V1 displays structural workspace artifacts; it does not execute workspace nodes or edges.
 - The builder shell is not a compiler, interpreter, visual programming environment, or custom simulation runtime.
 - A structurally valid workspace is still not a runnable model.

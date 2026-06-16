@@ -2,7 +2,7 @@
 
 import type { ChangeEvent } from "react";
 import { OrtusBrand } from "../branding";
-import { visualBuilderWorkspaceArtifactType } from "../../simulation/visualBuilderWorkspace";
+import { maxVisualBuilderWorkspaceJsonLength, visualBuilderWorkspaceArtifactType } from "../../simulation/visualBuilderWorkspace";
 import { BuilderStatusBadge } from "./BuilderStatusBadge";
 import type { BuilderModeId } from "./BuilderModeTabs";
 import type { BuilderWorkspaceViewModel } from "./builderViewModel";
@@ -38,6 +38,7 @@ export function BuilderHeader({
 }: BuilderHeaderProps) {
   const workspace = viewModel?.workspace;
   const authoring = activeMode === "authorSchema";
+  const graphViewing = activeMode === "graph";
   const statusBadges = [
     ...(authoring || !viewModel
       ? [
@@ -86,6 +87,10 @@ export function BuilderHeader({
     if (!file) {
       return;
     }
+    if (file.size > maxVisualBuilderWorkspaceJsonLength * 4) {
+      onFileError(`Workspace file is too large. The import limit is ${maxVisualBuilderWorkspaceJsonLength} JSON characters.`);
+      return;
+    }
     try {
       onFileText(await file.text());
     } catch {
@@ -99,11 +104,20 @@ export function BuilderHeader({
         <OrtusBrand href="/" showDescriptor={false} className="builder-header__brand" />
         <div>
           <span className="builder-header__eyebrow">
-            {authoring ? "Builder / Model Schema Authoring Forms V1" : "Builder Workspace / Safe UI Shell V1"}
+            {authoring
+              ? "Builder / Model Schema Authoring Forms V1"
+              : graphViewing
+                ? "Builder / Visual Builder Graph View V1"
+                : "Builder Workspace / Safe UI Shell V1"}
           </span>
-          <h1>{authoring ? "Model Schema Authoring" : (workspace?.name ?? "No workspace loaded")}</h1>
+          <h1>{authoring ? "Model Schema Authoring" : graphViewing ? "Structural Graph View" : (workspace?.name ?? "No workspace loaded")}</h1>
           {authoring ? (
             <p>ortus.modelSchema · structural artifact forms · local in-memory draft</p>
+          ) : graphViewing ? (
+            <p>
+              {workspace?.name ?? "No workspace loaded"} · {workspace?.id ?? "import a workspace source"} ·{" "}
+              {workspace?.artifactType ?? visualBuilderWorkspaceArtifactType}
+            </p>
           ) : (
             <p>
               {workspace?.id ?? "Import an ortus.visualBuilderWorkspace artifact"} · {workspace?.artifactType ?? visualBuilderWorkspaceArtifactType} ·
@@ -112,6 +126,8 @@ export function BuilderHeader({
           )}
           {authoring ? (
             <p>A valid authored schema is not a runnable simulation.</p>
+          ) : graphViewing ? (
+            <p>Visual relationships only · selection, filtering, panning, and zooming remain UI-only state.</p>
           ) : viewModel ? (
             <p>
               {viewModel.summary.nodeCount} nodes · {viewModel.summary.edgeCount} edges · {viewModel.summary.warningMarkerCount} warning markers ·{" "}
@@ -135,21 +151,27 @@ export function BuilderHeader({
             <input type="file" accept="application/json,.json" onChange={handleFileChange} aria-label="Import workspace JSON file" />
             Import File
           </label>
-          <button type="button" onClick={onLoadImportText} suppressHydrationWarning>
-            Load Workspace JSON
-          </button>
+          {!graphViewing ? (
+            <button type="button" onClick={onLoadImportText} suppressHydrationWarning>
+              Load Workspace JSON
+            </button>
+          ) : null}
           <button type="button" onClick={onExport} disabled={!canExport} suppressHydrationWarning>
             Export Workspace JSON
           </button>
           <button type="button" onClick={onClearWorkspace} disabled={!workspace} suppressHydrationWarning>
             Clear Loaded Workspace
           </button>
-          <button type="button" onClick={onToggleValidation} aria-pressed={showValidation} suppressHydrationWarning>
-            Validation Panel
-          </button>
-          <button type="button" onClick={onToggleWarnings} aria-pressed={showWarnings} suppressHydrationWarning>
-            Warnings Panel
-          </button>
+          {!graphViewing ? (
+            <>
+              <button type="button" onClick={onToggleValidation} aria-pressed={showValidation} suppressHydrationWarning>
+                Validation Panel
+              </button>
+              <button type="button" onClick={onToggleWarnings} aria-pressed={showWarnings} suppressHydrationWarning>
+                Warnings Panel
+              </button>
+            </>
+          ) : null}
         </div>
       )}
     </header>

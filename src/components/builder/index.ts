@@ -9,3 +9,4 @@ export { BuilderViewport } from "./BuilderViewport";
 export { ModelSchemaAuthoringShell } from "./ModelSchemaAuthoringShell";
 export * from "./builderViewModel";
 export * from "./modelSchemaAuthoring";
+export * from "./graph";
