@@ -281,6 +281,20 @@
 - Keep decision metrics labeled as readouts, not beliefs or intentions.
 - Do not add learning, plasticity, or adaptation from RPS payoff without a dedicated future prompt.
 - Keep Neural runtime graph scoped only to the Neural template.
+- Keep Neural Runtime Lab scenario-first but scientifically honest.
+- Do not add learning/adaptation in NUX1.
+- Do not claim the network understands RPS labels.
+- No cognition, belief, intention, preference, or personality language for Neural Runtime Lab outputs.
+- No biological neuron, brain simulation, clinical, neuroscience evidence, or mental-health claims for Neural Runtime Lab.
+- Keep RPS payoff observational until N2.
+- Cards must not imply learning before N2.
+- Neural Runtime Lab direct actions must remain template-scoped and use supported interventions or explicit fresh-run rebuilds.
+- Neural Runtime Lab Advanced config must remain available; scenario cards and plain-English controls must not hide exact parameters permanently.
+- Neural Runtime Lab timelines and RPS histories must remain bounded.
+- Neural Runtime Lab explanations must be metric/snapshot-derived and non-anthropomorphic.
+- Neural Runtime Lab must not make Builder graphs executable or Model Schemas runnable.
+- Do not claim rendered responsive, browser zoom, screen-reader, assistive-technology, or WCAG readiness for Neural Runtime Lab without direct verification.
+- Production build must pass before committing NUX1/NUX1B.
 - Do not make Builder graphs executable.
 - Do not make model schemas runnable.
 - Do not describe the Forest Fire / Landscape Spread template as wildfire prediction, GIS/weather/wind/humidity/terrain/suppression/firefighting modeling, calibrated fire behavior, generic control strategy support, SpatialFieldModel runtime support, or BoundaryEnvironmentModel runtime support.

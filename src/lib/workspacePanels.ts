@@ -24,6 +24,21 @@ export interface WorkspacePanelDefinition {
 
 export const workspacePanelDefinitions: readonly WorkspacePanelDefinition[] = [
   {
+    id: "neuralLab",
+    label: "Neural Runtime Lab",
+    eyebrow: "Scenario Guided",
+    description: "Scenario-first Neural Excitation workbench with bounded explanations, direct actions, and non-adaptive RPS readout shell.",
+    defaultPlacement: "modePanel",
+    supportedPlacements: ["modePanel"],
+    defaultSize: "compact",
+    supportedSizes: ["compact"],
+    glyph: "NL",
+    order: 4,
+    workspaceCapable: false,
+    analysisOriented: true,
+    selectionContextual: false
+  },
+  {
     id: "runSettings",
     label: "Run Settings",
     eyebrow: "Fresh Run Setup",

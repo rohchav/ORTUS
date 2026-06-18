@@ -11,6 +11,7 @@ import { Legend } from "./Legend";
 import { MacroPanel } from "./MacroPanel";
 import { MetricGraphPanel } from "./MetricGraphPanel";
 import { MicroPanel } from "./MicroPanel";
+import { NeuralRuntimeLabPanel } from "./NeuralRuntimeLabPanel";
 import { RunSettingsPanel } from "./RunSettingsPanel";
 import { RunComparisonPanel } from "./RunComparisonPanel";
 import { ScenarioBuilderPanel } from "./ScenarioBuilderPanel";
@@ -103,6 +104,9 @@ function renderWorkspaceMode(mode: SimulationWorkspaceModeId): ReactNode {
     case "setup":
       return (
         <>
+          <RailPanelSlot panelId="neuralLab">
+            <NeuralRuntimeLabPanel />
+          </RailPanelSlot>
           <RailPanelSlot panelId="runSettings">
             <RunSettingsPanel />
           </RailPanelSlot>

@@ -931,3 +931,98 @@ Remaining limitations:
 - Prompt N1 + N1B changes remain uncommitted.
 
 Next roadmap prompt after commit: Prompt 38 Schema-to-Template Fit Report V1.
+
+## 2026-06-18 - Prompt NUX1 Neural Runtime Lab UX V1
+
+Goal: add a scenario-guided Neural Runtime Lab around the existing Neural Excitation Network template without adding learning/adaptation, cognition, biological-neuron claims, Builder graph execution, Model Schema execution, generic graph runtime, selected-edge editing, LLM agents, external APIs, or payoff-driven weight/bias updates.
+
+Initial state:
+
+- `git status --short` was clean before edits.
+- Latest commit observed: `3b50266 Add neural excitation network template to production templates`.
+- Prompt N1 and Prompt N1B were committed before this prompt began.
+
+Implemented:
+
+- Added `NeuralRuntimeLabPanel` in Setup mode when `neural-excitation-network` is selected.
+- Added scenario cards for Watch a cascade spread, Stabilize runaway excitation, Make two clusters synchronize, Break the network by removing/silencing a hub, Rock-Paper-Scissors Readout Demo, and Stay unpredictable challenge shell.
+- Added mission/status readouts for firing neurons, refractory neurons, signal queue, excitation/inhibition balance, cascade status, and RPS readout/payoff status.
+- Added live explanations derived from current metrics/snapshot state. Explanations avoid anthropomorphic cognition language and keep outputs as model readouts.
+- Added direct UI actions over supported Neural interventions: seeded random/selected/cluster stimulation, selected-cluster silencing, RPS assembly stimulation, external stimulus toggle, reset activity, regenerate network, and show Advanced config.
+- Added plain-English controls that deterministically map to existing Neural parameters and rebuild a fresh tick-0 run through template validation.
+- Added a Neural-only Advanced config drawer around exact numeric parameters with `aria-expanded`/`aria-controls`; exact parameters remain available.
+- Added a bounded latest-events timeline with a 60-event limit and a bounded non-adaptive RPS challenge history with a 40-round limit.
+- Added a store-level `setParameters` batch setter so presets rebuild once through existing validation.
+
+Required boundary copy preserved:
+
+- This lab shows stylized neural excitation dynamics and bounded categorical readouts. It does not model cognition, biological neurons, or learning.
+- RPS payoff is observational in this version and does not update weights, biases, or future choices.
+- Rock-Paper-Scissors labels are assigned to output assemblies by the model designer; the network does not understand the labels.
+- This runtime graph belongs only to the Neural Excitation Network template and does not make Builder graphs executable.
+- Training and adaptation are deferred to Neural Strategy Adaptation V1.
+
+Checks:
+
+- `npm run test -- neuralRuntimeLab`: passed, 1 file and 5 tests.
+- `npm run test -- neuralRuntimeLab workspaceInformationArchitecture layoutContainment neural`: passed, 4 files and 27 tests.
+- `npm run typecheck`: passed.
+- `npm test`: passed, 56 files and 443 tests.
+- `git diff --check`: passed.
+- `npm run build`: failed with Next.js 15.5.19 after "Creating an optimized production build ..." and then only `Build failed because of webpack errors`. The same generic failure remained after moving `.next` to `/tmp`, temporarily unmounting `NeuralRuntimeLabPanel`, temporarily removing the new CSS, temporarily reverting the Neural Advanced config drawer, and temporarily removing the store batch setter. Next did not print a module-level webpack diagnostic in this environment.
+
+Remaining limitations:
+
+- Browser screenshots, rendered responsive inspection, browser zoom behavior, screen-reader behavior, assistive-technology behavior, and WCAG conformance remain unverified.
+- Production build failure remains unresolved because Next emitted only the generic webpack error banner despite clean cache and isolation attempts.
+
+Next roadmap prompt after commit: Prompt 38 Schema-to-Template Fit Report V1.
+
+## 2026-06-18 - Prompt NUX1B Neural Runtime Lab UX Audit + Build Investigation
+
+Goal: audit the Neural Runtime Lab UX V1 work, diagnose the generic Next/webpack production-build failure, keep the lab source-honest and bounded, and avoid starting Neural Strategy Adaptation V1.
+
+Build investigation:
+
+- Reproduced the reported `npm run build` failure: Next emitted only `Build failed because of webpack errors`.
+- Temporary source isolation showed the failure was not caused by `NeuralRuntimeLabPanel`, the new Neural lab CSS, the Advanced config drawer, the store batch setter, or the new lab helper/tests.
+- A clean HEAD copy also failed, which ruled out NUX1 as the direct root cause.
+- Temporary webpack-error instrumentation revealed the real cause: `next/font/google` in `src/app/layout.tsx` tried to fetch IBM Plex Mono, IBM Plex Sans, and Space Grotesk during production build in a network-restricted environment.
+- NUX1B removes the `next/font/google` loaders and leaves the existing CSS fallback stacks as the build-safe font path.
+
+Implemented hardening:
+
+- Added explicit Neural Runtime Lab discarded-state copy: Apply setup rebuilds a fresh tick-0 run and discards current tick, metric trace, selection, intervention target, and intervention history.
+- Strengthened Neural lab static tests for production-import hygiene, no test-file leakage, browser-free helper logic, no unsafe HTML/dynamic import, bounded timeline/RPS histories, and source-level accessibility hooks.
+- Updated docs and guardrails for NUX1B, including the build root cause and the exact unverified-rendering boundary.
+- Added AGENTS guardrail: production build must pass before committing NUX1/NUX1B.
+
+Required boundary copy preserved:
+
+- This lab shows stylized neural excitation dynamics and bounded categorical readouts. It does not model cognition, biological neurons, or learning.
+- RPS payoff is observational in this version and does not update weights, biases, or future choices.
+- Rock-Paper-Scissors labels are assigned to output assemblies by the model designer; the network does not understand the labels.
+- This runtime graph belongs only to the Neural Excitation Network template and does not make Builder graphs executable.
+- Training and adaptation are deferred to Neural Strategy Adaptation V1.
+- Rendered responsive, zoom, and assistive-technology behavior remain unverified unless directly tested.
+
+Checks:
+
+- `npm run test -- neuralRuntimeLab`: passed, 1 file and 7 tests.
+- `npm run test -- neural`: passed, 2 files and 15 tests.
+- `npm run test -- template modelSchema visualBuilderWorkspace schemaTemplateCompatibility socialLearning opinion primitiveRegistry hybridComposition roadmap assumptions builderUiShell workspaceInformationArchitecture`: passed, 21 files and 198 tests.
+- `npm run typecheck`: passed.
+- `npm test`: passed, 56 files and 445 tests.
+- `npm run build`: passed with Next.js 15.5.19; `/` and `/builder` prerendered successfully.
+- `npm run perf:simulation`: passed. Local smoke results included Flocking 100 agents at 112.35 ticks/sec, Flocking 500 agents at 15.89 ticks/sec, Forest Fire 80x60 at 26.38 ticks/sec, and Predator-Prey default at 75.13 ticks/sec.
+- `git diff --check`: passed.
+- `npm run dev`: failed in the sandbox with `listen EPERM`; an escalated dev-server run started successfully and local HTTP HEAD probes returned `200 OK` for `/` and `/builder`.
+- `npm run lint`: unavailable, package.json has no lint script.
+- Final doc/Neural rerun after log ordering: `npm run test -- roadmap workspaceInformationArchitecture neuralRuntimeLab` passed, 3 files and 18 tests.
+
+Remaining limitations:
+
+- Browser screenshots, rendered responsive inspection, browser zoom behavior, screen-reader behavior, assistive-technology behavior, and WCAG conformance remain unverified.
+- The dev-server route probes confirm HTTP availability only; they are not rendered UI, zoom, keyboard walkthrough, or assistive-technology verification.
+
+Next roadmap prompt after commit: Prompt 38 Schema-to-Template Fit Report V1.

@@ -1,7 +1,7 @@
 # ORTUS Workspace Information Architecture
 
-Date: 2026-06-16
-Prompt: UI-REMEDIATION-1, audited and hardened by Prompt 34B, extended by Prompt 35, audited by Prompt 35B, extended by Prompt 36, audited by Prompt 36B, extended by Prompt 37, and audited by Prompt 37B
+Date: 2026-06-18
+Prompt: UI-REMEDIATION-1, audited and hardened by Prompt 34B, extended by Prompt 35, audited by Prompt 35B, extended by Prompt 36, audited by Prompt 36B, extended by Prompt 37, audited by Prompt 37B, extended by Prompt NUX1, and audited by Prompt NUX1B
 Status: implemented and source-audited; rendered screenshot and browser zoom tooling remain unavailable in this environment
 
 ## Problem
@@ -28,7 +28,7 @@ The World Stage remains mounted while the user changes simulation workspace mode
 
 ## Feature Mapping
 
-- Setup: Run Settings, model template selection, seed controls, parameter controls, Scenario Builder.
+- Setup: Neural Runtime Lab when Neural Excitation Network is selected, Run Settings, model template selection, seed controls, parameter controls, Scenario Builder.
 - Understand: Assumptions + Limits, Field Notes.
 - Observe: Macro Field, Micro Field, Metric Trace, Legend.
 - Intervene: Interventions.
@@ -49,6 +49,10 @@ Prompt 36B hardens Graph View as inspection rather than authoring. Marker counts
 Prompt 37 extends only the Builder `Author Schema` validation region. It groups structural validation issues, warnings, missing capabilities, manual-review items, and bounded repair suggestions for the current UI-local schema draft. Repair suggestions do not activate the loaded workspace, simulation Setup, templates, scenarios, RunConfigs, snapshots, engines, compatibility reports, social-learning artifacts, or Graph View.
 
 Prompt 37B hardens that validation region without changing the workspace hierarchy. Repair suggestions are structural editing assistance. They do not make a schema runnable. A repaired schema may be structurally valid and still have no runtime implementation. ORTUS does not infer the correct model behavior from validation repairs. Validation repairs do not generate templates, scenarios, RunConfigs, snapshots, or engines. Confirmation-required repairs are enforced by the repair helper, `canApply` is explicit, malformed/prototype-like patches are rejected, stale list-item patches fail safely, and rule repair suggestions state that they only edit structure.
+
+Prompt NUX1 extends Setup only when the Neural Excitation Network template is selected. The Neural Runtime Lab is scenario-first: scenario cards, mission/status readouts, live explanations, direct actions, plain-English controls, an Advanced config drawer, bounded timeline, and non-adaptive RPS shell appear before exact numeric Neural parameters. This lab shows stylized neural excitation dynamics and bounded categorical readouts. It does not model cognition, biological neurons, or learning. RPS payoff is observational in this version and does not update weights, biases, or future choices. Rock-Paper-Scissors labels are assigned to output assemblies by the model designer; the network does not understand the labels. This runtime graph belongs only to the Neural Excitation Network template and does not make Builder graphs executable. The panel does not alter Builder modes, execute Model Schemas, add learning/adaptation, or turn visual graphs into runtime graphs.
+
+Prompt NUX1B keeps that workspace structure unchanged while fixing production buildability and source-level audit gaps. The Neural Runtime Lab remains a Setup-only UI layer; it is not a new workspace mode, runtime primitive, schema interpreter, Builder graph executor, or learning system. Rendered responsive, zoom, and assistive-technology behavior remain unverified unless directly tested.
 
 ## Header
 

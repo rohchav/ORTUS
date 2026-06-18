@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import type { JsonValue, ParameterDefinition } from "../simulation";
 import { formatNumber } from "../lib/format";
 import { getTemplateDescriptor } from "../lib/templateVisuals";
@@ -10,20 +11,63 @@ export function ParameterPanel() {
   const parameterValues = useSimulationStore((state) => state.parameterValues);
   const setParameter = useSimulationStore((state) => state.setParameter);
   const definitions = getTemplateDescriptor(selectedTemplateId).template.parameterDefinitions;
+  const [neuralAdvancedOpen, setNeuralAdvancedOpen] = useState(false);
+  const isNeural = selectedTemplateId === "neural-excitation-network";
+
+  useEffect(() => {
+    if (!isNeural) {
+      return;
+    }
+    function openAdvancedConfig() {
+      setNeuralAdvancedOpen(true);
+    }
+    window.addEventListener("ortus:open-neural-advanced-config", openAdvancedConfig);
+    return () => window.removeEventListener("ortus:open-neural-advanced-config", openAdvancedConfig);
+  }, [isNeural]);
+
+  const controls = definitions.map((definition) => (
+    <ParameterControl
+      key={definition.key}
+      definition={definition}
+      value={parameterValues[definition.key] ?? definition.defaultValue}
+      onChange={(value) => setParameter(definition.key, value)}
+    />
+  ));
+
+  if (isNeural) {
+    return (
+      <section className="parameter-panel parameter-panel--advanced" aria-label="Neural advanced configuration">
+        <button
+          id="neural-advanced-config-toggle"
+          type="button"
+          className="parameter-panel__advanced-toggle"
+          aria-expanded={neuralAdvancedOpen}
+          aria-controls="neural-advanced-config-panel"
+          onClick={() => setNeuralAdvancedOpen((current) => !current)}
+          suppressHydrationWarning
+        >
+          <span>Advanced config</span>
+          <strong>{neuralAdvancedOpen ? "Hide exact parameters" : "Show exact parameters"}</strong>
+        </button>
+        <p className="parameter-panel__note">
+          Parameter changes rebuild a fresh tick-0 run immediately through template validation. Invalid combinations are rejected before the engine is replaced.
+          Neural Runtime Lab controls are shortcuts; this drawer keeps every exact parameter available.
+        </p>
+        {neuralAdvancedOpen ? (
+          <div id="neural-advanced-config-panel" className="parameter-panel__advanced-body">
+            {controls}
+          </div>
+        ) : null}
+      </section>
+    );
+  }
 
   return (
     <div className="parameter-panel">
       <p className="parameter-panel__note">
         Parameter changes rebuild a fresh tick-0 run immediately through template validation. Invalid combinations are rejected before the engine is replaced.
       </p>
-      {definitions.map((definition) => (
-        <ParameterControl
-          key={definition.key}
-          definition={definition}
-          value={parameterValues[definition.key] ?? definition.defaultValue}
-          onChange={(value) => setParameter(definition.key, value)}
-        />
-      ))}
+      {controls}
     </div>
   );
 }

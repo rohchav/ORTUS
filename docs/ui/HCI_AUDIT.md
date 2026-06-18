@@ -1,8 +1,8 @@
 # ORTUS HCI / UX / Visual-Direction Audit
 
 Date: 2026-06-11  
-Updated: 2026-06-17 after Prompt N1
-Prompt: UI-BRAND-1, UI-REMEDIATION-1, Prompt 34B, Prompt 35, Prompt 35B, Prompt 36, Prompt 36B, Prompt 37, Prompt 37B, Prompt N1
+Updated: 2026-06-18 after Prompt NUX1B
+Prompt: UI-BRAND-1, UI-REMEDIATION-1, Prompt 34B, Prompt 35, Prompt 35B, Prompt 36, Prompt 36B, Prompt 37, Prompt 37B, Prompt N1, Prompt N1B, Prompt NUX1, Prompt NUX1B
 Status: source-based audit, not a formal WCAG audit
 
 ## 1. Executive Verdict
@@ -44,6 +44,12 @@ Neural Excitation Network adds a template-specific canvas graph visualization an
 
 Prompt N1B adds an optional Neural Decision Readout panel in the Legend surface. This is a source-level implementation, not rendered UX evidence. Decision Readout V1 maps labeled output assemblies to bounded categorical choices. It is not cognition or reasoning. Rock-Paper-Scissors labels are semantic labels assigned by the model designer, not meanings understood by the network. RPS payoff is observational in V1 and does not train, adapt, or optimize the network. The model does not infer intentions, beliefs, preferences, personality, or human decision-making. The panel labels output assembly activation, selected readout, and observational payoff separately from the canvas graph, which is the right direction. Remaining HCI risk is still serious: users may read “decision,” “confidence,” or “payoff” as understanding, strategy, or evidence unless future rendered testing confirms the boundary language is actually seen and understood.
 
+Prompt NUX1 update:
+Neural Runtime Lab UX V1 moves the Neural template toward a scenario-guided workbench instead of a parameter-first wall. That is directionally correct: beginner users get scenario cards, mission/status readouts, live explanations, direct actions, and an RPS shell before exact numeric configuration. The serious risk is overclaiming. The implementation keeps direct actions tied to supported template interventions, plain-English controls mapped to validated parameters, exact numeric controls behind an accessible Advanced config drawer, and event/RPS histories bounded. Required copy states: This lab shows stylized neural excitation dynamics and bounded categorical readouts. It does not model cognition, biological neurons, or learning. RPS payoff is observational in this version and does not update weights, biases, or future choices. Rock-Paper-Scissors labels are assigned to output assemblies by the model designer; the network does not understand the labels. This runtime graph belongs only to the Neural Excitation Network template and does not make Builder graphs executable. Training and adaptation are deferred to Neural Strategy Adaptation V1. This is still source-tested UX, not rendered evidence; scenario-card layout, scrolling, zoom behavior, keyboard walkthrough quality, screen-reader behavior, and whether users actually understand the caveats remain unverified.
+
+Prompt NUX1B update:
+The NUX1 production-build failure was not caused by the lab code. It was a build-time dependency on remote Google font fetches through `next/font/google`; that is a bad fit for a restricted or reproducible build environment. NUX1B removes those loaders and keeps existing local/system CSS fallback stacks. The source audit adds stronger static checks for production imports, browser-free helper logic, bounded histories, explicit discarded-state copy, no unsafe HTML/dynamic import/eval path, and no test-file leakage. Rendered responsive, zoom, and assistive-technology behavior remain unverified unless directly tested.
+
 ## 2. Audit Scope
 
 Inspected surfaces:
@@ -56,6 +62,8 @@ Inspected surfaces:
 - Schema validation assistance adapter and Author Schema validation panel changes added in Prompt 37 and hardened in Prompt 37B.
 - Neural Excitation Network template-specific canvas edge rendering, legend notes, inspector rows, and atmosphere styling added in Prompt N1.
 - Neural Decision Readout Legend panel, output assembly activation bars, selected readout, and observational RPS payoff copy added in Prompt N1B.
+- Neural Runtime Lab scenario cards, mission/status readouts, live explanations, direct actions, plain-English controls, Advanced config drawer, bounded timeline, and non-adaptive RPS shell added in Prompt NUX1.
+- Neural Runtime Lab build and source-boundary hardening added in Prompt NUX1B.
 - Global CSS, typography tokens, responsive rules, focus styles, animation/reduced-motion rules.
 - Metadata and favicon/icon configuration.
 - Existing component and simulation tests.

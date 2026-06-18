@@ -71,6 +71,7 @@ interface SimulationUiState {
   setSeed: (seed: string) => void;
   regenerateSeed: () => void;
   setParameter: (key: string, value: JsonValue) => void;
+  setParameters: (patch: ParameterValues, reason?: string) => void;
   setSpeedMultiplier: (value: number) => void;
   play: () => void;
   pause: () => void;
@@ -194,6 +195,17 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
       seed: get().seed,
       keepSelection: false,
       errorPrefix: `Parameter ${key}`
+    });
+  },
+
+  setParameters(patch, reason = "Parameter preset") {
+    const nextParameters = { ...get().parameterValues, ...patch };
+    replaceEngine(set, get, {
+      templateId: get().selectedTemplateId,
+      parameters: nextParameters,
+      seed: get().seed,
+      keepSelection: false,
+      errorPrefix: reason
     });
   },
 

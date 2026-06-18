@@ -1280,6 +1280,42 @@ textarea {
   line-height: 1.48;
 }
 
+.parameter-panel--advanced {
+  border-top: 1px solid rgba(243, 241, 232, 0.12);
+  padding-top: 10px;
+}
+
+.parameter-panel__advanced-toggle {
+  width: 100%;
+  min-height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 9px;
+  color: var(--text-primary);
+  border: 1px solid rgba(216, 255, 62, 0.24);
+  background: rgba(216, 255, 62, 0.08);
+  text-align: left;
+  clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%);
+}
+
+.parameter-panel__advanced-toggle span {
+  color: var(--text-muted);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+
+.parameter-panel__advanced-toggle strong {
+  font-size: 11px;
+}
+
+.parameter-panel__advanced-body {
+  display: grid;
+  gap: 10px;
+}
+
 .parameter-control {
   display: grid;
   gap: 5px;
@@ -1325,6 +1361,272 @@ textarea {
   color: #e6ff8c;
   font-size: 10px;
   text-transform: uppercase;
+}
+
+.neural-lab-panel {
+  background:
+    linear-gradient(145deg, rgba(216, 255, 62, 0.06), transparent 38%),
+    var(--bg-panel);
+}
+
+.neural-lab {
+  display: grid;
+  gap: 12px;
+}
+
+.neural-lab__boundary,
+.neural-lab__section,
+.neural-lab__mission {
+  display: grid;
+  gap: 9px;
+}
+
+.neural-lab__boundary {
+  padding: 8px;
+  border-left: 2px solid rgba(255, 90, 36, 0.72);
+  background: rgba(255, 90, 36, 0.08);
+}
+
+.neural-lab__boundary p,
+.neural-lab__mission p,
+.neural-lab__section p,
+.neural-lab-card p,
+.neural-lab-card em,
+.neural-lab__microcopy {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.48;
+}
+
+.neural-lab__section,
+.neural-lab__mission {
+  padding-top: 10px;
+  border-top: 1px solid rgba(243, 241, 232, 0.1);
+}
+
+.neural-lab__section-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.neural-lab__section-head span {
+  color: var(--text-muted);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+
+.neural-lab__section-head strong {
+  color: var(--text-primary);
+  font-size: 13px;
+}
+
+.neural-lab__cards,
+.neural-lab-actions,
+.neural-lab-controls {
+  display: grid;
+  gap: 8px;
+}
+
+.neural-lab-card {
+  display: grid;
+  gap: 7px;
+  padding: 8px;
+  border: 1px solid rgba(243, 241, 232, 0.12);
+  background: rgba(7, 9, 9, 0.28);
+}
+
+.neural-lab-card.is-active {
+  border-color: rgba(216, 255, 62, 0.5);
+  background: rgba(216, 255, 62, 0.07);
+}
+
+.neural-lab-card__select {
+  display: grid;
+  gap: 4px;
+  width: 100%;
+  padding: 0;
+  color: inherit;
+  border: 0;
+  background: transparent;
+  text-align: left;
+}
+
+.neural-lab-card__select strong {
+  color: var(--text-primary);
+  font-size: 13px;
+}
+
+.neural-lab-card__select span {
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.42;
+}
+
+.neural-lab-card__apply,
+.neural-lab-action button,
+.neural-lab-control-group button,
+.neural-lab-rps__buttons button {
+  min-height: 30px;
+  padding: 0 9px;
+  border: 1px solid rgba(216, 255, 62, 0.28);
+  background: rgba(216, 255, 62, 0.1);
+  color: var(--text-primary);
+  font-size: 11px;
+  text-transform: uppercase;
+  clip-path: polygon(0 0, calc(100% - 5px) 0, 100% 5px, 100% 100%, 0 100%);
+}
+
+.neural-lab-card__apply {
+  justify-self: start;
+}
+
+.neural-lab-status {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+}
+
+.neural-lab-status div {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 5px 6px;
+  background: rgba(243, 241, 232, 0.07);
+}
+
+.neural-lab-status dt {
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.neural-lab-status dd {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 11px;
+  text-align: right;
+}
+
+.neural-lab-status--rps div {
+  background: rgba(108, 114, 255, 0.1);
+}
+
+.neural-lab-next {
+  display: grid;
+  gap: 5px;
+}
+
+.neural-lab-next span {
+  color: var(--text-muted);
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+.neural-lab-next ul,
+.neural-lab-explanations,
+.neural-lab-timeline,
+.neural-lab-rps__history {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.neural-lab-next li,
+.neural-lab-explanations li {
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.44;
+}
+
+.neural-lab-action {
+  display: grid;
+  gap: 4px;
+  grid-template-columns: minmax(0, 1fr);
+  padding: 7px;
+  border: 1px solid rgba(243, 241, 232, 0.1);
+}
+
+.neural-lab-action span,
+.neural-lab-action em,
+.neural-lab-control-group p {
+  color: var(--text-muted);
+  font-size: 11px;
+  line-height: 1.42;
+}
+
+.neural-lab-action button:disabled,
+.neural-lab-rps__buttons button:disabled {
+  cursor: not-allowed;
+  color: rgba(243, 241, 232, 0.42);
+  border-color: rgba(243, 241, 232, 0.12);
+  background: rgba(243, 241, 232, 0.05);
+}
+
+.neural-lab-control-group {
+  display: grid;
+  gap: 5px;
+  padding: 7px;
+  border: 1px solid rgba(123, 215, 199, 0.18);
+}
+
+.neural-lab-control-group strong {
+  color: var(--text-primary);
+  font-size: 12px;
+}
+
+.neural-lab-control-group div,
+.neural-lab-rps__buttons,
+.neural-lab-rps__distribution {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.neural-lab-rps__distribution span {
+  padding: 4px 6px;
+  color: var(--text-secondary);
+  background: rgba(243, 241, 232, 0.08);
+  font-size: 11px;
+}
+
+.neural-lab-rps__distribution strong {
+  color: var(--text-primary);
+}
+
+.neural-lab-timeline,
+.neural-lab-rps__history {
+  display: grid;
+  gap: 6px;
+}
+
+.neural-lab-timeline li,
+.neural-lab-rps__history li {
+  display: grid;
+  gap: 2px;
+  padding: 6px;
+  background: rgba(7, 9, 9, 0.28);
+}
+
+.neural-lab-timeline li span {
+  color: #e6ff8c;
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+.neural-lab-timeline li strong,
+.neural-lab-rps__history li strong {
+  color: var(--text-primary);
+  font-size: 12px;
+}
+
+.neural-lab-timeline li em,
+.neural-lab-rps__history li span {
+  color: var(--text-muted);
+  font-size: 11px;
+  line-height: 1.42;
 }
 
 .macro-grid {

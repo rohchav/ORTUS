@@ -1,6 +1,6 @@
 # ORTUS Current Context
 
-Last updated: 2026-06-18 after non-roadmap Prompt N1B Neural Excitation Network Template Audit + Decision Readout V1
+Last updated: 2026-06-18 after non-roadmap Prompt NUX1B Neural Runtime Lab UX Audit + Build Investigation
 
 ## Project Identity
 
@@ -30,6 +30,10 @@ Prompt N1 adds Neural Excitation Network Template V1 as a hand-built production 
 
 Prompt N1B audits Neural Excitation Network Template V1 and adds optional Decision Readout V1 plus a Rock-Paper-Scissors readout preset. Decision Readout V1 maps labeled output assemblies to bounded categorical choices. It is not cognition or reasoning. Rock-Paper-Scissors labels are semantic labels assigned by the model designer, not meanings understood by the network. RPS payoff is observational in V1 and does not train, adapt, or optimize the network. The model does not infer intentions, beliefs, preferences, personality, or human decision-making. Decision metrics are model-output readouts from labeled neuron groups, not evidence of reasoning. The readout is template-local and does not make Builder graphs executable, model schemas runnable, social-learning artifacts executable, or RPS payoff adaptive.
 
+Prompt NUX1 adds a scenario-first Neural Runtime Lab UX panel in Setup when the Neural template is selected. The lab provides scenario cards, mission/status readouts, metric-derived live explanations, direct actions over supported Neural interventions, plain-English setup controls that map to validated parameters, an Advanced config drawer for exact numeric parameters, a bounded latest-events timeline, and a non-adaptive RPS challenge shell. This lab shows stylized neural excitation dynamics and bounded categorical readouts. It does not model cognition, biological neurons, or learning. RPS payoff is observational in this version and does not update weights, biases, or future choices. Rock-Paper-Scissors labels are assigned to output assemblies by the model designer; the network does not understand the labels. This runtime graph belongs only to the Neural Excitation Network template and does not make Builder graphs executable. Training and adaptation are deferred to Neural Strategy Adaptation V1.
+
+Prompt NUX1B audits the Neural Runtime Lab and fixes the production build failure. The root cause was `next/font/google` attempting to fetch IBM Plex Mono, IBM Plex Sans, and Space Grotesk during `npm run build` in a network-restricted environment; NUX1B removes those remote font loaders and relies on existing CSS fallback stacks. The audit preserves NUX1 as a UX layer only: no learning/adaptation, no payoff-driven weight or bias updates, no Builder graph execution, no Model Schema execution, no biological/cognitive validity claim. Rendered responsive, zoom, and assistive-technology behavior remain unverified unless directly tested.
+
 Confirmed UI layout defects fixed in UI-REMEDIATION-1:
 
 - The header used fixed `height: 50px` with `overflow-y: hidden`, which could clip crowded lower header content.
@@ -43,11 +47,11 @@ Built-in production templates currently include Epidemic Spread, Opinion Dynamic
 
 ## Completed Prompt State
 
-Durable docs and source indicate completed roadmap work through Prompt 37B plus non-roadmap Prompts N1 and N1B. Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 37B: Schema Validation UX + Repair Suggestions Audit are complete. Prompt N1: Neural Excitation Network Template V1 is complete. Prompt N1B: Neural Excitation Network Template Audit + Decision Readout V1 is complete.
+Durable docs and source indicate completed roadmap work through Prompt 37B plus non-roadmap Prompts N1, N1B, NUX1, and NUX1B. Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 37B: Schema Validation UX + Repair Suggestions Audit are complete. Prompt N1: Neural Excitation Network Template V1 is complete. Prompt N1B: Neural Excitation Network Template Audit + Decision Readout V1 is complete. Prompt NUX1: Neural Runtime Lab UX V1 is complete. Prompt NUX1B: Neural Runtime Lab UX Audit + Build Investigation is complete.
 
 The post-30B repository hygiene, dependency stabilization, durable context, and performance/scalability pass has also been completed. Recent commits include `dd6c256` for repo context/generated-artifact hygiene, `4949b72` for dependency and performance script stabilization, and `a80d5b7` for simulation performance instrumentation and spatial indexing foundations.
 
-The next roadmap prompt is Prompt 38: Schema-to-Template Fit Report V1, after Prompt N1 changes are reviewed and committed. A separate rendered responsive/design-system audit is still recommended before making mobile-readiness, WCAG, clipboard, focus-return, or polished visual-workbench claims.
+The next roadmap prompt is Prompt 38: Schema-to-Template Fit Report V1, after Prompt N1/N1B/NUX1/NUX1B changes are reviewed and committed. A separate rendered responsive/design-system audit is still recommended before making mobile-readiness, WCAG, clipboard, focus-return, or polished visual-workbench claims.
 
 Implemented runtime foundations include scenarios, snapshots, template-defined behavior modes, agent composition, interventions, experiments, run summaries/comparison, seeded randomness, metrics, spaces, template metadata, and a narrow Opinion Dynamics `socialLearning` behavior mode audited in Prompt 33D.
 
@@ -95,6 +99,10 @@ Prompt 36B source-level findings are hardened, but browser rendering remains unv
 Template/schema compatibility mapping is a structural fit-analysis service only. `ortus.schemaTemplateCompatibilityReport` and `ortus.templateMappingProfile` artifacts compare `ModelSchemaDefinition` structure against static production-template metadata. Template/schema compatibility reports are structural fit analyses; they do not convert schemas into runnable models. A strong template fit does not mean a schema can run. Unsupported and lossy mappings must remain visible; they must not be silently dropped. Compatibility mapping does not generate scenarios, RunConfigs, snapshots, templates, or engines. Compatibility reports do not execute schemas, parse rule descriptions, mutate templates, create engines, implement visual builder runtime, add external framework interop, run social-learning/cognitive behavior, validate science, calibrate outputs, or prove causality, emergence, robustness, strategy effectiveness, safety, or operational readiness. Prompt 33B audited these boundaries and kept compatibility mapping structural only.
 
 These foundations are not automatic runtime support for templates. A template must explicitly declare and actually use a primitive at runtime before ORTUS can claim template runtime support. Neural Excitation is the only current template with runtime network support, and that support is scoped to its template-owned runtime graph; it does not make Builder graphs, model-schema graphs, or network artifacts executable. Neural Decision Readout V1 is likewise scoped only to that template and is not a global decision-support primitive, cognition model, schema runtime, Builder graph runtime, or social-learning runtime.
+
+Neural Runtime Lab UX V1 is not a new runtime primitive. Its scenario cards, direct actions, plain-English controls, timeline, and RPS shell are UI affordances around existing Neural template parameters, existing template-scoped interventions, and current snapshots. They do not execute Builder graphs, make model schemas runnable, add learning or adaptation, update weights or biases from payoff, infer intent, or validate biological/cognitive claims.
+
+Prompt NUX1B does not change that boundary. It makes the lab production-buildable and source-audited; it does not make rendered responsive, zoom, or assistive-technology behavior verified.
 
 ## Package And Dependency State
 

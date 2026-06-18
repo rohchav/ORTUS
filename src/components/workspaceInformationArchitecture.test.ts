@@ -31,6 +31,7 @@ describe("simulation workspace information architecture", () => {
     const panels = new Set(simulationWorkspaceModes.flatMap((mode) => mode.panelIds));
     expect(panels).toEqual(
       new Set([
+        "neuralLab",
         "runSettings",
         "scenarios",
         "assumptions",
@@ -105,6 +106,7 @@ describe("simulation workspace information architecture", () => {
     expect(runSettings).toContain("setSeed");
     expect(runSettings).toContain("regenerateSeed");
     expect(runSettings).toContain("<ParameterPanel />");
+    expect(leftStack).toContain("<NeuralRuntimeLabPanel />");
     expect(leftStack).toContain("<FileActions />");
   });
 

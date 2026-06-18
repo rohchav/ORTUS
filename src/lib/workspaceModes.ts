@@ -18,7 +18,7 @@ export const simulationWorkspaceModes: readonly SimulationWorkspaceModeDefinitio
     label: "Setup",
     eyebrow: "Model + scenario",
     description: "Choose the template, seed, parameters, and initial-condition recipe for a fresh run.",
-    panelIds: ["runSettings", "scenarios"]
+    panelIds: ["neuralLab", "runSettings", "scenarios"]
   },
   {
     id: "understand",
