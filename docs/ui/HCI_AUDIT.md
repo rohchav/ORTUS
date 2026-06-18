@@ -1,8 +1,8 @@
 # ORTUS HCI / UX / Visual-Direction Audit
 
 Date: 2026-06-11  
-Updated: 2026-06-16 after Prompt 37B
-Prompt: UI-BRAND-1, UI-REMEDIATION-1, Prompt 34B, Prompt 35, Prompt 35B, Prompt 36, Prompt 36B, Prompt 37, Prompt 37B
+Updated: 2026-06-17 after Prompt N1
+Prompt: UI-BRAND-1, UI-REMEDIATION-1, Prompt 34B, Prompt 35, Prompt 35B, Prompt 36, Prompt 36B, Prompt 37, Prompt 37B, Prompt N1
 Status: source-based audit, not a formal WCAG audit
 
 ## 1. Executive Verdict
@@ -39,6 +39,11 @@ Author Schema validation is now more usable and more dangerous if misread. The g
 Prompt 37B update:
 The audit found a real enforcement weakness: confirmation-required repairs were blocked by the visible UI but could still be applied by the shared repair helper. Prompt 37B moves that boundary into the helper itself, adds explicit `canApply` classification, rejects malformed and prototype-like patches, makes group order deterministic, routes unknown validation messages to a safe structural group, adds rule-repair non-execution copy, reports missing/stale focus targets, and proves export-after-repair does not carry repair UI state. This is source- and unit-tested hardening. Browser clipboard behavior, rendered responsive behavior, browser zoom behavior, focus-return behavior, screen-reader behavior, and WCAG conformance remain unverified.
 
+Prompt N1 update:
+Neural Excitation Network adds a template-specific canvas graph visualization and legend boundary notes. The UI risk is overinterpretation: a runtime graph can look like a biological connectome or a Builder graph even when it is neither. The implementation keeps graph edges read-only, canvas-only, bounded, and scoped to the Neural template; legend copy states that the runtime graph belongs only to the Neural Excitation Network template and does not make Builder graphs or model-schema graphs executable. Inspector rows expose stylized activation, threshold, refractory, and incoming signal state as model variables. Browser rendering, zoom behavior, screen-reader behavior, edge readability at different densities, and WCAG conformance remain unverified.
+
+Prompt N1B adds an optional Neural Decision Readout panel in the Legend surface. This is a source-level implementation, not rendered UX evidence. Decision Readout V1 maps labeled output assemblies to bounded categorical choices. It is not cognition or reasoning. Rock-Paper-Scissors labels are semantic labels assigned by the model designer, not meanings understood by the network. RPS payoff is observational in V1 and does not train, adapt, or optimize the network. The model does not infer intentions, beliefs, preferences, personality, or human decision-making. The panel labels output assembly activation, selected readout, and observational payoff separately from the canvas graph, which is the right direction. Remaining HCI risk is still serious: users may read “decision,” “confidence,” or “payoff” as understanding, strategy, or evidence unless future rendered testing confirms the boundary language is actually seen and understood.
+
 ## 2. Audit Scope
 
 Inspected surfaces:
@@ -49,6 +54,8 @@ Inspected surfaces:
 - Model Schema Authoring Forms files added in Prompt 35.
 - Visual Builder Graph View components, pure graph adapter, keyboard outline, text edge list, bounded layout, and Prompt 36B source-level audit hardening.
 - Schema validation assistance adapter and Author Schema validation panel changes added in Prompt 37 and hardened in Prompt 37B.
+- Neural Excitation Network template-specific canvas edge rendering, legend notes, inspector rows, and atmosphere styling added in Prompt N1.
+- Neural Decision Readout Legend panel, output assembly activation bars, selected readout, and observational RPS payoff copy added in Prompt N1B.
 - Global CSS, typography tokens, responsive rules, focus styles, animation/reduced-motion rules.
 - Metadata and favicon/icon configuration.
 - Existing component and simulation tests.

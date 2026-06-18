@@ -1,6 +1,6 @@
 # ORTUS Current Context
 
-Last updated: 2026-06-16 after Prompt 37B Schema Validation UX + Repair Suggestions Audit
+Last updated: 2026-06-18 after non-roadmap Prompt N1B Neural Excitation Network Template Audit + Decision Readout V1
 
 ## Project Identity
 
@@ -26,6 +26,10 @@ Prompt 37 adds Schema Validation UX + Repair Suggestions V1 to the `Author Schem
 
 Prompt 37B audits and hardens the validation-assistance surface before the combined Prompt 37/37B commit. Confirmation-required repairs are enforced by `applySchemaRepairSuggestion` itself through an explicit confirmation option, every suggestion exposes `canApply`, malformed fabricated patches are rejected, prototype-like metadata patch targets are blocked, stale list-item suggestions are rejected after draft mutation, issue group order is deterministic, unknown validator messages fall into a safe structural group, rule repair cards carry explicit non-execution copy, field jumps report missing/stale focus targets, and export-after-repair remains ordinary model-schema serialization. The audit added no schema execution, rule execution, LLM repair, model generation, compatibility conversion, visual-builder generation, runtime preview, templates, scenarios, RunConfigs, snapshots, or engines.
 
+Prompt N1 adds Neural Excitation Network Template V1 as a hand-built production template. It uses a bounded hybrid space with continuous node layout and a template-owned runtime `NetworkSpace`, deterministic topology generation, bounded stylized activation state, a bounded delayed signal queue, refractory cooldown, excitatory/inhibitory signal scaling, model-output metrics, canvas-only runtime graph edge rendering, and bounded node/cluster/global interventions. Neural Excitation Network Template V1 is a stylized runtime network model, not a biological brain simulation. Activation is a model variable, not measured membrane voltage. Synapse weights are abstract influence strengths, not biological synaptic measurements. The model does not simulate ion channels, neurotransmitters, morphology, learning, consciousness, or cognition. This runtime graph belongs only to the Neural Excitation Network template and does not make Builder graphs executable.
+
+Prompt N1B audits Neural Excitation Network Template V1 and adds optional Decision Readout V1 plus a Rock-Paper-Scissors readout preset. Decision Readout V1 maps labeled output assemblies to bounded categorical choices. It is not cognition or reasoning. Rock-Paper-Scissors labels are semantic labels assigned by the model designer, not meanings understood by the network. RPS payoff is observational in V1 and does not train, adapt, or optimize the network. The model does not infer intentions, beliefs, preferences, personality, or human decision-making. Decision metrics are model-output readouts from labeled neuron groups, not evidence of reasoning. The readout is template-local and does not make Builder graphs executable, model schemas runnable, social-learning artifacts executable, or RPS payoff adaptive.
+
 Confirmed UI layout defects fixed in UI-REMEDIATION-1:
 
 - The header used fixed `height: 50px` with `overflow-y: hidden`, which could clip crowded lower header content.
@@ -35,15 +39,15 @@ The prompt attachment directory for UI-REMEDIATION-1 did not contain a screensho
 
 The engine must remain headless: no React, Zustand, DOM, Canvas, browser storage, backend, auth, or database dependencies in simulation code. The UI consumes engine snapshots and renders batched canvas/world views. Templates are registered through the template API and own domain behavior.
 
-Built-in production templates currently include Epidemic Spread, Opinion Dynamics, Predator-Prey, Schelling Segregation, Flocking / Boids, and Forest Fire / Landscape Spread. These are exploratory model structures, not calibrated predictive tools.
+Built-in production templates currently include Epidemic Spread, Opinion Dynamics, Predator-Prey, Schelling Segregation, Flocking / Boids, Forest Fire / Landscape Spread, and Neural Excitation Network. These are exploratory model structures, not calibrated predictive tools.
 
 ## Completed Prompt State
 
-Durable docs and source indicate completed roadmap work through Prompt 37B. Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 37B: Schema Validation UX + Repair Suggestions Audit are complete.
+Durable docs and source indicate completed roadmap work through Prompt 37B plus non-roadmap Prompts N1 and N1B. Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 37B: Schema Validation UX + Repair Suggestions Audit are complete. Prompt N1: Neural Excitation Network Template V1 is complete. Prompt N1B: Neural Excitation Network Template Audit + Decision Readout V1 is complete.
 
 The post-30B repository hygiene, dependency stabilization, durable context, and performance/scalability pass has also been completed. Recent commits include `dd6c256` for repo context/generated-artifact hygiene, `4949b72` for dependency and performance script stabilization, and `a80d5b7` for simulation performance instrumentation and spatial indexing foundations.
 
-The next roadmap prompt is Prompt 38: Schema-to-Template Fit Report V1, after the combined Prompt 37/37B changes are reviewed and committed. A separate rendered responsive/design-system audit is still recommended before making mobile-readiness, WCAG, clipboard, focus-return, or polished visual-workbench claims.
+The next roadmap prompt is Prompt 38: Schema-to-Template Fit Report V1, after Prompt N1 changes are reviewed and committed. A separate rendered responsive/design-system audit is still recommended before making mobile-readiness, WCAG, clipboard, focus-return, or polished visual-workbench claims.
 
 Implemented runtime foundations include scenarios, snapshots, template-defined behavior modes, agent composition, interventions, experiments, run summaries/comparison, seeded randomness, metrics, spaces, template metadata, and a narrow Opinion Dynamics `socialLearning` behavior mode audited in Prompt 33D.
 
@@ -90,7 +94,7 @@ Prompt 36B source-level findings are hardened, but browser rendering remains unv
 
 Template/schema compatibility mapping is a structural fit-analysis service only. `ortus.schemaTemplateCompatibilityReport` and `ortus.templateMappingProfile` artifacts compare `ModelSchemaDefinition` structure against static production-template metadata. Template/schema compatibility reports are structural fit analyses; they do not convert schemas into runnable models. A strong template fit does not mean a schema can run. Unsupported and lossy mappings must remain visible; they must not be silently dropped. Compatibility mapping does not generate scenarios, RunConfigs, snapshots, templates, or engines. Compatibility reports do not execute schemas, parse rule descriptions, mutate templates, create engines, implement visual builder runtime, add external framework interop, run social-learning/cognitive behavior, validate science, calibrate outputs, or prove causality, emergence, robustness, strategy effectiveness, safety, or operational readiness. Prompt 33B audited these boundaries and kept compatibility mapping structural only.
 
-These foundations are not automatic runtime support for templates. A template must explicitly declare and actually use a primitive at runtime before ORTUS can claim template runtime support.
+These foundations are not automatic runtime support for templates. A template must explicitly declare and actually use a primitive at runtime before ORTUS can claim template runtime support. Neural Excitation is the only current template with runtime network support, and that support is scoped to its template-owned runtime graph; it does not make Builder graphs, model-schema graphs, or network artifacts executable. Neural Decision Readout V1 is likewise scoped only to that template and is not a global decision-support primitive, cognition model, schema runtime, Builder graph runtime, or social-learning runtime.
 
 ## Package And Dependency State
 

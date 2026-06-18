@@ -297,9 +297,10 @@ describe("network and relation primitives", () => {
 
   it("keeps production templates and fresh-run schemas honest about unsupported network fields", () => {
     for (const template of productionTemplates) {
-      expect(template.capabilities?.supportsNetworkSpace).toBe(false);
+      const neuralRuntimeNetwork = template.id === "neural-excitation-network";
+      expect(template.capabilities?.supportsNetworkSpace).toBe(neuralRuntimeNetwork);
       expect(template.capabilities?.supportsNetworkOptions).toBe(false);
-      expect(template.capabilities?.supportsNetworkMetrics).toBe(false);
+      expect(template.capabilities?.supportsNetworkMetrics).toBe(neuralRuntimeNetwork);
       expect(template.spaceDefinition?.type).not.toBe("network");
 
       const runConfig = createDefaultRunConfig({ template, seed: `network-capabilities-${template.id}` });

@@ -81,6 +81,23 @@ function capabilityForTemplate(template: SimulationTemplate, primitiveId: Primit
         limitations: ["Assumption profiles do not affect engine dynamics."]
       };
     case "networks":
+      if (template.id === "neural-excitation-network" && capabilities?.supportsNetworkSpace && capabilities?.supportsNetworkMetrics) {
+        return {
+          templateId: template.id,
+          primitiveId,
+          status: "implemented",
+          supportLevel: "runtime",
+          runtimeActive: true,
+          serviceAvailable: true,
+          metadataAvailable: true,
+          notes:
+            "Neural Excitation Network uses template-owned runtime NetworkSpace synapses; this does not imply Builder graph execution, model-schema graph execution, or generic network artifact execution.",
+          limitations: [
+            "Runtime network support is scoped only to the Neural Excitation Network template.",
+            "Global network services and artifacts do not make other templates network-capable."
+          ]
+        };
+      }
       return unsupportedServiceCapability(
         template.id,
         primitiveId,

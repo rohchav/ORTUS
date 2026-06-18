@@ -829,3 +829,105 @@ Remaining limitations:
 - Prompt 37 and 37B changes remain uncommitted.
 
 Next roadmap prompt after commit: Prompt 38 Schema-to-Template Fit Report V1.
+
+## 2026-06-17 - Prompt N1 Neural Excitation Network Template V1
+
+Goal: add a hand-built Neural Excitation Network production template without biological brain-simulation claims, Builder graph execution, model-schema graph execution, learning/plasticity, LLM agents, arbitrary formulas, or generic graph runtime.
+
+Starting state:
+
+- Worktree was clean before edits.
+- Current branch was `main`.
+- Creating a feature branch failed because this environment exposes `.git` as read-only for branch ref writes, so the work remained on `main`.
+- Latest committed state before edits was Prompt 37B (`801b1aa feat: add schema validation UX and repair suggestions`).
+
+Implemented:
+
+- Added `neural-excitation-network` as a production template with deterministic topology generation, continuous node layout, template-owned runtime `NetworkSpace` synapses, bounded stylized activation state, refractory cooldown, delayed signal queue, seeded noise/external stimulus, firing saturation guard, and finite model-output metrics.
+- Added template docs, assumptions, limitations, presets, behavior mode metadata, runtime metadata, parameter validation, world validation, and exact neuroscience/runtime boundary copy.
+- Added Neural-specific interventions for selected/random/cluster stimulation, selected/cluster inhibition, global excitation/inhibition scale changes, and external stimulus toggling. Synapse-specific interventions were intentionally not added because the UI has no selectable-edge contract.
+- Updated the primitive capability registry so `networks` remains service-only globally, while Neural Excitation has the single narrow runtime-active template capability. Other templates remain unsupported for network runtime.
+- Added read-only canvas edge rendering, legend notes, metric labels/notes, Neural inspector rows, and a Neural atmosphere style. The canvas graph is visual-only and bounded; it does not mutate simulation state.
+- Updated docs and guardrails to state that Neural Excitation is stylized model behavior, not neuroscience evidence, not a clinical/cognitive model, and not Builder/model-schema graph execution.
+
+Boundary preserved:
+
+- Neural Excitation Network Template V1 is a stylized runtime network model, not a biological brain simulation.
+- Activation is a model variable, not measured membrane voltage.
+- Synapse weights are abstract influence strengths, not biological synaptic measurements.
+- The model does not simulate ion channels, neurotransmitters, morphology, learning, consciousness, or cognition.
+- This runtime graph belongs only to the Neural Excitation Network template and does not make Builder graphs executable.
+- Metrics are model-output history, not empirical neural recordings.
+- No visual builder runtime, model-schema runtime, network artifact execution, schema-to-template generation, LLM agent, arbitrary code execution, formula execution, or learning/plasticity was added.
+
+Checks:
+
+- `npm run test -- neural`: passed, 1 file and 4 tests.
+- `npm run test -- template primitiveRegistry networks interventions`: passed, 14 files and 131 tests.
+- `npm run test -- modelSchema visualBuilderWorkspace schemaTemplateCompatibility socialLearning opinion roadmap assumptions hybridComposition`: passed, 9 files and 84 tests.
+- `npm run typecheck`: passed.
+- `npm test`: passed, 55 files and 434 tests.
+- `npm run build`: passed with Next.js 15.5.19; `/` and `/builder` prerendered successfully.
+- `npm run perf:simulation`: passed. Local smoke results included Flocking 100 agents at 263.13 ticks/sec, Flocking 500 agents at 32.97 ticks/sec, Forest Fire 80x60 at 54.04 ticks/sec, and Predator-Prey default at 152.25 ticks/sec.
+- `git diff --check`: passed.
+- `npm run lint`: unavailable, package.json has no lint script.
+
+Remaining limitations:
+
+- Browser screenshots, rendered responsive inspection, browser zoom behavior, screen-reader behavior, graph-edge readability at varied densities, and WCAG conformance remain unverified.
+- Prompt N1 changes remain uncommitted.
+
+Next roadmap prompt after commit: Prompt 38 Schema-to-Template Fit Report V1.
+
+## 2026-06-18 - Prompt N1B Neural Excitation Network Template Audit + Decision Readout V1
+
+Goal: audit and harden Prompt N1, then add a bounded optional Neural Decision Readout with Rock-Paper-Scissors demonstration semantics without cognition, reasoning, learning, strategy adaptation, Builder graph execution, model-schema execution, or social-learning artifact execution.
+
+Starting state:
+
+- Prompt N1 changes were still uncommitted in the dirty worktree.
+- Dirty files were the N1 neural template, registry/UI/intervention/test updates, docs, and guardrails.
+- `npm run lint` remains unavailable because `package.json` has no lint script.
+
+Implemented:
+
+- Added optional Decision Readout V1 to `neural-excitation-network`.
+- Added three bounded output assemblies labeled Rock, Paper, and Scissors when `decisionReadoutEnabled` is true.
+- Added RPS readout preset with readout enabled and no learning/adaptation.
+- Added threshold, margin, bounded recent-window, output-bias, opponent mode, and fixed-opponent parameters.
+- Added deterministic selected readout states: `undecided`, `rock`, `paper`, `scissors`, and `conflicted`.
+- Added observational RPS payoff globals and numeric metrics without feeding payoff into weights, thresholds, topology, future bias, or synapse state.
+- Added readout metrics for output assembly activation, selected readout code, confidence, winner margin, switch count, and observational payoff.
+- Added read-only Legend panel rendering for output assembly activation, selected readout, and observational payoff.
+- Added bounded output-assembly stimulation interventions; no selected-synapse controls, clinical controls, threshold-control interventions, opponent-control interventions, or training controls were added.
+- Added validation for duplicate choices, missing choices, empty output assemblies, oversized assemblies, and missing neuron ids.
+
+Boundary preserved:
+
+- Decision Readout V1 maps labeled output assemblies to bounded categorical choices. It is not cognition or reasoning.
+- Rock-Paper-Scissors labels are semantic labels assigned by the model designer, not meanings understood by the network.
+- RPS payoff is observational in V1 and does not train, adapt, or optimize the network.
+- The model does not infer intentions, beliefs, preferences, personality, or human decision-making.
+- Decision metrics are model-output readouts from labeled neuron groups, not evidence of reasoning.
+- The Neural runtime graph remains scoped only to the Neural template and does not make Builder graphs, model-schema graphs, network artifacts, or social-learning artifacts executable.
+- No LLM agents, arbitrary code execution, formula execution, real-person profiling, protected-class inference, persuasion optimization, learning/plasticity, STDP, backpropagation, cognition, consciousness, diagnosis, treatment, or real brain-region modeling was added.
+
+Checks:
+
+- `npm run test -- neural`: passed, 1 file and 8 tests.
+- `npm run test -- template primitiveRegistry networks interventions`: passed, 14 files and 135 tests.
+- `npm run test -- modelSchema visualBuilderWorkspace schemaTemplateCompatibility socialLearning opinion roadmap assumptions hybridComposition builderGraphView modelSchemaAuthoring schemaValidationUx workspace`: passed, 13 files and 121 tests.
+- `npm run test -- ortusBrand workspaceInformationArchitecture builderUiShell layoutContainment`: passed, 4 files and 23 tests.
+- `npm run typecheck`: passed.
+- `npm test`: passed, 55 files and 438 tests.
+- `npm run build`: passed with Next.js 15.5.19; `/` and `/builder` prerendered successfully.
+- `npm run perf:simulation`: passed. Local smoke results included Flocking 100 agents at 98.01 ticks/sec, Flocking 500 agents at 16.22 ticks/sec, Forest Fire 80x60 at 26.08 ticks/sec, and Predator-Prey default at 77.77 ticks/sec.
+- `git diff --check`: passed.
+- `npm run lint`: unavailable, package.json has no lint script.
+
+Remaining limitations:
+
+- Browser screenshots, rendered responsive inspection, browser zoom behavior, screen-reader behavior, readout panel layout at varied viewports, and WCAG conformance remain unverified.
+- Prompt N1 + N1B changes remain uncommitted.
+
+Next roadmap prompt after commit: Prompt 38 Schema-to-Template Fit Report V1.

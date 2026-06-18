@@ -4,7 +4,7 @@ This roadmap reserves the major complex-systems pillars that ORTUS must support 
 
 ## Current Foundation
 
-ORTUS has completed through Prompt 37B. Prompts 1-37B established the current foundation:
+ORTUS has completed through Prompt 37B, plus non-roadmap Prompt N1: Neural Excitation Network Template V1 and Prompt N1B: Neural Excitation Network Template Audit + Decision Readout V1. Prompts 1-37B established the current foundation:
 
 - Engine/runtime/UI foundation.
 - Scenario Builder.
@@ -28,12 +28,14 @@ ORTUS has completed through Prompt 37B. Prompts 1-37B established the current fo
 - Prompt 36B graph-view audit hardening for structural-only affordances, explicit marker/notice counts, filtered selection coherence, deterministic layout/DOM ids, text-only metadata, source-level accessibility, and runtime-boundary tests.
 - Prompt 37 validation UX and bounded repair suggestions for `ortus.modelSchema` authoring, with grouped issue cards, copyable diagnostics, section jumps, stale-suggestion protection, confirmation for content-removing repairs, and manual-only handling for ambiguous modeling intent.
 - Prompt 37B audit hardening for helper-level confirmation enforcement, explicit `canApply` suggestion classification, malformed/prototype-like patch rejection, deterministic issue grouping, rule-repair boundary copy, stale list-target rejection, and export-after-repair tests.
+- Non-roadmap Prompt N1 adds a hand-built Neural Excitation Network production template with bounded deterministic runtime graph dynamics. Neural Excitation Network Template V1 is a stylized runtime network model, not a biological brain simulation.
+- Non-roadmap Prompt N1B audits that template and adds optional bounded Decision Readout V1 plus an RPS readout preset. Decision Readout V1 maps labeled output assemblies to bounded categorical choices. It is not cognition or reasoning.
 
 These foundations are deliberately service-first or metadata-first unless documented otherwise. Networks, resources, feedback primitives, boundary/environment models, spatial fields, observability models, causal assumptions, quantity semantics, emergence descriptors, robustness/resilience descriptors, and strategy/control descriptors are headless structural services until a template explicitly uses them at runtime. A template must not claim support for a primitive merely because a service exists.
 
 After Prompt 30B, ORTUS completed a repository hygiene, durable context, dependency stabilization, and performance/scalability pass. That pass added and validated performance instrumentation and spatial-indexing foundations, but it does not turn reserved structural primitives into runtime support and is not evidence for high-scale readiness by itself.
 
-Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 37B: Schema Validation UX + Repair Suggestions Audit are complete. The next roadmap prompt is Prompt 38: Schema-to-Template Fit Report V1.
+Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 37B: Schema Validation UX + Repair Suggestions Audit are complete. Non-roadmap Prompts N1 and N1B are complete. The next roadmap prompt is Prompt 38: Schema-to-Template Fit Report V1.
 
 ## Revised Prompt Sequence
 
@@ -137,13 +139,17 @@ Prompt 19 adds `src/simulation/registry` as the unified primitive registry and c
 
 Service-first primitives are foundations, not active model behavior. A template should not claim support for a primitive until its runtime actually uses that primitive.
 
-Global service availability is not template support. A primitive can exist as a headless service while every current template still reports no runtime support for it.
+Global service availability is not template support. A primitive can exist as a headless service without making templates runtime-capable; only explicitly wired and tested template slices may claim runtime support.
 
 Reserved primitives are roadmap commitments, not implemented behavior.
 
-Current production templates must not claim multi-scale systems, observability runtime support, causal-assumption runtime support, boundary/environment runtime modeling, spatial-field runtime support, quantity-semantics runtime support, emergence-detection runtime support, robustness/resilience runtime support, strategy/control runtime support, model schema runtime support, multi-rate time, adaptive agents, heterogeneity, phase transition analysis, attractor analysis, trace inspection, error budgets, compiler/interpreter runtime, visual builder, calibration, data assimilation, MCMC, or external framework interop.
+Current production templates must not claim multi-scale systems, observability runtime support, causal-assumption runtime support, boundary/environment runtime modeling, spatial-field runtime support, quantity-semantics runtime support, emergence-detection runtime support, robustness/resilience runtime support, strategy/control runtime support, model schema runtime support, multi-rate time, adaptive agents, heterogeneity, phase transition analysis, attractor analysis, trace inspection, error budgets, compiler/interpreter runtime, visual builder, calibration, data assimilation, MCMC, or external framework interop. Neural Excitation is the only current template with template-owned runtime network support; that support does not make Builder graphs, model-schema graphs, or generic network artifacts executable.
 
 Prompt 24C adds Forest Fire / Landscape Spread as a production template. It is an abstract local-spread grid model for qualitative spread, threshold, fragmentation, and emergence exploration; it is not a wildfire predictor, does not use GIS, wind, humidity, weather, terrain, suppression, firefighting, or calibrated fire probabilities, and does not make spatialFields or boundariesEnvironment runtime-active.
+
+Prompt N1 adds Neural Excitation Network as a production template. This is a stylized neural excitation network, not a biological brain simulation. Activation is a model variable, not measured membrane voltage. Synapse weights are abstract influence strengths, not biological synaptic measurements. The model does not simulate ion channels, neurotransmitters, morphology, learning, consciousness, or cognition. This runtime graph belongs only to the Neural Excitation Network template and does not make Builder graphs executable. Metrics are model-output history, not empirical neural recordings.
+
+Prompt N1B adds optional Decision Readout V1 inside the Neural template only. Decision Readout V1 maps labeled output assemblies to bounded categorical choices. It is not cognition or reasoning. Rock-Paper-Scissors labels are semantic labels assigned by the model designer, not meanings understood by the network. RPS payoff is observational in V1 and does not train, adapt, or optimize the network. The model does not infer intentions, beliefs, preferences, personality, or human decision-making. This readout does not make Builder graphs executable, does not make model schemas runnable, does not execute social-learning artifacts, and does not add learning, plasticity, adaptation, strategy control, or generic decision-support runtime.
 
 The registry does not change runtime behavior by itself. It records current support and reserved future work so Prompt 20 can plan hybrid composition without inferring support from service-module presence alone.
 

@@ -13,6 +13,7 @@ import {
   metricNotes,
   renderAgents,
   renderGrid,
+  renderNetworkEdges,
   requireTemplateDescriptor,
   templateDescriptors
 } from "../../lib/templateVisuals";
@@ -25,7 +26,8 @@ const invalidParameterCases: Record<string, ParameterValues> = {
   "predator-prey": { initialPrey: 0, initialPredators: 0 },
   "schelling-segregation": { density: 1 },
   "flocking-boids": { separationRadius: 80, perceptionRadius: 20 },
-  "forest-fire": { spreadProbability: 1.2 }
+  "forest-fire": { spreadProbability: 1.2 },
+  "neural-excitation-network": { signalDelayMin: 8, signalDelayMax: 2 }
 };
 
 const productionTemplateCases = productionTemplates.map((template) => [template.id, template] as const);
@@ -61,7 +63,6 @@ describe("production template system", () => {
           supportsExperimentRunner: true,
           supportsSnapshotExport: true,
           supportsNetworkOptions: false,
-          supportsNetworkMetrics: false,
           supportsResources: false,
           supportsStocks: false,
           supportsFlows: false,
@@ -73,7 +74,8 @@ describe("production template system", () => {
           supportsUncertaintyConfig: true
         })
       );
-      expect(template.spaceDefinition?.type).toMatch(/^(continuous2d|grid2d)$/);
+      expect(template.capabilities?.supportsNetworkMetrics).toBe(template.id === "neural-excitation-network");
+      expect(template.spaceDefinition?.type).toMatch(/^(continuous2d|grid2d|hybrid)$/);
       expect(template.spaceDefinition?.description).toBeTruthy();
       expect(template.entityTypeDefinitions?.length).toBeGreaterThan(0);
       for (const entityType of template.entityTypeDefinitions ?? []) {
@@ -127,12 +129,14 @@ describe("production template system", () => {
   it("declares explicit production template space definitions and capability flags", () => {
     expect(productionTemplateMap["schelling-segregation"].spaceDefinition?.type).toBe("grid2d");
     expect(productionTemplateMap["flocking-boids"].spaceDefinition?.type).toBe("continuous2d");
+    expect(productionTemplateMap["neural-excitation-network"].spaceDefinition?.type).toBe("hybrid");
 
     for (const template of productionTemplates) {
+      const neuralRuntimeNetwork = template.id === "neural-excitation-network";
       expect(template.spaceDefinition?.type).toBeTruthy();
-      expect(template.capabilities?.supportsNetworkSpace).toBe(false);
+      expect(template.capabilities?.supportsNetworkSpace).toBe(neuralRuntimeNetwork);
       expect(template.capabilities?.supportsNetworkOptions).toBe(false);
-      expect(template.capabilities?.supportsNetworkMetrics).toBe(false);
+      expect(template.capabilities?.supportsNetworkMetrics).toBe(neuralRuntimeNetwork);
       expect(template.capabilities?.supportsResources).toBe(false);
       expect(template.capabilities?.supportsStocks).toBe(false);
       expect(template.capabilities?.supportsFlows).toBe(false);
@@ -150,6 +154,10 @@ describe("production template system", () => {
       if (template.spaceDefinition?.type === "grid2d") {
         expect(template.capabilities?.supportsGridSpace).toBe(true);
         expect(template.capabilities?.supportsContinuousSpace).toBe(false);
+      }
+      if (template.spaceDefinition?.type === "hybrid") {
+        expect(template.capabilities?.supportsContinuousSpace).toBe(true);
+        expect(template.capabilities?.supportsGridSpace).toBe(false);
       }
     }
   });
@@ -298,6 +306,10 @@ describe("production template system", () => {
       expect(visuals.components).toEqual(expect.any(Object));
       expect(visuals.description).toBeTruthy();
       expect(legendEntries(template.id).length).toBeGreaterThan(0);
+      if (template.id === "neural-excitation-network") {
+        expect(renderNetworkEdges(snapshot).length).toBeGreaterThan(0);
+        expect(visuals.description).toContain("do not make Builder graphs or model-schema graphs executable");
+      }
 
       const grid = renderGrid(snapshot);
       const agents = renderAgents(snapshot);

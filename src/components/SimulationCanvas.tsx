@@ -6,8 +6,10 @@ import {
   getVelocity,
   renderAgents,
   renderGrid,
+  renderNetworkEdges,
   type RenderAgent,
-  type RenderGridAgent
+  type RenderGridAgent,
+  type RenderNetworkEdge
 } from "../lib/templateVisuals";
 import { useSimulationStore, type AvatarMode } from "../state/simulationStore";
 
@@ -114,6 +116,11 @@ function drawWorld(
     return;
   }
 
+  const networkEdges = renderNetworkEdges(snapshot);
+  if (networkEdges.length > 0) {
+    drawNetworkEdges(ctx, width, height, snapshot, networkEdges);
+  }
+
   const agents = renderAgents(snapshot);
   for (const agent of agents) {
     const screen = worldToScreen(snapshot, agent.x, agent.y, width, height);
@@ -132,6 +139,44 @@ function drawWorld(
   if (interventionTargetPoint) {
     drawInterventionPointTarget(ctx, worldToScreen(snapshot, interventionTargetPoint.x, interventionTargetPoint.y, width, height));
   }
+}
+
+function drawNetworkEdges(ctx: CanvasRenderingContext2D, width: number, height: number, snapshot: Snapshot, edges: RenderNetworkEdge[]): void {
+  ctx.save();
+  ctx.lineCap = "round";
+  for (const edge of edges) {
+    const source = worldToScreen(snapshot, edge.sourceX, edge.sourceY, width, height);
+    const target = worldToScreen(snapshot, edge.targetX, edge.targetY, width, height);
+    const dx = target.x - source.x;
+    const dy = target.y - source.y;
+    const length = Math.hypot(dx, dy);
+    if (length <= 0.001) {
+      continue;
+    }
+    const alpha = edge.enabled ? Math.min(0.34, 0.1 + edge.weight * 0.08) : 0.06;
+    ctx.setLineDash(edge.kind === "inhibitory" ? [4, 4] : []);
+    ctx.strokeStyle = edge.kind === "inhibitory" ? `rgba(108, 114, 255, ${alpha})` : `rgba(216, 255, 62, ${alpha})`;
+    ctx.lineWidth = Math.max(0.6, Math.min(2.2, edge.weight * 0.85));
+    ctx.beginPath();
+    ctx.moveTo(source.x, source.y);
+    ctx.lineTo(target.x, target.y);
+    ctx.stroke();
+
+    if (edge.enabled && length > 18) {
+      const ux = dx / length;
+      const uy = dy / length;
+      const arrowX = target.x - ux * 7;
+      const arrowY = target.y - uy * 7;
+      ctx.setLineDash([]);
+      ctx.beginPath();
+      ctx.moveTo(arrowX, arrowY);
+      ctx.lineTo(arrowX - ux * 6 - uy * 3, arrowY - uy * 6 + ux * 3);
+      ctx.moveTo(arrowX, arrowY);
+      ctx.lineTo(arrowX - ux * 6 + uy * 3, arrowY - uy * 6 - ux * 3);
+      ctx.stroke();
+    }
+  }
+  ctx.restore();
 }
 
 function drawGridWorld(

@@ -3,6 +3,7 @@
 import { CornerFramePanel } from "./ui/CornerFramePanel";
 import { formatNumber, jsonPreview, truncateId } from "../lib/format";
 import { getEntityComponents, getGridCell, getPosition, getVelocity } from "../lib/templateVisuals";
+import { NeuralNeuronStateComponent } from "../simulation/templates/neuralExcitation.template";
 import { useSimulationStore } from "../state/simulationStore";
 
 interface AgentInspectorProps {
@@ -110,6 +111,7 @@ function componentSummaryRows(components: Record<string, unknown>): Array<{ labe
   const satisfaction = readRecord(components.SatisfactionState);
   const boid = readRecord(components.BoidState);
   const boidGroup = readRecord(components.BoidGroup);
+  const neural = readRecord(components[NeuralNeuronStateComponent]);
 
   if (typeof infection?.status === "string") {
     rows.push({ label: "Infection", value: infection.status });
@@ -158,6 +160,27 @@ function componentSummaryRows(components: Record<string, unknown>): Array<{ labe
   }
   if (typeof boidGroup?.groupId === "string") {
     rows.push({ label: "Boid group", value: boidGroup.groupId });
+  }
+  if (typeof neural?.state === "string") {
+    rows.push({ label: "Neural state", value: neural.state });
+  }
+  if (typeof neural?.activation === "number") {
+    rows.push({ label: "Activation", value: formatNumber(neural.activation, 3) });
+  }
+  if (typeof neural?.threshold === "number") {
+    rows.push({ label: "Threshold", value: formatNumber(neural.threshold, 3) });
+  }
+  if (typeof neural?.refractoryRemaining === "number") {
+    rows.push({ label: "Refractory ticks", value: formatNumber(neural.refractoryRemaining, 0) });
+  }
+  if (typeof neural?.incomingExcitatory === "number") {
+    rows.push({ label: "Incoming excitation", value: formatNumber(neural.incomingExcitatory, 3) });
+  }
+  if (typeof neural?.incomingInhibitory === "number") {
+    rows.push({ label: "Incoming inhibition", value: formatNumber(neural.incomingInhibitory, 3) });
+  }
+  if (typeof neural?.groupId === "string") {
+    rows.push({ label: "Neural cluster", value: neural.groupId });
   }
 
   return rows;

@@ -194,7 +194,16 @@ describe("systems primitive registry and capability map", () => {
       expect(getTemplateCapability(template.id, "agentComposition")?.runtimeActive).toBe(true);
       expect(getTemplateCapability(template.id, "uncertainty")).toMatchObject({ status: "serviceOnly", runtimeActive: false });
       expect(getTemplateCapability(template.id, "assumptions")).toMatchObject({ status: "metadataOnly", runtimeActive: false });
-      expect(getTemplateCapability(template.id, "networks")).toMatchObject({ status: "unsupported", runtimeActive: false, serviceAvailable: true });
+      if (template.id === "neural-excitation-network") {
+        expect(getTemplateCapability(template.id, "networks")).toMatchObject({
+          status: "implemented",
+          supportLevel: "runtime",
+          runtimeActive: true,
+          serviceAvailable: true
+        });
+      } else {
+        expect(getTemplateCapability(template.id, "networks")).toMatchObject({ status: "unsupported", runtimeActive: false, serviceAvailable: true });
+      }
       expect(getTemplateCapability(template.id, "resources")).toMatchObject({ status: "unsupported", runtimeActive: false, serviceAvailable: true });
       expect(getTemplateCapability(template.id, "feedbackEvents")).toMatchObject({ status: "unsupported", runtimeActive: false, serviceAvailable: true });
       expect(getTemplateCapability(template.id, "hybridComposition")).toMatchObject({ status: "unsupported", runtimeActive: false, serviceAvailable: true });
@@ -272,8 +281,9 @@ describe("systems primitive registry and capability map", () => {
       expect.arrayContaining(["ortus.eventSchedule", "ortus.delayQueue", "ortus.feedbackLoops", "ortus.feedbackEventMetrics"])
     );
     expect(getTemplateCapability("epidemic-spread", "networks")?.runtimeActive).toBe(false);
+    expect(getTemplateCapability("neural-excitation-network", "networks")?.runtimeActive).toBe(true);
     expect(getTemplatePrimitiveCapabilities("missing-template")).toHaveLength(0);
-    expect(listTemplatesSupportingPrimitive("networks")).toHaveLength(0);
+    expect(listTemplatesSupportingPrimitive("networks").map((capability) => capability.templateId)).toEqual(["neural-excitation-network"]);
     expect(listTemplatesSupportingPrimitive("networks", { runtimeOnly: false, includeUnsupportedWithGlobalService: true })).toHaveLength(
       productionTemplates.length
     );
@@ -294,7 +304,9 @@ describe("systems primitive registry and capability map", () => {
       readFileSync(join(repoRoot, "AGENTS.md"), "utf8")
     ].join("\n");
 
-    expect(docs).toContain("Global service availability is not template support. A primitive can exist as a headless service while every current template still reports no runtime support for it.");
+    expect(docs).toContain(
+      "Global service availability is not template support. A primitive can exist as a headless service without making templates runtime-capable; only explicitly wired and tested template slices may claim runtime support."
+    );
     expect(docs).toContain("Reserved primitives are roadmap commitments, not implemented behavior.");
     expect(docs).toContain("The registry does not change runtime behavior by itself.");
     expect(docs).toContain("Check `src/simulation/registry` before claiming primitive or template support.");

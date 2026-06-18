@@ -134,6 +134,10 @@ export function validateTemplatePrimitiveCapabilityRegistry(
       throw new Error(`Template ${capability.templateId} cannot mark reserved primitive ${capability.primitiveId} runtime-active`);
     }
     if ((primitive.status === "serviceOnly" || primitive.status === "metadataOnly") && capability.runtimeActive) {
+      if (canRuntimeActivateServiceOnlyPrimitive(capability, primitive)) {
+        assertStatusSupportLevelConsistency(capability.status, capability.supportLevel, `Template capability ${key}`);
+        continue;
+      }
       throw new Error(`Template ${capability.templateId} cannot mark ${primitive.status} primitive ${capability.primitiveId} runtime-active`);
     }
     if (primitive.status === "reserved" && (capability.status !== "unsupported" || capability.supportLevel !== "none")) {
@@ -164,6 +168,16 @@ export function validateSystemsPrimitiveRegistry(): void {
   const primitives = validatePrimitiveRegistryEntries();
   validateArtifactFamilyRegistry(artifactFamilyRegistry, primitives);
   validateTemplatePrimitiveCapabilityRegistry(templatePrimitiveCapabilities, primitives);
+}
+
+function canRuntimeActivateServiceOnlyPrimitive(capability: TemplatePrimitiveCapability, primitive: SystemsPrimitiveEntry): boolean {
+  return (
+    primitive.status === "serviceOnly" &&
+    primitive.id === "networks" &&
+    capability.templateId === "neural-excitation-network" &&
+    capability.status === "implemented" &&
+    capability.supportLevel === "runtime"
+  );
 }
 
 function assertStatusSupportLevelConsistency(status: string, supportLevel: string, label: string): void {

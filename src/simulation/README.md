@@ -6,7 +6,7 @@ This directory contains a headless TypeScript simulation engine for visual compl
 
 The engine owns time, scheduling, mutation, seeded randomness, validation, metrics, snapshots, and serialization. Templates own domain behavior and metadata. Rendering layers should consume snapshots later without becoming part of the simulation loop.
 
-Roadmap status: ORTUS has completed Prompt 37B: Schema Validation UX + Repair Suggestions Audit. The post-30B repository hygiene, durable context, dependency stabilization, and performance/scalability pass is complete. The next roadmap prompt is Prompt 38: Schema-to-Template Fit Report V1.
+Roadmap status: ORTUS has completed Prompt 37B: Schema Validation UX + Repair Suggestions Audit, plus non-roadmap Prompt N1: Neural Excitation Network Template V1 and Prompt N1B: Neural Excitation Network Template Audit + Decision Readout V1. The post-30B repository hygiene, durable context, dependency stabilization, and performance/scalability pass is complete. The next roadmap prompt remains Prompt 38: Schema-to-Template Fit Report V1.
 
 ## Architecture
 
@@ -59,6 +59,10 @@ Templates may expose `initializationPresets`, `behaviorModes`, `agentComposition
 Scenario Builder is not a full model/rule editor. Custom model authoring will require the future Model Definition Schema, Rule Primitive Library, Model Compiler, and Visual Model Builder.
 
 Forest Fire / Landscape Spread is a template-owned abstract local-spread grid model. It demonstrates fuel density, local neighbor ignition, burnout, optional stylized regrowth, and landscape-level metrics, but it is not a wildfire predictor and does not use GIS, real terrain, wind, humidity, weather, suppression, firefighting, or calibrated fire probabilities. Its grid coordinates are implementation geometry, not SpatialFieldModel runtime support, and its boundary mode is not BoundaryEnvironmentModel runtime support.
+
+Neural Excitation Network is a template-owned stylized runtime network model. It uses a bounded hybrid space: continuous node layout plus a template-owned runtime `NetworkSpace` for directed abstract synapses. Neural Excitation Network Template V1 is a stylized runtime network model, not a biological brain simulation. Activation is a model variable, not measured membrane voltage. Synapse weights are abstract influence strengths, not biological synaptic measurements. The model does not simulate ion channels, neurotransmitters, morphology, learning, consciousness, or cognition. This runtime graph belongs only to the Neural Excitation Network template and does not make Builder graphs executable.
+
+Decision Readout V1 maps labeled output assemblies to bounded categorical choices. It is not cognition or reasoning. Rock-Paper-Scissors labels are semantic labels assigned by the model designer, not meanings understood by the network. RPS payoff is observational in V1 and does not train, adapt, or optimize the network. The model does not infer intentions, beliefs, preferences, personality, or human decision-making. Decision metrics are model-output readouts from labeled neuron groups, not evidence of reasoning. Decision Readout V1 is template-local readout state, not a global decision-support primitive, social-learning runtime, model-schema runtime, or Builder graph runtime.
 
 Agent composition defines the initial mix of agents, groups, or types for a run. It should not be confused with live engine state or snapshots. Current composition fields are template-owned parameter definitions. Flocking adds a `groupAware` behavior mode with deterministic boid group assignment and group-weighted alignment/cohesion. Ring Formation is an initialization preset only unless an orbit behavior mode is selected. Initial circular placement does not guarantee persistent circular motion.
 
@@ -124,9 +128,9 @@ Network definitions are bounded to 500 nodes, 20,000 edges, 200 relation types, 
 
 V1 network metrics include node count, edge count, density, average degree, min/max degree, connected component count, and largest component size. Directed graphs use weak connected components for component metrics. These metrics are bounded structural summaries, not causal proof or real-world social-network evidence. Full graph layout, visual network editing, centrality dashboards, all-pairs path analysis, network uncertainty, and network-backed template behavior are future work.
 
-Current production templates remain spatial/grid templates. Their `supportsNetworkSpace`, `supportsNetworkOptions`, and `supportsNetworkMetrics` flags are false until a template actually uses network topology. Epidemic and Opinion may later use contact or influence networks, and Predator-Prey may later use food-web relations, but Prompt 15 does not change runtime dynamics.
+Neural Excitation Network is the only current production template with runtime network support, and that support is limited to its template-owned runtime `NetworkSpace` synapses. `supportsNetworkOptions` remains false because RunConfig/scenario network artifact wiring is not implemented. Its optional Decision Readout V1 uses labeled neuron groups inside the same template only; it does not make network artifacts executable or imply generic graph runtime. Other production templates remain spatial/grid templates; their `supportsNetworkSpace` and `supportsNetworkMetrics` flags are false until a template actually uses network topology. Epidemic and Opinion may later use contact or influence networks, and Predator-Prey may later use food-web relations, but service-level network primitives do not change those runtime dynamics.
 
-RunConfig and scenario schemas intentionally reject unsupported network fields in V1. Future network-capable templates should introduce `networkOptions` or inline network-definition references only behind explicit capability flags and should validate them with `src/simulation/networks`.
+RunConfig and scenario schemas intentionally reject unsupported network fields in V1, including for Neural Excitation. Future network-configurable templates should introduce `networkOptions` or inline network-definition references only behind explicit capability flags and should validate them with `src/simulation/networks`.
 
 ## Resources, Stocks + Flows
 
@@ -260,11 +264,11 @@ Prompt 18 reserves these pillars in `../../docs/roadmap.md` and `../../docs/miss
 
 `src/simulation/registry` is a headless source of truth for primitive status, support level, artifact families, and production-template capability summaries. It records implemented runtime primitives, service-only primitives, metadata-only primitives, and reserved future pillars without changing engine dynamics.
 
-Global service availability is not template support. A primitive can exist as a headless service while every current template still reports no runtime support for it.
+Global service availability is not template support. A primitive can exist as a headless service without making templates runtime-capable; only explicitly wired and tested template slices may claim runtime support.
 
 Reserved primitives are roadmap commitments, not implemented behavior. A template capability is runtime-active only when the template runtime actually uses that primitive. Prompt 20 should use the registry for hybrid composition planning and must not infer support from module presence alone.
 
-The registry does not change runtime behavior by itself. No current production template runtime uses networks, resources/stocks/flows, or feedback/events/delays.
+The registry does not change runtime behavior by itself. Neural Excitation uses its own runtime network graph; no current production template runtime uses resource/stock/flow services or feedback/event/delay services.
 
 ## Hybrid Model Composition
 
@@ -362,15 +366,17 @@ Run comparisons are exploratory. Differences between runs can suggest patterns, 
 
 A template exports a `SimulationTemplate` model-family definition with capability flags, explicit space metadata, entity/agent type metadata, parameter definitions, formal metric definitions, optional initialization presets, optional behavior-mode metadata, optional agent-composition and environment-option definitions, documentation, `createInitialWorld`, system registration, metric registration, visual metadata, and optional validation hooks. Production templates are listed in `src/simulation/templates/registry.ts`; UI descriptors must stay aligned with that registry but remain outside the engine.
 
-Capability flags make support explicit. Current production templates support Scenario Builder, initialization presets, behavior mode metadata, metric history, run comparison, experiment runner, snapshot export, interventions, and Uncertainty Layer V1 through RunConfig-level sampling. Future-facing capabilities such as resources, stocks, flows, resource metrics, events, delays, feedback loops, feedback metrics, environment layers, and network space are false unless actually implemented.
+Capability flags make support explicit. Current production templates support Scenario Builder, initialization presets, behavior mode metadata, metric history, run comparison, experiment runner, snapshot export, interventions, and Uncertainty Layer V1 through RunConfig-level sampling. Future-facing capabilities such as resources, stocks, flows, resource metrics, events, delays, feedback loops, feedback metrics, and environment layers are false unless actually implemented. Runtime network support is true only for Neural Excitation Network and only for its template-owned runtime graph.
 
-Space metadata declares the model field shape (`continuous2d` or `grid2d` in V1). Entity/agent type metadata declares the user-facing agent categories without becoming simulation truth. Metric definitions now include history/comparison/display metadata so charts and run comparison can rely on declared metric semantics rather than guessing.
+Space metadata declares the model field shape (`continuous2d`, `grid2d`, or a narrowly owned `hybrid` field in V1). Entity/agent type metadata declares the user-facing agent categories without becoming simulation truth. Metric definitions now include history/comparison/display metadata so charts and run comparison can rely on declared metric semantics rather than guessing.
 
-Built-in templates currently include Epidemic Spread, Opinion Dynamics, Predator-Prey, Schelling Segregation, Flocking / Boids, and Forest Fire / Landscape Spread.
+Built-in templates currently include Epidemic Spread, Opinion Dynamics, Predator-Prey, Schelling Segregation, Flocking / Boids, Forest Fire / Landscape Spread, and Neural Excitation Network.
 
 Schelling is a grid-based template that uses `Grid2DSpace`, command-buffered movement, seeded initialization and movement selection, and metrics for satisfaction, similarity, group counts, movement, and empty cells. Its one-agent-per-cell rule is enforced as a template invariant so the generic grid space can remain reusable for other models.
 
 Flocking / Boids is a continuous-space template that uses `Continuous2DSpace`, command-buffered velocity and position updates, deterministic seeded initialization/noise, and metrics for speed, neighbor count, local density, alignment, dispersion, and living boid count. It demonstrates that another movement-heavy model can be added through the same plugin API without a new simulation loop or engine-specific changes.
+
+Neural Excitation Network is a hybrid-space template that uses deterministic topology generation, bounded abstract activation state, a bounded delayed signal queue, refractory cooldown, excitatory/inhibitory signal scaling, optional bounded Decision Readout V1, and model-output metrics. Metrics are model-output history, not empirical neural recordings. Activation and synchrony are stylized runtime variables, not biological measurements. Decision metrics are readouts from labeled output assemblies, not evidence of reasoning.
 
 To add a template:
 
@@ -412,6 +418,8 @@ Forest Fire / Landscape Spread uses template-owned grid-local spread logic, not 
 Flocking computes deterministic pair summaries once per tick for separation, alignment, cohesion, neighbor count, and local density. Those summaries are reused by steering, and Flocking emits batched command-buffer commands for velocity, position, and space movement updates. For local-radius queries with at least 100 boids and a perception radius smaller than half the world width/height, Flocking builds a headless `ContinuousSpatialHashIndex` and queries candidate pairs. Tiny flocks and global-radius settings use the all-pairs fallback because the grid overhead or coverage is not helpful. Pair order remains deterministic by sorted entity id.
 
 The Flocking `dispersion` metric is a center-of-mass spread metric, computed as mean distance from the flock center. It is intentionally O(n) and is an approximate flock spread summary, not an average pairwise distance.
+
+Neural Excitation uses sorted template-owned synapse lists for signal emission, a bounded delayed signal queue in world globals, a per-tick firing-fraction saturation guard, and an optional scan over three bounded output assemblies for Decision Readout V1. RPS payoff computation is a trivial observational lookup and does not train, adapt, optimize, or mutate synapse weights. Its UI edge drawing and readout panel are bounded and read-only. This runtime graph belongs only to the Neural Excitation Network template. It does not make Builder graphs or model-schema graphs executable.
 
 The dedicated Flocking baseline script can be run with:
 

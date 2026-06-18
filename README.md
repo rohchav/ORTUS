@@ -21,7 +21,7 @@ npm run build
 
 ## Roadmap Status
 
-ORTUS has completed Prompt 37B: Schema Validation UX + Repair Suggestions Audit. The post-30B repository hygiene, durable context, dependency stabilization, and performance/scalability pass is also complete. Prompt 31 through Prompt 37B are complete; the next roadmap prompt is Prompt 38: Schema-to-Template Fit Report V1.
+ORTUS has completed Prompt 37B: Schema Validation UX + Repair Suggestions Audit, plus non-roadmap Prompt N1: Neural Excitation Network Template V1 and Prompt N1B: Neural Excitation Network Template Audit + Decision Readout V1. The post-30B repository hygiene, durable context, dependency stabilization, and performance/scalability pass is also complete. Prompt 31 through Prompt 37B are complete; the next roadmap prompt remains Prompt 38: Schema-to-Template Fit Report V1.
 
 ## Layout
 
@@ -35,7 +35,7 @@ The current HCI/UX audit is documented in `docs/ui/HCI_AUDIT.md`. HCI findings m
 
 Major workspace panels use `CornerFramePanel`, a smoky translucent panel primitive with corner accents instead of full rectangular borders. Simulation tools are grouped by workflow mode: Setup, Understand, Observe, Intervene, Experiment, Compare, and Debug. The selected mode owns the only intended vertical scroll region in the left context panel; persistent run controls stay outside that scroll region.
 
-The visual direction is dark graphic realism: graphite and charcoal foundations, off-white structural UI, acid signal accents, restrained vermilion warnings, and sparse cobalt/violet secondary signals. Template backgrounds are lightweight CSS atmosphere layers only. They provide visual context for Epidemic, Opinion Dynamics, Predator-Prey, Schelling Segregation, Flocking / Boids, and Forest Fire / Landscape Spread runs, but they are not simulation data.
+The visual direction is dark graphic realism: graphite and charcoal foundations, off-white structural UI, acid signal accents, restrained vermilion warnings, and sparse cobalt/violet secondary signals. Template backgrounds are lightweight CSS atmosphere layers only. They provide visual context for Epidemic, Opinion Dynamics, Predator-Prey, Schelling Segregation, Flocking / Boids, Forest Fire / Landscape Spread, and Neural Excitation Network runs, but they are not simulation data.
 
 ## Template Connection
 
@@ -53,9 +53,13 @@ Randomness in simulation code is seeded through `RandomService`; hidden `Math.ra
 
 Forest Fire / Landscape Spread is an abstract local-spread grid template. It is not a wildfire predictor, does not use GIS, real terrain, wind, humidity, weather, suppression, firefighting, or calibrated fire probabilities, and is useful only for exploring local spread, thresholds, fragmentation, and qualitative emergent patterns. Its grid coordinates are not SpatialFieldModel runtime support, and its boundary modes are not BoundaryEnvironmentModel runtime support.
 
+Neural Excitation Network Template V1 is a stylized runtime network model, not a biological brain simulation. Activation is a model variable, not measured membrane voltage. Synapse weights are abstract influence strengths, not biological synaptic measurements. The model does not simulate ion channels, neurotransmitters, morphology, learning, consciousness, or cognition. This runtime graph belongs only to the Neural Excitation Network template and does not make Builder graphs executable. Outputs are model behavior, not neuroscience evidence.
+
+Decision Readout V1 maps labeled output assemblies to bounded categorical choices. It is not cognition or reasoning. Rock-Paper-Scissors labels are semantic labels assigned by the model designer, not meanings understood by the network. RPS payoff is observational in V1 and does not train, adapt, or optimize the network. The model does not infer intentions, beliefs, preferences, personality, or human decision-making.
+
 Every ORTUS model is an abstraction. The Assumptions, Limits + Ethics panel shows what the model includes, what it excludes, and what uses would be misleading without validation. Validation status describes evidence about the model, not truth about the real world; internally tested means software and invariant checks, not calibration or external validation.
 
-Network primitives are service-level in V1. They define bounded plain-JSON nodes, edges, relation types, deterministic generators, query helpers, metrics, and import/export artifacts, but current production templates do not claim network runtime behavior yet. Network metrics are structural summaries, not causal proof or real-world relational evidence.
+Network primitives are service-level in V1. They define bounded plain-JSON nodes, edges, relation types, deterministic generators, query helpers, metrics, and import/export artifacts. Neural Excitation is the one current production template with template-owned runtime `NetworkSpace` synapses; this does not make Builder graphs, model-schema graphs, network artifacts, or other templates executable. Network metrics are structural or model-output summaries, not causal proof or real-world relational evidence.
 
 Resource, stock, and flow primitives are service-level in V1. They define bounded plain-JSON resources, stocks, flows, deterministic update helpers, metrics, and import/export artifacts, but current production templates do not claim resource or stock-flow runtime behavior yet. Resource metrics are structural summaries, not proof of real-world economic, ecological, or health outcomes.
 
@@ -121,11 +125,11 @@ The revised roadmap is in `docs/roadmap.md`; reserved missing pillars are in `do
 
 `src/simulation/registry` is the source of truth for current vs reserved systems primitives, artifact families, and production-template capability summaries.
 
-Global service availability is not template support. A primitive can exist as a headless service while every current template still reports no runtime support for it.
+Global service availability is not template support. A primitive can exist as a headless service without making templates runtime-capable; only explicitly wired and tested template slices may claim runtime support.
 
 Reserved primitives are roadmap commitments, not implemented behavior. Runtime-active support must only be claimed when a template actually uses the primitive, and reserved future pillars must not be exposed as active features. Prompt 20 will use the registry for hybrid composition planning.
 
-The registry does not change runtime behavior by itself. No current template runtime uses networks, resources/stocks/flows, or feedback/events/delays.
+The registry does not change runtime behavior by itself. Neural Excitation uses its own runtime network graph; no current template runtime uses resource/stock/flow services or feedback/event/delay services.
 
 ## Hybrid Composition
 
@@ -183,7 +187,7 @@ V1 does not execute diffusion, interpolation, advection, field sampling, agent-f
 
 ## Product Notes
 
-The World Stage is the primary workspace. Agents are rendered as a single canvas layer over template-specific atmospheric backgrounds. The right-side inspector summarizes template-specific state such as infection status, opinion/stubbornness, species, energy, Schelling group, grid cell, satisfaction state, and Flocking speed/neighbor density, with raw component payloads available for debugging. Legend and debug diagnostics are available through the Observe and Debug workspace modes so they do not cover the world by default.
+The World Stage is the primary workspace. Agents are rendered as a single canvas layer over template-specific atmospheric backgrounds. The right-side inspector summarizes template-specific state such as infection status, opinion/stubbornness, species, energy, Schelling group, grid cell, satisfaction state, Flocking speed/neighbor density, and Neural stylized activation/refractory/inhibition state, with raw component payloads available for debugging. Legend and debug diagnostics are available through the Observe and Debug workspace modes so they do not cover the world by default.
 
 Parameter controls are generated from template definitions. Numeric controls show current values and ranges, and changes are applied by rebuilding the run through engine validation so invalid parameter combinations do not enter the engine. The Micro panel also includes an agent avatar display preference for canvas-only rendering styles: glyphs, arrows, initials, or head markers. File exchange reports whether a scenario or snapshot export/import succeeded.
 
@@ -191,7 +195,7 @@ Parameter controls are generated from template definitions. Numeric controls sho
 
 The Scenario Builder lives in the Setup workspace mode as an initial-condition and model-variant workspace. It authors Scenario Builder JSON artifacts with scenario id, name, description, tags, template id/version, seed, validated parameters, initialization preset/options, agent composition, behavior mode, environment options, metadata, and timestamps. These scenarios do not store tick state, world snapshots, metric history, intervention history, or run outcomes.
 
-Each production template exposes initialization presets and a supported default behavior mode through template metadata. V1 presets include outbreak layouts for Epidemic, opinion distributions for Opinion Dynamics, ecology layouts for Predator-Prey, neighborhood layouts for Schelling, heading/position layouts for Flocking, and abstract fuel/ignition layouts for Forest Fire / Landscape Spread. Agent composition fields are template-defined and backed by existing validated parameters such as agent count, predator/prey counts, density, group ratio, boid count, fuel density, or ignition count. Environment options are exposed only where there is a clean existing template option, such as Schelling grid dimensions, Flocking boundary mode, or Forest Fire grid and neighbor settings. The builder previews the initial world by creating a separate temporary engine at tick 0; preview does not mutate or advance the active simulation.
+Each production template exposes initialization presets and a supported default behavior mode through template metadata. V1 presets include outbreak layouts for Epidemic, opinion distributions for Opinion Dynamics, ecology layouts for Predator-Prey, neighborhood layouts for Schelling, heading/position layouts for Flocking, abstract fuel/ignition layouts for Forest Fire / Landscape Spread, and stylized topology/excitation presets for Neural Excitation Network, including an optional Rock-Paper-Scissors readout demonstration preset. The RPS preset maps labeled output assemblies to a bounded selected readout and observational payoff only; it is not cognition, semantic understanding, learning, strategy adaptation, or human decision-making. Agent composition fields are template-defined and backed by existing validated parameters such as agent count, predator/prey counts, density, group ratio, boid count, fuel density, ignition count, or neuron count. Environment options are exposed only where there is a clean existing template option, such as Schelling grid dimensions, Flocking boundary mode, or Forest Fire grid and neighbor settings. The builder previews the initial world by creating a separate temporary engine at tick 0; preview does not mutate or advance the active simulation.
 
 Applying a scenario validates the recipe, creates a fresh `SimulationEngine`, clears stale selection/intervention target state, and starts the active run at tick 0. The local scenario library is browser-local, bounded to 50 scenarios, validates loaded records, and ignores corrupted stored data without crashing the app. Scenario Builder import/export is separate from snapshot import/export and run comparison export.
 
@@ -209,7 +213,7 @@ Experiment results are exploratory and depend on model assumptions, parameter ch
 
 The Interventions instrument lets users apply controlled perturbations to the current run without editing agents or components from the UI. Each intervention is defined per template, validated by the headless intervention executor, and applied through the engine command buffer. Interventions apply immediately at the current tick and do not advance simulation time; the next normal step continues from the perturbed state.
 
-V1 interventions include infect selected/radius for Epidemic, set selected/broadcast opinion for Opinion Dynamics, add prey/remove selected for Predator-Prey, swap selected group for Schelling, apply impulse/scatter radius for Flocking, and ignite a selected fuel cell for Forest Fire. Canvas clicks only report target entity, world point, or grid-cell information to UI state. The canvas does not mutate simulation state.
+V1 interventions include infect selected/radius for Epidemic, set selected/broadcast opinion for Opinion Dynamics, add prey/remove selected for Predator-Prey, swap selected group for Schelling, apply impulse/scatter radius for Flocking, ignite a selected fuel cell for Forest Fire, and bounded node/cluster/global/output-assembly stimulus controls for Neural Excitation Network. Neural interventions do not edit selected synapses, train RPS choices, run clinical controls, infer intentions or beliefs, or make Builder graphs executable. Canvas clicks only report target entity, world point, or grid-cell information to UI state. The canvas does not mutate simulation state.
 
 Validation rejects stale or destroyed selected entities, unsupported intervention ids, invalid parameter ranges, non-finite world points/vectors, and invalid template-specific transitions such as reinfecting an already infected selected epidemic agent. Radius interventions compute affected agents only when applied.
 
@@ -241,6 +245,8 @@ Interactive runs step the headless engine through a fixed-tick loop, create one 
 Service primitives are not runtime support unless a template explicitly uses them. Default entity counts are UX defaults, not engine limits, and scalability claims require benchmark evidence. Generic `Continuous2DSpace.queryNeighbors` uses a versioned lazy `ContinuousSpatialHashIndex` for finite local-radius queries in non-tiny worlds, with deterministic all-pairs fallback for tiny or broad/global-radius cases. Flocking uses its own deterministic tick-local pair summaries on top of the same headless spatial-index service. The spatial index is an implementation detail, not a SpatialFieldModel runtime primitive.
 
 Forest Fire / Landscape Spread uses cached grid-neighbor indices, compact numeric state arrays, active burning-cell indices, changed-component updates, and current state-count globals for metrics. It is still an abstract local-spread template, not wildfire prediction or BoundaryEnvironmentModel/SpatialFieldModel runtime support. Full snapshots, engine invariant checks, template validation, Zustand publication, and render-model rebuilding remain separate runtime costs.
+
+Neural Excitation Network uses a bounded template-owned runtime graph, deterministic topology generation, a bounded delayed signal queue, per-tick firing saturation guards, and an optional bounded Decision Readout V1. Decision metrics are model-output readouts from labeled neuron groups, not evidence of reasoning. RPS payoff is observational and does not train or adapt the network in V1. This is a stylized neural excitation network, not a biological brain simulation, and the runtime graph does not make Builder graphs or model-schema graphs executable.
 
 Run `npm run perf:simulation` for a local non-asserting performance report covering flocking, forest-fire, and predator-prey scenarios. The report includes elapsed time, ticks/sec, scheduler compute time, metrics time, validation/overhead remainder, snapshot time, render-model preparation time where accessible, entity/cell counts, neighbor counters, and forest-fire changed-cell counters.
 

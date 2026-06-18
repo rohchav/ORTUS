@@ -300,7 +300,7 @@ describe("hybrid model composition layer", () => {
         runtimeActive: false,
         serviceAvailable: true
       });
-      expect(getTemplateCapability(template.id, "networks")?.runtimeActive).toBe(false);
+      expect(getTemplateCapability(template.id, "networks")?.runtimeActive).toBe(template.id === "neural-excitation-network");
       expect(getTemplateCapability(template.id, "resources")?.runtimeActive).toBe(false);
       expect(getTemplateCapability(template.id, "feedbackEvents")?.runtimeActive).toBe(false);
       expect(getTemplateCapability(template.id, "causalAssumptions")).toMatchObject({ runtimeActive: false, serviceAvailable: true });

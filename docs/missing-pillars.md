@@ -2,7 +2,7 @@
 
 This document reserves cross-cutting complex-systems capabilities that ORTUS must not accidentally design around. These are future pillars unless a later prompt explicitly implements and audits them.
 
-Prompt 19 records these reservations in the Systems Primitive Registry. Global service availability is not template support. A primitive can exist as a headless service while every current template still reports no runtime support for it.
+Prompt 19 records these reservations in the Systems Primitive Registry. Global service availability is not template support. A primitive can exist as a headless service without making templates runtime-capable; only explicitly wired and tested template slices may claim runtime support.
 
 Reserved primitives are roadmap commitments, not implemented behavior.
 

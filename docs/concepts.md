@@ -2,7 +2,7 @@
 
 ORTUS is organized around a small set of simulation concepts. Keeping these boundaries explicit prevents model-family definitions, live run state, exploratory comparisons, and UI workspace data from collapsing into one ambiguous artifact.
 
-Roadmap status: ORTUS has completed Prompt 37B: Schema Validation UX + Repair Suggestions Audit. The post-30B repository hygiene, durable context, dependency stabilization, and performance/scalability pass is complete. The next roadmap prompt is Prompt 38: Schema-to-Template Fit Report V1.
+Roadmap status: ORTUS has completed Prompt 37B: Schema Validation UX + Repair Suggestions Audit, plus non-roadmap Prompt N1: Neural Excitation Network Template V1 and Prompt N1B: Neural Excitation Network Template Audit + Decision Readout V1. The post-30B repository hygiene, durable context, dependency stabilization, and performance/scalability pass is complete. The next roadmap prompt remains Prompt 38: Schema-to-Template Fit Report V1.
 
 ## Brand And Workbench Identity
 
@@ -77,6 +77,10 @@ Templates own domain behavior. Template-specific rules should live in template s
 Production templates expose formal metadata through the `SimulationTemplate` shape: capability flags, `spaceDefinition`, `entityTypeDefinitions`, `parameterDefinitions`, formal metric metadata, documentation, initialization presets, behavior modes, agent composition definitions, environment option definitions, and engine factory hooks such as `createInitialWorld`, `registerSystems`, and `registerMetrics`.
 
 Forest Fire / Landscape Spread is a production template, not a generic spatial-field runtime. It is an abstract local-spread grid model for qualitative spread, threshold, fragmentation, and emergence exploration. It is not a wildfire predictor, does not use GIS, real terrain, wind, humidity, weather, suppression, firefighting, or calibrated fire probabilities, and its grid coordinates are not SpatialFieldModel runtime support. Its template-owned boundary mode is not BoundaryEnvironmentModel runtime support.
+
+Neural Excitation Network is a production template, not a biological brain simulation, cognitive model, clinical model, or generic graph runtime. Neural Excitation Network Template V1 is a stylized runtime network model, not a biological brain simulation. Activation is a model variable, not measured membrane voltage. Synapse weights are abstract influence strengths, not biological synaptic measurements. The model does not simulate ion channels, neurotransmitters, morphology, learning, consciousness, or cognition. This runtime graph belongs only to the Neural Excitation Network template and does not make Builder graphs executable. Outputs are model behavior, not neuroscience evidence.
+
+Decision Readout V1 maps labeled output assemblies to bounded categorical choices. It is not cognition or reasoning. Rock-Paper-Scissors labels are semantic labels assigned by the model designer, not meanings understood by the network. RPS payoff is observational in V1 and does not train, adapt, or optimize the network. The model does not infer intentions, beliefs, preferences, personality, or human decision-making. The RPS readout preset is a bounded demonstration of output-group activation and observational payoff, not semantic understanding, learning, strategy adaptation, persuasion, or human decision simulation.
 
 Forest-fire runtime optimizations are implementation details inside that template: cached grid-neighbor indices, compact per-tick state arrays, active burning-cell indices, changed-component updates, and current state-count globals for metrics. They do not add SpatialFieldModel runtime support, BoundaryEnvironmentModel runtime support, wildfire prediction, or calibrated fire behavior. Snapshot creation, render-model preparation, and UI publication remain separate runtime costs.
 
@@ -184,7 +188,7 @@ Network definitions are bounded to 500 nodes, 20,000 edges, 200 relation types, 
 
 V1 network metrics include node count, edge count, density, average degree, min/max degree, weak connected component count, and largest component size. Directed graph component metrics are reported as weak components. These are structural summaries only; they are not causal evidence or validation against real relational data. Expensive all-pairs path metrics, graph layout, centrality dashboards, network uncertainty, and graph editing are intentionally deferred.
 
-Current production templates do not claim network runtime support. Their `supportsNetworkSpace`, `supportsNetworkOptions`, and `supportsNetworkMetrics` flags remain false until a template actually uses relational topology in initialization or runtime behavior. Epidemic and Opinion are future candidates for contact/influence networks, Predator-Prey is a future candidate for food-web relations, and Schelling/Flocking remain spatial/grid-first in V1.
+Neural Excitation Network is the only current production template that claims runtime network support, and that support is limited to its template-owned runtime `NetworkSpace` synapses. `supportsNetworkOptions` remains false because fresh-run network artifact wiring is not implemented. Its optional Decision Readout V1 is template-local readout state, not a global decision-support primitive and not evidence that Builder graphs, model-schema graphs, network artifacts, or social-learning artifacts execute. Other production templates do not claim network runtime support; their `supportsNetworkSpace` and `supportsNetworkMetrics` flags remain false until a template actually uses relational topology in initialization or runtime behavior. Epidemic and Opinion are future candidates for contact/influence networks, Predator-Prey is a future candidate for food-web relations, and Schelling/Flocking remain spatial/grid-first in V1.
 
 RunConfig and scenario JSON do not yet include `networkOptions` or inline network definitions. Future network-capable templates should add those fields behind explicit capability flags and validate them through the headless network services. Uncertainty target validation does not treat network generator options as active V1 targets; network uncertainty is future work.
 
@@ -260,11 +264,11 @@ Strategy, Control + Intervention Semantics V1 is a headless structural service f
 
 Prompt 18 reserves these missing pillars in `docs/roadmap.md` and `docs/missing-pillars.md`. Prompt 19 adds `src/simulation/registry` as the unified systems primitive registry and capability map.
 
-The Systems Primitive Registry is the source of truth for current vs reserved capabilities, artifact families, and template capability summaries. Global service availability is not template support. A primitive can exist as a headless service while every current template still reports no runtime support for it.
+The Systems Primitive Registry is the source of truth for current vs reserved capabilities, artifact families, and template capability summaries. Global service availability is not template support. A primitive can exist as a headless service without making templates runtime-capable; only explicitly wired and tested template slices may claim runtime support.
 
 Reserved primitives are roadmap commitments, not implemented behavior. Runtime-active support must only be claimed when a template actually uses the primitive. Prompt 20 should use the registry for hybrid composition planning rather than inferring support from docs or service modules alone.
 
-The registry does not change runtime behavior by itself. No current template runtime uses networks, resources/stocks/flows, or feedback/events/delays.
+The registry does not change runtime behavior by itself. Neural Excitation uses its own runtime network graph; no current template runtime uses resource/stock/flow services or feedback/event/delay services.
 
 ### Hybrid Model Composition
 

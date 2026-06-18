@@ -1,15 +1,17 @@
 # ORTUS Full Prompt Roadmap
 
-*Last updated after Prompt 37B Schema Validation UX + Repair Suggestions Audit.*
+*Last updated after non-roadmap Prompt N1B Neural Excitation Network Template Audit + Decision Readout V1.*
 
 ## Current Status
 
-ORTUS has completed the core runtime/template foundation, scenario system, uncertainty layer, assumptions/limits layer, systems primitive registry, hybrid composition, multi-scale structure, scale-view state, boundary/environment models, spatial fields, observability, causality, quantity semantics, emergence pattern descriptors, robustness/resilience semantics, strategy/control semantics, model schema declarations, knowledge/memory/social-learning semantics, visual builder workspace schemas, template/schema compatibility mapping, the template/schema compatibility mapping audit, a narrow Opinion Dynamics social-learning behavior mode, the Opinion Dynamics social-learning runtime audit, Safe Builder UI Shell V1, the Safe Builder UI Shell + workspace information architecture audit, Model Schema Authoring Forms V1, the Model Schema Authoring Forms Audit, Visual Builder Graph View V1, the Visual Builder Graph View Audit, Schema Validation UX + Repair Suggestions V1, and the Schema Validation UX + Repair Suggestions Audit.
+ORTUS has completed the core runtime/template foundation, scenario system, uncertainty layer, assumptions/limits layer, systems primitive registry, hybrid composition, multi-scale structure, scale-view state, boundary/environment models, spatial fields, observability, causality, quantity semantics, emergence pattern descriptors, robustness/resilience semantics, strategy/control semantics, model schema declarations, knowledge/memory/social-learning semantics, visual builder workspace schemas, template/schema compatibility mapping, the template/schema compatibility mapping audit, a narrow Opinion Dynamics social-learning behavior mode, the Opinion Dynamics social-learning runtime audit, Safe Builder UI Shell V1, the Safe Builder UI Shell + workspace information architecture audit, Model Schema Authoring Forms V1, the Model Schema Authoring Forms Audit, Visual Builder Graph View V1, the Visual Builder Graph View Audit, Schema Validation UX + Repair Suggestions V1, the Schema Validation UX + Repair Suggestions Audit, non-roadmap Prompt N1 Neural Excitation Network Template V1, and non-roadmap Prompt N1B Neural Excitation Network Template Audit + Decision Readout V1.
 
 Current project status:
 
 ```text
 Completed roadmap prompt: Prompt 37B — Schema Validation UX + Repair Suggestions Audit
+Completed non-roadmap prompt: Prompt N1 — Neural Excitation Network Template V1
+Completed non-roadmap prompt: Prompt N1B — Neural Excitation Network Template Audit + Decision Readout V1
 Post-30B stabilization completed: repo hygiene, durable Codex context, dependency repair, generated-artifact cleanup, and runtime performance/scalability baseline
 Next roadmap prompt: Prompt 38 — Schema-to-Template Fit Report V1
 ```
@@ -32,6 +34,7 @@ Predator-Prey
 Schelling Segregation
 Flocking
 Forest Fire / Landscape Spread
+Neural Excitation Network
 ```
 
 Current major guardrails:
@@ -48,6 +51,12 @@ No causal-proof claims.
 No robustness/safety/certification claims.
 No strategy/control/optimality claims.
 No template runtime support claims unless the runtime actually uses that primitive.
+Neural Excitation Network Template V1 is a stylized runtime network model, not a biological brain simulation.
+Neural runtime graph support is scoped only to that template and does not make Builder graphs, model-schema graphs, or network artifacts executable.
+Decision Readout V1 maps labeled output assemblies to bounded categorical choices. It is not cognition or reasoning.
+Rock-Paper-Scissors labels are semantic labels assigned by the model designer, not meanings understood by the network.
+RPS payoff is observational in V1 and does not train, adapt, or optimize the network.
+The model does not infer intentions, beliefs, preferences, personality, or human decision-making.
 ```
 
 ## Expert Audit Additions and Roadmap Corrections
@@ -519,9 +528,9 @@ Boundary:
 
 ```text
 Networks are service-only.
-No current template runtime uses networks.
+Prompt N1 later adds a narrow Neural Excitation template-owned runtime network graph; this does not make Prompt 15 network artifacts executable.
 No graph editor.
-No network runtime behavior.
+No generic network runtime behavior.
 ```
 
 Status:
@@ -2916,7 +2925,7 @@ No global service availability treated as template runtime support.
 Recommended immediate next steps:
 
 ```text
-1. Review and commit Prompt 37 + Prompt 37B together.
+1. Review and commit Prompt N1 Neural Excitation Network Template V1 plus Prompt N1B Neural Excitation Network Template Audit + Decision Readout V1.
 2. Start Prompt 38 — Schema-to-Template Fit Report V1 after the commit checkpoint.
 3. Run a dedicated rendered responsive/design-system audit before making mobile-readiness, WCAG, clipboard, focus-return, or polished visual-workbench claims.
 ```
@@ -2925,6 +2934,8 @@ Do not start graph editing, visual programming, or runtime-mapping prompts until
 
 ```text
 Completed through Prompt 37B.
+Non-roadmap Prompt N1 Neural Excitation Network Template V1 is complete.
+Non-roadmap Prompt N1B Neural Excitation Network Template Audit + Decision Readout V1 is complete.
 Performance stabilization completed after Prompt 30B.
 Prompt 34 safe builder shell is complete.
 Prompt 34B safe builder shell audit is complete.

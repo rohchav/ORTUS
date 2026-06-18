@@ -262,6 +262,27 @@
 - Do not mark the global `socialLearningRuntime` primitive implemented unless a later audited registry prompt adds explicit template-specific nuance.
 - Do not use knowledge/memory/social-learning semantics for persuasion or microtargeting optimization.
 - Do not infer real-person traits, protected classes, psychological diagnoses, or real-person profiles from this structural layer.
+- Do not describe the Neural Excitation Network template as a biological brain simulation, cognitive model, consciousness model, clinical model, seizure model, neuroscience evidence generator, connectome model, or mental-health tool.
+- Neural Excitation Network Template V1 is a stylized runtime network model, not a biological brain simulation.
+- Activation is a model variable, not measured membrane voltage.
+- Synapse weights are abstract influence strengths, not biological synaptic measurements.
+- The Neural Excitation Network model does not simulate ion channels, neurotransmitters, morphology, learning, plasticity, STDP, backpropagation, cognition, consciousness, diagnosis, treatment, or real brain regions.
+- This runtime graph belongs only to the Neural Excitation Network template and does not make Builder graphs executable.
+- Do not generalize Neural runtime graph support into visual-builder graph execution, model-schema graph execution, network artifact execution, generic graph runtime, or template generation.
+- Keep Neural Excitation runtime state bounded, deterministic, numeric/symbolic, template-defined, and validated; do not add unbounded signal queues, arbitrary documents, embeddings, external model calls, LLM agents, or biological data imports.
+- Neural interventions must remain template-defined perturbations through the headless intervention executor or command buffer; do not add clinical control, persuasion optimization, or selected-synapse controls without an explicit selectable-edge contract and audit.
+- Neural metrics are model-output history, not empirical neural recordings; activation and synchrony are stylized runtime variables, not biological measurements.
+- Do not call Neural Decision Readout cognition or reasoning.
+- Decision Readout V1 maps labeled output assemblies to bounded categorical choices. It is not cognition or reasoning.
+- Rock-Paper-Scissors labels are semantic labels assigned by the model designer, not meanings understood by the network.
+- RPS payoff is observational in V1 and does not train, adapt, or optimize the network.
+- The model does not infer intentions, beliefs, preferences, personality, or human decision-making.
+- Keep output labels assigned by the model designer.
+- Keep decision metrics labeled as readouts, not beliefs or intentions.
+- Do not add learning, plasticity, or adaptation from RPS payoff without a dedicated future prompt.
+- Keep Neural runtime graph scoped only to the Neural template.
+- Do not make Builder graphs executable.
+- Do not make model schemas runnable.
 - Do not describe the Forest Fire / Landscape Spread template as wildfire prediction, GIS/weather/wind/humidity/terrain/suppression/firefighting modeling, calibrated fire behavior, generic control strategy support, SpatialFieldModel runtime support, or BoundaryEnvironmentModel runtime support.
 - Preserve valid-vs-runnable distinction for structural primitives.
 - Run comparison stores bounded run summaries for local comparison. Do not store full snapshots by default, and do not treat comparison workspace state as authoritative simulation state.

@@ -3,6 +3,17 @@ import { productionTemplateMap } from "../simulation";
 import { InfectionState, Position2D, Velocity2D } from "../simulation/templates/epidemic.template";
 import { BoidGroup, BoidState } from "../simulation/templates/flocking.template";
 import { ForestFireCellState } from "../simulation/templates/forestFire.template";
+import {
+  NeuralNeuronStateComponent,
+  neuralDecisionReadoutGlobalKey,
+  neuralRpsReadoutGlobalKey,
+  type NeuralDecisionAssembly,
+  type NeuralDecisionReadout,
+  type NeuralDecisionState,
+  type NeuralNeuronState,
+  type NeuralRpsReadout,
+  type NeuralSynapse
+} from "../simulation/templates/neuralExcitation.template";
 import { OpinionState } from "../simulation/templates/opinion.template";
 import { Energy, Species } from "../simulation/templates/predatorPrey.template";
 import { GroupIdentity, PositionGrid, SatisfactionState } from "../simulation/templates/schelling.template";
@@ -13,7 +24,7 @@ export interface TemplateDescriptor {
   id: TemplateId;
   template: SimulationTemplate;
   shortName: string;
-  atmosphere: "epidemic" | "opinion" | "predator-prey" | "schelling" | "flocking";
+  atmosphere: "epidemic" | "opinion" | "predator-prey" | "schelling" | "flocking" | "neural";
   accent: string;
 }
 
@@ -59,6 +70,13 @@ export const templateDescriptors: TemplateDescriptor[] = [
     shortName: "Forest Fire",
     atmosphere: "schelling",
     accent: "#ff5a24"
+  },
+  {
+    id: "neural-excitation-network",
+    template: productionTemplateMap["neural-excitation-network"],
+    shortName: "Neural",
+    atmosphere: "neural",
+    accent: "#d8ff3e"
   }
 ];
 
@@ -95,6 +113,27 @@ export interface LegendEntry {
 
 export function legendEntries(templateId: string): LegendEntry[] {
   return legendEntriesByTemplate[templateId] ?? legendEntriesByTemplate["predator-prey"] ?? [];
+}
+
+export function legendNotes(templateId: string): string[] {
+  if (templateId === "neural-excitation-network") {
+    return [
+      "This runtime graph belongs only to the Neural Excitation Network template.",
+      "It does not make Builder graphs or model-schema graphs executable.",
+      "Decision Readout V1 maps labeled output assemblies to bounded categorical choices. It is not cognition or reasoning.",
+      "RPS payoff is observational in V1 and does not train, adapt, or optimize the network."
+    ];
+  }
+  return [];
+}
+
+export interface NeuralDecisionReadoutView {
+  enabled: boolean;
+  choices: NeuralDecisionAssembly[];
+  selected: NeuralDecisionState;
+  confidence: number;
+  winnerMargin: number;
+  rps?: NeuralRpsReadout;
 }
 
 const metricLabels: Record<string, Record<string, string>> = {
@@ -141,6 +180,27 @@ const metricLabels: Record<string, Record<string, string>> = {
     newIgnitions: "New ignitions",
     spreadRate: "Spread rate",
     extinguished: "Extinguished"
+  },
+  "neural-excitation-network": {
+    activeNeuronCount: "Active neurons",
+    firingRate: "Firing rate",
+    averageActivation: "Average activation",
+    cascadeSize: "Cascade size",
+    synchronyScore: "Synchrony score",
+    excitationInhibitionBalance: "Excitation/inhibition balance",
+    signalQueueSize: "Signal queue",
+    refractoryCount: "Refractory neurons",
+    inhibitedCount: "Inhibited neurons",
+    largestActiveComponent: "Largest active component",
+    networkSaturation: "Network saturation",
+    outputRockActivation: "Output Rock activation",
+    outputPaperActivation: "Output Paper activation",
+    outputScissorsActivation: "Output Scissors activation",
+    decisionSelectedCode: "Selected readout code",
+    decisionConfidence: "Readout confidence",
+    decisionWinnerMargin: "Readout winner margin",
+    decisionSwitchCount: "Readout switch count",
+    rpsPayoff: "Observational RPS payoff"
   }
 };
 
@@ -177,6 +237,14 @@ const legendEntriesByTemplate: Record<string, LegendEntry[]> = {
     { label: "Fuel", description: "Cell containing fuel", color: "#6f8f3d", glyph: "F" },
     { label: "Burning", description: "Cell currently burning", color: "#ff5a24", glyph: "B" },
     { label: "Burned", description: "Cell that burned out", color: "#4a4540", glyph: "X" }
+  ],
+  "neural-excitation-network": [
+    { label: "Runtime synapse", description: "Template-owned directed influence edge", color: "#7bd7c7", glyph: "->" },
+    { label: "Stylized activation", description: "Activation is a model variable, not measured membrane voltage", color: "#d8ff3e", glyph: "A" },
+    { label: "Firing this tick", description: "Node crossed its abstract threshold this tick", color: "#ff5a24", glyph: "F" },
+    { label: "Refractory cooldown", description: "Recently fired and temporarily cannot fire again", color: "#f3f1e8", glyph: "R" },
+    { label: "Inhibitory signal", description: "Abstract inhibitory influence, not a biological measurement", color: "#6c72ff", glyph: "-" },
+    { label: "Excitatory signal", description: "Abstract excitatory influence, not a biological measurement", color: "#d8ff3e", glyph: "+" }
   ]
 };
 
@@ -214,6 +282,15 @@ const metricDescriptionSets: Record<string, Array<{ label: string; description: 
     { label: "New ignitions", description: "Fuel cells newly ignited during the last tick." },
     { label: "Spread rate", description: "New ignitions divided by previous active burning cells." },
     { label: "Extinguished", description: "1 when no cells are burning." }
+  ],
+  "neural-excitation-network": [
+    { label: "Metrics", description: "Metrics are model-output history, not empirical neural recordings." },
+    { label: "Activation", description: "Activation and synchrony are stylized runtime variables, not biological measurements." },
+    { label: "Synapse weights", description: "Synapse weights are abstract influence strengths, not biological synaptic measurements." },
+    { label: "Firing rate", description: "Fraction of template nodes firing in this tick." },
+    { label: "Cascade size", description: "Recent firing events in a bounded model-output window." },
+    { label: "Selected readout", description: "Decision metrics are model-output readouts from labeled neuron groups, not evidence of reasoning." },
+    { label: "Observational payoff", description: "RPS payoff is observational and does not train or adapt the network in V1." }
   ]
 };
 
@@ -248,6 +325,19 @@ export interface GridRenderModel {
   rows: number;
   cols: number;
   agents: RenderGridAgent[];
+}
+
+export interface RenderNetworkEdge {
+  id: string;
+  sourceId: EntityId;
+  targetId: EntityId;
+  sourceX: number;
+  sourceY: number;
+  targetX: number;
+  targetY: number;
+  weight: number;
+  kind: "excitatory" | "inhibitory";
+  enabled: boolean;
 }
 
 export function getContinuousWorld(snapshot: SimulationSnapshotView): { width: number; height: number } {
@@ -299,6 +389,63 @@ export function renderGrid(snapshot: SimulationSnapshotView): GridRenderModel | 
     .sort((left, right) => left.row - right.row || left.col - right.col || left.id.localeCompare(right.id));
 
   return { rows: space.rows, cols: space.cols, agents };
+}
+
+export function renderNetworkEdges(snapshot: SimulationSnapshotView): RenderNetworkEdge[] {
+  if (snapshot.templateId !== "neural-excitation-network") {
+    return [];
+  }
+  const space = snapshot.spaces.find((candidate) => candidate.kind === "continuous2d");
+  if (space?.kind !== "continuous2d") {
+    return [];
+  }
+  const synapsesValue = snapshot.globals.neuralSynapses;
+  if (!Array.isArray(synapsesValue)) {
+    return [];
+  }
+  return synapsesValue
+    .filter(isRenderableNeuralSynapse)
+    .slice(0, 2500)
+    .map((synapse) => {
+      const source = space.positions[synapse.sourceId];
+      const target = space.positions[synapse.targetId];
+      if (!source || !target) {
+        return undefined;
+      }
+      return {
+        id: synapse.id,
+        sourceId: synapse.sourceId,
+        targetId: synapse.targetId,
+        sourceX: source.x,
+        sourceY: source.y,
+        targetX: target.x,
+        targetY: target.y,
+        weight: synapse.weight,
+        kind: synapse.kind,
+        enabled: synapse.enabled
+      };
+    })
+    .filter((edge): edge is RenderNetworkEdge => edge !== undefined)
+    .sort((left, right) => left.id.localeCompare(right.id));
+}
+
+export function renderNeuralDecisionReadout(snapshot: SimulationSnapshotView | null | undefined): NeuralDecisionReadoutView | undefined {
+  if (!snapshot || snapshot.templateId !== "neural-excitation-network") {
+    return undefined;
+  }
+  const readout = snapshot.globals[neuralDecisionReadoutGlobalKey];
+  if (!isNeuralDecisionReadout(readout)) {
+    return undefined;
+  }
+  const rps = snapshot.globals[neuralRpsReadoutGlobalKey];
+  return {
+    enabled: readout.enabled,
+    choices: readout.choices.map((assembly) => ({ ...assembly, neuronIds: [...assembly.neuronIds] })),
+    selected: readout.selected,
+    confidence: readout.confidence,
+    winnerMargin: readout.winnerMargin,
+    ...(isNeuralRpsReadout(rps) ? { rps } : {})
+  };
 }
 
 export function componentForEntity<T = ComponentValue>(
@@ -397,6 +544,24 @@ function buildAgent(
     };
   }
 
+  if (descriptor.id === "neural-excitation-network") {
+    const state = componentForEntity<NeuralNeuronState>(snapshot, entity.id, NeuralNeuronStateComponent);
+    const activation = typeof state?.activation === "number" ? Math.max(0, state.activation) : 0;
+    const style = neuralStateStyle(state?.state);
+    return {
+      id: entity.id,
+      entity,
+      x,
+      y,
+      radius: style.radius + Math.min(2.8, activation * 0.55),
+      fill: style.fill,
+      stroke: style.stroke,
+      glyph: style.glyph,
+      label: style.label,
+      intensity: Math.max(style.intensity, Math.min(1, 0.42 + activation / 4))
+    };
+  }
+
   const species = componentForEntity<{ kind?: string }>(snapshot, entity.id, Species);
   const energy = componentForEntity<{ value?: number }>(snapshot, entity.id, Energy);
   if (species?.kind === "predator") {
@@ -415,6 +580,24 @@ function buildAgent(
     };
   }
   return { id: entity.id, entity, x, y, radius: 3.1, fill: "#b7ff3c", stroke: "#f3f1e8", glyph: "Y", label: "Prey", intensity: 0.7 };
+}
+
+function neuralStateStyle(
+  state: NeuralNeuronState["state"] | undefined
+): { fill: string; stroke: string; glyph: string; label: string; radius: number; intensity: number } {
+  if (state === "firing") {
+    return { fill: "#ff5a24", stroke: "#ffd37a", glyph: "F", label: "Firing this tick", radius: 4.8, intensity: 1 };
+  }
+  if (state === "refractory") {
+    return { fill: "#f3f1e8", stroke: "#7bd7c7", glyph: "R", label: "Refractory cooldown", radius: 4, intensity: 0.82 };
+  }
+  if (state === "inhibited") {
+    return { fill: "#6c72ff", stroke: "#d4d7ff", glyph: "-", label: "Inhibited neuron", radius: 3.8, intensity: 0.74 };
+  }
+  if (state === "charging") {
+    return { fill: "#d8ff3e", stroke: "#f3f1e8", glyph: "+", label: "Stylized activation", radius: 3.8, intensity: 0.86 };
+  }
+  return { fill: "#848a80", stroke: "#b7bbb0", glyph: "N", label: "Resting neuron", radius: 3.3, intensity: 0.52 };
 }
 
 function buildGridAgent(
@@ -510,6 +693,78 @@ function flockingGroupStyle(groupId: string | undefined): { fill: string; glyph:
     return { fill: "#c34dff", glyph: "4", label: "Boid group 4" };
   }
   return { fill: "#e8efe0", glyph: "›", label: "Boid" };
+}
+
+function isRenderableNeuralSynapse(value: unknown): value is NeuralSynapse {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    return false;
+  }
+  const synapse = value as NeuralSynapse;
+  return (
+    typeof synapse.id === "string" &&
+    typeof synapse.sourceId === "string" &&
+    typeof synapse.targetId === "string" &&
+    (synapse.kind === "excitatory" || synapse.kind === "inhibitory") &&
+    typeof synapse.weight === "number" &&
+    Number.isFinite(synapse.weight) &&
+    typeof synapse.enabled === "boolean"
+  );
+}
+
+function isNeuralDecisionReadout(value: unknown): value is NeuralDecisionReadout {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    return false;
+  }
+  const readout = value as NeuralDecisionReadout;
+  return (
+    typeof readout.enabled === "boolean" &&
+    Array.isArray(readout.choices) &&
+    readout.choices.every(isNeuralDecisionAssembly) &&
+    (readout.selected === "undecided" ||
+      readout.selected === "conflicted" ||
+      readout.selected === "rock" ||
+      readout.selected === "paper" ||
+      readout.selected === "scissors") &&
+    typeof readout.confidence === "number" &&
+    Number.isFinite(readout.confidence) &&
+    typeof readout.winnerMargin === "number" &&
+    Number.isFinite(readout.winnerMargin)
+  );
+}
+
+function isNeuralDecisionAssembly(value: unknown): value is NeuralDecisionAssembly {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    return false;
+  }
+  const assembly = value as NeuralDecisionAssembly;
+  return (
+    typeof assembly.id === "string" &&
+    typeof assembly.label === "string" &&
+    (assembly.choice === "rock" || assembly.choice === "paper" || assembly.choice === "scissors") &&
+    Array.isArray(assembly.neuronIds) &&
+    assembly.neuronIds.every((id) => typeof id === "string") &&
+    typeof assembly.activation === "number" &&
+    Number.isFinite(assembly.activation)
+  );
+}
+
+function isNeuralRpsReadout(value: unknown): value is NeuralRpsReadout {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    return false;
+  }
+  const rps = value as NeuralRpsReadout;
+  return (
+    typeof rps.enabled === "boolean" &&
+    (rps.networkChoice === "undecided" ||
+      rps.networkChoice === "conflicted" ||
+      rps.networkChoice === "rock" ||
+      rps.networkChoice === "paper" ||
+      rps.networkChoice === "scissors") &&
+    (rps.opponentChoice === "rock" || rps.opponentChoice === "paper" || rps.opponentChoice === "scissors") &&
+    (rps.outcome === "none" || rps.outcome === "win" || rps.outcome === "loss" || rps.outcome === "draw") &&
+    typeof rps.payoff === "number" &&
+    Number.isFinite(rps.payoff)
+  );
 }
 
 function humanizeKey(key: string): string {

@@ -38,6 +38,7 @@ export { predatorPreyTemplate } from "./templates/predatorPrey.template";
 export { schellingTemplate } from "./templates/schelling.template";
 export { flockingTemplate } from "./templates/flocking.template";
 export { forestFireTemplate } from "./templates/forestFire.template";
+export { neuralExcitationTemplate } from "./templates/neuralExcitation.template";
 export {
   productionTemplateIds,
   productionTemplateMap,

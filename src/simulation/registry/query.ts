@@ -110,6 +110,9 @@ export function assertTemplateDoesNotClaimUnsupportedRuntime(templateId: string)
       throw new Error(`Template ${templateId} claims runtime support for reserved primitive ${capability.primitiveId}`);
     }
     if (capability.runtimeActive && unsupportedRuntimePrimitiveIds.has(capability.primitiveId)) {
+      if (templateId === "neural-excitation-network" && capability.primitiveId === "networks") {
+        continue;
+      }
       throw new Error(`Template ${templateId} claims unsupported runtime support for ${capability.primitiveId}`);
     }
   }

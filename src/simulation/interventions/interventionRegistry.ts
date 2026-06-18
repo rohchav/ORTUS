@@ -9,6 +9,15 @@ import { PREDATOR_PREY_SPACE_ID, Species, type SpeciesComponent } from "../templ
 import { GroupIdentity, type GroupIdentityComponent } from "../templates/schelling.template";
 import { FLOCKING_SPACE_ID, BoidState, flockingParams, type BoidStateComponent } from "../templates/flocking.template";
 import { FOREST_FIRE_SPACE_ID, ForestFireCellState, type ForestFireCellStateComponent } from "../templates/forestFire.template";
+import {
+  NeuralNeuronStateComponent,
+  neuralExcitationScaleGlobalKey,
+  neuralExternalStimulusGlobalKey,
+  neuralInhibitionScaleGlobalKey,
+  readNeuralDecisionReadout,
+  type NeuralDecisionChoice,
+  type NeuralNeuronState
+} from "../templates/neuralExcitation.template";
 import type {
   InterventionBuildContext,
   InterventionCommandResult,
@@ -39,6 +48,30 @@ const radiusParam = (defaultValue: number): ParameterDefinition => ({
   description: "Intervention radius in world units.",
   liveUpdate: true
 });
+
+const neuralStimulusStrengthParam: ParameterDefinition = {
+  key: "strength",
+  label: "Strength",
+  type: "number",
+  defaultValue: 1.2,
+  min: 0,
+  max: 5,
+  step: 0.1,
+  description: "Activation adjustment in this stylized model variable.",
+  liveUpdate: true
+};
+
+const neuralScaleDeltaParam: ParameterDefinition = {
+  key: "delta",
+  label: "Delta",
+  type: "number",
+  defaultValue: 0.2,
+  min: 0.05,
+  max: 1,
+  step: 0.05,
+  description: "Bounded multiplier change for future template-owned signal emission.",
+  liveUpdate: true
+};
 
 export function getInterventionDefinitions(templateId: string): InterventionDefinition[] {
   return [...(interventionsByTemplate[templateId] ?? [])].sort((left, right) => left.id.localeCompare(right.id));
@@ -395,8 +428,350 @@ const interventionsByTemplate: Record<string, InterventionDefinition[]> = {
         };
       }
     }
+  ],
+  "neural-excitation-network": [
+    {
+      id: "neural.increaseGlobalExcitation",
+      templateId: "neural-excitation-network",
+      label: "Increase Global Excitation",
+      description: "Increase the future excitatory signal multiplier in the stylized Neural template.",
+      targetType: "none",
+      supportedTemplates: ["neural-excitation-network"],
+      capabilityRequirements: ["supportsInterventions"],
+      mutates: ["environment"],
+      eventType: "intervention.applied",
+      parameterDefinitions: [neuralScaleDeltaParam],
+      documentation:
+        "Changes a bounded template-owned multiplier for future abstract excitatory signals. This is not biological neuromodulation, treatment, cognition, or persuasion guidance.",
+      build(ctx) {
+        const delta = positiveNumber(ctx.params.delta, "delta");
+        const current = finiteGlobalNumber(ctx.world.globals, neuralExcitationScaleGlobalKey, 1);
+        const next = clamp(current + delta, 0.1, 4);
+        return {
+          commands: [{ type: "setGlobal", key: neuralExcitationScaleGlobalKey, value: next }],
+          targetSummary: `global excitation scale ${current.toFixed(2)} -> ${next.toFixed(2)}`
+        };
+      }
+    },
+    {
+      id: "neural.increaseGlobalInhibition",
+      templateId: "neural-excitation-network",
+      label: "Increase Global Inhibition",
+      description: "Increase the future inhibitory signal multiplier in the stylized Neural template.",
+      targetType: "none",
+      supportedTemplates: ["neural-excitation-network"],
+      capabilityRequirements: ["supportsInterventions"],
+      mutates: ["environment"],
+      eventType: "intervention.applied",
+      parameterDefinitions: [neuralScaleDeltaParam],
+      documentation:
+        "Changes a bounded template-owned multiplier for future abstract inhibitory signals. This is not biological inhibition, clinical control, or brain-state intervention.",
+      build(ctx) {
+        const delta = positiveNumber(ctx.params.delta, "delta");
+        const current = finiteGlobalNumber(ctx.world.globals, neuralInhibitionScaleGlobalKey, 1);
+        const next = clamp(current + delta, 0.1, 4);
+        return {
+          commands: [{ type: "setGlobal", key: neuralInhibitionScaleGlobalKey, value: next }],
+          targetSummary: `global inhibition scale ${current.toFixed(2)} -> ${next.toFixed(2)}`
+        };
+      }
+    },
+    {
+      id: "neural.inhibitSelectedNeuron",
+      templateId: "neural-excitation-network",
+      label: "Inhibit Selected Neuron",
+      description: "Apply a bounded inhibitory pulse to the selected stylized neuron node.",
+      targetType: "selectedEntity",
+      supportedTemplates: ["neural-excitation-network"],
+      capabilityRequirements: ["supportsInterventions"],
+      mutates: ["agents"],
+      eventType: "intervention.applied",
+      parameterDefinitions: [neuralStimulusStrengthParam],
+      documentation:
+        "Applies to one template-owned neuron state component. Activation is a model variable, not measured membrane voltage.",
+      build(ctx) {
+        const entityId = requireSelectedEntity(ctx.world, ctx.target);
+        const state = requireNeuralNeuron(ctx.world, entityId);
+        const strength = positiveFinite(ctx.params.strength, "strength");
+        return {
+          commands: [
+            {
+              type: "setComponent",
+              entityId,
+              componentType: NeuralNeuronStateComponent,
+              value: inhibitNeuralState(state, strength)
+            }
+          ],
+          targetSummary: `neuron ${entityId}`,
+          visualMarker: { kind: "entity", entityId }
+        };
+      }
+    },
+    {
+      id: "neural.silenceSelectedCluster",
+      templateId: "neural-excitation-network",
+      label: "Silence Selected Cluster",
+      description: "Apply a bounded inhibitory pulse to the selected neuron's cluster.",
+      targetType: "selectedEntity",
+      supportedTemplates: ["neural-excitation-network"],
+      capabilityRequirements: ["supportsInterventions"],
+      mutates: ["agents"],
+      eventType: "intervention.applied",
+      parameterDefinitions: [neuralStimulusStrengthParam],
+      documentation:
+        "Applies to nodes sharing the selected neuron's template cluster label. It is not a biological brain-region manipulation.",
+      build(ctx) {
+        const selectedId = requireSelectedEntity(ctx.world, ctx.target);
+        const selected = requireNeuralNeuron(ctx.world, selectedId);
+        const strength = positiveFinite(ctx.params.strength, "strength");
+        const targets = neuralClusterTargets(ctx.world, selected.groupId);
+        const values = Object.fromEntries(targets.map(([entityId, state]) => [entityId, inhibitNeuralState(state, strength)]));
+        return {
+          commands: [{ type: "setComponents", componentType: NeuralNeuronStateComponent, values }],
+          targetSummary: `${targets.length} neurons in ${selected.groupId}`,
+          visualMarker: { kind: "entity", entityId: selectedId }
+        };
+      }
+    },
+    {
+      id: "neural.stimulateRandomNeuron",
+      templateId: "neural-excitation-network",
+      label: "Stimulate Random Neuron",
+      description: "Apply a seeded bounded excitatory pulse to one stylized neuron node.",
+      targetType: "none",
+      supportedTemplates: ["neural-excitation-network"],
+      capabilityRequirements: ["supportsInterventions"],
+      mutates: ["agents"],
+      eventType: "intervention.applied",
+      parameterDefinitions: [neuralStimulusStrengthParam],
+      documentation:
+        "Uses the engine seeded RNG stream and updates one template-owned component. It does not import external stimuli or biological data.",
+      build(ctx) {
+        const entityIds = ctx.world.entitiesWith([NeuralNeuronStateComponent]);
+        if (entityIds.length === 0) {
+          throw new SimulationValidationError("Neural template has no neuron entities");
+        }
+        const entityId = ctx.engine.rng.fork("neural:intervention").choice(entityIds);
+        const state = requireNeuralNeuron(ctx.world, entityId);
+        const strength = positiveFinite(ctx.params.strength, "strength");
+        return {
+          commands: [
+            {
+              type: "setComponent",
+              entityId,
+              componentType: NeuralNeuronStateComponent,
+              value: stimulateNeuralState(state, strength)
+            }
+          ],
+          targetSummary: `seeded neuron ${entityId}`,
+          visualMarker: { kind: "entity", entityId }
+        };
+      }
+    },
+    {
+      id: "neural.stimulateSelectedCluster",
+      templateId: "neural-excitation-network",
+      label: "Stimulate Selected Cluster",
+      description: "Apply a bounded excitatory pulse to the selected neuron's cluster.",
+      targetType: "selectedEntity",
+      supportedTemplates: ["neural-excitation-network"],
+      capabilityRequirements: ["supportsInterventions"],
+      mutates: ["agents"],
+      eventType: "intervention.applied",
+      parameterDefinitions: [neuralStimulusStrengthParam],
+      documentation:
+        "Applies to nodes sharing the selected neuron's template cluster label. Outputs remain model behavior, not neuroscience evidence.",
+      build(ctx) {
+        const selectedId = requireSelectedEntity(ctx.world, ctx.target);
+        const selected = requireNeuralNeuron(ctx.world, selectedId);
+        const strength = positiveFinite(ctx.params.strength, "strength");
+        const targets = neuralClusterTargets(ctx.world, selected.groupId);
+        const values = Object.fromEntries(targets.map(([entityId, state]) => [entityId, stimulateNeuralState(state, strength)]));
+        return {
+          commands: [{ type: "setComponents", componentType: NeuralNeuronStateComponent, values }],
+          targetSummary: `${targets.length} neurons in ${selected.groupId}`,
+          visualMarker: { kind: "entity", entityId: selectedId }
+        };
+      }
+    },
+    {
+      id: "neural.stimulateSelectedNeuron",
+      templateId: "neural-excitation-network",
+      label: "Stimulate Selected Neuron",
+      description: "Apply a bounded excitatory pulse to the selected stylized neuron node.",
+      targetType: "selectedEntity",
+      supportedTemplates: ["neural-excitation-network"],
+      capabilityRequirements: ["supportsInterventions"],
+      mutates: ["agents"],
+      eventType: "intervention.applied",
+      parameterDefinitions: [neuralStimulusStrengthParam],
+      documentation:
+        "Applies to one template-owned neuron state component. Activation is a model variable, not measured membrane voltage.",
+      build(ctx) {
+        const entityId = requireSelectedEntity(ctx.world, ctx.target);
+        const state = requireNeuralNeuron(ctx.world, entityId);
+        const strength = positiveFinite(ctx.params.strength, "strength");
+        return {
+          commands: [
+            {
+              type: "setComponent",
+              entityId,
+              componentType: NeuralNeuronStateComponent,
+              value: stimulateNeuralState(state, strength)
+            }
+          ],
+          targetSummary: `neuron ${entityId}`,
+          visualMarker: { kind: "entity", entityId }
+        };
+      }
+    },
+    ...neuralDecisionAssemblyStimulusDefinitions(),
+    {
+      id: "neural.toggleExternalStimulus",
+      templateId: "neural-excitation-network",
+      label: "Toggle External Stimulus",
+      description: "Toggle the template-owned seeded external stimulus source.",
+      targetType: "none",
+      supportedTemplates: ["neural-excitation-network"],
+      capabilityRequirements: ["supportsInterventions"],
+      mutates: ["environment"],
+      eventType: "intervention.applied",
+      parameterDefinitions: [],
+      documentation:
+        "Toggles a bounded seeded model-input source. It is not an external API, data stream, clinical stimulus, or environment sensor.",
+      build(ctx) {
+        const current = ctx.world.globals[neuralExternalStimulusGlobalKey] !== false;
+        const next = !current;
+        return {
+          commands: [{ type: "setGlobal", key: neuralExternalStimulusGlobalKey, value: next }],
+          targetSummary: `external stimulus ${current ? "enabled" : "disabled"} -> ${next ? "enabled" : "disabled"}`
+        };
+      }
+    }
   ]
 };
+
+const neuralInterventionMaxActivation = 8;
+
+function neuralDecisionAssemblyStimulusDefinitions(): InterventionDefinition[] {
+  return [
+    neuralDecisionAssemblyStimulusDefinition("rock", "Rock"),
+    neuralDecisionAssemblyStimulusDefinition("paper", "Paper"),
+    neuralDecisionAssemblyStimulusDefinition("scissors", "Scissors")
+  ];
+}
+
+function neuralDecisionAssemblyStimulusDefinition(choice: NeuralDecisionChoice, label: string): InterventionDefinition {
+  return {
+    id: `neural.stimulate${label}Assembly`,
+    templateId: "neural-excitation-network",
+    label: `Stimulate ${label} Output Assembly`,
+    description: `Apply a bounded excitatory pulse to the ${label} output assembly used by Decision Readout V1.`,
+    targetType: "none",
+    supportedTemplates: ["neural-excitation-network"],
+    capabilityRequirements: ["supportsInterventions"],
+    mutates: ["agents"],
+    eventType: "intervention.applied",
+    parameterDefinitions: [neuralStimulusStrengthParam],
+    documentation:
+      "Applies to a bounded designer-labeled output assembly. Rock-Paper-Scissors labels are assigned labels only; the network does not understand them and payoff does not train or adapt the network.",
+    build(ctx) {
+      const strength = positiveFinite(ctx.params.strength, "strength");
+      const targets = neuralDecisionAssemblyTargets(ctx.world, choice);
+      const values = Object.fromEntries(targets.map(([entityId, state]) => [entityId, stimulateNeuralState(state, strength)]));
+      return {
+        commands: [{ type: "setComponents", componentType: NeuralNeuronStateComponent, values }],
+        targetSummary: `${targets.length} neurons in ${label} output assembly`
+      };
+    }
+  };
+}
+
+function requireNeuralNeuron(world: WorldView, entityId: string): NeuralNeuronState {
+  const state = world.getComponent<NeuralNeuronState>(entityId, NeuralNeuronStateComponent);
+  if (!isNeuralNeuronState(state)) {
+    throw new SimulationValidationError("Selected entity is not a Neural Excitation neuron");
+  }
+  return state;
+}
+
+function neuralClusterTargets(world: WorldView, groupId: string): Array<[string, NeuralNeuronState]> {
+  return world
+    .entitiesWith([NeuralNeuronStateComponent])
+    .map((entityId): [string, NeuralNeuronState] | undefined => {
+      const state = world.getComponent<NeuralNeuronState>(entityId, NeuralNeuronStateComponent);
+      return isNeuralNeuronState(state) && state.groupId === groupId ? [entityId, state] : undefined;
+    })
+    .filter((entry): entry is [string, NeuralNeuronState] => entry !== undefined);
+}
+
+function neuralDecisionAssemblyTargets(world: WorldView, choice: NeuralDecisionChoice): Array<[string, NeuralNeuronState]> {
+  const readout = readNeuralDecisionReadout(world.globals);
+  if (!readout.enabled) {
+    throw new SimulationValidationError("Enable Neural Decision Readout before stimulating an output assembly");
+  }
+  const assembly = readout.choices.find((candidate) => candidate.choice === choice);
+  if (!assembly || assembly.neuronIds.length === 0) {
+    throw new SimulationValidationError(`Neural Decision Readout has no ${choice} output assembly`);
+  }
+  return assembly.neuronIds
+    .slice()
+    .sort((left, right) => left.localeCompare(right))
+    .map((entityId): [string, NeuralNeuronState] => [entityId, requireNeuralNeuron(world, entityId)]);
+}
+
+function stimulateNeuralState(state: NeuralNeuronState, strength: number): NeuralNeuronState {
+  const activation = clamp(state.activation + strength, 0, neuralInterventionMaxActivation);
+  return {
+    ...state,
+    state: state.refractoryRemaining > 0 ? "refractory" : "charging",
+    activation,
+    incomingExcitatory: clamp(state.incomingExcitatory + strength, 0, 100),
+    incomingInhibitory: state.incomingInhibitory
+  };
+}
+
+function inhibitNeuralState(state: NeuralNeuronState, strength: number): NeuralNeuronState {
+  return {
+    ...state,
+    state: state.refractoryRemaining > 0 ? "refractory" : "inhibited",
+    activation: clamp(state.activation - strength, 0, neuralInterventionMaxActivation),
+    incomingExcitatory: state.incomingExcitatory,
+    incomingInhibitory: clamp(state.incomingInhibitory + strength, 0, 100)
+  };
+}
+
+function isNeuralNeuronState(value: unknown): value is NeuralNeuronState {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    return false;
+  }
+  const state = value as NeuralNeuronState;
+  return (
+    typeof state.groupId === "string" &&
+    (state.state === "resting" ||
+      state.state === "charging" ||
+      state.state === "firing" ||
+      state.state === "refractory" ||
+      state.state === "inhibited") &&
+    typeof state.activation === "number" &&
+    Number.isFinite(state.activation) &&
+    typeof state.threshold === "number" &&
+    Number.isFinite(state.threshold) &&
+    typeof state.incomingExcitatory === "number" &&
+    Number.isFinite(state.incomingExcitatory) &&
+    typeof state.incomingInhibitory === "number" &&
+    Number.isFinite(state.incomingInhibitory) &&
+    Number.isInteger(state.refractoryRemaining) &&
+    typeof state.baselineExcitability === "number" &&
+    Number.isFinite(state.baselineExcitability) &&
+    Number.isInteger(state.lastFiredTick)
+  );
+}
+
+function finiteGlobalNumber(globals: Record<string, JsonValue>, key: string, fallback: number): number {
+  const value = globals[key];
+  return typeof value === "number" && Number.isFinite(value) ? value : fallback;
+}
 
 function infectEntities(
   ctx: InterventionBuildContext,
