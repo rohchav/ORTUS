@@ -155,7 +155,10 @@ const nonPredictiveNote = "These models are exploratory simulations, not calibra
 const decisionReadoutBoundary =
   "Decision Readout V1 maps labeled output assemblies to bounded categorical choices. It is not cognition or reasoning.";
 const rpsLabelBoundary = "Rock-Paper-Scissors labels are semantic labels assigned by the model designer, not meanings understood by the network.";
-const rpsPayoffBoundary = "RPS payoff is observational in V1 and does not train, adapt, or optimize the network.";
+const rpsPayoffBoundary =
+  "Template RPS payoff is observational and does not train, optimize, mutate synapses, or update biological/plasticity fields.";
+const neuralStrategyAdaptationBoundary =
+  "Neural Strategy Adaptation V1 is local to the Neural Runtime Lab RPS/readout mode and adjusts bounded readout bias only.";
 const decisionInferenceBoundary = "The model does not infer intentions, beliefs, preferences, personality, or human decision-making.";
 const neuralDecisionChoices = ["rock", "paper", "scissors"] as const satisfies readonly NeuralDecisionChoice[];
 
@@ -427,7 +430,7 @@ const parameterDefinitions: ParameterDefinition[] = [
     min: 0,
     max: 1,
     step: 0.05,
-    description: "Optional equal initialization bias for labeled output assemblies; it does not train or adapt the network.",
+    description: "Optional equal initialization bias for labeled output assemblies; it does not train or mutate the network.",
     liveUpdate: false
   },
   {
@@ -620,7 +623,7 @@ const initializationPresets: InitializationPresetDefinition[] = [
     id: "rock-paper-scissors-readout",
     label: "Rock-Paper-Scissors Readout",
     description:
-      "Enables three labeled output assemblies and observational RPS payoff. This demonstrates bounded readout only, not cognition or strategy.",
+      "Enables three labeled output assemblies and observational RPS payoff. This demonstrates bounded readout only, not cognition or biological learning.",
     parameterOverrides: {
       neuronCount: 60,
       networkTopology: "clustered",
@@ -656,6 +659,7 @@ const behaviorModes = [
       "No learning or plasticity is implemented in V1.",
       decisionReadoutBoundary,
       rpsPayoffBoundary,
+      neuralStrategyAdaptationBoundary,
       "This runtime graph belongs only to the Neural Excitation Network template and does not make Builder graphs executable."
     ],
     metricNotes:
@@ -707,6 +711,7 @@ const documentation: ModelDocumentation = {
     "The Neural Decision Readout maps activity in labeled output assemblies to a bounded categorical choice. It does not reason, understand, learn, or model cognition.",
     rpsLabelBoundary,
     rpsPayoffBoundary,
+    neuralStrategyAdaptationBoundary,
     decisionInferenceBoundary,
     "Outputs are model behavior, not neuroscience evidence.",
     "Synapses are template-owned runtime relations in this one hand-built model."
@@ -717,9 +722,10 @@ const documentation: ModelDocumentation = {
     decisionReadoutBoundary,
     rpsLabelBoundary,
     rpsPayoffBoundary,
+    neuralStrategyAdaptationBoundary,
     decisionInferenceBoundary,
     "Decision metrics are model-output readouts from labeled neuron groups, not evidence of reasoning.",
-    "RPS payoff is observational and does not train or adapt the network in V1.",
+    "RPS payoff is observational and does not train, mutate synapses, or adapt the core neural graph in V1.",
     "The model does not import real connectomes, brain-region anatomy, clinical data, or external neuroscience data.",
     "The model is not a cognitive model and does not simulate consciousness, memory formation, emotion, personality, diagnosis, or human behavior.",
     "Metrics are model-output history, not empirical neural recordings.",
@@ -737,11 +743,12 @@ const documentation: ModelDocumentation = {
     "neurotransmitters",
     "cell morphology",
     "brain regions",
-    "learning or plasticity",
+    "biological learning or plasticity",
     "STDP",
     "backpropagation",
     "machine-learning training",
-    "RPS strategy learning",
+    "RPS strategy learning inside the core neural graph",
+    "persistent opponent profiles",
     "semantic understanding of Rock-Paper-Scissors labels",
     "human decision-making inference",
     "intent, belief, preference, or personality inference",
@@ -776,6 +783,7 @@ const assumptionProfile = createTemplateAssumptionProfile({
     decisionReadoutBoundary,
     rpsLabelBoundary,
     rpsPayoffBoundary,
+    neuralStrategyAdaptationBoundary,
     decisionInferenceBoundary,
     "This runtime graph is template-owned and must not be generalized into Builder graph execution or model-schema execution."
   ],
@@ -1365,7 +1373,7 @@ function neuralExcitationMetrics(): MetricDefinition[] {
     numberGlobalMetric(
       "rpsPayoff",
       "Observational RPS payoff",
-      "RPS payoff is observational and does not train or adapt the network in V1.",
+      "RPS payoff is observational and does not train, mutate synapses, or adapt the core neural graph in V1.",
       "neuralRpsPayoff",
       { min: -1, max: 1 },
       "decimal"

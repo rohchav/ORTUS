@@ -275,11 +275,21 @@
 - Do not call Neural Decision Readout cognition or reasoning.
 - Decision Readout V1 maps labeled output assemblies to bounded categorical choices. It is not cognition or reasoning.
 - Rock-Paper-Scissors labels are semantic labels assigned by the model designer, not meanings understood by the network.
-- RPS payoff is observational in V1 and does not train, adapt, or optimize the network.
+- Template RPS payoff is observational and does not train, optimize, mutate synapses, or update biological/plasticity fields.
 - The model does not infer intentions, beliefs, preferences, personality, or human decision-making.
 - Keep output labels assigned by the model designer.
 - Keep decision metrics labeled as readouts, not beliefs or intentions.
-- Do not add learning, plasticity, or adaptation from RPS payoff without a dedicated future prompt.
+- Neural Strategy Adaptation V1 is allowed only as local Neural Runtime Lab RPS/readout game-state adaptation.
+- Do not describe Neural Strategy Adaptation as cognition, reasoning, understanding, mind reading, human learning, or biological plasticity.
+- Do not infer beliefs, intentions, preferences, personality, human decision-making, psychological traits, or real-person profiles from Neural Strategy Adaptation.
+- Learned strategy state must remain local, bounded, resettable, and non-persistent unless a future prompt explicitly scopes user-controlled persistence.
+- Keep adaptation scoped to Neural RPS/readout mode; do not generalize it into generic adaptive agents, social-learning runtime, strategy/control runtime, Builder graph execution, Model Schema execution, or compatibility conversion.
+- Do not update core neural synapse weights from RPS payoff in V1.
+- Do not add biological plasticity, STDP, backpropagation, deep learning, or reinforcement-learning claims without a dedicated future prompt and audit.
+- Do not claim the adaptive readout can beat truly random optimal play over time.
+- Keep reset learned strategy and clear round history controls visible.
+- Reset learned strategy must not rehydrate old bounded RPS history or suppress new rounds after history truncation.
+- Keep Neural Strategy Adaptation explanations non-anthropomorphic.
 - Keep Neural runtime graph scoped only to the Neural template.
 - Keep Neural Runtime Lab scenario-first but scientifically honest.
 - Do not add learning/adaptation in NUX1.
@@ -294,7 +304,7 @@
 - Neural Runtime Lab explanations must be metric/snapshot-derived and non-anthropomorphic.
 - Neural Runtime Lab must not make Builder graphs executable or Model Schemas runnable.
 - Do not claim rendered responsive, browser zoom, screen-reader, assistive-technology, or WCAG readiness for Neural Runtime Lab without direct verification.
-- Production build must pass before committing NUX1/NUX1B.
+- Production build must pass before committing Neural Runtime Lab prompt work.
 - Do not make Builder graphs executable.
 - Do not make model schemas runnable.
 - Do not describe the Forest Fire / Landscape Spread template as wildfire prediction, GIS/weather/wind/humidity/terrain/suppression/firefighting modeling, calibrated fire behavior, generic control strategy support, SpatialFieldModel runtime support, or BoundaryEnvironmentModel runtime support.

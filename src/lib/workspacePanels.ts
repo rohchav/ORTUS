@@ -27,7 +27,7 @@ export const workspacePanelDefinitions: readonly WorkspacePanelDefinition[] = [
     id: "neuralLab",
     label: "Neural Runtime Lab",
     eyebrow: "Scenario Guided",
-    description: "Scenario-first Neural Excitation workbench with bounded explanations, direct actions, and non-adaptive RPS readout shell.",
+    description: "Scenario-first Neural Excitation workbench with bounded explanations, direct actions, and local Adaptive RPS Challenge.",
     defaultPlacement: "modePanel",
     supportedPlacements: ["modePanel"],
     defaultSize: "compact",

@@ -8,32 +8,46 @@ import { useSimulationStore } from "../state/simulationStore";
 import {
   boundNeuralRpsRounds,
   boundNeuralTimelineEvents,
+  chooseNeuralAdaptiveCue,
+  clearNeuralRpsHistory,
+  createInitialNeuralStrategyAdaptationState,
   createNeuralLabMission,
   createNeuralLiveExplanations,
   createNeuralRpsRound,
+  createNeuralStrategyAdaptationConfig,
   deriveNeuralRuntimeEvents,
+  defaultNeuralStrategyAdaptationConfig,
   neuralDirectActions,
   neuralLabScenarioCards,
   neuralPlainEnglishControls,
   neuralRuntimeLabBoundaryCopy,
   neuralRuntimeLabTemplateId,
   neuralRpsDistribution,
+  neuralRpsChoices,
+  neuralStrategyAdaptationConfigBounds,
+  neuralStrategyAdaptationMetricsBoundary,
+  neuralStrategyAdaptationPlainControls,
+  neuralStrategyRandomPlayBoundary,
+  nextNeuralRpsRoundIndex,
+  resetNeuralStrategyAdaptation,
+  roundsAfterNeuralStrategyReset,
   titleCase,
+  updateNeuralStrategyAdaptation,
   type NeuralDirectAction,
   type NeuralLabScenarioCard,
   type NeuralRpsRound,
+  type NeuralRpsChoice,
+  type NeuralStrategyAdaptationConfig,
+  type NeuralStrategyAdaptationState,
   type NeuralTimelineEvent
 } from "./neuralRuntimeLab";
 import { CornerFramePanel } from "./ui/CornerFramePanel";
-
-type RpsChoice = "rock" | "paper" | "scissors";
-
-const rpsChoices: readonly RpsChoice[] = ["rock", "paper", "scissors"];
 
 export function NeuralRuntimeLabPanel() {
   const selectedTemplateId = useSimulationStore((state) => state.selectedTemplateId);
   const latestSnapshot = useSimulationStore((state) => state.latestSnapshot);
   const isRunning = useSimulationStore((state) => state.isRunning);
+  const seed = useSimulationStore((state) => state.seed);
   const selectedEntityId = useSimulationStore((state) => state.selectedEntityId);
   const applyIntervention = useSimulationStore((state) => state.applyIntervention);
   const setParameters = useSimulationStore((state) => state.setParameters);
@@ -44,9 +58,22 @@ export function NeuralRuntimeLabPanel() {
   const [activeScenarioId, setActiveScenarioId] = useState<NeuralLabScenarioCard["id"]>("cascade-spread");
   const [events, setEvents] = useState<NeuralTimelineEvent[]>([]);
   const [rpsRounds, setRpsRounds] = useState<NeuralRpsRound[]>([]);
+  const [adaptationConfig, setAdaptationConfig] = useState<NeuralStrategyAdaptationConfig>(defaultNeuralStrategyAdaptationConfig);
+  const [adaptationState, setAdaptationState] = useState<NeuralStrategyAdaptationState>(() =>
+    createInitialNeuralStrategyAdaptationState(defaultNeuralStrategyAdaptationConfig)
+  );
+  const [challengeRunning, setChallengeRunning] = useState(false);
+  const [adaptationDetailsOpen, setAdaptationDetailsOpen] = useState(false);
   const previousSnapshotRef = useRef<SimulationSnapshotView | null>(null);
   const previousRunningRef = useRef(isRunning);
-  const pendingRpsChoiceRef = useRef<RpsChoice | null>(null);
+  const pendingRpsChoiceRef = useRef<{
+    userChoice: NeuralRpsChoice;
+    roundIndex: number;
+    explorationActive: boolean;
+  } | null>(null);
+  const adaptationStateRef = useRef(adaptationState);
+  const rpsRoundsRef = useRef(rpsRounds);
+  const strategyResetAfterRoundRef = useRef(0);
 
   const isNeural = selectedTemplateId === neuralRuntimeLabTemplateId;
   const activeScenario = useMemo(
@@ -54,9 +81,17 @@ export function NeuralRuntimeLabPanel() {
     [activeScenarioId]
   );
   const readout = renderNeuralDecisionReadout(latestSnapshot);
-  const mission = createNeuralLabMission(latestSnapshot, activeScenario);
-  const explanations = createNeuralLiveExplanations(latestSnapshot);
+  const mission = createNeuralLabMission(latestSnapshot, activeScenario, adaptationState);
+  const explanations = createNeuralLiveExplanations(latestSnapshot, adaptationState);
   const showRpsShell = activeScenario.id === "rps-readout-demo" || activeScenario.id === "stay-unpredictable" || Boolean(readout?.enabled);
+
+  useEffect(() => {
+    adaptationStateRef.current = adaptationState;
+  }, [adaptationState]);
+
+  useEffect(() => {
+    rpsRoundsRef.current = rpsRounds;
+  }, [rpsRounds]);
 
   useEffect(() => {
     if (!isNeural) {
@@ -93,7 +128,7 @@ export function NeuralRuntimeLabPanel() {
     if (!pending) {
       return;
     }
-    const round = createNeuralRpsRound(latestSnapshot, pending);
+    const round = createNeuralRpsRound(latestSnapshot, pending.userChoice, pending.roundIndex, pending.explorationActive);
     if (!round) {
       return;
     }
@@ -102,9 +137,13 @@ export function NeuralRuntimeLabPanel() {
       if (current.some((candidate) => candidate.id === round.id)) {
         return current;
       }
-      return boundNeuralRpsRounds([...current, round]);
+      const nextRounds = boundNeuralRpsRounds([...current, round], adaptationConfig.historyWindow);
+      const nextAdaptation = updateNeuralStrategyAdaptation(roundsSinceStrategyReset(nextRounds), adaptationConfig);
+      setAdaptationState(nextAdaptation);
+      appendAdaptationEvents(adaptationStateRef.current, nextAdaptation, round);
+      return nextRounds;
     });
-  }, [isNeural, latestSnapshot]);
+  }, [adaptationConfig, isNeural, latestSnapshot]);
 
   if (!isNeural) {
     return null;
@@ -112,6 +151,53 @@ export function NeuralRuntimeLabPanel() {
 
   function appendEvent(event: NeuralTimelineEvent): void {
     setEvents((current) => mergeTimelineEvents(current, [event]));
+  }
+
+  function appendAdaptationEvents(
+    previous: NeuralStrategyAdaptationState,
+    next: NeuralStrategyAdaptationState,
+    round: NeuralRpsRound
+  ): void {
+    const additions: NeuralTimelineEvent[] = [
+      {
+        id: `adaptation-round-${round.roundIndex}-${Date.now()}`,
+        tick: round.tick,
+        kind: "adaptation",
+        label: "Round recorded",
+        detail: `Player ${titleCase(round.userChoice)}; readout ${titleCase(round.networkChoice)}; ${titleCase(round.outcome)}.`
+      }
+    ];
+    if (round.explorationActive) {
+      additions.push({
+        id: `adaptation-exploration-${round.roundIndex}-${Date.now()}`,
+        tick: round.tick,
+        kind: "adaptation",
+        label: "Exploration used",
+        detail: "Deterministic exploration ignored the strongest counter-bias for this round."
+      });
+    }
+    if (previous.predictedOpponentChoice !== next.predictedOpponentChoice) {
+      additions.push({
+        id: `adaptation-prediction-${round.roundIndex}-${Date.now()}`,
+        tick: round.tick,
+        kind: "adaptation",
+        label: "Predicted move changed",
+        detail:
+          next.predictedOpponentChoice === "unknown"
+            ? "No stable pattern detected."
+            : `Recent rounds suggest ${titleCase(next.predictedOpponentChoice)} is more likely.`
+      });
+    }
+    if (formatPanelBias(previous.choiceBias) !== formatPanelBias(next.choiceBias)) {
+      additions.push({
+        id: `adaptation-bias-${round.roundIndex}-${Date.now()}`,
+        tick: round.tick,
+        kind: "adaptation",
+        label: "Readout bias updated",
+        detail: `Bounded bias is now ${formatPanelBias(next.choiceBias)}.`
+      });
+    }
+    setEvents((current) => mergeTimelineEvents(current, additions));
   }
 
   function selectScenario(scenario: NeuralLabScenarioCard): void {
@@ -132,7 +218,7 @@ export function NeuralRuntimeLabPanel() {
       tick: 0,
       kind: "network",
       label: "Network regenerated",
-      detail: `${scenario.title} setup applied through validated parameters. Training and adaptation are not active.`
+      detail: `${scenario.title} setup applied through validated parameters. Local learned strategy state is not cleared; use Reset learned strategy to clear it.`
     });
   }
 
@@ -143,7 +229,7 @@ export function NeuralRuntimeLabPanel() {
       tick: 0,
       kind: "network",
       label: "Network regenerated",
-      detail: `${label} applied through deterministic parameter mapping.`
+      detail: `${label} applied through deterministic parameter mapping. Local learned strategy state is not cleared unless Reset learned strategy is used.`
     });
   }
 
@@ -155,7 +241,7 @@ export function NeuralRuntimeLabPanel() {
         tick: 0,
         kind: "network",
         label: "Activity reset",
-        detail: "Fresh tick-0 run rebuilt with the same seed and parameters."
+        detail: "Fresh tick-0 run rebuilt with the same seed and parameters. Local learned strategy state is not cleared unless Reset learned strategy is used."
       });
       return;
     }
@@ -166,7 +252,7 @@ export function NeuralRuntimeLabPanel() {
         tick: 0,
         kind: "network",
         label: "Network regenerated",
-        detail: "New seed requested for a fresh validated Neural network."
+        detail: "New seed requested for a fresh validated Neural network. Local learned strategy state is not cleared unless Reset learned strategy is used."
       });
       return;
     }
@@ -194,18 +280,125 @@ export function NeuralRuntimeLabPanel() {
     });
   }
 
-  function cueRpsRound(choice: RpsChoice): void {
-    const interventionId = `neural.stimulate${titleCase(choice)}Assembly`;
-    pendingRpsChoiceRef.current = choice;
-    applyIntervention(interventionId, { strength: 2 });
+  function cueRpsRound(choice: NeuralRpsChoice): void {
+    const nextRoundIndex = nextNeuralRpsRoundIndex(rpsRoundsRef.current);
+    const cuePlan = chooseNeuralAdaptiveCue(choice, adaptationStateRef.current, adaptationConfig, seed, nextRoundIndex);
+    const interventionId = `neural.stimulate${titleCase(cuePlan.cueChoice)}Assembly`;
+    pendingRpsChoiceRef.current = {
+      userChoice: choice,
+      roundIndex: nextRoundIndex,
+      explorationActive: cuePlan.explorationActive
+    };
+    applyIntervention(interventionId, { strength: cuePlan.strength });
     stepOnce();
     appendEvent({
-      id: `rps-cue-${choice}-${Date.now()}`,
+      id: `rps-cue-${choice}-${nextRoundIndex}-${Date.now()}`,
       tick: latestSnapshot?.tick ?? 0,
       kind: "rps",
-      label: `RPS cue ${titleCase(choice)}`,
-      detail: "Stimulated a designer-labeled output assembly and stepped one tick for observational payoff."
+      label: `RPS round ${nextRoundIndex}`,
+      detail: `Player choice ${titleCase(choice)}; network cue ${titleCase(cuePlan.cueChoice)}. ${cuePlan.reason}`
     });
+  }
+
+  function startChallenge(): void {
+    setChallengeRunning(true);
+    appendEvent({
+      id: `adaptive-challenge-started-${Date.now()}`,
+      tick: latestSnapshot?.tick ?? 0,
+      kind: "adaptation",
+      label: "Adaptive challenge started",
+      detail: "Local RPS challenge is active. It resumes the visible local learned strategy state; use Reset learned strategy to clear it."
+    });
+  }
+
+  function pauseChallenge(): void {
+    setChallengeRunning(false);
+    appendEvent({
+      id: `adaptive-challenge-paused-${Date.now()}`,
+      tick: latestSnapshot?.tick ?? 0,
+      kind: "adaptation",
+      label: "Adaptive challenge paused",
+      detail: "Local challenge paused; neural run state is not reset."
+    });
+  }
+
+  function toggleAdaptation(enabled: boolean): void {
+    const nextConfig = createNeuralStrategyAdaptationConfig({ enabled }, adaptationConfig);
+    setAdaptationConfig(nextConfig);
+    const nextState = updateNeuralStrategyAdaptation(roundsSinceStrategyReset(rpsRoundsRef.current), nextConfig);
+    setAdaptationState(nextState);
+    appendEvent({
+      id: `adaptation-${enabled ? "enabled" : "disabled"}-${Date.now()}`,
+      tick: latestSnapshot?.tick ?? 0,
+      kind: "adaptation",
+      label: enabled ? "Adaptation enabled" : "Adaptation disabled",
+      detail: enabled
+        ? "Future rounds may shift bounded readout bias from explicit local RPS history."
+        : "Future rounds are recorded observationally; learned readout bias is not applied."
+    });
+  }
+
+  function applyAdaptationConfigPatch(label: string, patch: Partial<NeuralStrategyAdaptationConfig>): void {
+    const nextConfig = createNeuralStrategyAdaptationConfig(patch, adaptationConfig);
+    setAdaptationConfig(nextConfig);
+    const nextState = updateNeuralStrategyAdaptation(roundsSinceStrategyReset(rpsRoundsRef.current), nextConfig);
+    setAdaptationState(nextState);
+    appendEvent({
+      id: `adaptation-config-${label}-${Date.now()}`,
+      tick: latestSnapshot?.tick ?? 0,
+      kind: "adaptation",
+      label: "Adaptation config changed",
+      detail: `${label} updated bounded local strategy parameters.`
+    });
+  }
+
+  function setAdaptationConfigValue(key: NumericAdaptationConfigKey, value: number): void {
+    if (!Number.isFinite(value)) {
+      return;
+    }
+    const bounds = neuralStrategyAdaptationConfigBounds[key];
+    const boundedValue = Math.min(bounds.max, Math.max(bounds.min, value));
+    const nextValue = key === "historyWindow" || key === "patternWindow" ? Math.round(boundedValue) : boundedValue;
+    const patch = { [key]: nextValue } as Partial<NeuralStrategyAdaptationConfig>;
+    if (key === "historyWindow" && typeof nextValue === "number" && nextValue < adaptationConfig.patternWindow) {
+      patch.patternWindow = nextValue;
+    }
+    if (key === "patternWindow" && typeof nextValue === "number" && nextValue > adaptationConfig.historyWindow) {
+      patch.historyWindow = nextValue;
+    }
+    applyAdaptationConfigPatch(key, patch);
+  }
+
+  function resetLearnedStrategy(): void {
+    strategyResetAfterRoundRef.current = nextNeuralRpsRoundIndex(rpsRoundsRef.current) - 1;
+    const nextState = resetNeuralStrategyAdaptation(adaptationConfig);
+    setAdaptationState(nextState);
+    appendEvent({
+      id: `adaptation-reset-${Date.now()}`,
+      tick: latestSnapshot?.tick ?? 0,
+      kind: "adaptation",
+      label: "Learned strategy reset",
+      detail: "Choice bias, pattern statistics, transition counts, confidence, and local prediction state were cleared."
+    });
+  }
+
+  function clearRpsHistory(): void {
+    const emptyRounds = clearNeuralRpsHistory();
+    strategyResetAfterRoundRef.current = 0;
+    setRpsRounds(emptyRounds);
+    const nextState = resetNeuralStrategyAdaptation(adaptationConfig);
+    setAdaptationState(nextState);
+    appendEvent({
+      id: `rps-history-cleared-${Date.now()}`,
+      tick: latestSnapshot?.tick ?? 0,
+      kind: "adaptation",
+      label: "Local history cleared",
+      detail: "RPS round history, rolling stats, and derived learned strategy state were cleared."
+    });
+  }
+
+  function roundsSinceStrategyReset(rounds: readonly NeuralRpsRound[]): readonly NeuralRpsRound[] {
+    return roundsAfterNeuralStrategyReset(rounds, strategyResetAfterRoundRef.current);
   }
 
   return (
@@ -354,7 +547,24 @@ export function NeuralRuntimeLabPanel() {
         </section>
 
         {showRpsShell ? (
-          <RpsChallengeShell readout={readout} rounds={rpsRounds} onCue={cueRpsRound} enabled={Boolean(readout?.enabled)} />
+          <RpsChallengeShell
+            readout={readout}
+            rounds={rpsRounds}
+            enabled={Boolean(readout?.enabled)}
+            challengeRunning={challengeRunning}
+            adaptationConfig={adaptationConfig}
+            adaptationState={adaptationState}
+            detailsOpen={adaptationDetailsOpen}
+            onCue={cueRpsRound}
+            onStart={startChallenge}
+            onPause={pauseChallenge}
+            onToggleAdaptation={toggleAdaptation}
+            onDetailsToggle={() => setAdaptationDetailsOpen((current) => !current)}
+            onResetStrategy={resetLearnedStrategy}
+            onClearHistory={clearRpsHistory}
+            onConfigPatch={applyAdaptationConfigPatch}
+            onConfigValueChange={setAdaptationConfigValue}
+          />
         ) : null}
 
         <section className="neural-lab__section" aria-label="Neural lab timeline">
@@ -386,7 +596,7 @@ export function NeuralRuntimeLabPanel() {
           {neuralRuntimeLabBoundaryCopy.slice(4).map((copy) => (
             <p key={copy}>{copy}</p>
           ))}
-          <p>Training and adaptation are deferred to Neural Strategy Adaptation V1.</p>
+          <p>{neuralStrategyRandomPlayBoundary}</p>
         </div>
       </section>
     </CornerFramePanel>
@@ -397,56 +607,168 @@ function RpsChallengeShell({
   readout,
   rounds,
   enabled,
-  onCue
+  challengeRunning,
+  adaptationConfig,
+  adaptationState,
+  detailsOpen,
+  onCue,
+  onStart,
+  onPause,
+  onToggleAdaptation,
+  onDetailsToggle,
+  onResetStrategy,
+  onClearHistory,
+  onConfigPatch,
+  onConfigValueChange
 }: {
   readout: ReturnType<typeof renderNeuralDecisionReadout>;
   rounds: readonly NeuralRpsRound[];
   enabled: boolean;
-  onCue: (choice: RpsChoice) => void;
+  challengeRunning: boolean;
+  adaptationConfig: NeuralStrategyAdaptationConfig;
+  adaptationState: NeuralStrategyAdaptationState;
+  detailsOpen: boolean;
+  onCue: (choice: NeuralRpsChoice) => void;
+  onStart: () => void;
+  onPause: () => void;
+  onToggleAdaptation: (enabled: boolean) => void;
+  onDetailsToggle: () => void;
+  onResetStrategy: () => void;
+  onClearHistory: () => void;
+  onConfigPatch: (label: string, patch: Partial<NeuralStrategyAdaptationConfig>) => void;
+  onConfigValueChange: (key: NumericAdaptationConfigKey, value: number) => void;
 }) {
   const distribution = neuralRpsDistribution(rounds);
   const latestRound = rounds[rounds.length - 1];
+  const disabledReason = !enabled
+    ? "Enable Decision Readout V1 with the RPS scenario or plain-English control first."
+    : !challengeRunning
+      ? "Start adaptive challenge before recording rounds."
+      : null;
 
   return (
-    <section className="neural-lab__section neural-lab-rps" aria-label="Challenge shell: Stay unpredictable">
+    <section className="neural-lab__section neural-lab-rps" aria-label="Adaptive RPS Challenge">
       <div className="neural-lab__section-head">
-        <span>Challenge shell</span>
-        <strong>Stay unpredictable</strong>
+        <span>Adaptive RPS Challenge</span>
+        <strong>{adaptationState.enabled ? "Adaptive mode" : "Observational mode"}</strong>
       </div>
-      <p>
-        No adaptation is active. RPS payoff is recorded but does not change weights, biases, or future choices.
-      </p>
+      <p>Strategy Adaptation V1 updates bounded game-state variables from observed RPS rounds. It is not cognition, reasoning, or human intention inference.</p>
+      <p>The adaptive readout can exploit repeated patterns, but it cannot beat truly random optimal play over time.</p>
+      <p>Learned strategy state is local model state, not a psychological profile.</p>
+      <p>Adaptation changes game-readout bias only; it does not simulate biological plasticity or human learning.</p>
       <p>Rock-Paper-Scissors labels are assigned to output assemblies by the model designer; the network does not understand the labels.</p>
+      <div className="neural-lab-rps__toolbar" aria-label="Adaptive challenge controls">
+        <button type="button" onClick={onStart} disabled={!enabled || challengeRunning} suppressHydrationWarning>
+          Start adaptive challenge
+        </button>
+        <button type="button" onClick={onPause} disabled={!enabled || !challengeRunning} suppressHydrationWarning>
+          Pause challenge
+        </button>
+        <label className="neural-lab-rps__toggle">
+          <input
+            type="checkbox"
+            checked={adaptationConfig.enabled}
+            onChange={(event) => onToggleAdaptation(event.currentTarget.checked)}
+            aria-label="Enable adaptation"
+          />
+          <span>Enable adaptation</span>
+        </label>
+        <button type="button" onClick={onResetStrategy} aria-label="Reset learned strategy" suppressHydrationWarning>
+          Reset learned strategy
+        </button>
+        <button type="button" onClick={onClearHistory} aria-label="Clear local RPS history" suppressHydrationWarning>
+          Clear round history
+        </button>
+        <button
+          type="button"
+          onClick={onDetailsToggle}
+          aria-expanded={detailsOpen}
+          aria-controls="neural-adaptation-details"
+          suppressHydrationWarning
+        >
+          {detailsOpen ? "Hide adaptation details" : "Show adaptation details"}
+        </button>
+      </div>
       <div className="neural-lab-rps__buttons">
-        {rpsChoices.map((choice) => (
-          <button key={choice} type="button" onClick={() => onCue(choice)} disabled={!enabled} suppressHydrationWarning>
-            Cue {titleCase(choice)} + step
+        {neuralRpsChoices.map((choice) => (
+          <button
+            key={choice}
+            type="button"
+            onClick={() => onCue(choice)}
+            disabled={Boolean(disabledReason)}
+            aria-describedby={disabledReason ? "neural-rps-disabled-reason" : undefined}
+            suppressHydrationWarning
+          >
+            Choose {titleCase(choice)}
           </button>
         ))}
       </div>
-      {!enabled ? <p className="neural-lab__microcopy">Enable Decision Readout V1 with the RPS scenario or plain-English control first.</p> : null}
+      {disabledReason ? (
+        <p className="neural-lab__microcopy" id="neural-rps-disabled-reason">
+          {disabledReason}
+        </p>
+      ) : null}
       <dl className="neural-lab-status neural-lab-status--rps">
         <div>
-          <dt>User cue</dt>
-          <dd>{latestRound ? titleCase(latestRound.userChoice) : "None yet"}</dd>
+          <dt>Active mode</dt>
+          <dd>{adaptationState.enabled ? "Adaptive" : "Observational"}</dd>
         </div>
         <div>
-          <dt>Opponent choice</dt>
-          <dd>{readout?.rps ? titleCase(readout.rps.opponentChoice) : "None"}</dd>
+          <dt>Round count</dt>
+          <dd>{rounds.length}</dd>
+        </div>
+        <div>
+          <dt>Your last choice</dt>
+          <dd>{latestRound ? titleCase(latestRound.userChoice) : "None yet"}</dd>
         </div>
         <div>
           <dt>Network readout</dt>
           <dd>{readout?.enabled ? titleCase(readout.selected) : "Disabled"}</dd>
         </div>
         <div>
-          <dt>Outcome</dt>
-          <dd>{readout?.rps ? `${titleCase(readout.rps.outcome)} / ${formatNumber(readout.rps.payoff, 0)}` : "None / 0"}</dd>
+          <dt>Latest outcome</dt>
+          <dd>
+            {latestRound
+              ? `${titleCase(latestRound.outcome)} / ${formatNumber(latestRound.payoff, 0)}`
+              : readout?.rps
+                ? `${titleCase(readout.rps.outcome)} / ${formatNumber(readout.rps.payoff, 0)}`
+                : "None / 0"}
+          </dd>
         </div>
         <div>
-          <dt>Confidence</dt>
-          <dd>{readout?.enabled ? formatNumber(readout.confidence, 3) : "0"}</dd>
+          <dt>Rolling win/draw/loss</dt>
+          <dd>
+            {formatPercent(adaptationState.rollingWinRate)} / {formatPercent(adaptationState.rollingDrawRate)} /{" "}
+            {formatPercent(adaptationState.rollingLossRate)}
+          </dd>
+        </div>
+        <div>
+          <dt>Predicted player move</dt>
+          <dd>{adaptationState.predictedOpponentChoice === "unknown" ? "No stable pattern detected." : titleCase(adaptationState.predictedOpponentChoice)}</dd>
+        </div>
+        <div>
+          <dt>Predicted counter-choice</dt>
+          <dd>{adaptationState.predictedCounterChoice === "unknown" ? "Unknown" : titleCase(adaptationState.predictedCounterChoice)}</dd>
+        </div>
+        <div>
+          <dt>Pattern confidence</dt>
+          <dd>{formatNumber(adaptationState.patternConfidence, 3)}</dd>
+        </div>
+        <div>
+          <dt>Exploration rate</dt>
+          <dd>{formatPercent(adaptationState.explorationRate)}</dd>
+        </div>
+        <div>
+          <dt>Readout bias</dt>
+          <dd>{formatPanelBias(adaptationState.choiceBias)}</dd>
+        </div>
+        <div>
+          <dt>Local-state caveat</dt>
+          <dd>Local strategy state only</dd>
         </div>
       </dl>
+      <p className="neural-lab__microcopy">{neuralStrategyRandomPlayBoundary}</p>
+      <p className="neural-lab__microcopy">{neuralStrategyAdaptationMetricsBoundary}</p>
       <div className="neural-lab-rps__distribution" aria-label="RPS readout distribution">
         {distribution.map((item) => (
           <span key={item.choice}>
@@ -454,6 +776,83 @@ function RpsChallengeShell({
           </span>
         ))}
       </div>
+      {detailsOpen ? (
+        <div className="neural-lab-rps__details" id="neural-adaptation-details" aria-label="Adaptation details">
+          <section aria-label="Plain English adaptation controls">
+            <strong>Plain-English adaptation controls</strong>
+            <div className="neural-lab-controls">
+              {neuralStrategyAdaptationPlainControls.map((group) => (
+                <div key={group.id} className="neural-lab-control-group">
+                  <strong>{group.label}</strong>
+                  <p>{group.helper}</p>
+                  <div>
+                    {group.options.map((option) => (
+                      <button
+                        key={option.id}
+                        type="button"
+                        onClick={() => onConfigPatch(`${group.label}: ${option.label}`, option.configPatch)}
+                        title={option.description}
+                        suppressHydrationWarning
+                      >
+                        {option.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+          <section aria-label="Exact adaptation values">
+            <strong>Exact adaptation values</strong>
+            <div className="neural-lab-rps__config-grid">
+              {adaptationConfigInputs.map((input) => (
+                <label key={input.key}>
+                  <span>{input.label}</span>
+                  <input
+                    type="number"
+                    min={input.min}
+                    max={input.max}
+                    step={input.step}
+                    value={adaptationConfig[input.key]}
+                    onChange={(event) => onConfigValueChange(input.key, Number(event.currentTarget.value))}
+                    aria-label={input.label}
+                  />
+                </label>
+              ))}
+            </div>
+          </section>
+          <dl className="neural-lab-status neural-lab-status--rps" aria-label="Adaptation statistics">
+            {neuralRpsChoices.map((choice) => (
+              <div key={`count-${choice}`}>
+                <dt>{titleCase(choice)} player count</dt>
+                <dd>{adaptationState.opponentChoiceCounts[choice]}</dd>
+              </div>
+            ))}
+            {neuralRpsChoices.map((choice) => (
+              <div key={`bias-${choice}`}>
+                <dt>{titleCase(choice)} bias</dt>
+                <dd>{formatNumber(adaptationState.choiceBias[choice], 3)}</dd>
+              </div>
+            ))}
+            <div>
+              <dt>Transition summary</dt>
+              <dd>{formatTransitionSummary(adaptationState)}</dd>
+            </div>
+            <div>
+              <dt>Strategy entropy</dt>
+              <dd>{formatNumber(adaptationState.strategyEntropy, 3)}</dd>
+            </div>
+            <div>
+              <dt>Transition stability</dt>
+              <dd>{formatNumber(adaptationState.transitionStability, 3)}</dd>
+            </div>
+            <div>
+              <dt>Last update</dt>
+              <dd>{adaptationState.lastUpdateSummary}</dd>
+            </div>
+          </dl>
+        </div>
+      ) : null}
       {rounds.length > 0 ? (
         <ol className="neural-lab-rps__history" aria-label="RPS round history">
           {rounds
@@ -461,10 +860,13 @@ function RpsChallengeShell({
             .reverse()
             .map((round) => (
               <li key={round.id}>
-                <strong>tick {round.tick}</strong>
+                <strong>
+                  round {round.roundIndex} · tick {round.tick}
+                </strong>
                 <span>
-                  cue {titleCase(round.userChoice)} · readout {titleCase(round.networkChoice)} · opponent {titleCase(round.opponentChoice)} ·{" "}
-                  {titleCase(round.outcome)} / {formatNumber(round.payoff, 0)}
+                  player {titleCase(round.userChoice)} · readout {titleCase(round.networkChoice)} · {titleCase(round.outcome)} /{" "}
+                  {formatNumber(round.payoff, 0)} · confidence {formatNumber(round.readoutConfidence, 3)}
+                  {round.explorationActive ? " · exploration used" : ""}
                 </span>
               </li>
             ))}
@@ -474,6 +876,74 @@ function RpsChallengeShell({
       )}
     </section>
   );
+}
+
+type NumericAdaptationConfigKey = Exclude<keyof NeuralStrategyAdaptationConfig, "enabled">;
+
+const adaptationConfigInputs: Array<{
+  key: NumericAdaptationConfigKey;
+  label: string;
+  min: number;
+  max: number;
+  step: number;
+}> = [
+  {
+    key: "learningRate",
+    label: "Learning rate",
+    ...neuralStrategyAdaptationConfigBounds.learningRate
+  },
+  {
+    key: "explorationRate",
+    label: "Exploration rate",
+    ...neuralStrategyAdaptationConfigBounds.explorationRate
+  },
+  {
+    key: "historyWindow",
+    label: "History window",
+    ...neuralStrategyAdaptationConfigBounds.historyWindow
+  },
+  {
+    key: "patternWindow",
+    label: "Pattern window",
+    ...neuralStrategyAdaptationConfigBounds.patternWindow
+  },
+  {
+    key: "maxBiasMagnitude",
+    label: "Max bias magnitude",
+    ...neuralStrategyAdaptationConfigBounds.maxBiasMagnitude
+  },
+  {
+    key: "decayRate",
+    label: "Decay rate",
+    ...neuralStrategyAdaptationConfigBounds.decayRate
+  },
+  {
+    key: "minPatternConfidence",
+    label: "Min pattern confidence",
+    ...neuralStrategyAdaptationConfigBounds.minPatternConfidence
+  }
+];
+
+function formatPercent(value: number): string {
+  return `${formatNumber(Math.min(1, Math.max(0, value)) * 100, 0)}%`;
+}
+
+function formatPanelBias(choiceBias: Record<NeuralRpsChoice, number>): string {
+  return neuralRpsChoices
+    .map((choice) => `${titleCase(choice)} ${choiceBias[choice] >= 0 ? "+" : ""}${formatNumber(choiceBias[choice], 2)}`)
+    .join(" / ");
+}
+
+function formatTransitionSummary(state: NeuralStrategyAdaptationState): string {
+  return neuralRpsChoices
+    .map((from) => {
+      const row = state.transitionCounts[from];
+      const best = neuralRpsChoices
+        .map((to) => ({ to, count: row[to] }))
+        .sort((left, right) => right.count - left.count || left.to.localeCompare(right.to))[0];
+      return best && best.count > 0 ? `${titleCase(from)} -> ${titleCase(best.to)} (${best.count})` : `${titleCase(from)} -> none`;
+    })
+    .join("; ");
 }
 
 function defaultActionParameters(interventionId: string): ParameterValues {

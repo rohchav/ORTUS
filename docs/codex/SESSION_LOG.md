@@ -830,6 +830,93 @@ Remaining limitations:
 
 Next roadmap prompt after commit: Prompt 38 Schema-to-Template Fit Report V1.
 
+## 2026-06-19 - Prompt N2B Neural Strategy Adaptation Audit
+
+Goal: audit and harden Prompt N2 Neural Strategy Adaptation without broadening beyond the Neural Runtime Lab RPS/readout mode, without starting Prompt 38, and without adding cognition, biological plasticity, profiling, Builder graph execution, Model Schema execution, social-learning runtime, blackjack, generic decision analytics, or external stimuli.
+
+Starting state:
+
+- Prompt N2 changes were still uncommitted because `.git` was read-only in the sandbox and the prior `git add` escalation had been rejected.
+- Dirty files were N2-related only.
+- Prompt N2 reported typecheck, focused Neural tests, full suite, build, perf smoke, and `git diff --check` passing before N2B.
+
+Audit findings and hardening:
+
+- Found a real reset/truncation defect: N2 used an array-position reset cursor. If the RPS history window was full, Reset learned strategy could set the cursor to the bounded array length; future rounds were then sliced away because the bounded array never grew past that cursor.
+- Replaced the reset guard with round-index semantics through `roundsAfterNeuralStrategyReset`, so old bounded history cannot rehydrate learned state and new rounds after reset are counted even after truncation.
+- Replaced `rpsRounds.length + 1` round numbering with `nextNeuralRpsRoundIndex`, so round indexes remain monotonic when history is capped.
+- Filtered malformed RPS round objects before distribution/statistics/adaptation updates and rejected arbitrary RPS action labels in adaptive cue helpers.
+- Made fresh-run/rebuild timeline copy explicit: scenario setup, plain-English setup, Reset activity, and Regenerate network do not clear local learned strategy unless Reset learned strategy is used.
+- Preserved the existing boundary: adaptation remains local UI/view-model RPS/readout state and bounded output-assembly stimulus/readout-bias behavior only. It does not mutate core synapse weights, update topology, persist a user profile, infer beliefs/intentions/preferences/personality, execute Builder graphs, execute Model Schemas, activate social-learning artifacts, or add a hidden interpreter.
+- Updated README, roadmap docs, concepts, current context, HCI audit, workspace IA, simulation README, planned roadmap, AGENTS guardrails, and roadmap tests to mark Prompt N2B complete and Prompt 38 next after the N2/N2B commit checkpoint.
+
+Checks:
+
+- `git status --short`: dirty N2/N2B files only.
+- `npm run test -- neuralRuntimeLab template.neuralExcitation`: passed, 2 files and 19 tests.
+- `npm run typecheck`: passed.
+- `npm run test -- roadmap workspaceInformationArchitecture neuralRuntimeLab template.neuralExcitation`: passed, 4 files and 30 tests.
+- `npm run test -- neural templates modelSchema visualBuilderWorkspace schemaTemplateCompatibility socialLearning opinion primitiveRegistry hybridComposition roadmap assumptions builderUiShell workspaceInformationArchitecture`: passed, 14 files and 122 tests.
+- Static privacy/boundary scan found only tests and guardrail/docs mentions for banned terms; no forbidden implementation path was found in the Neural Lab source.
+- `npm test`: passed, 56 files and 449 tests.
+- `npm run build`: passed with Next.js 15.5.19; `/` and `/builder` prerendered successfully.
+- `npm run perf:simulation`: passed. Local smoke results included Flocking 100 agents at 147.89 ticks/sec, Flocking 500 agents at 20.88 ticks/sec, Forest Fire 80x60 at 31.57 ticks/sec, and Predator-Prey default at 78.62 ticks/sec.
+- `npm run lint`: unavailable, package.json has no lint script.
+
+Remaining limitations:
+
+- Rendered responsive, zoom, keyboard walkthrough, screen-reader behavior, assistive-technology behavior, and WCAG conformance remain unverified.
+- N2/N2B remain a narrow Neural Runtime Lab RPS/readout slice only, not generic adaptive agents, reinforcement learning, biological plasticity, human cognition, user profiling, model-schema execution, Builder graph execution, or social-learning runtime.
+
+Next roadmap prompt after the N2/N2B commit checkpoint: Prompt 38 Schema-to-Template Fit Report V1.
+
+## 2026-06-18 - Prompt N2 Neural Strategy Adaptation V1
+
+Goal: add bounded Neural Runtime Lab Rock-Paper-Scissors strategy adaptation without adding cognition, biological plasticity, hidden schema/builder execution, persistent user profiling, or core synapse-weight updates.
+
+Implemented:
+
+- Upgraded the RPS shell into an Adaptive RPS Challenge with Start adaptive challenge, Pause challenge, Choose Rock/Paper/Scissors, Enable adaptation, Reset learned strategy, Clear round history, and Show/Hide adaptation details controls.
+- Added local lab-specific adaptation types/config/state for bounded RPS history, choice counts, transition counts, pattern confidence, rolling win/draw/loss metrics, readout-bias values, deterministic exploration, and reset/clear behavior.
+- Changed local challenge scoring to use the explicit player choice as the opponent choice for the round; template fixed-opponent payoff remains separate.
+- Added deterministic frequency/transition prediction and counter-choice mapping. Repeated Rock shifts bounded tendency toward Paper; repeated Paper shifts toward Scissors; repeated Scissors shifts toward Rock.
+- Applied adaptation through bounded output-assembly stimulus/readout-bias behavior rather than mutating core synapse weights.
+- Kept learned strategy state in React/view-model memory only; no browser storage, external API, user identity, protected-class field, psychological field, biography, document, embedding, model weight, or profile persistence was added.
+- Added mission rows, live explanations, timeline events, and adaptation details for active mode, round count, rolling results, predicted move/counter-choice, confidence, exploration rate, bias summary, choice counts, transition summary, entropy, and reset controls.
+- Updated Neural template/intervention wording so template RPS payoff is still observational and does not train, optimize, mutate synapses, or update biological/plasticity fields, while N2 lab adaptation is explicitly local readout-bias state.
+- Updated README, roadmap docs, concepts, current context, HCI/IA docs, simulation README, and AGENTS guardrails for N2.
+
+Required boundary copy added:
+
+- Strategy Adaptation V1 updates bounded game-state variables from observed RPS rounds. It is not cognition, reasoning, or human intention inference.
+- The adaptive readout can exploit repeated patterns, but it cannot beat truly random optimal play over time.
+- Learned strategy state is local model state, not a psychological profile.
+- Adaptation changes game-readout bias only; it does not simulate biological plasticity or human learning.
+- Adaptation adjusts bounded readout bias. It does not rewrite the neural graph or simulate biological synaptic learning.
+- Against truly random play, Rock-Paper-Scissors has no exploitable pattern. The adaptive readout should not be expected to win above chance over time.
+- Adaptation metrics describe local game-state updates, not beliefs, intentions, or personality.
+
+Checks:
+
+- `git status --short`: clean before edits.
+- Baseline `npm run test -- neuralRuntimeLab template.neuralExcitation`: passed before edits, 2 files and 15 tests.
+- `npm run typecheck`: passed.
+- `npm run test -- neuralRuntimeLab template.neuralExcitation`: passed, 2 files and 17 tests.
+- `npm run test -- roadmap workspaceInformationArchitecture neuralRuntimeLab template.neuralExcitation`: passed, 4 files and 28 tests.
+- `npm run test -- neural templates modelSchema visualBuilderWorkspace schemaTemplateCompatibility socialLearning opinion primitiveRegistry hybridComposition roadmap assumptions builderUiShell workspaceInformationArchitecture`: passed, 14 files and 120 tests.
+- `npm test`: passed, 56 files and 447 tests.
+- `npm run build`: passed with Next.js 15.5.19; `/` and `/builder` prerendered successfully.
+- `npm run perf:simulation`: passed. Local smoke results included Flocking 100 agents at 88.48 ticks/sec, Flocking 500 agents at 15.64 ticks/sec, Forest Fire 80x60 at 24.24 ticks/sec, and Predator-Prey default at 75.84 ticks/sec.
+- `git diff --check`: passed.
+- `npm run lint`: unavailable, package.json has no lint script.
+
+Remaining limitations:
+
+- Browser screenshots, rendered responsive inspection, browser zoom behavior, screen-reader behavior, assistive-technology behavior, and WCAG conformance remain unverified unless directly tested.
+- N2 adaptation is a narrow local RPS/readout slice only. It is not generic adaptive agents, reinforcement learning, biological plasticity, human cognition, user profiling, model-schema execution, Builder graph execution, or social-learning runtime.
+
+Next prompt: Prompt N2B Neural Strategy Adaptation Audit. After N2B, ORTUS should return to Prompt 38 Schema-to-Template Fit Report V1.
+
 ## 2026-06-17 - Prompt N1 Neural Excitation Network Template V1
 
 Goal: add a hand-built Neural Excitation Network production template without biological brain-simulation claims, Builder graph execution, model-schema graph execution, learning/plasticity, LLM agents, arbitrary formulas, or generic graph runtime.

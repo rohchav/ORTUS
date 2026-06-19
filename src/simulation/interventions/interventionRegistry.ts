@@ -674,7 +674,7 @@ function neuralDecisionAssemblyStimulusDefinition(choice: NeuralDecisionChoice, 
     eventType: "intervention.applied",
     parameterDefinitions: [neuralStimulusStrengthParam],
     documentation:
-      "Applies to a bounded designer-labeled output assembly. Rock-Paper-Scissors labels are assigned labels only; the network does not understand them and payoff does not train or adapt the network.",
+      "Applies to a bounded designer-labeled output assembly. Rock-Paper-Scissors labels are assigned labels only; the network does not understand them and payoff does not train or adapt the core network.",
     build(ctx) {
       const strength = positiveFinite(ctx.params.strength, "strength");
       const targets = neuralDecisionAssemblyTargets(ctx.world, choice);

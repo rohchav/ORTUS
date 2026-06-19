@@ -1470,6 +1470,7 @@ textarea {
 .neural-lab-card__apply,
 .neural-lab-action button,
 .neural-lab-control-group button,
+.neural-lab-rps__toolbar button,
 .neural-lab-rps__buttons button {
   min-height: 30px;
   padding: 0 9px;
@@ -1558,6 +1559,7 @@ textarea {
 }
 
 .neural-lab-action button:disabled,
+.neural-lab-rps__toolbar button:disabled,
 .neural-lab-rps__buttons button:disabled {
   cursor: not-allowed;
   color: rgba(243, 241, 232, 0.42);
@@ -1578,11 +1580,65 @@ textarea {
 }
 
 .neural-lab-control-group div,
+.neural-lab-rps__toolbar,
 .neural-lab-rps__buttons,
 .neural-lab-rps__distribution {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
+}
+
+.neural-lab-rps__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 30px;
+  padding: 0 8px;
+  border: 1px solid rgba(123, 215, 199, 0.22);
+  color: var(--text-primary);
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+.neural-lab-rps__details {
+  display: grid;
+  gap: 10px;
+  padding: 8px;
+  border: 1px solid rgba(123, 215, 199, 0.22);
+  background: rgba(123, 215, 199, 0.06);
+}
+
+.neural-lab-rps__details > section {
+  display: grid;
+  gap: 8px;
+}
+
+.neural-lab-rps__details > section > strong {
+  color: var(--text-primary);
+  font-size: 12px;
+}
+
+.neural-lab-rps__config-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 6px;
+}
+
+.neural-lab-rps__config-grid label {
+  display: grid;
+  gap: 4px;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.neural-lab-rps__config-grid input {
+  min-width: 0;
+  width: 100%;
+  min-height: 28px;
+  border: 1px solid rgba(243, 241, 232, 0.14);
+  background: rgba(7, 9, 9, 0.42);
+  color: var(--text-primary);
+  font: inherit;
 }
 
 .neural-lab-rps__distribution span {

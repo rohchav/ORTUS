@@ -87,7 +87,13 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(roadmap).toContain("Completed Prompt 36 graph-view foundation and audit");
     expect(roadmap).toContain("Completed Prompt 37 validation-assistance foundation and audit");
     expect(roadmap).toContain("Prompt 35 adds a separate `Author Schema` Builder mode");
-    expect(roadmap).toContain("The next roadmap prompt is Prompt 38: Schema-to-Template Fit Report V1.");
+    expect(roadmap).toContain("Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, and N2B are complete.");
+    expect(roadmap).toContain("The next roadmap prompt after the N2/N2B commit checkpoint is Prompt 38: Schema-to-Template Fit Report V1.");
+    expect(roadmap).toContain("Prompt N2 adds Neural Strategy Adaptation V1 to the Neural Runtime Lab RPS/readout mode.");
+    expect(roadmap).toContain("Non-roadmap Prompt N2B audits and hardens Neural Strategy Adaptation.");
+    expect(roadmap).toContain("round-index reset guards");
+    expect(roadmap).toContain("Strategy Adaptation V1 updates bounded game-state variables from observed RPS rounds.");
+    expect(roadmap).toContain("The adaptive readout can exploit repeated patterns, but it cannot beat truly random optimal play over time.");
     expect(roadmap).toContain("31 - Model Schema + Interpreter Foundation V1");
     expect(roadmap).toContain("31B - Model Schema + Interpreter Foundation Audit");
     expect(roadmap).toContain("31C - Knowledge, Memory + Social Learning Semantics V1");

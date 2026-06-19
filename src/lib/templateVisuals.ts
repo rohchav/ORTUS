@@ -121,7 +121,7 @@ export function legendNotes(templateId: string): string[] {
       "This runtime graph belongs only to the Neural Excitation Network template.",
       "It does not make Builder graphs or model-schema graphs executable.",
       "Decision Readout V1 maps labeled output assemblies to bounded categorical choices. It is not cognition or reasoning.",
-      "RPS payoff is observational in V1 and does not train, adapt, or optimize the network."
+      "Template RPS payoff is observational and does not train, optimize, mutate synapses, or update biological/plasticity fields."
     ];
   }
   return [];
@@ -290,7 +290,7 @@ const metricDescriptionSets: Record<string, Array<{ label: string; description: 
     { label: "Firing rate", description: "Fraction of template nodes firing in this tick." },
     { label: "Cascade size", description: "Recent firing events in a bounded model-output window." },
     { label: "Selected readout", description: "Decision metrics are model-output readouts from labeled neuron groups, not evidence of reasoning." },
-    { label: "Observational payoff", description: "RPS payoff is observational and does not train or adapt the network in V1." }
+    { label: "Observational payoff", description: "Template RPS payoff is observational and does not train, mutate synapses, or adapt the core neural graph in V1." }
   ]
 };
 

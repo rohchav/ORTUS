@@ -1,10 +1,10 @@
 # ORTUS Full Prompt Roadmap
 
-*Last updated after non-roadmap Prompt NUX1B Neural Runtime Lab UX Audit + Build Investigation.*
+*Last updated after non-roadmap Prompt N2B Neural Strategy Adaptation Audit.*
 
 ## Current Status
 
-ORTUS has completed the core runtime/template foundation, scenario system, uncertainty layer, assumptions/limits layer, systems primitive registry, hybrid composition, multi-scale structure, scale-view state, boundary/environment models, spatial fields, observability, causality, quantity semantics, emergence pattern descriptors, robustness/resilience semantics, strategy/control semantics, model schema declarations, knowledge/memory/social-learning semantics, visual builder workspace schemas, template/schema compatibility mapping, the template/schema compatibility mapping audit, a narrow Opinion Dynamics social-learning behavior mode, the Opinion Dynamics social-learning runtime audit, Safe Builder UI Shell V1, the Safe Builder UI Shell + workspace information architecture audit, Model Schema Authoring Forms V1, the Model Schema Authoring Forms Audit, Visual Builder Graph View V1, the Visual Builder Graph View Audit, Schema Validation UX + Repair Suggestions V1, the Schema Validation UX + Repair Suggestions Audit, non-roadmap Prompt N1 Neural Excitation Network Template V1, non-roadmap Prompt N1B Neural Excitation Network Template Audit + Decision Readout V1, non-roadmap Prompt NUX1 Neural Runtime Lab UX V1, and non-roadmap Prompt NUX1B Neural Runtime Lab UX Audit + Build Investigation.
+ORTUS has completed the core runtime/template foundation, scenario system, uncertainty layer, assumptions/limits layer, systems primitive registry, hybrid composition, multi-scale structure, scale-view state, boundary/environment models, spatial fields, observability, causality, quantity semantics, emergence pattern descriptors, robustness/resilience semantics, strategy/control semantics, model schema declarations, knowledge/memory/social-learning semantics, visual builder workspace schemas, template/schema compatibility mapping, the template/schema compatibility mapping audit, a narrow Opinion Dynamics social-learning behavior mode, the Opinion Dynamics social-learning runtime audit, Safe Builder UI Shell V1, the Safe Builder UI Shell + workspace information architecture audit, Model Schema Authoring Forms V1, the Model Schema Authoring Forms Audit, Visual Builder Graph View V1, the Visual Builder Graph View Audit, Schema Validation UX + Repair Suggestions V1, the Schema Validation UX + Repair Suggestions Audit, non-roadmap Prompt N1 Neural Excitation Network Template V1, non-roadmap Prompt N1B Neural Excitation Network Template Audit + Decision Readout V1, non-roadmap Prompt NUX1 Neural Runtime Lab UX V1, non-roadmap Prompt NUX1B Neural Runtime Lab UX Audit + Build Investigation, non-roadmap Prompt N2 Neural Strategy Adaptation V1, and non-roadmap Prompt N2B Neural Strategy Adaptation Audit.
 
 Current project status:
 
@@ -14,8 +14,10 @@ Completed non-roadmap prompt: Prompt N1 — Neural Excitation Network Template V
 Completed non-roadmap prompt: Prompt N1B — Neural Excitation Network Template Audit + Decision Readout V1
 Completed non-roadmap prompt: Prompt NUX1 — Neural Runtime Lab UX V1
 Completed non-roadmap prompt: Prompt NUX1B — Neural Runtime Lab UX Audit + Build Investigation
+Completed non-roadmap prompt: Prompt N2 — Neural Strategy Adaptation V1
+Completed non-roadmap prompt: Prompt N2B — Neural Strategy Adaptation Audit
 Post-30B stabilization completed: repo hygiene, durable Codex context, dependency repair, generated-artifact cleanup, and runtime performance/scalability baseline
-Next roadmap prompt: Prompt 38 — Schema-to-Template Fit Report V1
+Next roadmap prompt after commit: Prompt 38 — Schema-to-Template Fit Report V1
 ```
 
 Critical global boundary:
@@ -57,13 +59,17 @@ Neural Excitation Network Template V1 is a stylized runtime network model, not a
 Neural runtime graph support is scoped only to that template and does not make Builder graphs, model-schema graphs, or network artifacts executable.
 Decision Readout V1 maps labeled output assemblies to bounded categorical choices. It is not cognition or reasoning.
 Rock-Paper-Scissors labels are semantic labels assigned by the model designer, not meanings understood by the network.
-RPS payoff is observational in V1 and does not train, adapt, or optimize the network.
+Template RPS payoff is observational and does not train, optimize, mutate synapses, or update biological/plasticity fields.
 The model does not infer intentions, beliefs, preferences, personality, or human decision-making.
 This lab shows stylized neural excitation dynamics and bounded categorical readouts. It does not model cognition, biological neurons, or learning.
-RPS payoff is observational in this version and does not update weights, biases, or future choices.
+Strategy Adaptation V1 updates bounded game-state variables from observed RPS rounds. It is not cognition, reasoning, or human intention inference.
+The adaptive readout can exploit repeated patterns, but it cannot beat truly random optimal play over time.
+Learned strategy state is local model state, not a psychological profile.
+Adaptation changes game-readout bias only; it does not simulate biological plasticity or human learning.
+Neural Strategy Adaptation V1 is local to the Neural Runtime Lab RPS/readout mode and does not update core synapse weights, persist a user profile, make Builder graphs executable, or make Model Schemas runnable.
+Prompt N2B hardened round-index reset semantics, monotonic round numbering under bounded history, malformed-round filtering, deterministic exploration tests, and visible fresh-run/reset-state copy.
 Rock-Paper-Scissors labels are assigned to output assemblies by the model designer; the network does not understand the labels.
-Training and adaptation are deferred to Neural Strategy Adaptation V1.
-Rendered responsive, zoom, and assistive-technology behavior remain unverified unless directly tested.
+Rendered responsive, zoom, keyboard walkthrough, screen-reader behavior, assistive-technology behavior, and WCAG conformance remain unverified unless directly tested.
 ```
 
 ## Expert Audit Additions and Roadmap Corrections
@@ -73,7 +79,7 @@ missing from this full roadmap. Prompt 31C and Prompt 31D are now corrected belo
 after Prompt 31B and before Prompt 32, with a later narrow Opinion Dynamics
 social-learning runtime slice placed after template/schema compatibility mapping.
 The social/cognitive semantics insertion was corrected after manual review, and
-Prompt 31C, Prompt 31D, Prompt 32, Prompt 32B, Prompt 33, Prompt 33B, Prompt 33C, Prompt 33D, Prompt 34, Prompt 34B, Prompt 35, Prompt 35B, Prompt 36, Prompt 36B, Prompt 37, and Prompt 37B are now marked complete while Prompt 38 is the next roadmap prompt.
+Prompt 31C, Prompt 31D, Prompt 32, Prompt 32B, Prompt 33, Prompt 33B, Prompt 33C, Prompt 33D, Prompt 34, Prompt 34B, Prompt 35, Prompt 35B, Prompt 36, Prompt 36B, Prompt 37, and Prompt 37B are now marked complete. Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, and N2B are complete, and Prompt 38 is the next roadmap prompt after the N2/N2B commit checkpoint.
 
 Safe Builder UI Shell V1 displays structural workspace artifacts; it does not execute workspace nodes or edges. The builder shell is not a compiler, interpreter, visual programming environment, or custom simulation runtime. A structurally valid workspace is still not a runnable model. Importing a workspace artifact does not activate model schemas, compatibility mappings, or social-learning semantics.
 
@@ -2932,8 +2938,8 @@ No global service availability treated as template runtime support.
 Recommended immediate next steps:
 
 ```text
-1. Review and commit Prompt N1 Neural Excitation Network Template V1, Prompt N1B Neural Excitation Network Template Audit + Decision Readout V1, Prompt NUX1 Neural Runtime Lab UX V1, and Prompt NUX1B Neural Runtime Lab UX Audit + Build Investigation.
-2. Start Prompt 38 — Schema-to-Template Fit Report V1 after the commit checkpoint.
+1. Review and commit Prompt N2 Neural Strategy Adaptation V1 and Prompt N2B Neural Strategy Adaptation Audit together if the worktree is still uncommitted.
+2. Start Prompt 38 — Schema-to-Template Fit Report V1 after the N2/N2B commit checkpoint.
 3. Run a dedicated rendered responsive/design-system audit before making mobile-readiness, WCAG, clipboard, focus-return, or polished visual-workbench claims.
 ```
 
@@ -2945,6 +2951,8 @@ Non-roadmap Prompt N1 Neural Excitation Network Template V1 is complete.
 Non-roadmap Prompt N1B Neural Excitation Network Template Audit + Decision Readout V1 is complete.
 Non-roadmap Prompt NUX1 Neural Runtime Lab UX V1 is complete.
 Non-roadmap Prompt NUX1B Neural Runtime Lab UX Audit + Build Investigation is complete.
+Non-roadmap Prompt N2 Neural Strategy Adaptation V1 is complete.
+Non-roadmap Prompt N2B Neural Strategy Adaptation Audit is complete.
 Performance stabilization completed after Prompt 30B.
 Prompt 34 safe builder shell is complete.
 Prompt 34B safe builder shell audit is complete.

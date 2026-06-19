@@ -4,7 +4,13 @@ import { renderNeuralDecisionReadout, type NeuralDecisionReadoutView } from "../
 
 export const neuralRuntimeLabTemplateId = "neural-excitation-network";
 export const neuralRuntimeLabTimelineLimit = 60;
-export const neuralRuntimeLabRpsHistoryLimit = 40;
+export const neuralRuntimeLabRpsHistoryLimit = 200;
+
+export type NeuralRpsChoice = "rock" | "paper" | "scissors";
+export type NeuralRpsReadoutChoice = NeuralRpsChoice | "undecided" | "conflicted";
+export type NeuralRpsOutcome = "win" | "loss" | "draw" | "none";
+
+export const neuralRpsChoices = ["rock", "paper", "scissors"] as const satisfies readonly NeuralRpsChoice[];
 
 export const neuralRuntimeLabBoundaryCopy = [
   "This lab shows stylized neural excitation dynamics and bounded categorical readouts. It does not model cognition, biological neurons, or learning.",
@@ -12,10 +18,20 @@ export const neuralRuntimeLabBoundaryCopy = [
   "Activation is a model variable, not measured membrane voltage.",
   "Synapse weights are abstract influence strengths, not biological synaptic measurements.",
   "The model does not simulate ion channels, neurotransmitters, morphology, learning, consciousness, or cognition.",
-  "RPS payoff is observational in this version and does not update weights, biases, or future choices.",
+  "Strategy Adaptation V1 updates bounded game-state variables from observed RPS rounds. It is not cognition, reasoning, or human intention inference.",
+  "The adaptive readout can exploit repeated patterns, but it cannot beat truly random optimal play over time.",
+  "Learned strategy state is local model state, not a psychological profile.",
+  "Adaptation changes game-readout bias only; it does not simulate biological plasticity or human learning.",
+  "Adaptation adjusts bounded readout bias. It does not rewrite the neural graph or simulate biological synaptic learning.",
   "Rock-Paper-Scissors labels are assigned to output assemblies by the model designer; the network does not understand the labels.",
   "This runtime graph belongs only to the Neural Excitation Network template and does not make Builder graphs executable."
 ] as const;
+
+export const neuralStrategyAdaptationMetricsBoundary =
+  "Adaptation metrics describe local game-state updates, not beliefs, intentions, or personality.";
+
+export const neuralStrategyRandomPlayBoundary =
+  "Against truly random play, Rock-Paper-Scissors has no exploitable pattern. The adaptive readout should not be expected to win above chance over time.";
 
 export type NeuralLabScenarioId =
   | "cascade-spread"
@@ -137,10 +153,10 @@ export const neuralLabScenarioCards: readonly NeuralLabScenarioCard[] = [
   },
   {
     id: "stay-unpredictable",
-    title: "Stay unpredictable challenge shell",
-    objective: "Show a non-learning RPS history and distribution shell. It records outcomes only; it does not adapt strategy.",
-    setupImpact: "Apply setup regenerates a fresh tick-0 RPS readout run with seeded-random opponent choice and no learning.",
-    actionHint: "Use assembly cues to create observed rounds. Distribution is a readout summary, not strategy, intent, or adaptation.",
+    title: "Adaptive RPS Challenge",
+    objective: "Try to keep the network win rate below 40% over the last 30 non-draw rounds while the lab tracks bounded local pattern statistics.",
+    setupImpact: "Apply setup regenerates a fresh tick-0 RPS readout run. Local strategy state is visible and resettable; it is not cleared unless Reset learned strategy is used.",
+    actionHint: "Choose Rock, Paper, or Scissors each round. Repeated patterns can shift bounded readout bias; random optimal play has no exploitable pattern.",
     parameterPatch: {
       neuronCount: 60,
       networkTopology: "clustered",
@@ -156,7 +172,7 @@ export const neuralLabScenarioCards: readonly NeuralLabScenarioCard[] = [
       decisionMargin: 0.15,
       decisionWindowTicks: 4,
       outputBias: 0,
-      opponentChoiceMode: "seededRandom",
+      opponentChoiceMode: "fixed",
       fixedOpponentChoice: "rock"
     }
   }
@@ -306,6 +322,128 @@ export const neuralPlainEnglishControls: readonly NeuralPlainEnglishControl[] = 
   }
 ] as const;
 
+export type NeuralStrategyAdaptationPlainControlId = "learningSpeed" | "exploration" | "memoryLength" | "adaptationStrength";
+
+export interface NeuralStrategyAdaptationPlainControl {
+  id: NeuralStrategyAdaptationPlainControlId;
+  label: string;
+  helper: string;
+  options: readonly NeuralStrategyAdaptationPlainControlOption[];
+}
+
+export interface NeuralStrategyAdaptationPlainControlOption {
+  id: string;
+  label: string;
+  description: string;
+  configPatch: Partial<NeuralStrategyAdaptationConfig>;
+}
+
+export interface NeuralStrategyAdaptationConfig {
+  enabled: boolean;
+  learningRate: number;
+  explorationRate: number;
+  historyWindow: number;
+  patternWindow: number;
+  maxBiasMagnitude: number;
+  decayRate: number;
+  minPatternConfidence: number;
+}
+
+export interface NeuralStrategyAdaptationState {
+  enabled: boolean;
+  roundCount: number;
+  choiceBias: Record<NeuralRpsChoice, number>;
+  opponentChoiceCounts: Record<NeuralRpsChoice, number>;
+  networkChoiceCounts: Record<NeuralRpsChoice, number>;
+  transitionCounts: Record<NeuralRpsChoice, Record<NeuralRpsChoice, number>>;
+  predictedOpponentChoice: NeuralRpsChoice | "unknown";
+  predictedCounterChoice: NeuralRpsChoice | "unknown";
+  patternConfidence: number;
+  explorationRate: number;
+  rollingWinRate: number;
+  rollingDrawRate: number;
+  rollingLossRate: number;
+  rollingNonDrawWinRate: number;
+  strategyEntropy: number;
+  transitionStability: number;
+  lastUpdatedRound?: number;
+  lastExplorationActive: boolean;
+  lastUpdateSummary: string;
+}
+
+export interface NeuralAdaptiveCuePlan {
+  cueChoice: NeuralRpsChoice;
+  strength: number;
+  explorationActive: boolean;
+  reason: string;
+}
+
+export const neuralStrategyAdaptationConfigBounds = {
+  learningRate: { min: 0, max: 0.5, step: 0.01 },
+  explorationRate: { min: 0, max: 0.5, step: 0.01 },
+  historyWindow: { min: 5, max: 200, step: 1 },
+  patternWindow: { min: 3, max: 50, step: 1 },
+  maxBiasMagnitude: { min: 0, max: 2, step: 0.05 },
+  decayRate: { min: 0, max: 0.5, step: 0.01 },
+  minPatternConfidence: { min: 0, max: 1, step: 0.01 }
+} as const;
+
+export const defaultNeuralStrategyAdaptationConfig: NeuralStrategyAdaptationConfig = {
+  enabled: true,
+  learningRate: 0.18,
+  explorationRate: 0.08,
+  historyWindow: 80,
+  patternWindow: 20,
+  maxBiasMagnitude: 1.25,
+  decayRate: 0.08,
+  minPatternConfidence: 0.34
+};
+
+export const neuralStrategyAdaptationPlainControls: readonly NeuralStrategyAdaptationPlainControl[] = [
+  {
+    id: "learningSpeed",
+    label: "Learning speed",
+    helper: "Maps to the local bias update rate.",
+    options: [
+      { id: "off", label: "Off", description: "No adaptive bias update.", configPatch: { learningRate: 0, enabled: false } },
+      { id: "slow", label: "Slow", description: "Small updates from repeated patterns.", configPatch: { learningRate: 0.08, enabled: true } },
+      { id: "balanced", label: "Balanced", description: "Moderate updates for visible adaptation.", configPatch: { learningRate: 0.18, enabled: true } },
+      { id: "fast", label: "Fast", description: "Faster local bias shifts while staying bounded.", configPatch: { learningRate: 0.32, enabled: true } }
+    ]
+  },
+  {
+    id: "exploration",
+    label: "Exploration",
+    helper: "Deterministically ignores the strongest counter-bias on some rounds.",
+    options: [
+      { id: "none", label: "None", description: "Always use the current counter-bias when confidence is high enough.", configPatch: { explorationRate: 0 } },
+      { id: "low", label: "Low", description: "Occasional deterministic exploration.", configPatch: { explorationRate: 0.05 } },
+      { id: "balanced", label: "Balanced", description: "Moderate deterministic exploration.", configPatch: { explorationRate: 0.12 } },
+      { id: "high", label: "High", description: "Frequent deterministic exploration.", configPatch: { explorationRate: 0.28 } }
+    ]
+  },
+  {
+    id: "memoryLength",
+    label: "Memory length",
+    helper: "Controls the bounded local round window.",
+    options: [
+      { id: "short", label: "Short", description: "Recent rounds dominate.", configPatch: { historyWindow: 20, patternWindow: 8 } },
+      { id: "medium", label: "Medium", description: "Balanced recent history.", configPatch: { historyWindow: 80, patternWindow: 20 } },
+      { id: "long", label: "Long", description: "Use more local rounds, capped at 200.", configPatch: { historyWindow: 160, patternWindow: 40 } }
+    ]
+  },
+  {
+    id: "adaptationStrength",
+    label: "Adaptation strength",
+    helper: "Caps the output-assembly stimulus bias.",
+    options: [
+      { id: "subtle", label: "Subtle", description: "Small maximum readout bias.", configPatch: { maxBiasMagnitude: 0.5, decayRate: 0.12 } },
+      { id: "balanced", label: "Balanced", description: "Moderate readout bias.", configPatch: { maxBiasMagnitude: 1.25, decayRate: 0.08 } },
+      { id: "strong", label: "Strong", description: "Larger but still bounded readout bias.", configPatch: { maxBiasMagnitude: 2, decayRate: 0.04 } }
+    ]
+  }
+] as const;
+
 export interface NeuralLabMission {
   title: string;
   objective: string;
@@ -317,7 +455,11 @@ export interface NeuralLabMission {
 
 export type NeuralCascadeStatus = "quiet" | "local" | "spreading" | "saturated";
 
-export function createNeuralLabMission(snapshot: SimulationSnapshotView | null | undefined, scenario?: NeuralLabScenarioCard): NeuralLabMission {
+export function createNeuralLabMission(
+  snapshot: SimulationSnapshotView | null | undefined,
+  scenario?: NeuralLabScenarioCard,
+  adaptation?: NeuralStrategyAdaptationState
+): NeuralLabMission {
   const cascadeStatus = classifyNeuralCascade(snapshot);
   const readout = renderNeuralDecisionReadout(snapshot);
   const firing = metricNumber(snapshot, "neuralFiringCount", "firingRate");
@@ -340,14 +482,21 @@ export function createNeuralLabMission(snapshot: SimulationSnapshotView | null |
       { label: "Cascade status", value: cascadeStatus }
     ],
     tryNext: readout?.enabled
-      ? ["Stimulate a Rock/Paper/Scissors assembly.", "Step one tick to compute the observational payoff.", "Compare confidence with winner margin."]
+      ? [
+          "Choose Rock, Paper, or Scissors for the next local round.",
+          "Compare adaptive play against a non-adaptive observational baseline.",
+          neuralStrategyRandomPlayBoundary
+        ]
       : ["Stimulate a cluster.", "Raise inhibition.", "Lower threshold in Advanced config or apply a cascade-prone setup."],
-    rpsRows: createRpsRows(readout),
+    rpsRows: createRpsRows(readout, adaptation),
     cascadeStatus
   };
 }
 
-export function createNeuralLiveExplanations(snapshot: SimulationSnapshotView | null | undefined): string[] {
+export function createNeuralLiveExplanations(
+  snapshot: SimulationSnapshotView | null | undefined,
+  adaptation?: NeuralStrategyAdaptationState
+): string[] {
   if (!snapshot || snapshot.templateId !== neuralRuntimeLabTemplateId) {
     return ["Select Neural Excitation Network to use the runtime lab."];
   }
@@ -395,10 +544,17 @@ export function createNeuralLiveExplanations(snapshot: SimulationSnapshotView | 
         `RPS readout selected ${titleCase(readout.selected)} because that labeled output assembly currently has the strongest bounded activation.`
       );
     }
-    explanations.push("RPS payoff is observational in this version and does not update weights, biases, or future choices.");
+    explanations.push(adaptationExplanation(adaptation));
+    if (adaptation?.roundCount && adaptation.enabled && adaptation.patternConfidence > 0) {
+      explanations.push("Bias decay applied so older patterns matter less over time.");
+    }
+    if (adaptation?.lastExplorationActive) {
+      explanations.push("Exploration active: the network did not fully follow the strongest counter-bias this round.");
+    }
+    explanations.push("This is game-state adaptation, not cognition or human intention inference.");
   }
 
-  return explanations.slice(0, 6);
+  return explanations.slice(0, 8);
 }
 
 export type NeuralTimelineEventKind =
@@ -410,7 +566,8 @@ export type NeuralTimelineEventKind =
   | "saturation"
   | "containment"
   | "readout"
-  | "rps";
+  | "rps"
+  | "adaptation";
 
 export interface NeuralTimelineEvent {
   id: string;
@@ -490,7 +647,7 @@ export function deriveNeuralRuntimeEvents(
       tick: next.tick,
       kind: "rps",
       label: "RPS payoff computed",
-      detail: `${titleCase(nextReadout.rps.outcome)} / ${formatNumber(nextReadout.rps.payoff, 0)}. Payoff is observational and non-adaptive.`
+      detail: `${titleCase(nextReadout.rps.outcome)} / ${formatNumber(nextReadout.rps.payoff, 0)}. Template payoff stays separate from learned strategy state.`
     });
   }
   return events;
@@ -599,34 +756,67 @@ export const neuralDirectActions: readonly NeuralDirectAction[] = [
 
 export interface NeuralRpsRound {
   id: string;
+  roundIndex: number;
   tick: number;
-  userChoice: "rock" | "paper" | "scissors";
-  networkChoice: string;
-  opponentChoice: string;
-  outcome: string;
+  userChoice: NeuralRpsChoice;
+  networkChoice: NeuralRpsReadoutChoice;
+  opponentChoice: NeuralRpsChoice;
+  outcome: NeuralRpsOutcome;
   payoff: number;
+  readoutConfidence: number;
+  winnerMargin: number;
   confidence: number;
+  explorationActive?: boolean;
 }
 
-export function createNeuralRpsRound(snapshot: SimulationSnapshotView, userChoice: "rock" | "paper" | "scissors"): NeuralRpsRound | null {
-  const readout = renderNeuralDecisionReadout(snapshot);
-  if (!readout?.enabled || !readout.rps || readout.rps.outcome === "none") {
+export function createNeuralRpsRound(
+  snapshot: SimulationSnapshotView,
+  userChoice: NeuralRpsChoice,
+  roundIndex = 1,
+  explorationActive = false
+): NeuralRpsRound | null {
+  if (!isRpsChoice(userChoice)) {
     return null;
   }
+  const readout = renderNeuralDecisionReadout(snapshot);
+  if (!readout?.enabled) {
+    return null;
+  }
+  const networkChoice = normalizeReadoutChoice(readout.selected);
+  const outcome = scoreRpsOutcome(networkChoice, userChoice);
+  const payoff = rpsPayoff(outcome);
   return {
-    id: `rps-${snapshot.tick}-${userChoice}-${readout.rps.outcome}`,
+    id: `rps-${roundIndex}-${snapshot.tick}-${userChoice}-${networkChoice}-${outcome}`,
+    roundIndex,
     tick: snapshot.tick,
     userChoice,
-    networkChoice: readout.rps.networkChoice,
-    opponentChoice: readout.rps.opponentChoice,
-    outcome: readout.rps.outcome,
-    payoff: readout.rps.payoff,
-    confidence: readout.confidence
+    networkChoice,
+    opponentChoice: userChoice,
+    outcome,
+    payoff,
+    readoutConfidence: readout.confidence,
+    winnerMargin: readout.winnerMargin,
+    confidence: readout.confidence,
+    explorationActive
   };
 }
 
-export function boundNeuralRpsRounds(rounds: readonly NeuralRpsRound[]): NeuralRpsRound[] {
-  return rounds.slice(-neuralRuntimeLabRpsHistoryLimit);
+export function boundNeuralRpsRounds(rounds: readonly NeuralRpsRound[], limit = neuralRuntimeLabRpsHistoryLimit): NeuralRpsRound[] {
+  const safeLimit = Number.isInteger(limit) && limit > 0 ? Math.min(limit, neuralRuntimeLabRpsHistoryLimit) : neuralRuntimeLabRpsHistoryLimit;
+  return rounds.filter(isValidNeuralRpsRound).slice(-safeLimit);
+}
+
+export function nextNeuralRpsRoundIndex(rounds: readonly NeuralRpsRound[]): number {
+  const latest = rounds.reduce((max, round) => (Number.isInteger(round.roundIndex) && round.roundIndex > max ? round.roundIndex : max), 0);
+  return latest + 1;
+}
+
+export function roundsAfterNeuralStrategyReset(
+  rounds: readonly NeuralRpsRound[],
+  resetAfterRoundIndex: number
+): NeuralRpsRound[] {
+  const safeResetIndex = Number.isFinite(resetAfterRoundIndex) ? Math.max(0, Math.floor(resetAfterRoundIndex)) : 0;
+  return boundNeuralRpsRounds(rounds).filter((round) => round.roundIndex > safeResetIndex);
 }
 
 export function neuralRpsDistribution(rounds: readonly NeuralRpsRound[]): Array<{ choice: string; count: number }> {
@@ -638,26 +828,487 @@ export function neuralRpsDistribution(rounds: readonly NeuralRpsRound[]): Array<
     ["conflicted", 0]
   ]);
   for (const round of rounds) {
-    counts.set(round.networkChoice, (counts.get(round.networkChoice) ?? 0) + 1);
+    if (isRpsReadoutChoice(round.networkChoice)) {
+      counts.set(round.networkChoice, (counts.get(round.networkChoice) ?? 0) + 1);
+    }
   }
   return [...counts].map(([choice, count]) => ({ choice, count }));
+}
+
+export function validateNeuralStrategyAdaptationConfig(config: NeuralStrategyAdaptationConfig): NeuralStrategyAdaptationConfig {
+  if (typeof config.enabled !== "boolean") {
+    throw new Error("Strategy adaptation enabled must be boolean");
+  }
+  validateBoundedNumber(config.learningRate, "learningRate", neuralStrategyAdaptationConfigBounds.learningRate);
+  validateBoundedNumber(config.explorationRate, "explorationRate", neuralStrategyAdaptationConfigBounds.explorationRate);
+  validateBoundedInteger(config.historyWindow, "historyWindow", neuralStrategyAdaptationConfigBounds.historyWindow);
+  validateBoundedInteger(config.patternWindow, "patternWindow", neuralStrategyAdaptationConfigBounds.patternWindow);
+  validateBoundedNumber(config.maxBiasMagnitude, "maxBiasMagnitude", neuralStrategyAdaptationConfigBounds.maxBiasMagnitude);
+  validateBoundedNumber(config.decayRate, "decayRate", neuralStrategyAdaptationConfigBounds.decayRate);
+  validateBoundedNumber(config.minPatternConfidence, "minPatternConfidence", neuralStrategyAdaptationConfigBounds.minPatternConfidence);
+  if (config.patternWindow > config.historyWindow) {
+    throw new Error("patternWindow must be less than or equal to historyWindow");
+  }
+  return { ...config };
+}
+
+export function createNeuralStrategyAdaptationConfig(
+  patch: Partial<NeuralStrategyAdaptationConfig> = {},
+  base: NeuralStrategyAdaptationConfig = defaultNeuralStrategyAdaptationConfig
+): NeuralStrategyAdaptationConfig {
+  return validateNeuralStrategyAdaptationConfig({ ...base, ...patch });
+}
+
+export function createInitialNeuralStrategyAdaptationState(
+  config: NeuralStrategyAdaptationConfig = defaultNeuralStrategyAdaptationConfig
+): NeuralStrategyAdaptationState {
+  const valid = validateNeuralStrategyAdaptationConfig(config);
+  return {
+    enabled: valid.enabled,
+    roundCount: 0,
+    choiceBias: emptyChoiceRecord(),
+    opponentChoiceCounts: emptyChoiceRecord(),
+    networkChoiceCounts: emptyChoiceRecord(),
+    transitionCounts: emptyTransitionCounts(),
+    predictedOpponentChoice: "unknown",
+    predictedCounterChoice: "unknown",
+    patternConfidence: 0,
+    explorationRate: valid.explorationRate,
+    rollingWinRate: 0,
+    rollingDrawRate: 0,
+    rollingLossRate: 0,
+    rollingNonDrawWinRate: 0,
+    strategyEntropy: 0,
+    transitionStability: 0,
+    lastExplorationActive: false,
+    lastUpdateSummary: valid.enabled
+      ? "No adaptation update: no RPS rounds recorded yet."
+      : "No adaptation update: adaptation is disabled."
+  };
+}
+
+export function updateNeuralStrategyAdaptation(
+  rounds: readonly NeuralRpsRound[],
+  config: NeuralStrategyAdaptationConfig = defaultNeuralStrategyAdaptationConfig
+): NeuralStrategyAdaptationState {
+  const valid = validateNeuralStrategyAdaptationConfig(config);
+  const boundedRounds = boundNeuralRpsRounds(rounds, valid.historyWindow);
+  const counts = countOpponentChoices(boundedRounds);
+  const networkCounts = countNetworkChoices(boundedRounds);
+  const transitionCounts = countTransitions(boundedRounds.slice(-valid.patternWindow));
+  const prediction = computePatternPrediction(boundedRounds, valid);
+  const rolling = computeRollingRates(boundedRounds);
+  const bias = valid.enabled ? computeChoiceBias(boundedRounds, valid) : emptyChoiceRecord();
+  const activePrediction =
+    valid.enabled && prediction.confidence >= valid.minPatternConfidence && prediction.predictedOpponentChoice !== "unknown"
+      ? prediction
+      : { predictedOpponentChoice: "unknown" as const, predictedCounterChoice: "unknown" as const, confidence: 0, transitionStability: prediction.transitionStability };
+  const lastRound = boundedRounds[boundedRounds.length - 1];
+  return {
+    enabled: valid.enabled,
+    roundCount: boundedRounds.length,
+    choiceBias: bias,
+    opponentChoiceCounts: counts,
+    networkChoiceCounts: networkCounts,
+    transitionCounts,
+    predictedOpponentChoice: activePrediction.predictedOpponentChoice,
+    predictedCounterChoice: activePrediction.predictedCounterChoice,
+    patternConfidence: clamp(activePrediction.confidence, 0, 1),
+    explorationRate: valid.explorationRate,
+    rollingWinRate: rolling.win,
+    rollingDrawRate: rolling.draw,
+    rollingLossRate: rolling.loss,
+    rollingNonDrawWinRate: rolling.nonDrawWin,
+    strategyEntropy: computeChoiceEntropy(counts),
+    transitionStability: clamp(activePrediction.transitionStability, 0, 1),
+    ...(lastRound ? { lastUpdatedRound: lastRound.roundIndex } : {}),
+    lastExplorationActive: Boolean(lastRound?.explorationActive),
+    lastUpdateSummary: formatAdaptationUpdateSummary(activePrediction.predictedOpponentChoice, activePrediction.predictedCounterChoice, valid.enabled)
+  };
+}
+
+export function resetNeuralStrategyAdaptation(
+  config: NeuralStrategyAdaptationConfig = defaultNeuralStrategyAdaptationConfig
+): NeuralStrategyAdaptationState {
+  return createInitialNeuralStrategyAdaptationState(config);
+}
+
+export function clearNeuralRpsHistory(): NeuralRpsRound[] {
+  return [];
+}
+
+export function rpsCounterChoice(choice: NeuralRpsChoice): NeuralRpsChoice {
+  if (choice === "rock") {
+    return "paper";
+  }
+  if (choice === "paper") {
+    return "scissors";
+  }
+  return "rock";
+}
+
+export function chooseNeuralAdaptiveCue(
+  userChoice: NeuralRpsChoice,
+  state: NeuralStrategyAdaptationState,
+  config: NeuralStrategyAdaptationConfig,
+  seed: string,
+  roundIndex: number
+): NeuralAdaptiveCuePlan {
+  if (!isRpsChoice(userChoice)) {
+    throw new Error("Invalid RPS choice for adaptive cue");
+  }
+  const valid = validateNeuralStrategyAdaptationConfig(config);
+  if (!valid.enabled || !state.enabled || state.predictedCounterChoice === "unknown" || state.patternConfidence < valid.minPatternConfidence) {
+    return {
+      cueChoice: userChoice,
+      strength: 2,
+      explorationActive: false,
+      reason: "No stable pattern detected; local round uses the selected assembly as an observational baseline."
+    };
+  }
+  const explorationActive = deterministicExploration(seed, roundIndex, valid.explorationRate);
+  const cueChoice = explorationActive ? deterministicExplorationChoice(userChoice, seed, roundIndex) : state.predictedCounterChoice;
+  const biasMagnitude = Math.max(0, state.choiceBias[cueChoice] ?? 0);
+  return {
+    cueChoice,
+    strength: clamp(2 + biasMagnitude, 0.1, 5),
+    explorationActive,
+    reason: explorationActive
+      ? "Exploration active: the strongest counter-bias is ignored for this round."
+      : `Recent rounds suggest ${titleCase(state.predictedOpponentChoice)} is more likely; cueing ${titleCase(cueChoice)} as the counter-choice.`
+  };
 }
 
 export function titleCase(value: string): string {
   return value.slice(0, 1).toUpperCase() + value.slice(1);
 }
 
-function createRpsRows(readout: NeuralDecisionReadoutView | undefined): Array<{ label: string; value: string }> {
+function createRpsRows(
+  readout: NeuralDecisionReadoutView | undefined,
+  adaptation?: NeuralStrategyAdaptationState
+): Array<{ label: string; value: string }> {
   if (!readout?.enabled) {
     return [];
   }
-  return [
+  const rows = [
     { label: "Selected readout", value: titleCase(readout.selected) },
     { label: "Confidence", value: formatNumber(readout.confidence, 3) },
     { label: "Winner margin", value: formatNumber(readout.winnerMargin, 3) },
     { label: "Outcome", value: readout.rps ? `${titleCase(readout.rps.outcome)} / ${formatNumber(readout.rps.payoff, 0)}` : "None / 0" },
-    { label: "Payoff boundary", value: "RPS payoff is observational in this version and does not update weights, biases, or future choices." }
+    { label: "Payoff boundary", value: "Template RPS payoff does not update core synapse weights or biological plasticity fields." }
   ];
+  if (!adaptation) {
+    return rows;
+  }
+  return [
+    ...rows,
+    { label: "Challenge mode", value: adaptation.enabled ? "Adaptive" : "Observational" },
+    { label: "Rounds recorded", value: formatNumber(adaptation.roundCount, 0) },
+    { label: "Rolling network win/draw/loss", value: `${percent(adaptation.rollingWinRate)} / ${percent(adaptation.rollingDrawRate)} / ${percent(adaptation.rollingLossRate)}` },
+    {
+      label: "Pattern status",
+      value: adaptation.predictedOpponentChoice === "unknown" ? "No stable pattern detected." : "Repeated choice pattern detected in recent rounds."
+    },
+    {
+      label: "Recent rounds suggest",
+      value: adaptation.predictedOpponentChoice === "unknown" ? "Unknown" : titleCase(adaptation.predictedOpponentChoice)
+    },
+    {
+      label: "Predicted counter-choice",
+      value: adaptation.predictedCounterChoice === "unknown" ? "Unknown" : titleCase(adaptation.predictedCounterChoice)
+    },
+    { label: "Pattern confidence", value: formatNumber(adaptation.patternConfidence, 3) },
+    { label: "Exploration rate", value: percent(adaptation.explorationRate) },
+    { label: "Readout bias", value: formatBiasSummary(adaptation.choiceBias) },
+    { label: "Strategy-state caveat", value: "Local strategy state only." },
+    { label: "Metric boundary", value: neuralStrategyAdaptationMetricsBoundary }
+  ];
+}
+
+function adaptationExplanation(adaptation: NeuralStrategyAdaptationState | undefined): string {
+  if (!adaptation) {
+    return "No adaptation update: local strategy state is not initialized.";
+  }
+  if (!adaptation.enabled) {
+    return "No adaptation update: adaptation is off and the RPS shell remains observational.";
+  }
+  if (adaptation.roundCount === 0 || adaptation.predictedOpponentChoice === "unknown" || adaptation.predictedCounterChoice === "unknown") {
+    return "No adaptation update: the latest round was conflicted or no stable pattern was detected.";
+  }
+  return `Adaptation update: recent rounds favored ${titleCase(adaptation.predictedOpponentChoice)}, so the readout bias shifted toward ${titleCase(
+    adaptation.predictedCounterChoice
+  )}.`;
+}
+
+function validateBoundedNumber(value: number, key: string, bounds: { min: number; max: number }): void {
+  if (typeof value !== "number" || !Number.isFinite(value) || value < bounds.min || value > bounds.max) {
+    throw new Error(`${key} must be between ${bounds.min} and ${bounds.max}`);
+  }
+}
+
+function validateBoundedInteger(value: number, key: string, bounds: { min: number; max: number }): void {
+  if (!Number.isInteger(value) || value < bounds.min || value > bounds.max) {
+    throw new Error(`${key} must be an integer between ${bounds.min} and ${bounds.max}`);
+  }
+}
+
+function normalizeReadoutChoice(value: string): NeuralRpsReadoutChoice {
+  return isRpsChoice(value) ? value : value === "conflicted" ? "conflicted" : "undecided";
+}
+
+function isRpsChoice(value: unknown): value is NeuralRpsChoice {
+  return value === "rock" || value === "paper" || value === "scissors";
+}
+
+function isRpsReadoutChoice(value: unknown): value is NeuralRpsReadoutChoice {
+  return isRpsChoice(value) || value === "undecided" || value === "conflicted";
+}
+
+function isRpsOutcome(value: unknown): value is NeuralRpsOutcome {
+  return value === "win" || value === "loss" || value === "draw" || value === "none";
+}
+
+function isScoredRpsOutcome(value: unknown): value is Exclude<NeuralRpsOutcome, "none"> {
+  return value === "win" || value === "loss" || value === "draw";
+}
+
+function isValidNeuralRpsRound(round: NeuralRpsRound): boolean {
+  return (
+    typeof round.id === "string" &&
+    Number.isInteger(round.roundIndex) &&
+    round.roundIndex > 0 &&
+    Number.isInteger(round.tick) &&
+    isRpsChoice(round.userChoice) &&
+    isRpsChoice(round.opponentChoice) &&
+    isRpsReadoutChoice(round.networkChoice) &&
+    isRpsOutcome(round.outcome) &&
+    Number.isFinite(round.payoff) &&
+    Number.isFinite(round.readoutConfidence) &&
+    Number.isFinite(round.winnerMargin) &&
+    Number.isFinite(round.confidence)
+  );
+}
+
+function scoreRpsOutcome(networkChoice: NeuralRpsReadoutChoice, opponentChoice: NeuralRpsChoice): NeuralRpsOutcome {
+  if (!isRpsChoice(networkChoice)) {
+    return "none";
+  }
+  if (networkChoice === opponentChoice) {
+    return "draw";
+  }
+  return rpsCounterChoice(opponentChoice) === networkChoice ? "win" : "loss";
+}
+
+function rpsPayoff(outcome: NeuralRpsOutcome): number {
+  if (outcome === "win") {
+    return 1;
+  }
+  if (outcome === "loss") {
+    return -1;
+  }
+  return 0;
+}
+
+function emptyChoiceRecord(): Record<NeuralRpsChoice, number> {
+  return { rock: 0, paper: 0, scissors: 0 };
+}
+
+function emptyTransitionCounts(): Record<NeuralRpsChoice, Record<NeuralRpsChoice, number>> {
+  return {
+    rock: emptyChoiceRecord(),
+    paper: emptyChoiceRecord(),
+    scissors: emptyChoiceRecord()
+  };
+}
+
+function countOpponentChoices(rounds: readonly NeuralRpsRound[]): Record<NeuralRpsChoice, number> {
+  const counts = emptyChoiceRecord();
+  for (const round of rounds) {
+    if (isRpsChoice(round.opponentChoice)) {
+      counts[round.opponentChoice] += 1;
+    }
+  }
+  return counts;
+}
+
+function countNetworkChoices(rounds: readonly NeuralRpsRound[]): Record<NeuralRpsChoice, number> {
+  const counts = emptyChoiceRecord();
+  for (const round of rounds) {
+    if (isRpsChoice(round.networkChoice)) {
+      counts[round.networkChoice] += 1;
+    }
+  }
+  return counts;
+}
+
+function countTransitions(rounds: readonly NeuralRpsRound[]): Record<NeuralRpsChoice, Record<NeuralRpsChoice, number>> {
+  const counts = emptyTransitionCounts();
+  for (let index = 1; index < rounds.length; index += 1) {
+    const previous = rounds[index - 1]?.opponentChoice;
+    const next = rounds[index]?.opponentChoice;
+    if (isRpsChoice(previous) && isRpsChoice(next)) {
+      counts[previous][next] += 1;
+    }
+  }
+  return counts;
+}
+
+function computeChoiceBias(rounds: readonly NeuralRpsRound[], config: NeuralStrategyAdaptationConfig): Record<NeuralRpsChoice, number> {
+  const bias = emptyChoiceRecord();
+  for (let index = 0; index < rounds.length; index += 1) {
+    for (const choice of neuralRpsChoices) {
+      bias[choice] = clamp(bias[choice] * (1 - config.decayRate), -config.maxBiasMagnitude, config.maxBiasMagnitude);
+    }
+    const prefix = rounds.slice(0, index + 1);
+    const prediction = computePatternPrediction(prefix, config);
+    if (prediction.predictedCounterChoice !== "unknown" && prediction.confidence >= config.minPatternConfidence) {
+      bias[prediction.predictedCounterChoice] = clamp(
+        bias[prediction.predictedCounterChoice] + config.learningRate * prediction.confidence,
+        -config.maxBiasMagnitude,
+        config.maxBiasMagnitude
+      );
+    }
+  }
+  return bias;
+}
+
+function computePatternPrediction(
+  rounds: readonly NeuralRpsRound[],
+  config: NeuralStrategyAdaptationConfig
+): {
+  predictedOpponentChoice: NeuralRpsChoice | "unknown";
+  predictedCounterChoice: NeuralRpsChoice | "unknown";
+  confidence: number;
+  transitionStability: number;
+} {
+  const recent = boundNeuralRpsRounds(rounds, config.historyWindow);
+  if (recent.length === 0) {
+    return { predictedOpponentChoice: "unknown", predictedCounterChoice: "unknown", confidence: 0, transitionStability: 0 };
+  }
+  const frequency = distributionPrediction(countOpponentChoices(recent), recent.length);
+  const transitionRounds = recent.slice(-config.patternWindow);
+  const transitions = countTransitions(transitionRounds);
+  const lastChoice = transitionRounds[transitionRounds.length - 1]?.opponentChoice;
+  const transitionTotal = lastChoice ? sumChoiceRecord(transitions[lastChoice]) : 0;
+  const transition = lastChoice && transitionTotal > 0 ? distributionPrediction(transitions[lastChoice], transitionTotal) : null;
+  const transitionStability = transition ? transition.confidence : 0;
+  const selected = transition && transition.confidence > frequency.confidence ? transition : frequency;
+  if (!selected.choice) {
+    return { predictedOpponentChoice: "unknown", predictedCounterChoice: "unknown", confidence: 0, transitionStability };
+  }
+  return {
+    predictedOpponentChoice: selected.choice,
+    predictedCounterChoice: rpsCounterChoice(selected.choice),
+    confidence: selected.confidence,
+    transitionStability
+  };
+}
+
+function distributionPrediction(
+  counts: Record<NeuralRpsChoice, number>,
+  total: number
+): { choice: NeuralRpsChoice | null; confidence: number } {
+  if (total <= 0) {
+    return { choice: null, confidence: 0 };
+  }
+  const sorted = neuralRpsChoices
+    .map((choice) => ({ choice, count: counts[choice] }))
+    .sort((left, right) => right.count - left.count || neuralRpsChoices.indexOf(left.choice) - neuralRpsChoices.indexOf(right.choice));
+  const top = sorted[0]!;
+  const second = sorted[1]?.count ?? 0;
+  if (top.count <= 0 || top.count === second) {
+    return { choice: null, confidence: 0 };
+  }
+  const maxShare = top.count / total;
+  const secondShare = second / total;
+  const sampleFactor = clamp(total / 4, 0, 1);
+  const confidence = clamp((maxShare - secondShare) * 1.5 * sampleFactor, 0, 1);
+  return { choice: top.choice, confidence };
+}
+
+function computeRollingRates(rounds: readonly NeuralRpsRound[]): { win: number; draw: number; loss: number; nonDrawWin: number } {
+  const scored = rounds.filter((round) => isScoredRpsOutcome(round.outcome)).slice(-30);
+  if (scored.length === 0) {
+    return { win: 0, draw: 0, loss: 0, nonDrawWin: 0 };
+  }
+  const wins = scored.filter((round) => round.outcome === "win").length;
+  const draws = scored.filter((round) => round.outcome === "draw").length;
+  const losses = scored.filter((round) => round.outcome === "loss").length;
+  const nonDrawTotal = wins + losses;
+  return {
+    win: wins / scored.length,
+    draw: draws / scored.length,
+    loss: losses / scored.length,
+    nonDrawWin: nonDrawTotal > 0 ? wins / nonDrawTotal : 0
+  };
+}
+
+function computeChoiceEntropy(counts: Record<NeuralRpsChoice, number>): number {
+  const total = sumChoiceRecord(counts);
+  if (total <= 0) {
+    return 0;
+  }
+  const entropy = neuralRpsChoices.reduce((sum, choice) => {
+    const count = counts[choice];
+    if (count <= 0) {
+      return sum;
+    }
+    const probability = count / total;
+    return sum - probability * Math.log2(probability);
+  }, 0);
+  return clamp(entropy / Math.log2(neuralRpsChoices.length), 0, 1);
+}
+
+function sumChoiceRecord(counts: Record<NeuralRpsChoice, number>): number {
+  return neuralRpsChoices.reduce((sum, choice) => sum + counts[choice], 0);
+}
+
+function formatAdaptationUpdateSummary(
+  predictedOpponentChoice: NeuralRpsChoice | "unknown",
+  predictedCounterChoice: NeuralRpsChoice | "unknown",
+  enabled: boolean
+): string {
+  if (!enabled) {
+    return "No adaptation update: adaptation is disabled.";
+  }
+  if (predictedOpponentChoice === "unknown" || predictedCounterChoice === "unknown") {
+    return "No adaptation update: no stable pattern was detected.";
+  }
+  return `Adaptation update: recent rounds favored ${titleCase(predictedOpponentChoice)}, so the readout bias shifted toward ${titleCase(
+    predictedCounterChoice
+  )}.`;
+}
+
+function deterministicExploration(seed: string, roundIndex: number, explorationRate: number): boolean {
+  return deterministicUnit(`${seed}:explore:${roundIndex}`) < explorationRate;
+}
+
+function deterministicExplorationChoice(userChoice: NeuralRpsChoice, seed: string, roundIndex: number): NeuralRpsChoice {
+  const unit = deterministicUnit(`${seed}:choice:${roundIndex}`);
+  const offset = Math.floor(unit * neuralRpsChoices.length) % neuralRpsChoices.length;
+  const start = neuralRpsChoices.indexOf(userChoice);
+  return neuralRpsChoices[(start + offset) % neuralRpsChoices.length] ?? userChoice;
+}
+
+function deterministicUnit(input: string): number {
+  let hash = 2166136261;
+  for (let index = 0; index < input.length; index += 1) {
+    hash ^= input.charCodeAt(index);
+    hash = Math.imul(hash, 16777619);
+  }
+  return (hash >>> 0) / 4_294_967_295;
+}
+
+function formatBiasSummary(choiceBias: Record<NeuralRpsChoice, number>): string {
+  return neuralRpsChoices.map((choice) => `${titleCase(choice)} ${formatSigned(choiceBias[choice])}`).join(" · ");
+}
+
+function formatSigned(value: number): string {
+  return `${value >= 0 ? "+" : ""}${formatNumber(value, 2)}`;
+}
+
+function percent(value: number): string {
+  return `${formatNumber(clamp(value, 0, 1) * 100, 0)}%`;
 }
 
 function classifyNeuralCascade(snapshot: SimulationSnapshotView | null | undefined): NeuralCascadeStatus {
@@ -695,4 +1346,8 @@ function metricNumber(snapshot: SimulationSnapshotView | null | undefined, globa
 
 function numberValue(value: JsonValue | undefined): number | undefined {
   return typeof value === "number" && Number.isFinite(value) ? value : undefined;
+}
+
+function clamp(value: number, min: number, max: number): number {
+  return Math.min(max, Math.max(min, value));
 }

@@ -42,7 +42,8 @@ describe("Neural Excitation Network template", () => {
     expect(docs).toContain("It does not make Builder graphs or model-schema graphs executable.");
     expect(docs).toContain("Decision Readout V1 maps labeled output assemblies to bounded categorical choices. It is not cognition or reasoning.");
     expect(docs).toContain("Rock-Paper-Scissors labels are semantic labels assigned by the model designer, not meanings understood by the network.");
-    expect(docs).toContain("RPS payoff is observational in V1 and does not train, adapt, or optimize the network.");
+    expect(docs).toContain("Template RPS payoff is observational and does not train, optimize, mutate synapses, or update biological/plasticity fields.");
+    expect(docs).toContain("Neural Strategy Adaptation V1 is local to the Neural Runtime Lab RPS/readout mode and adjusts bounded readout bias only.");
     expect(docs).toContain("The model does not infer intentions, beliefs, preferences, personality, or human decision-making.");
   });
 
