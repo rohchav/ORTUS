@@ -290,6 +290,16 @@
 - Keep reset learned strategy and clear round history controls visible.
 - Reset learned strategy must not rehydrate old bounded RPS history or suppress new rounds after history truncation.
 - Keep Neural Strategy Adaptation explanations non-anthropomorphic.
+- Prompt MR0 is documentation only; do not implement future templates, decision-cluster runtime, blackjack logic, external-stimulus runtime, observed cluster discovery, UI behavior, source runtime code, primitives, casino support, wearable support, camera input, live-card input, or gambling-advice features from MR0 alone.
+- Return to Prompt 38 after Prompt MR0 unless the user explicitly redirects.
+- Do not add future templates or decision-cluster runtime without dedicated implementation prompts and audits.
+- Decision clusters model observable state-action patterns, not thoughts.
+- Prediction outputs are probabilities, not certainties.
+- Cluster labels are assigned modeling labels, not meanings understood by the system.
+- External stimuli are modeled inputs, not evidence of internal mental state.
+- Observed clusters are analytical groupings, not psychological profiles.
+- Blackjack work is offline simulation only, not gambling advice, live casino assistance, or wearable card-counting support.
+- Do not use wearable devices, camera input, or software assistance for live casino play.
 - Keep Neural runtime graph scoped only to the Neural template.
 - Keep Neural Runtime Lab scenario-first but scientifically honest.
 - Do not add learning/adaptation in NUX1.

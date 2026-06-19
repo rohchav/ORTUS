@@ -26,6 +26,13 @@ const requiredDocPhrases = [
   "A repaired schema may be structurally valid and still have no runtime implementation.",
   "ORTUS does not infer the correct model behavior from validation repairs.",
   "Validation repairs do not generate templates, scenarios, RunConfigs, snapshots, or engines.",
+  "Decision clusters model observable state-action patterns, not thoughts.",
+  "Prediction outputs are probabilities, not certainties.",
+  "Cluster labels are assigned modeling labels, not meanings understood by the system.",
+  "External stimuli are modeled inputs, not evidence of internal mental state.",
+  "Observed clusters are analytical groupings, not psychological profiles.",
+  "Blackjack work is offline simulation only, not gambling advice, live casino assistance, or wearable card-counting support.",
+  "Do not use wearable devices, camera input, or software assistance for live casino play.",
   "Rendered responsive behavior and WCAG-level accessibility remain unverified until browser and assistive-technology testing is available."
 ];
 
@@ -87,10 +94,38 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(roadmap).toContain("Completed Prompt 36 graph-view foundation and audit");
     expect(roadmap).toContain("Completed Prompt 37 validation-assistance foundation and audit");
     expect(roadmap).toContain("Prompt 35 adds a separate `Author Schema` Builder mode");
-    expect(roadmap).toContain("Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, and N2B are complete.");
-    expect(roadmap).toContain("The next roadmap prompt after the N2/N2B commit checkpoint is Prompt 38: Schema-to-Template Fit Report V1.");
+    expect(roadmap).toContain("Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, and MR0 are complete.");
+    expect(roadmap).toContain("The next roadmap prompt after the MR0 commit checkpoint is Prompt 38: Schema-to-Template Fit Report V1.");
     expect(roadmap).toContain("Prompt N2 adds Neural Strategy Adaptation V1 to the Neural Runtime Lab RPS/readout mode.");
     expect(roadmap).toContain("Non-roadmap Prompt N2B audits and hardens Neural Strategy Adaptation.");
+    expect(roadmap).toContain(
+      "Non-roadmap Prompt MR0 records future template and decision-cluster direction only; it does not implement runtime behavior."
+    );
+    expect(roadmap).toContain("MR0 is documentation only.");
+    expect(roadmap).toContain("T1: Urban Daily Routine / Activity Choice Template V1.");
+    expect(roadmap).toContain("T2: Atmospheric Field Dynamics Template V1.");
+    expect(roadmap).toContain("DC1: Cluster-Based Decision Readout Generalization V1.");
+    expect(roadmap).toContain("DC2: Stimulus-Conditioned Decision Clusters V1.");
+    expect(roadmap).toContain("G1: Blackjack Sequential Decision Lab V1.");
+    expect(roadmap).toContain("DC3: Observed Cluster Discovery / Decision-Space Analytics V1.");
+    expect(roadmap).toContain(
+      "A stylized activity-choice ABM for agents, locations, routines, habits, resources, commute costs, time-of-day effects, and disruptions."
+    );
+    expect(roadmap).toContain(
+      "A stylized spatial field model for temperature, moisture, pressure proxy, wind vector proxy, diffusion, advection-like movement, and threshold zones."
+    );
+    expect(roadmap).toContain(
+      "context cluster → decision cluster → probability readout → selected action"
+    );
+    expect(roadmap).toContain(
+      "external stimulus → context cluster activation → trajectory cluster → decision probabilities"
+    );
+    expect(roadmap).toContain(
+      "Blackjack Sequential Decision Lab V1 is an offline simulated card-game decision lab, not gambling advice, casino assistance, or a real-money betting tool."
+    );
+    expect(roadmap).toContain(
+      "Observed clusters are analytical groupings, not discovered thoughts, psychological types, or real-world identities."
+    );
     expect(roadmap).toContain("round-index reset guards");
     expect(roadmap).toContain("Strategy Adaptation V1 updates bounded game-state variables from observed RPS rounds.");
     expect(roadmap).toContain("The adaptive readout can exploit repeated patterns, but it cannot beat truly random optimal play over time.");

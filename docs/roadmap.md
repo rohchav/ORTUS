@@ -4,7 +4,7 @@ This roadmap reserves the major complex-systems pillars that ORTUS must support 
 
 ## Current Foundation
 
-ORTUS has completed through Prompt 37B, plus non-roadmap Prompt N1: Neural Excitation Network Template V1, Prompt N1B: Neural Excitation Network Template Audit + Decision Readout V1, Prompt NUX1: Neural Runtime Lab UX V1, Prompt NUX1B: Neural Runtime Lab UX Audit + Build Investigation, Prompt N2: Neural Strategy Adaptation V1, and Prompt N2B: Neural Strategy Adaptation Audit. Prompts 1-37B established the current foundation:
+ORTUS has completed through Prompt 37B, plus non-roadmap Prompt N1: Neural Excitation Network Template V1, Prompt N1B: Neural Excitation Network Template Audit + Decision Readout V1, Prompt NUX1: Neural Runtime Lab UX V1, Prompt NUX1B: Neural Runtime Lab UX Audit + Build Investigation, Prompt N2: Neural Strategy Adaptation V1, Prompt N2B: Neural Strategy Adaptation Audit, and Prompt MR0: Templates + Decision Clusters Mini-Roadmap. Prompts 1-37B established the current foundation:
 
 - Engine/runtime/UI foundation.
 - Scenario Builder.
@@ -34,12 +34,13 @@ ORTUS has completed through Prompt 37B, plus non-roadmap Prompt N1: Neural Excit
 - Non-roadmap Prompt NUX1B audits that lab and fixes the production build failure by removing build-time remote Google font fetches in favor of existing CSS fallback stacks. Rendered responsive, zoom, and assistive-technology behavior remain unverified unless directly tested.
 - Non-roadmap Prompt N2 adds Neural Strategy Adaptation V1 to the Neural Runtime Lab RPS/readout mode. Strategy Adaptation V1 updates bounded game-state variables from observed RPS rounds. It is not cognition, reasoning, or human intention inference. The adaptive readout can exploit repeated patterns, but it cannot beat truly random optimal play over time. Learned strategy state is local model state, not a psychological profile. Adaptation changes game-readout bias only; it does not simulate biological plasticity or human learning. It uses bounded local RPS history, pattern statistics, deterministic exploration, rolling results, and bounded readout-bias/stimulus adjustment. It does not persist a user profile, infer beliefs/intentions/preferences/personality, update core synapse weights, make Builder graphs executable, or make Model Schemas runnable.
 - Non-roadmap Prompt N2B audits and hardens Neural Strategy Adaptation. It fixes the array-index reset flaw by using round-index reset guards, keeps round numbering monotonic after bounded-history truncation, filters malformed round objects before statistics, strengthens deterministic/malformed-state tests, and documents that fresh-run rebuilds do not clear local learned strategy unless Reset learned strategy is used.
+- Non-roadmap Prompt MR0 records future template and decision-cluster direction only; it does not implement runtime behavior. MR0 is documentation only. It adds a near-term roadmap for T1 Urban Daily Routine / Activity Choice, T2 Atmospheric Field Dynamics, DC1 cluster-based decision readout generalization, DC2 stimulus-conditioned decision clusters, G1 Blackjack Sequential Decision Lab, and DC3 observed cluster discovery / decision-space analytics.
 
 These foundations are deliberately service-first or metadata-first unless documented otherwise. Networks, resources, feedback primitives, boundary/environment models, spatial fields, observability models, causal assumptions, quantity semantics, emergence descriptors, robustness/resilience descriptors, and strategy/control descriptors are headless structural services until a template explicitly uses them at runtime. A template must not claim support for a primitive merely because a service exists.
 
 After Prompt 30B, ORTUS completed a repository hygiene, durable context, dependency stabilization, and performance/scalability pass. That pass added and validated performance instrumentation and spatial-indexing foundations, but it does not turn reserved structural primitives into runtime support and is not evidence for high-scale readiness by itself.
 
-Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 37B: Schema Validation UX + Repair Suggestions Audit are complete. Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, and N2B are complete. The next roadmap prompt after the N2/N2B commit checkpoint is Prompt 38: Schema-to-Template Fit Report V1.
+Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 37B: Schema Validation UX + Repair Suggestions Audit are complete. Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, and MR0 are complete. The next roadmap prompt after the MR0 commit checkpoint is Prompt 38: Schema-to-Template Fit Report V1.
 
 ## Revised Prompt Sequence
 
@@ -122,6 +123,24 @@ Next roadmap prompt:
 
 1. 38 - Schema-to-Template Fit Report V1.
 
+Prompt MR0 mini-roadmap order:
+
+1. MR0: Templates + Decision Clusters Mini-Roadmap.
+2. Prompt 38: Schema-to-Template Fit Report V1.
+3. Prompt 38B: Schema-to-Template Fit Report Audit.
+4. T1: Urban Daily Routine / Activity Choice Template V1.
+5. T1B: Urban Daily Routine / Activity Choice Audit.
+6. T2: Atmospheric Field Dynamics Template V1.
+7. T2B: Atmospheric Field Dynamics Audit.
+8. DC1: Cluster-Based Decision Readout Generalization V1.
+9. DC1B: Cluster-Based Decision Readout Audit.
+10. DC2: Stimulus-Conditioned Decision Clusters V1.
+11. DC2B: Stimulus-Conditioned Decision Clusters Audit.
+12. G1: Blackjack Sequential Decision Lab V1.
+13. G1B: Blackjack Sequential Decision Lab Audit.
+14. DC3: Observed Cluster Discovery / Decision-Space Analytics V1.
+15. DC3B: Observed Cluster Discovery / Decision-Space Analytics Audit.
+
 Later roadmap bands:
 
 - Post-31 audit: validation schema, versioning/migration, rule primitive library, execution safety hardening, trace inspection, error budgets, phase/tipping tools, attractor/basin tools, agent internal state, adaptive agents, and heterogeneity.
@@ -136,6 +155,179 @@ Observability and causal assumptions come before serious calibration, data assim
 The visual builder must wait until schema, interpreter, and execution-safety foundations exist. A visual rule editor without a model definition schema would either be fake or unsafe.
 
 Predictive claims are prohibited until validation, calibration, and domain review phases exist. Current ORTUS outputs are exploratory simulations under stated assumptions.
+
+## Prompt MR0 Mini-Roadmap
+
+Prompt MR0 is a docs-only branch, not a capability branch. It names future work so ORTUS can grow without pretending planned concepts already run.
+
+```text
+Prompt MR0 records future template and decision-cluster direction only; it does not implement runtime behavior.
+MR0 is documentation only.
+Decision clusters model observable state-action patterns, not thoughts.
+Prediction outputs are probabilities, not certainties.
+Cluster labels are assigned modeling labels, not meanings understood by the system.
+External stimuli are modeled inputs, not evidence of internal mental state.
+Observed clusters are analytical groupings, not psychological profiles.
+Blackjack work is offline simulation only, not gambling advice, live casino assistance, or wearable card-counting support.
+Do not use wearable devices, camera input, or software assistance for live casino play.
+```
+
+### T1 Urban Daily Routine / Activity Choice Template V1
+
+Purpose:
+
+```text
+A stylized activity-choice ABM for agents, locations, routines, habits, resources, commute costs, time-of-day effects, and disruptions.
+```
+
+Core concepts: agents, locations, daily schedule blocks, needs/resources, habits, commute costs, time-of-day effects, bounded social exposure, disruption, activity choice, interventions, routine stability metrics.
+
+Choices: work, commute, eat, shop, rest, exercise, socialize, stay home.
+
+Boundary:
+
+```text
+Urban Daily Routine / Activity Choice Template V1 is a stylized activity-choice ABM, not real human behavior prediction.
+Routine choices are model outputs, not inferred intentions, preferences, psychology, or personality.
+```
+
+### T2 Atmospheric Field Dynamics Template V1
+
+Purpose:
+
+```text
+A stylized spatial field model for temperature, moisture, pressure proxy, wind vector proxy, diffusion, advection-like movement, and threshold zones.
+```
+
+Core concepts: scalar fields, vector proxy, diffusion, advection-like movement, bounded terrain/boundary effects, moisture/temperature interaction, stylized precipitation/storm-cell proxy, field metrics/interventions.
+
+Boundary:
+
+```text
+Atmospheric Field Dynamics Template V1 is a stylized field-dynamics model, not weather forecasting, climate simulation, CFD, or operational meteorology.
+```
+
+### T3 Later Urban Exposure + Resilience Scenario Pack
+
+Purpose:
+
+```text
+A scenario pack combining daily routines, environmental fields, interventions, and exposure/resilience metrics.
+```
+
+Examples: heat/pollution exposure, transit disruption, cooling-center intervention, unequal exposure burden, resource allocation under stress.
+
+Boundary:
+
+```text
+Urban Exposure + Resilience scenarios are exploratory simulations, not epidemiological proof, policy certification, or public-health prediction.
+```
+
+### DC1 Cluster-Based Decision Readout Generalization V1
+
+Purpose:
+
+```text
+Generalize the Neural/RPS decision-readout pattern into a reusable ORTUS design for context clusters, decision clusters, probabilities, and selected actions.
+```
+
+Architecture:
+
+```text
+context cluster → decision cluster → probability readout → selected action
+```
+
+DC1 starts with fixed designed clusters first. Examples include RPS lose-switch/repeat-Rock, routine morning-workday/low-energy-evening, and blackjack hard-16 + dealer-10.
+
+Boundary:
+
+```text
+Decision clusters model observable state-action patterns, not thoughts, beliefs, intentions, preferences, or personality.
+Prediction outputs are probabilities, not certainties.
+Cluster labels are assigned modeling labels, not meanings understood by the system.
+```
+
+### DC2 Stimulus-Conditioned Decision Clusters V1
+
+Purpose:
+
+```text
+Add external stimuli as structured modeled inputs that activate or suppress context clusters before decision probabilities are computed.
+```
+
+Architecture:
+
+```text
+external stimulus → context cluster activation → trajectory cluster → decision probabilities
+```
+
+Stimuli examples: time pressure, reward/penalty change, visual cue, environment shift, resource constraint, interruption, dealer up-card in simulated card game, heat condition, transit delay.
+
+Distinction:
+
+```text
+Structured stimulus = explicit modeled input.
+Random stimulus = noise or uncertainty only.
+```
+
+Boundary:
+
+```text
+External stimuli are modeled inputs, not proof of internal mental state.
+Stimulus-conditioned decisions estimate local state-action probabilities; they do not infer hidden intentions.
+```
+
+### G1 Blackjack Sequential Decision Lab V1
+
+Purpose:
+
+```text
+An offline simulated card-game decision lab for sequential, state-dependent action selection.
+```
+
+V1 is offline only. V1 decisions are Hit/Stand only. It must not add real-money betting, casino assistance, wearable/camera/live-card input, gambling advice, or a card-counting assistant for live play.
+
+Deferred: Double, Split, Surrender, real card-counting optimization, wearable display, camera input, live casino use, betting advice, bankroll systems.
+
+State clusters: hard low total, hard danger total 12–16, strong total 17–21, soft hand, pair hand, dealer weak/strong up-card, deck-pressure proxy from simulated shoe only.
+
+Decision clusters: Hit/Stand.
+
+Boundary:
+
+```text
+Blackjack Sequential Decision Lab V1 is an offline simulated card-game decision lab, not gambling advice, casino assistance, or a real-money betting tool.
+Deck-pressure metrics must come from simulated or manually entered practice data only.
+Do not use wearable devices, camera input, or software assistance for live casino play.
+```
+
+G1 comes after DC1/DC2 because blackjack is sequential, partial-information, and payoff-driven.
+
+### DC3 Later Observed Cluster Discovery / Decision-Space Analytics V1
+
+Purpose:
+
+```text
+A 10x-inspired analysis layer that discovers clusters from observed simulation traces rather than relying only on designed clusters.
+```
+
+Abstractions:
+
+```text
+many observations → feature vectors → similarity graph → discovered clusters → human-readable labels
+rounds / agents / states / trajectories → decision feature vectors → similarity graph → observed behavior clusters → decision-space map
+```
+
+Examples: states to Hit/Stand, commute-heavy routine clusters, neural states high-confidence Paper, field/agent high-exposure.
+
+Boundary:
+
+```text
+Observed clusters are analytical groupings, not discovered thoughts, psychological types, or real-world identities.
+Observed cluster labels are analyst/model labels, not meanings inferred from a person.
+```
+
+DC3 waits until enough runtime traces from multiple systems exist.
 
 ## Capability Policy
 

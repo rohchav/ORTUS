@@ -1,8 +1,8 @@
 # ORTUS HCI / UX / Visual-Direction Audit
 
 Date: 2026-06-11  
-Updated: 2026-06-18 after Prompt NUX1B
-Prompt: UI-BRAND-1, UI-REMEDIATION-1, Prompt 34B, Prompt 35, Prompt 35B, Prompt 36, Prompt 36B, Prompt 37, Prompt 37B, Prompt N1, Prompt N1B, Prompt NUX1, Prompt NUX1B
+Updated: 2026-06-19 after Prompt MR0
+Prompt: UI-BRAND-1, UI-REMEDIATION-1, Prompt 34B, Prompt 35, Prompt 35B, Prompt 36, Prompt 36B, Prompt 37, Prompt 37B, Prompt N1, Prompt N1B, Prompt NUX1, Prompt NUX1B, Prompt N2, Prompt N2B, Prompt MR0
 Status: source-based audit, not a formal WCAG audit
 
 ## 1. Executive Verdict
@@ -53,6 +53,9 @@ The NUX1 production-build failure was not caused by the lab code. It was a build
 Prompt N2/N2B update:
 Neural Strategy Adaptation V1 turns the RPS shell into an Adaptive RPS Challenge with start/pause, choose Rock/Paper/Scissors, enable adaptation, reset learned strategy, clear round history, and adaptation details controls. Strategy Adaptation V1 updates bounded game-state variables from observed RPS rounds. It is not cognition, reasoning, or human intention inference. The adaptive readout can exploit repeated patterns, but it cannot beat truly random optimal play over time. Learned strategy state is local model state, not a psychological profile. Adaptation changes game-readout bias only; it does not simulate biological plasticity or human learning. The source-level HCI risk is still high: users may overread "learning," "confidence," "prediction," or "strategy" as mind-reading or human psychology. Prompt N2B found a real reset/truncation defect: array-index reset state could suppress new learned rounds once bounded history was full. The fix uses round-index reset guards, monotonic round numbering after history truncation, malformed-round filtering, and clearer fresh-run copy stating that local learned strategy is not cleared unless Reset learned strategy is used. The implementation counters overclaim risk with local-state caveats, random-play warnings, text-readable confidence/bias/rolling stats, visible reset/clear controls, and non-anthropomorphic explanations. Rendered responsiveness, keyboard walkthrough quality, browser zoom, screen-reader behavior, assistive-technology behavior, WCAG conformance, and whether users actually notice the caveats remain unverified until a browser/AT audit.
 
+Prompt MR0 update:
+MR0 is documentation only and adds no UI. The HCI risk is therefore future-facing rather than rendered: future decision clusters, stimulus-conditioned decisions, observed clusters, and game-decision labs can easily be misread as mind modeling, personality inference, prediction certainty, or live decision advice. The mini-roadmap requires the blunt counter-language now: decision clusters model observable state-action patterns, not thoughts; prediction outputs are probabilities, not certainties; cluster labels are assigned modeling labels, not meanings understood by the system; external stimuli are modeled inputs, not evidence of internal mental state; observed clusters are analytical groupings, not psychological profiles; blackjack work is offline simulation only, not gambling advice, live casino assistance, or wearable card-counting support; and users must not use wearable devices, camera input, or software assistance for live casino play.
+
 ## 2. Audit Scope
 
 Inspected surfaces:
@@ -68,6 +71,7 @@ Inspected surfaces:
 - Neural Runtime Lab scenario cards, mission/status readouts, live explanations, direct actions, plain-English controls, Advanced config drawer, bounded timeline, and RPS shell added in Prompt NUX1.
 - Neural Runtime Lab build and source-boundary hardening added in Prompt NUX1B.
 - Neural Runtime Lab Adaptive RPS Challenge, bounded local strategy state, reset/clear controls, adaptation details, and source-boundary tests added in Prompt N2; reset/truncation hardening and malformed-round filtering added in Prompt N2B.
+- Prompt MR0 docs-only mini-roadmap and guardrails for future template, decision-cluster, stimulus-conditioned, offline blackjack, and observed-cluster work.
 - Global CSS, typography tokens, responsive rules, focus styles, animation/reduced-motion rules.
 - Metadata and favicon/icon configuration.
 - Existing component and simulation tests.

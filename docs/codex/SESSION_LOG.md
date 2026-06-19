@@ -830,6 +830,39 @@ Remaining limitations:
 
 Next roadmap prompt after commit: Prompt 38 Schema-to-Template Fit Report V1.
 
+## 2026-06-19 - Prompt MR0 Templates + Decision Clusters Mini-Roadmap
+
+Goal: add a documentation-only mini-roadmap for near-term runtime templates, decision-cluster generalization, stimulus-conditioned decision clusters, a later offline blackjack/sequential decision lab, and a later observed-cluster analytics layer before returning to Prompt 38.
+
+Starting state:
+
+- `git status --short`: clean.
+- Latest commit before MR0 was `1a8eda0 feat: add neural strategy adaptation`, confirming Prompt N2 and Prompt N2B were committed.
+- Prompt MR0 was explicitly scoped to docs/roadmap updates only. It did not authorize runtime code, UI behavior, new templates, new primitives, decision-cluster execution, blackjack execution, external-stimulus runtime, observed cluster discovery, wearable support, camera input, live-card input, casino assistance, or gambling advice.
+
+Documentation updates:
+
+- Updated planned roadmap, public roadmap, README, concepts, current context, simulation README, HCI audit, workspace IA, AGENTS guardrails, and roadmap status tests.
+- Documented the required order: MR0, Prompt 38, Prompt 38B, T1/T1B Urban Daily Routine / Activity Choice, T2/T2B Atmospheric Field Dynamics, DC1/DC1B Cluster-Based Decision Readout Generalization, DC2/DC2B Stimulus-Conditioned Decision Clusters, G1/G1B Blackjack Sequential Decision Lab, and DC3/DC3B Observed Cluster Discovery / Decision-Space Analytics.
+- Added exact guardrails that decision clusters model observable state-action patterns rather than thoughts, outputs are probabilities rather than certainties, labels are assigned modeling labels, external stimuli are modeled inputs rather than evidence of internal mental state, observed clusters are analytical groupings rather than psychological profiles, and blackjack work is offline simulation only.
+- Preserved Prompt N2/N2B constraints: no generic decision analytics runtime, no external-stimulus runtime, no blackjack implementation, no wearable/camera/live-casino functionality, no cognition/biological-plasticity claims, no Builder graph execution, no Model Schema execution, and no social-learning runtime expansion.
+
+Checks:
+
+- `npm run test -- roadmap`: passed, 1 file and 4 tests.
+- `npm run test -- roadmap assumptions`: passed, 2 files and 12 tests.
+- `npm run typecheck`: passed.
+- `npm test`: passed, 56 files and 449 tests.
+- `npm run build`: passed; Next.js prerendered `/` and `/builder`.
+- `npm run perf:simulation`: passed. Local smoke results included Flocking 100 agents at 111.42 ticks/sec, Flocking 500 agents at 16.88 ticks/sec, Forest Fire 80x60 at 27.18 ticks/sec, and Predator-Prey default at 78.74 ticks/sec.
+- `git diff --check`: passed.
+- `npm run lint`: unavailable, package.json has no lint script.
+
+Remaining limitations:
+
+- MR0 is documentation only. No future template, decision-cluster, stimulus-conditioned, blackjack, or observed-cluster runtime is implemented by this work.
+- Prompt 38 remains the next roadmap prompt after the MR0 commit checkpoint.
+
 ## 2026-06-19 - Prompt N2B Neural Strategy Adaptation Audit
 
 Goal: audit and harden Prompt N2 Neural Strategy Adaptation without broadening beyond the Neural Runtime Lab RPS/readout mode, without starting Prompt 38, and without adding cognition, biological plasticity, profiling, Builder graph execution, Model Schema execution, social-learning runtime, blackjack, generic decision analytics, or external stimuli.

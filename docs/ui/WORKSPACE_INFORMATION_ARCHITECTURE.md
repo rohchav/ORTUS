@@ -1,7 +1,7 @@
 # ORTUS Workspace Information Architecture
 
-Date: 2026-06-18
-Prompt: UI-REMEDIATION-1, audited and hardened by Prompt 34B, extended by Prompt 35, audited by Prompt 35B, extended by Prompt 36, audited by Prompt 36B, extended by Prompt 37, audited by Prompt 37B, extended by Prompt NUX1, and audited by Prompt NUX1B
+Date: 2026-06-19
+Prompt: UI-REMEDIATION-1, audited and hardened by Prompt 34B, extended by Prompt 35, audited by Prompt 35B, extended by Prompt 36, audited by Prompt 36B, extended by Prompt 37, audited by Prompt 37B, extended by Prompt NUX1, audited by Prompt NUX1B, extended by Prompt N2, audited by Prompt N2B, and documented by Prompt MR0
 Status: implemented and source-audited; rendered screenshot and browser zoom tooling remain unavailable in this environment
 
 ## Problem
@@ -55,6 +55,8 @@ Prompt NUX1 extends Setup only when the Neural Excitation Network template is se
 Prompt NUX1B keeps that workspace structure unchanged while fixing production buildability and source-level audit gaps. The Neural Runtime Lab remains a Setup-only UI layer; it is not a new workspace mode, runtime primitive, schema interpreter, Builder graph executor, or learning system. Rendered responsive, zoom, and assistive-technology behavior remain unverified unless directly tested.
 
 Prompt N2 keeps the same Setup-only IA and upgrades only the Neural lab RPS shell into an Adaptive RPS Challenge. Prompt N2B audits and hardens that shell without adding a workspace mode. Strategy Adaptation V1 updates bounded game-state variables from observed RPS rounds. It is not cognition, reasoning, or human intention inference. The adaptive readout can exploit repeated patterns, but it cannot beat truly random optimal play over time. Learned strategy state is local model state, not a psychological profile. Adaptation changes game-readout bias only; it does not simulate biological plasticity or human learning. Prompt N2B keeps reset semantics round-index based, keeps round numbering monotonic after bounded-history truncation, filters malformed round objects before statistics, and documents that fresh-run rebuilds do not clear local learned strategy unless Reset learned strategy is used. Adaptation details, local exact adaptation values, reset learned strategy, and clear round history controls stay inside the Neural lab panel. They do not create a new workspace mode, persist a user strategy profile, mutate Builder artifacts, execute Model Schemas, make Builder graphs executable, update core neural synapse weights, or activate social-learning artifacts.
+
+Prompt MR0 is documentation only and does not change the workspace hierarchy. It does not add a new workspace mode, UI surface, runtime template, decision-cluster runtime, stimulus-conditioned runtime, blackjack lab, observed-cluster analytics, wearable/camera/live-card input, casino assistance, or gambling-advice flow. Future T1/T2/DC1/DC2/G1/DC3 work must arrive through dedicated prompts and audits before it appears in Setup, Observe, Experiment, Compare, Builder, or any other workspace area.
 
 ## Header
 

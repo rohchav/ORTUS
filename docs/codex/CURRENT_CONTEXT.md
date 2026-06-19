@@ -1,6 +1,6 @@
 # ORTUS Current Context
 
-Last updated: 2026-06-19 after non-roadmap Prompt N2B Neural Strategy Adaptation Audit
+Last updated: 2026-06-19 after non-roadmap Prompt MR0 Templates + Decision Clusters Mini-Roadmap
 
 ## Project Identity
 
@@ -38,6 +38,8 @@ Prompt N2 adds Neural Strategy Adaptation V1 to the Neural Runtime Lab RPS/reado
 
 Prompt N2B audits and hardens Neural Strategy Adaptation before Prompt 38. The audit found a real reset/truncation flaw: the N2 reset guard used bounded-array positions, so after Reset learned strategy on a full history window, new rounds could be sliced away and never update adaptation. N2B replaces that with round-index reset guards, adds monotonic round indexing after bounded-history truncation, filters malformed round objects before statistics, rejects arbitrary RPS action labels in adaptive cue helpers, strengthens reset/malformed-state tests, and makes fresh-run rebuild copy explicit that local learned strategy is not cleared unless Reset learned strategy is used. N2B does not broaden adaptation beyond the Neural Runtime Lab RPS/readout mode and does not add blackjack, generic decision analytics, external stimuli, wearable/camera/live-casino functionality, biological plasticity, Builder graph execution, Model Schema execution, or social-learning runtime.
 
+Prompt MR0 adds a documentation-only mini-roadmap before returning to Prompt 38. It records future template and decision-cluster direction only; it does not implement runtime behavior, UI behavior, templates, primitives, decision-cluster execution, blackjack execution, external-stimulus runtime, observed cluster discovery, casino support, wearable support, live-card input, or analysis algorithms. The documented order is MR0, Prompt 38, Prompt 38B, T1 Urban Daily Routine / Activity Choice, T1B, T2 Atmospheric Field Dynamics, T2B, DC1 Cluster-Based Decision Readout Generalization, DC1B, DC2 Stimulus-Conditioned Decision Clusters, DC2B, G1 Blackjack Sequential Decision Lab, G1B, DC3 Observed Cluster Discovery / Decision-Space Analytics, and DC3B. Decision clusters model observable state-action patterns, not thoughts. Prediction outputs are probabilities, not certainties. Cluster labels are assigned modeling labels, not meanings understood by the system. External stimuli are modeled inputs, not evidence of internal mental state. Observed clusters are analytical groupings, not psychological profiles. Blackjack work is offline simulation only, not gambling advice, live casino assistance, or wearable card-counting support. Do not use wearable devices, camera input, or software assistance for live casino play.
+
 Confirmed UI layout defects fixed in UI-REMEDIATION-1:
 
 - The header used fixed `height: 50px` with `overflow-y: hidden`, which could clip crowded lower header content.
@@ -51,11 +53,11 @@ Built-in production templates currently include Epidemic Spread, Opinion Dynamic
 
 ## Completed Prompt State
 
-Durable docs and source indicate completed roadmap work through Prompt 37B plus non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, and N2B. Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 37B: Schema Validation UX + Repair Suggestions Audit are complete. Prompt N1: Neural Excitation Network Template V1 is complete. Prompt N1B: Neural Excitation Network Template Audit + Decision Readout V1 is complete. Prompt NUX1: Neural Runtime Lab UX V1 is complete. Prompt NUX1B: Neural Runtime Lab UX Audit + Build Investigation is complete. Prompt N2: Neural Strategy Adaptation V1 is complete. Prompt N2B: Neural Strategy Adaptation Audit is complete.
+Durable docs and source indicate completed roadmap work through Prompt 37B plus non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, and MR0. Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 37B: Schema Validation UX + Repair Suggestions Audit are complete. Prompt N1: Neural Excitation Network Template V1 is complete. Prompt N1B: Neural Excitation Network Template Audit + Decision Readout V1 is complete. Prompt NUX1: Neural Runtime Lab UX V1 is complete. Prompt NUX1B: Neural Runtime Lab UX Audit + Build Investigation is complete. Prompt N2: Neural Strategy Adaptation V1 is complete. Prompt N2B: Neural Strategy Adaptation Audit is complete. Prompt MR0: Templates + Decision Clusters Mini-Roadmap is complete.
 
 The post-30B repository hygiene, dependency stabilization, durable context, and performance/scalability pass has also been completed. Recent commits include `dd6c256` for repo context/generated-artifact hygiene, `4949b72` for dependency and performance script stabilization, and `a80d5b7` for simulation performance instrumentation and spatial indexing foundations.
 
-The next roadmap prompt after the N2/N2B commit checkpoint is Prompt 38: Schema-to-Template Fit Report V1. A separate rendered responsive/design-system audit is still recommended before making mobile-readiness, browser zoom, keyboard walkthrough, screen-reader, assistive-technology, WCAG, clipboard, focus-return, or polished visual-workbench claims.
+The next roadmap prompt after the MR0 commit checkpoint is Prompt 38: Schema-to-Template Fit Report V1. A separate rendered responsive/design-system audit is still recommended before making mobile-readiness, browser zoom, keyboard walkthrough, screen-reader, assistive-technology, WCAG, clipboard, focus-return, or polished visual-workbench claims.
 
 Implemented runtime foundations include scenarios, snapshots, template-defined behavior modes, agent composition, interventions, experiments, run summaries/comparison, seeded randomness, metrics, spaces, template metadata, and a narrow Opinion Dynamics `socialLearning` behavior mode audited in Prompt 33D.
 
@@ -166,7 +168,7 @@ Prompt 35 and Prompt 35B were committed together in `7696381 feat: Implement Mod
 
 ## Next Recommended Prompt After Stabilization
 
-Next roadmap prompt: Prompt 38: Schema-to-Template Fit Report V1.
+Next roadmap prompt after MR0 commit: Prompt 38: Schema-to-Template Fit Report V1.
 
 Next recommended UI/design-system prompt: `UI-DESIGN-SYSTEM-1: Rendered Responsive, Typography + Visualization Accessibility Audit`.
 

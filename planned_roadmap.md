@@ -1,10 +1,10 @@
 # ORTUS Full Prompt Roadmap
 
-*Last updated after non-roadmap Prompt N2B Neural Strategy Adaptation Audit.*
+*Last updated after non-roadmap Prompt MR0 Templates + Decision Clusters Mini-Roadmap.*
 
 ## Current Status
 
-ORTUS has completed the core runtime/template foundation, scenario system, uncertainty layer, assumptions/limits layer, systems primitive registry, hybrid composition, multi-scale structure, scale-view state, boundary/environment models, spatial fields, observability, causality, quantity semantics, emergence pattern descriptors, robustness/resilience semantics, strategy/control semantics, model schema declarations, knowledge/memory/social-learning semantics, visual builder workspace schemas, template/schema compatibility mapping, the template/schema compatibility mapping audit, a narrow Opinion Dynamics social-learning behavior mode, the Opinion Dynamics social-learning runtime audit, Safe Builder UI Shell V1, the Safe Builder UI Shell + workspace information architecture audit, Model Schema Authoring Forms V1, the Model Schema Authoring Forms Audit, Visual Builder Graph View V1, the Visual Builder Graph View Audit, Schema Validation UX + Repair Suggestions V1, the Schema Validation UX + Repair Suggestions Audit, non-roadmap Prompt N1 Neural Excitation Network Template V1, non-roadmap Prompt N1B Neural Excitation Network Template Audit + Decision Readout V1, non-roadmap Prompt NUX1 Neural Runtime Lab UX V1, non-roadmap Prompt NUX1B Neural Runtime Lab UX Audit + Build Investigation, non-roadmap Prompt N2 Neural Strategy Adaptation V1, and non-roadmap Prompt N2B Neural Strategy Adaptation Audit.
+ORTUS has completed the core runtime/template foundation, scenario system, uncertainty layer, assumptions/limits layer, systems primitive registry, hybrid composition, multi-scale structure, scale-view state, boundary/environment models, spatial fields, observability, causality, quantity semantics, emergence pattern descriptors, robustness/resilience semantics, strategy/control semantics, model schema declarations, knowledge/memory/social-learning semantics, visual builder workspace schemas, template/schema compatibility mapping, the template/schema compatibility mapping audit, a narrow Opinion Dynamics social-learning behavior mode, the Opinion Dynamics social-learning runtime audit, Safe Builder UI Shell V1, the Safe Builder UI Shell + workspace information architecture audit, Model Schema Authoring Forms V1, the Model Schema Authoring Forms Audit, Visual Builder Graph View V1, the Visual Builder Graph View Audit, Schema Validation UX + Repair Suggestions V1, the Schema Validation UX + Repair Suggestions Audit, non-roadmap Prompt N1 Neural Excitation Network Template V1, non-roadmap Prompt N1B Neural Excitation Network Template Audit + Decision Readout V1, non-roadmap Prompt NUX1 Neural Runtime Lab UX V1, non-roadmap Prompt NUX1B Neural Runtime Lab UX Audit + Build Investigation, non-roadmap Prompt N2 Neural Strategy Adaptation V1, non-roadmap Prompt N2B Neural Strategy Adaptation Audit, and non-roadmap Prompt MR0 Templates + Decision Clusters Mini-Roadmap.
 
 Current project status:
 
@@ -16,8 +16,9 @@ Completed non-roadmap prompt: Prompt NUX1 — Neural Runtime Lab UX V1
 Completed non-roadmap prompt: Prompt NUX1B — Neural Runtime Lab UX Audit + Build Investigation
 Completed non-roadmap prompt: Prompt N2 — Neural Strategy Adaptation V1
 Completed non-roadmap prompt: Prompt N2B — Neural Strategy Adaptation Audit
+Completed non-roadmap prompt: Prompt MR0 — Templates + Decision Clusters Mini-Roadmap
 Post-30B stabilization completed: repo hygiene, durable Codex context, dependency repair, generated-artifact cleanup, and runtime performance/scalability baseline
-Next roadmap prompt after commit: Prompt 38 — Schema-to-Template Fit Report V1
+Next roadmap prompt after MR0 commit: Prompt 38 — Schema-to-Template Fit Report V1
 ```
 
 Critical global boundary:
@@ -68,6 +69,14 @@ Learned strategy state is local model state, not a psychological profile.
 Adaptation changes game-readout bias only; it does not simulate biological plasticity or human learning.
 Neural Strategy Adaptation V1 is local to the Neural Runtime Lab RPS/readout mode and does not update core synapse weights, persist a user profile, make Builder graphs executable, or make Model Schemas runnable.
 Prompt N2B hardened round-index reset semantics, monotonic round numbering under bounded history, malformed-round filtering, deterministic exploration tests, and visible fresh-run/reset-state copy.
+Prompt MR0 is documentation only; it records future template and decision-cluster directions and does not implement runtime behavior, UI behavior, templates, primitives, decision-cluster runtime, blackjack, external-stimulus runtime, or observed-cluster discovery.
+Decision clusters model observable state-action patterns, not thoughts.
+Prediction outputs are probabilities, not certainties.
+Cluster labels are assigned modeling labels, not meanings understood by the system.
+External stimuli are modeled inputs, not evidence of internal mental state.
+Observed clusters are analytical groupings, not psychological profiles.
+Blackjack work is offline simulation only, not gambling advice, live casino assistance, or wearable card-counting support.
+Do not use wearable devices, camera input, or software assistance for live casino play.
 Rock-Paper-Scissors labels are assigned to output assemblies by the model designer; the network does not understand the labels.
 Rendered responsive, zoom, keyboard walkthrough, screen-reader behavior, assistive-technology behavior, and WCAG conformance remain unverified unless directly tested.
 ```
@@ -79,7 +88,7 @@ missing from this full roadmap. Prompt 31C and Prompt 31D are now corrected belo
 after Prompt 31B and before Prompt 32, with a later narrow Opinion Dynamics
 social-learning runtime slice placed after template/schema compatibility mapping.
 The social/cognitive semantics insertion was corrected after manual review, and
-Prompt 31C, Prompt 31D, Prompt 32, Prompt 32B, Prompt 33, Prompt 33B, Prompt 33C, Prompt 33D, Prompt 34, Prompt 34B, Prompt 35, Prompt 35B, Prompt 36, Prompt 36B, Prompt 37, and Prompt 37B are now marked complete. Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, and N2B are complete, and Prompt 38 is the next roadmap prompt after the N2/N2B commit checkpoint.
+Prompt 31C, Prompt 31D, Prompt 32, Prompt 32B, Prompt 33, Prompt 33B, Prompt 33C, Prompt 33D, Prompt 34, Prompt 34B, Prompt 35, Prompt 35B, Prompt 36, Prompt 36B, Prompt 37, and Prompt 37B are now marked complete. Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, and MR0 are complete, and Prompt 38 is the next roadmap prompt after the MR0 commit checkpoint.
 
 Safe Builder UI Shell V1 displays structural workspace artifacts; it does not execute workspace nodes or edges. The builder shell is not a compiler, interpreter, visual programming environment, or custom simulation runtime. A structurally valid workspace is still not a runnable model. Importing a workspace artifact does not activate model schemas, compatibility mappings, or social-learning semantics.
 
@@ -1576,6 +1585,201 @@ Confirmation-required repairs are enforced by the repair helper, applyability is
 Rendered responsive behavior, browser zoom behavior, clipboard behavior, focus-return behavior, assistive-technology behavior, and WCAG readiness remain unverified without browser/assistive tooling.
 ```
 
+## Prompt MR0 — Templates + Decision Clusters Mini-Roadmap
+
+Purpose:
+
+* Add a documentation-only mini-roadmap for near-term runtime templates, decision-cluster generalization, stimulus-conditioned decision clusters, a later offline blackjack/sequential decision lab, and a later observed-cluster analytics layer.
+* Keep Prompt 38 as the next roadmap prompt after the MR0 commit checkpoint.
+* Preserve all N2/N2B Neural Strategy Adaptation guardrails.
+
+Scope:
+
+```text
+Prompt MR0 records future template and decision-cluster direction only; it does not implement runtime behavior.
+MR0 is documentation only.
+MR0 does not add source runtime code, UI behavior, templates, primitives, decision-cluster execution, blackjack execution, external-stimulus runtime, observed cluster discovery, casino support, wearable support, live-card input, or analysis algorithms.
+```
+
+Recommended order:
+
+1. MR0: Templates + Decision Clusters Mini-Roadmap.
+2. Prompt 38: Schema-to-Template Fit Report V1.
+3. Prompt 38B: Schema-to-Template Fit Report Audit.
+4. T1: Urban Daily Routine / Activity Choice Template V1.
+5. T1B: Urban Daily Routine / Activity Choice Audit.
+6. T2: Atmospheric Field Dynamics Template V1.
+7. T2B: Atmospheric Field Dynamics Audit.
+8. DC1: Cluster-Based Decision Readout Generalization V1.
+9. DC1B: Cluster-Based Decision Readout Audit.
+10. DC2: Stimulus-Conditioned Decision Clusters V1.
+11. DC2B: Stimulus-Conditioned Decision Clusters Audit.
+12. G1: Blackjack Sequential Decision Lab V1.
+13. G1B: Blackjack Sequential Decision Lab Audit.
+14. DC3: Observed Cluster Discovery / Decision-Space Analytics V1.
+15. DC3B: Observed Cluster Discovery / Decision-Space Analytics Audit.
+
+T1: Urban Daily Routine / Activity Choice Template V1:
+
+```text
+A stylized activity-choice ABM for agents, locations, routines, habits, resources, commute costs, time-of-day effects, and disruptions.
+```
+
+Core concepts: agents, locations, daily schedule blocks, needs/resources, habits, commute costs, time-of-day effects, bounded social exposure, disruption, activity choice, interventions, routine stability metrics.
+
+Choices: work, commute, eat, shop, rest, exercise, socialize, stay home.
+
+Boundary:
+
+```text
+Urban Daily Routine / Activity Choice Template V1 is a stylized activity-choice ABM, not real human behavior prediction.
+Routine choices are model outputs, not inferred intentions, preferences, psychology, or personality.
+```
+
+T2: Atmospheric Field Dynamics Template V1:
+
+```text
+A stylized spatial field model for temperature, moisture, pressure proxy, wind vector proxy, diffusion, advection-like movement, and threshold zones.
+```
+
+Core concepts: scalar fields, vector proxy, diffusion, advection-like movement, bounded terrain/boundary effects, moisture/temperature interaction, stylized precipitation/storm-cell proxy, field metrics/interventions.
+
+Boundary:
+
+```text
+Atmospheric Field Dynamics Template V1 is a stylized field-dynamics model, not weather forecasting, climate simulation, CFD, or operational meteorology.
+```
+
+T3 later: Urban Exposure + Resilience Scenario Pack:
+
+```text
+A scenario pack combining daily routines, environmental fields, interventions, and exposure/resilience metrics.
+```
+
+Examples: heat/pollution exposure, transit disruption, cooling-center intervention, unequal exposure burden, resource allocation under stress.
+
+Boundary:
+
+```text
+Urban Exposure + Resilience scenarios are exploratory simulations, not epidemiological proof, policy certification, or public-health prediction.
+```
+
+DC1: Cluster-Based Decision Readout Generalization V1:
+
+```text
+Generalize the Neural/RPS decision-readout pattern into a reusable ORTUS design for context clusters, decision clusters, probabilities, and selected actions.
+```
+
+Architecture:
+
+```text
+context cluster → decision cluster → probability readout → selected action
+```
+
+DC1 starts with fixed designed clusters first. Examples include RPS lose-switch/repeat-Rock, routine morning-workday/low-energy-evening, and blackjack hard-16 + dealer-10.
+
+Boundary:
+
+```text
+Decision clusters model observable state-action patterns, not thoughts, beliefs, intentions, preferences, or personality.
+Prediction outputs are probabilities, not certainties.
+Cluster labels are assigned modeling labels, not meanings understood by the system.
+```
+
+DC2: Stimulus-Conditioned Decision Clusters V1:
+
+```text
+Add external stimuli as structured modeled inputs that activate or suppress context clusters before decision probabilities are computed.
+```
+
+Architecture:
+
+```text
+external stimulus → context cluster activation → trajectory cluster → decision probabilities
+```
+
+Stimuli examples: time pressure, reward/penalty change, visual cue, environment shift, resource constraint, interruption, dealer up-card in simulated card game, heat condition, transit delay.
+
+Distinction:
+
+```text
+Structured stimulus = explicit modeled input.
+Random stimulus = noise or uncertainty only.
+```
+
+Boundary:
+
+```text
+External stimuli are modeled inputs, not proof of internal mental state.
+Stimulus-conditioned decisions estimate local state-action probabilities; they do not infer hidden intentions.
+```
+
+G1: Blackjack Sequential Decision Lab V1:
+
+```text
+An offline simulated card-game decision lab for sequential, state-dependent action selection.
+```
+
+V1 is offline only. It must not add real-money betting, casino assistance, wearable/camera/live-card input, gambling advice, or a card-counting assistant for live play. V1 decisions are Hit/Stand only.
+
+Deferred: Double, Split, Surrender, real card-counting optimization, wearable display, camera input, live casino use, betting advice, bankroll systems.
+
+State clusters: hard low total, hard danger total 12–16, strong total 17–21, soft hand, pair hand, dealer weak/strong up-card, deck-pressure proxy from simulated shoe only.
+
+Decision clusters: Hit/Stand.
+
+Boundary:
+
+```text
+Blackjack Sequential Decision Lab V1 is an offline simulated card-game decision lab, not gambling advice, casino assistance, or a real-money betting tool.
+Deck-pressure metrics must come from simulated or manually entered practice data only.
+Do not use wearable devices, camera input, or software assistance for live casino play.
+```
+
+G1 comes after DC1/DC2 because blackjack adds sequential, partial-information, payoff-driven complexity.
+
+DC3 later: Observed Cluster Discovery / Decision-Space Analytics V1:
+
+```text
+A 10x-inspired analysis layer that discovers clusters from observed simulation traces rather than relying only on designed clusters.
+```
+
+Abstractions:
+
+```text
+many observations → feature vectors → similarity graph → discovered clusters → human-readable labels
+rounds / agents / states / trajectories → decision feature vectors → similarity graph → observed behavior clusters → decision-space map
+```
+
+Examples: states to Hit/Stand, commute-heavy routine clusters, neural states high-confidence Paper, field/agent high-exposure.
+
+Boundary:
+
+```text
+Observed clusters are analytical groupings, not discovered thoughts, psychological types, or real-world identities.
+Observed cluster labels are analyst/model labels, not meanings inferred from a person.
+```
+
+DC3 waits until enough runtime traces from multiple systems exist.
+
+Global guardrails:
+
+```text
+Decision clusters model observable state-action patterns, not thoughts.
+Prediction outputs are probabilities, not certainties.
+Cluster labels are assigned modeling labels, not meanings understood by the system.
+External stimuli are modeled inputs, not evidence of internal mental state.
+Observed clusters are analytical groupings, not psychological profiles.
+Blackjack work is offline simulation only, not gambling advice, live casino assistance, or wearable card-counting support.
+Do not use wearable devices, camera input, or software assistance for live casino play.
+```
+
+Status:
+
+```text
+Complete.
+```
+
 ## Prompt 38 — Schema-to-Template Fit Report V1
 
 Purpose:
@@ -2938,8 +3142,8 @@ No global service availability treated as template runtime support.
 Recommended immediate next steps:
 
 ```text
-1. Review and commit Prompt N2 Neural Strategy Adaptation V1 and Prompt N2B Neural Strategy Adaptation Audit together if the worktree is still uncommitted.
-2. Start Prompt 38 — Schema-to-Template Fit Report V1 after the N2/N2B commit checkpoint.
+1. Review and commit Prompt MR0 Templates + Decision Clusters Mini-Roadmap if the docs-only worktree is still uncommitted.
+2. Start Prompt 38 — Schema-to-Template Fit Report V1 after the MR0 commit checkpoint.
 3. Run a dedicated rendered responsive/design-system audit before making mobile-readiness, WCAG, clipboard, focus-return, or polished visual-workbench claims.
 ```
 
@@ -2953,6 +3157,7 @@ Non-roadmap Prompt NUX1 Neural Runtime Lab UX V1 is complete.
 Non-roadmap Prompt NUX1B Neural Runtime Lab UX Audit + Build Investigation is complete.
 Non-roadmap Prompt N2 Neural Strategy Adaptation V1 is complete.
 Non-roadmap Prompt N2B Neural Strategy Adaptation Audit is complete.
+Non-roadmap Prompt MR0 Templates + Decision Clusters Mini-Roadmap is complete.
 Performance stabilization completed after Prompt 30B.
 Prompt 34 safe builder shell is complete.
 Prompt 34B safe builder shell audit is complete.
