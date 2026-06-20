@@ -26,6 +26,17 @@ const requiredDocPhrases = [
   "A repaired schema may be structurally valid and still have no runtime implementation.",
   "ORTUS does not infer the correct model behavior from validation repairs.",
   "Validation repairs do not generate templates, scenarios, RunConfigs, snapshots, or engines.",
+  "Schema-to-template fit reports are structural fit analyses. They do not convert schemas into runnable models.",
+  "A strong template fit does not mean a schema can run.",
+  "Fit reports do not generate templates, scenarios, RunConfigs, snapshots, engines, or agents.",
+  "Unsupported and lossy mappings must remain visible; they must not be silently dropped.",
+  "Rule fits are structural comparisons. Rule declarations are not executed.",
+  "Fit score is a structural summary, not a runtime readiness score.",
+  "Validation asks whether the schema is structurally valid. Fit reporting asks which existing templates it structurally resembles.",
+  "Builder graphs remain structural inspection views. Fit reports do not make them executable.",
+  "Neural Strategy Adaptation is a local Neural Runtime Lab feature, not a generic schema-to-template capability.",
+  "MR0 roadmap concepts may appear as future-only fit gaps. They are not implemented by this report.",
+  "This fit report may be stale because the schema changed after it was generated. Refresh the report before using it.",
   "Decision clusters model observable state-action patterns, not thoughts.",
   "Prediction outputs are probabilities, not certainties.",
   "Cluster labels are assigned modeling labels, not meanings understood by the system.",
@@ -81,10 +92,10 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(existsSync(missingPillarsPath)).toBe(true);
 
     const roadmap = readFileSync(roadmapPath, "utf8");
-    expect(roadmap).toContain("completed through Prompt 37B");
+    expect(roadmap).toContain("completed through Prompt 38B");
     expect(roadmap).toContain("Post-30B stabilization");
     expect(roadmap).toContain(
-      "Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 37B: Schema Validation UX + Repair Suggestions Audit are complete."
+      "Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 38B: Schema-to-Template Fit Report Audit are complete."
     );
     expect(roadmap).toContain("Completed Prompt 31 audit band");
     expect(roadmap).toContain("Completed Prompt 32 planning and audit foundation");
@@ -93,9 +104,10 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(roadmap).toContain("Completed Prompt 35 authoring and audit foundation");
     expect(roadmap).toContain("Completed Prompt 36 graph-view foundation and audit");
     expect(roadmap).toContain("Completed Prompt 37 validation-assistance foundation and audit");
+    expect(roadmap).toContain("Completed Prompt 38 fit-report foundation and audit");
     expect(roadmap).toContain("Prompt 35 adds a separate `Author Schema` Builder mode");
     expect(roadmap).toContain("Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, and MR0 are complete.");
-    expect(roadmap).toContain("The next roadmap prompt after the MR0 commit checkpoint is Prompt 38: Schema-to-Template Fit Report V1.");
+    expect(roadmap).toContain("The next roadmap prompt is Prompt 39: Scenario Planning From Schema V1.");
     expect(roadmap).toContain("Prompt N2 adds Neural Strategy Adaptation V1 to the Neural Runtime Lab RPS/readout mode.");
     expect(roadmap).toContain("Non-roadmap Prompt N2B audits and hardens Neural Strategy Adaptation.");
     expect(roadmap).toContain(
@@ -143,6 +155,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(roadmap).toContain("37 - Schema Validation UX + Repair Suggestions V1");
     expect(roadmap).toContain("37B - Schema Validation UX + Repair Suggestions Audit");
     expect(roadmap).toContain("38 - Schema-to-Template Fit Report V1");
+    expect(roadmap).toContain("38B - Schema-to-Template Fit Report Audit");
     expect(roadmap).toContain("18B - Roadmap Alignment Audit");
     expect(roadmap).toContain("21 - Multi-Scale Systems Architecture V1");
     expect(roadmap).toContain("25 - Observability + Measurement Model V1");

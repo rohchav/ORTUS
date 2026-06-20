@@ -161,6 +161,25 @@
 - Do not claim template support for service-only primitives.
 - Do not claim validation/calibration from compatibility mapping.
 - Do not claim visual builder runtime from compatibility reports.
+- Do not treat schema-to-template fit as conversion.
+- Do not call strong fit runtime readiness.
+- Do not generate templates, scenarios, RunConfigs, snapshots, engines, agents, or code from fit reports.
+- Do not execute schema rules for fit reporting.
+- Do not hide unsupported or lossy mappings.
+- Do not mutate schemas from fit report findings.
+- Do not turn fit findings into repair patches.
+- Do not activate simulation runtime from fit reports.
+- Do not activate Neural Strategy Adaptation from schema fit.
+- Do not treat MR0 roadmap concepts as implemented capabilities.
+- Keep fit scores labeled as structural summaries, not readiness scores.
+- Mark generated fit reports stale when the current Author Schema draft changes after report generation.
+- The exact stale-report warning is: This fit report may be stale because the schema changed after it was generated. Refresh the report before using it.
+- Invalid current drafts must not display a previous valid fit report as if it applies to the current schema.
+- Fit-report refresh must recompute from the current structurally valid draft only.
+- Fit-report ranking must be deterministic by score, fit label, then template id.
+- Fit-report diagnostics must preserve stale warnings, unsupported concepts, lossy mappings, future-only gaps, rule non-execution copy, and no-runtime-readiness copy.
+- Keep Builder graphs structural and non-executable.
+- Keep Model Schemas non-runnable unless future runtime prompt changes that.
 - Do not treat belief, memory, or social-learning rule declarations as runtime cognition.
 - Do not collapse observability into internal state. Observability must distinguish simulated state and runtime metrics from measured, partial, noisy, proxy, synthetic, or empirical observation definitions.
 - Do not skip audit prompts after feature prompts.

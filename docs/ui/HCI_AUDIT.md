@@ -1,8 +1,8 @@
 # ORTUS HCI / UX / Visual-Direction Audit
 
 Date: 2026-06-11  
-Updated: 2026-06-19 after Prompt MR0
-Prompt: UI-BRAND-1, UI-REMEDIATION-1, Prompt 34B, Prompt 35, Prompt 35B, Prompt 36, Prompt 36B, Prompt 37, Prompt 37B, Prompt N1, Prompt N1B, Prompt NUX1, Prompt NUX1B, Prompt N2, Prompt N2B, Prompt MR0
+Updated: 2026-06-20 after Prompt 38B
+Prompt: UI-BRAND-1, UI-REMEDIATION-1, Prompt 34B, Prompt 35, Prompt 35B, Prompt 36, Prompt 36B, Prompt 37, Prompt 37B, Prompt 38, Prompt 38B, Prompt N1, Prompt N1B, Prompt NUX1, Prompt NUX1B, Prompt N2, Prompt N2B, Prompt MR0
 Status: source-based audit, not a formal WCAG audit
 
 ## 1. Executive Verdict
@@ -56,6 +56,12 @@ Neural Strategy Adaptation V1 turns the RPS shell into an Adaptive RPS Challenge
 Prompt MR0 update:
 MR0 is documentation only and adds no UI. The HCI risk is therefore future-facing rather than rendered: future decision clusters, stimulus-conditioned decisions, observed clusters, and game-decision labs can easily be misread as mind modeling, personality inference, prediction certainty, or live decision advice. The mini-roadmap requires the blunt counter-language now: decision clusters model observable state-action patterns, not thoughts; prediction outputs are probabilities, not certainties; cluster labels are assigned modeling labels, not meanings understood by the system; external stimuli are modeled inputs, not evidence of internal mental state; observed clusters are analytical groupings, not psychological profiles; blackjack work is offline simulation only, not gambling advice, live casino assistance, or wearable card-counting support; and users must not use wearable devices, camera input, or software assistance for live casino play.
 
+Prompt 38 update:
+Author Schema now includes a Schema-to-Template Fit Report panel. This is useful and risky: "closest template" and "fit score" can sound like runtime readiness or conversion. The panel counters that with persistent copy: Schema-to-template fit reports are structural fit analyses. They do not convert schemas into runnable models. A strong template fit does not mean a schema can run. Fit reports do not generate templates, scenarios, RunConfigs, snapshots, engines, or agents. Unsupported and lossy mappings must remain visible; they must not be silently dropped. Rule fits are structural comparisons. Rule declarations are not executed. Fit score is a structural summary, not a runtime readiness score. Validation asks whether the schema is structurally valid. Fit reporting asks which existing templates it structurally resembles. Builder graphs remain structural inspection views. Fit reports do not make them executable. Neural Strategy Adaptation is a local Neural Runtime Lab feature, not a generic schema-to-template capability. MR0 roadmap concepts may appear as future-only fit gaps. They are not implemented by this report. Source/unit tests cover these boundaries; browser rendering, clipboard behavior, focus return, zoom behavior, screen-reader behavior, and WCAG conformance remain unverified.
+
+Prompt 38B update:
+The audit found one real HCI/epistemology defect: a previously generated fit report could silently track the live draft, so the interface had no honest stale-report state after edits, imports, resets, or repairs. Prompt 38B adds source-level stale tracking with the required warning: This fit report may be stale because the schema changed after it was generated. Refresh the report before using it. Invalid current drafts now disable the report instead of showing a previous valid report as if it applied. Candidate rows expose counts for matched, partial, unsupported, lossy, future-only, and runtime-gap concepts, and equal-score ranking is deterministic by score, fit label, then template id. These are source- and unit-tested improvements, not browser-rendered evidence; clipboard behavior, focus return, zoom, screen-reader behavior, assistive-technology behavior, and WCAG conformance remain unverified.
+
 ## 2. Audit Scope
 
 Inspected surfaces:
@@ -66,6 +72,7 @@ Inspected surfaces:
 - Model Schema Authoring Forms files added in Prompt 35.
 - Visual Builder Graph View components, pure graph adapter, keyboard outline, text edge list, bounded layout, and Prompt 36B source-level audit hardening.
 - Schema validation assistance adapter and Author Schema validation panel changes added in Prompt 37 and hardened in Prompt 37B.
+- Schema-to-template fit report adapter and Author Schema fit-report panel added in Prompt 38 and source-audited/hardened in Prompt 38B.
 - Neural Excitation Network template-specific canvas edge rendering, legend notes, inspector rows, and atmosphere styling added in Prompt N1.
 - Neural Decision Readout Legend panel, output assembly activation bars, selected readout, and observational RPS payoff copy added in Prompt N1B.
 - Neural Runtime Lab scenario cards, mission/status readouts, live explanations, direct actions, plain-English controls, Advanced config drawer, bounded timeline, and RPS shell added in Prompt NUX1.

@@ -920,13 +920,17 @@ describe("model schema service", () => {
     expect(docs).toContain("A valid model schema is not a template, scenario, RunConfig, or snapshot.");
     expect(docs).toContain("Rule declarations are descriptive metadata, not parsed formulas or executable behavior.");
     expect(docs).toContain("Belief, memory, and social-learning rule declarations are structural placeholders; they do not implement human cognition or social-learning runtime.");
-    expect(docs).toContain("ORTUS has completed Prompt 37B");
+    expect(docs).toContain("ORTUS has completed Prompt 38B");
     expect(docs).toContain("Model Schema Authoring Forms V1 creates structural model-schema artifacts; it does not execute schemas.");
     expect(docs).toContain("Rule declarations authored in the Builder are descriptive only and remain non-executable.");
     expect(docs).toContain("A valid authored schema is not a runnable simulation.");
     expect(docs).toContain("The schema authoring UI does not generate templates, scenarios, RunConfigs, snapshots, or engines.");
     expect(docs).toContain("Repair suggestions are structural editing assistance. They do not make a schema runnable.");
     expect(docs).toContain("Validation repairs do not generate templates, scenarios, RunConfigs, snapshots, or engines.");
+    expect(docs).toContain("Schema-to-template fit reports are structural fit analyses. They do not convert schemas into runnable models.");
+    expect(docs).toContain("Fit reports do not generate templates, scenarios, RunConfigs, snapshots, engines, or agents.");
+    expect(docs).toContain("Rule fits are structural comparisons. Rule declarations are not executed.");
+    expect(docs).toContain("This fit report may be stale because the schema changed after it was generated. Refresh the report before using it.");
     expect(docs).toContain("Stale repair suggestions are rejected without draft mutation.");
     expect(docs).toContain("Visual builder workspaces are structural planning artifacts; they do not implement runnable visual model authoring.");
     expect(docs).toContain("Opinion Dynamics social learning is a stylized template-owned runtime mode, not a model of full human cognition.");

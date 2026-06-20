@@ -15,6 +15,13 @@ import {
   type ModelSchemaAuthoringSectionId
 } from "./modelSchemaAuthoring";
 import {
+  createSchemaTemplateFitReportSnapshot,
+  resolveSchemaTemplateFitReportUxModel,
+  SchemaTemplateFitReportPanel,
+  type SchemaTemplateFitConcept,
+  type SchemaTemplateFitReportSnapshot
+} from "./fitReport";
+import {
   applySchemaRepairSuggestion,
   createSchemaValidationUxModel,
   formatSchemaValidationIssueDetails,
@@ -51,12 +58,18 @@ export function ModelSchemaAuthoringShell({ hidden = false }: ModelSchemaAuthori
   const [statusMessage, setStatusMessage] = useState("Empty structural draft created in memory.");
   const [pendingAction, setPendingAction] = useState<PendingAction | null>(null);
   const [collapsedValidationGroups, setCollapsedValidationGroups] = useState<ReadonlySet<string>>(() => new Set());
+  const [collapsedFitCandidates, setCollapsedFitCandidates] = useState<ReadonlySet<string>>(() => new Set());
+  const [fitReportSnapshot, setFitReportSnapshot] = useState<SchemaTemplateFitReportSnapshot | null>(null);
   const confirmButtonRef = useRef<HTMLButtonElement>(null);
   const cancelButtonRef = useRef<HTMLButtonElement>(null);
   const deferredDraft = useDeferredValue(draft);
   const validationPending = deferredDraft !== draft;
   const view = useMemo(() => createModelSchemaDraftView(deferredDraft), [deferredDraft]);
   const validationUx = useMemo(() => createSchemaValidationUxModel(deferredDraft, view.report), [deferredDraft, view.report]);
+  const fitReportUx = useMemo(
+    () => resolveSchemaTemplateFitReportUxModel(deferredDraft, view.structurallyValid, fitReportSnapshot),
+    [deferredDraft, view.structurallyValid, fitReportSnapshot]
+  );
   const dirty = useMemo(() => isModelSchemaDraftDirty(draft, baseline), [draft, baseline]);
 
   useEffect(() => {
@@ -76,6 +89,13 @@ export function ModelSchemaAuthoringShell({ hidden = false }: ModelSchemaAuthori
       confirmButtonRef.current?.focus();
     }
   }, [pendingAction]);
+
+  useEffect(() => {
+    if (validationPending || !view.structurallyValid || fitReportSnapshot) {
+      return;
+    }
+    setFitReportSnapshot(createSchemaTemplateFitReportSnapshot(deferredDraft, true));
+  }, [deferredDraft, fitReportSnapshot, validationPending, view.structurallyValid]);
 
   function updateDraft(nextDraft: ModelSchemaDefinition) {
     setDraft(nextDraft);
@@ -184,6 +204,31 @@ export function ModelSchemaAuthoringShell({ hidden = false }: ModelSchemaAuthori
     });
   }
 
+  function toggleFitCandidate(candidateId: string) {
+    setCollapsedFitCandidates((current) => {
+      const next = new Set(current);
+      if (next.has(candidateId)) {
+        next.delete(candidateId);
+      } else {
+        next.add(candidateId);
+      }
+      return next;
+    });
+  }
+
+  function refreshFitReport() {
+    if (validationPending) {
+      setStatusMessage("Structural validation is updating. Refresh the fit report after the current draft is checked.");
+      return;
+    }
+    if (!view.structurallyValid) {
+      setStatusMessage("Fit report unavailable: the current schema must be structurally valid before ORTUS can compare it to runtime templates.");
+      return;
+    }
+    setFitReportSnapshot(createSchemaTemplateFitReportSnapshot(deferredDraft, true));
+    setStatusMessage("Schema-to-template fit report refreshed from the current structurally valid draft.");
+  }
+
   function requestRepairSuggestion(suggestion: SchemaRepairSuggestion, triggerId: string, focusAfterId: string) {
     if (validationPending) {
       setStatusMessage("Structural validation is updating. Repair suggestions are disabled until the current draft is checked.");
@@ -242,6 +287,28 @@ export function ModelSchemaAuthoringShell({ hidden = false }: ModelSchemaAuthori
       }
     }
     setStatusMessage("Clipboard copy is unavailable. Use the copyable issue details text in the issue card.");
+  }
+
+  async function copyFitReportDiagnostics() {
+    if (typeof navigator !== "undefined" && navigator.clipboard?.writeText) {
+      try {
+        await navigator.clipboard.writeText(fitReportUx.diagnostics);
+        setStatusMessage("Schema-to-template fit diagnostics copied as text. No schema or runtime state was changed.");
+        return;
+      } catch {
+        setStatusMessage("Clipboard copy failed. Use the copyable fit diagnostics text in the fit report.");
+        return;
+      }
+    }
+    setStatusMessage("Clipboard copy is unavailable. Use the copyable fit diagnostics text in the fit report.");
+  }
+
+  function jumpToFitConcept(concept: SchemaTemplateFitConcept) {
+    const sectionTargetId = `schema-section-${concept.sectionId}`;
+    setActiveSection(concept.sectionId);
+    focusAfterRender(sectionTargetId, () => {
+      setStatusMessage(`Fit report path ${concept.schemaPath} is not currently focusable. The ${concept.sectionId} section is open for manual inspection.`);
+    });
   }
 
   function confirmPendingAction() {
@@ -466,7 +533,7 @@ export function ModelSchemaAuthoringShell({ hidden = false }: ModelSchemaAuthori
         </CornerFramePanel>
       </div>
 
-      <aside className="schema-authoring-validation" aria-label="Schema validation and limits">
+      <aside className="schema-authoring-validation" aria-label="Schema validation, fit report, and limits">
         <CornerFramePanel title="Validation + Limits" eyebrow="Service Report" variant="compact">
           <SchemaValidationAssistance
             ux={validationUx}
@@ -478,6 +545,16 @@ export function ModelSchemaAuthoringShell({ hidden = false }: ModelSchemaAuthori
             onIssueJump={jumpToValidationIssue}
             onRepairSuggestion={requestRepairSuggestion}
             onCopyIssueDetails={copyValidationIssueDetails}
+          />
+        </CornerFramePanel>
+        <CornerFramePanel title="Fit Report" eyebrow="Structural Template Review" variant="compact">
+          <SchemaTemplateFitReportPanel
+            ux={fitReportUx}
+            collapsedCandidateIds={collapsedFitCandidates}
+            onToggleCandidate={toggleFitCandidate}
+            onRefresh={refreshFitReport}
+            onCopyDiagnostics={copyFitReportDiagnostics}
+            onJumpToSection={jumpToFitConcept}
           />
         </CornerFramePanel>
       </aside>

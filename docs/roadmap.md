@@ -4,7 +4,7 @@ This roadmap reserves the major complex-systems pillars that ORTUS must support 
 
 ## Current Foundation
 
-ORTUS has completed through Prompt 37B, plus non-roadmap Prompt N1: Neural Excitation Network Template V1, Prompt N1B: Neural Excitation Network Template Audit + Decision Readout V1, Prompt NUX1: Neural Runtime Lab UX V1, Prompt NUX1B: Neural Runtime Lab UX Audit + Build Investigation, Prompt N2: Neural Strategy Adaptation V1, Prompt N2B: Neural Strategy Adaptation Audit, and Prompt MR0: Templates + Decision Clusters Mini-Roadmap. Prompts 1-37B established the current foundation:
+ORTUS has completed through Prompt 38B, plus non-roadmap Prompt N1: Neural Excitation Network Template V1, Prompt N1B: Neural Excitation Network Template Audit + Decision Readout V1, Prompt NUX1: Neural Runtime Lab UX V1, Prompt NUX1B: Neural Runtime Lab UX Audit + Build Investigation, Prompt N2: Neural Strategy Adaptation V1, Prompt N2B: Neural Strategy Adaptation Audit, and Prompt MR0: Templates + Decision Clusters Mini-Roadmap. Prompts 1-38B established the current foundation:
 
 - Engine/runtime/UI foundation.
 - Scenario Builder.
@@ -28,6 +28,8 @@ ORTUS has completed through Prompt 37B, plus non-roadmap Prompt N1: Neural Excit
 - Prompt 36B graph-view audit hardening for structural-only affordances, explicit marker/notice counts, filtered selection coherence, deterministic layout/DOM ids, text-only metadata, source-level accessibility, and runtime-boundary tests.
 - Prompt 37 validation UX and bounded repair suggestions for `ortus.modelSchema` authoring, with grouped issue cards, copyable diagnostics, section jumps, stale-suggestion protection, confirmation for content-removing repairs, and manual-only handling for ambiguous modeling intent.
 - Prompt 37B audit hardening for helper-level confirmation enforcement, explicit `canApply` suggestion classification, malformed/prototype-like patch rejection, deterministic issue grouping, rule-repair boundary copy, stale list-target rejection, and export-after-repair tests.
+- Prompt 38 schema-to-template fit report UI for the current structurally valid Author Schema draft, wrapping the existing compatibility service and preserving matched, partial, unsupported, lossy, future-only, and runtime-gap diagnostics.
+- Prompt 38B audit hardening for stale report detection, invalid-current-draft disabling, exact-fit ranking, visible candidate counts, MR0 future-only gaps, source-level guardrails, and diagnostics copy.
 - Non-roadmap Prompt N1 adds a hand-built Neural Excitation Network production template with bounded deterministic runtime graph dynamics. Neural Excitation Network Template V1 is a stylized runtime network model, not a biological brain simulation.
 - Non-roadmap Prompt N1B audits that template and adds optional bounded Decision Readout V1 plus an RPS readout preset. Decision Readout V1 maps labeled output assemblies to bounded categorical choices. It is not cognition or reasoning.
 - Non-roadmap Prompt NUX1 adds a scenario-first Neural Runtime Lab UX around that template. This lab shows stylized neural excitation dynamics and bounded categorical readouts. It does not model cognition, biological neurons, or learning.
@@ -40,7 +42,7 @@ These foundations are deliberately service-first or metadata-first unless docume
 
 After Prompt 30B, ORTUS completed a repository hygiene, durable context, dependency stabilization, and performance/scalability pass. That pass added and validated performance instrumentation and spatial-indexing foundations, but it does not turn reserved structural primitives into runtime support and is not evidence for high-scale readiness by itself.
 
-Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 37B: Schema Validation UX + Repair Suggestions Audit are complete. Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, and MR0 are complete. The next roadmap prompt after the MR0 commit checkpoint is Prompt 38: Schema-to-Template Fit Report V1.
+Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 38B: Schema-to-Template Fit Report Audit are complete. Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, and MR0 are complete. The next roadmap prompt is Prompt 39: Scenario Planning From Schema V1.
 
 ## Revised Prompt Sequence
 
@@ -119,9 +121,30 @@ Completed Prompt 37 validation-assistance foundation and audit:
 1. 37 - Schema Validation UX + Repair Suggestions V1.
 2. 37B - Schema Validation UX + Repair Suggestions Audit.
 
-Next roadmap prompt:
+Completed Prompt 38 fit-report foundation and audit:
 
 1. 38 - Schema-to-Template Fit Report V1.
+2. 38B - Schema-to-Template Fit Report Audit.
+
+Next roadmap prompt:
+
+1. 39 - Scenario Planning From Schema V1.
+
+Prompt 38 boundary:
+
+```text
+Schema-to-template fit reports are structural fit analyses. They do not convert schemas into runnable models.
+A strong template fit does not mean a schema can run.
+Fit reports do not generate templates, scenarios, RunConfigs, snapshots, engines, or agents.
+Unsupported and lossy mappings must remain visible; they must not be silently dropped.
+Rule fits are structural comparisons. Rule declarations are not executed.
+Fit score is a structural summary, not a runtime readiness score.
+Validation asks whether the schema is structurally valid. Fit reporting asks which existing templates it structurally resembles.
+Builder graphs remain structural inspection views. Fit reports do not make them executable.
+Neural Strategy Adaptation is a local Neural Runtime Lab feature, not a generic schema-to-template capability.
+MR0 roadmap concepts may appear as future-only fit gaps. They are not implemented by this report.
+This fit report may be stale because the schema changed after it was generated. Refresh the report before using it.
+```
 
 Prompt MR0 mini-roadmap order:
 

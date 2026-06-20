@@ -830,6 +830,66 @@ Remaining limitations:
 
 Next roadmap prompt after commit: Prompt 38 Schema-to-Template Fit Report V1.
 
+## 2026-06-19 - Prompt 38 Schema-to-Template Fit Report V1
+
+Goal: add a user-facing schema-to-template fit report for valid Author Schema drafts without adding schema execution, schema-to-template conversion, scenario/RunConfig/snapshot/template/engine/agent generation, runtime preview, rule parsing, Builder graph execution, Neural Strategy Adaptation generalization, MR0 runtime implementation, validation/calibration claims, LLM behavior, external APIs, or simulation-state mutation.
+
+Initial state:
+
+- `git status --short` was clean before Prompt 38 began.
+- Latest commit observed before edits: `5552428 docs: add templates and decision clusters mini-roadmap`.
+- Prompt MR0 was committed, so Prompt 38 was the next roadmap prompt.
+
+Implemented:
+
+- Added `src/components/builder/fitReport/schemaTemplateFitReportUx.ts` as a pure report adapter over the existing headless `schemaTemplateCompatibility` service.
+- Added `SchemaTemplateFitReportPanel` inside Builder `Author Schema`, in the existing side column below validation.
+- Fit reports operate only on the current structurally valid draft. Invalid drafts stay editable and show the required unavailable state.
+- Reports show closest templates, structural score, matched concepts, partial concepts, unsupported concepts, lossy mappings, future-only gaps, runtime gaps, template assumptions, refresh, section jumps, and copyable diagnostics.
+- Empty template-profile sets show `No template mapping profiles are available. This does not make the schema invalid.`
+- MR0 terms such as decision clusters, Atmospheric Field Dynamics, and Blackjack Sequential Decision Lab are surfaced only as future-only fit gaps.
+- Added focused tests for deterministic reports, invalid/empty states, unknown valid profiles, mutation isolation, weak-fit language, unsupported/lossy/future/runtime gap preservation, source guardrails, and Author Schema integration.
+- Updated README, concepts, roadmap, planned roadmap, simulation README, HCI audit, workspace IA, current context, AGENTS guardrails, and roadmap/model-schema/control tests. Prompt 38 is now marked complete and Prompt 38B is next.
+
+Required boundary copy:
+
+- Schema-to-template fit reports are structural fit analyses. They do not convert schemas into runnable models.
+- A strong template fit does not mean a schema can run.
+- Fit reports do not generate templates, scenarios, RunConfigs, snapshots, engines, or agents.
+- Unsupported and lossy mappings must remain visible; they must not be silently dropped.
+- Rule fits are structural comparisons. Rule declarations are not executed.
+- Fit score is a structural summary, not a runtime readiness score.
+- Validation asks whether the schema is structurally valid. Fit reporting asks which existing templates it structurally resembles.
+- Builder graphs remain structural inspection views. Fit reports do not make them executable.
+- Neural Strategy Adaptation is a local Neural Runtime Lab feature, not a generic schema-to-template capability.
+- MR0 roadmap concepts may appear as future-only fit gaps. They are not implemented by this report.
+
+Non-goals preserved:
+
+- No schema execution, rule execution, formula parsing, code execution, compatibility conversion, template mutation, generated artifacts, hidden interpreter, simulation-store subscription, runtime preview, Builder graph execution, social-learning runtime, Neural Strategy Adaptation activation, MR0 capability implementation, LLM behavior, external API call, validation/calibration claim, or scientific-truth claim was added.
+- The report does not mutate drafts, last-valid artifacts, active simulation state, loaded visual workspaces, templates, scenarios, RunConfigs, snapshots, engines, compatibility reports, or social-learning artifacts.
+
+Checks:
+
+- `npm test -- roadmap modelSchema control schemaTemplateFitReportUx modelSchemaAuthoring schemaValidationUx workspaceInformationArchitecture`: passed, 7 files and 75 tests.
+- `npm run typecheck`: passed.
+- `npm test -- schemaTemplateCompatibility`: passed after restoring the legacy exact compatibility phrase in audited docs, 1 file and 5 tests.
+- `npm test -- assumptions`: passed, 1 file and 8 tests.
+- `npm test -- neural`: passed, 2 files and 19 tests.
+- `npm test -- builderGraphView`: passed, 2 files and 16 tests.
+- `npm test`: passed, 57 files and 459 tests.
+- `npm run build`: passed with Next.js 15.5.19; `/` and `/builder` prerendered successfully.
+- `npm run perf:simulation`: passed. Local smoke results included Flocking 100 agents at 107.20 ticks/sec, Flocking 500 agents at 12.71 ticks/sec, Forest Fire 80x60 at 23.17 ticks/sec, and Predator-Prey default at 56.44 ticks/sec.
+- `git diff --check`: passed.
+- `npm run lint`: unavailable, package.json has no lint script.
+
+Remaining limitations:
+
+- Browser-rendered layout, browser clipboard behavior, focus-return behavior, browser zoom behavior, screen-reader behavior, assistive-technology behavior, and WCAG conformance remain unverified.
+- Prompt 38 changes remain uncommitted.
+
+Next roadmap prompt after commit: Prompt 38B Schema-to-Template Fit Report Audit.
+
 ## 2026-06-19 - Prompt MR0 Templates + Decision Clusters Mini-Roadmap
 
 Goal: add a documentation-only mini-roadmap for near-term runtime templates, decision-cluster generalization, stimulus-conditioned decision clusters, a later offline blackjack/sequential decision lab, and a later observed-cluster analytics layer before returning to Prompt 38.
@@ -1146,3 +1206,62 @@ Remaining limitations:
 - The dev-server route probes confirm HTTP availability only; they are not rendered UI, zoom, keyboard walkthrough, or assistive-technology verification.
 
 Next roadmap prompt after commit: Prompt 38 Schema-to-Template Fit Report V1.
+
+## 2026-06-20 - Prompt 38B Schema-to-Template Fit Report Audit
+
+Goal: audit and harden Prompt 38 without committing Prompt 38 first, and without adding schema execution, schema-to-template conversion, rule parsing, formula execution, generated artifacts, runtime preview, template mutation, Builder graph execution, social-learning runtime, Neural Strategy Adaptation generalization, MR0 runtime implementation, LLM repair, external API calls, validation claims, calibration claims, or scientific-truth claims.
+
+Initial state:
+
+- Prompt 38 changes were still uncommitted in the worktree.
+- The fit-report UI existed under `src/components/builder/fitReport` and was wired into Builder `Author Schema`.
+- Focused Prompt 38 checks had previously passed, but the audit had not started.
+
+Implemented:
+
+- Added source-snapshot based stale handling for generated schema-to-template fit reports.
+- Reports now become visibly stale when the current Author Schema draft changes after edits, imports, resets, or repair applications.
+- Added the required stale warning: `This fit report may be stale because the schema changed after it was generated. Refresh the report before using it.`
+- Invalid current drafts now show the unavailable state instead of falling back to a previous valid report.
+- Refresh recomputes from the current structurally valid draft only.
+- Candidate rows now expose matched, partial, unsupported, lossy, future-only, and runtime-gap counts.
+- Equal-score candidates now rank deterministically by score, compatibility fit label, fit level, then template id, so `templateExact` does not lose to a lexically earlier `strong` candidate.
+- MR0 future-only gap detection now includes Urban Exposure + Resilience, Cluster-Based Decision Readout Generalization, and Stimulus-Conditioned Decision Clusters.
+- Strengthened focused fit-report tests for stale edit/import/repair-style changes, invalid-current-draft behavior, exact-fit tie ranking, stable-id tie ranking, MR0 future gaps, source guardrails, and Author Schema integration.
+- Updated README, roadmap docs, concepts, simulation README, HCI audit, workspace IA, current context, planned roadmap, AGENTS guardrails, and roadmap/model-schema/control tests to mark Prompt 38B complete and Prompt 39 next.
+
+Required boundary copy preserved:
+
+- Schema-to-template fit reports are structural fit analyses. They do not convert schemas into runnable models.
+- A strong template fit does not mean a schema can run.
+- Fit reports do not generate templates, scenarios, RunConfigs, snapshots, engines, or agents.
+- Unsupported and lossy mappings must remain visible; they must not be silently dropped.
+- Rule fits are structural comparisons. Rule declarations are not executed.
+- Fit score is a structural summary, not a runtime readiness score.
+- Validation asks whether the schema is structurally valid. Fit reporting asks which existing templates it structurally resembles.
+- Builder graphs remain structural inspection views. Fit reports do not make them executable.
+- Neural Strategy Adaptation is a local Neural Runtime Lab feature, not a generic schema-to-template capability.
+- MR0 roadmap concepts may appear as future-only fit gaps. They are not implemented by this report.
+
+Non-goals preserved:
+
+- No schema execution, rule execution, formula parsing, code execution, compatibility conversion, template mutation, generated artifacts, hidden interpreter, simulation-store subscription, runtime preview, Builder graph execution, social-learning runtime, Neural Strategy Adaptation activation, MR0 capability implementation, LLM behavior, external API call, validation/calibration claim, or scientific-truth claim was added.
+- The report still does not mutate schemas, last-valid artifacts, active simulation state, loaded visual workspaces, templates, scenarios, RunConfigs, snapshots, engines, compatibility reports, or social-learning artifacts.
+
+Checks:
+
+- `npm test -- schemaTemplateFitReportUx`: passed, 1 file and 14 tests.
+- `npm test -- roadmap modelSchema control schemaTemplateFitReportUx modelSchemaAuthoring schemaValidationUx workspaceInformationArchitecture builderGraphView schemaTemplateCompatibility neural assumptions`: passed, 13 files and 127 tests.
+- `npm run typecheck`: passed.
+- `npm test`: passed, 57 files and 463 tests.
+- `npm run build`: passed with Next.js 15.5.19; `/` and `/builder` prerendered successfully.
+- `npm run perf:simulation`: passed. Local smoke results included Flocking 100 agents at 248.95 ticks/sec, Flocking 500 agents at 31.76 ticks/sec, Forest Fire 80x60 at 53.95 ticks/sec, and Predator-Prey default at 154.99 ticks/sec.
+- `git diff --check`: passed.
+- `npm run lint`: unavailable because `package.json` has no lint script. npm also could not write its missing-script log under `/home/rohchav/.npm/_logs`.
+- Final doc-alignment rerun after session-log edits: `npm test -- roadmap modelSchema control` passed, 4 files and 44 tests.
+
+Remaining limitations:
+
+- Browser rendering, responsive behavior, browser clipboard behavior, focus return, browser zoom behavior, screen-reader behavior, assistive-technology behavior, and WCAG conformance remain unverified.
+
+Next roadmap prompt after commit: Prompt 39 Scenario Planning From Schema V1.
