@@ -1,6 +1,6 @@
 # ORTUS Current Context
 
-Last updated: 2026-06-20 after Prompt 38B Schema-to-Template Fit Report Audit
+Last updated: 2026-06-20 after Prompt 39B Scenario Planning From Schema Audit
 
 ## Project Identity
 
@@ -46,6 +46,8 @@ Prompt 38 required boundary language: Schema-to-template fit reports are structu
 
 Prompt 38B audits and hardens the Schema-to-Template Fit Report before the combined Prompt 38/38B commit. The audit found two meaningful report-layer risks: a generated report had no stale state after draft changes, and exact-scope same-score matches could be hidden behind lexically earlier strong matches. Prompt 38B adds a source snapshot for generated reports, marks reports stale after schema edits/imports/resets/repairs, keeps this exact warning visible and copyable: `This fit report may be stale because the schema changed after it was generated. Refresh the report before using it.`, disables the report for invalid current drafts instead of falling back to a prior valid report, refreshes only from the current structurally valid draft, ranks equal-score candidates by score, fit label, then template id, shows candidate concept counts, and expands MR0 future-only gap detection. It adds no schema execution, schema-to-template conversion, generated scenarios, generated RunConfigs, snapshots, templates, engines, agents, Builder graph execution, Neural Strategy Adaptation activation, MR0 runtime behavior, LLM repair, external API call, validation/calibration claim, or scientific-truth claim.
 
+Prompt 39 adds Scenario Planning From Schema V1 to the Builder `Author Schema` side column below the fit report, and Prompt 39B audits/hardens that slice. A pure `src/components/builder/scenarioPlanning` adapter consumes the current structurally valid `ModelSchemaDefinition` plus the resolved current non-stale fit-report UX model when available. It produces bounded serializable planning data and copyable plain text: candidate scenario questions, conceptual interventions, observable metrics, parameter families, assumption checks, data/calibration needs, fit-linked template candidates, unsupported/lossy/runtime gaps, future-only gaps, claim boundaries, and next modeling steps. Scenario planning from schema is a planning aid. It does not create runnable scenarios. Scenario plans do not generate RunConfigs, snapshots, engines, agents, templates, or simulation state. Scenario questions are hypotheses to explore, not predictions or validated conclusions. A scenario plan can suggest what to inspect, but it does not prove what will happen. Conceptual interventions are not executable controls. Suggested metrics are not empirical measurements. Data needs do not imply the current schema is calibrated. Assumption checks identify what the modeler should clarify. They do not resolve the assumption. Fit reports describe structural resemblance. Scenario plans describe possible study designs. Neither one makes a schema runnable. Invalid schemas disable planning, stale fit reports disable planning until refreshed, schema or fit-report source changes mark dependent scenario plans stale until refreshed, MR0 concepts remain future-only planning gaps, and Neural Strategy Adaptation remains local to Neural Runtime Lab. Scenario planning does not provide medical/public-health prediction, weather forecasting, policy recommendation, persuasion optimization, targeting logic, real-human-behavior prediction, or gambling assistance. Rendered responsive behavior, clipboard behavior, focus return, zoom, screen-reader behavior, assistive-technology behavior, and WCAG conformance remain unverified.
+
 Confirmed UI layout defects fixed in UI-REMEDIATION-1:
 
 - The header used fixed `height: 50px` with `overflow-y: hidden`, which could clip crowded lower header content.
@@ -59,11 +61,11 @@ Built-in production templates currently include Epidemic Spread, Opinion Dynamic
 
 ## Completed Prompt State
 
-Durable docs and source indicate completed roadmap work through Prompt 38B plus non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, and MR0. Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 38B: Schema-to-Template Fit Report Audit are complete. Prompt N1: Neural Excitation Network Template V1 is complete. Prompt N1B: Neural Excitation Network Template Audit + Decision Readout V1 is complete. Prompt NUX1: Neural Runtime Lab UX V1 is complete. Prompt NUX1B: Neural Runtime Lab UX Audit + Build Investigation is complete. Prompt N2: Neural Strategy Adaptation V1 is complete. Prompt N2B: Neural Strategy Adaptation Audit is complete. Prompt MR0: Templates + Decision Clusters Mini-Roadmap is complete.
+Durable docs and source indicate completed roadmap work through Prompt 39B plus non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, and MR0. Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 39B: Scenario Planning From Schema Audit are complete. Prompt N1: Neural Excitation Network Template V1 is complete. Prompt N1B: Neural Excitation Network Template Audit + Decision Readout V1 is complete. Prompt NUX1: Neural Runtime Lab UX V1 is complete. Prompt NUX1B: Neural Runtime Lab UX Audit + Build Investigation is complete. Prompt N2: Neural Strategy Adaptation V1 is complete. Prompt N2B: Neural Strategy Adaptation Audit is complete. Prompt MR0: Templates + Decision Clusters Mini-Roadmap is complete.
 
 The post-30B repository hygiene, dependency stabilization, durable context, and performance/scalability pass has also been completed. Recent commits include `dd6c256` for repo context/generated-artifact hygiene, `4949b72` for dependency and performance script stabilization, and `a80d5b7` for simulation performance instrumentation and spatial indexing foundations.
 
-The next roadmap prompt is Prompt 39: Scenario Planning From Schema V1. A separate rendered responsive/design-system audit is still recommended before making mobile-readiness, browser zoom, keyboard walkthrough, screen-reader, assistive-technology, WCAG, clipboard, focus-return, or polished visual-workbench claims.
+The next prompt is pending user direction; do not start F0 or fractal/multiscale work without explicit approval. A separate rendered responsive/design-system audit is still recommended before making mobile-readiness, browser zoom, keyboard walkthrough, screen-reader, assistive-technology, WCAG, clipboard, focus-return, or polished visual-workbench claims.
 
 Implemented runtime foundations include scenarios, snapshots, template-defined behavior modes, agent composition, interventions, experiments, run summaries/comparison, seeded randomness, metrics, spaces, template metadata, and a narrow Opinion Dynamics `socialLearning` behavior mode audited in Prompt 33D.
 
@@ -176,7 +178,7 @@ Prompt 35 and Prompt 35B were committed together in `7696381 feat: Implement Mod
 
 ## Next Recommended Prompt After Stabilization
 
-Next roadmap prompt: Prompt 39: Scenario Planning From Schema V1.
+Next prompt: pending user direction; do not start F0 or fractal/multiscale work without explicit approval.
 
 Next recommended UI/design-system prompt: `UI-DESIGN-SYSTEM-1: Rendered Responsive, Typography + Visualization Accessibility Audit`.
 
@@ -192,6 +194,14 @@ Next recommended UI/design-system prompt: `UI-DESIGN-SYSTEM-1: Rendered Responsi
 - Do not hide unsupported concepts or silently drop lossy mappings.
 - Do not generate scenarios, RunConfigs, snapshots, templates, or engines from compatibility reports.
 - Do not mutate templates from compatibility reports.
+- Do not treat scenario planning as scenario generation.
+- Do not create RunConfigs, snapshots, engines, agents, templates, code, or simulation state from scenario plans.
+- Do not execute schema rules for scenario planning.
+- Do not mutate schemas from scenario planning findings.
+- Do not turn scenario questions into predictions, validated conclusions, policy recommendations, or scientific proof.
+- Do not turn conceptual interventions into executable controls or suggested metrics into empirical measurements.
+- Do not use stale fit reports for scenario planning without warning and refresh.
+- Do not treat MR0 roadmap concepts as implemented scenario capabilities or activate Neural Strategy Adaptation from scenario planning.
 - Schema editing is limited to bounded Prompt 35 forms. Do not add graph editing, drag-and-drop authoring, compiler/interpreter behavior, runtime model schema execution, schema-backed rule execution, scenario/RunConfig/template/snapshot generation, or Apply-to-Template behavior.
 - Prompt 36/36B Graph View is read-only presentation. Do not add node/edge authoring, connect handles, drag/drop mutation, graph execution, runtime dataflow interpretation, source-artifact mutation, simulation-state mutation, or Run/Compile/Preview/Generate/Apply actions.
 - Prompt 37 validation repairs are structural editing assistance only. Do not treat repairs as schema execution, model inference, scientific validation, compatibility conversion, generated artifacts, runtime preview, or visual-builder authoring.

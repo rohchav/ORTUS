@@ -1,15 +1,15 @@
 # ORTUS Full Prompt Roadmap
 
-*Last updated after Prompt 38B Schema-to-Template Fit Report Audit.*
+*Last updated after Prompt 39B Scenario Planning From Schema Audit.*
 
 ## Current Status
 
-ORTUS has completed the core runtime/template foundation, scenario system, uncertainty layer, assumptions/limits layer, systems primitive registry, hybrid composition, multi-scale structure, scale-view state, boundary/environment models, spatial fields, observability, causality, quantity semantics, emergence pattern descriptors, robustness/resilience semantics, strategy/control semantics, model schema declarations, knowledge/memory/social-learning semantics, visual builder workspace schemas, template/schema compatibility mapping, the template/schema compatibility mapping audit, a narrow Opinion Dynamics social-learning behavior mode, the Opinion Dynamics social-learning runtime audit, Safe Builder UI Shell V1, the Safe Builder UI Shell + workspace information architecture audit, Model Schema Authoring Forms V1, the Model Schema Authoring Forms Audit, Visual Builder Graph View V1, the Visual Builder Graph View Audit, Schema Validation UX + Repair Suggestions V1, the Schema Validation UX + Repair Suggestions Audit, Schema-to-Template Fit Report V1, the Schema-to-Template Fit Report Audit, non-roadmap Prompt N1 Neural Excitation Network Template V1, non-roadmap Prompt N1B Neural Excitation Network Template Audit + Decision Readout V1, non-roadmap Prompt NUX1 Neural Runtime Lab UX V1, non-roadmap Prompt NUX1B Neural Runtime Lab UX Audit + Build Investigation, non-roadmap Prompt N2 Neural Strategy Adaptation V1, non-roadmap Prompt N2B Neural Strategy Adaptation Audit, and non-roadmap Prompt MR0 Templates + Decision Clusters Mini-Roadmap.
+ORTUS has completed the core runtime/template foundation, scenario system, uncertainty layer, assumptions/limits layer, systems primitive registry, hybrid composition, multi-scale structure, scale-view state, boundary/environment models, spatial fields, observability, causality, quantity semantics, emergence pattern descriptors, robustness/resilience semantics, strategy/control semantics, model schema declarations, knowledge/memory/social-learning semantics, visual builder workspace schemas, template/schema compatibility mapping, the template/schema compatibility mapping audit, a narrow Opinion Dynamics social-learning behavior mode, the Opinion Dynamics social-learning runtime audit, Safe Builder UI Shell V1, the Safe Builder UI Shell + workspace information architecture audit, Model Schema Authoring Forms V1, the Model Schema Authoring Forms Audit, Visual Builder Graph View V1, the Visual Builder Graph View Audit, Schema Validation UX + Repair Suggestions V1, the Schema Validation UX + Repair Suggestions Audit, Schema-to-Template Fit Report V1, the Schema-to-Template Fit Report Audit, Scenario Planning From Schema V1, the Scenario Planning From Schema Audit, non-roadmap Prompt N1 Neural Excitation Network Template V1, non-roadmap Prompt N1B Neural Excitation Network Template Audit + Decision Readout V1, non-roadmap Prompt NUX1 Neural Runtime Lab UX V1, non-roadmap Prompt NUX1B Neural Runtime Lab UX Audit + Build Investigation, non-roadmap Prompt N2 Neural Strategy Adaptation V1, non-roadmap Prompt N2B Neural Strategy Adaptation Audit, and non-roadmap Prompt MR0 Templates + Decision Clusters Mini-Roadmap.
 
 Current project status:
 
 ```text
-Completed roadmap prompt: Prompt 38B — Schema-to-Template Fit Report Audit
+Completed roadmap prompt: Prompt 39B — Scenario Planning From Schema Audit
 Completed non-roadmap prompt: Prompt N1 — Neural Excitation Network Template V1
 Completed non-roadmap prompt: Prompt N1B — Neural Excitation Network Template Audit + Decision Readout V1
 Completed non-roadmap prompt: Prompt NUX1 — Neural Runtime Lab UX V1
@@ -18,7 +18,7 @@ Completed non-roadmap prompt: Prompt N2 — Neural Strategy Adaptation V1
 Completed non-roadmap prompt: Prompt N2B — Neural Strategy Adaptation Audit
 Completed non-roadmap prompt: Prompt MR0 — Templates + Decision Clusters Mini-Roadmap
 Post-30B stabilization completed: repo hygiene, durable Codex context, dependency repair, generated-artifact cleanup, and runtime performance/scalability baseline
-Next roadmap prompt: Prompt 39 — Scenario Planning From Schema V1
+Next prompt: Pending user direction; do not start F0 or fractal/multiscale work without explicit approval
 ```
 
 Critical global boundary:
@@ -78,7 +78,7 @@ Observed clusters are analytical groupings, not psychological profiles.
 Blackjack work is offline simulation only, not gambling advice, live casino assistance, or wearable card-counting support.
 Do not use wearable devices, camera input, or software assistance for live casino play.
 Rock-Paper-Scissors labels are assigned to output assemblies by the model designer; the network does not understand the labels.
-Rendered responsive, zoom, keyboard walkthrough, screen-reader behavior, assistive-technology behavior, and WCAG conformance remain unverified unless directly tested.
+Rendered responsive behavior, clipboard behavior, focus return, zoom, screen-reader behavior, assistive-technology behavior, and WCAG conformance remain unverified.
 ```
 
 ## Expert Audit Additions and Roadmap Corrections
@@ -88,7 +88,7 @@ missing from this full roadmap. Prompt 31C and Prompt 31D are now corrected belo
 after Prompt 31B and before Prompt 32, with a later narrow Opinion Dynamics
 social-learning runtime slice placed after template/schema compatibility mapping.
 The social/cognitive semantics insertion was corrected after manual review, and
-Prompt 31C, Prompt 31D, Prompt 32, Prompt 32B, Prompt 33, Prompt 33B, Prompt 33C, Prompt 33D, Prompt 34, Prompt 34B, Prompt 35, Prompt 35B, Prompt 36, Prompt 36B, Prompt 37, Prompt 37B, Prompt 38, and Prompt 38B are now marked complete. Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, and MR0 are complete, and Prompt 39 is the next roadmap prompt.
+Prompt 31C, Prompt 31D, Prompt 32, Prompt 32B, Prompt 33, Prompt 33B, Prompt 33C, Prompt 33D, Prompt 34, Prompt 34B, Prompt 35, Prompt 35B, Prompt 36, Prompt 36B, Prompt 37, Prompt 37B, Prompt 38, Prompt 38B, Prompt 39, and Prompt 39B are now marked complete. Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, and MR0 are complete, and the next prompt is pending user direction.
 
 Safe Builder UI Shell V1 displays structural workspace artifacts; it does not execute workspace nodes or edges. The builder shell is not a compiler, interpreter, visual programming environment, or custom simulation runtime. A structurally valid workspace is still not a runnable model. Importing a workspace artifact does not activate model schemas, compatibility mappings, or social-learning semantics.
 
@@ -1855,22 +1855,55 @@ This fit report may be stale because the schema changed after it was generated. 
 
 Purpose:
 
-* Produce scenario planning drafts from schemas.
-* Identify what a real scenario would need.
+* Produce bounded scenario planning reports from structurally valid schemas.
+* Identify what a real scenario study would need before runtime work, validation, calibration, or claims.
 
 Boundary:
 
 ```text
-Scenario planning draft is not executable.
-No actual Scenario generation.
-No RunConfig generation.
+Scenario planning from schema is a planning aid. It does not create runnable scenarios.
+Scenario plans do not generate RunConfigs, snapshots, engines, agents, templates, or simulation state.
+Scenario questions are hypotheses to explore, not predictions or validated conclusions.
+A scenario plan can suggest what to inspect, but it does not prove what will happen.
+Fit reports describe structural resemblance. Scenario plans describe possible study designs. Neither one makes a schema runnable.
+Conceptual interventions are not executable controls.
+Suggested metrics are not empirical measurements.
+Data needs do not imply the current schema is calibrated.
 ```
 
 Status:
 
 ```text
-Planned.
+Complete.
 ```
+
+Prompt 39 adds a Builder Author Schema Scenario Planning panel near the fit report. It uses the current structurally valid schema plus current non-stale fit-report data when available to derive candidate scenario questions, conceptual intervention levers, observable metrics, parameter families, assumption checks, data/calibration needs, fit-linked template candidates, unsupported/lossy/future-only gaps, claim boundaries, and next modeling steps. Invalid schemas disable planning. Stale fit reports must be refreshed before planning uses them. MR0 concepts may appear only as future-only planning gaps. Neural Strategy Adaptation remains local to Neural Runtime Lab and is not activated by scenario planning. Blackjack roadmap work remains offline only and Prompt 39 adds no gambling advice, live casino assistance, wearable input, camera input, or card-counting support.
+
+## Prompt 39B — Scenario Planning From Schema Audit
+
+Purpose:
+
+* Audit Prompt 39 stale-fit handling, copy honesty, forbidden actions, accessibility, bounded output, and runtime boundaries.
+* Confirm scenario planning remains planning/reporting only.
+* Confirm stale schema sources, fit-report replacements, copied reports, assumption checks, and UI verification copy stay honest.
+
+Boundary:
+
+```text
+No scenario generation.
+No RunConfig, snapshot, engine, agent, template, code, or simulation-state generation.
+No schema execution, rule execution, policy recommendation, calibration, validation, Neural Strategy Adaptation activation, or MR0 runtime capability.
+Assumption checks identify what the modeler should clarify. They do not resolve the assumption.
+Rendered responsive behavior, clipboard behavior, focus return, zoom, screen-reader behavior, assistive-technology behavior, and WCAG conformance remain unverified.
+```
+
+Status:
+
+```text
+Complete.
+```
+
+Prompt 39B marks dependent scenario plans stale when the schema or fit-report source changes, disables planning for stale fit reports, keeps copied stale reports from presenting old output as current, strengthens claim boundaries against medical/public-health prediction, weather forecasting, real-human-behavior prediction, policy recommendation, persuasion optimization, targeting logic, and gambling assistance, and confirms the UI remains a bounded reporting surface only.
 
 ## Prompt 40 — Safe Scenario Draft Workspace V1
 
@@ -3193,15 +3226,15 @@ No global service availability treated as template runtime support.
 Recommended immediate next steps:
 
 ```text
-1. Review and commit combined Prompt 38 and Prompt 38B schema-to-template fit report work if this worktree is still uncommitted.
-2. Start Prompt 39 — Scenario Planning From Schema V1 after the Prompt 38/38B commit checkpoint.
+1. Review and commit Prompt 39 + Prompt 39B work if this worktree is still uncommitted.
+2. Wait for explicit user direction before starting F0 or any fractal/multiscale work.
 3. Run a dedicated rendered responsive/design-system audit before making mobile-readiness, WCAG, clipboard, focus-return, or polished visual-workbench claims.
 ```
 
 Do not start graph editing, visual programming, or runtime-mapping prompts until the repo status and roadmap docs clearly reflect:
 
 ```text
-Completed through Prompt 38B.
+Completed through Prompt 39B.
 Non-roadmap Prompt N1 Neural Excitation Network Template V1 is complete.
 Non-roadmap Prompt N1B Neural Excitation Network Template Audit + Decision Readout V1 is complete.
 Non-roadmap Prompt NUX1 Neural Runtime Lab UX V1 is complete.
@@ -3219,5 +3252,7 @@ Prompt 37 schema validation UX and repair suggestions are complete.
 Prompt 37B schema validation UX and repair suggestions audit is complete.
 Prompt 38 schema-to-template fit report is complete.
 Prompt 38B schema-to-template fit report audit is complete.
-Next roadmap prompt: Prompt 39.
+Prompt 39 scenario planning from schema is complete.
+Prompt 39B scenario planning from schema audit is complete.
+Next prompt: pending user direction.
 ```

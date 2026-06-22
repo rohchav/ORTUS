@@ -37,6 +37,12 @@ const requiredDocPhrases = [
   "Neural Strategy Adaptation is a local Neural Runtime Lab feature, not a generic schema-to-template capability.",
   "MR0 roadmap concepts may appear as future-only fit gaps. They are not implemented by this report.",
   "This fit report may be stale because the schema changed after it was generated. Refresh the report before using it.",
+  "Scenario planning from schema is a planning aid. It does not create runnable scenarios.",
+  "Scenario plans do not generate RunConfigs, snapshots, engines, agents, templates, or simulation state.",
+  "Scenario questions are hypotheses to explore, not predictions or validated conclusions.",
+  "A scenario plan can suggest what to inspect, but it does not prove what will happen.",
+  "Assumption checks identify what the modeler should clarify. They do not resolve the assumption.",
+  "Prompt 39B marks existing scenario plans stale when the schema or fit-report source changes, and copied stale reports must not present old output as current.",
   "Decision clusters model observable state-action patterns, not thoughts.",
   "Prediction outputs are probabilities, not certainties.",
   "Cluster labels are assigned modeling labels, not meanings understood by the system.",
@@ -44,7 +50,7 @@ const requiredDocPhrases = [
   "Observed clusters are analytical groupings, not psychological profiles.",
   "Blackjack work is offline simulation only, not gambling advice, live casino assistance, or wearable card-counting support.",
   "Do not use wearable devices, camera input, or software assistance for live casino play.",
-  "Rendered responsive behavior and WCAG-level accessibility remain unverified until browser and assistive-technology testing is available."
+  "Rendered responsive behavior, clipboard behavior, focus return, zoom, screen-reader behavior, assistive-technology behavior, and WCAG conformance remain unverified."
 ];
 
 const futureTopLevelFields = [
@@ -92,10 +98,10 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(existsSync(missingPillarsPath)).toBe(true);
 
     const roadmap = readFileSync(roadmapPath, "utf8");
-    expect(roadmap).toContain("completed through Prompt 38B");
+    expect(roadmap).toContain("completed through Prompt 39B");
     expect(roadmap).toContain("Post-30B stabilization");
     expect(roadmap).toContain(
-      "Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 38B: Schema-to-Template Fit Report Audit are complete."
+      "Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 39B: Scenario Planning From Schema Audit are complete."
     );
     expect(roadmap).toContain("Completed Prompt 31 audit band");
     expect(roadmap).toContain("Completed Prompt 32 planning and audit foundation");
@@ -105,9 +111,11 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(roadmap).toContain("Completed Prompt 36 graph-view foundation and audit");
     expect(roadmap).toContain("Completed Prompt 37 validation-assistance foundation and audit");
     expect(roadmap).toContain("Completed Prompt 38 fit-report foundation and audit");
+    expect(roadmap).toContain("Completed Prompt 39 scenario-planning foundation");
+    expect(roadmap).toContain("Completed Prompt 39 scenario-planning audit");
     expect(roadmap).toContain("Prompt 35 adds a separate `Author Schema` Builder mode");
     expect(roadmap).toContain("Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, and MR0 are complete.");
-    expect(roadmap).toContain("The next roadmap prompt is Prompt 39: Scenario Planning From Schema V1.");
+    expect(roadmap).toContain("The next prompt is pending user direction; do not start F0 or fractal/multiscale work without explicit approval.");
     expect(roadmap).toContain("Prompt N2 adds Neural Strategy Adaptation V1 to the Neural Runtime Lab RPS/readout mode.");
     expect(roadmap).toContain("Non-roadmap Prompt N2B audits and hardens Neural Strategy Adaptation.");
     expect(roadmap).toContain(
@@ -156,6 +164,8 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(roadmap).toContain("37B - Schema Validation UX + Repair Suggestions Audit");
     expect(roadmap).toContain("38 - Schema-to-Template Fit Report V1");
     expect(roadmap).toContain("38B - Schema-to-Template Fit Report Audit");
+    expect(roadmap).toContain("39 - Scenario Planning From Schema V1");
+    expect(roadmap).toContain("39B - Scenario Planning From Schema Audit");
     expect(roadmap).toContain("18B - Roadmap Alignment Audit");
     expect(roadmap).toContain("21 - Multi-Scale Systems Architecture V1");
     expect(roadmap).toContain("25 - Observability + Measurement Model V1");

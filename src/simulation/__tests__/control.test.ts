@@ -885,9 +885,12 @@ describe("strategy, control, and intervention semantics services", () => {
     expect(docs).toContain("Active policies, triggers, and objectives are structural declarations, not runtime-executed control loops.");
     expect(docs).toContain("Do not treat template-owned interventions as general strategy/control support.");
     expect(docs).toContain("Do not mark templates controlStrategy/interventionStrategy-capable unless runtime uses `ControlStrategyModel`.");
-    expect(docs).toContain("ORTUS has completed Prompt 38B");
+    expect(docs).toContain("ORTUS has completed Prompt 39B");
     expect(docs).toContain("Fit reports do not generate templates, scenarios, RunConfigs, snapshots, engines, or agents.");
     expect(docs).toContain("This fit report may be stale because the schema changed after it was generated. Refresh the report before using it.");
+    expect(docs).toContain("Scenario plans do not generate RunConfigs, snapshots, engines, agents, templates, or simulation state.");
+    expect(docs).toContain("Assumption checks identify what the modeler should clarify. They do not resolve the assumption.");
+    expect(docs).toContain("schema or fit-report source changes mark dependent scenario plans stale until refreshed");
     expect(docs).toContain("Model Schema Authoring Forms V1 creates structural model-schema artifacts; it does not execute schemas.");
     expect(docs).toContain("Rule declarations authored in the Builder are descriptive only and remain non-executable.");
     expect(docs).toContain("Visual Builder Graph View V1 visualizes structural relationships; it does not execute nodes or edges.");

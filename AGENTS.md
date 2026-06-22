@@ -178,6 +178,22 @@
 - Fit-report refresh must recompute from the current structurally valid draft only.
 - Fit-report ranking must be deterministic by score, fit label, then template id.
 - Fit-report diagnostics must preserve stale warnings, unsupported concepts, lossy mappings, future-only gaps, rule non-execution copy, and no-runtime-readiness copy.
+- Do not treat scenario planning as scenario generation.
+- Do not create RunConfigs, snapshots, engines, agents, templates, code, or simulation state from scenario plans.
+- Do not execute schema rules for scenario planning.
+- Do not mutate schemas from scenario planning findings.
+- Do not turn scenario questions into predictions.
+- Do not turn conceptual interventions into executable controls.
+- Do not call suggested metrics empirical measurements.
+- Do not use stale fit reports for scenario planning without warning/refresh.
+- Prompt 39B marks existing scenario plans stale when the schema or fit-report source changes, and copied stale reports must not present old output as current.
+- Refresh scenario plans only from the current structurally valid draft and current non-stale fit-report context when available.
+- Assumption checks identify what the modeler should clarify. They do not resolve the assumption.
+- Do not treat MR0 roadmap concepts as implemented scenario capabilities.
+- Do not activate Neural Strategy Adaptation from scenario planning.
+- Do not call scenario plans policy recommendations or validated conclusions.
+- Do not use scenario planning for medical/public-health prediction, weather forecasting, real-human-behavior prediction, persuasion optimization, targeting logic, or gambling assistance.
+- Do not claim rendered UI, clipboard, focus-return, zoom, screen-reader, AT, or WCAG readiness without direct verification.
 - Keep Builder graphs structural and non-executable.
 - Keep Model Schemas non-runnable unless future runtime prompt changes that.
 - Do not treat belief, memory, or social-learning rule declarations as runtime cognition.

@@ -1265,3 +1265,108 @@ Remaining limitations:
 - Browser rendering, responsive behavior, browser clipboard behavior, focus return, browser zoom behavior, screen-reader behavior, assistive-technology behavior, and WCAG conformance remain unverified.
 
 Next roadmap prompt after commit: Prompt 39 Scenario Planning From Schema V1.
+
+## 2026-06-20 - Prompt 39 Scenario Planning From Schema V1
+
+Goal: add a non-runnable scenario-planning report in Builder Author Schema without adding schema execution, scenario generation, RunConfig generation, snapshot generation, engine/agent/template/code generation, simulation-state mutation, fit-report mutation, repair patch generation, Builder graph execution, Model Schema runtime, Neural Strategy Adaptation activation, MR0 runtime behavior, LLM behavior, external APIs, calibration, validation, policy recommendation, or scientific-truth claims.
+
+Implemented:
+
+- Added `src/components/builder/scenarioPlanning` with a pure bounded planning adapter, serializable UX model, plain-text copied report, React panel, and focused tests.
+- The planning adapter consumes the current structurally valid `ModelSchemaDefinition` plus the resolved current non-stale fit-report UX model when available. It does not import the simulation engine, simulation store, template runtimes, compatibility internals, repair helpers, scenarios, RunConfigs, snapshots, or external APIs.
+- The planning report lists candidate scenario questions, conceptual interventions, observable metrics, parameter families, assumption checks, data/calibration needs, fit-linked template candidates, unsupported/lossy/runtime gaps, future-only gaps, claim boundaries, and next modeling steps.
+- Builder Author Schema now shows Scenario Planning below Fit Report, with Refresh scenario plan, Copy planning report, View fit report, section expand/collapse, and Jump to schema section controls.
+- Invalid schemas disable scenario planning with the required invalid copy. Stale fit reports disable scenario planning with the required stale-fit copy. Missing fit context is handled as incomplete planning context rather than runtime readiness.
+- Updated README, concepts, roadmap, planned roadmap, simulation README, HCI audit, workspace IA, current context, AGENTS guardrails, and roadmap/model-schema/control tests to mark Prompt 39 complete and Prompt 39B next.
+
+Required boundary copy preserved:
+
+- Scenario planning from schema is a planning aid. It does not create runnable scenarios.
+- Scenario plans do not generate RunConfigs, snapshots, engines, agents, templates, or simulation state.
+- Scenario questions are hypotheses to explore, not predictions or validated conclusions.
+- A scenario plan can suggest what to inspect, but it does not prove what will happen.
+- Fit reports describe structural resemblance. Scenario plans describe possible study designs. Neither one makes a schema runnable.
+- A strong fit can guide planning, but it is not runtime readiness.
+- Conceptual interventions describe what a future scenario might vary. They are not executable controls.
+- Suggested metrics describe what to observe if a future runtime exists. They are not empirical measurements.
+- Data needs identify what would be required for calibration or validation. They do not imply the current schema is calibrated.
+- Neural Strategy Adaptation is a local Neural Runtime Lab feature, not a generic scenario-planning capability.
+- MR0 roadmap concepts may appear as future-only planning gaps. They are not implemented scenario capabilities.
+- Blackjack work is offline simulation only in the roadmap. Prompt 39 does not add gambling advice, live casino assistance, wearable input, camera input, or card-counting support.
+
+Checks:
+
+- `git status --short`: worktree was clean before Prompt 39 edits.
+- `npm test -- schemaScenarioPlanningUx schemaTemplateFitReportUx modelSchemaAuthoring schemaValidationUx schemaTemplateCompatibility roadmap assumptions`: passed, 7 files and 75 tests.
+- `npm run typecheck`: passed.
+- First `npm test`: failed only on stale doc-status assertions still expecting `ORTUS has completed Prompt 38B` in `control.test.ts` and `modelSchema.test.ts`; assertions were updated to Prompt 39 and strengthened with Prompt 39 boundary copy.
+- `npm test -- control modelSchema roadmap schemaScenarioPlanningUx`: passed, 5 files and 54 tests.
+- Final `npm test`: passed, 58 files and 473 tests.
+- `npm run build`: passed with Next.js 15.5.19; `/` and `/builder` prerendered successfully.
+- `npm run perf:simulation`: passed. Local smoke results included Flocking 100 agents at 250.8 ticks/sec, Flocking 500 agents at 32.98 ticks/sec, Forest Fire 80x60 at 54.15 ticks/sec, and Predator-Prey default at 163.69 ticks/sec.
+- `git diff --check`: passed.
+- `npm run test -- fitReport`: passed, 1 file and 14 tests.
+- `npm run test -- scenarioPlanning`: passed, 1 file and 10 tests.
+- `npm run test -- schemaTemplateCompatibility modelSchema roadmap assumptions schemaValidationUx modelSchemaAuthoring`: passed, 6 files and 63 tests.
+- `npm run lint`: unavailable, package.json has no lint script.
+
+Remaining limitations:
+
+- Browser rendering, responsive behavior, browser clipboard behavior, focus return, browser zoom behavior, screen-reader behavior, assistive-technology behavior, and WCAG conformance remain unverified.
+- Scenario plans remain planning reports only. They do not create scenarios, RunConfigs, snapshots, engines, agents, templates, code, or simulation state.
+
+Next roadmap prompt after commit: Prompt 39B Scenario Planning From Schema Audit.
+
+## 2026-06-20 - Prompt 39B Scenario Planning From Schema Audit
+
+Goal: audit and harden Prompt 39 scenario planning without adding scenario generation, RunConfig generation, snapshot generation, engine/agent/template/code generation, simulation-state mutation, schema execution, rule execution, policy recommendation, calibration, validation, Neural Strategy Adaptation activation, MR0 runtime capability, F0/fractal work, LLM behavior, external APIs, or scientific-truth claims.
+
+Implemented:
+
+- Marked stored scenario plans stale when the current schema hash or fit-report hash no longer matches the plan snapshot.
+- Included fit-report diagnostics in the scenario-plan fit hash so fit-report replacements invalidate dependent planning output.
+- Kept stale scenario plans unavailable until explicit refresh, and kept copied stale reports from presenting old planning output as current.
+- Added visible/report copy: Assumption checks identify what the modeler should clarify. They do not resolve the assumption.
+- Added visible/report copy: Rendered responsive behavior, clipboard behavior, focus return, zoom, screen-reader behavior, assistive-technology behavior, and WCAG conformance remain unverified.
+- Strengthened claim boundaries against medical/public-health prediction, weather forecasting, real-human-behavior prediction, policy recommendation, persuasion optimization, targeting logic, and gambling assistance.
+- Strengthened scenario-planning tests for changed schema snapshots, changed fit-report snapshots, stale copied report text, serializable output, forbidden runtime hooks, required copy, and documentation alignment.
+- Updated README, concepts, roadmap, planned roadmap, simulation README, HCI audit, workspace IA, current context, AGENTS guardrails, and roadmap/model-schema/control tests to mark Prompt 39B complete and next work pending user direction.
+
+Required boundary copy preserved:
+
+- Scenario planning from schema is a planning aid. It does not create runnable scenarios.
+- Scenario plans do not generate RunConfigs, snapshots, engines, agents, templates, or simulation state.
+- Scenario questions are hypotheses to explore, not predictions or validated conclusions.
+- A scenario plan can suggest what to inspect, but it does not prove what will happen.
+- Assumption checks identify what the modeler should clarify. They do not resolve the assumption.
+- Fit reports describe structural resemblance. Scenario plans describe possible study designs. Neither one makes a schema runnable.
+- A strong fit can guide planning, but it is not runtime readiness.
+- Conceptual interventions describe what a future scenario might vary. They are not executable controls.
+- Suggested metrics describe what to observe if a future runtime exists. They are not empirical measurements.
+- Data needs identify what would be required for calibration or validation. They do not imply the current schema is calibrated.
+- Neural Strategy Adaptation is a local Neural Runtime Lab feature, not a generic scenario-planning capability.
+- MR0 roadmap concepts may appear as future-only planning gaps. They are not implemented scenario capabilities.
+- Blackjack work is offline simulation only in the roadmap. Prompt 39 does not add gambling advice, live casino assistance, wearable input, camera input, or card-counting support.
+- Rendered responsive behavior, clipboard behavior, focus return, zoom, screen-reader behavior, assistive-technology behavior, and WCAG conformance remain unverified.
+
+Checks:
+
+- `npm test -- src/components/builder/scenarioPlanning/schemaScenarioPlanningUx.test.ts`: passed, 1 file and 12 tests.
+- `npm test -- roadmap modelSchema control schemaScenarioPlanningUx`: first run failed because the exact stale-plan audit sentence was present only in the roadmap, not in the README/concepts/simulation README/AGENTS doc set checked by `roadmap.test.ts`; AGENTS was updated with the exact sentence.
+- `npm test -- roadmap modelSchema control schemaScenarioPlanningUx`: passed after the AGENTS update, 5 files and 56 tests.
+- `npm run typecheck`: passed.
+- First `npm test`: failed only because `src/simulation/__tests__/uncertainty.test.ts` timed out in the full suite on `supports uncertainty over one safe numeric parameter for every production template`.
+- `npm test -- src/simulation/__tests__/uncertainty.test.ts`: passed, 1 file and 9 tests.
+- Second `npm test`: passed, 58 files and 475 tests.
+- `npm run build`: passed with Next.js 15.5.19; `/` and `/builder` prerendered successfully.
+- `npm run perf:simulation`: passed. Local smoke results included Flocking 100 agents at 103.41 ticks/sec, Flocking 500 agents at 14.36 ticks/sec, Forest Fire 80x60 at 23.24 ticks/sec, and Predator-Prey default at 70.75 ticks/sec.
+- `git diff --check`: passed.
+- `npm run lint`: unavailable, package.json has no lint script.
+
+Remaining limitations:
+
+- Browser rendering, responsive behavior, browser clipboard behavior, focus return, browser zoom behavior, screen-reader behavior, assistive-technology behavior, and WCAG conformance remain unverified.
+- Scenario plans remain planning reports only. They do not create scenarios, RunConfigs, snapshots, engines, agents, templates, code, or simulation state.
+- Performance smoke numbers were lower than some prior session notes on this machine; Prompt 39B did not touch runtime execution paths, and the performance command still passed as a smoke check rather than a scalability claim.
+
+Next prompt after commit: pending user direction. Do not start F0, fractal, recursive, duality, or multiscale work without explicit approval.

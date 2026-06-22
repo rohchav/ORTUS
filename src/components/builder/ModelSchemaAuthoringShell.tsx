@@ -32,6 +32,15 @@ import {
   type SchemaValidationIssueGroup,
   type SchemaValidationUxModel
 } from "./validation/schemaValidationUx";
+import {
+  createSchemaScenarioPlanSnapshot,
+  resolveSchemaScenarioPlanUxModel,
+  SchemaScenarioPlanningPanel,
+  schemaScenarioPlanningInvalidState,
+  schemaScenarioPlanningStaleFitState,
+  type ScenarioPlanningSectionId,
+  type SchemaScenarioPlanSnapshot
+} from "./scenarioPlanning";
 
 type PendingAction =
   | { type: "reset"; triggerId: string; focusAfterId: string }
@@ -59,7 +68,9 @@ export function ModelSchemaAuthoringShell({ hidden = false }: ModelSchemaAuthori
   const [pendingAction, setPendingAction] = useState<PendingAction | null>(null);
   const [collapsedValidationGroups, setCollapsedValidationGroups] = useState<ReadonlySet<string>>(() => new Set());
   const [collapsedFitCandidates, setCollapsedFitCandidates] = useState<ReadonlySet<string>>(() => new Set());
+  const [collapsedScenarioPlanSections, setCollapsedScenarioPlanSections] = useState<ReadonlySet<ScenarioPlanningSectionId>>(() => new Set());
   const [fitReportSnapshot, setFitReportSnapshot] = useState<SchemaTemplateFitReportSnapshot | null>(null);
+  const [scenarioPlanSnapshot, setScenarioPlanSnapshot] = useState<SchemaScenarioPlanSnapshot | null>(null);
   const confirmButtonRef = useRef<HTMLButtonElement>(null);
   const cancelButtonRef = useRef<HTMLButtonElement>(null);
   const deferredDraft = useDeferredValue(draft);
@@ -69,6 +80,10 @@ export function ModelSchemaAuthoringShell({ hidden = false }: ModelSchemaAuthori
   const fitReportUx = useMemo(
     () => resolveSchemaTemplateFitReportUxModel(deferredDraft, view.structurallyValid, fitReportSnapshot),
     [deferredDraft, view.structurallyValid, fitReportSnapshot]
+  );
+  const scenarioPlanUx = useMemo(
+    () => resolveSchemaScenarioPlanUxModel(deferredDraft, view.structurallyValid, fitReportUx, scenarioPlanSnapshot),
+    [deferredDraft, fitReportUx, scenarioPlanSnapshot, view.structurallyValid]
   );
   const dirty = useMemo(() => isModelSchemaDraftDirty(draft, baseline), [draft, baseline]);
 
@@ -96,6 +111,13 @@ export function ModelSchemaAuthoringShell({ hidden = false }: ModelSchemaAuthori
     }
     setFitReportSnapshot(createSchemaTemplateFitReportSnapshot(deferredDraft, true));
   }, [deferredDraft, fitReportSnapshot, validationPending, view.structurallyValid]);
+
+  useEffect(() => {
+    if (validationPending || !view.structurallyValid || fitReportUx.stale || scenarioPlanSnapshot) {
+      return;
+    }
+    setScenarioPlanSnapshot(createSchemaScenarioPlanSnapshot(deferredDraft, true, fitReportUx));
+  }, [deferredDraft, fitReportUx, scenarioPlanSnapshot, validationPending, view.structurallyValid]);
 
   function updateDraft(nextDraft: ModelSchemaDefinition) {
     setDraft(nextDraft);
@@ -216,6 +238,18 @@ export function ModelSchemaAuthoringShell({ hidden = false }: ModelSchemaAuthori
     });
   }
 
+  function toggleScenarioPlanSection(sectionId: ScenarioPlanningSectionId) {
+    setCollapsedScenarioPlanSections((current) => {
+      const next = new Set(current);
+      if (next.has(sectionId)) {
+        next.delete(sectionId);
+      } else {
+        next.add(sectionId);
+      }
+      return next;
+    });
+  }
+
   function refreshFitReport() {
     if (validationPending) {
       setStatusMessage("Structural validation is updating. Refresh the fit report after the current draft is checked.");
@@ -227,6 +261,23 @@ export function ModelSchemaAuthoringShell({ hidden = false }: ModelSchemaAuthori
     }
     setFitReportSnapshot(createSchemaTemplateFitReportSnapshot(deferredDraft, true));
     setStatusMessage("Schema-to-template fit report refreshed from the current structurally valid draft.");
+  }
+
+  function refreshScenarioPlan() {
+    if (validationPending) {
+      setStatusMessage("Structural validation is updating. Refresh the scenario plan after the current draft is checked.");
+      return;
+    }
+    if (!view.structurallyValid) {
+      setStatusMessage(schemaScenarioPlanningInvalidState);
+      return;
+    }
+    if (fitReportUx.stale) {
+      setStatusMessage(schemaScenarioPlanningStaleFitState);
+      return;
+    }
+    setScenarioPlanSnapshot(createSchemaScenarioPlanSnapshot(deferredDraft, true, fitReportUx));
+    setStatusMessage("Scenario planning report refreshed from the current structurally valid draft. No runtime artifact was generated.");
   }
 
   function requestRepairSuggestion(suggestion: SchemaRepairSuggestion, triggerId: string, focusAfterId: string) {
@@ -303,12 +354,38 @@ export function ModelSchemaAuthoringShell({ hidden = false }: ModelSchemaAuthori
     setStatusMessage("Clipboard copy is unavailable. Use the copyable fit diagnostics text in the fit report.");
   }
 
+  async function copyScenarioPlanningReport() {
+    if (typeof navigator !== "undefined" && navigator.clipboard?.writeText) {
+      try {
+        await navigator.clipboard.writeText(scenarioPlanUx.reportText);
+        setStatusMessage("Scenario planning report copied as text. No schema, fit report, or runtime state was changed.");
+        return;
+      } catch {
+        setStatusMessage("Clipboard copy failed. Use the copyable planning report text in the scenario planning panel.");
+        return;
+      }
+    }
+    setStatusMessage("Clipboard copy is unavailable. Use the copyable planning report text in the scenario planning panel.");
+  }
+
   function jumpToFitConcept(concept: SchemaTemplateFitConcept) {
     const sectionTargetId = `schema-section-${concept.sectionId}`;
     setActiveSection(concept.sectionId);
     focusAfterRender(sectionTargetId, () => {
       setStatusMessage(`Fit report path ${concept.schemaPath} is not currently focusable. The ${concept.sectionId} section is open for manual inspection.`);
     });
+  }
+
+  function jumpToScenarioPlanningSection(sectionId: ModelSchemaAuthoringSectionId, schemaPath: string) {
+    const sectionTargetId = `schema-section-${sectionId}`;
+    setActiveSection(sectionId);
+    focusAfterRender(sectionTargetId, () => {
+      setStatusMessage(`Scenario planning path ${schemaPath} is not currently focusable. The ${sectionId} section is open for manual inspection.`);
+    });
+  }
+
+  function viewFitReportFromScenarioPlan() {
+    focusAfterRender("schema-fit-report-title");
   }
 
   function confirmPendingAction() {
@@ -533,7 +610,7 @@ export function ModelSchemaAuthoringShell({ hidden = false }: ModelSchemaAuthori
         </CornerFramePanel>
       </div>
 
-      <aside className="schema-authoring-validation" aria-label="Schema validation, fit report, and limits">
+      <aside className="schema-authoring-validation" aria-label="Schema validation, fit report, scenario planning, and limits">
         <CornerFramePanel title="Validation + Limits" eyebrow="Service Report" variant="compact">
           <SchemaValidationAssistance
             ux={validationUx}
@@ -555,6 +632,17 @@ export function ModelSchemaAuthoringShell({ hidden = false }: ModelSchemaAuthori
             onRefresh={refreshFitReport}
             onCopyDiagnostics={copyFitReportDiagnostics}
             onJumpToSection={jumpToFitConcept}
+          />
+        </CornerFramePanel>
+        <CornerFramePanel title="Scenario Planning" eyebrow="Planning Report" variant="compact">
+          <SchemaScenarioPlanningPanel
+            ux={scenarioPlanUx}
+            collapsedSectionIds={collapsedScenarioPlanSections}
+            onToggleSection={toggleScenarioPlanSection}
+            onRefresh={refreshScenarioPlan}
+            onCopyReport={copyScenarioPlanningReport}
+            onJumpToSection={jumpToScenarioPlanningSection}
+            onViewFitReport={viewFitReportFromScenarioPlan}
           />
         </CornerFramePanel>
       </aside>

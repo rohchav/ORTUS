@@ -920,7 +920,7 @@ describe("model schema service", () => {
     expect(docs).toContain("A valid model schema is not a template, scenario, RunConfig, or snapshot.");
     expect(docs).toContain("Rule declarations are descriptive metadata, not parsed formulas or executable behavior.");
     expect(docs).toContain("Belief, memory, and social-learning rule declarations are structural placeholders; they do not implement human cognition or social-learning runtime.");
-    expect(docs).toContain("ORTUS has completed Prompt 38B");
+    expect(docs).toContain("ORTUS has completed Prompt 39B");
     expect(docs).toContain("Model Schema Authoring Forms V1 creates structural model-schema artifacts; it does not execute schemas.");
     expect(docs).toContain("Rule declarations authored in the Builder are descriptive only and remain non-executable.");
     expect(docs).toContain("A valid authored schema is not a runnable simulation.");
@@ -931,6 +931,11 @@ describe("model schema service", () => {
     expect(docs).toContain("Fit reports do not generate templates, scenarios, RunConfigs, snapshots, engines, or agents.");
     expect(docs).toContain("Rule fits are structural comparisons. Rule declarations are not executed.");
     expect(docs).toContain("This fit report may be stale because the schema changed after it was generated. Refresh the report before using it.");
+    expect(docs).toContain("Scenario planning from schema is a planning aid. It does not create runnable scenarios.");
+    expect(docs).toContain("Scenario plans do not generate RunConfigs, snapshots, engines, agents, templates, or simulation state.");
+    expect(docs).toContain("Assumption checks identify what the modeler should clarify. They do not resolve the assumption.");
+    expect(docs).toContain("schema or fit-report source changes mark dependent scenario plans stale until refreshed");
+    expect(docs).toContain("Rendered responsive behavior, clipboard behavior, focus return, zoom, screen-reader behavior, assistive-technology behavior, and WCAG conformance remain unverified.");
     expect(docs).toContain("Stale repair suggestions are rejected without draft mutation.");
     expect(docs).toContain("Visual builder workspaces are structural planning artifacts; they do not implement runnable visual model authoring.");
     expect(docs).toContain("Opinion Dynamics social learning is a stylized template-owned runtime mode, not a model of full human cognition.");
