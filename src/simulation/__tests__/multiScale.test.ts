@@ -489,6 +489,9 @@ describe("multi-scale architecture service", () => {
     expect(docs).toContain("Camera zoom is not multi-scale modeling.");
     expect(docs).toContain("Aggregation can lose information, and disaggregation can create synthetic detail.");
     expect(docs).toContain("A valid scale model is a structural description, not proof that a template can execute multi-scale dynamics.");
+    expect(docs).toContain("Coarse-graining changes what is represented. Similar aggregate behavior does not mean the underlying microstates are equivalent.");
+    expect(docs).toContain("Scale Lens views are analytical projections, not separate validated models.");
+    expect(docs).toContain("Measure multiscale structure before generating synthetic fractal structure.");
   });
 
   it("keeps multiscale services headless and free of execution/randomness hooks", () => {

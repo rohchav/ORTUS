@@ -935,6 +935,11 @@ describe("model schema service", () => {
     expect(docs).toContain("Scenario plans do not generate RunConfigs, snapshots, engines, agents, templates, or simulation state.");
     expect(docs).toContain("Assumption checks identify what the modeler should clarify. They do not resolve the assumption.");
     expect(docs).toContain("schema or fit-report source changes mark dependent scenario plans stale until refreshed");
+    expect(docs).toContain("Prompt F0 is documentation only.");
+    expect(docs).toContain("Fractal and multiscale tools describe how measured structure changes across scale. They do not prove that a system is fundamentally fractal.");
+    expect(docs).toContain("Fractal analysis requires a defined object, scale operation, and measurement. ORTUS must not apply one generic fractal score to unrelated spatial, network, temporal, and trajectory data.");
+    expect(docs).toContain("Clustering groups similar observations. Fractal analysis measures how structure changes across scale. One does not imply the other.");
+    expect(docs).toContain("Synthetic fractal generators create model inputs, not observed reality.");
     expect(docs).toContain("Rendered responsive behavior, clipboard behavior, focus return, zoom, screen-reader behavior, assistive-technology behavior, and WCAG conformance remain unverified.");
     expect(docs).toContain("Stale repair suggestions are rejected without draft mutation.");
     expect(docs).toContain("Visual builder workspaces are structural planning artifacts; they do not implement runnable visual model authoring.");

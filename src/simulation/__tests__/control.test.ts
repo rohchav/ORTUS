@@ -891,6 +891,11 @@ describe("strategy, control, and intervention semantics services", () => {
     expect(docs).toContain("Scenario plans do not generate RunConfigs, snapshots, engines, agents, templates, or simulation state.");
     expect(docs).toContain("Assumption checks identify what the modeler should clarify. They do not resolve the assumption.");
     expect(docs).toContain("schema or fit-report source changes mark dependent scenario plans stale until refreshed");
+    expect(docs).toContain("Prompt F0 is documentation only.");
+    expect(docs).toContain("Fractal and multiscale metrics are structural summaries, not causal explanations, forecasts, validation results, or proof of universal laws.");
+    expect(docs).toContain("Coarse-graining changes what is represented. Similar aggregate behavior does not mean the underlying microstates are equivalent.");
+    expect(docs).toContain("Scale Lens views are analytical projections, not separate validated models.");
+    expect(docs).toContain("A scale-free degree distribution is not the same as a fractal network.");
     expect(docs).toContain("Model Schema Authoring Forms V1 creates structural model-schema artifacts; it does not execute schemas.");
     expect(docs).toContain("Rule declarations authored in the Builder are descriptive only and remain non-executable.");
     expect(docs).toContain("Visual Builder Graph View V1 visualizes structural relationships; it does not execute nodes or edges.");

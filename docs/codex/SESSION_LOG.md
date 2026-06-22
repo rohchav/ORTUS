@@ -1369,4 +1369,70 @@ Remaining limitations:
 - Scenario plans remain planning reports only. They do not create scenarios, RunConfigs, snapshots, engines, agents, templates, code, or simulation state.
 - Performance smoke numbers were lower than some prior session notes on this machine; Prompt 39B did not touch runtime execution paths, and the performance command still passed as a smoke check rather than a scalability claim.
 
-Next prompt after commit: pending user direction. Do not start F0, fractal, recursive, duality, or multiscale work without explicit approval.
+Next prompt after that commit was pending user direction for possible F0/fractal/multiscale roadmap work.
+
+## 2026-06-22 - Prompt F0 Fractal and Multiscale Analysis Mini-Roadmap
+
+Goal: add a documentation-only fractal and multiscale analysis mini-roadmap without implementing fractal metrics, fractal spatial generators, Scale Lens UI, network scaling analytics, trajectory motif analytics, runtime behavior, schema fields, template capabilities, Builder graph execution, Model Schema execution, or registry support.
+
+Implemented:
+
+- Added Prompt F0 to `planned_roadmap.md` and `docs/roadmap.md` with future branch order: F1 Fractal Metrics, F1B audit, F2 Fractal Spatial Generators, F2B audit, F3 Scale Lens / Coarse-Graining, F3B audit, F4 Network Scaling Metrics, F4B audit, F5 Hierarchical Trajectory Motif Analytics, and F5B audit.
+- Documented the recommended implementation priority: F1 measurement -> F3 scale comparison -> F2 synthetic generation -> F4 network scaling -> F5 abstract trajectory analysis.
+- Documented that the numbering identifies the branch, but implementation sequencing may put F3 before F2.
+- Added the core design principle: Measure multiscale structure before generating synthetic fractal structure.
+- Added required boundary language for visual resemblance, power-law evidence, finite-resolution dimension estimates, statistical self-similarity, scale-free versus geometric fractality, synthetic generators, coarse-graining, Scale Lens projections, network scaling, trajectory motifs, clustering, and causal/forecast/validation overclaims.
+- Updated README, concepts, simulation README, HCI audit, workspace IA, current context, and AGENTS guardrails to mark F0 complete as documentation only and keep F1-F5 unimplemented.
+- Updated focused documentation tests in roadmap, model-schema, control, multiscale, and social-learning suites to preserve F0 boundaries.
+
+Required boundary copy preserved:
+
+- Fractal and multiscale tools describe how measured structure changes across scale. They do not prove that a system is fundamentally fractal.
+- A complex-looking, nested, branching, or irregular pattern is not automatically fractal.
+- Power-law behavior may indicate scale-free structure, but a power-law fit alone does not establish fractality.
+- Finite-resolution fractal dimensions are estimators over a chosen scale range, not intrinsic truths about the modeled system.
+- Statistical self-similarity must be supported across an explicit scale range; it should not be inferred from visual resemblance alone.
+- Scale-free distributional evidence is not identical to geometric fractality.
+- Visual resemblance to a fractal is not evidence of scale invariance.
+- Fractal metrics are structural summaries of simulation output. They are not proof of biological, ecological, social, meteorological, or empirical validity.
+- Fractal spatial generators create synthetic structure. They do not reproduce real geography, ecology, urban form, climate, terrain, or weather without calibration and validation.
+- Coarse-graining changes what is represented. Similar aggregate behavior does not mean the underlying microstates are equivalent.
+- Scale Lens views are analytical projections, not separate validated models.
+- A scale-free degree distribution is not the same as a fractal network.
+- A hierarchical community structure is not automatically self-similar.
+- Network fractality requires a defined network-scale method and evidence across a supported scale range.
+- Hierarchical trajectory motifs describe repeated observable state-action sequences. They do not reveal thoughts, intentions, beliefs, personality, or subconscious mental states.
+- Repeated motifs across time windows are not automatically evidence of temporal fractality.
+- Fractal analysis requires a defined object, scale operation, and measurement. ORTUS must not apply one generic fractal score to unrelated spatial, network, temporal, and trajectory data.
+- Clustering groups similar observations. Fractal analysis measures how structure changes across scale. One does not imply the other.
+- Synthetic fractal generators create model inputs, not observed reality.
+- Coarse-graining may discard information and alter apparent dynamics.
+- Fractal and multiscale metrics are structural summaries, not causal explanations, forecasts, validation results, or proof of universal laws.
+
+Non-goals preserved:
+
+- No runtime source, template source, simulation engine source, Builder feature source, fit-report source, scenario-planning source, Neural Runtime Lab source, visual graph source, dependency file, registry support, import/export support, or package dependency was changed.
+- No F1-F5 capability is marked implemented.
+- Prompt 39 scenario planning remains a planning report only; it may mention future fractal metrics as possible future observation targets but does not compute them.
+- Builder graphs remain non-executable and Model Schemas remain non-runnable.
+
+Checks:
+
+- `git status --short`: clean before Prompt F0 edits.
+- `npm test -- roadmap modelSchema control socialLearning multiScale`: passed, 6 files and 59 tests.
+- `npm run typecheck`: passed.
+- First `npm test`: failed only on the known timing-sensitive `src/simulation/__tests__/uncertainty.test.ts` test `supports uncertainty over one safe numeric parameter for every production template` timing out at the 5000ms limit.
+- First standalone `npm test -- src/simulation/__tests__/uncertainty.test.ts`: failed on the same 5000ms timeout at 5204ms.
+- Second standalone `npm test -- src/simulation/__tests__/uncertainty.test.ts`: passed, 1 file and 9 tests.
+- Second full `npm test`: passed, 58 files and 475 tests.
+- `npm run build`: passed with Next.js 15.5.19; `/` and `/builder` prerendered successfully.
+- `npm run perf:simulation`: passed. Local smoke results included Flocking 100 agents at 140.34 ticks/sec, Flocking 500 agents at 20.65 ticks/sec, Forest Fire 80x60 at 33.24 ticks/sec, and Predator-Prey default at 95.39 ticks/sec.
+- `git diff --check`: passed.
+- `npm run lint`: unavailable, package.json has no lint script.
+
+Remaining limitations:
+
+- Browser rendering, responsive behavior, browser clipboard behavior, focus return, browser zoom behavior, screen-reader behavior, assistive-technology behavior, and WCAG conformance remain unverified.
+- F0 is documentation only. Fractal metrics, fractal generators, Scale Lens / Coarse-Graining, network scaling analytics, and hierarchical trajectory motif analytics remain future work.
+
+Next prompt after commit: pending user direction. Do not start F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any fractal/multiscale implementation without explicit approval.

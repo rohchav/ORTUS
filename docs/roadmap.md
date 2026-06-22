@@ -4,7 +4,7 @@ This roadmap reserves the major complex-systems pillars that ORTUS must support 
 
 ## Current Foundation
 
-ORTUS has completed through Prompt 39B, plus non-roadmap Prompt N1: Neural Excitation Network Template V1, Prompt N1B: Neural Excitation Network Template Audit + Decision Readout V1, Prompt NUX1: Neural Runtime Lab UX V1, Prompt NUX1B: Neural Runtime Lab UX Audit + Build Investigation, Prompt N2: Neural Strategy Adaptation V1, Prompt N2B: Neural Strategy Adaptation Audit, and Prompt MR0: Templates + Decision Clusters Mini-Roadmap. Prompts 1-39B established the current foundation:
+ORTUS has completed through Prompt 39B, plus non-roadmap Prompt N1: Neural Excitation Network Template V1, Prompt N1B: Neural Excitation Network Template Audit + Decision Readout V1, Prompt NUX1: Neural Runtime Lab UX V1, Prompt NUX1B: Neural Runtime Lab UX Audit + Build Investigation, Prompt N2: Neural Strategy Adaptation V1, Prompt N2B: Neural Strategy Adaptation Audit, Prompt MR0: Templates + Decision Clusters Mini-Roadmap, and docs-only Prompt F0: Fractal and Multiscale Analysis Mini-Roadmap. Prompts 1-39B established the current foundation:
 
 - Engine/runtime/UI foundation.
 - Scenario Builder.
@@ -39,12 +39,13 @@ ORTUS has completed through Prompt 39B, plus non-roadmap Prompt N1: Neural Excit
 - Non-roadmap Prompt N2 adds Neural Strategy Adaptation V1 to the Neural Runtime Lab RPS/readout mode. Strategy Adaptation V1 updates bounded game-state variables from observed RPS rounds. It is not cognition, reasoning, or human intention inference. The adaptive readout can exploit repeated patterns, but it cannot beat truly random optimal play over time. Learned strategy state is local model state, not a psychological profile. Adaptation changes game-readout bias only; it does not simulate biological plasticity or human learning. It uses bounded local RPS history, pattern statistics, deterministic exploration, rolling results, and bounded readout-bias/stimulus adjustment. It does not persist a user profile, infer beliefs/intentions/preferences/personality, update core synapse weights, make Builder graphs executable, or make Model Schemas runnable.
 - Non-roadmap Prompt N2B audits and hardens Neural Strategy Adaptation. It fixes the array-index reset flaw by using round-index reset guards, keeps round numbering monotonic after bounded-history truncation, filters malformed round objects before statistics, strengthens deterministic/malformed-state tests, and documents that fresh-run rebuilds do not clear local learned strategy unless Reset learned strategy is used.
 - Non-roadmap Prompt MR0 records future template and decision-cluster direction only; it does not implement runtime behavior. MR0 is documentation only. It adds a near-term roadmap for T1 Urban Daily Routine / Activity Choice, T2 Atmospheric Field Dynamics, DC1 cluster-based decision readout generalization, DC2 stimulus-conditioned decision clusters, G1 Blackjack Sequential Decision Lab, and DC3 observed cluster discovery / decision-space analytics.
+- Docs-only Prompt F0 records future fractal and multiscale analysis direction only; it does not implement fractal metrics, fractal spatial generators, Scale Lens UI, network scaling analytics, trajectory motif analytics, template support, schema fields, primitives, or runtime behavior.
 
 These foundations are deliberately service-first or metadata-first unless documented otherwise. Networks, resources, feedback primitives, boundary/environment models, spatial fields, observability models, causal assumptions, quantity semantics, emergence descriptors, robustness/resilience descriptors, and strategy/control descriptors are headless structural services until a template explicitly uses them at runtime. A template must not claim support for a primitive merely because a service exists.
 
 After Prompt 30B, ORTUS completed a repository hygiene, durable context, dependency stabilization, and performance/scalability pass. That pass added and validated performance instrumentation and spatial-indexing foundations, but it does not turn reserved structural primitives into runtime support and is not evidence for high-scale readiness by itself.
 
-Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 39B: Scenario Planning From Schema Audit are complete. Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, and MR0 are complete. The next prompt is pending user direction; do not start F0 or fractal/multiscale work without explicit approval.
+Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 39B: Scenario Planning From Schema Audit are complete. Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, MR0, and F0 are complete. The next prompt is pending user direction; do not start F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any fractal/multiscale implementation without explicit approval.
 
 ## Revised Prompt Sequence
 
@@ -136,6 +137,10 @@ Completed Prompt 39 scenario-planning audit:
 
 1. 39B - Scenario Planning From Schema Audit.
 
+Completed docs-only fractal and multiscale mini-roadmap:
+
+1. F0 - Fractal and Multiscale Analysis Mini-Roadmap.
+
 Prompt 38 boundary:
 
 ```text
@@ -189,6 +194,22 @@ Prompt MR0 mini-roadmap order:
 13. G1B: Blackjack Sequential Decision Lab Audit.
 14. DC3: Observed Cluster Discovery / Decision-Space Analytics V1.
 15. DC3B: Observed Cluster Discovery / Decision-Space Analytics Audit.
+
+Prompt F0 mini-roadmap order:
+
+1. F0: Fractal and Multiscale Analysis Mini-Roadmap.
+2. F1: Fractal Metrics V1.
+3. F1B: Fractal Metrics Audit.
+4. F2: Fractal Spatial Generators V1.
+5. F2B: Fractal Spatial Generators Audit.
+6. F3: Scale Lens / Coarse-Graining V1.
+7. F3B: Scale Lens / Coarse-Graining Audit.
+8. F4: Network Scaling Metrics V1.
+9. F4B: Network Scaling Metrics Audit.
+10. F5: Hierarchical Trajectory Motif Analytics V1.
+11. F5B: Hierarchical Trajectory Motif Analytics Audit.
+
+Recommended F-branch implementation priority: F1 measurement -> F3 scale comparison -> F2 synthetic generation -> F4 network scaling -> F5 abstract trajectory analysis. The numbering identifies the branch, but implementation sequencing may put F3 before F2 because ORTUS should measure observed multiscale structure before generating synthetic fractal structure.
 
 Later roadmap bands:
 
@@ -378,6 +399,91 @@ Observed cluster labels are analyst/model labels, not meanings inferred from a p
 
 DC3 waits until enough runtime traces from multiple systems exist.
 
+## Prompt F0 Fractal And Multiscale Analysis Mini-Roadmap
+
+Prompt F0 is a docs-only branch, not a capability branch. It names future fractal and multiscale analysis work so ORTUS can later measure structure across scale without pretending that complex-looking output is scientifically fractal.
+
+Core design principle:
+
+```text
+Measure multiscale structure before generating synthetic fractal structure.
+```
+
+Required framing:
+
+```text
+Fractal and multiscale tools describe how measured structure changes across scale. They do not prove that a system is fundamentally fractal.
+A complex-looking, nested, branching, or irregular pattern is not automatically fractal.
+Power-law behavior may indicate scale-free structure, but a power-law fit alone does not establish fractality.
+Finite-resolution fractal dimensions are estimators over a chosen scale range, not intrinsic truths about the modeled system.
+Statistical self-similarity must be supported across an explicit scale range; it should not be inferred from visual resemblance alone.
+Scale-free distributional evidence is not identical to geometric fractality.
+Visual resemblance to a fractal is not evidence of scale invariance.
+Fractal metrics are structural summaries of simulation output. They are not proof of biological, ecological, social, meteorological, or empirical validity.
+Fractal spatial generators create synthetic structure. They do not reproduce real geography, ecology, urban form, climate, terrain, or weather without calibration and validation.
+Coarse-graining changes what is represented. Similar aggregate behavior does not mean the underlying microstates are equivalent.
+Scale Lens views are analytical projections, not separate validated models.
+A scale-free degree distribution is not the same as a fractal network.
+A hierarchical community structure is not automatically self-similar.
+Network fractality requires a defined network-scale method and evidence across a supported scale range.
+Hierarchical trajectory motifs describe repeated observable state-action sequences. They do not reveal thoughts, intentions, beliefs, personality, or subconscious mental states.
+Repeated motifs across time windows are not automatically evidence of temporal fractality.
+Fractal analysis requires a defined object, scale operation, and measurement. ORTUS must not apply one generic fractal score to unrelated spatial, network, temporal, and trajectory data.
+Clustering groups similar observations. Fractal analysis measures how structure changes across scale. One does not imply the other.
+Synthetic fractal generators create model inputs, not observed reality.
+Coarse-graining may discard information and alter apparent dynamics.
+Fractal and multiscale metrics are structural summaries, not causal explanations, forecasts, validation results, or proof of universal laws.
+```
+
+Terminology ladder, from strongest to weakest claim:
+
+1. Exact self-similarity.
+2. Statistical self-similarity.
+3. Scale-free behavior.
+4. Multiscale structure.
+5. Hierarchical or recursive structure.
+6. Visual fractal appearance.
+
+### F1 Fractal Metrics V1
+
+F1 should start with bounded structural metrics over supported simulation outputs, not generators and not claims of intrinsic fractality. Candidate metrics include box-counting dimension estimate, lacunarity, occupied-cell fraction by scale, boundary roughness estimate, cluster-size distribution summary, scale-similarity summary, supported scale range, fit quality/residual summary, and sample-size/resolution warning.
+
+Candidate inputs are 2D occupancy masks, agent-position rasterizations, activation footprints, scalar-field threshold masks if a field template exists, and cluster boundaries. Template examples include Schelling segregation boundaries and lacunarity, Epidemic spread fronts and outbreak clusters, Predator-Prey spatial patches and cluster distributions, Flocking fragmentation and occupied scale, Forest Fire spread/fragmentation footprints, and Neural activation footprints or cascade distributions.
+
+F1 reports must include scales analyzed and excluded, finite resolution, minimum data requirements, estimator limitations, and evidence strength such as weak, moderate, or unsupported. F1 must not report "the system is fractal", exact intrinsic dimension, causal explanation, or real-world validation.
+
+### F2 Fractal Spatial Generators V1
+
+F2 is a later synthetic initialization branch. It may consider bounded recursive subdivision, noise fields, L-system-like structures, diffusion-limited aggregation, percolation-like patterns, and patch fields after measurement language exists.
+
+F2 must require future depth, resolution, seed, memory, iteration, and parameter bounds. It must not claim realism, call synthetic fields observed data, import external geographic data, add weather forecasting, replace calibration, silently change initial conditions, or introduce unbounded recursion.
+
+### F3 Scale Lens / Coarse-Graining V1
+
+F3 should support multiresolution inspection and comparison: fine output -> aggregation -> coarser representation -> metric comparison -> information-loss warning. The branch must distinguish visual zoom, spatial resampling, aggregation, coarse-graining, and model reduction.
+
+F3 must not claim preserved causality, preserved dynamics, microstate equivalence, or the correct scale. Coarse views may be useful, but they are not separate validated models and they can erase information that matters.
+
+### F4 Network Scaling Metrics V1
+
+F4 should analyze bounded network artifacts or template-owned runtime network outputs where support exists, reusing the network service where possible. Potential metrics include degree distribution, component/community size, hub/leaf structure, branching depth, modularity across resolutions, network box-count if defined, path-length scaling, and neighborhood growth.
+
+F4 must not redefine networks as executable runtime behavior, activate network runtime in unsupported templates, infer real social structure, infer identities, infer influence, infer beliefs or personality, or call a network fractal from a log-log plot.
+
+### F5 Hierarchical Trajectory Motif Analytics V1
+
+F5 is the abstract/latest branch. It may inspect bounded state/decision trajectories across multiple windows using terms such as repeated motif, nested sequence, multiscale temporal pattern, recurrence summary, windowed trajectory similarity, and state-action motif family.
+
+F5 must avoid "fractal mind", "subconscious fractal", "thought geometry", "intention structure", "personality fractal", and "predicting every decision". Long-range dependence, temporal scaling, self-similarity, and power-law recurrence require statistical evidence before those labels are used.
+
+### Relation To Existing ORTUS Work
+
+Existing templates may eventually provide measurement surfaces, but F0 does not make any of them fractal-capable. Predator-Prey can later expose spatial patches or cluster distributions; Epidemic can later expose spread fronts or outbreak clusters; Opinion networks can later support community scaling without psychological inference; Schelling can later expose segregation boundaries and lacunarity; Flocking can later expose fragmentation and occupied scale; Neural can later expose activation footprints or cascade distributions.
+
+MR0 concepts remain future-only. T1 could later expose trajectory motifs or urban spatial structure; T2 could later expose field roughness, boundaries, or multiscale field summaries; T3 could later combine exposure fields with agent locations. Decision-cluster work remains separate: DC1/DC2 do not automatically become fractal claims, DC3 clustering and fractal analysis are different operations, and F5 should come only after the decision-cluster systems exist.
+
+Prompt 38 fit reports may list future fractal concepts only as future-only structural gaps until implemented. Prompt 39 scenario plans may mention fractal metrics as possible future observation targets, but Prompt 39 does not compute them.
+
 ## Capability Policy
 
 Prompt 19 adds `src/simulation/registry` as the unified primitive registry and capability map. Future pillars remain reserved in documentation and validation boundaries, while current template capability flags remain focused on implemented contracts.
@@ -388,7 +494,7 @@ Global service availability is not template support. A primitive can exist as a 
 
 Reserved primitives are roadmap commitments, not implemented behavior.
 
-Current production templates must not claim multi-scale systems, observability runtime support, causal-assumption runtime support, boundary/environment runtime modeling, spatial-field runtime support, quantity-semantics runtime support, emergence-detection runtime support, robustness/resilience runtime support, strategy/control runtime support, model schema runtime support, multi-rate time, adaptive agents, heterogeneity, phase transition analysis, attractor analysis, trace inspection, error budgets, compiler/interpreter runtime, visual builder, calibration, data assimilation, MCMC, or external framework interop. Neural Excitation is the only current template with template-owned runtime network support; that support does not make Builder graphs, model-schema graphs, or generic network artifacts executable.
+Current production templates must not claim multi-scale systems, fractal metrics, fractal spatial generation, Scale Lens / Coarse-Graining, network scaling analytics, hierarchical trajectory motif analytics, observability runtime support, causal-assumption runtime support, boundary/environment runtime modeling, spatial-field runtime support, quantity-semantics runtime support, emergence-detection runtime support, robustness/resilience runtime support, strategy/control runtime support, model schema runtime support, multi-rate time, adaptive agents, heterogeneity, phase transition analysis, attractor analysis, trace inspection, error budgets, compiler/interpreter runtime, visual builder, calibration, data assimilation, MCMC, or external framework interop. Neural Excitation is the only current template with template-owned runtime network support; that support does not make Builder graphs, model-schema graphs, or generic network artifacts executable.
 
 Prompt 24C adds Forest Fire / Landscape Spread as a production template. It is an abstract local-spread grid model for qualitative spread, threshold, fragmentation, and emergence exploration; it is not a wildfire predictor, does not use GIS, wind, humidity, weather, terrain, suppression, firefighting, or calibrated fire probabilities, and does not make spatialFields or boundariesEnvironment runtime-active.
 

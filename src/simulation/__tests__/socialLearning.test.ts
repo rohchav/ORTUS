@@ -844,6 +844,9 @@ describe("knowledge, memory, and social-learning semantics service", () => {
     expect(docs).toContain(
       "No LLM agents, real-person profiling, protected-class inference, persuasion optimization, or psychological diagnosis are implemented."
     );
+    expect(docs).toContain(
+      "Hierarchical trajectory motifs describe repeated observable state-action sequences. They do not reveal thoughts, intentions, beliefs, personality, or subconscious mental states."
+    );
 
     const assumptionText = productionTemplates
       .flatMap((template) => template.assumptionProfile?.limitations.map((item) => item.description) ?? [])

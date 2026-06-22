@@ -335,6 +335,33 @@
 - Observed clusters are analytical groupings, not psychological profiles.
 - Blackjack work is offline simulation only, not gambling advice, live casino assistance, or wearable card-counting support.
 - Do not use wearable devices, camera input, or software assistance for live casino play.
+- Prompt F0 is documentation only; do not implement fractal metrics, fractal generators, Scale Lens UI, network scaling analytics, trajectory motif analytics, schema fields, template capabilities, primitives, or runtime behavior from F0 alone.
+- Do not implement F1, F1B, F2, F2B, F3, F3B, F4, F4B, F5, or F5B without dedicated prompts and audits.
+- Measure multiscale structure before generating synthetic fractal structure.
+- Fractal and multiscale tools describe how measured structure changes across scale. They do not prove that a system is fundamentally fractal.
+- A complex-looking, nested, branching, or irregular pattern is not automatically fractal.
+- Power-law behavior may indicate scale-free structure, but a power-law fit alone does not establish fractality.
+- Finite-resolution fractal dimensions are estimators over a chosen scale range, not intrinsic truths about the modeled system.
+- Statistical self-similarity must be supported across an explicit scale range; it should not be inferred from visual resemblance alone.
+- Scale-free distributional evidence is not identical to geometric fractality.
+- Visual resemblance to a fractal is not evidence of scale invariance.
+- Fractal metrics are structural summaries of simulation output. They are not proof of biological, ecological, social, meteorological, or empirical validity.
+- Fractal spatial generators create synthetic structure. They do not reproduce real geography, ecology, urban form, climate, terrain, or weather without calibration and validation.
+- Fractal analysis requires a defined object, scale operation, and measurement. ORTUS must not apply one generic fractal score to unrelated spatial, network, temporal, and trajectory data.
+- Clustering groups similar observations. Fractal analysis measures how structure changes across scale. One does not imply the other.
+- Synthetic fractal generators create model inputs, not observed reality.
+- Coarse-graining may discard information and alter apparent dynamics.
+- Coarse-graining changes what is represented. Similar aggregate behavior does not mean the underlying microstates are equivalent.
+- Scale Lens views are analytical projections, not separate validated models.
+- A scale-free degree distribution is not the same as a fractal network.
+- A hierarchical community structure is not automatically self-similar.
+- Network fractality requires a defined network-scale method and evidence across a supported scale range.
+- Hierarchical trajectory motifs describe repeated observable state-action sequences. They do not reveal thoughts, intentions, beliefs, personality, or subconscious mental states.
+- Repeated motifs across time windows are not automatically evidence of temporal fractality.
+- Fractal and multiscale metrics are structural summaries, not causal explanations, forecasts, validation results, or proof of universal laws.
+- Do not treat Prompt F0 future items as implemented capabilities, template support, registry support, visual-builder support, scenario-planning support, or schema/runtime execution.
+- Do not change Prompt 39 scenario-planning boundaries for F0: future fractal metrics may be mentioned only as possible future observation targets, not computed outputs.
+- Do not make Builder graphs executable or Model Schemas runnable while documenting or later implementing fractal/multiscale analysis.
 - Keep Neural runtime graph scoped only to the Neural template.
 - Keep Neural Runtime Lab scenario-first but scientifically honest.
 - Do not add learning/adaptation in NUX1.

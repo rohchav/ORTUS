@@ -1,10 +1,10 @@
 # ORTUS Full Prompt Roadmap
 
-*Last updated after Prompt 39B Scenario Planning From Schema Audit.*
+*Last updated after Prompt F0 Fractal and Multiscale Analysis Mini-Roadmap.*
 
 ## Current Status
 
-ORTUS has completed the core runtime/template foundation, scenario system, uncertainty layer, assumptions/limits layer, systems primitive registry, hybrid composition, multi-scale structure, scale-view state, boundary/environment models, spatial fields, observability, causality, quantity semantics, emergence pattern descriptors, robustness/resilience semantics, strategy/control semantics, model schema declarations, knowledge/memory/social-learning semantics, visual builder workspace schemas, template/schema compatibility mapping, the template/schema compatibility mapping audit, a narrow Opinion Dynamics social-learning behavior mode, the Opinion Dynamics social-learning runtime audit, Safe Builder UI Shell V1, the Safe Builder UI Shell + workspace information architecture audit, Model Schema Authoring Forms V1, the Model Schema Authoring Forms Audit, Visual Builder Graph View V1, the Visual Builder Graph View Audit, Schema Validation UX + Repair Suggestions V1, the Schema Validation UX + Repair Suggestions Audit, Schema-to-Template Fit Report V1, the Schema-to-Template Fit Report Audit, Scenario Planning From Schema V1, the Scenario Planning From Schema Audit, non-roadmap Prompt N1 Neural Excitation Network Template V1, non-roadmap Prompt N1B Neural Excitation Network Template Audit + Decision Readout V1, non-roadmap Prompt NUX1 Neural Runtime Lab UX V1, non-roadmap Prompt NUX1B Neural Runtime Lab UX Audit + Build Investigation, non-roadmap Prompt N2 Neural Strategy Adaptation V1, non-roadmap Prompt N2B Neural Strategy Adaptation Audit, and non-roadmap Prompt MR0 Templates + Decision Clusters Mini-Roadmap.
+ORTUS has completed the core runtime/template foundation, scenario system, uncertainty layer, assumptions/limits layer, systems primitive registry, hybrid composition, multi-scale structure, scale-view state, boundary/environment models, spatial fields, observability, causality, quantity semantics, emergence pattern descriptors, robustness/resilience semantics, strategy/control semantics, model schema declarations, knowledge/memory/social-learning semantics, visual builder workspace schemas, template/schema compatibility mapping, the template/schema compatibility mapping audit, a narrow Opinion Dynamics social-learning behavior mode, the Opinion Dynamics social-learning runtime audit, Safe Builder UI Shell V1, the Safe Builder UI Shell + workspace information architecture audit, Model Schema Authoring Forms V1, the Model Schema Authoring Forms Audit, Visual Builder Graph View V1, the Visual Builder Graph View Audit, Schema Validation UX + Repair Suggestions V1, the Schema Validation UX + Repair Suggestions Audit, Schema-to-Template Fit Report V1, the Schema-to-Template Fit Report Audit, Scenario Planning From Schema V1, the Scenario Planning From Schema Audit, non-roadmap Prompt N1 Neural Excitation Network Template V1, non-roadmap Prompt N1B Neural Excitation Network Template Audit + Decision Readout V1, non-roadmap Prompt NUX1 Neural Runtime Lab UX V1, non-roadmap Prompt NUX1B Neural Runtime Lab UX Audit + Build Investigation, non-roadmap Prompt N2 Neural Strategy Adaptation V1, non-roadmap Prompt N2B Neural Strategy Adaptation Audit, non-roadmap Prompt MR0 Templates + Decision Clusters Mini-Roadmap, and docs-only Prompt F0 Fractal and Multiscale Analysis Mini-Roadmap.
 
 Current project status:
 
@@ -17,8 +17,9 @@ Completed non-roadmap prompt: Prompt NUX1B — Neural Runtime Lab UX Audit + Bui
 Completed non-roadmap prompt: Prompt N2 — Neural Strategy Adaptation V1
 Completed non-roadmap prompt: Prompt N2B — Neural Strategy Adaptation Audit
 Completed non-roadmap prompt: Prompt MR0 — Templates + Decision Clusters Mini-Roadmap
+Completed docs-only prompt: Prompt F0 — Fractal and Multiscale Analysis Mini-Roadmap
 Post-30B stabilization completed: repo hygiene, durable Codex context, dependency repair, generated-artifact cleanup, and runtime performance/scalability baseline
-Next prompt: Pending user direction; do not start F0 or fractal/multiscale work without explicit approval
+Next prompt: Pending user direction; do not start F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any fractal/multiscale implementation without explicit approval
 ```
 
 Critical global boundary:
@@ -77,6 +78,17 @@ External stimuli are modeled inputs, not evidence of internal mental state.
 Observed clusters are analytical groupings, not psychological profiles.
 Blackjack work is offline simulation only, not gambling advice, live casino assistance, or wearable card-counting support.
 Do not use wearable devices, camera input, or software assistance for live casino play.
+Prompt F0 is documentation only; it records future fractal and multiscale analysis direction and does not implement fractal metrics, fractal generators, Scale Lens UI, network scaling analytics, trajectory motif analytics, schema fields, template capabilities, primitives, or runtime behavior.
+Measure multiscale structure before generating synthetic fractal structure.
+Fractal and multiscale tools describe how measured structure changes across scale. They do not prove that a system is fundamentally fractal.
+A complex-looking, nested, branching, or irregular pattern is not automatically fractal.
+Power-law behavior may indicate scale-free structure, but a power-law fit alone does not establish fractality.
+Finite-resolution fractal dimensions are estimators over a chosen scale range, not intrinsic truths about the modeled system.
+Statistical self-similarity must be supported across an explicit scale range; it should not be inferred from visual resemblance alone.
+Scale-free distributional evidence is not identical to geometric fractality.
+Visual resemblance to a fractal is not evidence of scale invariance.
+Fractal analysis requires a defined object, scale operation, and measurement. ORTUS must not apply one generic fractal score to unrelated spatial, network, temporal, and trajectory data.
+Fractal and multiscale metrics are structural summaries, not causal explanations, forecasts, validation results, or proof of universal laws.
 Rock-Paper-Scissors labels are assigned to output assemblies by the model designer; the network does not understand the labels.
 Rendered responsive behavior, clipboard behavior, focus return, zoom, screen-reader behavior, assistive-technology behavior, and WCAG conformance remain unverified.
 ```
@@ -88,7 +100,7 @@ missing from this full roadmap. Prompt 31C and Prompt 31D are now corrected belo
 after Prompt 31B and before Prompt 32, with a later narrow Opinion Dynamics
 social-learning runtime slice placed after template/schema compatibility mapping.
 The social/cognitive semantics insertion was corrected after manual review, and
-Prompt 31C, Prompt 31D, Prompt 32, Prompt 32B, Prompt 33, Prompt 33B, Prompt 33C, Prompt 33D, Prompt 34, Prompt 34B, Prompt 35, Prompt 35B, Prompt 36, Prompt 36B, Prompt 37, Prompt 37B, Prompt 38, Prompt 38B, Prompt 39, and Prompt 39B are now marked complete. Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, and MR0 are complete, and the next prompt is pending user direction.
+Prompt 31C, Prompt 31D, Prompt 32, Prompt 32B, Prompt 33, Prompt 33B, Prompt 33C, Prompt 33D, Prompt 34, Prompt 34B, Prompt 35, Prompt 35B, Prompt 36, Prompt 36B, Prompt 37, Prompt 37B, Prompt 38, Prompt 38B, Prompt 39, and Prompt 39B are now marked complete. Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, MR0, and F0 are complete, and the next prompt is pending user direction.
 
 Safe Builder UI Shell V1 displays structural workspace artifacts; it does not execute workspace nodes or edges. The builder shell is not a compiler, interpreter, visual programming environment, or custom simulation runtime. A structurally valid workspace is still not a runnable model. Importing a workspace artifact does not activate model schemas, compatibility mappings, or social-learning semantics.
 
@@ -1905,6 +1917,89 @@ Complete.
 
 Prompt 39B marks dependent scenario plans stale when the schema or fit-report source changes, disables planning for stale fit reports, keeps copied stale reports from presenting old output as current, strengthens claim boundaries against medical/public-health prediction, weather forecasting, real-human-behavior prediction, policy recommendation, persuasion optimization, targeting logic, and gambling assistance, and confirms the UI remains a bounded reporting surface only.
 
+## Prompt F0 — Fractal and Multiscale Analysis Mini-Roadmap
+
+Purpose:
+
+* Add a docs-only roadmap branch for future fractal and multiscale analysis.
+* Protect ORTUS from treating complex-looking patterns, hierarchy, recursion, clusters, or power-law-looking plots as proof of fractality.
+* Establish measurement-first sequencing before any future synthetic fractal generator work.
+
+Status:
+
+```text
+Complete. Documentation only.
+```
+
+F0 branch order:
+
+1. F0: Fractal and Multiscale Analysis Mini-Roadmap.
+2. F1: Fractal Metrics V1.
+3. F1B: Fractal Metrics Audit.
+4. F2: Fractal Spatial Generators V1.
+5. F2B: Fractal Spatial Generators Audit.
+6. F3: Scale Lens / Coarse-Graining V1.
+7. F3B: Scale Lens / Coarse-Graining Audit.
+8. F4: Network Scaling Metrics V1.
+9. F4B: Network Scaling Metrics Audit.
+10. F5: Hierarchical Trajectory Motif Analytics V1.
+11. F5B: Hierarchical Trajectory Motif Analytics Audit.
+
+Recommended implementation priority: F1 measurement -> F3 scale comparison -> F2 synthetic generation -> F4 network scaling -> F5 abstract trajectory analysis. The numbering identifies the branch, but implementation sequencing may put F3 before F2.
+
+Core design principle:
+
+```text
+Measure multiscale structure before generating synthetic fractal structure.
+```
+
+Required boundary language:
+
+```text
+Fractal and multiscale tools describe how measured structure changes across scale. They do not prove that a system is fundamentally fractal.
+A complex-looking, nested, branching, or irregular pattern is not automatically fractal.
+Power-law behavior may indicate scale-free structure, but a power-law fit alone does not establish fractality.
+Finite-resolution fractal dimensions are estimators over a chosen scale range, not intrinsic truths about the modeled system.
+Statistical self-similarity must be supported across an explicit scale range; it should not be inferred from visual resemblance alone.
+Scale-free distributional evidence is not identical to geometric fractality.
+Visual resemblance to a fractal is not evidence of scale invariance.
+Fractal metrics are structural summaries of simulation output. They are not proof of biological, ecological, social, meteorological, or empirical validity.
+Fractal spatial generators create synthetic structure. They do not reproduce real geography, ecology, urban form, climate, terrain, or weather without calibration and validation.
+Coarse-graining changes what is represented. Similar aggregate behavior does not mean the underlying microstates are equivalent.
+Scale Lens views are analytical projections, not separate validated models.
+A scale-free degree distribution is not the same as a fractal network.
+A hierarchical community structure is not automatically self-similar.
+Network fractality requires a defined network-scale method and evidence across a supported scale range.
+Hierarchical trajectory motifs describe repeated observable state-action sequences. They do not reveal thoughts, intentions, beliefs, personality, or subconscious mental states.
+Repeated motifs across time windows are not automatically evidence of temporal fractality.
+Fractal analysis requires a defined object, scale operation, and measurement. ORTUS must not apply one generic fractal score to unrelated spatial, network, temporal, and trajectory data.
+Clustering groups similar observations. Fractal analysis measures how structure changes across scale. One does not imply the other.
+Synthetic fractal generators create model inputs, not observed reality.
+Coarse-graining may discard information and alter apparent dynamics.
+Fractal and multiscale metrics are structural summaries, not causal explanations, forecasts, validation results, or proof of universal laws.
+```
+
+Terminology ladder:
+
+1. Exact self-similarity.
+2. Statistical self-similarity.
+3. Scale-free behavior.
+4. Multiscale structure.
+5. Hierarchical or recursive structure.
+6. Visual fractal appearance.
+
+Future F1 scope: bounded structural metrics over supported simulation outputs. Candidate metrics include box-counting dimension estimate, lacunarity, occupied-cell fraction by scale, boundary roughness estimate, cluster-size distribution summary, scale-similarity summary, supported scale range, fit quality/residual summary, and sample-size/resolution warning. Inputs include 2D occupancy masks, agent-position rasterizations, activation footprints, scalar-field threshold masks if a field template exists, and cluster boundaries. Reports must include scales analyzed and excluded, finite resolution, minimum data requirements, estimator limitations, and weak/moderate/unsupported evidence. F1 must not report that a system is fractal, exact intrinsic dimension, causal explanation, or real-world validation.
+
+Future F2 scope: synthetic initialization only, with bounded recursive/subdivision/noise/L-system/DLA/percolation/patch-field options. F2 must require future depth, resolution, seed, memory, iteration, and parameter bounds. It must not claim realism, call synthetic fields observed data, import external geo data, add weather forecasting, replace calibration, silently change initial conditions, or introduce unbounded recursion.
+
+Future F3 scope: multiresolution inspection and comparison: fine output -> aggregation -> coarser representation -> metric comparison -> information-loss warning. F3 must distinguish visual zoom, spatial resampling, aggregation, coarse-graining, and model reduction. It must not claim preserved causality, preserved dynamics, microstate equivalence, or correct scale.
+
+Future F4 scope: bounded network scaling metrics over network artifacts or template-owned runtime network outputs where support exists. Potential metrics include degree distribution, component/community size, hub/leaf structure, branching depth, modularity across resolutions, network box-count if defined, path-length scaling, and neighborhood growth. F4 must not redefine networks as executable, activate network runtime in unsupported templates, infer real social structure, identities, influence, beliefs, or personality, or call a network fractal from a log-log plot.
+
+Future F5 scope: bounded state/decision trajectories over multiple windows. Use repeated motif, nested sequence, multiscale temporal pattern, recurrence summary, windowed trajectory similarity, and state-action motif family. Avoid fractal mind, subconscious fractal, thought geometry, intention structure, personality fractal, and predicting every decision. Long-range dependence, temporal scaling, self-similarity, and power-law recurrence require statistical evidence before those labels are used.
+
+Relation to existing ORTUS: Predator-Prey may later support spatial patches or cluster distributions; Epidemic may later support spread fronts or outbreak clusters; Opinion may later support network/community scaling without psychological inference; Schelling may later support segregation boundaries/lacunarity; Flocking may later support fragmentation/occupied scale; Neural may later support activation footprints or cascade distributions. MR0 future T1/T2/T3/DC work remains future-only. Prompt 38 fit reports may list future fractal concepts only as future-only structural gaps until implemented. Prompt 39 scenario plans may mention fractal metrics as possible future observation targets, but Prompt 39 does not compute them.
+
 ## Prompt 40 — Safe Scenario Draft Workspace V1
 
 Purpose:
@@ -3226,8 +3321,8 @@ No global service availability treated as template runtime support.
 Recommended immediate next steps:
 
 ```text
-1. Review and commit Prompt 39 + Prompt 39B work if this worktree is still uncommitted.
-2. Wait for explicit user direction before starting F0 or any fractal/multiscale work.
+1. Review and commit Prompt F0 documentation/test work if this worktree is still uncommitted.
+2. Wait for explicit user direction before starting F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any fractal/multiscale implementation.
 3. Run a dedicated rendered responsive/design-system audit before making mobile-readiness, WCAG, clipboard, focus-return, or polished visual-workbench claims.
 ```
 
@@ -3242,6 +3337,7 @@ Non-roadmap Prompt NUX1B Neural Runtime Lab UX Audit + Build Investigation is co
 Non-roadmap Prompt N2 Neural Strategy Adaptation V1 is complete.
 Non-roadmap Prompt N2B Neural Strategy Adaptation Audit is complete.
 Non-roadmap Prompt MR0 Templates + Decision Clusters Mini-Roadmap is complete.
+Docs-only Prompt F0 Fractal and Multiscale Analysis Mini-Roadmap is complete.
 Performance stabilization completed after Prompt 30B.
 Prompt 34 safe builder shell is complete.
 Prompt 34B safe builder shell audit is complete.
