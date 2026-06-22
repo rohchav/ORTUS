@@ -4,7 +4,7 @@ This roadmap reserves the major complex-systems pillars that ORTUS must support 
 
 ## Current Foundation
 
-ORTUS has completed through Prompt 39B, plus non-roadmap Prompt N1: Neural Excitation Network Template V1, Prompt N1B: Neural Excitation Network Template Audit + Decision Readout V1, Prompt NUX1: Neural Runtime Lab UX V1, Prompt NUX1B: Neural Runtime Lab UX Audit + Build Investigation, Prompt N2: Neural Strategy Adaptation V1, Prompt N2B: Neural Strategy Adaptation Audit, Prompt MR0: Templates + Decision Clusters Mini-Roadmap, docs-only Prompt F0: Fractal and Multiscale Analysis Mini-Roadmap, and docs-only Prompt P0: ORTUS Product Philosophy and Learning Mission. Prompts 1-39B established the current foundation:
+ORTUS has completed through Prompt 39B, plus non-roadmap Prompt N1: Neural Excitation Network Template V1, Prompt N1B: Neural Excitation Network Template Audit + Decision Readout V1, Prompt NUX1: Neural Runtime Lab UX V1, Prompt NUX1B: Neural Runtime Lab UX Audit + Build Investigation, Prompt N2: Neural Strategy Adaptation V1, Prompt N2B: Neural Strategy Adaptation Audit, Prompt MR0: Templates + Decision Clusters Mini-Roadmap, docs-only Prompt F0: Fractal and Multiscale Analysis Mini-Roadmap, docs-only Prompt P0: ORTUS Product Philosophy and Learning Mission, and docs-only Prompt UX0: ORTUS Living Systems Atlas Visual Direction. Prompts 1-39B established the current foundation:
 
 - Engine/runtime/UI foundation.
 - Scenario Builder.
@@ -41,12 +41,13 @@ ORTUS has completed through Prompt 39B, plus non-roadmap Prompt N1: Neural Excit
 - Non-roadmap Prompt MR0 records future template and decision-cluster direction only; it does not implement runtime behavior. MR0 is documentation only. It adds a near-term roadmap for T1 Urban Daily Routine / Activity Choice, T2 Atmospheric Field Dynamics, DC1 cluster-based decision readout generalization, DC2 stimulus-conditioned decision clusters, G1 Blackjack Sequential Decision Lab, and DC3 observed cluster discovery / decision-space analytics.
 - Docs-only Prompt F0 records future fractal and multiscale analysis direction only; it does not implement fractal metrics, fractal spatial generators, Scale Lens UI, network scaling analytics, trajectory motif analytics, template support, schema fields, primitives, or runtime behavior.
 - Docs-only Prompt P0 records ORTUS product philosophy, learning mission, epistemic guardrails, and future Research World progression direction only; it does not implement progression, missions, XP, streaks, unlocks, scoring, persistence, social features, runtime behavior, templates, or UI flows.
+- Docs-only Prompt UX0 records the ORTUS Living Systems Atlas visual and interaction target only; it does not implement World/Lab/Atlas/Workshop routes, tabs, navigation, shell redesign, CSS tokens, component changes, persistence, discovery logic, behavioral landscapes, progression, runtime behavior, dependencies, remote fonts, icons, animations, or mockups.
 
 These foundations are deliberately service-first or metadata-first unless documented otherwise. Networks, resources, feedback primitives, boundary/environment models, spatial fields, observability models, causal assumptions, quantity semantics, emergence descriptors, robustness/resilience descriptors, and strategy/control descriptors are headless structural services until a template explicitly uses them at runtime. A template must not claim support for a primitive merely because a service exists.
 
 After Prompt 30B, ORTUS completed a repository hygiene, durable context, dependency stabilization, and performance/scalability pass. That pass added and validated performance instrumentation and spatial-indexing foundations, but it does not turn reserved structural primitives into runtime support and is not evidence for high-scale readiness by itself.
 
-Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 39B: Scenario Planning From Schema Audit are complete. Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, MR0, F0, and P0 are complete. The next prompt is pending user direction; do not start GW0-GW6 Research World progression, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any Research World/fractal/multiscale implementation without explicit approval.
+Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 39B: Scenario Planning From Schema Audit are complete. Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, MR0, F0, P0, and UX0 are complete. The next prompt is pending user direction; do not start GW0-GW6 Research World progression, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any Research World/fractal/multiscale implementation without explicit approval.
 
 ## Revised Prompt Sequence
 
@@ -215,13 +216,14 @@ Recommended F-branch implementation priority: F1 measurement -> F3 scale compari
 Prompt P0 future Research World branch:
 
 1. P0: ORTUS Product Philosophy and Learning Mission.
-2. GW0: Research World Progression Mini-Roadmap.
-3. GW1: Persistent Model Lab.
-4. GW2: Discovery Atlas.
-5. GW3: Behavioral Landscape Exploration.
-6. GW4: Contextual Capability Guidance.
-7. GW5: Model Composition Frontiers.
-8. GW6: Grand Systems Challenges.
+2. UX0: Living Systems Atlas Visual Direction.
+3. GW0: Research World Progression Mini-Roadmap.
+4. GW1: Persistent Model Lab.
+5. GW2: Discovery Atlas.
+6. GW3: Behavioral Landscape Exploration.
+7. GW4: Contextual Capability Guidance.
+8. GW5: Model Composition Frontiers.
+9. GW6: Grand Systems Challenges.
 
 P0 is complete as documentation only. GW0-GW6 remain future prompts and must not be treated as implemented progression, persistence, missions, scoring, unlocks, achievements, discovery detection, model composition, templates, UI flows, or Research World state.
 
@@ -529,6 +531,40 @@ The user progresses by gaining reusable understanding and modeling capability, n
 ```
 
 P0 does not implement Research World progression, persistent model labs, discovery atlases, behavioral landscapes, capability guidance, model composition frontiers, grand systems challenges, XP, streaks, grinding, missions, achievements, unlocks, scoring, persistence, accounts, social features, UI flows, templates, runtime behavior, or dependency changes.
+
+## Prompt UX0 ORTUS Living Systems Atlas Visual Direction
+
+Prompt UX0 is a docs-only visual direction and UX-principle branch, not an implementation branch. The canonical document is `ui/LIVING_SYSTEMS_ATLAS_VISUAL_DIRECTION.md`.
+
+Required framing:
+
+```text
+ORTUS should feel like a living system observed through precise scientific instruments, not a system under tactical command.
+The interface should preserve wonder without hiding uncertainty, assumptions, or model limits.
+Visual progression should correspond to real modeling capability and accumulated understanding, not arbitrary status or engagement rewards.
+```
+
+Design identity:
+
+```text
+ORTUS Living Systems Atlas
+Living Systems Observatory + Scientific Expedition Atlas + Modular Research Workshop + Persistent Model Laboratory
+```
+
+Required boundaries:
+
+```text
+ORTUS is an exploratory laboratory, not a tactical command interface.
+UX0 defines these destinations conceptually. It does not create routes, tabs, navigation, persistence, or runtime behavior.
+UX0 defines the visual and interaction target. Research World prompts will determine how that target is implemented.
+Do not rewrite the entire interface at once. Migrate through bounded, testable surfaces while preserving current workflows.
+```
+
+UX0 retires tactical HUD framing, military mission language, combat-console metaphors, crosshairs, targeting reticles, warning-triangle saturation, dominant hazard orange/red, ultra-condensed sci-fi typography, excessive uppercase, scan lines, animated borders, decorative data noise, permanent glowing UI chrome, fake terminal commands, compressed control walls, and command/target/deploy/engage language where scientific language is appropriate.
+
+UX0 preserves useful hierarchy, precision, strong silhouettes, disciplined spacing, clear contrast, high-quality motion, distinctive identity, dark-mode capability, and bold but readable typography.
+
+UX0 does not implement World/Lab/Atlas/Workshop routes, tabs, navigation, shell redesign, CSS tokens, component changes, persistence, discovery logic, behavioral landscapes, progression, runtime behavior, dependencies, remote fonts, icons, animations, or mockups.
 
 ## Capability Policy
 

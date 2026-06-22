@@ -153,6 +153,8 @@ The user progresses by gaining reusable understanding and modeling capability, n
 
 Any future Research World work should avoid XP, streaks, grinding loops, manipulative engagement rewards, and artificial locks that make scientific thinking feel like a checklist. Soft contextual guidance can help users notice next useful questions, but it must not imply that unexplored features are invalid or that completed tasks are validated discoveries.
 
+Prompt UX0 adds the documentation-only ORTUS Living Systems Atlas visual direction before Research World implementation prompts. UX0 defines the visual and interaction target; Research World prompts will determine how that target is implemented. UX0 does not implement World/Lab/Atlas/Workshop routes, tabs, navigation, persistence, discovery logic, behavioral landscapes, CSS tokens, component redesigns, runtime behavior, or progression.
+
 ## Intellectual Progression Arc
 
 ORTUS progression is both technical and intellectual: users acquire tools while learning why simple explanations often fail.

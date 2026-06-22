@@ -1,10 +1,10 @@
 # ORTUS Full Prompt Roadmap
 
-*Last updated after Prompt P0 ORTUS Product Philosophy and Learning Mission.*
+*Last updated after Prompt UX0 ORTUS Living Systems Atlas Visual Direction.*
 
 ## Current Status
 
-ORTUS has completed the core runtime/template foundation, scenario system, uncertainty layer, assumptions/limits layer, systems primitive registry, hybrid composition, multi-scale structure, scale-view state, boundary/environment models, spatial fields, observability, causality, quantity semantics, emergence pattern descriptors, robustness/resilience semantics, strategy/control semantics, model schema declarations, knowledge/memory/social-learning semantics, visual builder workspace schemas, template/schema compatibility mapping, the template/schema compatibility mapping audit, a narrow Opinion Dynamics social-learning behavior mode, the Opinion Dynamics social-learning runtime audit, Safe Builder UI Shell V1, the Safe Builder UI Shell + workspace information architecture audit, Model Schema Authoring Forms V1, the Model Schema Authoring Forms Audit, Visual Builder Graph View V1, the Visual Builder Graph View Audit, Schema Validation UX + Repair Suggestions V1, the Schema Validation UX + Repair Suggestions Audit, Schema-to-Template Fit Report V1, the Schema-to-Template Fit Report Audit, Scenario Planning From Schema V1, the Scenario Planning From Schema Audit, non-roadmap Prompt N1 Neural Excitation Network Template V1, non-roadmap Prompt N1B Neural Excitation Network Template Audit + Decision Readout V1, non-roadmap Prompt NUX1 Neural Runtime Lab UX V1, non-roadmap Prompt NUX1B Neural Runtime Lab UX Audit + Build Investigation, non-roadmap Prompt N2 Neural Strategy Adaptation V1, non-roadmap Prompt N2B Neural Strategy Adaptation Audit, non-roadmap Prompt MR0 Templates + Decision Clusters Mini-Roadmap, docs-only Prompt F0 Fractal and Multiscale Analysis Mini-Roadmap, and docs-only Prompt P0 ORTUS Product Philosophy and Learning Mission.
+ORTUS has completed the core runtime/template foundation, scenario system, uncertainty layer, assumptions/limits layer, systems primitive registry, hybrid composition, multi-scale structure, scale-view state, boundary/environment models, spatial fields, observability, causality, quantity semantics, emergence pattern descriptors, robustness/resilience semantics, strategy/control semantics, model schema declarations, knowledge/memory/social-learning semantics, visual builder workspace schemas, template/schema compatibility mapping, the template/schema compatibility mapping audit, a narrow Opinion Dynamics social-learning behavior mode, the Opinion Dynamics social-learning runtime audit, Safe Builder UI Shell V1, the Safe Builder UI Shell + workspace information architecture audit, Model Schema Authoring Forms V1, the Model Schema Authoring Forms Audit, Visual Builder Graph View V1, the Visual Builder Graph View Audit, Schema Validation UX + Repair Suggestions V1, the Schema Validation UX + Repair Suggestions Audit, Schema-to-Template Fit Report V1, the Schema-to-Template Fit Report Audit, Scenario Planning From Schema V1, the Scenario Planning From Schema Audit, non-roadmap Prompt N1 Neural Excitation Network Template V1, non-roadmap Prompt N1B Neural Excitation Network Template Audit + Decision Readout V1, non-roadmap Prompt NUX1 Neural Runtime Lab UX V1, non-roadmap Prompt NUX1B Neural Runtime Lab UX Audit + Build Investigation, non-roadmap Prompt N2 Neural Strategy Adaptation V1, non-roadmap Prompt N2B Neural Strategy Adaptation Audit, non-roadmap Prompt MR0 Templates + Decision Clusters Mini-Roadmap, docs-only Prompt F0 Fractal and Multiscale Analysis Mini-Roadmap, docs-only Prompt P0 ORTUS Product Philosophy and Learning Mission, and docs-only Prompt UX0 ORTUS Living Systems Atlas Visual Direction.
 
 Current project status:
 
@@ -19,6 +19,7 @@ Completed non-roadmap prompt: Prompt N2B — Neural Strategy Adaptation Audit
 Completed non-roadmap prompt: Prompt MR0 — Templates + Decision Clusters Mini-Roadmap
 Completed docs-only prompt: Prompt F0 — Fractal and Multiscale Analysis Mini-Roadmap
 Completed docs-only prompt: Prompt P0 — ORTUS Product Philosophy and Learning Mission
+Completed docs-only prompt: Prompt UX0 — ORTUS Living Systems Atlas Visual Direction
 Post-30B stabilization completed: repo hygiene, durable Codex context, dependency repair, generated-artifact cleanup, and runtime performance/scalability baseline
 Next prompt: Pending user direction; do not start GW0-GW6 Research World progression, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any Research World/fractal/multiscale implementation without explicit approval
 ```
@@ -81,6 +82,7 @@ Blackjack work is offline simulation only, not gambling advice, live casino assi
 Do not use wearable devices, camera input, or software assistance for live casino play.
 Prompt F0 is documentation only; it records future fractal and multiscale analysis direction and does not implement fractal metrics, fractal generators, Scale Lens UI, network scaling analytics, trajectory motif analytics, schema fields, template capabilities, primitives, or runtime behavior.
 Prompt P0 is documentation only; it records ORTUS product philosophy, learning mission, epistemic guardrails, and future Research World direction and does not implement progression, missions, XP, streaks, unlocks, scoring, persistence, accounts, social features, templates, UI flows, dependencies, or runtime behavior.
+Prompt UX0 is documentation and design planning only; it records the ORTUS Living Systems Atlas visual and interaction target and does not implement World/Lab/Atlas/Workshop routes, tabs, navigation, shell redesign, CSS tokens, component changes, persistence, discovery logic, behavioral landscapes, progression, runtime behavior, dependencies, remote fonts, icons, animations, or mockups.
 Measure multiscale structure before generating synthetic fractal structure.
 Fractal and multiscale tools describe how measured structure changes across scale. They do not prove that a system is fundamentally fractal.
 A complex-looking, nested, branching, or irregular pattern is not automatically fractal.
@@ -102,7 +104,7 @@ missing from this full roadmap. Prompt 31C and Prompt 31D are now corrected belo
 after Prompt 31B and before Prompt 32, with a later narrow Opinion Dynamics
 social-learning runtime slice placed after template/schema compatibility mapping.
 The social/cognitive semantics insertion was corrected after manual review, and
-Prompt 31C, Prompt 31D, Prompt 32, Prompt 32B, Prompt 33, Prompt 33B, Prompt 33C, Prompt 33D, Prompt 34, Prompt 34B, Prompt 35, Prompt 35B, Prompt 36, Prompt 36B, Prompt 37, Prompt 37B, Prompt 38, Prompt 38B, Prompt 39, and Prompt 39B are now marked complete. Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, MR0, F0, and P0 are complete, and the next prompt is pending user direction.
+Prompt 31C, Prompt 31D, Prompt 32, Prompt 32B, Prompt 33, Prompt 33B, Prompt 33C, Prompt 33D, Prompt 34, Prompt 34B, Prompt 35, Prompt 35B, Prompt 36, Prompt 36B, Prompt 37, Prompt 37B, Prompt 38, Prompt 38B, Prompt 39, and Prompt 39B are now marked complete. Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, MR0, F0, P0, and UX0 are complete, and the next prompt is pending user direction.
 
 Safe Builder UI Shell V1 displays structural workspace artifacts; it does not execute workspace nodes or edges. The builder shell is not a compiler, interpreter, visual programming environment, or custom simulation runtime. A structurally valid workspace is still not a runnable model. Importing a workspace artifact does not activate model schemas, compatibility mappings, or social-learning semantics.
 
@@ -2070,6 +2072,77 @@ Non-goals:
 P0 does not implement Research World progression, persistent model labs, discovery atlases, behavioral landscapes, capability guidance, model composition frontiers, grand systems challenges, XP, streaks, grinding, missions, achievements, unlocks, scoring, persistence, accounts, social features, UI flows, templates, runtime behavior, or dependency changes.
 ```
 
+## Prompt UX0 — ORTUS Living Systems Atlas Visual Direction
+
+Purpose:
+
+* Define a documentation-only visual and interaction direction before Research World implementation prompts.
+* Replace the Marathon/tactical-HUD interpretation with a Living Systems Atlas direction.
+* Preserve useful hierarchy, precision, contrast, spacing, motion discipline, and dark-mode identity without military/combat-console framing.
+
+Status:
+
+```text
+Complete. Documentation and design planning only.
+```
+
+Canonical source:
+
+```text
+docs/ui/LIVING_SYSTEMS_ATLAS_VISUAL_DIRECTION.md
+```
+
+Central framing:
+
+```text
+ORTUS should feel like a living system observed through precise scientific instruments, not a system under tactical command.
+The interface should preserve wonder without hiding uncertainty, assumptions, or model limits.
+Visual progression should correspond to real modeling capability and accumulated understanding, not arbitrary status or engagement rewards.
+```
+
+Design identity:
+
+```text
+ORTUS Living Systems Atlas
+Living Systems Observatory + Scientific Expedition Atlas + Modular Research Workshop + Persistent Model Laboratory
+```
+
+Required guardrails:
+
+```text
+ORTUS is an exploratory laboratory, not a tactical command interface.
+The metaphor may organize the experience, but precise scientific labels must remain visible.
+UX0 defines these destinations conceptually. It does not create routes, tabs, navigation, persistence, or runtime behavior.
+Contextual tools should respond to the modeled object under inspection instead of presenting every control permanently.
+Color must reinforce meaning, never carry it alone.
+Do not reintroduce next/font/google or any remote font dependency.
+Motion should communicate state, information flow, or system change—not decorate an otherwise static interface.
+Discovery styling should represent evidence accumulation, not achievement acquisition.
+visible lab growth = accumulated modeling capability
+Do not rewrite the entire interface at once. Migrate through bounded, testable surfaces while preserving current workflows.
+UX0 defines the visual and interaction target. Research World prompts will determine how that target is implemented.
+```
+
+Recommended Research World order:
+
+```text
+P0: Product Philosophy and Learning Mission
+UX0: Living Systems Atlas Visual Direction
+GW0: Research World Progression Mini-Roadmap
+GW1: Persistent World/Lab/Atlas/Workshop Shell
+GW2: Research Notebook and Reusable Assets
+GW3: Discovery Atlas
+GW4: Behavioral Landscape Exploration
+GW5: Contextual Capability Guidance
+GW6: Composition Frontiers
+```
+
+Non-goals:
+
+```text
+UX0 does not implement World/Lab/Atlas/Workshop routes, tabs, navigation, shell redesign, CSS tokens, component changes, persistence, discovery logic, behavioral landscapes, progression, runtime behavior, dependencies, remote fonts, icons, animations, or mockups.
+```
+
 ## Prompt 40 — Safe Scenario Draft Workspace V1
 
 Purpose:
@@ -3391,8 +3464,8 @@ No global service availability treated as template runtime support.
 Recommended immediate next steps:
 
 ```text
-1. Review and commit Prompt P0 documentation/test work if this worktree is still uncommitted.
-2. Wait for explicit user direction before starting GW0-GW6 Research World progression, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any Research World/fractal/multiscale implementation.
+1. Review and commit Prompt UX0 documentation/test work if this worktree is still uncommitted.
+2. Wait for explicit user direction before starting GW0-GW6 Research World progression, a design-token/component audit, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any Research World/fractal/multiscale implementation.
 3. Run a dedicated rendered responsive/design-system audit before making mobile-readiness, WCAG, clipboard, focus-return, or polished visual-workbench claims.
 ```
 
@@ -3409,6 +3482,7 @@ Non-roadmap Prompt N2B Neural Strategy Adaptation Audit is complete.
 Non-roadmap Prompt MR0 Templates + Decision Clusters Mini-Roadmap is complete.
 Docs-only Prompt F0 Fractal and Multiscale Analysis Mini-Roadmap is complete.
 Docs-only Prompt P0 ORTUS Product Philosophy and Learning Mission is complete.
+Docs-only Prompt UX0 ORTUS Living Systems Atlas Visual Direction is complete.
 Performance stabilization completed after Prompt 30B.
 Prompt 34 safe builder shell is complete.
 Prompt 34B safe builder shell audit is complete.

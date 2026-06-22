@@ -1504,3 +1504,67 @@ Remaining limitations:
 - Browser rendering, responsive behavior, browser clipboard behavior, focus return, browser zoom behavior, screen-reader behavior, assistive-technology behavior, and WCAG conformance remain unverified.
 
 Next prompt after commit: pending user direction. Do not start GW0-GW6 Research World progression, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any Research World/fractal/multiscale implementation without explicit approval.
+
+## 2026-06-22 - Prompt UX0 ORTUS Living Systems Atlas Visual Direction
+
+Goal: add a documentation-only visual direction and UX-principle source of truth before Research World progression prompts, without implementing routes, navigation, World/Lab/Atlas/Workshop shell behavior, component redesigns, CSS rewrites, typography changes, color-token changes, icons, animations, persistent lab state, progression, unlocks, discoveries, behavioral landscapes, model composition, runtime behavior, template behavior, dependencies, remote fonts, image assets, or generated mockups.
+
+Implemented:
+
+- Added `docs/ui/LIVING_SYSTEMS_ATLAS_VISUAL_DIRECTION.md` as the UX0 source of truth.
+- Defined the ORTUS Living Systems Atlas identity as Living Systems Observatory + Scientific Expedition Atlas + Modular Research Workshop + Persistent Model Laboratory.
+- Documented the central transformation from a sophisticated modeling dashboard to a persistent living laboratory where users explore systems, build research capability, map behavioral territory, and accumulate reusable understanding.
+- Preserved required framing that ORTUS should feel like a living system observed through precise scientific instruments, not a system under tactical command.
+- Documented the six design pillars: alive worlds, precise instruments, accumulated knowledge, visible unknowns, contextual depth, and scientific wonder.
+- Explicitly retired tactical HUD framing, military mission language, combat-console metaphors, crosshairs/targeting reticles, warning saturation, dominant hazard orange/red, ultra-condensed sci-fi typography, excessive uppercase, scan lines, animated borders, decorative data noise, permanent glowing chrome, fake terminal commands, compressed control walls, and command/target/deploy/engage language where scientific wording is appropriate.
+- Preserved useful prior strengths: hierarchy, precision, strong silhouettes, disciplined spacing, clear contrast, high-quality motion, distinctive identity, dark-mode capability, and bold but readable typography.
+- Documented future World, Lab, Atlas, and Workshop directions as conceptual destinations only.
+- Documented information hierarchy, contextual interaction model, semantic color families, typography/offline-font guardrails, shape language, panel families, material/texture direction, environmental-canvas direction, motion/reduced-motion principles, iconography direction, Atlas/discovery styling, visual progression, responsive/accessibility principles, product-language guidance, migration strategy, Research World relationship, and existing-feature conceptual mapping.
+- Updated README, concepts, simulation README, roadmap, planned roadmap, P0 philosophy doc, HCI audit, workspace IA, current context, and AGENTS guardrails.
+- Updated roadmap and control documentation tests for UX0 boundaries.
+
+Required boundary copy preserved:
+
+- ORTUS should feel like a living system observed through precise scientific instruments, not a system under tactical command.
+- The interface should preserve wonder without hiding uncertainty, assumptions, or model limits.
+- Visual progression should correspond to real modeling capability and accumulated understanding, not arbitrary status or engagement rewards.
+- The metaphor may organize the experience, but precise scientific labels must remain visible.
+- ORTUS is an exploratory laboratory, not a tactical command interface.
+- UX0 defines these destinations conceptually. It does not create routes, tabs, navigation, persistence, or runtime behavior.
+- Contextual tools should respond to the modeled object under inspection instead of presenting every control permanently.
+- Color must reinforce meaning, never carry it alone.
+- Do not reintroduce next/font/google or any remote font dependency.
+- Material cues should support hierarchy and metaphor without reducing readability or suggesting false physical controls.
+- Motion should communicate state, information flow, or system change—not decorate an otherwise static interface.
+- Behavioral landscapes are scientific maps of investigated model behavior, not fantasy overworlds.
+- Discovery styling should represent evidence accumulation, not achievement acquisition.
+- visible lab growth = accumulated modeling capability
+- visible lab growth = decorative XP reward
+- Visual richness must not make scientific state, uncertainty, or controls harder to perceive.
+- Do not rewrite the entire interface at once. Migrate through bounded, testable surfaces while preserving current workflows.
+- UX0 defines the visual and interaction target. Research World prompts will determine how that target is implemented.
+
+Non-goals preserved:
+
+- No runtime source, template source, simulation engine source, Builder feature source, Neural Runtime Lab source, global CSS, design-token file, component source, route, dependency file, package lock, branding asset, icon, image asset, or mockup was changed.
+- No World/Lab/Atlas/Workshop route, shell, navigation, persistence, discovery logic, behavioral landscape, progression, unlock, mission, scoring, achievement, remote font, or runtime behavior was implemented.
+- UX0 does not start GW0-GW6 or a token/component migration.
+
+Checks:
+
+- `git status --short`: clean before Prompt UX0 edits.
+- `npm test -- roadmap modelSchema control socialLearning multiScale`: first run failed only because a negative roadmap-test assertion matched correct non-goal wording for World/Lab/Atlas/Workshop shell; the assertion was narrowed.
+- `npm test -- roadmap modelSchema control socialLearning multiScale`: passed after the test correction, 6 files and 59 tests.
+- `npm run typecheck`: passed.
+- `npm test`: passed, 58 files and 475 tests.
+- `npm run build`: passed with Next.js 15.5.19; `/` and `/builder` prerendered successfully.
+- `npm run perf:simulation`: passed. Local smoke results included Flocking 100 agents at 87.81 ticks/sec, Flocking 500 agents at 12.90 ticks/sec, Forest Fire 80x60 at 18.25 ticks/sec, and Predator-Prey default at 52.14 ticks/sec.
+- `git diff --check`: passed.
+- `npm run lint`: unavailable, package.json has no lint script.
+
+Remaining limitations:
+
+- UX0 is documentation and design planning only. It has not verified rendered responsive behavior, browser zoom behavior, keyboard walkthroughs, screen-reader behavior, assistive-technology behavior, reduced-motion behavior, color contrast, or WCAG conformance.
+- Performance smoke numbers were lower than recent P0/F0 runs on this machine; UX0 touched no runtime or UI source paths, so this is not evidence of a UX0 runtime regression.
+
+Next prompt after commit: pending user direction. Do not start GW0-GW6 Research World progression, a design-token/component audit, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any Research World/fractal/multiscale implementation without explicit approval.

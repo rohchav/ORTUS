@@ -130,7 +130,11 @@ const futureTopLevelFields = [
   "discoveryAtlas",
   "missionState",
   "achievementState",
-  "unlockState"
+  "unlockState",
+  "livingSystemsAtlasState",
+  "worldLabAtlasWorkshopState",
+  "discoveryState",
+  "behavioralLandscapeState"
 ];
 
 const inactivePrimitiveTopLevelFields = [
@@ -147,12 +151,15 @@ describe("roadmap alignment and missing pillar reservations", () => {
     const roadmapPath = join(repoRoot, "docs", "roadmap.md");
     const missingPillarsPath = join(repoRoot, "docs", "missing-pillars.md");
     const productPhilosophyPath = join(repoRoot, "docs", "PRODUCT_PHILOSOPHY_AND_LEARNING_MISSION.md");
+    const livingSystemsAtlasPath = join(repoRoot, "docs", "ui", "LIVING_SYSTEMS_ATLAS_VISUAL_DIRECTION.md");
     expect(existsSync(roadmapPath)).toBe(true);
     expect(existsSync(missingPillarsPath)).toBe(true);
     expect(existsSync(productPhilosophyPath)).toBe(true);
+    expect(existsSync(livingSystemsAtlasPath)).toBe(true);
 
     const roadmap = readFileSync(roadmapPath, "utf8");
     const productPhilosophy = readFileSync(productPhilosophyPath, "utf8");
+    const livingSystemsAtlas = readFileSync(livingSystemsAtlasPath, "utf8");
     expect(roadmap).toContain("completed through Prompt 39B");
     expect(roadmap).toContain("Post-30B stabilization");
     expect(roadmap).toContain(
@@ -169,7 +176,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(roadmap).toContain("Completed Prompt 39 scenario-planning foundation");
     expect(roadmap).toContain("Completed Prompt 39 scenario-planning audit");
     expect(roadmap).toContain("Prompt 35 adds a separate `Author Schema` Builder mode");
-    expect(roadmap).toContain("Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, MR0, F0, and P0 are complete.");
+    expect(roadmap).toContain("Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, MR0, F0, P0, and UX0 are complete.");
     expect(roadmap).toContain(
       "The next prompt is pending user direction; do not start GW0-GW6 Research World progression, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any Research World/fractal/multiscale implementation without explicit approval."
     );
@@ -183,6 +190,9 @@ describe("roadmap alignment and missing pillar reservations", () => {
     );
     expect(roadmap).toContain(
       "Docs-only Prompt P0 records ORTUS product philosophy, learning mission, epistemic guardrails, and future Research World progression direction only; it does not implement progression, missions, XP, streaks, unlocks, scoring, persistence, social features, runtime behavior, templates, or UI flows."
+    );
+    expect(roadmap).toContain(
+      "Docs-only Prompt UX0 records the ORTUS Living Systems Atlas visual and interaction target only; it does not implement World/Lab/Atlas/Workshop routes, tabs, navigation, shell redesign, CSS tokens, component changes, persistence, discovery logic, behavioral landscapes, progression, runtime behavior, dependencies, remote fonts, icons, animations, or mockups."
     );
     expect(roadmap).toContain("MR0 is documentation only.");
     expect(roadmap).toContain("T1: Urban Daily Routine / Activity Choice Template V1.");
@@ -241,6 +251,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(roadmap).toContain("F5: Hierarchical Trajectory Motif Analytics V1.");
     expect(roadmap).toContain("F5B: Hierarchical Trajectory Motif Analytics Audit.");
     expect(roadmap).toContain("P0: ORTUS Product Philosophy and Learning Mission.");
+    expect(roadmap).toContain("UX0: Living Systems Atlas Visual Direction.");
     expect(roadmap).toContain("GW0: Research World Progression Mini-Roadmap.");
     expect(roadmap).toContain("GW1: Persistent Model Lab.");
     expect(roadmap).toContain("GW2: Discovery Atlas.");
@@ -249,6 +260,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(roadmap).toContain("GW5: Model Composition Frontiers.");
     expect(roadmap).toContain("GW6: Grand Systems Challenges.");
     expect(roadmap).toContain("P0 is complete as documentation only. GW0-GW6 remain future prompts");
+    expect(roadmap).toContain("Prompt UX0 is a docs-only visual direction and UX-principle branch");
     expect(roadmap).toContain(
       "Recommended F-branch implementation priority: F1 measurement -> F3 scale comparison -> F2 synthetic generation -> F4 network scaling -> F5 abstract trajectory analysis."
     );
@@ -280,6 +292,33 @@ describe("roadmap alignment and missing pillar reservations", () => {
     }
     expect(productPhilosophy).not.toMatch(/GW[0-6].*implemented/i);
     expect(productPhilosophy).not.toMatch(/XP.*implemented|implemented.*XP|streaks.*implemented|implemented.*streaks|grinding.*implemented|implemented.*grinding/i);
+    for (const phrase of [
+      "ORTUS Living Systems Atlas",
+      "ORTUS should feel like a living system observed through precise scientific instruments, not a system under tactical command.",
+      "The interface should preserve wonder without hiding uncertainty, assumptions, or model limits.",
+      "Visual progression should correspond to real modeling capability and accumulated understanding, not arbitrary status or engagement rewards.",
+      "The metaphor may organize the experience, but precise scientific labels must remain visible.",
+      "ORTUS is an exploratory laboratory, not a tactical command interface.",
+      "UX0 defines these destinations conceptually. It does not create routes, tabs, navigation, persistence, or runtime behavior.",
+      "Contextual tools should respond to the modeled object under inspection instead of presenting every control permanently.",
+      "Color must reinforce meaning, never carry it alone.",
+      "Do not reintroduce next/font/google or any remote font dependency.",
+      "Motion should communicate state, information flow, or system change—not decorate an otherwise static interface.",
+      "Behavioral landscapes are scientific maps of investigated model behavior, not fantasy overworlds.",
+      "Discovery styling should represent evidence accumulation, not achievement acquisition.",
+      "visible lab growth = accumulated modeling capability",
+      "visible lab growth = decorative XP reward",
+      "Visual richness must not make scientific state, uncertainty, or controls harder to perceive.",
+      "Do not rewrite the entire interface at once. Migrate through bounded, testable surfaces while preserving current workflows.",
+      "UX0 defines the visual and interaction target. Research World prompts will determine how that target is implemented."
+    ]) {
+      expect(livingSystemsAtlas).toContain(phrase);
+    }
+    expect(livingSystemsAtlas).toContain("UX0 must not implement GW0-GW6.");
+    expect(livingSystemsAtlas).toContain(
+      "UX0 does not implement new routes, new navigation, a World/Lab/Atlas/Workshop shell, component redesigns"
+    );
+    expect(livingSystemsAtlas).not.toMatch(/next\/font\/google.*import/i);
 
     const missingPillars = readFileSync(missingPillarsPath, "utf8");
     for (const heading of [
@@ -315,6 +354,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
       readFileSync(join(repoRoot, "README.md"), "utf8"),
       readFileSync(join(repoRoot, "docs", "concepts.md"), "utf8"),
       readFileSync(join(repoRoot, "docs", "PRODUCT_PHILOSOPHY_AND_LEARNING_MISSION.md"), "utf8"),
+      readFileSync(join(repoRoot, "docs", "ui", "LIVING_SYSTEMS_ATLAS_VISUAL_DIRECTION.md"), "utf8"),
       readFileSync(join(repoRoot, "src", "simulation", "README.md"), "utf8"),
       readFileSync(join(repoRoot, "AGENTS.md"), "utf8")
     ].join("\n");
@@ -334,6 +374,8 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(docs).toContain("Validation status describes evidence about the model, not truth about the real world");
     expect(docs).toContain("Prompt P0 is documentation only");
     expect(docs).toContain("Do not add XP, streaks, grinding, or engagement manipulation by default.");
+    expect(docs).toContain("Treat UX0 as documentation and design planning only.");
+    expect(docs).toContain("Do not implement World/Lab/Atlas/Workshop without a dedicated prompt.");
   });
 
   it("keeps production template assumptions honest about reserved future pillars", () => {

@@ -874,6 +874,7 @@ describe("strategy, control, and intervention semantics services", () => {
     const docs = [
       readFileSync(join(repoRoot, "README.md"), "utf8"),
       readFileSync(join(repoRoot, "docs", "concepts.md"), "utf8"),
+      readFileSync(join(repoRoot, "docs", "ui", "LIVING_SYSTEMS_ATLAS_VISUAL_DIRECTION.md"), "utf8"),
       readFileSync(join(repoRoot, "src", "simulation", "README.md"), "utf8"),
       readFileSync(join(repoRoot, "docs", "roadmap.md"), "utf8"),
       readFileSync(join(repoRoot, "docs", "missing-pillars.md"), "utf8"),
@@ -902,6 +903,10 @@ describe("strategy, control, and intervention semantics services", () => {
     );
     expect(docs).toContain("Do not use complexity to dismiss evidence, responsibility, causality, or intervention.");
     expect(docs).toContain("Simulation output is evidence about the model’s behavior, not automatically evidence about the world.");
+    expect(docs).toContain("UX0 defines these destinations conceptually. It does not create routes, tabs, navigation, persistence, or runtime behavior.");
+    expect(docs).toContain("Do not reintroduce next/font/google or any remote font dependency.");
+    expect(docs).toContain("Motion should communicate state, information flow, or system change—not decorate an otherwise static interface.");
+    expect(docs).toContain("Color must reinforce meaning, never carry it alone.");
     expect(docs).toContain("Model Schema Authoring Forms V1 creates structural model-schema artifacts; it does not execute schemas.");
     expect(docs).toContain("Rule declarations authored in the Builder are descriptive only and remain non-executable.");
     expect(docs).toContain("Visual Builder Graph View V1 visualizes structural relationships; it does not execute nodes or edges.");

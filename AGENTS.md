@@ -389,6 +389,29 @@
 - Do not add XP, streaks, grinding, or engagement manipulation by default.
 - Future progression should reward reusable understanding, reproducibility, stronger comparison, and honest interpretation.
 - Preserve model/runtime/template boundaries while applying product-philosophy language.
+- Treat UX0 as documentation and design planning only.
+- Do not implement World/Lab/Atlas/Workshop without a dedicated prompt.
+- Preserve ORTUS as a living laboratory, not a tactical command interface.
+- ORTUS should feel like a living system observed through precise scientific instruments, not a system under tactical command.
+- Retire military, targeting, tactical HUD, and combat-console metaphors.
+- Preserve useful hierarchy, precision, clear contrast, disciplined spacing, strong silhouettes, high-quality motion, distinctive identity, and dark-mode strengths from the earlier direction.
+- The metaphor may organize the experience, but precise scientific labels must remain visible.
+- Do not use color as the only status cue.
+- Do not let organic backgrounds reduce readability.
+- Do not add decorative motion without informational purpose.
+- Motion should communicate state, information flow, or system change—not decorate an otherwise static interface.
+- Honor reduced-motion preferences.
+- Do not introduce remote font dependencies.
+- Do not reintroduce `next/font/google`.
+- Do not distribute font files.
+- Keep domain accents subordinate to the shared design system.
+- Do not depict unexplored or weakly sampled behavior as established knowledge.
+- Discovery styling should represent evidence accumulation, not achievement acquisition.
+- Tie future visual progression to real modeling capability and accumulated understanding.
+- Do not lock essential scientific tools solely for gamified progression.
+- Do not implement discovery, persistence, behavioral-landscape logic, or Research World progression during UX0.
+- Migrate future UI incrementally rather than through one uncontrolled rewrite.
+- Do not claim responsive, zoom, keyboard, screen-reader, assistive-technology, reduced-motion, or WCAG verification without direct evidence.
 - Do not make Builder graphs executable or Model Schemas runnable while documenting or later implementing fractal/multiscale analysis.
 - Keep Neural runtime graph scoped only to the Neural template.
 - Keep Neural Runtime Lab scenario-first but scientifically honest.

@@ -1,6 +1,6 @@
 # ORTUS Current Context
 
-Last updated: 2026-06-22 after Prompt P0 ORTUS Product Philosophy and Learning Mission
+Last updated: 2026-06-22 after Prompt UX0 ORTUS Living Systems Atlas Visual Direction
 
 ## Project Identity
 
@@ -56,6 +56,10 @@ Prompt P0 adds the docs-only ORTUS Product Philosophy and Learning Mission sourc
 
 Prompt P0 is documentation only. It records future Research World direction but does not implement GW0-GW6, progression, persistent model labs, discovery atlases, behavioral landscapes, contextual guidance, model composition frontiers, grand challenges, XP, streaks, grinding, missions, achievements, unlocks, scoring, persistence, accounts, social features, UI flows, templates, runtime behavior, or dependency changes. Research World progression should reward reusable understanding, comparison, reproducibility, and honest interpretation rather than arbitrary points.
 
+Prompt UX0 adds the docs-only ORTUS Living Systems Atlas visual and interaction direction at `docs/ui/LIVING_SYSTEMS_ATLAS_VISUAL_DIRECTION.md`. UX0 defines a future direction combining Living Systems Observatory, Scientific Expedition Atlas, Modular Research Workshop, and Persistent Model Laboratory. ORTUS should feel like a living system observed through precise scientific instruments, not a system under tactical command. UX0 retires tactical HUD framing, military/combat-console metaphors, crosshairs, targeting language, warning saturation, scan lines, permanent glow, fake terminal affect, and compressed control-wall direction while preserving hierarchy, precision, contrast, disciplined spacing, strong silhouettes, high-quality motion, dark-mode capability, and distinctive identity.
+
+Prompt UX0 is documentation and design planning only. It does not implement World/Lab/Atlas/Workshop routes, tabs, navigation, shell redesign, CSS tokens, component changes, persistence, discovery logic, behavioral landscapes, progression, runtime behavior, dependencies, remote fonts, icons, animations, mockups, or GW0-GW6. UX0 defines the visual and interaction target; Research World prompts will determine how that target is implemented.
+
 Confirmed UI layout defects fixed in UI-REMEDIATION-1:
 
 - The header used fixed `height: 50px` with `overflow-y: hidden`, which could clip crowded lower header content.
@@ -69,11 +73,11 @@ Built-in production templates currently include Epidemic Spread, Opinion Dynamic
 
 ## Completed Prompt State
 
-Durable docs and source indicate completed roadmap work through Prompt 39B plus non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, MR0, and docs-only Prompts F0 and P0. Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 39B: Scenario Planning From Schema Audit are complete. Prompt N1: Neural Excitation Network Template V1 is complete. Prompt N1B: Neural Excitation Network Template Audit + Decision Readout V1 is complete. Prompt NUX1: Neural Runtime Lab UX V1 is complete. Prompt NUX1B: Neural Runtime Lab UX Audit + Build Investigation is complete. Prompt N2: Neural Strategy Adaptation V1 is complete. Prompt N2B: Neural Strategy Adaptation Audit is complete. Prompt MR0: Templates + Decision Clusters Mini-Roadmap is complete. Prompt F0: Fractal and Multiscale Analysis Mini-Roadmap is complete as documentation only. Prompt P0: ORTUS Product Philosophy and Learning Mission is complete as documentation only.
+Durable docs and source indicate completed roadmap work through Prompt 39B plus non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, MR0, and docs-only Prompts F0, P0, and UX0. Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 39B: Scenario Planning From Schema Audit are complete. Prompt N1: Neural Excitation Network Template V1 is complete. Prompt N1B: Neural Excitation Network Template Audit + Decision Readout V1 is complete. Prompt NUX1: Neural Runtime Lab UX V1 is complete. Prompt NUX1B: Neural Runtime Lab UX Audit + Build Investigation is complete. Prompt N2: Neural Strategy Adaptation V1 is complete. Prompt N2B: Neural Strategy Adaptation Audit is complete. Prompt MR0: Templates + Decision Clusters Mini-Roadmap is complete. Prompt F0: Fractal and Multiscale Analysis Mini-Roadmap is complete as documentation only. Prompt P0: ORTUS Product Philosophy and Learning Mission is complete as documentation only. Prompt UX0: ORTUS Living Systems Atlas Visual Direction is complete as documentation and design planning only.
 
 The post-30B repository hygiene, dependency stabilization, durable context, and performance/scalability pass has also been completed. Recent commits include `dd6c256` for repo context/generated-artifact hygiene, `4949b72` for dependency and performance script stabilization, and `a80d5b7` for simulation performance instrumentation and spatial indexing foundations.
 
-The next prompt is pending user direction; do not start GW0-GW6 Research World progression, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any Research World/fractal/multiscale implementation without explicit approval. A separate rendered responsive/design-system audit is still recommended before making mobile-readiness, browser zoom, keyboard walkthrough, screen-reader, assistive-technology, WCAG, clipboard, focus-return, or polished visual-workbench claims.
+The next prompt is pending user direction; do not start GW0-GW6 Research World progression, a design-token/component audit, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any Research World/fractal/multiscale implementation without explicit approval. A separate rendered responsive/design-system audit is still recommended before making mobile-readiness, browser zoom, keyboard walkthrough, screen-reader, assistive-technology, WCAG, clipboard, focus-return, reduced-motion, or polished visual-workbench claims.
 
 Implemented runtime foundations include scenarios, snapshots, template-defined behavior modes, agent composition, interventions, experiments, run summaries/comparison, seeded randomness, metrics, spaces, template metadata, and a narrow Opinion Dynamics `socialLearning` behavior mode audited in Prompt 33D.
 
@@ -186,7 +190,7 @@ Prompt 35 and Prompt 35B were committed together in `7696381 feat: Implement Mod
 
 ## Next Recommended Prompt After Stabilization
 
-Next prompt: pending user direction; do not start GW0-GW6 Research World progression, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any Research World/fractal/multiscale implementation without explicit approval.
+Next prompt: pending user direction; do not start GW0-GW6 Research World progression, a design-token/component audit, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any Research World/fractal/multiscale implementation without explicit approval.
 
 Next recommended UI/design-system prompt: `UI-DESIGN-SYSTEM-1: Rendered Responsive, Typography + Visualization Accessibility Audit`.
 
