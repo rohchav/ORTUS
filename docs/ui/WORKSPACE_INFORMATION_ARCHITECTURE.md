@@ -1,7 +1,7 @@
 # ORTUS Workspace Information Architecture
 
 Date: 2026-06-22
-Prompt: UI-REMEDIATION-1, audited and hardened by Prompt 34B, extended by Prompt 35, audited by Prompt 35B, extended by Prompt 36, audited by Prompt 36B, extended by Prompt 37, audited by Prompt 37B, extended by Prompt 38, audited by Prompt 38B, extended by Prompt 39, audited by Prompt 39B, extended by Prompt NUX1, audited by Prompt NUX1B, extended by Prompt N2, audited by Prompt N2B, documented by Prompt MR0, and documented by Prompt F0
+Prompt: UI-REMEDIATION-1, audited and hardened by Prompt 34B, extended by Prompt 35, audited by Prompt 35B, extended by Prompt 36, audited by Prompt 36B, extended by Prompt 37, audited by Prompt 37B, extended by Prompt 38, audited by Prompt 38B, extended by Prompt 39, audited by Prompt 39B, extended by Prompt NUX1, audited by Prompt NUX1B, extended by Prompt N2, audited by Prompt N2B, documented by Prompt MR0, documented by Prompt F0, and documented by Prompt P0
 Status: implemented and source-audited; rendered screenshot and browser zoom tooling remain unavailable in this environment
 
 ## Problem
@@ -65,6 +65,8 @@ Prompt N2 keeps the same Setup-only IA and upgrades only the Neural lab RPS shel
 Prompt MR0 is documentation only and does not change the workspace hierarchy. It does not add a new workspace mode, UI surface, runtime template, decision-cluster runtime, stimulus-conditioned runtime, blackjack lab, observed-cluster analytics, wearable/camera/live-card input, casino assistance, or gambling-advice flow. Future T1/T2/DC1/DC2/G1/DC3 work must arrive through dedicated prompts and audits before it appears in Setup, Observe, Experiment, Compare, Builder, or any other workspace area.
 
 Prompt F0 is documentation only and does not change the workspace hierarchy. It does not add a new workspace mode, UI surface, Scale Lens, fractal metric output, fractal spatial generator controls, network scaling plots, trajectory motif analytics, template support, schema execution, Builder graph execution, or runtime behavior. Future Scale Lens / Coarse-Graining work, if explicitly prompted later, belongs in analytical observation/comparison surfaces and must distinguish visual zoom, spatial resampling, aggregation, coarse-graining, and model reduction. Scale Lens views are analytical projections, not separate validated models; coarse-graining may discard information and alter apparent dynamics.
+
+Prompt P0 is documentation only and does not change the workspace hierarchy. It does not add Research World progression, persistent model labs, discovery atlases, behavioral landscapes, contextual capability guidance, model composition frontiers, grand challenges, missions, XP, streaks, unlocks, scoring, achievements, persistence, accounts, social features, onboarding, or UI flows. Future Research World work, if explicitly prompted later, should use soft contextual guidance rather than artificial feature locks and must reward reusable understanding, reproducibility, comparison, and honest interpretation rather than arbitrary points.
 
 ## Header
 

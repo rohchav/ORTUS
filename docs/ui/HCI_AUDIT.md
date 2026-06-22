@@ -1,8 +1,8 @@
 # ORTUS HCI / UX / Visual-Direction Audit
 
 Date: 2026-06-11  
-Updated: 2026-06-22 after Prompt F0
-Prompt: UI-BRAND-1, UI-REMEDIATION-1, Prompt 34B, Prompt 35, Prompt 35B, Prompt 36, Prompt 36B, Prompt 37, Prompt 37B, Prompt 38, Prompt 38B, Prompt 39, Prompt 39B, Prompt F0, Prompt N1, Prompt N1B, Prompt NUX1, Prompt NUX1B, Prompt N2, Prompt N2B, Prompt MR0
+Updated: 2026-06-22 after Prompt P0
+Prompt: UI-BRAND-1, UI-REMEDIATION-1, Prompt 34B, Prompt 35, Prompt 35B, Prompt 36, Prompt 36B, Prompt 37, Prompt 37B, Prompt 38, Prompt 38B, Prompt 39, Prompt 39B, Prompt F0, Prompt P0, Prompt N1, Prompt N1B, Prompt NUX1, Prompt NUX1B, Prompt N2, Prompt N2B, Prompt MR0
 Status: source-based audit, not a formal WCAG audit
 
 ## 1. Executive Verdict
@@ -68,6 +68,9 @@ Author Schema now includes a Scenario Planning From Schema panel below the fit r
 Prompt F0 update:
 F0 adds no UI. The HCI risk is future-facing: fractal metrics, Scale Lens views, network scaling plots, and trajectory motif summaries can easily be overread as proof of hidden laws, causal mechanisms, validation, or cognition. Future F-branch surfaces must keep this copy visible near outputs: Fractal and multiscale tools describe how measured structure changes across scale. They do not prove that a system is fundamentally fractal. A complex-looking, nested, branching, or irregular pattern is not automatically fractal. Visual resemblance to a fractal is not evidence of scale invariance. Coarse-graining changes what is represented. Similar aggregate behavior does not mean the underlying microstates are equivalent. Scale Lens views are analytical projections, not separate validated models. Hierarchical trajectory motifs describe repeated observable state-action sequences. They do not reveal thoughts, intentions, beliefs, personality, or subconscious mental states. Browser rendering, zoom behavior, screen-reader behavior, assistive-technology behavior, and WCAG conformance remain unverified because no F-branch UI exists yet.
 
+Prompt P0 update:
+P0 adds no UI. It is a product-philosophy and learning-mission document, not a progression system. The HCI risk is future-facing: Research World, discovery atlases, capability guidance, and grand challenges can easily turn into artificial locks, XP loops, streaks, completionism, or overconfident "discovery" language. Future surfaces should use P0 as a hard product test: ORTUS progression should emerge from building a capable laboratory, discovering system behavior, and reaching new modeling frontiers—not from completing a prescribed checklist. The user progresses by gaining reusable understanding and modeling capability, not by accumulating arbitrary points. Simulation output remains evidence about model behavior, not automatically evidence about the world.
+
 ## 2. Audit Scope
 
 Inspected surfaces:
@@ -81,6 +84,7 @@ Inspected surfaces:
 - Schema-to-template fit report adapter and Author Schema fit-report panel added in Prompt 38 and source-audited/hardened in Prompt 38B.
 - Scenario planning adapter and Author Schema scenario-planning panel added in Prompt 39.
 - Prompt F0 docs-only fractal and multiscale mini-roadmap. No rendered UI, Scale Lens surface, fractal metric output, generator control, network scaling plot, or trajectory motif surface exists yet.
+- Prompt P0 docs-only product philosophy and learning mission. No Research World progression, mission, scoring, unlock, persistence, social, onboarding, or UI flow exists yet.
 - Neural Excitation Network template-specific canvas edge rendering, legend notes, inspector rows, and atmosphere styling added in Prompt N1.
 - Neural Decision Readout Legend panel, output assembly activation bars, selected readout, and observational RPS payoff copy added in Prompt N1B.
 - Neural Runtime Lab scenario cards, mission/status readouts, live explanations, direct actions, plain-English controls, Advanced config drawer, bounded timeline, and RPS shell added in Prompt NUX1.

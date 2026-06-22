@@ -480,6 +480,7 @@ describe("multi-scale architecture service", () => {
     const docs = [
       readFileSync(join(repoRoot, "README.md"), "utf8"),
       readFileSync(join(repoRoot, "docs", "concepts.md"), "utf8"),
+      readFileSync(join(repoRoot, "docs", "PRODUCT_PHILOSOPHY_AND_LEARNING_MISSION.md"), "utf8"),
       readFileSync(join(repoRoot, "src", "simulation", "README.md"), "utf8"),
       readFileSync(join(repoRoot, "docs", "roadmap.md"), "utf8"),
       readFileSync(join(repoRoot, "docs", "missing-pillars.md"), "utf8"),
@@ -492,6 +493,7 @@ describe("multi-scale architecture service", () => {
     expect(docs).toContain("Coarse-graining changes what is represented. Similar aggregate behavior does not mean the underlying microstates are equivalent.");
     expect(docs).toContain("Scale Lens views are analytical projections, not separate validated models.");
     expect(docs).toContain("Measure multiscale structure before generating synthetic fractal structure.");
+    expect(docs).toContain("Changing scale can reveal structure while hiding variation and mechanism.");
   });
 
   it("keeps multiscale services headless and free of execution/randomness hooks", () => {

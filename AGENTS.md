@@ -361,6 +361,34 @@
 - Fractal and multiscale metrics are structural summaries, not causal explanations, forecasts, validation results, or proof of universal laws.
 - Do not treat Prompt F0 future items as implemented capabilities, template support, registry support, visual-builder support, scenario-planning support, or schema/runtime execution.
 - Do not change Prompt 39 scenario-planning boundaries for F0: future fractal metrics may be mentioned only as possible future observation targets, not computed outputs.
+- Prompt P0 is documentation only; do not implement Research World progression, persistent model labs, discovery atlases, behavioral landscapes, contextual guidance, model composition frontiers, grand challenges, missions, XP, streaks, unlocks, scoring, achievements, persistence, accounts, social features, UI flows, templates, dependencies, or runtime behavior from P0 alone.
+- Preserve ORTUS as an exploratory complex-systems sandbox, not an oracle.
+- ORTUS is a sandbox for exploring how interacting mechanisms, constraints, feedback, stochasticity, adaptation, selection, and history can produce complex, path-dependent, and sometimes chaotic system-level behavior.
+- Do not describe complexity as rulelessness.
+- Complexity does not mean the absence of rules. It means that interacting rules, constraints, feedback, and history can produce outcomes that cannot be understood from one mechanism in isolation.
+- ORTUS should challenge context-free certainty, not the existence of evidence, mechanisms, or constraints.
+- Prefer historical contingency over arbitrary coincidence.
+- Outcomes can be historically contingent without being causeless or arbitrary.
+- Chance operates within structural, environmental, and historical constraints.
+- Do not imply adaptation or evolution guarantees progress, optimality, fairness, efficiency, stability, or moral improvement.
+- Adaptation is local and conditional. It does not guarantee global improvement, fairness, efficiency, stability, or progress.
+- Evolutionary processes have no required destination and may produce both resilience and fragility.
+- Encourage epistemic tolerance without factual or moral relativism.
+- Be tolerant of uncertainty, heterogeneity, and competing plausible mechanisms while remaining strict about evidence, harm, and unsupported claims.
+- Do not treat all explanations as equally supported.
+- Do not use complexity to dismiss evidence, responsibility, causality, or intervention.
+- Treat simulation output as evidence about model behavior, not automatically evidence about the world.
+- Do not call one successful run robust.
+- Do not imply aggregate similarity proves mechanism.
+- Do not imply small changes always have large effects.
+- Make uncertainty, scale, assumptions, unsupported claims, and validation needs visible.
+- Prefer soft contextual guidance over artificial feature locks.
+- Do not implement GW0, GW1, GW2, GW3, GW4, GW5, or GW6 without dedicated prompts and audits.
+- ORTUS progression should emerge from building a capable laboratory, discovering system behavior, and reaching new modeling frontiers—not from completing a prescribed checklist.
+- The user progresses by gaining reusable understanding and modeling capability, not by accumulating arbitrary points.
+- Do not add XP, streaks, grinding, or engagement manipulation by default.
+- Future progression should reward reusable understanding, reproducibility, stronger comparison, and honest interpretation.
+- Preserve model/runtime/template boundaries while applying product-philosophy language.
 - Do not make Builder graphs executable or Model Schemas runnable while documenting or later implementing fractal/multiscale analysis.
 - Keep Neural runtime graph scoped only to the Neural template.
 - Keep Neural Runtime Lab scenario-first but scientifically honest.

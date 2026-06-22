@@ -1,10 +1,10 @@
 # ORTUS Full Prompt Roadmap
 
-*Last updated after Prompt F0 Fractal and Multiscale Analysis Mini-Roadmap.*
+*Last updated after Prompt P0 ORTUS Product Philosophy and Learning Mission.*
 
 ## Current Status
 
-ORTUS has completed the core runtime/template foundation, scenario system, uncertainty layer, assumptions/limits layer, systems primitive registry, hybrid composition, multi-scale structure, scale-view state, boundary/environment models, spatial fields, observability, causality, quantity semantics, emergence pattern descriptors, robustness/resilience semantics, strategy/control semantics, model schema declarations, knowledge/memory/social-learning semantics, visual builder workspace schemas, template/schema compatibility mapping, the template/schema compatibility mapping audit, a narrow Opinion Dynamics social-learning behavior mode, the Opinion Dynamics social-learning runtime audit, Safe Builder UI Shell V1, the Safe Builder UI Shell + workspace information architecture audit, Model Schema Authoring Forms V1, the Model Schema Authoring Forms Audit, Visual Builder Graph View V1, the Visual Builder Graph View Audit, Schema Validation UX + Repair Suggestions V1, the Schema Validation UX + Repair Suggestions Audit, Schema-to-Template Fit Report V1, the Schema-to-Template Fit Report Audit, Scenario Planning From Schema V1, the Scenario Planning From Schema Audit, non-roadmap Prompt N1 Neural Excitation Network Template V1, non-roadmap Prompt N1B Neural Excitation Network Template Audit + Decision Readout V1, non-roadmap Prompt NUX1 Neural Runtime Lab UX V1, non-roadmap Prompt NUX1B Neural Runtime Lab UX Audit + Build Investigation, non-roadmap Prompt N2 Neural Strategy Adaptation V1, non-roadmap Prompt N2B Neural Strategy Adaptation Audit, non-roadmap Prompt MR0 Templates + Decision Clusters Mini-Roadmap, and docs-only Prompt F0 Fractal and Multiscale Analysis Mini-Roadmap.
+ORTUS has completed the core runtime/template foundation, scenario system, uncertainty layer, assumptions/limits layer, systems primitive registry, hybrid composition, multi-scale structure, scale-view state, boundary/environment models, spatial fields, observability, causality, quantity semantics, emergence pattern descriptors, robustness/resilience semantics, strategy/control semantics, model schema declarations, knowledge/memory/social-learning semantics, visual builder workspace schemas, template/schema compatibility mapping, the template/schema compatibility mapping audit, a narrow Opinion Dynamics social-learning behavior mode, the Opinion Dynamics social-learning runtime audit, Safe Builder UI Shell V1, the Safe Builder UI Shell + workspace information architecture audit, Model Schema Authoring Forms V1, the Model Schema Authoring Forms Audit, Visual Builder Graph View V1, the Visual Builder Graph View Audit, Schema Validation UX + Repair Suggestions V1, the Schema Validation UX + Repair Suggestions Audit, Schema-to-Template Fit Report V1, the Schema-to-Template Fit Report Audit, Scenario Planning From Schema V1, the Scenario Planning From Schema Audit, non-roadmap Prompt N1 Neural Excitation Network Template V1, non-roadmap Prompt N1B Neural Excitation Network Template Audit + Decision Readout V1, non-roadmap Prompt NUX1 Neural Runtime Lab UX V1, non-roadmap Prompt NUX1B Neural Runtime Lab UX Audit + Build Investigation, non-roadmap Prompt N2 Neural Strategy Adaptation V1, non-roadmap Prompt N2B Neural Strategy Adaptation Audit, non-roadmap Prompt MR0 Templates + Decision Clusters Mini-Roadmap, docs-only Prompt F0 Fractal and Multiscale Analysis Mini-Roadmap, and docs-only Prompt P0 ORTUS Product Philosophy and Learning Mission.
 
 Current project status:
 
@@ -18,8 +18,9 @@ Completed non-roadmap prompt: Prompt N2 — Neural Strategy Adaptation V1
 Completed non-roadmap prompt: Prompt N2B — Neural Strategy Adaptation Audit
 Completed non-roadmap prompt: Prompt MR0 — Templates + Decision Clusters Mini-Roadmap
 Completed docs-only prompt: Prompt F0 — Fractal and Multiscale Analysis Mini-Roadmap
+Completed docs-only prompt: Prompt P0 — ORTUS Product Philosophy and Learning Mission
 Post-30B stabilization completed: repo hygiene, durable Codex context, dependency repair, generated-artifact cleanup, and runtime performance/scalability baseline
-Next prompt: Pending user direction; do not start F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any fractal/multiscale implementation without explicit approval
+Next prompt: Pending user direction; do not start GW0-GW6 Research World progression, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any Research World/fractal/multiscale implementation without explicit approval
 ```
 
 Critical global boundary:
@@ -79,6 +80,7 @@ Observed clusters are analytical groupings, not psychological profiles.
 Blackjack work is offline simulation only, not gambling advice, live casino assistance, or wearable card-counting support.
 Do not use wearable devices, camera input, or software assistance for live casino play.
 Prompt F0 is documentation only; it records future fractal and multiscale analysis direction and does not implement fractal metrics, fractal generators, Scale Lens UI, network scaling analytics, trajectory motif analytics, schema fields, template capabilities, primitives, or runtime behavior.
+Prompt P0 is documentation only; it records ORTUS product philosophy, learning mission, epistemic guardrails, and future Research World direction and does not implement progression, missions, XP, streaks, unlocks, scoring, persistence, accounts, social features, templates, UI flows, dependencies, or runtime behavior.
 Measure multiscale structure before generating synthetic fractal structure.
 Fractal and multiscale tools describe how measured structure changes across scale. They do not prove that a system is fundamentally fractal.
 A complex-looking, nested, branching, or irregular pattern is not automatically fractal.
@@ -100,7 +102,7 @@ missing from this full roadmap. Prompt 31C and Prompt 31D are now corrected belo
 after Prompt 31B and before Prompt 32, with a later narrow Opinion Dynamics
 social-learning runtime slice placed after template/schema compatibility mapping.
 The social/cognitive semantics insertion was corrected after manual review, and
-Prompt 31C, Prompt 31D, Prompt 32, Prompt 32B, Prompt 33, Prompt 33B, Prompt 33C, Prompt 33D, Prompt 34, Prompt 34B, Prompt 35, Prompt 35B, Prompt 36, Prompt 36B, Prompt 37, Prompt 37B, Prompt 38, Prompt 38B, Prompt 39, and Prompt 39B are now marked complete. Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, MR0, and F0 are complete, and the next prompt is pending user direction.
+Prompt 31C, Prompt 31D, Prompt 32, Prompt 32B, Prompt 33, Prompt 33B, Prompt 33C, Prompt 33D, Prompt 34, Prompt 34B, Prompt 35, Prompt 35B, Prompt 36, Prompt 36B, Prompt 37, Prompt 37B, Prompt 38, Prompt 38B, Prompt 39, and Prompt 39B are now marked complete. Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, MR0, F0, and P0 are complete, and the next prompt is pending user direction.
 
 Safe Builder UI Shell V1 displays structural workspace artifacts; it does not execute workspace nodes or edges. The builder shell is not a compiler, interpreter, visual programming environment, or custom simulation runtime. A structurally valid workspace is still not a runnable model. Importing a workspace artifact does not activate model schemas, compatibility mappings, or social-learning semantics.
 
@@ -2000,6 +2002,74 @@ Future F5 scope: bounded state/decision trajectories over multiple windows. Use 
 
 Relation to existing ORTUS: Predator-Prey may later support spatial patches or cluster distributions; Epidemic may later support spread fronts or outbreak clusters; Opinion may later support network/community scaling without psychological inference; Schelling may later support segregation boundaries/lacunarity; Flocking may later support fragmentation/occupied scale; Neural may later support activation footprints or cascade distributions. MR0 future T1/T2/T3/DC work remains future-only. Prompt 38 fit reports may list future fractal concepts only as future-only structural gaps until implemented. Prompt 39 scenario plans may mention fractal metrics as possible future observation targets, but Prompt 39 does not compute them.
 
+## Prompt P0 — ORTUS Product Philosophy and Learning Mission
+
+Purpose:
+
+* Add a docs-only product philosophy and learning mission source of truth.
+* Protect ORTUS from becoming a pretty pseudo-ABM tool, oracle, prediction engine, or engagement game.
+* Establish future Research World progression as understanding-driven and future-only.
+
+Status:
+
+```text
+Complete. Documentation only.
+```
+
+Canonical source:
+
+```text
+docs/PRODUCT_PHILOSOPHY_AND_LEARNING_MISSION.md
+```
+
+Core mission:
+
+```text
+ORTUS is a sandbox for exploring how interacting mechanisms, constraints, feedback, stochasticity, adaptation, selection, and history can produce complex, path-dependent, and sometimes chaotic system-level behavior.
+The world is neither perfectly ordered nor merely random. Complex patterns emerge from constrained interactions, feedback, adaptation, stochasticity, and history.
+ORTUS helps users explore those mechanisms while remaining honest about uncertainty, scale, evidence, and the limits of models.
+ORTUS should expand the user’s range of plausible explanations without implying that complexity makes explanation, evidence, responsibility, or intervention impossible.
+```
+
+Required boundary language:
+
+```text
+Complexity does not mean the absence of rules. It means that interacting rules, constraints, feedback, and history can produce outcomes that cannot be understood from one mechanism in isolation.
+ORTUS should challenge context-free certainty, not the existence of evidence, mechanisms, or constraints.
+Outcomes can be historically contingent without being causeless or arbitrary.
+Chance operates within structural, environmental, and historical constraints.
+Adaptation is local and conditional. It does not guarantee global improvement, fairness, efficiency, stability, or progress.
+Evolutionary processes have no required destination and may produce both resilience and fragility.
+Be tolerant of uncertainty, heterogeneity, and competing plausible mechanisms while remaining strict about evidence, harm, and unsupported claims.
+A model can show what follows from its assumptions. It cannot establish that those assumptions fully describe reality.
+Simulation output is evidence about the model’s behavior, not automatically evidence about the world.
+```
+
+Research World branch:
+
+1. GW0: Research World Progression Mini-Roadmap.
+2. GW1: Persistent Model Lab.
+3. GW2: Discovery Atlas.
+4. GW3: Behavioral Landscape Exploration.
+5. GW4: Contextual Capability Guidance.
+6. GW5: Model Composition Frontiers.
+7. GW6: Grand Systems Challenges.
+
+Research World framing:
+
+```text
+ORTUS progression should emerge from building a capable laboratory, discovering system behavior, and reaching new modeling frontiers—not from completing a prescribed checklist.
+The user progresses by gaining reusable understanding and modeling capability, not by accumulating arbitrary points.
+ORTUS progression is both technical and intellectual: users acquire tools while learning why simple explanations often fail.
+The advanced ORTUS challenge is to construct, interrogate, and explain a complex model without losing scientific discipline.
+```
+
+Non-goals:
+
+```text
+P0 does not implement Research World progression, persistent model labs, discovery atlases, behavioral landscapes, capability guidance, model composition frontiers, grand systems challenges, XP, streaks, grinding, missions, achievements, unlocks, scoring, persistence, accounts, social features, UI flows, templates, runtime behavior, or dependency changes.
+```
+
 ## Prompt 40 — Safe Scenario Draft Workspace V1
 
 Purpose:
@@ -3321,8 +3391,8 @@ No global service availability treated as template runtime support.
 Recommended immediate next steps:
 
 ```text
-1. Review and commit Prompt F0 documentation/test work if this worktree is still uncommitted.
-2. Wait for explicit user direction before starting F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any fractal/multiscale implementation.
+1. Review and commit Prompt P0 documentation/test work if this worktree is still uncommitted.
+2. Wait for explicit user direction before starting GW0-GW6 Research World progression, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any Research World/fractal/multiscale implementation.
 3. Run a dedicated rendered responsive/design-system audit before making mobile-readiness, WCAG, clipboard, focus-return, or polished visual-workbench claims.
 ```
 
@@ -3338,6 +3408,7 @@ Non-roadmap Prompt N2 Neural Strategy Adaptation V1 is complete.
 Non-roadmap Prompt N2B Neural Strategy Adaptation Audit is complete.
 Non-roadmap Prompt MR0 Templates + Decision Clusters Mini-Roadmap is complete.
 Docs-only Prompt F0 Fractal and Multiscale Analysis Mini-Roadmap is complete.
+Docs-only Prompt P0 ORTUS Product Philosophy and Learning Mission is complete.
 Performance stabilization completed after Prompt 30B.
 Prompt 34 safe builder shell is complete.
 Prompt 34B safe builder shell audit is complete.

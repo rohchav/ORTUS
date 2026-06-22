@@ -72,7 +72,31 @@ const requiredDocPhrases = [
   "Clustering groups similar observations. Fractal analysis measures how structure changes across scale. One does not imply the other.",
   "Synthetic fractal generators create model inputs, not observed reality.",
   "Coarse-graining may discard information and alter apparent dynamics.",
-  "Fractal and multiscale metrics are structural summaries, not causal explanations, forecasts, validation results, or proof of universal laws."
+  "Fractal and multiscale metrics are structural summaries, not causal explanations, forecasts, validation results, or proof of universal laws.",
+  "ORTUS is a sandbox for exploring how interacting mechanisms, constraints, feedback, stochasticity, adaptation, selection, and history can produce complex, path-dependent, and sometimes chaotic system-level behavior.",
+  "The world is neither perfectly ordered nor merely random. Complex patterns emerge from constrained interactions, feedback, adaptation, stochasticity, and history.",
+  "ORTUS helps users explore those mechanisms while remaining honest about uncertainty, scale, evidence, and the limits of models.",
+  "ORTUS should expand the user’s range of plausible explanations without implying that complexity makes explanation, evidence, responsibility, or intervention impossible.",
+  "ORTUS is designed to help users investigate how system-level patterns can emerge from local interactions and constraints.",
+  "ORTUS models are representations for exploration and comparison, not direct copies of reality.",
+  "Complexity does not mean the absence of rules. It means that interacting rules, constraints, feedback, and history can produce outcomes that cannot be understood from one mechanism in isolation.",
+  "ORTUS should challenge context-free certainty, not the existence of evidence, mechanisms, or constraints.",
+  "Outcomes can be historically contingent without being causeless or arbitrary.",
+  "Chance operates within structural, environmental, and historical constraints.",
+  "Adaptation is local and conditional. It does not guarantee global improvement, fairness, efficiency, stability, or progress.",
+  "Evolutionary processes have no required destination and may produce both resilience and fragility.",
+  "Be tolerant of uncertainty, heterogeneity, and competing plausible mechanisms while remaining strict about evidence, harm, and unsupported claims.",
+  "ORTUS should reward better questions, stronger comparisons, and more honest interpretation—not confidence, certainty, or favorable outcomes.",
+  "Matching an observed pattern does not establish that the modeled mechanism caused it.",
+  "Changing scale can reveal structure while hiding variation and mechanism.",
+  "A model can show what follows from its assumptions. It cannot establish that those assumptions fully describe reality.",
+  "Simulation output is evidence about the model’s behavior, not automatically evidence about the world.",
+  "ORTUS progression should emerge from building a capable laboratory, discovering system behavior, and reaching new modeling frontiers—not from completing a prescribed checklist.",
+  "The user progresses by gaining reusable understanding and modeling capability, not by accumulating arbitrary points.",
+  "ORTUS progression is both technical and intellectual: users acquire tools while learning why simple explanations often fail.",
+  "The advanced ORTUS challenge is to construct, interrogate, and explain a complex model without losing scientific discipline.",
+  "Complexity should increase analytical humility, not eliminate accountability.",
+  "Prefer features that deepen exploration, comparison, explanation, and reuse. Reject features that primarily reward compulsion, certainty, spectacle, or unsupported real-world authority."
 ];
 
 const futureTopLevelFields = [
@@ -100,7 +124,13 @@ const futureTopLevelFields = [
   "unitSystem",
   "modelSchema",
   "compilerOptions",
-  "visualBuilderState"
+  "visualBuilderState",
+  "researchWorldState",
+  "progressionState",
+  "discoveryAtlas",
+  "missionState",
+  "achievementState",
+  "unlockState"
 ];
 
 const inactivePrimitiveTopLevelFields = [
@@ -116,10 +146,13 @@ describe("roadmap alignment and missing pillar reservations", () => {
   it("documents the revised roadmap and reserved missing pillars", () => {
     const roadmapPath = join(repoRoot, "docs", "roadmap.md");
     const missingPillarsPath = join(repoRoot, "docs", "missing-pillars.md");
+    const productPhilosophyPath = join(repoRoot, "docs", "PRODUCT_PHILOSOPHY_AND_LEARNING_MISSION.md");
     expect(existsSync(roadmapPath)).toBe(true);
     expect(existsSync(missingPillarsPath)).toBe(true);
+    expect(existsSync(productPhilosophyPath)).toBe(true);
 
     const roadmap = readFileSync(roadmapPath, "utf8");
+    const productPhilosophy = readFileSync(productPhilosophyPath, "utf8");
     expect(roadmap).toContain("completed through Prompt 39B");
     expect(roadmap).toContain("Post-30B stabilization");
     expect(roadmap).toContain(
@@ -136,9 +169,9 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(roadmap).toContain("Completed Prompt 39 scenario-planning foundation");
     expect(roadmap).toContain("Completed Prompt 39 scenario-planning audit");
     expect(roadmap).toContain("Prompt 35 adds a separate `Author Schema` Builder mode");
-    expect(roadmap).toContain("Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, MR0, and F0 are complete.");
+    expect(roadmap).toContain("Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, MR0, F0, and P0 are complete.");
     expect(roadmap).toContain(
-      "The next prompt is pending user direction; do not start F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any fractal/multiscale implementation without explicit approval."
+      "The next prompt is pending user direction; do not start GW0-GW6 Research World progression, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any Research World/fractal/multiscale implementation without explicit approval."
     );
     expect(roadmap).toContain("Prompt N2 adds Neural Strategy Adaptation V1 to the Neural Runtime Lab RPS/readout mode.");
     expect(roadmap).toContain("Non-roadmap Prompt N2B audits and hardens Neural Strategy Adaptation.");
@@ -147,6 +180,9 @@ describe("roadmap alignment and missing pillar reservations", () => {
     );
     expect(roadmap).toContain(
       "Docs-only Prompt F0 records future fractal and multiscale analysis direction only; it does not implement fractal metrics, fractal spatial generators, Scale Lens UI, network scaling analytics, trajectory motif analytics, template support, schema fields, primitives, or runtime behavior."
+    );
+    expect(roadmap).toContain(
+      "Docs-only Prompt P0 records ORTUS product philosophy, learning mission, epistemic guardrails, and future Research World progression direction only; it does not implement progression, missions, XP, streaks, unlocks, scoring, persistence, social features, runtime behavior, templates, or UI flows."
     );
     expect(roadmap).toContain("MR0 is documentation only.");
     expect(roadmap).toContain("T1: Urban Daily Routine / Activity Choice Template V1.");
@@ -204,6 +240,15 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(roadmap).toContain("F4B: Network Scaling Metrics Audit.");
     expect(roadmap).toContain("F5: Hierarchical Trajectory Motif Analytics V1.");
     expect(roadmap).toContain("F5B: Hierarchical Trajectory Motif Analytics Audit.");
+    expect(roadmap).toContain("P0: ORTUS Product Philosophy and Learning Mission.");
+    expect(roadmap).toContain("GW0: Research World Progression Mini-Roadmap.");
+    expect(roadmap).toContain("GW1: Persistent Model Lab.");
+    expect(roadmap).toContain("GW2: Discovery Atlas.");
+    expect(roadmap).toContain("GW3: Behavioral Landscape Exploration.");
+    expect(roadmap).toContain("GW4: Contextual Capability Guidance.");
+    expect(roadmap).toContain("GW5: Model Composition Frontiers.");
+    expect(roadmap).toContain("GW6: Grand Systems Challenges.");
+    expect(roadmap).toContain("P0 is complete as documentation only. GW0-GW6 remain future prompts");
     expect(roadmap).toContain(
       "Recommended F-branch implementation priority: F1 measurement -> F3 scale comparison -> F2 synthetic generation -> F4 network scaling -> F5 abstract trajectory analysis."
     );
@@ -216,6 +261,25 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(roadmap).toContain("Later: runnable visual model builder");
     expect(roadmap).toContain("Prompt 19 adds `src/simulation/registry` as the unified primitive registry and capability map");
     expect(roadmap.toLowerCase()).toContain("predictive claims are prohibited");
+    for (const phrase of requiredDocPhrases.slice(-24)) {
+      expect(productPhilosophy).toContain(phrase);
+    }
+    for (const phrase of [
+      "constraints + mechanisms + initial conditions + stochastic events + history → observed trajectory",
+      "epistemic tolerance",
+      "What is happening here?",
+      "How do I configure every field?",
+      "One run varies unexpectedly → introduce seeds and uncertainty.",
+      "Matching an observed pattern does not establish that the modeled mechanism caused it.",
+      "Changing scale can reveal structure while hiding variation and mechanism."
+    ]) {
+      expect(productPhilosophy).toContain(phrase);
+    }
+    for (const futureName of ["GW0", "GW1", "GW2", "GW3", "GW4", "GW5", "GW6"]) {
+      expect(productPhilosophy).toContain(futureName);
+    }
+    expect(productPhilosophy).not.toMatch(/GW[0-6].*implemented/i);
+    expect(productPhilosophy).not.toMatch(/XP.*implemented|implemented.*XP|streaks.*implemented|implemented.*streaks|grinding.*implemented|implemented.*grinding/i);
 
     const missingPillars = readFileSync(missingPillarsPath, "utf8");
     for (const heading of [
@@ -246,10 +310,11 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(missingPillars).toContain("Must not claim yet");
   });
 
-  it("keeps README, concepts, simulation docs, and AGENTS aligned on future-pillar boundaries", () => {
+  it("keeps README, concepts, simulation docs, product philosophy, and AGENTS aligned on future-pillar boundaries", () => {
     const docs = [
       readFileSync(join(repoRoot, "README.md"), "utf8"),
       readFileSync(join(repoRoot, "docs", "concepts.md"), "utf8"),
+      readFileSync(join(repoRoot, "docs", "PRODUCT_PHILOSOPHY_AND_LEARNING_MISSION.md"), "utf8"),
       readFileSync(join(repoRoot, "src", "simulation", "README.md"), "utf8"),
       readFileSync(join(repoRoot, "AGENTS.md"), "utf8")
     ].join("\n");
@@ -267,6 +332,8 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(docs).toContain("causal assumptions");
     expect(docs).toContain("Do not treat uncertainty ensembles as calibrated probabilities.");
     expect(docs).toContain("Validation status describes evidence about the model, not truth about the real world");
+    expect(docs).toContain("Prompt P0 is documentation only");
+    expect(docs).toContain("Do not add XP, streaks, grinding, or engagement manipulation by default.");
   });
 
   it("keeps production template assumptions honest about reserved future pillars", () => {

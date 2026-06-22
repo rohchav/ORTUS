@@ -847,6 +847,9 @@ describe("knowledge, memory, and social-learning semantics service", () => {
     expect(docs).toContain(
       "Hierarchical trajectory motifs describe repeated observable state-action sequences. They do not reveal thoughts, intentions, beliefs, personality, or subconscious mental states."
     );
+    expect(docs).toContain("Be tolerant of uncertainty, heterogeneity, and competing plausible mechanisms while remaining strict about evidence, harm, and unsupported claims.");
+    expect(docs).toContain("Do not treat all explanations as equally supported.");
+    expect(docs).toContain("The user progresses by gaining reusable understanding and modeling capability, not by accumulating arbitrary points.");
 
     const assumptionText = productionTemplates
       .flatMap((template) => template.assumptionProfile?.limitations.map((item) => item.description) ?? [])

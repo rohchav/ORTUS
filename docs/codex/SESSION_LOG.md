@@ -1436,3 +1436,71 @@ Remaining limitations:
 - F0 is documentation only. Fractal metrics, fractal generators, Scale Lens / Coarse-Graining, network scaling analytics, and hierarchical trajectory motif analytics remain future work.
 
 Next prompt after commit: pending user direction. Do not start F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any fractal/multiscale implementation without explicit approval.
+
+## 2026-06-22 - Prompt P0 ORTUS Product Philosophy and Learning Mission
+
+Goal: add a documentation-only product philosophy and learning mission source of truth without implementing runtime behavior, UI progression, unlocks, missions, scoring, achievements, discovery detection, model composition, templates, simulation features, fractal metrics, Research World state, persistence, accounts, social features, onboarding flows, dependencies, or new capability flags.
+
+Implemented:
+
+- Added `docs/PRODUCT_PHILOSOPHY_AND_LEARNING_MISSION.md` as the canonical P0 source of truth.
+- Documented ORTUS as an exploratory complex-systems sandbox, visual modeling workbench, exploratory simulation environment, systems-thinking learning environment, mechanism/assumption comparison tool, and platform for experiencing emergence.
+- Preserved the core mission: ORTUS is a sandbox for exploring how interacting mechanisms, constraints, feedback, stochasticity, adaptation, selection, and history can produce complex, path-dependent, and sometimes chaotic system-level behavior.
+- Preserved the central product statement: The world is neither perfectly ordered nor merely random. Complex patterns emerge from constrained interactions, feedback, adaptation, stochasticity, and history.
+- Preserved the product-purpose statement: ORTUS helps users explore those mechanisms while remaining honest about uncertainty, scale, evidence, and the limits of models.
+- Preserved the guardrail that ORTUS should expand the user’s range of plausible explanations without implying that complexity makes explanation, evidence, responsibility, or intervention impossible.
+- Documented complexity as interacting rules, constraints, feedback, and history rather than rulelessness.
+- Documented historical contingency, stochasticity within constraints, local/conditional adaptation, non-teleological evolution, epistemic tolerance, model-output limits, and model-versus-world boundaries.
+- Added 20 core learning outcomes, recurring learning experiences, product experience principles, product-language guidance, values/non-goals, and a 12-question product decision test.
+- Reserved the future Research World branch: GW0 Research World Progression Mini-Roadmap, GW1 Persistent Model Lab, GW2 Discovery Atlas, GW3 Behavioral Landscape Exploration, GW4 Contextual Capability Guidance, GW5 Model Composition Frontiers, and GW6 Grand Systems Challenges.
+- Updated README, concepts, simulation README, roadmap, planned roadmap, HCI audit, workspace IA, current context, and AGENTS guardrails to mark P0 complete as documentation only.
+- Updated roadmap/control/social-learning/multiscale documentation tests to protect P0 boundaries without adding fake runtime coverage.
+
+Required boundary copy preserved:
+
+- Complexity does not mean the absence of rules. It means that interacting rules, constraints, feedback, and history can produce outcomes that cannot be understood from one mechanism in isolation.
+- ORTUS should challenge context-free certainty, not the existence of evidence, mechanisms, or constraints.
+- Outcomes can be historically contingent without being causeless or arbitrary.
+- Chance operates within structural, environmental, and historical constraints.
+- Adaptation is local and conditional. It does not guarantee global improvement, fairness, efficiency, stability, or progress.
+- Evolutionary processes have no required destination and may produce both resilience and fragility.
+- Be tolerant of uncertainty, heterogeneity, and competing plausible mechanisms while remaining strict about evidence, harm, and unsupported claims.
+- ORTUS should reward better questions, stronger comparisons, and more honest interpretation—not confidence, certainty, or favorable outcomes.
+- Matching an observed pattern does not establish that the modeled mechanism caused it.
+- Changing scale can reveal structure while hiding variation and mechanism.
+- A model can show what follows from its assumptions. It cannot establish that those assumptions fully describe reality.
+- Simulation output is evidence about the model’s behavior, not automatically evidence about the world.
+- ORTUS progression should emerge from building a capable laboratory, discovering system behavior, and reaching new modeling frontiers—not from completing a prescribed checklist.
+- The user progresses by gaining reusable understanding and modeling capability, not by accumulating arbitrary points.
+- ORTUS progression is both technical and intellectual: users acquire tools while learning why simple explanations often fail.
+- The advanced ORTUS challenge is to construct, interrogate, and explain a complex model without losing scientific discipline.
+- Complexity should increase analytical humility, not eliminate accountability.
+
+Non-goals preserved:
+
+- No runtime source, template source, simulation engine source, Builder feature source, fit-report source, scenario-planning source, Neural Runtime Lab source, visual graph source, dependency file, registry support, import/export support, or package dependency was changed.
+- No GW0-GW6 Research World capability is marked implemented.
+- No XP, streaks, grinding, engagement manipulation, scoring, unlocks, missions, achievements, persistence, accounts, social features, onboarding flow, or Research World state was implemented.
+- Builder graphs remain non-executable and Model Schemas remain non-runnable.
+
+Checks:
+
+- `git status --short`: clean before Prompt P0 edits.
+- `npm test -- roadmap modelSchema control socialLearning multiScale`: passed, 6 files and 59 tests.
+- `npm run typecheck`: passed.
+- First `npm test`: failed only on timing-sensitive 5000ms timeouts in `src/simulation/__tests__/uncertainty.test.ts` and `src/simulation/__tests__/template.predatorPrey.test.ts`.
+- `npm test -- src/simulation/__tests__/template.predatorPrey.test.ts`: passed, 1 file and 5 tests.
+- First standalone `npm test -- src/simulation/__tests__/uncertainty.test.ts`: failed on the same 5000ms timeout at 5034ms.
+- Second standalone `npm test -- src/simulation/__tests__/uncertainty.test.ts`: passed, 1 file and 9 tests.
+- Second full `npm test`: passed, 58 files and 475 tests.
+- `npm run build`: passed with Next.js 15.5.19; `/` and `/builder` prerendered successfully.
+- `npm run perf:simulation`: passed. Local smoke results included Flocking 100 agents at 130.49 ticks/sec, Flocking 500 agents at 18.99 ticks/sec, Forest Fire 80x60 at 26.96 ticks/sec, and Predator-Prey default at 78.81 ticks/sec.
+- `git diff --check`: passed.
+- `npm run lint`: unavailable, package.json has no lint script.
+
+Remaining limitations:
+
+- P0 is documentation only. Research World progression, persistent labs, discovery atlas, behavioral landscapes, contextual guidance, model composition frontiers, grand challenges, XP, streaks, scoring, missions, achievements, unlocks, accounts, persistence, social features, UI flows, templates, dependencies, and runtime behavior remain unimplemented.
+- Browser rendering, responsive behavior, browser clipboard behavior, focus return, browser zoom behavior, screen-reader behavior, assistive-technology behavior, and WCAG conformance remain unverified.
+
+Next prompt after commit: pending user direction. Do not start GW0-GW6 Research World progression, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any Research World/fractal/multiscale implementation without explicit approval.
