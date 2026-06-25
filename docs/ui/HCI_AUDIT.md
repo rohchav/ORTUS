@@ -1,8 +1,8 @@
 # ORTUS HCI / UX / Visual-Direction Audit
 
 Date: 2026-06-11  
-Updated: 2026-06-25 after Prompt UX1
-Prompt: UI-BRAND-1, UI-REMEDIATION-1, Prompt 34B, Prompt 35, Prompt 35B, Prompt 36, Prompt 36B, Prompt 37, Prompt 37B, Prompt 38, Prompt 38B, Prompt 39, Prompt 39B, Prompt F0, Prompt P0, Prompt UX0, Prompt UX1, Prompt N1, Prompt N1B, Prompt NUX1, Prompt NUX1B, Prompt N2, Prompt N2B, Prompt MR0
+Updated: 2026-06-25 after Prompt GW0
+Prompt: UI-BRAND-1, UI-REMEDIATION-1, Prompt 34B, Prompt 35, Prompt 35B, Prompt 36, Prompt 36B, Prompt 37, Prompt 37B, Prompt 38, Prompt 38B, Prompt 39, Prompt 39B, Prompt F0, Prompt P0, Prompt UX0, Prompt UX1, Prompt GW0, Prompt N1, Prompt N1B, Prompt NUX1, Prompt NUX1B, Prompt N2, Prompt N2B, Prompt MR0
 Status: source-based audit, not a formal WCAG audit
 
 ## 1. Executive Verdict
@@ -77,6 +77,9 @@ UX0 adds no UI. It defines ORTUS Living Systems Atlas as the future visual and i
 Prompt UX1 update:
 UX1 adds no UI. It audits the existing source implementation before visual migration. The blunt finding is that ORTUS has useful workbench structure, but its visual system is not yet a coherent design system: global CSS variables are overloaded, raw colors repeat as coincidence rather than semantics, status/evidence states are fragmented, template accents are useful but under-governed, and dense tactical ornament remains entangled with real hierarchy. UX1 records source-visible responsive and accessibility risks only. It does not claim rendered responsive behavior, contrast, keyboard completeness, screen-reader compatibility, assistive-technology readiness, reduced-motion equivalence, or WCAG conformance.
 
+Prompt GW0 update:
+GW0 adds no UI. It is Research World product architecture, information architecture, and roadmap planning only. The HCI risk is future-facing and serious: progression can easily become XP, badges, locks, streaks, completion pressure, fake discovery states, or psychological profiling if the product language drifts. GW0 sets the blunt alternative: progress = reusable understanding + modeling capability + investigative depth, not progress = clicks + time + completed tasks. A Discovery Atlas records investigated model behavior, not certified real-world discoveries. A behavioral landscape maps what has been investigated and must not imply that unsampled regions are known. Contextual guidance may respond to model/workspace state, but it must not become psychological profiling of the user. Expert access and current `/` and `/builder` workflows must survive the future shell. GW0 does not claim rendered responsive, zoom, keyboard, screen-reader, assistive-technology, reduced-motion, or WCAG verification.
+
 ## 2. Audit Scope
 
 Inspected surfaces:
@@ -92,7 +95,8 @@ Inspected surfaces:
 - Prompt F0 docs-only fractal and multiscale mini-roadmap. No rendered UI, Scale Lens surface, fractal metric output, generator control, network scaling plot, or trajectory motif surface exists yet.
 - Prompt P0 docs-only product philosophy and learning mission. No Research World progression, mission, scoring, unlock, persistence, social, onboarding, or UI flow exists yet.
 - Prompt UX0 docs-only visual direction and UX principles. No World/Lab/Atlas/Workshop shell, route, navigation, design tokens, component redesign, discovery logic, behavioral landscape, progression, icon, animation, dependency, remote font, or mockup exists yet.
-- Prompt UX1 docs-only existing design-token and component audit. No CSS, production UI component, route, dependency, asset, font, token, rendered-verification, UX2, GW0, or World/Lab/Atlas/Workshop implementation exists yet.
+- Prompt UX1 docs-only existing design-token and component audit. No CSS, production UI component, route, dependency, asset, font, token, rendered-verification, UX2, or World/Lab/Atlas/Workshop implementation exists yet.
+- Prompt GW0 docs-only Research World progression mini-roadmap. No route, navigation, World/Lab/Atlas/Workshop shell, persistence, discovery logic, behavioral landscape, contextual guidance, progression state, notebook, saved asset, model composition, grand challenge, CSS, UI component, dependency, asset, runtime behavior, template behavior, or rendered-verification implementation exists yet.
 - Neural Excitation Network template-specific canvas edge rendering, legend notes, inspector rows, and atmosphere styling added in Prompt N1.
 - Neural Decision Readout Legend panel, output assembly activation bars, selected readout, and observational RPS payoff copy added in Prompt N1B.
 - Neural Runtime Lab scenario cards, mission/status readouts, live explanations, direct actions, plain-English controls, Advanced config drawer, bounded timeline, and RPS shell added in Prompt NUX1.

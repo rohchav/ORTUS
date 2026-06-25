@@ -1,6 +1,6 @@
 # UX1: Existing Design Token And Component Audit
 
-Status: Prompt UX1 source-level audit and documentation only. UX1 does not redesign the interface, add design tokens, modify CSS, restyle components, change routes, add dependencies, add assets, change font configuration, implement World/Lab/Atlas/Workshop, start GW0, start UX2, or claim rendered accessibility/responsive verification.
+Status: Prompt UX1 source-level audit and documentation only, updated after Prompt GW0. UX1 does not redesign the interface, add design tokens, modify CSS, restyle components, change routes, add dependencies, add assets, change font configuration, implement World/Lab/Atlas/Workshop, start UX2, or claim rendered accessibility/responsive verification. Prompt GW0 later adds Research World progression architecture in `../RESEARCH_WORLD_PROGRESSION_MINI_ROADMAP.md` without changing the UX1 source audit evidence.
 
 Required framing:
 
@@ -35,7 +35,7 @@ Evidence categories used below:
 
 Inspected source groups:
 
-- Documentation: `README.md`, `planned_roadmap.md`, `docs/roadmap.md`, `docs/concepts.md`, `docs/PRODUCT_PHILOSOPHY_AND_LEARNING_MISSION.md`, `docs/ui/LIVING_SYSTEMS_ATLAS_VISUAL_DIRECTION.md`, `docs/ui/HCI_AUDIT.md`, `docs/ui/WORKSPACE_INFORMATION_ARCHITECTURE.md`, `docs/codex/CURRENT_CONTEXT.md`, `docs/codex/SESSION_LOG.md`, `src/simulation/README.md`, and `AGENTS.md`.
+- Documentation: `README.md`, `planned_roadmap.md`, `docs/roadmap.md`, `docs/concepts.md`, `docs/PRODUCT_PHILOSOPHY_AND_LEARNING_MISSION.md`, `docs/RESEARCH_WORLD_PROGRESSION_MINI_ROADMAP.md`, `docs/ui/LIVING_SYSTEMS_ATLAS_VISUAL_DIRECTION.md`, `docs/ui/HCI_AUDIT.md`, `docs/ui/WORKSPACE_INFORMATION_ARCHITECTURE.md`, `docs/codex/CURRENT_CONTEXT.md`, `docs/codex/SESSION_LOG.md`, `src/simulation/README.md`, and `AGENTS.md`.
 - Styling: `src/app/globals.css`; no CSS modules were present.
 - Shell and navigation: `src/components/AppShell.tsx`, `src/components/TopStatusBar.tsx`, `src/components/LeftInstrumentStack.tsx`, `src/components/TimelineControlStrip.tsx`, `src/components/WorldStage.tsx`, `src/components/RightContextDrawer.tsx`.
 - Builder: `src/components/builder/BuilderShell.tsx`, `BuilderHeader.tsx`, `BuilderModeTabs.tsx`, `BuilderViewport.tsx`, `ModelSchemaAuthoringShell.tsx`, `ModelSchemaSectionEditor.tsx`, and `src/components/builder/graph/BuilderGraphView.tsx`.
@@ -576,6 +576,7 @@ UX2 should not start until the following are accepted as UX1 findings:
 - Accessibility and responsive risks are explicitly source-level only.
 - Dependency constraints and offline-font constraints are documented.
 - Migration priority is defined.
+- Prompt GW0 Research World progression architecture is available as product-architecture input.
 - Production UI, CSS, dependencies, assets, and font configuration remain unchanged by UX1.
 
 UX2 should be limited to semantic token foundations and bounded primitive migration. UX2 must not automatically implement the four-destination shell.
@@ -593,22 +594,25 @@ UX2
 -> establishes shared semantic design foundations
 
 GW1
--> introduces the persistent World/Lab/Atlas/Workshop shell
+-> introduces the persistent destination shell
 ```
 
 Required copy:
 
 ```text
 UX1 provides implementation evidence. GW0 provides progression architecture. UX2 provides visual foundations. GW1 provides the first structural transformation.
+GW0 defines what the product must communicate. UX2 defines how shared design foundations communicate it. GW1 implements the first structural shell using both.
 ```
 
-Current constraints GW0/GW1 must account for:
+Current constraints UX2/GW1 must account for:
 
 - Existing workflows are not disposable.
 - Builder Workshop behavior is already extensive and must keep non-execution boundaries.
 - The simulation shell already has task modes and a persistent run dock.
 - No persistent Lab/Atlas data model exists yet.
 - Current visual density cannot be solved by route names alone.
+- GW0 defines destination responsibilities. It does not implement destination navigation or persistence.
+- Research World progression must remain investigative capability, not XP, achievements, hard locks, or evidence-free discovery claims.
 
 ## 23. Verification Backlog
 

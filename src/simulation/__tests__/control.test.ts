@@ -874,6 +874,7 @@ describe("strategy, control, and intervention semantics services", () => {
     const docs = [
       readFileSync(join(repoRoot, "README.md"), "utf8"),
       readFileSync(join(repoRoot, "docs", "concepts.md"), "utf8"),
+      readFileSync(join(repoRoot, "docs", "RESEARCH_WORLD_PROGRESSION_MINI_ROADMAP.md"), "utf8"),
       readFileSync(join(repoRoot, "docs", "ui", "LIVING_SYSTEMS_ATLAS_VISUAL_DIRECTION.md"), "utf8"),
       readFileSync(join(repoRoot, "docs", "ui", "EXISTING_DESIGN_TOKEN_AND_COMPONENT_AUDIT.md"), "utf8"),
       readFileSync(join(repoRoot, "src", "simulation", "README.md"), "utf8"),
@@ -920,6 +921,12 @@ describe("strategy, control, and intervention semantics services", () => {
       "Runtime interpreter/compiler, runnable visual model builder support, external framework interop, generic social-learning runtime outside the narrow Opinion Dynamics behavior mode, full human cognition, LLM-per-agent runtime, validation, and calibration remain future work."
     );
     expect(docs).toContain("Workspace nodes and edges are visual descriptors, not executable dataflow or runtime behavior.");
+    expect(docs).toContain("GW0 is documentation and progression architecture only.");
+    expect(docs).toContain("Progressive guidance and expert access must coexist.");
+    expect(docs).toContain("Contextual guidance may respond to the state of the model and workspace. It must not become psychological profiling of the user.");
+    expect(docs).toContain("Grand Systems Challenges should test model construction, interrogation, comparison, and scientific discipline—not optimization toward a scripted victory state.");
+    expect(docs).toContain("artifact attachment ≠ activation");
+    expect(docs).toContain("scenario plan ≠ executable scenario");
 
     const controlDir = join(repoRoot, "src", "simulation", "control");
     const source = readdirSync(controlDir)

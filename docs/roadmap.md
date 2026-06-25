@@ -4,7 +4,7 @@ This roadmap reserves the major complex-systems pillars that ORTUS must support 
 
 ## Current Foundation
 
-ORTUS has completed through Prompt 39B, plus non-roadmap Prompt N1: Neural Excitation Network Template V1, Prompt N1B: Neural Excitation Network Template Audit + Decision Readout V1, Prompt NUX1: Neural Runtime Lab UX V1, Prompt NUX1B: Neural Runtime Lab UX Audit + Build Investigation, Prompt N2: Neural Strategy Adaptation V1, Prompt N2B: Neural Strategy Adaptation Audit, Prompt MR0: Templates + Decision Clusters Mini-Roadmap, docs-only Prompt F0: Fractal and Multiscale Analysis Mini-Roadmap, docs-only Prompt P0: ORTUS Product Philosophy and Learning Mission, docs-only Prompt UX0: ORTUS Living Systems Atlas Visual Direction, and docs-only Prompt UX1: Existing Design Token and Component Audit. Prompts 1-39B established the current foundation:
+ORTUS has completed through Prompt 39B, plus non-roadmap Prompt N1: Neural Excitation Network Template V1, Prompt N1B: Neural Excitation Network Template Audit + Decision Readout V1, Prompt NUX1: Neural Runtime Lab UX V1, Prompt NUX1B: Neural Runtime Lab UX Audit + Build Investigation, Prompt N2: Neural Strategy Adaptation V1, Prompt N2B: Neural Strategy Adaptation Audit, Prompt MR0: Templates + Decision Clusters Mini-Roadmap, docs-only Prompt F0: Fractal and Multiscale Analysis Mini-Roadmap, docs-only Prompt P0: ORTUS Product Philosophy and Learning Mission, docs-only Prompt UX0: ORTUS Living Systems Atlas Visual Direction, docs-only Prompt UX1: Existing Design Token and Component Audit, and docs-only Prompt GW0: ORTUS Research World Progression Mini-Roadmap. Prompts 1-39B established the current foundation:
 
 - Engine/runtime/UI foundation.
 - Scenario Builder.
@@ -42,13 +42,14 @@ ORTUS has completed through Prompt 39B, plus non-roadmap Prompt N1: Neural Excit
 - Docs-only Prompt F0 records future fractal and multiscale analysis direction only; it does not implement fractal metrics, fractal spatial generators, Scale Lens UI, network scaling analytics, trajectory motif analytics, template support, schema fields, primitives, or runtime behavior.
 - Docs-only Prompt P0 records ORTUS product philosophy, learning mission, epistemic guardrails, and future Research World progression direction only; it does not implement progression, missions, XP, streaks, unlocks, scoring, persistence, social features, runtime behavior, templates, or UI flows.
 - Docs-only Prompt UX0 records the ORTUS Living Systems Atlas visual and interaction target only; it does not implement World/Lab/Atlas/Workshop routes, tabs, navigation, shell redesign, CSS tokens, component changes, persistence, discovery logic, behavioral landscapes, progression, runtime behavior, dependencies, remote fonts, icons, animations, or mockups.
-- Docs-only Prompt UX1 records the existing design-token and component audit only; it inventories real UI/CSS/component sources, migration risk, accessibility and responsive source risks, and retain/adapt/replace/retire classifications. It does not redesign the interface, add tokens, modify CSS, restyle components, change routes, add dependencies, add assets, change font configuration, implement World/Lab/Atlas/Workshop, start GW0, start UX2, or claim rendered accessibility/responsive verification.
+- Docs-only Prompt UX1 records the existing design-token and component audit only; it inventories real UI/CSS/component sources, migration risk, accessibility and responsive source risks, and retain/adapt/replace/retire classifications. It does not redesign the interface, add tokens, modify CSS, restyle components, change routes, add dependencies, add assets, change font configuration, implement World/Lab/Atlas/Workshop, start UX2, or claim rendered accessibility/responsive verification.
+- Docs-only Prompt GW0 records ORTUS Research World progression architecture only; it defines model-bounded investigation context, World/Lab/Atlas/Workshop destination responsibilities, progression without XP, Discovery Atlas and Behavioral Landscape boundaries, reusable-asset provenance, expert access, responsible engagement, artifact/runtime boundaries, and the GW0 -> UX2 -> GW1 -> GW1B -> GW2 -> GW2B -> GW3 -> GW3B -> GW4 -> GW4B -> GW5 -> GW5B -> GW6 -> GW6B sequence. It does not implement routes, navigation, persistence, discovery logic, behavioral landscapes, contextual guidance, notebooks, saved assets, progression state, UI/CSS changes, dependencies, assets, runtime behavior, template behavior, model composition, or grand-system scenarios.
 
 These foundations are deliberately service-first or metadata-first unless documented otherwise. Networks, resources, feedback primitives, boundary/environment models, spatial fields, observability models, causal assumptions, quantity semantics, emergence descriptors, robustness/resilience descriptors, and strategy/control descriptors are headless structural services until a template explicitly uses them at runtime. A template must not claim support for a primitive merely because a service exists.
 
 After Prompt 30B, ORTUS completed a repository hygiene, durable context, dependency stabilization, and performance/scalability pass. That pass added and validated performance instrumentation and spatial-indexing foundations, but it does not turn reserved structural primitives into runtime support and is not evidence for high-scale readiness by itself.
 
-Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 39B: Scenario Planning From Schema Audit are complete. Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, MR0, F0, P0, UX0, and UX1 are complete. The next prompt is pending user direction; do not start UX2, GW0-GW6 Research World progression, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any Research World/fractal/multiscale/design-system implementation without explicit approval.
+Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 39B: Scenario Planning From Schema Audit are complete. Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, MR0, F0, P0, UX0, UX1, and GW0 are complete. The next prompt is pending user direction; do not start UX2, GW1-GW6 Research World implementation, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any Research World/fractal/multiscale/design-system implementation without explicit approval.
 
 ## Revised Prompt Sequence
 
@@ -144,6 +145,10 @@ Completed docs-only fractal and multiscale mini-roadmap:
 
 1. F0 - Fractal and Multiscale Analysis Mini-Roadmap.
 
+Completed docs-only Research World progression mini-roadmap:
+
+1. GW0 - ORTUS Research World Progression Mini-Roadmap.
+
 Prompt 38 boundary:
 
 ```text
@@ -220,14 +225,21 @@ Prompt P0 future Research World branch:
 2. UX0: Living Systems Atlas Visual Direction.
 3. UX1: Existing Design Token and Component Audit.
 4. GW0: Research World Progression Mini-Roadmap.
-5. GW1: Persistent Model Lab.
-6. GW2: Discovery Atlas.
-7. GW3: Behavioral Landscape Exploration.
-8. GW4: Contextual Capability Guidance.
-9. GW5: Model Composition Frontiers.
-10. GW6: Grand Systems Challenges.
+5. UX2: Shared Design Foundations.
+6. GW1: Persistent Destination Shell.
+7. GW1B: Persistent Destination Shell Audit.
+8. GW2: Research Notebook And Reusable Assets.
+9. GW2B: Research Notebook And Reusable Assets Audit.
+10. GW3: Discovery Atlas.
+11. GW3B: Discovery Atlas Audit.
+12. GW4: Behavioral Landscape Exploration.
+13. GW4B: Behavioral Landscape Exploration Audit.
+14. GW5: Contextual Capability Guidance.
+15. GW5B: Contextual Capability Guidance Audit.
+16. GW6: Composition Frontiers And Grand Systems Challenges.
+17. GW6B: Composition Frontiers And Grand Systems Challenges Audit.
 
-P0 is complete as documentation only. GW0-GW6 remain future prompts and must not be treated as implemented progression, persistence, missions, scoring, unlocks, achievements, discovery detection, model composition, templates, UI flows, or Research World state.
+P0, UX0, UX1, and GW0 are complete as documentation-only prompts. UX2 and GW1-GW6 remain future prompts and must not be treated as implemented progression, persistence, missions, scoring, unlocks, achievements, discovery detection, behavioral landscapes, contextual recommendations, model composition, templates, UI flows, or Research World state.
 
 Later roadmap bands:
 
@@ -597,7 +609,71 @@ Migrate shared foundations before specialized surfaces, but do not block necessa
 UX1 provides implementation evidence. GW0 provides progression architecture. UX2 provides visual foundations. GW1 provides the first structural transformation.
 ```
 
-Prompt UX1 does not modify production CSS, production UI components, tokens, colors, typography, routes, navigation, World/Lab/Atlas/Workshop shell, responsive behavior, animations, dependencies, assets, font configuration, mockups, Storybook, visual-regression infrastructure, runtime behavior, templates, scenarios, snapshots, or engine code. UX2 must not start without explicit direction and should be limited to semantic foundations and bounded primitive migration. GW0 and GW1 remain future prompts.
+Prompt UX1 does not modify production CSS, production UI components, tokens, colors, typography, routes, navigation, World/Lab/Atlas/Workshop shell, responsive behavior, animations, dependencies, assets, font configuration, mockups, Storybook, visual-regression infrastructure, runtime behavior, templates, scenarios, snapshots, or engine code. UX2 must not start without explicit direction and should be limited to semantic foundations and bounded primitive migration.
+
+## Prompt GW0 ORTUS Research World Progression Mini-Roadmap
+
+Prompt GW0 is a docs-only Research World progression branch, not an implementation branch. The canonical document is `RESEARCH_WORLD_PROGRESSION_MINI_ROADMAP.md`.
+
+GW0 is documentation and progression architecture only. It records the future Research World transformation from disconnected sophisticated screens toward a persistent research environment where worlds, experiments, evidence, questions, and reusable capabilities accumulate. ORTUS progression should emerge from building a capable laboratory, discovering system behavior, and reaching new modeling frontiers—not from completing a prescribed checklist.
+
+GW0 defines a Research World as a model-bounded investigation context, not a literal game world, a complete real-world domain simulation, a reward economy, a discovery-certification engine, or a runtime feature. Progression must organize learning and discovery without implying that the user has mastered reality, proven a mechanism, or completed a scientific domain.
+
+GW0 defines destination responsibilities for World, Lab, Atlas, and Workshop. GW0 defines destination responsibilities. It does not implement destination navigation or persistence.
+
+GW0 uses this investigative loop:
+
+```text
+Observe -> Perturb -> Compare -> Interpret -> Document -> Revisit -> Extend
+```
+
+GW0 rejects XP-style progression:
+
+```text
+progress = reusable understanding + modeling capability + investigative depth
+```
+
+Not:
+
+```text
+progress = clicks + time + completed tasks
+```
+
+Research World progression is a flexible expansion of investigative capability, not a universal curriculum or player-level system. Disproving interpretations, documenting uncertainty, finding non-robust results, preserving contradictions, and finding that a model cannot support a conclusion are meaningful progress.
+
+GW0 documents Discovery Atlas and Behavioral Landscape boundaries. A Discovery Atlas records investigated model behavior. It does not certify discoveries about the real world. Candidate evidence states are `observation -> possible pattern -> supported modeled regime -> robust across tested conditions`. A behavioral landscape maps what has been investigated. It must not imply that unsampled regions are known.
+
+GW0 documents future persistence and reusable-asset responsibilities without choosing storage technology. Persistence must preserve provenance and model boundaries. Reusable does not mean universally compatible. Attached artifacts are not active runtime behavior, and compatible artifacts are not scientifically validated results.
+
+GW0 preserves these artifact/runtime boundaries:
+
+```text
+artifact attachment ≠ activation
+valid artifact ≠ runnable artifact
+runnable artifact ≠ scientifically validated model
+successful run ≠ robust result
+structural fit ≠ semantic correctness
+scenario plan ≠ executable scenario
+simulation output ≠ empirical truth
+```
+
+GW0 requires direct expert access. Contextual capability guidance is not the same as hard-locking tools. Progressive guidance and expert access must coexist. Contextual guidance may respond to the state of the model and workspace. It must not become psychological profiling of the user.
+
+GW0 preserves responsible engagement. Research continuity should be supported without manufacturing urgency. Do not add XP, levels, ranks, badges, streaks, daily rewards, randomized rewards, grinding loops, completion pressure, leaderboards, FOMO, psychological profiling, persuasion optimization, protected-class inference, or real-person profiling.
+
+GW0 preserves current implemented workflows. The Research World architecture must wrap and reorganize validated workflows before attempting to replace them. Current `/` and `/builder` access, template runtime, Builder modes, schema authoring, graph inspection, validation/repair suggestions, structural fit reporting, scenario planning, Neural Runtime Lab, run controls, and metrics remain current workflows until a dedicated future implementation prompt and audit safely reorganize them.
+
+GW0 establishes the future sequence:
+
+```text
+GW0 -> UX2 -> GW1 -> GW1B -> GW2 -> GW2B -> GW3 -> GW3B -> GW4 -> GW4B -> GW5 -> GW5B -> GW6 -> GW6B
+```
+
+GW0 defines what the product must communicate. UX2 defines how shared design foundations communicate it. GW1 implements the first structural shell using both.
+
+A new modeling frontier expands the questions ORTUS can represent. It does not guarantee better answers. Grand Systems Challenges should test model construction, interrogation, comparison, and scientific discipline—not optimization toward a scripted victory state. Beginners should receive a clear investigative starting point. Experts should not be forced through a simulated beginner journey.
+
+GW0 does not implement routes, navigation, World/Lab/Atlas/Workshop pages, persistence, accounts, cloud storage, local storage, database schemas, progression state, unlocks, XP, levels, achievements, badges, streaks, missions, quests, daily rewards, discovery detection, regime classification, behavioral landscapes, contextual recommendations, notebooks, saved research assets, model composition, grand-system scenarios, design tokens, CSS, components, runtime behavior, simulation behavior, template behavior, dependencies, assets, or mockups. UX2 and GW1-GW6 remain future prompts and must not start without explicit direction.
 
 ## Capability Policy
 

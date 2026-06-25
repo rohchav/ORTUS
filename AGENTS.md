@@ -383,12 +383,47 @@
 - Do not imply small changes always have large effects.
 - Make uncertainty, scale, assumptions, unsupported claims, and validation needs visible.
 - Prefer soft contextual guidance over artificial feature locks.
-- Do not implement GW0, GW1, GW2, GW3, GW4, GW5, or GW6 without dedicated prompts and audits.
+- Do not implement GW1, GW2, GW3, GW4, GW5, or GW6 without dedicated prompts and audits.
 - ORTUS progression should emerge from building a capable laboratory, discovering system behavior, and reaching new modeling frontiers—not from completing a prescribed checklist.
 - The user progresses by gaining reusable understanding and modeling capability, not by accumulating arbitrary points.
 - Do not add XP, streaks, grinding, or engagement manipulation by default.
 - Future progression should reward reusable understanding, reproducibility, stronger comparison, and honest interpretation.
 - Preserve model/runtime/template boundaries while applying product-philosophy language.
+- Prompt GW0 is documentation, product architecture, information architecture, and roadmap planning only.
+- Do not implement World, Lab, Atlas, Workshop, routes, navigation, pages, shell behavior, persistence, accounts, cloud storage, local storage, database schemas, progression state, unlocks, XP, levels, achievements, badges, streaks, missions, quests, daily rewards, discovery detection, regime classification, behavioral landscapes, contextual recommendations, notebooks, saved research assets, model composition, grand-system scenarios, design tokens, CSS, components, runtime behavior, simulation behavior, template behavior, dependencies, assets, or mockups during GW0.
+- ORTUS progression should emerge from building a capable laboratory, discovering system behavior, and reaching new modeling frontiers—not from completing a prescribed checklist.
+- Progression must organize learning and discovery without implying that the user has mastered reality, proven a mechanism, or completed a scientific domain.
+- Research World progression is a flexible expansion of investigative capability, not a universal curriculum or player-level system.
+- Progression means reusable understanding, modeling capability, and investigative depth; it does not mean clicks, time, completed tasks, XP, levels, ranks, badges, streaks, daily rewards, grinding, randomized rewards, or leaderboards.
+- Disproving an interpretation, documenting uncertainty, finding a non-robust result, preserving contradictions, or finding that a model cannot support a conclusion are meaningful progress.
+- Do not hard-lock essential scientific tools for Research World progression.
+- Progressive guidance and expert access must coexist.
+- Contextual capability guidance may respond to model state, workspace state, stale artifacts, unresolved questions, unsupported gaps, and template capabilities; it must not profile the user.
+- Do not infer user psychology, protected classes, personality, diagnoses, intentions, vulnerabilities, or real-world identity from Research World guidance.
+- Do not use Research World progression for persuasion optimization, microtargeting, protected-class inference, manipulation guidance, psychological diagnosis, or real-person profiling.
+- A Discovery Atlas records investigated model behavior, not certified real-world discoveries.
+- A visually compelling pattern is not automatically supported.
+- Contradictory runs are evidence.
+- Behavioral landscapes must distinguish sampled, sparsely sampled, unsampled, stale, contradictory, and unsupported regions.
+- Do not imply unsampled behavioral-landscape regions are known.
+- Future persistent artifacts must preserve provenance, model boundaries, source versions, stale state, runnable-versus-planning-only state, and compatibility limits.
+- Artifact attachment is not runtime activation.
+- Valid artifact is not runnable artifact.
+- Runnable artifact is not scientifically validated model.
+- Successful run is not robust result.
+- Structural fit is not semantic correctness.
+- Scenario plan is not executable scenario.
+- Simulation output is not empirical truth.
+- Composition is not automatic scientific coherence.
+- Two valid components can still be incompatible.
+- A connected graph is not proof that coupled runtime is meaningful.
+- Grand Systems Challenges must not be scripted victory states, score maximizers, optimization tracks, policy games, or leaderboards.
+- Preserve current `/` and `/builder` workflows while planning Research World architecture.
+- The Research World architecture must wrap and reorganize validated workflows before attempting to replace them.
+- GW0 defines destination responsibilities. It does not implement destination navigation or persistence.
+- Do not start UX2, GW1, GW1B, GW2, GW2B, GW3, GW3B, GW4, GW4B, GW5, GW5B, GW6, or GW6B without a dedicated prompt.
+- GW0 defines what the product must communicate. UX2 defines how shared design foundations communicate it. GW1 implements the first structural shell using both.
+- Do not claim rendered UX, accessibility, responsive, browser, zoom, screen-reader, assistive-technology, or WCAG readiness for Research World work without direct evidence.
 - Treat UX0 as documentation and design planning only.
 - Do not implement World/Lab/Atlas/Workshop without a dedicated prompt.
 - Preserve ORTUS as a living laboratory, not a tactical command interface.
@@ -428,7 +463,7 @@
 - Do not add font files.
 - Do not add dependencies.
 - Do not weaken tests.
-- Do not start UX2, GW0, or GW1 without a dedicated prompt.
+- Do not start UX2 or GW1 without a dedicated prompt.
 - Do not make Builder graphs executable or Model Schemas runnable while documenting or later implementing fractal/multiscale analysis.
 - Keep Neural runtime graph scoped only to the Neural template.
 - Keep Neural Runtime Lab scenario-first but scientifically honest.

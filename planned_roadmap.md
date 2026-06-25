@@ -1,10 +1,10 @@
 # ORTUS Full Prompt Roadmap
 
-*Last updated after Prompt UX1 Existing Design Token and Component Audit.*
+*Last updated after Prompt GW0 ORTUS Research World Progression Mini-Roadmap.*
 
 ## Current Status
 
-ORTUS has completed the core runtime/template foundation, scenario system, uncertainty layer, assumptions/limits layer, systems primitive registry, hybrid composition, multi-scale structure, scale-view state, boundary/environment models, spatial fields, observability, causality, quantity semantics, emergence pattern descriptors, robustness/resilience semantics, strategy/control semantics, model schema declarations, knowledge/memory/social-learning semantics, visual builder workspace schemas, template/schema compatibility mapping, the template/schema compatibility mapping audit, a narrow Opinion Dynamics social-learning behavior mode, the Opinion Dynamics social-learning runtime audit, Safe Builder UI Shell V1, the Safe Builder UI Shell + workspace information architecture audit, Model Schema Authoring Forms V1, the Model Schema Authoring Forms Audit, Visual Builder Graph View V1, the Visual Builder Graph View Audit, Schema Validation UX + Repair Suggestions V1, the Schema Validation UX + Repair Suggestions Audit, Schema-to-Template Fit Report V1, the Schema-to-Template Fit Report Audit, Scenario Planning From Schema V1, the Scenario Planning From Schema Audit, non-roadmap Prompt N1 Neural Excitation Network Template V1, non-roadmap Prompt N1B Neural Excitation Network Template Audit + Decision Readout V1, non-roadmap Prompt NUX1 Neural Runtime Lab UX V1, non-roadmap Prompt NUX1B Neural Runtime Lab UX Audit + Build Investigation, non-roadmap Prompt N2 Neural Strategy Adaptation V1, non-roadmap Prompt N2B Neural Strategy Adaptation Audit, non-roadmap Prompt MR0 Templates + Decision Clusters Mini-Roadmap, docs-only Prompt F0 Fractal and Multiscale Analysis Mini-Roadmap, docs-only Prompt P0 ORTUS Product Philosophy and Learning Mission, docs-only Prompt UX0 ORTUS Living Systems Atlas Visual Direction, and docs-only Prompt UX1 Existing Design Token and Component Audit.
+ORTUS has completed the core runtime/template foundation, scenario system, uncertainty layer, assumptions/limits layer, systems primitive registry, hybrid composition, multi-scale structure, scale-view state, boundary/environment models, spatial fields, observability, causality, quantity semantics, emergence pattern descriptors, robustness/resilience semantics, strategy/control semantics, model schema declarations, knowledge/memory/social-learning semantics, visual builder workspace schemas, template/schema compatibility mapping, the template/schema compatibility mapping audit, a narrow Opinion Dynamics social-learning behavior mode, the Opinion Dynamics social-learning runtime audit, Safe Builder UI Shell V1, the Safe Builder UI Shell + workspace information architecture audit, Model Schema Authoring Forms V1, the Model Schema Authoring Forms Audit, Visual Builder Graph View V1, the Visual Builder Graph View Audit, Schema Validation UX + Repair Suggestions V1, the Schema Validation UX + Repair Suggestions Audit, Schema-to-Template Fit Report V1, the Schema-to-Template Fit Report Audit, Scenario Planning From Schema V1, the Scenario Planning From Schema Audit, non-roadmap Prompt N1 Neural Excitation Network Template V1, non-roadmap Prompt N1B Neural Excitation Network Template Audit + Decision Readout V1, non-roadmap Prompt NUX1 Neural Runtime Lab UX V1, non-roadmap Prompt NUX1B Neural Runtime Lab UX Audit + Build Investigation, non-roadmap Prompt N2 Neural Strategy Adaptation V1, non-roadmap Prompt N2B Neural Strategy Adaptation Audit, non-roadmap Prompt MR0 Templates + Decision Clusters Mini-Roadmap, docs-only Prompt F0 Fractal and Multiscale Analysis Mini-Roadmap, docs-only Prompt P0 ORTUS Product Philosophy and Learning Mission, docs-only Prompt UX0 ORTUS Living Systems Atlas Visual Direction, docs-only Prompt UX1 Existing Design Token and Component Audit, and docs-only Prompt GW0 ORTUS Research World Progression Mini-Roadmap.
 
 Current project status:
 
@@ -21,8 +21,9 @@ Completed docs-only prompt: Prompt F0 — Fractal and Multiscale Analysis Mini-R
 Completed docs-only prompt: Prompt P0 — ORTUS Product Philosophy and Learning Mission
 Completed docs-only prompt: Prompt UX0 — ORTUS Living Systems Atlas Visual Direction
 Completed docs-only prompt: Prompt UX1 — Existing Design Token and Component Audit
+Completed docs-only prompt: Prompt GW0 — ORTUS Research World Progression Mini-Roadmap
 Post-30B stabilization completed: repo hygiene, durable Codex context, dependency repair, generated-artifact cleanup, and runtime performance/scalability baseline
-Next prompt: Pending user direction; do not start UX2, GW0-GW6 Research World progression, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any Research World/fractal/multiscale/design-system implementation without explicit approval
+Next prompt: Pending user direction; do not start UX2, GW1-GW6 Research World implementation, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any Research World/fractal/multiscale/design-system implementation without explicit approval
 ```
 
 Critical global boundary:
@@ -84,7 +85,8 @@ Do not use wearable devices, camera input, or software assistance for live casin
 Prompt F0 is documentation only; it records future fractal and multiscale analysis direction and does not implement fractal metrics, fractal generators, Scale Lens UI, network scaling analytics, trajectory motif analytics, schema fields, template capabilities, primitives, or runtime behavior.
 Prompt P0 is documentation only; it records ORTUS product philosophy, learning mission, epistemic guardrails, and future Research World direction and does not implement progression, missions, XP, streaks, unlocks, scoring, persistence, accounts, social features, templates, UI flows, dependencies, or runtime behavior.
 Prompt UX0 is documentation and design planning only; it records the ORTUS Living Systems Atlas visual and interaction target and does not implement World/Lab/Atlas/Workshop routes, tabs, navigation, shell redesign, CSS tokens, component changes, persistence, discovery logic, behavioral landscapes, progression, runtime behavior, dependencies, remote fonts, icons, animations, or mockups.
-Prompt UX1 is documentation and source-level audit only; it records the existing design-token and component inventory, source-visible accessibility/responsive risks, retain/adapt/replace/retire classifications, and a bounded migration sequence toward the Living Systems Atlas. It does not redesign the interface, implement tokens, modify CSS, modify production UI components, change routes or navigation, add dependencies, add assets, change font configuration, start UX2, start GW0, or implement World/Lab/Atlas/Workshop.
+Prompt UX1 is documentation and source-level audit only; it records the existing design-token and component inventory, source-visible accessibility/responsive risks, retain/adapt/replace/retire classifications, and a bounded migration sequence toward the Living Systems Atlas. It does not redesign the interface, implement tokens, modify CSS, modify production UI components, change routes or navigation, add dependencies, add assets, change font configuration, start UX2, or implement World/Lab/Atlas/Workshop.
+Prompt GW0 is documentation and progression architecture only; it records the ORTUS Research World progression mini-roadmap and does not implement routes, navigation, persistence, discovery logic, behavioral landscapes, contextual guidance, notebooks, saved assets, progression state, UI/CSS changes, dependencies, assets, runtime behavior, template behavior, model composition, or grand-system scenarios.
 Measure multiscale structure before generating synthetic fractal structure.
 Fractal and multiscale tools describe how measured structure changes across scale. They do not prove that a system is fundamentally fractal.
 A complex-looking, nested, branching, or irregular pattern is not automatically fractal.
@@ -2052,12 +2054,19 @@ Simulation output is evidence about the model’s behavior, not automatically ev
 Research World branch:
 
 1. GW0: Research World Progression Mini-Roadmap.
-2. GW1: Persistent Model Lab.
-3. GW2: Discovery Atlas.
-4. GW3: Behavioral Landscape Exploration.
-5. GW4: Contextual Capability Guidance.
-6. GW5: Model Composition Frontiers.
-7. GW6: Grand Systems Challenges.
+2. UX2: Shared Design Foundations.
+3. GW1: Persistent Destination Shell.
+4. GW1B: Persistent Destination Shell Audit.
+5. GW2: Research Notebook And Reusable Assets.
+6. GW2B: Research Notebook And Reusable Assets Audit.
+7. GW3: Discovery Atlas.
+8. GW3B: Discovery Atlas Audit.
+9. GW4: Behavioral Landscape Exploration.
+10. GW4B: Behavioral Landscape Exploration Audit.
+11. GW5: Contextual Capability Guidance.
+12. GW5B: Contextual Capability Guidance Audit.
+13. GW6: Composition Frontiers And Grand Systems Challenges.
+14. GW6B: Composition Frontiers And Grand Systems Challenges Audit.
 
 Research World framing:
 
@@ -2132,12 +2141,19 @@ P0: Product Philosophy and Learning Mission
 UX0: Living Systems Atlas Visual Direction
 UX1: Existing Design Token and Component Audit
 GW0: Research World Progression Mini-Roadmap
-GW1: Persistent World/Lab/Atlas/Workshop Shell
+UX2: Shared Design Foundations
+GW1: Persistent Destination Shell
+GW1B: Persistent Destination Shell Audit
 GW2: Research Notebook and Reusable Assets
+GW2B: Research Notebook and Reusable Assets Audit
 GW3: Discovery Atlas
+GW3B: Discovery Atlas Audit
 GW4: Behavioral Landscape Exploration
+GW4B: Behavioral Landscape Exploration Audit
 GW5: Contextual Capability Guidance
-GW6: Composition Frontiers
+GW5B: Contextual Capability Guidance Audit
+GW6: Composition Frontiers and Grand Systems Challenges
+GW6B: Composition Frontiers and Grand Systems Challenges Audit
 ```
 
 Non-goals:
@@ -2188,7 +2204,107 @@ Migrate shared foundations before specialized surfaces, but do not block necessa
 UX1 provides implementation evidence. GW0 provides progression architecture. UX2 provides visual foundations. GW1 provides the first structural transformation.
 ```
 
-UX1 does not implement CSS changes, token changes, typography changes, color changes, production UI component changes, routes, navigation, World/Lab/Atlas/Workshop, responsive behavior, animations, persistence, Research World progression, GW0-GW6, UX2, dependencies, assets, font files, mockups, Storybook, visual-regression infrastructure, UI refactors, runtime behavior, template behavior, schema execution, or Builder execution.
+UX1 does not implement CSS changes, token changes, typography changes, color changes, production UI component changes, routes, navigation, World/Lab/Atlas/Workshop, responsive behavior, animations, persistence, Research World progression, GW0-GW6 implementation, UX2, dependencies, assets, font files, mockups, Storybook, visual-regression infrastructure, UI refactors, runtime behavior, template behavior, schema execution, or Builder execution.
+
+## Prompt GW0 — ORTUS Research World Progression Mini-Roadmap
+
+Purpose:
+
+* Add a documentation-only Research World progression mini-roadmap.
+* Define product architecture and information architecture for future World/Lab/Atlas/Workshop work.
+* Protect ORTUS progression from becoming XP, achievements, hard locks, profiling, or pseudo-scientific discovery theater.
+
+Status:
+
+```text
+Complete. Documentation and progression architecture only.
+```
+
+Canonical source:
+
+```text
+docs/RESEARCH_WORLD_PROGRESSION_MINI_ROADMAP.md
+```
+
+Core transformation:
+
+```text
+ORTUS should move from a collection of sophisticated modeling screens toward a persistent research environment where worlds, experiments, evidence, questions, and reusable capabilities accumulate.
+ORTUS progression should emerge from building a capable laboratory, discovering system behavior, and reaching new modeling frontiers—not from completing a prescribed checklist.
+Progression must organize learning and discovery without implying that the user has mastered reality, proven a mechanism, or completed a scientific domain.
+```
+
+Core loop:
+
+```text
+Observe -> Perturb -> Compare -> Interpret -> Document -> Revisit -> Extend
+```
+
+Destination boundary:
+
+```text
+GW0 defines destination responsibilities. It does not implement destination navigation or persistence.
+```
+
+Progression boundary:
+
+```text
+progress = reusable understanding + modeling capability + investigative depth
+
+not:
+
+progress = clicks + time + completed tasks
+```
+
+Required guardrails:
+
+```text
+Research World progression is a flexible expansion of investigative capability, not a universal curriculum or player-level system.
+Contextual capability guidance is not the same as hard-locking tools.
+Progressive guidance and expert access must coexist.
+A Discovery Atlas records investigated model behavior. It does not certify discoveries about the real world.
+A behavioral landscape maps what has been investigated. It must not imply that unsampled regions are known.
+Persistence must preserve provenance and model boundaries.
+Reusable does not mean universally compatible.
+Finding that the model cannot support a conclusion is meaningful progress.
+A new modeling frontier expands the questions ORTUS can represent. It does not guarantee better answers.
+Grand Systems Challenges should test model construction, interrogation, comparison, and scientific discipline—not optimization toward a scripted victory state.
+Beginners should receive a clear investigative starting point. Experts should not be forced through a simulated beginner journey.
+Research continuity should be supported without manufacturing urgency.
+Contextual guidance may respond to the state of the model and workspace. It must not become psychological profiling of the user.
+The Research World architecture must wrap and reorganize validated workflows before attempting to replace them.
+```
+
+Artifact/runtime boundaries:
+
+```text
+artifact attachment ≠ activation
+valid artifact ≠ runnable artifact
+runnable artifact ≠ scientifically validated model
+successful run ≠ robust result
+structural fit ≠ semantic correctness
+scenario plan ≠ executable scenario
+simulation output ≠ empirical truth
+```
+
+Future GW sequence:
+
+```text
+GW0 -> UX2 -> GW1 -> GW1B -> GW2 -> GW2B -> GW3 -> GW3B -> GW4 -> GW4B -> GW5 -> GW5B -> GW6 -> GW6B
+```
+
+UX2 relationship:
+
+```text
+GW0 defines what the product must communicate. UX2 defines how shared design foundations communicate it. GW1 implements the first structural shell using both.
+```
+
+Non-goals:
+
+```text
+GW0 does not implement routes, navigation, World/Lab/Atlas/Workshop pages, persistence, accounts, cloud storage, local storage, database schemas, progression state, unlocks, XP, levels, achievements, badges, streaks, missions, quests, daily rewards, discovery detection, regime classification, behavioral landscapes, contextual recommendations, notebooks, saved research assets, model composition, grand-system scenarios, design tokens, CSS, components, runtime behavior, simulation behavior, template behavior, dependencies, assets, or mockups.
+UX2 and GW1-GW6 remain future prompts and must not start without explicit direction.
+```
 
 ## Prompt 40 — Safe Scenario Draft Workspace V1
 
@@ -3511,8 +3627,8 @@ No global service availability treated as template runtime support.
 Recommended immediate next steps:
 
 ```text
-1. Review and commit Prompt UX1 documentation/test work if this worktree is still uncommitted.
-2. Wait for explicit user direction before starting UX2, GW0-GW6 Research World progression, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any Research World/fractal/multiscale/design-system implementation.
+1. Review and commit Prompt GW0 documentation/test work if this worktree is still uncommitted.
+2. Wait for explicit user direction before starting UX2, GW1-GW6 Research World implementation, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any Research World/fractal/multiscale/design-system implementation.
 3. Run a dedicated rendered responsive/design-system audit before making mobile-readiness, WCAG, clipboard, focus-return, or polished visual-workbench claims.
 ```
 
@@ -3531,6 +3647,7 @@ Docs-only Prompt F0 Fractal and Multiscale Analysis Mini-Roadmap is complete.
 Docs-only Prompt P0 ORTUS Product Philosophy and Learning Mission is complete.
 Docs-only Prompt UX0 ORTUS Living Systems Atlas Visual Direction is complete.
 Docs-only Prompt UX1 Existing Design Token and Component Audit is complete.
+Docs-only Prompt GW0 ORTUS Research World Progression Mini-Roadmap is complete.
 Performance stabilization completed after Prompt 30B.
 Prompt 34 safe builder shell is complete.
 Prompt 34B safe builder shell audit is complete.

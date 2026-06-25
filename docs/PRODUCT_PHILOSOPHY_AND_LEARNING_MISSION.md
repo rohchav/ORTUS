@@ -1,6 +1,6 @@
 # ORTUS Product Philosophy And Learning Mission
 
-Status: Prompt P0 documentation-only source of truth. This document records product philosophy, learning goals, future progression principles, and guardrails. It does not implement runtime behavior, UI progression, unlocks, missions, scoring, achievements, discovery detection, model composition, templates, simulation features, fractal metrics, Research World state, persistence, accounts, social features, onboarding flows, dependencies, or new capability flags.
+Status: Prompt P0 documentation-only source of truth, updated after Prompt GW0. This document records product philosophy, learning goals, future progression principles, and guardrails. It does not implement runtime behavior, UI progression, unlocks, missions, scoring, achievements, discovery detection, model composition, templates, simulation features, fractal metrics, Research World state, persistence, accounts, social features, onboarding flows, dependencies, or new capability flags.
 
 ## Core Mission
 
@@ -135,17 +135,24 @@ Good ORTUS experiences should:
 
 ## Research World Direction
 
-Research World is a future product branch, not a current implementation. Prompt P0 only reserves philosophy and direction. It does not implement progression, persistence, missions, unlocks, discovery detection, achievements, scoring, accounts, social systems, or world state.
+Research World is a future product branch, not a current implementation. Prompt P0 reserves philosophy and direction. Prompt GW0, documented in `RESEARCH_WORLD_PROGRESSION_MINI_ROADMAP.md`, adds a documentation-only progression and information-architecture roadmap for that branch. Neither prompt implements progression, persistence, missions, unlocks, discovery detection, achievements, scoring, accounts, social systems, routes, navigation, UI changes, runtime behavior, or world state.
 
 Future branch names:
 
 - GW0: Research World Progression Mini-Roadmap
-- GW1: Persistent Model Lab
-- GW2: Discovery Atlas
-- GW3: Behavioral Landscape Exploration
-- GW4: Contextual Capability Guidance
-- GW5: Model Composition Frontiers
-- GW6: Grand Systems Challenges
+- UX2: Shared Design Foundations
+- GW1: Persistent Destination Shell
+- GW1B: Persistent Destination Shell Audit
+- GW2: Research Notebook And Reusable Assets
+- GW2B: Research Notebook And Reusable Assets Audit
+- GW3: Discovery Atlas
+- GW3B: Discovery Atlas Audit
+- GW4: Behavioral Landscape Exploration
+- GW4B: Behavioral Landscape Exploration Audit
+- GW5: Contextual Capability Guidance
+- GW5B: Contextual Capability Guidance Audit
+- GW6: Composition Frontiers And Grand Systems Challenges
+- GW6B: Composition Frontiers And Grand Systems Challenges Audit
 
 ORTUS progression should emerge from building a capable laboratory, discovering system behavior, and reaching new modeling frontiers—not from completing a prescribed checklist.
 
@@ -156,6 +163,8 @@ Any future Research World work should avoid XP, streaks, grinding loops, manipul
 Prompt UX0 adds the documentation-only ORTUS Living Systems Atlas visual direction before Research World implementation prompts. UX0 defines the visual and interaction target; Research World prompts will determine how that target is implemented. UX0 does not implement World/Lab/Atlas/Workshop routes, tabs, navigation, persistence, discovery logic, behavioral landscapes, CSS tokens, component redesigns, runtime behavior, or progression.
 
 Prompt UX1 adds the documentation-only existing design-token and component audit before any visual migration. It records implementation evidence for UX2/GW0/GW1 planning while preserving current workflows and runtime-honesty language. UX1 does not redesign the interface, add tokens, modify CSS or UI components, change routes, add dependencies, add assets, change font configuration, implement World/Lab/Atlas/Workshop, or claim rendered accessibility/responsive verification.
+
+Prompt GW0 defines Research World as a model-bounded investigation context, not a literal game world or complete real-world domain simulation. It defines the loop Observe -> Perturb -> Compare -> Interpret -> Document -> Revisit -> Extend, destination responsibilities for World/Lab/Atlas/Workshop, progression without XP, evidence-oriented Discovery Atlas boundaries, sampled/unsampled Behavioral Landscape boundaries, reusable-asset provenance, expert access, and responsible engagement. It also requires: GW0 defines what the product must communicate. UX2 defines how shared design foundations communicate it. GW1 implements the first structural shell using both. GW0 does not implement routes, navigation, persistence, discovery logic, behavioral landscapes, contextual guidance, UI/CSS changes, dependencies, assets, runtime behavior, or template behavior.
 
 ## Intellectual Progression Arc
 
@@ -263,4 +272,4 @@ Avoid unless a dedicated implementation and validation path explicitly earns it:
 
 ## Operational Guardrails
 
-Preserve ORTUS as an exploratory complex-systems sandbox, not an oracle. Do not describe complexity as rulelessness. Prefer historical contingency over arbitrary coincidence. Do not imply adaptation or evolution guarantees progress, optimality, fairness, efficiency, or stability. Encourage epistemic tolerance without factual or moral relativism. Do not treat all explanations as equally supported. Do not use complexity to dismiss evidence, responsibility, causality, or intervention. Treat simulation output as evidence about model behavior, not automatically evidence about the world. Do not call one successful run robust. Do not imply aggregate similarity proves mechanism. Do not imply small changes always have large effects. Make uncertainty, scale, assumptions, unsupported claims, and validation needs visible. Prefer soft contextual guidance over artificial feature locks. Do not implement Research World progression without a dedicated prompt. Future progression should reward reusable understanding, reproducibility, comparison, and honest interpretation. Preserve model/runtime/template boundaries.
+Preserve ORTUS as an exploratory complex-systems sandbox, not an oracle. Do not describe complexity as rulelessness. Prefer historical contingency over arbitrary coincidence. Do not imply adaptation or evolution guarantees progress, optimality, fairness, efficiency, or stability. Encourage epistemic tolerance without factual or moral relativism. Do not treat all explanations as equally supported. Do not use complexity to dismiss evidence, responsibility, causality, or intervention. Treat simulation output as evidence about model behavior, not automatically evidence about the world. Do not call one successful run robust. Do not imply aggregate similarity proves mechanism. Do not imply small changes always have large effects. Make uncertainty, scale, assumptions, unsupported claims, and validation needs visible. Prefer soft contextual guidance over artificial feature locks. Do not implement Research World progression features without a dedicated implementation prompt. Future progression should reward reusable understanding, reproducibility, comparison, and honest interpretation. Preserve model/runtime/template boundaries.

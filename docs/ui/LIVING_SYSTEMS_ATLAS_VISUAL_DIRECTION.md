@@ -1,6 +1,6 @@
 # ORTUS Living Systems Atlas Visual Direction
 
-Status: Prompt UX0 documentation, design-system planning, and UX-principle definition only. UX0 does not implement routes, navigation, a World/Lab/Atlas/Workshop shell, component redesigns, CSS rewrites, typography changes, color-token changes, icons, animations, persistent lab state, progression, unlocks, discoveries, behavioral landscapes, model composition, runtime behavior, template behavior, dependencies, remote fonts, image assets, or generated mockups. Prompt UX1 later audits the existing UI source in `EXISTING_DESIGN_TOKEN_AND_COMPONENT_AUDIT.md` without implementing UX0.
+Status: Prompt UX0 documentation, design-system planning, and UX-principle definition only, updated after Prompt GW0. UX0 does not implement routes, navigation, a World/Lab/Atlas/Workshop shell, component redesigns, CSS rewrites, typography changes, color-token changes, icons, animations, persistent lab state, progression, unlocks, discoveries, behavioral landscapes, model composition, runtime behavior, template behavior, dependencies, remote fonts, image assets, or generated mockups. Prompt UX1 audits the existing UI source in `EXISTING_DESIGN_TOKEN_AND_COMPONENT_AUDIT.md` without implementing UX0. Prompt GW0 defines Research World progression architecture in `../RESEARCH_WORLD_PROGRESSION_MINI_ROADMAP.md` without implementing UX0, UX2, GW1, routes, navigation, persistence, discovery logic, behavioral landscapes, UI, CSS, runtime behavior, or template behavior.
 
 ## Purpose
 
@@ -590,13 +590,13 @@ Documentation and visual direction only.
 
 Prompt UX1 completes the source-level inventory of current colors, typography, spacing, borders, elevation, panel variants, motion, accessibility and responsive risks, hardcoded values, dependencies, and Marathon-specific ornament in `EXISTING_DESIGN_TOKEN_AND_COMPONENT_AUDIT.md`. UX1 does not implement shell redesign, CSS changes, token changes, component changes, routes, dependencies, assets, or rendered verification.
 
-### Stage 2 — Core Design Tokens
+### Stage 2 — UX2 Core Design Foundations
 
-Future dedicated prompt should introduce semantic colors, typography scales, shape tokens, material tokens, motion tokens, and status patterns. It must keep the production build offline-safe.
+Future dedicated prompt should introduce semantic colors, typography scales, shape tokens, material tokens, motion tokens, and status patterns. It must use UX0, UX1, and GW0 as inputs and keep the production build offline-safe.
 
-### Stage 3 — Destination Shell
+### Stage 3 — GW1 Destination Shell
 
-GW1 or a dedicated shell prompt may introduce World, Lab, Atlas, and Workshop. It must preserve existing feature access.
+GW1 may introduce World, Lab, Atlas, and Workshop destination responsibilities after UX2. It must preserve existing feature access and avoid full persistence, discovery logic, behavioral landscapes, or unsupported runtime claims.
 
 ### Stage 4 — Contextual Panels
 
@@ -621,20 +621,30 @@ P0: Product Philosophy and Learning Mission
 UX0: Living Systems Atlas Visual Direction
 UX1: Existing Design Token and Component Audit
 GW0: Research World Progression Mini-Roadmap
-GW1: Persistent World/Lab/Atlas/Workshop Shell
+UX2: Shared Design Foundations
+GW1: Persistent Destination Shell
+GW1B: Persistent Destination Shell Audit
 GW2: Research Notebook and Reusable Assets
+GW2B: Research Notebook and Reusable Assets Audit
 GW3: Discovery Atlas
+GW3B: Discovery Atlas Audit
 GW4: Behavioral Landscape Exploration
+GW4B: Behavioral Landscape Exploration Audit
 GW5: Contextual Capability Guidance
-GW6: Composition Frontiers
+GW5B: Contextual Capability Guidance Audit
+GW6: Composition Frontiers and Grand Systems Challenges
+GW6B: Composition Frontiers and Grand Systems Challenges Audit
 ```
 
 UX0 must not implement GW0-GW6.
+
+GW0 defines Research World progression as investigation architecture, not XP, achievements, hard locks, profiling, persistence, discovery certification, or runtime behavior. It defines destination responsibilities only; GW0 defines destination responsibilities. It does not implement destination navigation or persistence.
 
 Required copy:
 
 ```text
 UX0 defines the visual and interaction target. Research World prompts will determine how that target is implemented.
+GW0 defines what the product must communicate. UX2 defines how shared design foundations communicate it. GW1 implements the first structural shell using both.
 ```
 
 ## Existing-Feature Mapping

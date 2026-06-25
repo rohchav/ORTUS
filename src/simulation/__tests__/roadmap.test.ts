@@ -96,7 +96,29 @@ const requiredDocPhrases = [
   "ORTUS progression is both technical and intellectual: users acquire tools while learning why simple explanations often fail.",
   "The advanced ORTUS challenge is to construct, interrogate, and explain a complex model without losing scientific discipline.",
   "Complexity should increase analytical humility, not eliminate accountability.",
-  "Prefer features that deepen exploration, comparison, explanation, and reuse. Reject features that primarily reward compulsion, certainty, spectacle, or unsupported real-world authority."
+  "Prefer features that deepen exploration, comparison, explanation, and reuse. Reject features that primarily reward compulsion, certainty, spectacle, or unsupported real-world authority.",
+  "ORTUS should move from a collection of sophisticated modeling screens toward a persistent research environment where worlds, experiments, evidence, questions, and reusable capabilities accumulate.",
+  "Progression must organize learning and discovery without implying that the user has mastered reality, proven a mechanism, or completed a scientific domain.",
+  "GW0 defines destination responsibilities. It does not implement destination navigation or persistence.",
+  "progress = reusable understanding + modeling capability + investigative depth",
+  "progress = clicks + time + completed tasks",
+  "Research World progression is a flexible expansion of investigative capability, not a universal curriculum or player-level system.",
+  "Contextual capability guidance is not the same as hard-locking tools.",
+  "A Discovery Atlas records investigated model behavior.",
+  "It does not certify discoveries about the real world.",
+  "A behavioral landscape maps what has been investigated.",
+  "It must not imply that unsampled regions are known.",
+  "Persistence must preserve provenance and model boundaries.",
+  "Reusable does not mean universally compatible.",
+  "Finding that the model cannot support a conclusion is meaningful progress.",
+  "A new modeling frontier expands the questions ORTUS can represent. It does not guarantee better answers.",
+  "Grand Systems Challenges should test model construction, interrogation, comparison, and scientific discipline—not optimization toward a scripted victory state.",
+  "Beginners should receive a clear investigative starting point. Experts should not be forced through a simulated beginner journey.",
+  "Progressive guidance and expert access must coexist.",
+  "Research continuity should be supported without manufacturing urgency.",
+  "Contextual guidance may respond to the state of the model and workspace. It must not become psychological profiling of the user.",
+  "The Research World architecture must wrap and reorganize validated workflows before attempting to replace them.",
+  "GW0 defines what the product must communicate. UX2 defines how shared design foundations communicate it. GW1 implements the first structural shell using both."
 ];
 
 const futureTopLevelFields = [
@@ -151,16 +173,19 @@ describe("roadmap alignment and missing pillar reservations", () => {
     const roadmapPath = join(repoRoot, "docs", "roadmap.md");
     const missingPillarsPath = join(repoRoot, "docs", "missing-pillars.md");
     const productPhilosophyPath = join(repoRoot, "docs", "PRODUCT_PHILOSOPHY_AND_LEARNING_MISSION.md");
+    const researchWorldRoadmapPath = join(repoRoot, "docs", "RESEARCH_WORLD_PROGRESSION_MINI_ROADMAP.md");
     const livingSystemsAtlasPath = join(repoRoot, "docs", "ui", "LIVING_SYSTEMS_ATLAS_VISUAL_DIRECTION.md");
     const existingDesignAuditPath = join(repoRoot, "docs", "ui", "EXISTING_DESIGN_TOKEN_AND_COMPONENT_AUDIT.md");
     expect(existsSync(roadmapPath)).toBe(true);
     expect(existsSync(missingPillarsPath)).toBe(true);
     expect(existsSync(productPhilosophyPath)).toBe(true);
+    expect(existsSync(researchWorldRoadmapPath)).toBe(true);
     expect(existsSync(livingSystemsAtlasPath)).toBe(true);
     expect(existsSync(existingDesignAuditPath)).toBe(true);
 
     const roadmap = readFileSync(roadmapPath, "utf8");
     const productPhilosophy = readFileSync(productPhilosophyPath, "utf8");
+    const researchWorldRoadmap = readFileSync(researchWorldRoadmapPath, "utf8");
     const livingSystemsAtlas = readFileSync(livingSystemsAtlasPath, "utf8");
     const existingDesignAudit = readFileSync(existingDesignAuditPath, "utf8");
     expect(roadmap).toContain("completed through Prompt 39B");
@@ -179,9 +204,9 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(roadmap).toContain("Completed Prompt 39 scenario-planning foundation");
     expect(roadmap).toContain("Completed Prompt 39 scenario-planning audit");
     expect(roadmap).toContain("Prompt 35 adds a separate `Author Schema` Builder mode");
-    expect(roadmap).toContain("Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, MR0, F0, P0, UX0, and UX1 are complete.");
+    expect(roadmap).toContain("Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, MR0, F0, P0, UX0, UX1, and GW0 are complete.");
     expect(roadmap).toContain(
-      "The next prompt is pending user direction; do not start UX2, GW0-GW6 Research World progression, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any Research World/fractal/multiscale/design-system implementation without explicit approval."
+      "The next prompt is pending user direction; do not start UX2, GW1-GW6 Research World implementation, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any Research World/fractal/multiscale/design-system implementation without explicit approval."
     );
     expect(roadmap).toContain("Prompt N2 adds Neural Strategy Adaptation V1 to the Neural Runtime Lab RPS/readout mode.");
     expect(roadmap).toContain("Non-roadmap Prompt N2B audits and hardens Neural Strategy Adaptation.");
@@ -199,6 +224,9 @@ describe("roadmap alignment and missing pillar reservations", () => {
     );
     expect(roadmap).toContain(
       "Docs-only Prompt UX1 records the existing design-token and component audit only; it inventories real UI/CSS/component sources, migration risk, accessibility and responsive source risks, and retain/adapt/replace/retire classifications."
+    );
+    expect(roadmap).toContain(
+      "Docs-only Prompt GW0 records ORTUS Research World progression architecture only; it defines model-bounded investigation context"
     );
     expect(roadmap).toContain("MR0 is documentation only.");
     expect(roadmap).toContain("T1: Urban Daily Routine / Activity Choice Template V1.");
@@ -260,13 +288,20 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(roadmap).toContain("UX0: Living Systems Atlas Visual Direction.");
     expect(roadmap).toContain("UX1: Existing Design Token and Component Audit.");
     expect(roadmap).toContain("GW0: Research World Progression Mini-Roadmap.");
-    expect(roadmap).toContain("GW1: Persistent Model Lab.");
-    expect(roadmap).toContain("GW2: Discovery Atlas.");
-    expect(roadmap).toContain("GW3: Behavioral Landscape Exploration.");
-    expect(roadmap).toContain("GW4: Contextual Capability Guidance.");
-    expect(roadmap).toContain("GW5: Model Composition Frontiers.");
-    expect(roadmap).toContain("GW6: Grand Systems Challenges.");
-    expect(roadmap).toContain("P0 is complete as documentation only. GW0-GW6 remain future prompts");
+    expect(roadmap).toContain("UX2: Shared Design Foundations.");
+    expect(roadmap).toContain("GW1: Persistent Destination Shell.");
+    expect(roadmap).toContain("GW1B: Persistent Destination Shell Audit.");
+    expect(roadmap).toContain("GW2: Research Notebook And Reusable Assets.");
+    expect(roadmap).toContain("GW2B: Research Notebook And Reusable Assets Audit.");
+    expect(roadmap).toContain("GW3: Discovery Atlas.");
+    expect(roadmap).toContain("GW3B: Discovery Atlas Audit.");
+    expect(roadmap).toContain("GW4: Behavioral Landscape Exploration.");
+    expect(roadmap).toContain("GW4B: Behavioral Landscape Exploration Audit.");
+    expect(roadmap).toContain("GW5: Contextual Capability Guidance.");
+    expect(roadmap).toContain("GW5B: Contextual Capability Guidance Audit.");
+    expect(roadmap).toContain("GW6: Composition Frontiers And Grand Systems Challenges.");
+    expect(roadmap).toContain("GW6B: Composition Frontiers And Grand Systems Challenges Audit.");
+    expect(roadmap).toContain("P0, UX0, UX1, and GW0 are complete as documentation-only prompts.");
     expect(roadmap).toContain("Prompt UX0 is a docs-only visual direction and UX-principle branch");
     expect(roadmap).toContain(
       "Recommended F-branch implementation priority: F1 measurement -> F3 scale comparison -> F2 synthetic generation -> F4 network scaling -> F5 abstract trajectory analysis."
@@ -280,7 +315,32 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(roadmap).toContain("Later: runnable visual model builder");
     expect(roadmap).toContain("Prompt 19 adds `src/simulation/registry` as the unified primitive registry and capability map");
     expect(roadmap.toLowerCase()).toContain("predictive claims are prohibited");
-    for (const phrase of requiredDocPhrases.slice(-24)) {
+    for (const phrase of [
+      "ORTUS is a sandbox for exploring how interacting mechanisms, constraints, feedback, stochasticity, adaptation, selection, and history can produce complex, path-dependent, and sometimes chaotic system-level behavior.",
+      "The world is neither perfectly ordered nor merely random. Complex patterns emerge from constrained interactions, feedback, adaptation, stochasticity, and history.",
+      "ORTUS helps users explore those mechanisms while remaining honest about uncertainty, scale, evidence, and the limits of models.",
+      "ORTUS should expand the user’s range of plausible explanations without implying that complexity makes explanation, evidence, responsibility, or intervention impossible.",
+      "ORTUS is designed to help users investigate how system-level patterns can emerge from local interactions and constraints.",
+      "ORTUS models are representations for exploration and comparison, not direct copies of reality.",
+      "Complexity does not mean the absence of rules. It means that interacting rules, constraints, feedback, and history can produce outcomes that cannot be understood from one mechanism in isolation.",
+      "ORTUS should challenge context-free certainty, not the existence of evidence, mechanisms, or constraints.",
+      "Outcomes can be historically contingent without being causeless or arbitrary.",
+      "Chance operates within structural, environmental, and historical constraints.",
+      "Adaptation is local and conditional. It does not guarantee global improvement, fairness, efficiency, stability, or progress.",
+      "Evolutionary processes have no required destination and may produce both resilience and fragility.",
+      "Be tolerant of uncertainty, heterogeneity, and competing plausible mechanisms while remaining strict about evidence, harm, and unsupported claims.",
+      "ORTUS should reward better questions, stronger comparisons, and more honest interpretation—not confidence, certainty, or favorable outcomes.",
+      "Matching an observed pattern does not establish that the modeled mechanism caused it.",
+      "Changing scale can reveal structure while hiding variation and mechanism.",
+      "A model can show what follows from its assumptions. It cannot establish that those assumptions fully describe reality.",
+      "Simulation output is evidence about the model’s behavior, not automatically evidence about the world.",
+      "ORTUS progression should emerge from building a capable laboratory, discovering system behavior, and reaching new modeling frontiers—not from completing a prescribed checklist.",
+      "The user progresses by gaining reusable understanding and modeling capability, not by accumulating arbitrary points.",
+      "ORTUS progression is both technical and intellectual: users acquire tools while learning why simple explanations often fail.",
+      "The advanced ORTUS challenge is to construct, interrogate, and explain a complex model without losing scientific discipline.",
+      "Complexity should increase analytical humility, not eliminate accountability.",
+      "Prefer features that deepen exploration, comparison, explanation, and reuse. Reject features that primarily reward compulsion, certainty, spectacle, or unsupported real-world authority."
+    ]) {
       expect(productPhilosophy).toContain(phrase);
     }
     for (const phrase of [
@@ -294,6 +354,61 @@ describe("roadmap alignment and missing pillar reservations", () => {
     ]) {
       expect(productPhilosophy).toContain(phrase);
     }
+    for (const phrase of [
+      "GW0 is documentation, product architecture, information architecture, and roadmap planning only.",
+      "GW0 is documentation and progression architecture only.",
+      "ORTUS should move from a collection of sophisticated modeling screens toward a persistent research environment where worlds, experiments, evidence, questions, and reusable capabilities accumulate.",
+      "Progression must organize learning and discovery without implying that the user has mastered reality, proven a mechanism, or completed a scientific domain.",
+      "A Research World is an organized investigation context.",
+      "It is not a literal game world, not a complete real-world domain simulation, not a domain authority",
+      "Observe -> Perturb -> Compare -> Interpret -> Document -> Revisit -> Extend",
+      "GW0 defines destination responsibilities. It does not implement destination navigation or persistence.",
+      "World is the investigation context.",
+      "Lab is where runnable model work happens.",
+      "Atlas is the evidence-oriented record of investigated model behavior.",
+      "Workshop is where reusable artifacts and modeling capabilities are prepared",
+      "Current implemented workflows include `/`, `/builder`, template selection/runtime, Builder modes, schema authoring, graph inspection, validation/repair suggestions, structural fit reporting, scenario planning, Neural Runtime Lab, and current run controls/metrics.",
+      "The Research World architecture must wrap and reorganize validated workflows before attempting to replace them.",
+      "progress = reusable understanding + modeling capability + investigative depth",
+      "progress = clicks + time + completed tasks",
+      "Disproving an interpretation, documenting uncertainty, finding that a result is not robust, or discovering that the current model cannot support a conclusion are all meaningful progress.",
+      "Research World progression is a flexible expansion of investigative capability, not a universal curriculum or player-level system.",
+      "Contextual capability guidance is not the same as hard-locking tools.",
+      "Progressive guidance and expert access must coexist.",
+      "A Discovery Atlas records investigated model behavior.",
+      "It does not certify discoveries about the real world.",
+      "observation -> possible pattern -> supported modeled regime -> robust across tested conditions",
+      "Contradictory runs are evidence.",
+      "A behavioral landscape maps what has been investigated.",
+      "It must not imply that unsampled regions are known.",
+      "Persistent Model Lab is conceptual in GW0.",
+      "Persistence must preserve provenance and model boundaries.",
+      "Reusable does not mean universally compatible.",
+      "Unresolved questions should remain visible.",
+      "Finding that the model cannot support a conclusion is meaningful progress.",
+      "A new modeling frontier expands the questions ORTUS can represent. It does not guarantee better answers.",
+      "Composition is not automatic scientific coherence.",
+      "Two valid components can be incompatible.",
+      "Grand Systems Challenges should test model construction, interrogation, comparison, and scientific discipline—not optimization toward a scripted victory state.",
+      "Beginners should receive a clear investigative starting point. Experts should not be forced through a simulated beginner journey.",
+      "Research continuity should be supported without manufacturing urgency.",
+      "Contextual guidance may respond to the state of the model and workspace. It must not become psychological profiling of the user.",
+      "artifact attachment ≠ activation",
+      "valid artifact ≠ runnable artifact",
+      "runnable artifact ≠ scientifically validated model",
+      "successful run ≠ robust result",
+      "structural fit ≠ semantic correctness",
+      "scenario plan ≠ executable scenario",
+      "simulation output ≠ empirical truth",
+      "Progression must not rely only on color, maps, animation, drag/drop, hover, or decorative metaphor.",
+      "GW0 defines what the product must communicate. UX2 defines how shared design foundations communicate it. GW1 implements the first structural shell using both.",
+      "GW0 -> UX2 -> GW1 -> GW1B -> GW2 -> GW2B -> GW3 -> GW3B -> GW4 -> GW4B -> GW5 -> GW5B -> GW6 -> GW6B",
+      "UX2 and GW1-GW6 remain future prompts and must not start without explicit direction.",
+      "no production UI, CSS, runtime, persistence, route, asset, dependency, or package file is changed by GW0"
+    ]) {
+      expect(researchWorldRoadmap).toContain(phrase);
+    }
+    expect(researchWorldRoadmap).not.toMatch(/XP[^.\n]*(implemented|added)|implemented[^.\n]*XP/i);
     for (const futureName of ["GW0", "GW1", "GW2", "GW3", "GW4", "GW5", "GW6"]) {
       expect(productPhilosophy).toContain(futureName);
     }
@@ -412,6 +527,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
       readFileSync(join(repoRoot, "README.md"), "utf8"),
       readFileSync(join(repoRoot, "docs", "concepts.md"), "utf8"),
       readFileSync(join(repoRoot, "docs", "PRODUCT_PHILOSOPHY_AND_LEARNING_MISSION.md"), "utf8"),
+      readFileSync(join(repoRoot, "docs", "RESEARCH_WORLD_PROGRESSION_MINI_ROADMAP.md"), "utf8"),
       readFileSync(join(repoRoot, "docs", "ui", "LIVING_SYSTEMS_ATLAS_VISUAL_DIRECTION.md"), "utf8"),
       readFileSync(join(repoRoot, "docs", "ui", "EXISTING_DESIGN_TOKEN_AND_COMPONENT_AUDIT.md"), "utf8"),
       readFileSync(join(repoRoot, "src", "simulation", "README.md"), "utf8"),
@@ -440,7 +556,12 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(docs).toContain("Retire tactical framing without flattening ORTUS into generic SaaS.");
     expect(docs).toContain("Distinguish semantic tokens from repeated raw values.");
     expect(docs).toContain("Distinguish source evidence from rendered behavior.");
-    expect(docs).toContain("Do not start UX2, GW0, or GW1 without a dedicated prompt.");
+    expect(docs).toContain("Do not start UX2 or GW1 without a dedicated prompt.");
+    expect(docs).toContain("Prompt GW0 is documentation, product architecture, information architecture, and roadmap planning only.");
+    expect(docs).toContain("Do not implement World, Lab, Atlas, Workshop, routes, navigation, pages, shell behavior, persistence");
+    expect(docs).toContain("Artifact attachment is not runtime activation.");
+    expect(docs).toContain("A Discovery Atlas records investigated model behavior, not certified real-world discoveries.");
+    expect(docs).toContain("A connected graph is not proof that coupled runtime is meaningful.");
   });
 
   it("keeps production template assumptions honest about reserved future pillars", () => {

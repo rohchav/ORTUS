@@ -1617,3 +1617,79 @@ Remaining limitations:
 - UX2, GW0, and GW1 should not start without explicit user direction.
 
 Next prompt after commit: pending user direction. Do not start UX2, GW0-GW6 Research World progression, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any Research World/fractal/multiscale/design-system implementation without explicit approval.
+
+## 2026-06-25 - Prompt GW0 ORTUS Research World Progression Mini-Roadmap
+
+Goal: add a documentation-only Research World progression mini-roadmap after UX1, without implementing UX2, GW1-GW6, routes, navigation, World/Lab/Atlas/Workshop pages, persistence, accounts, cloud/local storage, database schemas, progression state, unlocks, XP, levels, achievements, badges, streaks, missions, quests, daily rewards, discovery detection, regime classification, behavioral landscapes, contextual recommendations, notebooks, saved research assets, model composition, grand-system scenarios, design tokens, CSS, components, runtime behavior, simulation behavior, template behavior, dependencies, assets, or mockups.
+
+Implemented:
+
+- Added `docs/RESEARCH_WORLD_PROGRESSION_MINI_ROADMAP.md` as the GW0 source of truth.
+- Defined Research World as a model-bounded investigation context, not a literal game world, complete real-world domain simulation, reward economy, discovery-certification engine, or runtime capability.
+- Preserved the core loop: Observe -> Perturb -> Compare -> Interpret -> Document -> Revisit -> Extend.
+- Defined World, Lab, Atlas, and Workshop as future destination responsibilities only.
+- Documented progression without XP: progress = reusable understanding + modeling capability + investigative depth, not progress = clicks + time + completed tasks.
+- Documented Discovery Atlas evidence states, Behavioral Landscape sampled/unsampled boundaries, Persistent Model Lab provenance/stale-state expectations, reusable-asset compatibility limits, open questions/failure as progress, modeling frontiers, composition frontiers, Grand Systems Challenges, expert access, responsible engagement, personalization boundaries, artifact/runtime boundaries, accessibility/non-spatial navigation principles, and the UX2/GW1 relationship.
+- Updated README, concepts, roadmap, planned roadmap, product philosophy, UX0 visual direction, UX1 source audit, HCI audit, workspace IA, current Codex context, simulation README, and AGENTS guardrails.
+- Updated roadmap/control documentation tests to cover GW0 boundaries and future-only status.
+
+Required boundary copy preserved:
+
+- ORTUS should move from a collection of sophisticated modeling screens toward a persistent research environment where worlds, experiments, evidence, questions, and reusable capabilities accumulate.
+- ORTUS progression should emerge from building a capable laboratory, discovering system behavior, and reaching new modeling frontiers—not from completing a prescribed checklist.
+- Progression must organize learning and discovery without implying that the user has mastered reality, proven a mechanism, or completed a scientific domain.
+- GW0 defines destination responsibilities. It does not implement destination navigation or persistence.
+- Research World progression is a flexible expansion of investigative capability, not a universal curriculum or player-level system.
+- Contextual capability guidance is not the same as hard-locking tools.
+- Progressive guidance and expert access must coexist.
+- A Discovery Atlas records investigated model behavior. It does not certify discoveries about the real world.
+- A behavioral landscape maps what has been investigated. It must not imply that unsampled regions are known.
+- Persistence must preserve provenance and model boundaries.
+- Reusable does not mean universally compatible.
+- Finding that the model cannot support a conclusion is meaningful progress.
+- A new modeling frontier expands the questions ORTUS can represent. It does not guarantee better answers.
+- Grand Systems Challenges should test model construction, interrogation, comparison, and scientific discipline—not optimization toward a scripted victory state.
+- Beginners should receive a clear investigative starting point. Experts should not be forced through a simulated beginner journey.
+- Research continuity should be supported without manufacturing urgency.
+- Contextual guidance may respond to the state of the model and workspace. It must not become psychological profiling of the user.
+- The Research World architecture must wrap and reorganize validated workflows before attempting to replace them.
+- GW0 defines what the product must communicate. UX2 defines how shared design foundations communicate it. GW1 implements the first structural shell using both.
+
+Artifact/runtime boundaries preserved:
+
+```text
+artifact attachment ≠ activation
+valid artifact ≠ runnable artifact
+runnable artifact ≠ scientifically validated model
+successful run ≠ robust result
+structural fit ≠ semantic correctness
+scenario plan ≠ executable scenario
+simulation output ≠ empirical truth
+```
+
+Non-goals preserved:
+
+- No production UI source, CSS source, runtime source, persistence source, route, asset, dependency file, package-lock file, or font configuration was changed.
+- No World/Lab/Atlas/Workshop route, shell, page, navigation, persistence, discovery logic, behavioral landscape, contextual guidance, progression state, notebook, saved asset, model composition, grand challenge, runtime behavior, template behavior, dependency, asset, token, CSS, or component was implemented.
+- Current `/` and `/builder` workflows remain the implemented surfaces.
+- UX2 and GW1-GW6 remain future prompts and must not start without explicit user direction.
+
+Checks:
+
+- `git status --short`: clean before Prompt GW0 edits.
+- `npm test -- roadmap control modelSchema`: first run failed on exact GW0 documentation guardrail wording; the standalone `Persistence must preserve provenance and model boundaries.` line and future-only wording were added.
+- `npm test -- roadmap control modelSchema`: passed, 4 files and 44 tests.
+- `npm test -- roadmap modelSchema control socialLearning multiScale`: passed, 6 files and 59 tests.
+- `npm run typecheck`: passed.
+- `npm test`: passed, 58 files and 475 tests.
+- `npm run build`: passed with Next.js 15.5.19; `/` and `/builder` prerendered successfully.
+- `npm run perf:simulation`: passed. Local smoke results included Flocking 100 agents at 97.25 ticks/sec, Flocking 500 agents at 12.87 ticks/sec, Forest Fire 80x60 at 19.95 ticks/sec, and Predator-Prey default at 58.50 ticks/sec.
+- `npm run lint`: unavailable, package.json has no lint script.
+
+Remaining limitations:
+
+- GW0 is documentation, product architecture, information architecture, and roadmap planning only.
+- Rendered responsive behavior, browser zoom behavior, keyboard walkthroughs, screen-reader behavior, assistive-technology behavior, reduced-motion behavior, color contrast, and WCAG conformance remain unverified.
+- Research World progression, persistent destination shell, notebooks, reusable assets, Discovery Atlas, Behavioral Landscape, contextual capability guidance, composition frontiers, Grand Systems Challenges, persistence, routes, navigation, UI, CSS, runtime behavior, and template behavior remain unimplemented.
+
+Next prompt after commit: pending user direction. Recommended sequence is GW0 -> UX2 -> GW1 -> GW1B -> GW2 -> GW2B -> GW3 -> GW3B -> GW4 -> GW4B -> GW5 -> GW5B -> GW6 -> GW6B, but do not start UX2, GW1-GW6, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any Research World/fractal/multiscale/design-system implementation without explicit approval.
