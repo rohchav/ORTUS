@@ -118,7 +118,11 @@ const requiredDocPhrases = [
   "Research continuity should be supported without manufacturing urgency.",
   "Contextual guidance may respond to the state of the model and workspace. It must not become psychological profiling of the user.",
   "The Research World architecture must wrap and reorganize validated workflows before attempting to replace them.",
-  "GW0 defines what the product must communicate. UX2 defines how shared design foundations communicate it. GW1 implements the first structural shell using both."
+  "GW0 defines what the product must communicate. UX2 defines how shared design foundations communicate it. GW1 implements the first structural shell using both.",
+  "UX2 establishes shared visual semantics. It does not perform the Research World shell transformation.",
+  "UX2 prepares the visual language. GW1 performs the structural shell transformation.",
+  "Operational success means the requested software operation completed. It does not mean the modeled conclusion was scientifically validated.",
+  "Domain color identifies modeled content. Semantic color communicates interface and evidence state."
 ];
 
 const futureTopLevelFields = [
@@ -176,18 +180,21 @@ describe("roadmap alignment and missing pillar reservations", () => {
     const researchWorldRoadmapPath = join(repoRoot, "docs", "RESEARCH_WORLD_PROGRESSION_MINI_ROADMAP.md");
     const livingSystemsAtlasPath = join(repoRoot, "docs", "ui", "LIVING_SYSTEMS_ATLAS_VISUAL_DIRECTION.md");
     const existingDesignAuditPath = join(repoRoot, "docs", "ui", "EXISTING_DESIGN_TOKEN_AND_COMPONENT_AUDIT.md");
+    const semanticTokenFoundationPath = join(repoRoot, "docs", "ui", "LIVING_SYSTEMS_ATLAS_SEMANTIC_TOKEN_FOUNDATION.md");
     expect(existsSync(roadmapPath)).toBe(true);
     expect(existsSync(missingPillarsPath)).toBe(true);
     expect(existsSync(productPhilosophyPath)).toBe(true);
     expect(existsSync(researchWorldRoadmapPath)).toBe(true);
     expect(existsSync(livingSystemsAtlasPath)).toBe(true);
     expect(existsSync(existingDesignAuditPath)).toBe(true);
+    expect(existsSync(semanticTokenFoundationPath)).toBe(true);
 
     const roadmap = readFileSync(roadmapPath, "utf8");
     const productPhilosophy = readFileSync(productPhilosophyPath, "utf8");
     const researchWorldRoadmap = readFileSync(researchWorldRoadmapPath, "utf8");
     const livingSystemsAtlas = readFileSync(livingSystemsAtlasPath, "utf8");
     const existingDesignAudit = readFileSync(existingDesignAuditPath, "utf8");
+    const semanticTokenFoundation = readFileSync(semanticTokenFoundationPath, "utf8");
     expect(roadmap).toContain("completed through Prompt 39B");
     expect(roadmap).toContain("Post-30B stabilization");
     expect(roadmap).toContain(
@@ -204,9 +211,9 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(roadmap).toContain("Completed Prompt 39 scenario-planning foundation");
     expect(roadmap).toContain("Completed Prompt 39 scenario-planning audit");
     expect(roadmap).toContain("Prompt 35 adds a separate `Author Schema` Builder mode");
-    expect(roadmap).toContain("Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, MR0, F0, P0, UX0, UX1, and GW0 are complete.");
+    expect(roadmap).toContain("Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, MR0, F0, P0, UX0, UX1, GW0, and UX2 are complete.");
     expect(roadmap).toContain(
-      "The next prompt is pending user direction; do not start UX2, GW1-GW6 Research World implementation, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any Research World/fractal/multiscale/design-system implementation without explicit approval."
+      "The next prompt is pending user direction; do not start GW1-GW6 Research World implementation, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any Research World/fractal/multiscale implementation without explicit approval."
     );
     expect(roadmap).toContain("Prompt N2 adds Neural Strategy Adaptation V1 to the Neural Runtime Lab RPS/readout mode.");
     expect(roadmap).toContain("Non-roadmap Prompt N2B audits and hardens Neural Strategy Adaptation.");
@@ -302,6 +309,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(roadmap).toContain("GW6: Composition Frontiers And Grand Systems Challenges.");
     expect(roadmap).toContain("GW6B: Composition Frontiers And Grand Systems Challenges Audit.");
     expect(roadmap).toContain("P0, UX0, UX1, and GW0 are complete as documentation-only prompts.");
+    expect(roadmap).toContain("UX2 - Living Systems Atlas Semantic Token Foundation.");
     expect(roadmap).toContain("Prompt UX0 is a docs-only visual direction and UX-principle branch");
     expect(roadmap).toContain(
       "Recommended F-branch implementation priority: F1 measurement -> F3 scale comparison -> F2 synthetic generation -> F4 network scaling -> F5 abstract trajectory analysis."
@@ -460,6 +468,28 @@ describe("roadmap alignment and missing pillar reservations", () => {
     ]) {
       expect(existingDesignAudit).toContain(phrase);
     }
+    for (const phrase of [
+      "UX2 establishes shared visual semantics.",
+      "It does not perform the Research World shell transformation.",
+      "introduce semantic tokens",
+      "preserve legacy compatibility",
+      "migrate a small shared primitive set",
+      "A visual state must communicate what kind of state it represents:",
+      "operational, interaction, evidence, uncertainty, or capability.",
+      "Operational success means the requested software operation completed.",
+      "It does not mean the modeled conclusion was scientifically validated.",
+      "contradicted is not failure",
+      "unresolved is not error",
+      "stale is not unsupported",
+      "planning-only is not non-runnable for the same reason",
+      "future-only is not disabled functionality",
+      "Domain color identifies modeled content.",
+      "Semantic color communicates interface and evidence state.",
+      "UX2 prepares the visual language.",
+      "GW1 performs the structural shell transformation."
+    ]) {
+      expect(semanticTokenFoundation).toContain(phrase);
+    }
     for (const heading of [
       "## 3. Source Inventory",
       "## 4. Existing Token Inventory",
@@ -530,6 +560,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
       readFileSync(join(repoRoot, "docs", "RESEARCH_WORLD_PROGRESSION_MINI_ROADMAP.md"), "utf8"),
       readFileSync(join(repoRoot, "docs", "ui", "LIVING_SYSTEMS_ATLAS_VISUAL_DIRECTION.md"), "utf8"),
       readFileSync(join(repoRoot, "docs", "ui", "EXISTING_DESIGN_TOKEN_AND_COMPONENT_AUDIT.md"), "utf8"),
+      readFileSync(join(repoRoot, "docs", "ui", "LIVING_SYSTEMS_ATLAS_SEMANTIC_TOKEN_FOUNDATION.md"), "utf8"),
       readFileSync(join(repoRoot, "src", "simulation", "README.md"), "utf8"),
       readFileSync(join(repoRoot, "AGENTS.md"), "utf8")
     ].join("\n");
@@ -556,7 +587,12 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(docs).toContain("Retire tactical framing without flattening ORTUS into generic SaaS.");
     expect(docs).toContain("Distinguish semantic tokens from repeated raw values.");
     expect(docs).toContain("Distinguish source evidence from rendered behavior.");
-    expect(docs).toContain("Do not start UX2 or GW1 without a dedicated prompt.");
+    expect(docs).toContain("Do not treat UX1 as UX2 or GW1, and do not start GW1 without a dedicated prompt.");
+    expect(docs).toContain("UX2 establishes shared visual semantics. It does not perform the Research World shell transformation.");
+    expect(docs).toContain("UX2 prepares the visual language. GW1 performs the structural shell transformation.");
+    expect(docs).toContain("A visual state must communicate what kind of state it represents: operational, interaction, evidence, uncertainty, or capability.");
+    expect(docs).toContain("Selected is not supported; active is not validated; hovered is not important.");
+    expect(docs).toContain("Contradicted is not failure; unresolved is not error; stale is not unsupported; planning-only is not non-runnable for the same reason; future-only is not disabled functionality.");
     expect(docs).toContain("Prompt GW0 is documentation, product architecture, information architecture, and roadmap planning only.");
     expect(docs).toContain("Do not implement World, Lab, Atlas, Workshop, routes, navigation, pages, shell behavior, persistence");
     expect(docs).toContain("Artifact attachment is not runtime activation.");

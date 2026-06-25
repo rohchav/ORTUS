@@ -1,6 +1,6 @@
 # ORTUS Product Philosophy And Learning Mission
 
-Status: Prompt P0 documentation-only source of truth, updated after Prompt GW0. This document records product philosophy, learning goals, future progression principles, and guardrails. It does not implement runtime behavior, UI progression, unlocks, missions, scoring, achievements, discovery detection, model composition, templates, simulation features, fractal metrics, Research World state, persistence, accounts, social features, onboarding flows, dependencies, or new capability flags.
+Status: Prompt P0 documentation-only source of truth, updated after Prompt UX2. This document records product philosophy, learning goals, future progression principles, and guardrails. It does not implement runtime behavior, UI progression, unlocks, missions, scoring, achievements, discovery detection, model composition, templates, simulation features, fractal metrics, Research World state, persistence, accounts, social features, onboarding flows, dependencies, or new capability flags.
 
 ## Core Mission
 
@@ -165,6 +165,8 @@ Prompt UX0 adds the documentation-only ORTUS Living Systems Atlas visual directi
 Prompt UX1 adds the documentation-only existing design-token and component audit before any visual migration. It records implementation evidence for UX2/GW0/GW1 planning while preserving current workflows and runtime-honesty language. UX1 does not redesign the interface, add tokens, modify CSS or UI components, change routes, add dependencies, add assets, change font configuration, implement World/Lab/Atlas/Workshop, or claim rendered accessibility/responsive verification.
 
 Prompt GW0 defines Research World as a model-bounded investigation context, not a literal game world or complete real-world domain simulation. It defines the loop Observe -> Perturb -> Compare -> Interpret -> Document -> Revisit -> Extend, destination responsibilities for World/Lab/Atlas/Workshop, progression without XP, evidence-oriented Discovery Atlas boundaries, sampled/unsampled Behavioral Landscape boundaries, reusable-asset provenance, expert access, and responsible engagement. It also requires: GW0 defines what the product must communicate. UX2 defines how shared design foundations communicate it. GW1 implements the first structural shell using both. GW0 does not implement routes, navigation, persistence, discovery logic, behavioral landscapes, contextual guidance, UI/CSS changes, dependencies, assets, runtime behavior, or template behavior.
+
+Prompt UX2 adds the bounded Living Systems Atlas Semantic Token Foundation. UX2 establishes shared visual semantics. It does not perform the Research World shell transformation. A visual state must communicate what kind of state it represents: operational, interaction, evidence, uncertainty, or capability. Operational success means the requested software operation completed. It does not mean the modeled conclusion was scientifically validated. Domain color identifies modeled content. Semantic color communicates interface and evidence state. UX2 prepares the visual language. GW1 performs the structural shell transformation.
 
 ## Intellectual Progression Arc
 

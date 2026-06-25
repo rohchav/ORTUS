@@ -50,6 +50,8 @@ export interface BuilderStatusBadge {
   label: string;
   tone: "neutral" | "accent" | "danger" | "moss";
   description: string;
+  category?: "operational" | "interaction" | "evidence" | "capability";
+  state?: "idle" | "ready" | "failed" | "non-runnable" | "supported" | "unsupported" | "planning-only" | "future-only" | "unverified";
 }
 
 export interface BuilderMarkerView {
@@ -179,32 +181,44 @@ export function getWorkspaceStatusBadges(report: VisualBuilderWorkspaceValidatio
     {
       label: "Structural only",
       tone: "accent",
-      description: "The workspace is a structural display artifact."
+      description: "The workspace is a structural display artifact.",
+      category: "capability",
+      state: "planning-only"
     },
     {
       label: report.valid ? "Structurally valid" : "Invalid",
       tone: report.valid ? "moss" : "danger",
-      description: report.valid ? "The artifact passes workspace schema validation." : "The artifact did not pass workspace validation."
+      description: report.valid ? "The artifact passes workspace schema validation." : "The artifact did not pass workspace validation.",
+      category: "operational",
+      state: report.valid ? "ready" : "failed"
     },
     {
       label: "Not runnable",
       tone: "danger",
-      description: "A structurally valid workspace is still not a runnable model."
+      description: "A structurally valid workspace is still not a runnable model.",
+      category: "capability",
+      state: "non-runnable"
     },
     {
       label: "Service only",
       tone: "neutral",
-      description: "The artifact is handled by service-level validation and display only."
+      description: "The artifact is handled by service-level validation and display only.",
+      category: "capability",
+      state: "unsupported"
     },
     {
       label: "No compiler",
       tone: "neutral",
-      description: "The builder shell is not a compiler or interpreter."
+      description: "The builder shell is not a compiler or interpreter.",
+      category: "capability",
+      state: "unsupported"
     },
     {
       label: "No schema execution",
       tone: "neutral",
-      description: "Model schema references are not executed."
+      description: "Model schema references are not executed.",
+      category: "capability",
+      state: "unsupported"
     }
   ];
 }

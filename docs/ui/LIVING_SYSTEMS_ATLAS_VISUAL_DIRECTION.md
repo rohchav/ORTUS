@@ -1,6 +1,6 @@
 # ORTUS Living Systems Atlas Visual Direction
 
-Status: Prompt UX0 documentation, design-system planning, and UX-principle definition only, updated after Prompt GW0. UX0 does not implement routes, navigation, a World/Lab/Atlas/Workshop shell, component redesigns, CSS rewrites, typography changes, color-token changes, icons, animations, persistent lab state, progression, unlocks, discoveries, behavioral landscapes, model composition, runtime behavior, template behavior, dependencies, remote fonts, image assets, or generated mockups. Prompt UX1 audits the existing UI source in `EXISTING_DESIGN_TOKEN_AND_COMPONENT_AUDIT.md` without implementing UX0. Prompt GW0 defines Research World progression architecture in `../RESEARCH_WORLD_PROGRESSION_MINI_ROADMAP.md` without implementing UX0, UX2, GW1, routes, navigation, persistence, discovery logic, behavioral landscapes, UI, CSS, runtime behavior, or template behavior.
+Status: Prompt UX0 documentation, design-system planning, and UX-principle definition only, updated after Prompt UX2. UX0 does not implement routes, navigation, a World/Lab/Atlas/Workshop shell, component redesigns, CSS rewrites, typography changes, color-token changes, icons, animations, persistent lab state, progression, unlocks, discoveries, behavioral landscapes, model composition, runtime behavior, template behavior, dependencies, remote fonts, image assets, or generated mockups. Prompt UX1 audits the existing UI source in `EXISTING_DESIGN_TOKEN_AND_COMPONENT_AUDIT.md` without implementing UX0. Prompt GW0 defines Research World progression architecture in `../RESEARCH_WORLD_PROGRESSION_MINI_ROADMAP.md` without implementing UX0, GW1, routes, navigation, persistence, discovery logic, behavioral landscapes, UI shell behavior, runtime behavior, or template behavior. Prompt UX2 implements shared semantic token foundations in `LIVING_SYSTEMS_ATLAS_SEMANTIC_TOKEN_FOUNDATION.md` without performing the Research World shell transformation.
 
 ## Purpose
 
@@ -592,7 +592,7 @@ Prompt UX1 completes the source-level inventory of current colors, typography, s
 
 ### Stage 2 — UX2 Core Design Foundations
 
-Future dedicated prompt should introduce semantic colors, typography scales, shape tokens, material tokens, motion tokens, and status patterns. It must use UX0, UX1, and GW0 as inputs and keep the production build offline-safe.
+Prompt UX2 introduced semantic colors, typography roles, shape tokens, material/elevation tokens, motion tokens, reduced-motion semantics, and status patterns. It uses UX0, UX1, and GW0 as inputs, keeps the production build offline-safe, preserves legacy compatibility aliases, and migrates only a bounded shared primitive set.
 
 ### Stage 3 — GW1 Destination Shell
 

@@ -1,10 +1,10 @@
 # ORTUS Research World Progression Mini-Roadmap
 
-Status: Prompt GW0 documentation source of truth.
+Status: Prompt GW0 documentation source of truth, updated after Prompt UX2.
 
 GW0 is documentation, product architecture, information architecture, and roadmap planning only.
 
-GW0 is documentation and progression architecture only. It does not implement routes, navigation, World/Lab/Atlas/Workshop pages, persistence, accounts, cloud storage, local storage, database schemas, progression state, unlocks, XP, levels, achievements, badges, streaks, missions, quests, daily rewards, discovery detection, regime classification, behavioral landscapes, contextual recommendations, notebooks, saved research assets, model composition, grand-system scenarios, design tokens, CSS, components, runtime behavior, simulation behavior, template behavior, dependencies, assets, or mockups.
+GW0 is documentation and progression architecture only. It does not implement routes, navigation, World/Lab/Atlas/Workshop pages, persistence, accounts, cloud storage, local storage, database schemas, progression state, unlocks, XP, levels, achievements, badges, streaks, missions, quests, daily rewards, discovery detection, regime classification, behavioral landscapes, contextual recommendations, notebooks, saved research assets, model composition, grand-system scenarios, runtime behavior, simulation behavior, template behavior, dependencies, assets, or mockups. Prompt UX2 later implements shared semantic visual tokens and a bounded shared primitive migration; UX2 still does not implement the Research World shell.
 
 The central principle:
 
@@ -100,6 +100,8 @@ Current implemented workflows include `/`, `/builder`, template selection/runtim
 The Research World architecture must wrap and reorganize validated workflows before attempting to replace them.
 
 GW0 does not authorize a flag-day rewrite. GW1 and later prompts must preserve direct access to the existing `/` and `/builder` surfaces until a dedicated implementation prompt and audit prove a replacement is safe.
+
+Prompt UX2 prepares the visual language for this future shell by distinguishing operational, interaction, evidence, uncertainty, and capability states. UX2 does not create destination routes, destination navigation, persistence, notebooks, Discovery Atlas, behavioral landscapes, contextual guidance, or progression state.
 
 ## 5. Progression Without XP
 
@@ -342,6 +344,12 @@ Future map, atlas, landscape, or destination metaphors need equivalent text outl
 ## 21. UX2 And GW1 Relationship
 
 GW0 defines what the product must communicate. UX2 defines how shared design foundations communicate it. GW1 implements the first structural shell using both.
+
+UX2 establishes shared visual semantics.
+It does not perform the Research World shell transformation.
+
+UX2 prepares the visual language.
+GW1 performs the structural shell transformation.
 
 GW0 must not define final token names, final token values, CSS implementation, component APIs, route structure, or navigation behavior. Those belong to dedicated future prompts and audits.
 

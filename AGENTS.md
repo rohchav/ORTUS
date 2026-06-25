@@ -421,8 +421,27 @@
 - Preserve current `/` and `/builder` workflows while planning Research World architecture.
 - The Research World architecture must wrap and reorganize validated workflows before attempting to replace them.
 - GW0 defines destination responsibilities. It does not implement destination navigation or persistence.
-- Do not start UX2, GW1, GW1B, GW2, GW2B, GW3, GW3B, GW4, GW4B, GW5, GW5B, GW6, or GW6B without a dedicated prompt.
+- Do not start GW1, GW1B, GW2, GW2B, GW3, GW3B, GW4, GW4B, GW5, GW5B, GW6, or GW6B without a dedicated prompt.
 - GW0 defines what the product must communicate. UX2 defines how shared design foundations communicate it. GW1 implements the first structural shell using both.
+- Prompt UX2 establishes shared visual semantics and bounded primitive migration only.
+- UX2 establishes shared visual semantics. It does not perform the Research World shell transformation.
+- UX2 prepares the visual language. GW1 performs the structural shell transformation.
+- Do not add World, Lab, Atlas, Workshop, destination routes, destination navigation, shell behavior, persistence, notebooks, reusable assets, Discovery Atlas, behavioral landscapes, contextual capability guidance, progression, onboarding, new simulation behavior, template behavior, model-schema behavior, visual-builder execution, or runtime behavior during UX2.
+- Preserve `/` and `/builder` as the implemented routes during UX2.
+- Do not add styling frameworks, component libraries, icon libraries, chart libraries, graph libraries, animation libraries, Tailwind, Sass, CSS-in-JS, theme providers, token-generation build steps, remote fonts, local font files, `next/font/google`, dependencies, assets, light-mode controls, or broad redesign during UX2.
+- Keep one canonical semantic-token source in `src/app/globals.css`.
+- Preserve legacy visual variables until their consumers are known and migrated.
+- Distinguish raw palette values, semantic tokens, component-role tokens, and component styles.
+- A visual state must communicate what kind of state it represents: operational, interaction, evidence, uncertainty, or capability.
+- Operational success means the requested software operation completed. It does not mean the modeled conclusion was scientifically validated.
+- Selected is not supported; active is not validated; hovered is not important.
+- Contradicted is not failure; unresolved is not error; stale is not unsupported; planning-only is not non-runnable for the same reason; future-only is not disabled functionality.
+- Domain color identifies modeled content. Semantic color communicates interface and evidence state.
+- Use color with explicit text and non-color cues; never rely on color alone for status.
+- Keep focus visible, keyboard-reachable, and distinct from selection.
+- Reduced motion should remove nonessential interface motion without erasing the modeled information the user is studying.
+- UX2 may migrate no more than four shared primitive families; do not redesign specialized simulation, chart, graph, schema, Neural Runtime Lab, template, or Builder feature surfaces without a dedicated prompt.
+- Do not claim rendered responsive behavior, browser zoom behavior, keyboard walkthrough completion, screen-reader behavior, assistive-technology behavior, forced-colors readiness, WCAG conformance, or complete accessibility from UX2 source work unless directly verified.
 - Do not claim rendered UX, accessibility, responsive, browser, zoom, screen-reader, assistive-technology, or WCAG readiness for Research World work without direct evidence.
 - Treat UX0 as documentation and design planning only.
 - Do not implement World/Lab/Atlas/Workshop without a dedicated prompt.
@@ -463,7 +482,7 @@
 - Do not add font files.
 - Do not add dependencies.
 - Do not weaken tests.
-- Do not start UX2 or GW1 without a dedicated prompt.
+- Do not treat UX1 as UX2 or GW1, and do not start GW1 without a dedicated prompt.
 - Do not make Builder graphs executable or Model Schemas runnable while documenting or later implementing fractal/multiscale analysis.
 - Keep Neural runtime graph scoped only to the Neural template.
 - Keep Neural Runtime Lab scenario-first but scientifically honest.

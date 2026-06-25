@@ -1,6 +1,6 @@
 # UX1: Existing Design Token And Component Audit
 
-Status: Prompt UX1 source-level audit and documentation only, updated after Prompt GW0. UX1 does not redesign the interface, add design tokens, modify CSS, restyle components, change routes, add dependencies, add assets, change font configuration, implement World/Lab/Atlas/Workshop, start UX2, or claim rendered accessibility/responsive verification. Prompt GW0 later adds Research World progression architecture in `../RESEARCH_WORLD_PROGRESSION_MINI_ROADMAP.md` without changing the UX1 source audit evidence.
+Status: Prompt UX1 source-level audit and documentation only, updated after Prompt UX2. UX1 does not redesign the interface, add design tokens, modify CSS, restyle components, change routes, add dependencies, add assets, change font configuration, implement World/Lab/Atlas/Workshop, or claim rendered accessibility/responsive verification. Prompt GW0 later adds Research World progression architecture in `../RESEARCH_WORLD_PROGRESSION_MINI_ROADMAP.md` without changing the UX1 source audit evidence. Prompt UX2 later implements shared semantic token foundations in `LIVING_SYSTEMS_ATLAS_SEMANTIC_TOKEN_FOUNDATION.md` without changing UX1's source-audit evidence.
 
 Required framing:
 
@@ -567,7 +567,7 @@ Wave F - Atlas and persistence:
 
 ## 21. UX2 Entry Criteria
 
-UX2 should not start until the following are accepted as UX1 findings:
+UX2 started after the following were accepted as UX1 findings:
 
 - Current token sources and raw-value hotspots are documented.
 - Shared/local component inventory exists.
@@ -579,7 +579,7 @@ UX2 should not start until the following are accepted as UX1 findings:
 - Prompt GW0 Research World progression architecture is available as product-architecture input.
 - Production UI, CSS, dependencies, assets, and font configuration remain unchanged by UX1.
 
-UX2 should be limited to semantic token foundations and bounded primitive migration. UX2 must not automatically implement the four-destination shell.
+UX2 is limited to semantic token foundations and bounded primitive migration. UX2 must not automatically implement the four-destination shell.
 
 ## 22. GW0/GW1 Relationship
 

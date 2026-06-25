@@ -1693,3 +1693,65 @@ Remaining limitations:
 - Research World progression, persistent destination shell, notebooks, reusable assets, Discovery Atlas, Behavioral Landscape, contextual capability guidance, composition frontiers, Grand Systems Challenges, persistence, routes, navigation, UI, CSS, runtime behavior, and template behavior remain unimplemented.
 
 Next prompt after commit: pending user direction. Recommended sequence is GW0 -> UX2 -> GW1 -> GW1B -> GW2 -> GW2B -> GW3 -> GW3B -> GW4 -> GW4B -> GW5 -> GW5B -> GW6 -> GW6B, but do not start UX2, GW1-GW6, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any Research World/fractal/multiscale/design-system implementation without explicit approval.
+
+## 2026-06-25 - Prompt UX2 Living Systems Atlas Semantic Token Foundation
+
+Goal: add a bounded shared visual-semantics foundation after GW0, without performing the Research World shell transformation, adding World/Lab/Atlas/Workshop routes or navigation, adding persistence, notebooks, Discovery Atlas, behavioral landscapes, contextual guidance, progression, onboarding, runtime behavior, simulation behavior, template behavior, model-schema execution, Builder graph execution, dependencies, assets, local fonts, remote fonts, `next/font/google`, styling frameworks, component libraries, icon/chart/graph/animation libraries, theme providers, token-generation build steps, light-mode controls, or broad specialized-surface redesign.
+
+Implemented:
+
+- Added `docs/ui/LIVING_SYSTEMS_ATLAS_SEMANTIC_TOKEN_FOUNDATION.md` as the UX2 canonical source of truth.
+- Added raw palette, semantic surface/text/border/interaction/status/type/spacing/shape/elevation/motion tokens in the canonical CSS source, `src/app/globals.css`.
+- Preserved legacy compatibility aliases for existing visual variables such as `--bg-primary`, `--bg-secondary`, `--bg-panel`, `--bg-panel-strong`, `--accent-primary`, `--accent-secondary`, `--accent-tertiary`, `--accent-rare`, `--danger`, `--frame-corner`, `--structure-line`, and `--motion-tight`.
+- Migrated the bounded shared primitive set: `CornerFramePanel`, shared/global buttons and icon controls, shared form controls, and shared status badges.
+- Extended `StatusPill` with explicit semantic category/state, accessible label, optional description, and size while preserving legacy tone props.
+- Added `statusPillSemantics.ts` as a browser-free helper for status semantics tests.
+- Extended Builder status badges with semantic category/state data attributes and accessible labels without changing Builder runtime behavior.
+- Updated roadmap, concepts, product philosophy, Research World roadmap, UX0, UX1, HCI audit, workspace IA, simulation README, current Codex context, AGENTS guardrails, README, planned roadmap, and roadmap tests.
+- Added `src/components/ui/semanticTokenFoundation.test.ts` for token, route, dependency, status, and no-overclaim guardrails.
+
+Required boundary copy preserved:
+
+- UX2 establishes shared visual semantics. It does not perform the Research World shell transformation.
+- UX2 prepares the visual language. GW1 performs the structural shell transformation.
+- A visual state must communicate what kind of state it represents: operational, interaction, evidence, uncertainty, or capability.
+- Operational success means the requested software operation completed. It does not mean the modeled conclusion was scientifically validated.
+- selected != supported; active != validated; hovered != important.
+- contradicted is not failure; unresolved is not error; stale is not unsupported; planning-only is not non-runnable for the same reason; future-only is not disabled functionality.
+- Domain color identifies modeled content. Semantic color communicates interface and evidence state.
+- Reduced motion should remove nonessential interface motion without erasing the modeled information the user is studying.
+
+Non-goals preserved:
+
+- No World/Lab/Atlas/Workshop routes, destination shell, destination navigation, persistence, notebooks, reusable assets, Discovery Atlas, behavioral landscapes, contextual guidance, progression state, onboarding, runtime behavior, template behavior, model-schema execution, Builder graph execution, dependency, asset, local font, remote font, or `next/font/google` change was added.
+- Current `/` and `/builder` remain the implemented routes.
+- Specialized simulation canvas, template visual descriptors, charts, Builder graph visuals, schema cards, Neural Runtime Lab surfaces, and template backgrounds remain deferred unless they safely inherit shared variables.
+- UX2 does not claim rendered responsive behavior, browser zoom behavior, keyboard walkthrough completion, screen-reader behavior, assistive-technology behavior, forced-colors readiness, WCAG conformance, or complete accessibility.
+
+Checks:
+
+- `git status --short`: clean before Prompt UX2 edits.
+- Current pre-UX2 commit: `f632e79 Refactor documentation and roadmap to incorporate GW0: Research World Progression Mini-Roadmap`.
+- `npm test -- semanticTokenFoundation roadmap`: first run failed because Vitest could not import a TSX component helper directly; the status semantics helper was moved into `statusPillSemantics.ts`.
+- `npm test -- semanticTokenFoundation roadmap`: passed, 2 files and 8 tests.
+- `npm run typecheck`: first run failed because the UX2 test used an incomplete `VisualBuilderWorkspaceValidationReport` fixture; the fixture was expanded to the real type.
+- `npm run typecheck`: passed.
+- `npm test -- semanticTokenFoundation roadmap control modelSchema socialLearning multiScale`: passed, 7 files and 63 tests.
+- `npm test`: passed, 59 files and 479 tests.
+- `npm run build`: passed with Next.js 15.5.19; `/` and `/builder` prerendered successfully.
+- `npm run perf:simulation`: passed. Local smoke results included Flocking 100 agents at 115.23 ticks/sec, Flocking 500 agents at 16.73 ticks/sec, Forest Fire 80x60 at 26.58 ticks/sec, and Predator-Prey default at 79.02 ticks/sec.
+- `git diff --check`: passed.
+- `npm run lint`: unavailable, package.json has no lint script.
+
+Rendered verification:
+
+- Route availability was verified through `npm run build` static output for `/` and `/builder`.
+- Browser viewport screenshots, browser focus walkthroughs, disabled/selected/warning-state visual inspection, browser zoom, screen-reader behavior, assistive-technology behavior, forced-colors behavior, and WCAG conformance were not verified because no browser/rendered verification tooling was available in this environment.
+
+Remaining limitations:
+
+- UX2 is a semantic foundation and bounded shared-primitive migration, not a full design system.
+- Old raw acid/vermillion values remain in deferred specialized surfaces, template atmospheres, charts, schema/graph/card variants, and domain visualizations.
+- A dedicated rendered responsive, zoom, keyboard, reduced-motion, contrast, screen-reader, assistive-technology, and visual-regression audit remains needed before making polished Living Systems Atlas readiness claims.
+
+Next prompt after commit: pending user direction. Do not start GW1-GW6, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any Research World/fractal/multiscale implementation without explicit approval.
