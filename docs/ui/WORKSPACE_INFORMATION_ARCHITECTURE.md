@@ -1,7 +1,7 @@
 # ORTUS Workspace Information Architecture
 
-Date: 2026-06-22
-Prompt: UI-REMEDIATION-1, audited and hardened by Prompt 34B, extended by Prompt 35, audited by Prompt 35B, extended by Prompt 36, audited by Prompt 36B, extended by Prompt 37, audited by Prompt 37B, extended by Prompt 38, audited by Prompt 38B, extended by Prompt 39, audited by Prompt 39B, extended by Prompt NUX1, audited by Prompt NUX1B, extended by Prompt N2, audited by Prompt N2B, documented by Prompt MR0, documented by Prompt F0, documented by Prompt P0, and documented by Prompt UX0
+Date: 2026-06-25
+Prompt: UI-REMEDIATION-1, audited and hardened by Prompt 34B, extended by Prompt 35, audited by Prompt 35B, extended by Prompt 36, audited by Prompt 36B, extended by Prompt 37, audited by Prompt 37B, extended by Prompt 38, audited by Prompt 38B, extended by Prompt 39, audited by Prompt 39B, extended by Prompt NUX1, audited by Prompt NUX1B, extended by Prompt N2, audited by Prompt N2B, documented by Prompt MR0, documented by Prompt F0, documented by Prompt P0, documented by Prompt UX0, and audited by Prompt UX1
 Status: implemented and source-audited; rendered screenshot and browser zoom tooling remain unavailable in this environment
 
 ## Problem
@@ -69,6 +69,8 @@ Prompt F0 is documentation only and does not change the workspace hierarchy. It 
 Prompt P0 is documentation only and does not change the workspace hierarchy. It does not add Research World progression, persistent model labs, discovery atlases, behavioral landscapes, contextual capability guidance, model composition frontiers, grand challenges, missions, XP, streaks, unlocks, scoring, achievements, persistence, accounts, social features, onboarding, or UI flows. Future Research World work, if explicitly prompted later, should use soft contextual guidance rather than artificial feature locks and must reward reusable understanding, reproducibility, comparison, and honest interpretation rather than arbitrary points.
 
 Prompt UX0 is documentation only and does not change the workspace hierarchy. It defines the future World, Lab, Atlas, and Workshop destinations conceptually: World observes and perturbs active systems, Lab organizes experiments and reusable research assets, Atlas maps accumulated understanding and unexplored behavioral territory, and Workshop constructs and inspects model structure. UX0 does not add routes, tabs, navigation, shell state, persistence, CSS tokens, component redesigns, discovery logic, behavioral landscapes, model composition, or runtime behavior. Future migration must be incremental and preserve existing workflows.
+
+Prompt UX1 is documentation and source-level audit only and does not change the workspace hierarchy. It inventories the existing shell, Builder, Neural Runtime Lab, template-specific views, forms, validation UI, cards, panels, drawers, tabs, badges, charts, graph/canvas surfaces, global CSS, inline styling, dependency constraints, responsive source risks, and accessibility source risks. UX1 identifies current shell constraints that UX2, GW0, and GW1 must account for, but it does not add routes, navigation, World/Lab/Atlas/Workshop, CSS tokens, component redesigns, responsive behavior, runtime behavior, dependencies, assets, or rendered verification.
 
 ## Header
 
@@ -173,9 +175,10 @@ This is not a formal WCAG conformance claim.
 - Prompt 35B form focus behavior is source-tested but not verified with a screen reader or real browser keyboard walkthrough.
 - Prompt 36/36B graph keyboard, responsive, SVG/text equivalence, target sizing, fit behavior, filtered-selection behavior, and zoom behavior are source-tested but not verified in a real browser or screen reader.
 - Prompt 37/37B validation group expansion, repair confirmation, clipboard fallback, focus return, missing-focus fallback, and keyboard walkthrough behavior are source-tested but not verified in a real browser or screen reader.
+- Prompt UX1 documents source-visible token, component, responsive, and accessibility risks; it does not verify rendered behavior.
 
 ## Future Design-System Work
 
-A dedicated visual design-system prompt is still recommended after Prompt 37B. It should address typography scale, color-independent state encoding, richer chart semantics and units where model definitions support them, responsive screenshot testing, keyboard walkthroughs, and zoom behavior without changing simulation semantics.
+A dedicated visual design-system prompt should start from Prompt UX1 evidence and should not begin without explicit UX2 direction. It should address semantic tokens, typography scale, color-independent state encoding, richer chart semantics and units where model definitions support them, responsive screenshot testing, keyboard walkthroughs, and zoom behavior without changing simulation semantics or implementing World/Lab/Atlas/Workshop by accident.
 
 Visual Builder Graph View V1 visualizes structural relationships; it does not execute nodes or edges. Graph selection, filtering, panning, and zooming are UI-only state. Graph View is not visual programming, schema execution, or runtime generation. A graph that looks complete is still not a runnable model.

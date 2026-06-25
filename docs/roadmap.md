@@ -4,7 +4,7 @@ This roadmap reserves the major complex-systems pillars that ORTUS must support 
 
 ## Current Foundation
 
-ORTUS has completed through Prompt 39B, plus non-roadmap Prompt N1: Neural Excitation Network Template V1, Prompt N1B: Neural Excitation Network Template Audit + Decision Readout V1, Prompt NUX1: Neural Runtime Lab UX V1, Prompt NUX1B: Neural Runtime Lab UX Audit + Build Investigation, Prompt N2: Neural Strategy Adaptation V1, Prompt N2B: Neural Strategy Adaptation Audit, Prompt MR0: Templates + Decision Clusters Mini-Roadmap, docs-only Prompt F0: Fractal and Multiscale Analysis Mini-Roadmap, docs-only Prompt P0: ORTUS Product Philosophy and Learning Mission, and docs-only Prompt UX0: ORTUS Living Systems Atlas Visual Direction. Prompts 1-39B established the current foundation:
+ORTUS has completed through Prompt 39B, plus non-roadmap Prompt N1: Neural Excitation Network Template V1, Prompt N1B: Neural Excitation Network Template Audit + Decision Readout V1, Prompt NUX1: Neural Runtime Lab UX V1, Prompt NUX1B: Neural Runtime Lab UX Audit + Build Investigation, Prompt N2: Neural Strategy Adaptation V1, Prompt N2B: Neural Strategy Adaptation Audit, Prompt MR0: Templates + Decision Clusters Mini-Roadmap, docs-only Prompt F0: Fractal and Multiscale Analysis Mini-Roadmap, docs-only Prompt P0: ORTUS Product Philosophy and Learning Mission, docs-only Prompt UX0: ORTUS Living Systems Atlas Visual Direction, and docs-only Prompt UX1: Existing Design Token and Component Audit. Prompts 1-39B established the current foundation:
 
 - Engine/runtime/UI foundation.
 - Scenario Builder.
@@ -42,12 +42,13 @@ ORTUS has completed through Prompt 39B, plus non-roadmap Prompt N1: Neural Excit
 - Docs-only Prompt F0 records future fractal and multiscale analysis direction only; it does not implement fractal metrics, fractal spatial generators, Scale Lens UI, network scaling analytics, trajectory motif analytics, template support, schema fields, primitives, or runtime behavior.
 - Docs-only Prompt P0 records ORTUS product philosophy, learning mission, epistemic guardrails, and future Research World progression direction only; it does not implement progression, missions, XP, streaks, unlocks, scoring, persistence, social features, runtime behavior, templates, or UI flows.
 - Docs-only Prompt UX0 records the ORTUS Living Systems Atlas visual and interaction target only; it does not implement World/Lab/Atlas/Workshop routes, tabs, navigation, shell redesign, CSS tokens, component changes, persistence, discovery logic, behavioral landscapes, progression, runtime behavior, dependencies, remote fonts, icons, animations, or mockups.
+- Docs-only Prompt UX1 records the existing design-token and component audit only; it inventories real UI/CSS/component sources, migration risk, accessibility and responsive source risks, and retain/adapt/replace/retire classifications. It does not redesign the interface, add tokens, modify CSS, restyle components, change routes, add dependencies, add assets, change font configuration, implement World/Lab/Atlas/Workshop, start GW0, start UX2, or claim rendered accessibility/responsive verification.
 
 These foundations are deliberately service-first or metadata-first unless documented otherwise. Networks, resources, feedback primitives, boundary/environment models, spatial fields, observability models, causal assumptions, quantity semantics, emergence descriptors, robustness/resilience descriptors, and strategy/control descriptors are headless structural services until a template explicitly uses them at runtime. A template must not claim support for a primitive merely because a service exists.
 
 After Prompt 30B, ORTUS completed a repository hygiene, durable context, dependency stabilization, and performance/scalability pass. That pass added and validated performance instrumentation and spatial-indexing foundations, but it does not turn reserved structural primitives into runtime support and is not evidence for high-scale readiness by itself.
 
-Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 39B: Scenario Planning From Schema Audit are complete. Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, MR0, F0, P0, and UX0 are complete. The next prompt is pending user direction; do not start GW0-GW6 Research World progression, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any Research World/fractal/multiscale implementation without explicit approval.
+Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 39B: Scenario Planning From Schema Audit are complete. Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, MR0, F0, P0, UX0, and UX1 are complete. The next prompt is pending user direction; do not start UX2, GW0-GW6 Research World progression, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any Research World/fractal/multiscale/design-system implementation without explicit approval.
 
 ## Revised Prompt Sequence
 
@@ -217,13 +218,14 @@ Prompt P0 future Research World branch:
 
 1. P0: ORTUS Product Philosophy and Learning Mission.
 2. UX0: Living Systems Atlas Visual Direction.
-3. GW0: Research World Progression Mini-Roadmap.
-4. GW1: Persistent Model Lab.
-5. GW2: Discovery Atlas.
-6. GW3: Behavioral Landscape Exploration.
-7. GW4: Contextual Capability Guidance.
-8. GW5: Model Composition Frontiers.
-9. GW6: Grand Systems Challenges.
+3. UX1: Existing Design Token and Component Audit.
+4. GW0: Research World Progression Mini-Roadmap.
+5. GW1: Persistent Model Lab.
+6. GW2: Discovery Atlas.
+7. GW3: Behavioral Landscape Exploration.
+8. GW4: Contextual Capability Guidance.
+9. GW5: Model Composition Frontiers.
+10. GW6: Grand Systems Challenges.
 
 P0 is complete as documentation only. GW0-GW6 remain future prompts and must not be treated as implemented progression, persistence, missions, scoring, unlocks, achievements, discovery detection, model composition, templates, UI flows, or Research World state.
 
@@ -565,6 +567,37 @@ UX0 retires tactical HUD framing, military mission language, combat-console meta
 UX0 preserves useful hierarchy, precision, strong silhouettes, disciplined spacing, clear contrast, high-quality motion, distinctive identity, dark-mode capability, and bold but readable typography.
 
 UX0 does not implement World/Lab/Atlas/Workshop routes, tabs, navigation, shell redesign, CSS tokens, component changes, persistence, discovery logic, behavioral landscapes, progression, runtime behavior, dependencies, remote fonts, icons, animations, or mockups.
+
+## Prompt UX1 Existing Design Token And Component Audit
+
+Prompt UX1 is a docs-only source-level audit and migration-planning checkpoint, not an implementation branch. The canonical document is `ui/EXISTING_DESIGN_TOKEN_AND_COMPONENT_AUDIT.md`.
+
+Required framing:
+
+```text
+UX1 audits the current interface. It does not redesign it.
+The audit must distinguish production evidence from assumptions and unverified visual behavior.
+The migration target is the Living Systems Atlas, but the audit must preserve current workflows and validated functionality.
+```
+
+Prompt UX1 inventories real production sources: global CSS, CSS-module absence, inline styles, canvas/SVG/chart styling, template visual descriptors, shell/navigation, Builder, Neural Runtime Lab, template-specific surfaces, forms, validation UI, cards, panels, drawers, tabs, badges, tooltips, dialogs, tables, icon usage, motion, responsive rules, dependency constraints, and existing roadmap/control tests.
+
+Prompt UX1 records these blunt findings: the current global CSS token base is useful but overloaded; repeated raw values are not semantic tokens; acid green and vermilion/orange are doing too many unrelated jobs; typography is offline-safe but over-small and all-caps-heavy; `CornerFramePanel` is useful but still tactical; status/evidence styling is fragmented; charts/canvas/graphs are hand-built and need better scale, unit, text-alternative, and provenance conventions; source inspection shows responsive and accessibility risks but not rendered failures; and `var(--muted)` appears in source while the defined muted text token is `--text-muted`.
+
+Prompt UX1 classifies major patterns as retain, adapt, replace, or retire with evidence. It retains workflow staging, the persistent run-control dock, runtime-honesty copy, the ORTUS navigation brand, and bounded graph-outline alternatives. It adapts shared panels, domain accents, charts, graph views, canvas overlays, forms, and Marathon-derived geometry. It replaces the fragmented status/evidence system and gradually replaces permanent control-wall assumptions. It retires or sharply reduces decorative scan/sweep/jitter/tactical ornament that has no informational role.
+
+Required distinctions:
+
+```text
+Retire tactical framing without flattening ORTUS into generic SaaS.
+Source inspection indicates a potential risk. Rendered verification has not been performed.
+successful operation is not the same as scientifically validated result
+Templates may have domain accents, but they should not behave like unrelated products.
+Migrate shared foundations before specialized surfaces, but do not block necessary feature work on a total redesign.
+UX1 provides implementation evidence. GW0 provides progression architecture. UX2 provides visual foundations. GW1 provides the first structural transformation.
+```
+
+Prompt UX1 does not modify production CSS, production UI components, tokens, colors, typography, routes, navigation, World/Lab/Atlas/Workshop shell, responsive behavior, animations, dependencies, assets, font configuration, mockups, Storybook, visual-regression infrastructure, runtime behavior, templates, scenarios, snapshots, or engine code. UX2 must not start without explicit direction and should be limited to semantic foundations and bounded primitive migration. GW0 and GW1 remain future prompts.
 
 ## Capability Policy
 

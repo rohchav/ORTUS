@@ -875,6 +875,7 @@ describe("strategy, control, and intervention semantics services", () => {
       readFileSync(join(repoRoot, "README.md"), "utf8"),
       readFileSync(join(repoRoot, "docs", "concepts.md"), "utf8"),
       readFileSync(join(repoRoot, "docs", "ui", "LIVING_SYSTEMS_ATLAS_VISUAL_DIRECTION.md"), "utf8"),
+      readFileSync(join(repoRoot, "docs", "ui", "EXISTING_DESIGN_TOKEN_AND_COMPONENT_AUDIT.md"), "utf8"),
       readFileSync(join(repoRoot, "src", "simulation", "README.md"), "utf8"),
       readFileSync(join(repoRoot, "docs", "roadmap.md"), "utf8"),
       readFileSync(join(repoRoot, "docs", "missing-pillars.md"), "utf8"),
@@ -904,6 +905,11 @@ describe("strategy, control, and intervention semantics services", () => {
     expect(docs).toContain("Do not use complexity to dismiss evidence, responsibility, causality, or intervention.");
     expect(docs).toContain("Simulation output is evidence about the model’s behavior, not automatically evidence about the world.");
     expect(docs).toContain("UX0 defines these destinations conceptually. It does not create routes, tabs, navigation, persistence, or runtime behavior.");
+    expect(docs).toContain("UX1 audits the current interface. It does not redesign it.");
+    expect(docs).toContain("The migration target is the Living Systems Atlas, but the audit must preserve current workflows and validated functionality.");
+    expect(docs).toContain("Do not modify production CSS or UI components during UX1.");
+    expect(docs).toContain("Do not add dependencies.");
+    expect(docs).toContain("Do not claim accessibility, responsiveness, contrast, keyboard, screen-reader, reduced-motion, or WCAG verification from source inspection alone.");
     expect(docs).toContain("Do not reintroduce next/font/google or any remote font dependency.");
     expect(docs).toContain("Motion should communicate state, information flow, or system change—not decorate an otherwise static interface.");
     expect(docs).toContain("Color must reinforce meaning, never carry it alone.");

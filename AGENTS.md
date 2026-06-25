@@ -412,6 +412,23 @@
 - Do not implement discovery, persistence, behavioral-landscape logic, or Research World progression during UX0.
 - Migrate future UI incrementally rather than through one uncontrolled rewrite.
 - Do not claim responsive, zoom, keyboard, screen-reader, assistive-technology, reduced-motion, or WCAG verification without direct evidence.
+- UX1 is source-level audit and documentation only.
+- Do not modify production CSS or UI components during UX1.
+- Do not add or change design tokens during UX1.
+- Do not add routes or navigation during UX1.
+- Do not implement World/Lab/Atlas/Workshop during UX1.
+- Classify UX1 components as retain, adapt, replace, or retire with evidence.
+- Preserve working behavior while planning visual migration.
+- Do not treat all Marathon-derived patterns as automatically invalid.
+- Retire tactical ornament without flattening ORTUS into generic SaaS.
+- Distinguish semantic tokens from repeated raw values.
+- Distinguish source evidence from rendered behavior.
+- Do not claim accessibility, responsiveness, contrast, keyboard, screen-reader, reduced-motion, or WCAG verification from source inspection alone.
+- Do not reintroduce remote fonts or `next/font/google`.
+- Do not add font files.
+- Do not add dependencies.
+- Do not weaken tests.
+- Do not start UX2, GW0, or GW1 without a dedicated prompt.
 - Do not make Builder graphs executable or Model Schemas runnable while documenting or later implementing fractal/multiscale analysis.
 - Keep Neural runtime graph scoped only to the Neural template.
 - Keep Neural Runtime Lab scenario-first but scientifically honest.

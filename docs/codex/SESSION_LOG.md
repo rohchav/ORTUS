@@ -1568,3 +1568,52 @@ Remaining limitations:
 - Performance smoke numbers were lower than recent P0/F0 runs on this machine; UX0 touched no runtime or UI source paths, so this is not evidence of a UX0 runtime regression.
 
 Next prompt after commit: pending user direction. Do not start GW0-GW6 Research World progression, a design-token/component audit, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any Research World/fractal/multiscale implementation without explicit approval.
+
+## 2026-06-25 - Prompt UX1 Existing Design Token and Component Audit
+
+Goal: add a documentation-only, source-level audit of ORTUS's existing design tokens, component patterns, hardcoded values, accessibility risks, responsive risks, dependency constraints, and migration sequence toward the Living Systems Atlas, without implementing UX2, GW0, GW1, routes, navigation, World/Lab/Atlas/Workshop, CSS changes, token changes, production UI component changes, dependencies, assets, font files, mockups, visual regression tooling, or runtime behavior.
+
+Implemented:
+
+- Added `docs/ui/EXISTING_DESIGN_TOKEN_AND_COMPONENT_AUDIT.md` as the UX1 source of truth.
+- Documented source inventory for global CSS, CSS-module absence, inline styles, canvas/SVG/chart styling, template visual descriptors, shell/navigation, Builder, Neural Runtime Lab, template-specific views, forms, validation UI, cards, panels, drawers, tabs, badges, tooltips, dialogs, tables, icon usage, motion, responsive rules, dependency constraints, and existing docs/tests.
+- Recorded current token findings: useful global CSS variables, but overloaded acid green, vermilion/orange, off-white borders, chart/domain colors, dense all-caps typography, clipped HUD geometry, repeated raw spacing, and a source-visible `var(--muted)` versus `--text-muted` mismatch.
+- Classified major patterns as retain, adapt, replace, or retire. Retained task-oriented workspace modes, the persistent run dock, runtime-honesty copy, ORTUS brand lockup, and graph outline/text alternatives. Adapted shared panels, domain accents, charts, graph/canvas surfaces, forms, and Marathon-derived geometry. Replaced the fragmented status/evidence-state system as a future target. Retired or reduced decorative scan/sweep/jitter/tactical ornament as future work.
+- Documented responsive and accessibility risks as source-level findings only, with browser, zoom, contrast, keyboard, reduced-motion, screen-reader, assistive-technology, and WCAG verification still unperformed.
+- Updated README, concepts, simulation README, roadmap, planned roadmap, UX0 visual direction, HCI audit, workspace IA, product philosophy, current context, AGENTS guardrails, and roadmap/control tests.
+
+Required boundary copy preserved:
+
+- UX1 audits the current interface. It does not redesign it.
+- The audit must distinguish production evidence from assumptions and unverified visual behavior.
+- The migration target is the Living Systems Atlas, but the audit must preserve current workflows and validated functionality.
+- Retire tactical framing without flattening ORTUS into generic SaaS.
+- Source inspection indicates a potential risk. Rendered verification has not been performed.
+- successful operation is not the same as scientifically validated result
+- Templates may have domain accents, but they should not behave like unrelated products.
+- Migrate shared foundations before specialized surfaces, but do not block necessary feature work on a total redesign.
+- UX1 provides implementation evidence. GW0 provides progression architecture. UX2 provides visual foundations. GW1 provides the first structural transformation.
+
+Non-goals preserved:
+
+- No production UI source, CSS source, package dependency, font configuration, or asset file was changed.
+- No semantic tokens, colors, typography, routes, navigation, World/Lab/Atlas/Workshop shell, responsive behavior, animation behavior, persistence, Research World progression, UX2, GW0-GW6, runtime behavior, template behavior, schema execution, or Builder execution was implemented.
+
+Checks:
+
+- `git status --short`: UX1 docs/tests dirty; no production UI/CSS/dependency/font/asset paths dirty.
+- `git log -1 --oneline`: `9c73ebc Add ORTUS Living Systems Atlas Visual Direction documentation and update related files`, confirming UX0 was committed before UX1 work.
+- `npm test -- roadmap control modelSchema socialLearning multiScale`: passed, 6 files and 59 tests.
+- `npm run typecheck`: passed.
+- `npm test`: passed, 58 files and 475 tests.
+- `npm run build`: passed with Next.js 15.5.19; `/` and `/builder` prerendered successfully.
+- `npm run perf:simulation`: passed. Local smoke results included Flocking 100 agents at 85.63 ticks/sec, Flocking 500 agents at 14.07 ticks/sec, Forest Fire 80x60 at 29.58 ticks/sec, and Predator-Prey default at 54.46 ticks/sec.
+- `git diff --check`: passed after the session-log append.
+- `npm run lint`: unavailable, package.json has no lint script.
+
+Remaining limitations:
+
+- UX1 is documentation and source-level audit only. Rendered responsive behavior, browser zoom behavior, keyboard walkthroughs, screen-reader behavior, assistive-technology behavior, reduced-motion behavior, color contrast, and WCAG conformance remain unverified.
+- UX2, GW0, and GW1 should not start without explicit user direction.
+
+Next prompt after commit: pending user direction. Do not start UX2, GW0-GW6 Research World progression, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any Research World/fractal/multiscale/design-system implementation without explicit approval.

@@ -1,8 +1,8 @@
 # ORTUS HCI / UX / Visual-Direction Audit
 
 Date: 2026-06-11  
-Updated: 2026-06-22 after Prompt UX0
-Prompt: UI-BRAND-1, UI-REMEDIATION-1, Prompt 34B, Prompt 35, Prompt 35B, Prompt 36, Prompt 36B, Prompt 37, Prompt 37B, Prompt 38, Prompt 38B, Prompt 39, Prompt 39B, Prompt F0, Prompt P0, Prompt UX0, Prompt N1, Prompt N1B, Prompt NUX1, Prompt NUX1B, Prompt N2, Prompt N2B, Prompt MR0
+Updated: 2026-06-25 after Prompt UX1
+Prompt: UI-BRAND-1, UI-REMEDIATION-1, Prompt 34B, Prompt 35, Prompt 35B, Prompt 36, Prompt 36B, Prompt 37, Prompt 37B, Prompt 38, Prompt 38B, Prompt 39, Prompt 39B, Prompt F0, Prompt P0, Prompt UX0, Prompt UX1, Prompt N1, Prompt N1B, Prompt NUX1, Prompt NUX1B, Prompt N2, Prompt N2B, Prompt MR0
 Status: source-based audit, not a formal WCAG audit
 
 ## 1. Executive Verdict
@@ -74,6 +74,9 @@ P0 adds no UI. It is a product-philosophy and learning-mission document, not a p
 Prompt UX0 update:
 UX0 adds no UI. It defines ORTUS Living Systems Atlas as the future visual and interaction target: living systems observatory, scientific expedition atlas, modular research workshop, and persistent model laboratory. The important HCI correction is blunt: ORTUS should feel like a living system observed through precise scientific instruments, not a system under tactical command. Future work should retire tactical HUD framing, military/combat-console metaphors, crosshairs, targeting language, warning saturation, scan lines, permanent glow, and fake terminal affect. It should preserve hierarchy, precision, contrast, disciplined spacing, strong silhouettes, high-quality motion, dark-mode capability, and distinctive identity. UX0 does not claim rendered responsive, zoom, keyboard, screen-reader, assistive-technology, reduced-motion, or WCAG verification.
 
+Prompt UX1 update:
+UX1 adds no UI. It audits the existing source implementation before visual migration. The blunt finding is that ORTUS has useful workbench structure, but its visual system is not yet a coherent design system: global CSS variables are overloaded, raw colors repeat as coincidence rather than semantics, status/evidence states are fragmented, template accents are useful but under-governed, and dense tactical ornament remains entangled with real hierarchy. UX1 records source-visible responsive and accessibility risks only. It does not claim rendered responsive behavior, contrast, keyboard completeness, screen-reader compatibility, assistive-technology readiness, reduced-motion equivalence, or WCAG conformance.
+
 ## 2. Audit Scope
 
 Inspected surfaces:
@@ -89,6 +92,7 @@ Inspected surfaces:
 - Prompt F0 docs-only fractal and multiscale mini-roadmap. No rendered UI, Scale Lens surface, fractal metric output, generator control, network scaling plot, or trajectory motif surface exists yet.
 - Prompt P0 docs-only product philosophy and learning mission. No Research World progression, mission, scoring, unlock, persistence, social, onboarding, or UI flow exists yet.
 - Prompt UX0 docs-only visual direction and UX principles. No World/Lab/Atlas/Workshop shell, route, navigation, design tokens, component redesign, discovery logic, behavioral landscape, progression, icon, animation, dependency, remote font, or mockup exists yet.
+- Prompt UX1 docs-only existing design-token and component audit. No CSS, production UI component, route, dependency, asset, font, token, rendered-verification, UX2, GW0, or World/Lab/Atlas/Workshop implementation exists yet.
 - Neural Excitation Network template-specific canvas edge rendering, legend notes, inspector rows, and atmosphere styling added in Prompt N1.
 - Neural Decision Readout Legend panel, output assembly activation bars, selected readout, and observational RPS payoff copy added in Prompt N1B.
 - Neural Runtime Lab scenario cards, mission/status readouts, live explanations, direct actions, plain-English controls, Advanced config drawer, bounded timeline, and RPS shell added in Prompt NUX1.

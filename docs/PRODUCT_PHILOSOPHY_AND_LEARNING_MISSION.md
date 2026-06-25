@@ -155,6 +155,8 @@ Any future Research World work should avoid XP, streaks, grinding loops, manipul
 
 Prompt UX0 adds the documentation-only ORTUS Living Systems Atlas visual direction before Research World implementation prompts. UX0 defines the visual and interaction target; Research World prompts will determine how that target is implemented. UX0 does not implement World/Lab/Atlas/Workshop routes, tabs, navigation, persistence, discovery logic, behavioral landscapes, CSS tokens, component redesigns, runtime behavior, or progression.
 
+Prompt UX1 adds the documentation-only existing design-token and component audit before any visual migration. It records implementation evidence for UX2/GW0/GW1 planning while preserving current workflows and runtime-honesty language. UX1 does not redesign the interface, add tokens, modify CSS or UI components, change routes, add dependencies, add assets, change font configuration, implement World/Lab/Atlas/Workshop, or claim rendered accessibility/responsive verification.
+
 ## Intellectual Progression Arc
 
 ORTUS progression is both technical and intellectual: users acquire tools while learning why simple explanations often fail.

@@ -1,6 +1,6 @@
 # ORTUS Living Systems Atlas Visual Direction
 
-Status: Prompt UX0 documentation, design-system planning, and UX-principle definition only. UX0 does not implement routes, navigation, a World/Lab/Atlas/Workshop shell, component redesigns, CSS rewrites, typography changes, color-token changes, icons, animations, persistent lab state, progression, unlocks, discoveries, behavioral landscapes, model composition, runtime behavior, template behavior, dependencies, remote fonts, image assets, or generated mockups.
+Status: Prompt UX0 documentation, design-system planning, and UX-principle definition only. UX0 does not implement routes, navigation, a World/Lab/Atlas/Workshop shell, component redesigns, CSS rewrites, typography changes, color-token changes, icons, animations, persistent lab state, progression, unlocks, discoveries, behavioral landscapes, model composition, runtime behavior, template behavior, dependencies, remote fonts, image assets, or generated mockups. Prompt UX1 later audits the existing UI source in `EXISTING_DESIGN_TOKEN_AND_COMPONENT_AUDIT.md` without implementing UX0.
 
 ## Purpose
 
@@ -588,7 +588,7 @@ Documentation and visual direction only.
 
 ### Stage 1 — Token And Component Audit
 
-Future dedicated prompt should inventory current colors, typography, spacing, borders, elevation, panel variants, motion, accessibility, and Marathon-specific ornament. No shell redesign yet.
+Prompt UX1 completes the source-level inventory of current colors, typography, spacing, borders, elevation, panel variants, motion, accessibility and responsive risks, hardcoded values, dependencies, and Marathon-specific ornament in `EXISTING_DESIGN_TOKEN_AND_COMPONENT_AUDIT.md`. UX1 does not implement shell redesign, CSS changes, token changes, component changes, routes, dependencies, assets, or rendered verification.
 
 ### Stage 2 — Core Design Tokens
 
@@ -619,6 +619,7 @@ Recommended order:
 ```text
 P0: Product Philosophy and Learning Mission
 UX0: Living Systems Atlas Visual Direction
+UX1: Existing Design Token and Component Audit
 GW0: Research World Progression Mini-Roadmap
 GW1: Persistent World/Lab/Atlas/Workshop Shell
 GW2: Research Notebook and Reusable Assets

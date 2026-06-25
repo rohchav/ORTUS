@@ -152,14 +152,17 @@ describe("roadmap alignment and missing pillar reservations", () => {
     const missingPillarsPath = join(repoRoot, "docs", "missing-pillars.md");
     const productPhilosophyPath = join(repoRoot, "docs", "PRODUCT_PHILOSOPHY_AND_LEARNING_MISSION.md");
     const livingSystemsAtlasPath = join(repoRoot, "docs", "ui", "LIVING_SYSTEMS_ATLAS_VISUAL_DIRECTION.md");
+    const existingDesignAuditPath = join(repoRoot, "docs", "ui", "EXISTING_DESIGN_TOKEN_AND_COMPONENT_AUDIT.md");
     expect(existsSync(roadmapPath)).toBe(true);
     expect(existsSync(missingPillarsPath)).toBe(true);
     expect(existsSync(productPhilosophyPath)).toBe(true);
     expect(existsSync(livingSystemsAtlasPath)).toBe(true);
+    expect(existsSync(existingDesignAuditPath)).toBe(true);
 
     const roadmap = readFileSync(roadmapPath, "utf8");
     const productPhilosophy = readFileSync(productPhilosophyPath, "utf8");
     const livingSystemsAtlas = readFileSync(livingSystemsAtlasPath, "utf8");
+    const existingDesignAudit = readFileSync(existingDesignAuditPath, "utf8");
     expect(roadmap).toContain("completed through Prompt 39B");
     expect(roadmap).toContain("Post-30B stabilization");
     expect(roadmap).toContain(
@@ -176,9 +179,9 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(roadmap).toContain("Completed Prompt 39 scenario-planning foundation");
     expect(roadmap).toContain("Completed Prompt 39 scenario-planning audit");
     expect(roadmap).toContain("Prompt 35 adds a separate `Author Schema` Builder mode");
-    expect(roadmap).toContain("Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, MR0, F0, P0, and UX0 are complete.");
+    expect(roadmap).toContain("Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, MR0, F0, P0, UX0, and UX1 are complete.");
     expect(roadmap).toContain(
-      "The next prompt is pending user direction; do not start GW0-GW6 Research World progression, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any Research World/fractal/multiscale implementation without explicit approval."
+      "The next prompt is pending user direction; do not start UX2, GW0-GW6 Research World progression, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any Research World/fractal/multiscale/design-system implementation without explicit approval."
     );
     expect(roadmap).toContain("Prompt N2 adds Neural Strategy Adaptation V1 to the Neural Runtime Lab RPS/readout mode.");
     expect(roadmap).toContain("Non-roadmap Prompt N2B audits and hardens Neural Strategy Adaptation.");
@@ -193,6 +196,9 @@ describe("roadmap alignment and missing pillar reservations", () => {
     );
     expect(roadmap).toContain(
       "Docs-only Prompt UX0 records the ORTUS Living Systems Atlas visual and interaction target only; it does not implement World/Lab/Atlas/Workshop routes, tabs, navigation, shell redesign, CSS tokens, component changes, persistence, discovery logic, behavioral landscapes, progression, runtime behavior, dependencies, remote fonts, icons, animations, or mockups."
+    );
+    expect(roadmap).toContain(
+      "Docs-only Prompt UX1 records the existing design-token and component audit only; it inventories real UI/CSS/component sources, migration risk, accessibility and responsive source risks, and retain/adapt/replace/retire classifications."
     );
     expect(roadmap).toContain("MR0 is documentation only.");
     expect(roadmap).toContain("T1: Urban Daily Routine / Activity Choice Template V1.");
@@ -252,6 +258,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(roadmap).toContain("F5B: Hierarchical Trajectory Motif Analytics Audit.");
     expect(roadmap).toContain("P0: ORTUS Product Philosophy and Learning Mission.");
     expect(roadmap).toContain("UX0: Living Systems Atlas Visual Direction.");
+    expect(roadmap).toContain("UX1: Existing Design Token and Component Audit.");
     expect(roadmap).toContain("GW0: Research World Progression Mini-Roadmap.");
     expect(roadmap).toContain("GW1: Persistent Model Lab.");
     expect(roadmap).toContain("GW2: Discovery Atlas.");
@@ -315,10 +322,61 @@ describe("roadmap alignment and missing pillar reservations", () => {
       expect(livingSystemsAtlas).toContain(phrase);
     }
     expect(livingSystemsAtlas).toContain("UX0 must not implement GW0-GW6.");
+    expect(livingSystemsAtlas).toContain("Prompt UX1 completes the source-level inventory");
     expect(livingSystemsAtlas).toContain(
       "UX0 does not implement new routes, new navigation, a World/Lab/Atlas/Workshop shell, component redesigns"
     );
     expect(livingSystemsAtlas).not.toMatch(/next\/font\/google.*import/i);
+    for (const phrase of [
+      "UX1 audits the current interface. It does not redesign it.",
+      "The audit must distinguish production evidence from assumptions and unverified visual behavior.",
+      "The migration target is the Living Systems Atlas, but the audit must preserve current workflows and validated functionality.",
+      "Retire tactical framing without flattening ORTUS into generic SaaS.",
+      "Source inspection indicates a potential risk. Rendered verification has not been performed.",
+      "successful operation is not the same as scientifically validated result",
+      "Templates may have domain accents, but they should not behave like unrelated products.",
+      "Migrate shared foundations before specialized surfaces, but do not block necessary feature work on a total redesign.",
+      "UX1 provides implementation evidence. GW0 provides progression architecture. UX2 provides visual foundations. GW1 provides the first structural transformation.",
+      "UX1 must not modify production CSS or UI components.",
+      "No Tailwind configuration, CSS module files, Storybook, component-library package, icon package, chart package, graph package, animation package, local font files, or remote-font package was found.",
+      "Remote fonts are absent.",
+      "`next/font/google` is absent in app source.",
+      "UX1 adds no dependencies and removes none."
+    ]) {
+      expect(existingDesignAudit).toContain(phrase);
+    }
+    for (const heading of [
+      "## 3. Source Inventory",
+      "## 4. Existing Token Inventory",
+      "## 6. Component Inventory",
+      "## 7. Retain / Adapt / Replace / Retire Matrix",
+      "## 8. Marathon-Derived Conventions",
+      "## 10. Responsive Risks",
+      "## 11. Accessibility Risks",
+      "## 12. Status And Evidence States",
+      "## 17. Dependency Constraints",
+      "## 18. Future Semantic Token Candidates",
+      "## 19. Migration Risk Matrix",
+      "## 20. Migration Waves",
+      "## 21. UX2 Entry Criteria",
+      "## 22. GW0/GW1 Relationship",
+      "## 23. Verification Backlog",
+      "## 24. Non-Goals And Guardrails"
+    ]) {
+      expect(existingDesignAudit).toContain(heading);
+    }
+    for (const sourceEvidence of [
+      "src/app/globals.css",
+      "src/components/AppShell.tsx",
+      "src/components/builder/graph/BuilderGraphView.tsx",
+      "src/components/NeuralRuntimeLabPanel.tsx",
+      "src/lib/templateVisuals.ts",
+      "package.json",
+      "var(--muted)"
+    ]) {
+      expect(existingDesignAudit).toContain(sourceEvidence);
+    }
+    expect(existingDesignAudit).not.toMatch(/WCAG compliance.*verified/i);
 
     const missingPillars = readFileSync(missingPillarsPath, "utf8");
     for (const heading of [
@@ -355,6 +413,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
       readFileSync(join(repoRoot, "docs", "concepts.md"), "utf8"),
       readFileSync(join(repoRoot, "docs", "PRODUCT_PHILOSOPHY_AND_LEARNING_MISSION.md"), "utf8"),
       readFileSync(join(repoRoot, "docs", "ui", "LIVING_SYSTEMS_ATLAS_VISUAL_DIRECTION.md"), "utf8"),
+      readFileSync(join(repoRoot, "docs", "ui", "EXISTING_DESIGN_TOKEN_AND_COMPONENT_AUDIT.md"), "utf8"),
       readFileSync(join(repoRoot, "src", "simulation", "README.md"), "utf8"),
       readFileSync(join(repoRoot, "AGENTS.md"), "utf8")
     ].join("\n");
@@ -376,6 +435,12 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(docs).toContain("Do not add XP, streaks, grinding, or engagement manipulation by default.");
     expect(docs).toContain("Treat UX0 as documentation and design planning only.");
     expect(docs).toContain("Do not implement World/Lab/Atlas/Workshop without a dedicated prompt.");
+    expect(docs).toContain("UX1 audits the current interface. It does not redesign it.");
+    expect(docs).toContain("The audit must distinguish production evidence from assumptions and unverified visual behavior.");
+    expect(docs).toContain("Retire tactical framing without flattening ORTUS into generic SaaS.");
+    expect(docs).toContain("Distinguish semantic tokens from repeated raw values.");
+    expect(docs).toContain("Distinguish source evidence from rendered behavior.");
+    expect(docs).toContain("Do not start UX2, GW0, or GW1 without a dedicated prompt.");
   });
 
   it("keeps production template assumptions honest about reserved future pillars", () => {
