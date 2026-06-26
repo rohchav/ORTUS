@@ -1,7 +1,7 @@
 # ORTUS HCI / UX / Visual-Direction Audit
 
 Date: 2026-06-11  
-Updated: 2026-06-25 after Prompt UX2
+Updated: 2026-06-26 after Prompt UX2B rendered audit continuation
 Prompt: UI-BRAND-1, UI-REMEDIATION-1, Prompt 34B, Prompt 35, Prompt 35B, Prompt 36, Prompt 36B, Prompt 37, Prompt 37B, Prompt 38, Prompt 38B, Prompt 39, Prompt 39B, Prompt F0, Prompt P0, Prompt UX0, Prompt UX1, Prompt GW0, Prompt UX2, Prompt N1, Prompt N1B, Prompt NUX1, Prompt NUX1B, Prompt N2, Prompt N2B, Prompt MR0
 Status: source-based audit, not a formal WCAG audit
 
@@ -83,6 +83,9 @@ GW0 adds no UI. It is Research World product architecture, information architect
 Prompt UX2 update:
 UX2 adds a real semantic token foundation and migrates a bounded shared primitive set. This is useful, but it is not a rendered accessibility audit, not a Research World shell, and not runtime support. The most important correction is status semantics: a visual state must communicate whether it is operational, interaction, evidence, uncertainty, or capability state. Operational success means the requested software operation completed; it does not mean the modeled conclusion was scientifically validated. Selected is not supported, active is not validated, hovered is not important, contradicted is not failure, unresolved is not error, stale is not unsupported, planning-only is not non-runnable for the same reason, and future-only is not disabled functionality. UX2 does not claim rendered responsive, browser zoom, screen-reader, assistive-technology, forced-colors, or WCAG verification.
 
+Prompt UX2B continuation update:
+UX2B adds a dev-only Playwright/Axe rendered audit harness and tests for `/` and `/builder`, the specified viewport set, reduced-motion context, console/pageerror/hydration/asset failures, overflow checks, keyboard smoke coverage, shared primitives, status semantics, Builder badges, and Axe scans. The initial Chromium dependency blocker is resolved, and the full rendered suite now passes. The audit exposed and fixed real defects: `Paused` rendered with `data-state="idle"`, Builder fallback badges defaulted to `unverified`, `/` lacked an `h1`, and the reduced-motion harness needed explicit media emulation. This is meaningful rendered evidence for the UX2 shared foundation, but it is still not actual browser zoom verification, screen-reader verification, assistive-technology verification, forced-colors verification, complete WCAG conformance, or user-comprehension evidence. GW1 is conditionally ready only under a dedicated implementation prompt and follow-up audit.
+
 ## 2. Audit Scope
 
 Inspected surfaces:
@@ -134,7 +137,7 @@ Evidence:
 - Local Next route probe was previously available with approval for `/builder`; browser screenshot tooling is not installed in this environment.
 - For UI-REMEDIATION-1, the prompt attachment directory did not contain an actual screenshot file; route availability was verified by HTTP probing and layout causes were confirmed from source/CSS.
 - For Prompt 34B, HTTP route probes returned 200 for `/` and `/builder`. Local socket access required an approved unsandboxed `curl` because the sandbox blocks local sockets.
-- No Chromium, Chrome, Firefox, `wkhtmltoimage`, or Playwright dependency was available, so viewport, zoom, and rendered overlap findings remain source-based.
+- Playwright and Axe dependencies now exist for dev audit tooling, and the UX2B suite rendered `/` and `/builder` successfully. Viewport automation, reduced-motion checks, keyboard/focus smoke coverage, status-semantic checks, shared-primitive checks, and Axe scans passed. Actual browser UI zoom, screen-reader behavior, assistive-technology behavior, forced-colors behavior, complete WCAG conformance, and user-comprehension evidence remain unverified.
 
 Limitations:
 

@@ -1,6 +1,6 @@
 # ORTUS Current Context
 
-Last updated: 2026-06-25 after Prompt UX2 Living Systems Atlas Semantic Token Foundation
+Last updated: 2026-06-26 after Prompt UX2B rendered audit continuation
 
 ## Project Identity
 
@@ -72,6 +72,8 @@ Prompt UX2 adds `docs/ui/LIVING_SYSTEMS_ATLAS_SEMANTIC_TOKEN_FOUNDATION.md`, sem
 
 UX2 status guardrails: a visual state must communicate whether it is operational, interaction, evidence, uncertainty, or capability state. Operational success means the requested software operation completed. It does not mean the modeled conclusion was scientifically validated. Selected is not supported; active is not validated; hovered is not important. Contradicted is not failure; unresolved is not error; stale is not unsupported; planning-only is not non-runnable for the same reason; future-only is not disabled functionality. Domain color identifies modeled content. Semantic color communicates interface and evidence state.
 
+Prompt UX2B adds a dev-only Playwright/Axe rendered audit harness: `playwright.config.ts`, `tests/ui/semantic-foundation.spec.ts`, `npm run test:ui`, `npm run test:ui:headed`, and `npm run test:ui:report`. The harness targets existing routes `/` and `/builder`, the UX2 viewport set, reduced-motion context, console/pageerror/hydration/asset failures, overflow checks, keyboard smoke coverage, shared primitives, status semantics, Builder badges, and Axe scans. The initial Chromium dependency blocker is resolved. The full rendered suite now passes, and the continuation fixed the real defects it exposed: `Paused` now uses operational `paused` rather than `idle`, Builder fallback badges use explicit capability states, `/` has a hidden `h1`, and the reduced-motion test explicitly emulates the reduced-motion media state. UX2B does not verify actual browser zoom, screen-reader behavior, assistive-technology behavior, forced-colors behavior, full WCAG conformance, or user comprehension. GW1 is conditionally ready only under a dedicated implementation prompt and follow-up audit.
+
 Confirmed UI layout defects fixed in UI-REMEDIATION-1:
 
 - The header used fixed `height: 50px` with `overflow-y: hidden`, which could clip crowded lower header content.
@@ -85,11 +87,11 @@ Built-in production templates currently include Epidemic Spread, Opinion Dynamic
 
 ## Completed Prompt State
 
-Durable docs and source indicate completed roadmap work through Prompt 39B plus non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, MR0, and Prompts F0, P0, UX0, UX1, GW0, and UX2. Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 39B: Scenario Planning From Schema Audit are complete. Prompt N1: Neural Excitation Network Template V1 is complete. Prompt N1B: Neural Excitation Network Template Audit + Decision Readout V1 is complete. Prompt NUX1: Neural Runtime Lab UX V1 is complete. Prompt NUX1B: Neural Runtime Lab UX Audit + Build Investigation is complete. Prompt N2: Neural Strategy Adaptation V1 is complete. Prompt N2B: Neural Strategy Adaptation Audit is complete. Prompt MR0: Templates + Decision Clusters Mini-Roadmap is complete. Prompt F0: Fractal and Multiscale Analysis Mini-Roadmap is complete as documentation only. Prompt P0: ORTUS Product Philosophy and Learning Mission is complete as documentation only. Prompt UX0: ORTUS Living Systems Atlas Visual Direction is complete as documentation and design planning only. Prompt UX1: Existing Design Token and Component Audit is complete as documentation and source-level audit only. Prompt GW0: ORTUS Research World Progression Mini-Roadmap is complete as documentation and progression architecture only. Prompt UX2: Living Systems Atlas Semantic Token Foundation is complete as a bounded UI/CSS implementation.
+Durable docs and source indicate completed roadmap work through Prompt 39B plus non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, MR0, and Prompts F0, P0, UX0, UX1, GW0, UX2, and UX2B. Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 39B: Scenario Planning From Schema Audit are complete. Prompt N1: Neural Excitation Network Template V1 is complete. Prompt N1B: Neural Excitation Network Template Audit + Decision Readout V1 is complete. Prompt NUX1: Neural Runtime Lab UX V1 is complete. Prompt NUX1B: Neural Runtime Lab UX Audit + Build Investigation is complete. Prompt N2: Neural Strategy Adaptation V1 is complete. Prompt N2B: Neural Strategy Adaptation Audit is complete. Prompt MR0: Templates + Decision Clusters Mini-Roadmap is complete. Prompt F0: Fractal and Multiscale Analysis Mini-Roadmap is complete as documentation only. Prompt P0: ORTUS Product Philosophy and Learning Mission is complete as documentation only. Prompt UX0: Living Systems Atlas Visual Direction is complete as documentation and design planning only. Prompt UX1: Existing Design Token and Component Audit is complete as documentation and source-level audit only. Prompt GW0: Research World Progression Mini-Roadmap is complete as documentation and progression architecture only. Prompt UX2: Living Systems Atlas Semantic Token Foundation is complete as a bounded UI/CSS implementation. Prompt UX2B: Living Systems Atlas Semantic Foundation Rendered Browser Audit is complete, with GW1 conditionally ready but not started.
 
 The post-30B repository hygiene, dependency stabilization, durable context, and performance/scalability pass has also been completed. Recent commits include `dd6c256` for repo context/generated-artifact hygiene, `4949b72` for dependency and performance script stabilization, and `a80d5b7` for simulation performance instrumentation and spatial indexing foundations.
 
-The next prompt is pending user direction; do not start GW1-GW6 Research World implementation, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any Research World/fractal/multiscale implementation without explicit approval. A separate rendered responsive/design-system audit is still recommended before making mobile-readiness, browser zoom, keyboard walkthrough, screen-reader, assistive-technology, WCAG, clipboard, focus-return, forced-colors, reduced-motion, or polished visual-workbench claims.
+The next prompt should wait for user direction; do not start GW1-GW6 Research World implementation, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any Research World/fractal/multiscale implementation without explicit approval. UX2B provides rendered route, viewport, reduced-motion, keyboard/focus smoke, shared-primitive, status-semantic, and Axe coverage, but actual browser zoom, screen-reader, assistive-technology, forced-colors, full WCAG, clipboard, focus-return beyond the covered smoke paths, and user-comprehension claims remain unverified.
 
 Implemented runtime foundations include scenarios, snapshots, template-defined behavior modes, agent composition, interventions, experiments, run summaries/comparison, seeded randomness, metrics, spaces, template metadata, and a narrow Opinion Dynamics `socialLearning` behavior mode audited in Prompt 33D.
 
@@ -150,8 +152,8 @@ Current local toolchain observed during stabilization:
 
 - Node: `v24.16.0`
 - npm: `11.13.0`
-- Installed top-level packages include `next@15.5.19`, `react@19.2.7`, `react-dom@19.2.7`, `vitest@4.1.8`, and `vite-node@6.0.0`.
-- `package.json` currently defines `next`, `react`, `react-dom`, `zod`, `zustand`, TypeScript, Vitest, and `vite-node`.
+- Installed top-level packages include `next@15.5.19`, `react@19.2.7`, `react-dom@19.2.7`, `vitest@4.1.8`, `vite-node@6.0.0`, `@playwright/test@1.61.1`, and `@axe-core/playwright@4.12.1`.
+- `package.json` currently defines `next`, `react`, `react-dom`, `zod`, `zustand`, TypeScript, Vitest, `vite-node`, and dev-only Playwright/Axe UI audit tooling.
 - `npm install` completed cleanly after adding explicit `vite-node` support for `npm run perf:simulation`.
 - `npm run lint` is unavailable because `package.json` has no lint script.
 
@@ -185,7 +187,7 @@ These are local smoke numbers only. They are not benchmark evidence for scalabil
 
 Generated artifacts have been removed from git tracking without deleting local files:
 
-- `.gitignore` now ignores `node_modules/`, `.next/`, `tsconfig.tsbuildinfo`, local env files, and package-manager debug logs.
+- `.gitignore` now ignores `node_modules/`, `.next/`, `tsconfig.tsbuildinfo`, local env files, package-manager debug logs, and Playwright report/output artifacts.
 - `git rm --cached -r .next tsconfig.tsbuildinfo` removed the previously tracked generated artifacts from git tracking.
 - `git ls-files .next tsconfig.tsbuildinfo` now returns no tracked files.
 - The local `.next` directory and local `tsconfig.tsbuildinfo` still exist after build/typecheck activity, but they are ignored.
@@ -198,13 +200,13 @@ Prompt 35 and Prompt 35B were committed together in `7696381 feat: Implement Mod
 ## Current Blockers
 
 - npm reports two moderate audit findings; no force fix was run.
-- No browser screenshot/DOM measurement/zoom audit was possible in this environment, so rendered layout and 125%/150%/200% zoom behavior remain unverified.
+- Actual browser zoom at 125%, 150%, and 200%, screen-reader behavior, assistive-technology behavior, forced-colors behavior, complete WCAG conformance, and user comprehension remain unverified.
 
 ## Next Recommended Prompt After Stabilization
 
-Next prompt: pending user direction; do not start GW1-GW6 Research World implementation, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any Research World/fractal/multiscale implementation without explicit approval.
+Next prompt: await user direction; do not start GW1-GW6 Research World implementation, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any Research World/fractal/multiscale implementation without explicit approval.
 
-Next recommended UI/design-system prompt: `UI-DESIGN-SYSTEM-1: Rendered Responsive, Typography + Visualization Accessibility Audit`.
+Next recommended UI/design-system prompt after UX2B: `UI-DESIGN-SYSTEM-1: Rendered Responsive, Typography + Visualization Accessibility Audit`.
 
 ## Critical Guardrails
 

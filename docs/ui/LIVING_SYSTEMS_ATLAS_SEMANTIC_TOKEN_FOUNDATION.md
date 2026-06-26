@@ -313,7 +313,11 @@ Keyboard operability for shared controls is source-preserved through native butt
 
 UX2 source and build verification should cover `/` and `/builder` so existing workflows remain reachable. Browser-rendered viewport screenshots at 1440x900, 1280x720, approximately 900px width, and short-height desktop remain desirable but were not available through repository tooling at implementation time unless separately reported in the session log.
 
+Prompt UX2B adds a dev-only Playwright/Axe audit harness in `playwright.config.ts` and `tests/ui/semantic-foundation.spec.ts`. The harness targets `/` and `/builder`, the UX2 viewport set, reduced-motion context, console/pageerror/hydration/asset checks, conservative overflow checks, keyboard smoke coverage, shared primitive rendering, rendered status distinctions, Builder badges, and Axe scans. The continuation run completed successfully after the host Chromium dependency blocker was resolved: all 15 rendered tests passed. See `LIVING_SYSTEMS_ATLAS_SEMANTIC_FOUNDATION_AUDIT.md`.
+
 Do not claim rendered responsive behavior, browser zoom behavior, screen-reader behavior, assistive-technology behavior, forced-colors readiness, or WCAG conformance from UX2 source tests alone.
+
+Viewport automation is not actual browser UI zoom. Browser zoom remains unverified unless explicitly tested.
 
 ## Deferred Migration
 
@@ -325,9 +329,9 @@ Deferred:
 - Builder graph node/edge visual refinements.
 - Schema validation/fit/scenario-planning card systems beyond inherited tokens.
 - Neural Runtime Lab specialized panels.
-- Responsive and zoom remediation.
+- Responsive and actual browser-zoom remediation.
 - A full tooltip primitive.
-- A full rendered accessibility audit.
+- Full screen-reader, assistive-technology, forced-colors, actual browser-zoom, and WCAG verification beyond the UX2B automated rendered harness.
 - GW1 destination shell work.
 
 The next implementation branch should not treat these deferred areas as already solved by UX2.
@@ -337,6 +341,8 @@ The next implementation branch should not treat these deferred areas as already 
 UX2 defines how shared design foundations communicate interface, evidence, uncertainty, and capability state.
 
 GW1 must decide how the structural destination shell wraps current validated workflows. It must preserve current `/` and `/builder` access until a dedicated implementation and audit prove replacement safe.
+
+GW1 is conditionally ready after UX2B, but it must still begin only from a dedicated prompt and must preserve `/` and `/builder` until its own implementation and audit prove replacement safe.
 
 Required boundary:
 

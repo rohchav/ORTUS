@@ -5,7 +5,7 @@ import { OrtusBrand } from "../branding";
 import { maxVisualBuilderWorkspaceJsonLength, visualBuilderWorkspaceArtifactType } from "../../simulation/visualBuilderWorkspace";
 import { BuilderStatusBadge } from "./BuilderStatusBadge";
 import type { BuilderModeId } from "./BuilderModeTabs";
-import type { BuilderWorkspaceViewModel } from "./builderViewModel";
+import type { BuilderStatusBadge as BuilderStatusBadgeModel, BuilderWorkspaceViewModel } from "./builderViewModel";
 
 interface BuilderHeaderProps {
   activeMode: BuilderModeId;
@@ -39,45 +39,59 @@ export function BuilderHeader({
   const workspace = viewModel?.workspace;
   const authoring = activeMode === "authorSchema";
   const graphViewing = activeMode === "graph";
-  const statusBadges = [
+  const statusBadges: BuilderStatusBadgeModel[] = [
     ...(authoring || !viewModel
       ? [
           {
             label: "Structural only",
             tone: "accent" as const,
-            description: "Builder artifacts and forms are structural only."
+            description: "Builder artifacts and forms are structural only.",
+            category: "capability" as const,
+            state: "planning-only" as const
           },
           {
             label: "Not runnable",
             tone: "danger" as const,
-            description: "A structurally valid artifact is not a runnable simulation."
+            description: "A structurally valid artifact is not a runnable simulation.",
+            category: "capability" as const,
+            state: "non-runnable" as const
           },
           {
             label: "No compiler",
             tone: "neutral" as const,
-            description: "The Builder does not compile or interpret model schemas."
+            description: "The Builder does not compile or interpret model schemas.",
+            category: "capability" as const,
+            state: "unsupported" as const
           },
           {
             label: "No schema execution",
             tone: "neutral" as const,
-            description: "The Builder does not execute model schemas or rule declarations."
+            description: "The Builder does not execute model schemas or rule declarations.",
+            category: "capability" as const,
+            state: "unsupported" as const
           }
         ]
       : viewModel.statusBadges),
     {
       label: "No template generation",
       tone: "neutral" as const,
-      description: "Builder artifacts do not generate templates."
+      description: "Builder artifacts do not generate templates.",
+      category: "capability",
+      state: "unsupported"
     },
     {
       label: "No scenario generation",
       tone: "neutral" as const,
-      description: "Builder artifacts do not generate scenarios."
+      description: "Builder artifacts do not generate scenarios.",
+      category: "capability",
+      state: "unsupported"
     },
     {
       label: "No RunConfig generation",
       tone: "neutral" as const,
-      description: "Builder artifacts do not generate RunConfigs."
+      description: "Builder artifacts do not generate RunConfigs.",
+      category: "capability",
+      state: "unsupported"
     }
   ];
 

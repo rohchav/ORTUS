@@ -1755,3 +1755,111 @@ Remaining limitations:
 - A dedicated rendered responsive, zoom, keyboard, reduced-motion, contrast, screen-reader, assistive-technology, and visual-regression audit remains needed before making polished Living Systems Atlas readiness claims.
 
 Next prompt after commit: pending user direction. Do not start GW1-GW6, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any Research World/fractal/multiscale implementation without explicit approval.
+
+## 2026-06-25 - Prompt UX2B Amendment Rendered Browser Audit Harness
+
+Goal: add a minimal dev-only rendered browser audit harness for the UX2 shared semantic foundation after the previous UX2B attempt stopped because no rendered browser tooling existed. The amendment authorizes Playwright and Axe only as audit tooling, not production behavior.
+
+Implemented:
+
+- Added `@playwright/test` and `@axe-core/playwright` as dev dependencies.
+- Added `test:ui`, `test:ui:headed`, and `test:ui:report` scripts.
+- Added `playwright.config.ts` with Chromium-only execution, existing Next app web server on `127.0.0.1:3000`, base URL `http://127.0.0.1:3000`, server reuse outside CI, one worker, deterministic timeouts, failure-only screenshots/video/traces, and HTML/list reporters.
+- Added `.gitignore` entries for `playwright-report/`, `test-results/`, and `blob-report/`.
+- Added `tests/ui/semantic-foundation.spec.ts` covering existing routes `/` and `/builder`, specified viewport sizes, reduced-motion context, console/pageerror/hydration/asset failure detection, conservative overflow checks, keyboard smoke checks, shared primitives, rendered status attributes, Builder status badges, status-pair distinction fixtures, and Axe scans.
+- Added `docs/ui/LIVING_SYSTEMS_ATLAS_SEMANTIC_FOUNDATION_AUDIT.md` as the UX2B rendered-audit record.
+
+Commands and results:
+
+- `npm install --save-dev @playwright/test @axe-core/playwright`: passed; packages were already satisfied and npm still reports two moderate vulnerabilities. No `npm audit fix --force` was run.
+- `npx playwright install chromium`: passed with no output; local cache contains `chromium-1228`, `chromium_headless_shell-1228`, and `ffmpeg-1011`.
+- `npm run test:ui` in the sandbox: failed before tests because Next dev server could not bind `127.0.0.1:3000` (`listen EPERM`).
+- `npm run test:ui` with elevated local-server permissions: reached the Playwright runner, but Chromium launch failed before any route rendered because `libnspr4.so` is missing. The first test failed and the remaining 14 tests did not run.
+- A direct launch of the full cached Chromium binary failed with the same missing `libnspr4.so`.
+- `npx playwright install-deps --dry-run chromium`: reported 27 missing host packages, including `libnspr4`, `libnss3`, X11/font packages, and `xvfb`.
+- `npx playwright install-deps chromium`: failed because sudo authentication requires an interactive terminal.
+- `npx playwright test --list`: passed and listed 15 UI tests.
+- `npm run typecheck`: passed.
+- `npm test -- roadmap`: passed after updating the roadmap-status assertion for the UX2B blocked state.
+- `npm test`: passed, 59 files and 479 tests.
+- `npm run build`: passed with Next.js 15.5.19; `/` and `/builder` prerendered successfully.
+- `npm run perf:simulation`: passed. Local smoke results included Flocking 100 agents at 115.39 ticks/sec, Flocking 500 agents at 16.49 ticks/sec, Forest Fire 80x60 at 26.94 ticks/sec, and Predator-Prey default at 82.17 ticks/sec.
+- `git diff --check`: passed.
+- `npm run lint`: unavailable, package.json has no lint script.
+
+Result:
+
+- No rendered UX2 baseline was produced.
+- No Axe scan results were produced.
+- No route-level console, hydration, overflow, keyboard, reduced-motion, status-semantic, or missing-asset findings can be claimed from the browser run.
+- No production UI source fixes were attempted because the required rendered baseline did not execute.
+
+Current blocker:
+
+- Playwright Chromium cannot launch until host system dependencies are installed outside this non-interactive Codex session.
+
+Next prompt:
+
+- Resolve the UX2B host dependency blocker or wait for user direction. Do not start GW1 from this state.
+
+## 2026-06-26 - Prompt UX2B Continuation Rendered Audit Completion
+
+Goal: continue UX2B from the existing dirty worktree after the host Chromium dependency blocker was resolved. Fix the first rendered semantic defect, add focused regression coverage, run all 15 rendered tests, complete UX2B documentation, and decide GW1 readiness without starting GW1.
+
+Starting state:
+
+- Current commit: `e3e08c9`.
+- Starting dirty worktree contained the expected UX2B harness, package, documentation, roadmap-test, and related audit files from the prior amendment.
+- Prompt UX2B was not restarted and no existing harness/package/doc work was discarded.
+
+Root cause and decision:
+
+- The first rendered failure showed visible label `Paused`, ARIA label `Paused`, category `operational`, and `data-state="idle"`.
+- Source inspection showed the simulation has an initialized engine and snapshot at tick 0, time is not advancing, and Run advances from that displayed state.
+- Interpretation selected: Paused. The correct rendered contract is `Paused / Paused / operational / paused`.
+- Root cause was `TopStatusBar` rendering `Paused` from `isRunning === false` while omitting explicit semantic state, causing `StatusPill` to fall back from legacy neutral tone to `idle`.
+
+Implemented:
+
+- Added `src/components/runStatusSemantics.ts` as the source of truth for `Running`/`Paused` status pill label, tone, category, and state.
+- Updated `TopStatusBar` to pass explicit operational `running`/`paused` state to `StatusPill`.
+- Updated `BuilderHeader` fallback/no-generation badges to pass explicit capability states instead of defaulting to `unverified`.
+- Added a visually hidden route `h1` in `AppShell` and defined `.sr-only` in global CSS after Axe found `/` had no level-one heading.
+- Updated the reduced-motion Playwright test to call `page.emulateMedia({ reducedMotion: "reduce" })`; the assertion still requires reduced-motion context.
+- Extended `semanticTokenFoundation.test.ts` to cover the run-status semantic model, StatusPill data/ARIA source contract, explicit operational-state preservation, Builder fallback badge states, and the hidden route heading utility.
+- Updated README, planned roadmap, roadmap, UX2 docs, HCI audit, current context, AGENTS guardrails, the UX2B audit doc, and roadmap tests so they no longer claim UX2B is blocked.
+
+Rendered audit results:
+
+- Focused original failure rerun passed: `simulate loads without console, hydration, asset, or overflow failures at desktop 1440x900`.
+- Focused Builder fallback badge case passed.
+- Focused reduced-motion case passed.
+- Focused simulate Axe case passed.
+- Full `npm run test:ui` passed: 15 tests run, 15 passed, 0 failed, 0 skipped.
+- Routes covered: `/` and `/builder`.
+- Viewports covered: `1440x900`, `1280x720`, `1024x768`, `900x700`, and `1280x600`.
+- Rendered checks passed for console/page errors, hydration mismatch messages, critical asset failures, document overflow, conservative clipping, representative keyboard traversal, visible focus, icon-control names, shared panels/buttons/forms, StatusPill, BuilderStatusBadge, semantic status distinctions, reduced-motion context, and Axe scans.
+- The only repeated warnings were Node web-server warnings that `NO_COLOR` was ignored because `FORCE_COLOR` was set; these were not page console errors.
+
+Final checks:
+
+- `npm test -- semanticTokenFoundation roadmap`: passed, 2 files and 10 tests after updating stale roadmap expectations and one test tuple type.
+- `npm run test:ui`: passed, 15 tests.
+- `npm run typecheck`: passed.
+- `npm test`: passed, 59 files and 481 tests.
+- `npm run build`: passed with Next.js 15.5.19; `/` and `/builder` prerendered successfully.
+- `npm run perf:simulation`: passed. Local smoke results included Flocking 100 agents at 116.54 ticks/sec, Flocking 500 agents at 16.02 ticks/sec, Forest Fire 80x60 at 26.97 ticks/sec, and Predator-Prey default at 82.48 ticks/sec.
+- `git diff --check`: passed.
+- `npm run lint`: unavailable, package.json has no lint script.
+
+Non-goals preserved:
+
+- No GW1, GW2-GW6, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, new routes, Research World shell, runtime behavior, simulation behavior, persistence, assets, fonts, production dependency, Builder execution, schema execution, route generation, or broad redesign was added.
+- Playwright and Axe remain dev audit tooling only.
+- UX2B does not verify actual browser zoom, screen-reader behavior, assistive-technology behavior, forced-colors behavior, complete WCAG conformance, or user comprehension.
+
+Result:
+
+- UX2B rendered browser audit is complete.
+- GW1 readiness decision: conditionally ready. GW1 still requires an explicit prompt and its own audit.
+- The worktree remains intentionally dirty and uncommitted for user review.

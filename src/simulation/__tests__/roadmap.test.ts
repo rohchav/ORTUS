@@ -211,10 +211,12 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(roadmap).toContain("Completed Prompt 39 scenario-planning foundation");
     expect(roadmap).toContain("Completed Prompt 39 scenario-planning audit");
     expect(roadmap).toContain("Prompt 35 adds a separate `Author Schema` Builder mode");
-    expect(roadmap).toContain("Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, MR0, F0, P0, UX0, UX1, GW0, and UX2 are complete.");
+    expect(roadmap).toContain("Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, MR0, F0, P0, UX0, UX1, GW0, UX2, and UX2B are complete.");
     expect(roadmap).toContain(
-      "The next prompt is pending user direction; do not start GW1-GW6 Research World implementation, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any Research World/fractal/multiscale implementation without explicit approval."
+      "GW1 is conditionally ready but not implemented; do not start GW1-GW6 Research World implementation, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any Research World/fractal/multiscale implementation without explicit approval."
     );
+    expect(roadmap).toContain("Prompt UX2B adds a rendered browser audit harness with Playwright and Axe, and executes it.");
+    expect(roadmap).toContain("The full suite passed for `/` and `/builder`, including route load, viewport, reduced-motion, keyboard/focus smoke, shared primitive, status-semantic, Builder badge, and Axe checks.");
     expect(roadmap).toContain("Prompt N2 adds Neural Strategy Adaptation V1 to the Neural Runtime Lab RPS/readout mode.");
     expect(roadmap).toContain("Non-roadmap Prompt N2B audits and hardens Neural Strategy Adaptation.");
     expect(roadmap).toContain(
@@ -296,6 +298,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(roadmap).toContain("UX1: Existing Design Token and Component Audit.");
     expect(roadmap).toContain("GW0: Research World Progression Mini-Roadmap.");
     expect(roadmap).toContain("UX2: Shared Design Foundations.");
+    expect(roadmap).toContain("UX2B - Living Systems Atlas Semantic Foundation Rendered Browser Audit Harness.");
     expect(roadmap).toContain("GW1: Persistent Destination Shell.");
     expect(roadmap).toContain("GW1B: Persistent Destination Shell Audit.");
     expect(roadmap).toContain("GW2: Research Notebook And Reusable Assets.");
@@ -308,7 +311,9 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(roadmap).toContain("GW5B: Contextual Capability Guidance Audit.");
     expect(roadmap).toContain("GW6: Composition Frontiers And Grand Systems Challenges.");
     expect(roadmap).toContain("GW6B: Composition Frontiers And Grand Systems Challenges Audit.");
-    expect(roadmap).toContain("P0, UX0, UX1, and GW0 are complete as documentation-only prompts.");
+    expect(roadmap).toContain(
+      "P0, UX0, UX1, and GW0 are complete as documentation-only prompts, and UX2/UX2B are complete as bounded shared visual-foundation and rendered-audit prompts."
+    );
     expect(roadmap).toContain("UX2 - Living Systems Atlas Semantic Token Foundation.");
     expect(roadmap).toContain("Prompt UX0 is a docs-only visual direction and UX-principle branch");
     expect(roadmap).toContain(
@@ -411,7 +416,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
       "Progression must not rely only on color, maps, animation, drag/drop, hover, or decorative metaphor.",
       "GW0 defines what the product must communicate. UX2 defines how shared design foundations communicate it. GW1 implements the first structural shell using both.",
       "GW0 -> UX2 -> GW1 -> GW1B -> GW2 -> GW2B -> GW3 -> GW3B -> GW4 -> GW4B -> GW5 -> GW5B -> GW6 -> GW6B",
-      "UX2 and GW1-GW6 remain future prompts and must not start without explicit direction.",
+      "GW1-GW6 remain future prompts and must not start without explicit direction.",
       "no production UI, CSS, runtime, persistence, route, asset, dependency, or package file is changed by GW0"
     ]) {
       expect(researchWorldRoadmap).toContain(phrase);

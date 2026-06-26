@@ -1,10 +1,10 @@
 # ORTUS Full Prompt Roadmap
 
-*Last updated after Prompt UX2 Living Systems Atlas Semantic Token Foundation.*
+*Last updated after Prompt UX2B rendered audit continuation.*
 
 ## Current Status
 
-ORTUS has completed the core runtime/template foundation, scenario system, uncertainty layer, assumptions/limits layer, systems primitive registry, hybrid composition, multi-scale structure, scale-view state, boundary/environment models, spatial fields, observability, causality, quantity semantics, emergence pattern descriptors, robustness/resilience semantics, strategy/control semantics, model schema declarations, knowledge/memory/social-learning semantics, visual builder workspace schemas, template/schema compatibility mapping, the template/schema compatibility mapping audit, a narrow Opinion Dynamics social-learning behavior mode, the Opinion Dynamics social-learning runtime audit, Safe Builder UI Shell V1, the Safe Builder UI Shell + workspace information architecture audit, Model Schema Authoring Forms V1, the Model Schema Authoring Forms Audit, Visual Builder Graph View V1, the Visual Builder Graph View Audit, Schema Validation UX + Repair Suggestions V1, the Schema Validation UX + Repair Suggestions Audit, Schema-to-Template Fit Report V1, the Schema-to-Template Fit Report Audit, Scenario Planning From Schema V1, the Scenario Planning From Schema Audit, non-roadmap Prompt N1 Neural Excitation Network Template V1, non-roadmap Prompt N1B Neural Excitation Network Template Audit + Decision Readout V1, non-roadmap Prompt NUX1 Neural Runtime Lab UX V1, non-roadmap Prompt NUX1B Neural Runtime Lab UX Audit + Build Investigation, non-roadmap Prompt N2 Neural Strategy Adaptation V1, non-roadmap Prompt N2B Neural Strategy Adaptation Audit, non-roadmap Prompt MR0 Templates + Decision Clusters Mini-Roadmap, docs-only Prompt F0 Fractal and Multiscale Analysis Mini-Roadmap, docs-only Prompt P0 ORTUS Product Philosophy and Learning Mission, docs-only Prompt UX0 ORTUS Living Systems Atlas Visual Direction, docs-only Prompt UX1 Existing Design Token and Component Audit, docs-only Prompt GW0 ORTUS Research World Progression Mini-Roadmap, and Prompt UX2 Living Systems Atlas Semantic Token Foundation.
+ORTUS has completed the core runtime/template foundation, scenario system, uncertainty layer, assumptions/limits layer, systems primitive registry, hybrid composition, multi-scale structure, scale-view state, boundary/environment models, spatial fields, observability, causality, quantity semantics, emergence pattern descriptors, robustness/resilience semantics, strategy/control semantics, model schema declarations, knowledge/memory/social-learning semantics, visual builder workspace schemas, template/schema compatibility mapping, the template/schema compatibility mapping audit, a narrow Opinion Dynamics social-learning behavior mode, the Opinion Dynamics social-learning runtime audit, Safe Builder UI Shell V1, the Safe Builder UI Shell + workspace information architecture audit, Model Schema Authoring Forms V1, the Model Schema Authoring Forms Audit, Visual Builder Graph View V1, the Visual Builder Graph View Audit, Schema Validation UX + Repair Suggestions V1, the Schema Validation UX + Repair Suggestions Audit, Schema-to-Template Fit Report V1, the Schema-to-Template Fit Report Audit, Scenario Planning From Schema V1, the Scenario Planning From Schema Audit, non-roadmap Prompt N1 Neural Excitation Network Template V1, non-roadmap Prompt N1B Neural Excitation Network Template Audit + Decision Readout V1, non-roadmap Prompt NUX1 Neural Runtime Lab UX V1, non-roadmap Prompt NUX1B Neural Runtime Lab UX Audit + Build Investigation, non-roadmap Prompt N2 Neural Strategy Adaptation V1, non-roadmap Prompt N2B Neural Strategy Adaptation Audit, non-roadmap Prompt MR0 Templates + Decision Clusters Mini-Roadmap, docs-only Prompt F0 Fractal and Multiscale Analysis Mini-Roadmap, docs-only Prompt P0 ORTUS Product Philosophy and Learning Mission, docs-only Prompt UX0 ORTUS Living Systems Atlas Visual Direction, docs-only Prompt UX1 Existing Design Token and Component Audit, docs-only Prompt GW0 ORTUS Research World Progression Mini-Roadmap, Prompt UX2 Living Systems Atlas Semantic Token Foundation, and Prompt UX2B Living Systems Atlas Semantic Foundation Rendered Browser Audit.
 
 Current project status:
 
@@ -23,8 +23,9 @@ Completed docs-only prompt: Prompt UX0 — ORTUS Living Systems Atlas Visual Dir
 Completed docs-only prompt: Prompt UX1 — Existing Design Token and Component Audit
 Completed docs-only prompt: Prompt GW0 — ORTUS Research World Progression Mini-Roadmap
 Completed implementation prompt: Prompt UX2 — Living Systems Atlas Semantic Token Foundation
+Completed audit prompt: Prompt UX2B — rendered browser audit passed for `/` and `/builder`; GW1 is conditionally ready, not implemented
 Post-30B stabilization completed: repo hygiene, durable Codex context, dependency repair, generated-artifact cleanup, and runtime performance/scalability baseline
-Next prompt: Pending user direction; do not start GW1-GW6 Research World implementation, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any Research World/fractal/multiscale implementation without explicit approval
+Next prompt: Await user direction; do not start GW1-GW6 Research World implementation, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any Research World/fractal/multiscale implementation without explicit approval
 ```
 
 Critical global boundary:
@@ -100,7 +101,7 @@ Visual resemblance to a fractal is not evidence of scale invariance.
 Fractal analysis requires a defined object, scale operation, and measurement. ORTUS must not apply one generic fractal score to unrelated spatial, network, temporal, and trajectory data.
 Fractal and multiscale metrics are structural summaries, not causal explanations, forecasts, validation results, or proof of universal laws.
 Rock-Paper-Scissors labels are assigned to output assemblies by the model designer; the network does not understand the labels.
-Rendered responsive behavior, clipboard behavior, focus return, zoom, screen-reader behavior, assistive-technology behavior, and WCAG conformance remain unverified.
+UX2B rendered route, viewport, reduced-motion, keyboard/focus smoke, status-semantic, shared-primitive, and Axe checks passed for `/` and `/builder`. Clipboard behavior, focus return beyond the covered smoke paths, actual browser zoom, screen-reader behavior, assistive-technology behavior, forced-colors behavior, and WCAG conformance remain unverified.
 ```
 
 ## Expert Audit Additions and Roadmap Corrections
@@ -110,7 +111,7 @@ missing from this full roadmap. Prompt 31C and Prompt 31D are now corrected belo
 after Prompt 31B and before Prompt 32, with a later narrow Opinion Dynamics
 social-learning runtime slice placed after template/schema compatibility mapping.
 The social/cognitive semantics insertion was corrected after manual review, and
-Prompt 31C, Prompt 31D, Prompt 32, Prompt 32B, Prompt 33, Prompt 33B, Prompt 33C, Prompt 33D, Prompt 34, Prompt 34B, Prompt 35, Prompt 35B, Prompt 36, Prompt 36B, Prompt 37, Prompt 37B, Prompt 38, Prompt 38B, Prompt 39, and Prompt 39B are now marked complete. Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, MR0, F0, P0, UX0, UX1, GW0, and UX2 are complete, and the next prompt is pending user direction.
+Prompt 31C, Prompt 31D, Prompt 32, Prompt 32B, Prompt 33, Prompt 33B, Prompt 33C, Prompt 33D, Prompt 34, Prompt 34B, Prompt 35, Prompt 35B, Prompt 36, Prompt 36B, Prompt 37, Prompt 37B, Prompt 38, Prompt 38B, Prompt 39, and Prompt 39B are now marked complete. Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, MR0, F0, P0, UX0, UX1, GW0, UX2, and UX2B are complete. GW1 is conditionally ready only after a dedicated prompt and still requires its own audit.
 
 Safe Builder UI Shell V1 displays structural workspace artifacts; it does not execute workspace nodes or edges. The builder shell is not a compiler, interpreter, visual programming environment, or custom simulation runtime. A structurally valid workspace is still not a runnable model. Importing a workspace artifact does not activate model schemas, compatibility mappings, or social-learning semantics.
 
@@ -2305,7 +2306,7 @@ Non-goals:
 
 ```text
 GW0 does not implement routes, navigation, World/Lab/Atlas/Workshop pages, persistence, accounts, cloud storage, local storage, database schemas, progression state, unlocks, XP, levels, achievements, badges, streaks, missions, quests, daily rewards, discovery detection, regime classification, behavioral landscapes, contextual recommendations, notebooks, saved research assets, model composition, grand-system scenarios, design tokens, CSS, components, runtime behavior, simulation behavior, template behavior, dependencies, assets, or mockups.
-UX2 and GW1-GW6 remain future prompts and must not start without explicit direction.
+GW1-GW6 remain future prompts and must not start without explicit direction.
 ```
 
 ## Prompt 40 — Safe Scenario Draft Workspace V1

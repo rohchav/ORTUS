@@ -85,6 +85,7 @@ export function AppShell() {
 
   return (
     <main className="ortus-shell">
+      <h1 className="sr-only">ORTUS Simulation Workbench</h1>
       <TopStatusBar activeWorkspaceMode={activeWorkspaceMode} />
       <div className="ortus-layout">
         <LeftInstrumentStack activeMode={activeWorkspaceMode} onModeChange={setActiveWorkspaceMode} />

@@ -442,6 +442,15 @@
 - Reduced motion should remove nonessential interface motion without erasing the modeled information the user is studying.
 - UX2 may migrate no more than four shared primitive families; do not redesign specialized simulation, chart, graph, schema, Neural Runtime Lab, template, or Builder feature surfaces without a dedicated prompt.
 - Do not claim rendered responsive behavior, browser zoom behavior, keyboard walkthrough completion, screen-reader behavior, assistive-technology behavior, forced-colors readiness, WCAG conformance, or complete accessibility from UX2 source work unless directly verified.
+- Playwright and Axe are authorized only as dev audit tooling for UX2B and later rendered audit prompts.
+- Do not expose Playwright/Axe harness routes or controls in production UI.
+- Keep Playwright-generated artifacts ignored: `playwright-report/`, `test-results/`, and `blob-report/`.
+- Viewport automation is not actual browser UI zoom, and Axe automation is not WCAG, screen-reader, or assistive-technology verification.
+- Do not silence Axe rules without narrow documented justification.
+- Preserve existing `/` and `/builder` routes during UX2B rendered audit work.
+- Do not start GW1 unless UX2B's successful rendered browser audit is committed and the user provides a dedicated GW1 prompt, or the user explicitly redirects.
+- UX2B conditionally readies GW1; it does not implement GW1, verify actual browser zoom, verify screen-reader or assistive-technology behavior, verify forced-colors behavior, or establish WCAG conformance.
+- Do not redesign unrelated legacy surfaces while adding or repairing the UX2B harness.
 - Do not claim rendered UX, accessibility, responsive, browser, zoom, screen-reader, assistive-technology, or WCAG readiness for Research World work without direct evidence.
 - Treat UX0 as documentation and design planning only.
 - Do not implement World/Lab/Atlas/Workshop without a dedicated prompt.

@@ -1,6 +1,7 @@
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
+import { getRunStatusPillModel } from "../runStatusSemantics";
 import { getWorkspaceStatusBadges } from "../builder/builderViewModel";
 import { resolveStatusPillSemantics } from "./statusPillSemantics";
 
@@ -126,6 +127,12 @@ describe("Living Systems Atlas semantic token foundation", () => {
     expect(appSources).not.toMatch(/@import\s+url|https?:\/\//i);
   });
 
+  it("keeps a level-one simulation route heading available without changing the visual shell", () => {
+    expect(source("src/components/AppShell.tsx")).toContain('<h1 className="sr-only">ORTUS Simulation Workbench</h1>');
+    expect(source("src/app/globals.css")).toContain(".sr-only");
+    expect(source("src/app/globals.css")).toContain("clip: rect(0, 0, 0, 0);");
+  });
+
   it("keeps status categories explicit and distinct from scientific validation claims", () => {
     const selected = resolveStatusPillSemantics({
       label: "Selected",
@@ -164,6 +171,49 @@ describe("Living Systems Atlas semantic token foundation", () => {
     expect(css).toContain("--evidence-unsupported-surface");
     expect(css).toContain("--evidence-planning-only-surface");
     expect(css).toContain("--evidence-future-only-surface");
+  });
+
+  it("maps simulation run status labels to matching operational semantics", () => {
+    expect(getRunStatusPillModel(false)).toEqual({
+      label: "Paused",
+      tone: "neutral",
+      category: "operational",
+      state: "paused"
+    });
+    expect(getRunStatusPillModel(true)).toEqual({
+      label: "Running",
+      tone: "accent",
+      category: "operational",
+      state: "running"
+    });
+
+    const statusPillSource = source("src/components/ui/StatusPill.tsx");
+    expect(statusPillSource).toContain("aria-label={semantics.ariaLabel}");
+    expect(statusPillSource).toContain("data-status-category={semantics.category}");
+    expect(statusPillSource).toContain("data-state={semantics.state}");
+    expect(statusPillSource).toContain("{label}");
+
+    const operationalCases: Array<[string, "idle" | "paused" | "running" | "completed" | "failed"]> = [
+      ["Idle", "idle"],
+      ["Paused", "paused"],
+      ["Running", "running"],
+      ["Completed", "completed"],
+      ["Failed", "failed"]
+    ];
+
+    const semanticsByState = new Map(
+      operationalCases.map(([label, state]) => [
+        state,
+        resolveStatusPillSemantics({
+          label,
+          category: "operational",
+          state
+        })
+      ])
+    );
+    expect(semanticsByState.get("paused")).toMatchObject({ category: "operational", state: "paused", ariaLabel: "Paused" });
+    expect(semanticsByState.get("running")).toMatchObject({ category: "operational", state: "running", ariaLabel: "Running" });
+    expect([...semanticsByState.values()].map((semantics) => semantics.state)).toEqual(["idle", "paused", "running", "completed", "failed"]);
   });
 
   it("renders builder badge semantics without implying runnable or validated workspace behavior", () => {
@@ -208,5 +258,13 @@ describe("Living Systems Atlas semantic token foundation", () => {
     expect(componentSource).toContain("data-status-category={badge.category ?? \"capability\"}");
     expect(componentSource).toContain("data-state={badge.state ?? \"unverified\"}");
     expect(componentSource).toContain("aria-label={`${badge.label}: ${badge.description}`}");
+
+    const headerSource = source("src/components/builder/BuilderHeader.tsx");
+    expect(headerSource).toContain('label: "Structural only"');
+    expect(headerSource).toContain('state: "planning-only"');
+    expect(headerSource).toContain('label: "Not runnable"');
+    expect(headerSource).toContain('state: "non-runnable"');
+    expect(headerSource).toContain('label: "No compiler"');
+    expect(headerSource).toContain('state: "unsupported"');
   });
 });

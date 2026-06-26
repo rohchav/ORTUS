@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { PhaseStateReadout } from "./PhaseStateReadout";
 import { OrtusBrand } from "./branding";
+import { getRunStatusPillModel } from "./runStatusSemantics";
 import { StatusPill } from "./ui/StatusPill";
 import { getTemplateDescriptor } from "../lib/templateVisuals";
 import { getSimulationWorkspaceMode, type SimulationWorkspaceModeId } from "../lib/workspaceModes";
@@ -20,6 +21,7 @@ export function TopStatusBar({ activeWorkspaceMode }: TopStatusBarProps) {
   const descriptor = getTemplateDescriptor(selectedTemplateId);
   const mode = getSimulationWorkspaceMode(activeWorkspaceMode);
   const scenarioName = metadataText(engine?.metadata.scenarioName) ?? "Default run";
+  const runStatus = getRunStatusPillModel(isRunning);
 
   return (
     <header className="top-status">
@@ -50,7 +52,7 @@ export function TopStatusBar({ activeWorkspaceMode }: TopStatusBarProps) {
       </div>
       <div className="top-status__run" aria-label="Current run status">
         <PhaseStateReadout />
-        <StatusPill label={isRunning ? "Running" : "Paused"} tone={isRunning ? "moss" : "neutral"} />
+        <StatusPill label={runStatus.label} tone={runStatus.tone} category={runStatus.category} state={runStatus.state} />
         {lastError ? <StatusPill label="Warning" tone="danger" /> : null}
       </div>
     </header>
