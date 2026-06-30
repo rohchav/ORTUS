@@ -69,7 +69,9 @@ describe("Research World destination registry", () => {
       "progress",
       "achievement",
       "discoveryCount",
-      "experimentCount"
+      "experimentCount",
+      "provenanceRecordId",
+      "observationRecordId"
     ];
 
     for (const destination of researchDestinations) {

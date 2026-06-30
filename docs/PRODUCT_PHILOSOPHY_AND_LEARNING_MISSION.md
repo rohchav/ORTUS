@@ -1,6 +1,6 @@
 # ORTUS Product Philosophy And Learning Mission
 
-Status: Prompt P0 documentation-only source of truth, updated after Prompt GW1. This document records product philosophy, learning goals, future progression principles, and guardrails. GW1 implements only the shared World / Lab / Atlas / Workshop destination shell around existing workflows. This document does not implement runtime behavior, UI progression, unlocks, missions, scoring, achievements, discovery detection, model composition, templates, simulation features, fractal metrics, persistent Research World state, persistence, accounts, social features, onboarding flows, dependencies, or new capability flags.
+Status: Prompt P0 documentation-only source of truth, updated after Prompt GW2. This document records product philosophy, learning goals, future progression principles, and guardrails. GW1 implements only the shared World / Lab / Atlas / Workshop destination shell around existing workflows. GW2 adds live active-run provenance and observation context in World only. This document does not implement runtime behavior, UI progression, unlocks, missions, scoring, achievements, discovery detection, model composition, templates, simulation features, fractal metrics, persistent Research World state, persistence, accounts, social features, onboarding flows, dependencies, or new capability flags.
 
 ## Core Mission
 
@@ -111,6 +111,8 @@ Simulation output is evidence about the model’s behavior, not automatically ev
 
 This is the core anti-pseudo-ABM rule. ORTUS can help users explore consequences, compare mechanisms, surface gaps, design studies, and learn complex-systems reasoning. It must not present model output as empirical truth, clinical advice, policy authority, psychological profiling, persuasion guidance, or proof that a mechanism caused a real outcome.
 
+Prompt GW2 operationalizes this rule in the World Observe surface. The active-run provenance summary describes current model configuration, not a saved experiment record. Observed values describe model state, not measured real-world data. A visual pattern in a run is evidence about that model under that configuration, not automatically evidence about the real system.
+
 ## Product Experience Principles
 
 The first product question should be:
@@ -135,7 +137,7 @@ Good ORTUS experiences should:
 
 ## Research World Direction
 
-Research World is a future product branch, not a current implementation. Prompt P0 reserves philosophy and direction. Prompt GW0, documented in `RESEARCH_WORLD_PROGRESSION_MINI_ROADMAP.md`, adds a documentation-only progression and information-architecture roadmap for that branch. Neither prompt implements progression, persistence, missions, unlocks, discovery detection, achievements, scoring, accounts, social systems, routes, navigation, UI changes, runtime behavior, or world state.
+Research World is an incremental product branch, not a finished research platform. Prompt P0 reserves philosophy and direction. Prompt GW0, documented in `RESEARCH_WORLD_PROGRESSION_MINI_ROADMAP.md`, adds a documentation-only progression and information-architecture roadmap for that branch. GW1 adds the destination shell, and GW2 adds live World-only active-run provenance. These prompts still do not implement progression, persistence, missions, unlocks, discovery detection, achievements, scoring, accounts, social systems, runtime behavior, or persistent Research World state.
 
 Future branch names:
 
@@ -143,8 +145,8 @@ Future branch names:
 - UX2: Shared Design Foundations
 - GW1: Persistent Destination Shell
 - GW1B: Persistent Destination Shell Audit
-- GW2: Research Notebook And Reusable Assets
-- GW2B: Research Notebook And Reusable Assets Audit
+- GW2: Active Run Provenance And Observation Layer
+- GW2B: Active Run Provenance And Observation Layer Audit
 - GW3: Discovery Atlas
 - GW3B: Discovery Atlas Audit
 - GW4: Behavioral Landscape Exploration

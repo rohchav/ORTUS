@@ -1,6 +1,6 @@
 # ORTUS Research World Destination Shell
 
-Status: Prompt GW1 implementation source of truth, audited and hardened by Prompt GW1B. GW1 introduces a persistent World / Lab / Atlas / Workshop destination shell across routes. GW1B hardens the shell evidence without expanding product behavior. This destination shell does not implement persistent research data, Discovery Atlas logic, behavioral landscapes, progression systems, runtime behavior, template behavior, Builder execution behavior, dependencies, assets, fonts, or storage.
+Status: Prompt GW1 implementation source of truth, audited and hardened by Prompt GW1B, updated after Prompt GW2. GW1 introduces a persistent World / Lab / Atlas / Workshop destination shell across routes. GW1B hardens the shell evidence without expanding product behavior. GW2 adds live active-run provenance inside World only. This destination shell does not implement persistent research data, Discovery Atlas logic, behavioral landscapes, progression systems, runtime behavior, template behavior, Builder execution behavior, dependencies, assets, fonts, or storage.
 
 ## 1. Purpose And Scope
 
@@ -79,6 +79,8 @@ Links preserve ordinary route behavior and expose `aria-current="page"` only for
 
 World has a route-level `h1` of `World` and receives the shared destination shell. The World canvas remains the primary functional surface.
 
+GW2 adds `Active Run Context` in the World Observe rail. It is live UI context over the active engine and latest snapshot. It does not save a run, create a Lab record, create an Atlas record, or validate model output.
+
 ## 9. Workshop Integration
 
 `/builder` remains the direct expert route and becomes the Workshop destination. The internal surface remains Builder because that name is precise for current structural authoring and inspection tools.
@@ -92,8 +94,9 @@ Workshop preserves Builder modes, Author Schema, Graph View, validation and repa
 Required boundary:
 
 ```text
-Lab is a future Research World destination. Persistent experiments, notebooks, comparison sets, and reusable research assets are not implemented in GW1.
+Lab is a future Research World destination. Persistent experiments, notebooks, comparison sets, and reusable research assets are not implemented in GW1 or GW2.
 The Lab route documents destination responsibility. It does not simulate persistence.
+GW2 exposes live run provenance in World. Persistent Lab records are still not implemented.
 ```
 
 The page lists planned artifact categories only as future responsibilities. It renders no fake saved experiments, fake notebooks, fake counts, fake timestamps, fake recent activity, fake charts, fake storage, or disabled controls.
@@ -105,8 +108,9 @@ The page lists planned artifact categories only as future responsibilities. It r
 Required boundary:
 
 ```text
-Atlas is a future Research World destination. Discovery records, behavioral landscapes, sampled-region maps, and evidence-linked model regimes are not implemented in GW1.
+Atlas is a future Research World destination. Discovery records, behavioral landscapes, sampled-region maps, and evidence-linked model regimes are not implemented in GW1 or GW2.
 Atlas will map investigated model behavior. It will not certify discoveries about the real world.
+GW2 does not create Discovery Atlas records. Atlas remains future-only.
 ```
 
 The page lists future Atlas concepts only as planned responsibilities. It renders no fake maps, fake discoveries, fake sampled regions, fake evidence scores, fake regime labels, achievements, locked regions, or progress percentages.

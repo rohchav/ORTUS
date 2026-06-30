@@ -69,6 +69,21 @@ export const workspacePanelDefinitions: readonly WorkspacePanelDefinition[] = [
     selectionContextual: false
   },
   {
+    id: "runProvenance",
+    label: "Active Run Context",
+    eyebrow: "Live Provenance",
+    description: "Live, non-persistent model configuration and observation boundaries for the active World run.",
+    defaultPlacement: "modePanel",
+    supportedPlacements: ["modePanel"],
+    defaultSize: "compact",
+    supportedSizes: ["compact"],
+    glyph: "RP",
+    order: 15,
+    workspaceCapable: false,
+    analysisOriented: true,
+    selectionContextual: false
+  },
+  {
     id: "macro",
     label: "Macro Field",
     eyebrow: "Emergence",

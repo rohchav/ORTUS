@@ -596,11 +596,11 @@ Prompt UX2 introduced semantic colors, typography roles, shape tokens, material/
 
 ### Stage 3 — GW1 Destination Shell
 
-GW1 introduces the shared World, Lab, Atlas, and Workshop destination shell after UX2. It preserves `/` as World and `/builder` as Workshop, adds `/lab` and `/atlas` as reachable future-only informational routes, and avoids persistence, discovery logic, behavioral landscapes, progression, fake data, and unsupported runtime claims. GW1B must audit and harden this shell before further Research World implementation.
+GW1 introduces the shared World, Lab, Atlas, and Workshop destination shell after UX2. It preserves `/` as World and `/builder` as Workshop, adds `/lab` and `/atlas` as reachable future-only informational routes, and avoids persistence, discovery logic, behavioral landscapes, progression, fake data, and unsupported runtime claims. GW1B audited and hardened this shell; GW2 adds live active-run context in World Observe only, and GW2B must audit that context before later Research World implementation.
 
-### Stage 4 — Contextual Panels
+### Stage 4 — Active Run Context And Contextual Panels
 
-Gradually replace permanent control walls.
+GW2 adds live active-run provenance and observation context in World Observe. Future contextual panels should continue to replace permanent control walls without implying saved Lab records, Atlas discoveries, runtime support, or empirical validation.
 
 ### Stage 5 — Atlas And Persistent Lab Surfaces
 
@@ -624,8 +624,8 @@ GW0: Research World Progression Mini-Roadmap
 UX2: Shared Design Foundations
 GW1: Persistent Destination Shell
 GW1B: Persistent Destination Shell Audit
-GW2: Research Notebook and Reusable Assets
-GW2B: Research Notebook and Reusable Assets Audit
+GW2: Active Run Provenance and Observation Layer
+GW2B: Active Run Provenance and Observation Layer Audit
 GW3: Discovery Atlas
 GW3B: Discovery Atlas Audit
 GW4: Behavioral Landscape Exploration

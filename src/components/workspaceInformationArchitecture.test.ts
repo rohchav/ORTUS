@@ -36,6 +36,7 @@ describe("simulation workspace information architecture", () => {
         "scenarios",
         "assumptions",
         "notes",
+        "runProvenance",
         "macro",
         "micro",
         "metrics",

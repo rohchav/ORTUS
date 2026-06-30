@@ -2037,3 +2037,103 @@ Result:
 - Prompt GW1B is complete.
 - Readiness decision: ready for GW2 only as a route-shell prerequisite, with strict boundaries and only after explicit user approval.
 - The worktree remains intentionally dirty and uncommitted for user review.
+
+## 2026-06-30 - Prompt GW2 Active Run Provenance And Observation Layer
+
+Goal: add live, non-persistent active-run provenance and observation context in World only, without creating persistent Lab records, Atlas discoveries, saved experiments, notebooks, reusable assets, behavioral landscapes, progression, runtime behavior, template behavior, Builder execution behavior, routes, dependencies, storage, timestamps, random ids, fingerprints, validation, calibration, or empirical-truth claims.
+
+Starting state:
+
+- Current commit: `f71db6c`.
+- Starting worktree was clean.
+- Recent history showed GW1 and GW1B committed.
+
+Baseline before edits:
+
+- `npm run typecheck`: passed.
+- `npm test`: passed, 60 files and 485 tests.
+- `git diff --check`: passed.
+- `npm run lint`: unavailable, package.json has no lint script. npm reported `Missing script: "lint"`.
+- `npm run perf:simulation`: passed.
+- A concurrent baseline mistake ran `npm run build` while Playwright's web server was still using `.next`, causing a temporary `.next/routes-manifest.json` failure. Rerunning sequentially classified this as command-concurrency noise.
+- Sequential `npm run build`: passed.
+- Sequential `npm run test:ui`: passed, 45 passed.
+
+Implemented:
+
+- Added a pure active-run derivation adapter with `RunProvenanceSummary`, `RunObservationSummary`, and `RunInterpretationBoundary`.
+- Added the World Observe `Active Run Context` panel.
+- Derived live context only from existing selected template, active engine, latest snapshot, seed, parameters, scenario metadata, run status, speed, and intervention count.
+- Preserved `Paused` as operational/paused.
+- Added unresolved evidence status and required model-boundary copy.
+- Did not generate a configuration fingerprint in GW2.
+- Updated Lab and Atlas copy to state that GW2 live provenance exists only in World and does not create persistent Lab records or Atlas records.
+- Added focused derivation, source-guardrail, destination-registry, and rendered Playwright coverage.
+- Added `docs/ui/ACTIVE_RUN_PROVENANCE_AND_OBSERVATION.md` and updated durable roadmap/context docs.
+
+Boundaries preserved:
+
+- No persistent Lab records, Discovery Atlas records, saved experiments, notebooks, reusable assets, behavioral landscapes, progression, runtime behavior, template behavior, Builder execution behavior, routes, dependencies, storage, timestamps, random ids, UUIDs, fingerprints, validation, calibration, causal proof, empirical measurement, or real-world evidence claim was added.
+
+Final verification:
+
+- `npm test -- provenance observation`: passed, 1 file and 5 tests.
+- `npm run typecheck`: passed.
+- `npm test`: passed, 61 files and 490 tests.
+- `npm run build`: passed with Next.js 15.5.19; static routes include `/`, `/_not-found`, `/atlas`, `/builder`, and `/lab`.
+- `npm run perf:simulation`: passed. Local smoke results included Flocking 100 agents at 121.57 ticks/sec, Flocking 500 agents at 18.43 ticks/sec, Forest Fire medium grid at 30.79 ticks/sec, and Predator-Prey default at 97.92 ticks/sec.
+- `git diff --check`: passed.
+- `npm run lint`: unavailable, package.json has no lint script. npm reported `Missing script: "lint"`.
+- Required post-implementation `npx playwright test tests/ui/research-world-shell.spec.ts` was blocked by the approval layer because the session hit its usage limit. It was not rerun after implementation.
+
+Result:
+
+- Prompt GW2 source implementation and non-browser verification are complete.
+- Post-implementation rendered Playwright verification remains blocked/unrun in this session.
+- Prompt GW2B is the next required audit prompt.
+
+## 2026-06-30 - Prompt GW2 Continuation Focus Contract And Rendered Verification
+
+Goal: fix the active-run context focus-contract failure and complete rendered GW2 verification without starting GW2B.
+
+Failure:
+
+- `npm run test:ui` failed in `tests/ui/research-world-shell.spec.ts`, `World shell contract holds at desktop 1440x900`.
+- The failing assertion expected `.active-run-context` to be focused after `Observe` + `Tab`.
+
+Diagnostic:
+
+- Trace error context showed the panel was visible and readable.
+- Temporary Playwright diagnostic after `Observe` + `Tab` reported the active element as `BUTTON#workspace-mode-tab-intervene`, role `tab`, text `IntervenePerturb`.
+
+Root cause:
+
+- The test forced an accessibility contract that static provenance/observation content should not have.
+- `.active-run-context` had `tabIndex={0}` even though it contains read-only explanatory/model-output context and no primary interaction.
+
+Fix:
+
+- Removed `tabIndex={0}` from `.active-run-context`.
+- Removed the matching focus-visible CSS for the static section.
+- Updated the Playwright helper to verify panel visibility/readability and visible focus on real workspace controls around the panel.
+- Added a source guard that `.active-run-context` remains semantic readable content rather than a fake tab stop.
+
+Rendered verification:
+
+- `npx playwright test tests/ui/research-world-shell.spec.ts -g "World shell contract holds at desktop 1440x900"`: passed, 1 passed.
+- `npm run test:ui`: passed, 45 passed, 0 failed, 0 skipped.
+
+Accessibility decision:
+
+- `.active-run-context` is Case A: static readable region.
+- It is not a normal Tab stop and is not a programmatic skip target in GW2.
+- Keyboard focus moves from the Observe tab to the next meaningful workspace tab, and focus remains visible.
+
+Boundaries preserved:
+
+- No persistence, storage, timestamps, UUIDs, random ids, fingerprints, Lab records, Atlas records, Discovery Atlas behavior, behavioral landscapes, progression, routes, redirects, runtime behavior, template behavior, Builder execution behavior, dependencies, assets, fonts, validation, calibration, or empirical-truth claim was added.
+
+Result:
+
+- GW2 rendered verification is complete.
+- Prompt GW2B remains the next required audit prompt after GW2 is committed.

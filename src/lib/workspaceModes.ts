@@ -31,8 +31,8 @@ export const simulationWorkspaceModes: readonly SimulationWorkspaceModeDefinitio
     id: "observe",
     label: "Observe",
     eyebrow: "Runtime output",
-    description: "Inspect current run outputs, metric traces, local rules, and the visual legend.",
-    panelIds: ["macro", "micro", "metrics", "legend"]
+    description: "Inspect live run provenance, current outputs, metric traces, local rules, and the visual legend.",
+    panelIds: ["runProvenance", "macro", "micro", "metrics", "legend"]
   },
   {
     id: "intervene",

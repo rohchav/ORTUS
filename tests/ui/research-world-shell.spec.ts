@@ -207,6 +207,41 @@ async function expectWorldPreserved(page: Page) {
   await expect(paused).toHaveAttribute("data-state", "paused");
 }
 
+async function expectWorldProvenanceLayer(page: Page) {
+  const observeTab = page.getByRole("tab", { name: /Observe/i });
+  await observeTab.click();
+
+  const panel = page.locator(".active-run-context");
+  await expect(panel).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Active Run Provenance" })).toBeVisible();
+  await expect(page.getByText("This provenance summary describes the active model configuration. It is not a saved experiment record.")).toBeVisible();
+  await expect(page.getByText("Observed values describe the model’s current state, not measured real-world data.")).toBeVisible();
+  await expect(
+    page.getByText("A visual pattern in this run is evidence about this model under this configuration. It is not automatically evidence about the real system.")
+  ).toBeVisible();
+  await expect(panel.getByText("Epidemic Spread")).toBeVisible();
+  await expect(panel.getByText("epidemic-spread")).toBeVisible();
+  await expect(panel.getByText("Default run")).toBeVisible();
+  await expect(panel.getByText("Not generated in GW2")).toBeVisible();
+
+  const runStatus = panel.locator(".status-pill", { hasText: "Paused" }).first();
+  await expect(runStatus).toHaveAttribute("data-status-category", "operational");
+  await expect(runStatus).toHaveAttribute("data-state", "paused");
+  const evidenceStatus = panel.locator(".status-pill", { hasText: "Model output" }).first();
+  await expect(evidenceStatus).toHaveAttribute("data-status-category", "evidence");
+  await expect(evidenceStatus).toHaveAttribute("data-state", "unresolved");
+
+  await expect(page.getByRole("region", { name: "Simulation workspace" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Run simulation" })).toBeVisible();
+
+  await observeTab.focus();
+  await expect(observeTab).toBeFocused();
+  await expectFocusedElementVisible(page);
+  await page.keyboard.press("Tab");
+  await expect(page.getByRole("tab", { name: /Intervene/i })).toBeFocused();
+  await expectFocusedElementVisible(page);
+}
+
 async function expectWorkshopPreserved(page: Page) {
   await expect(page.getByRole("region", { name: "Builder structural shell" })).toBeVisible();
   await expect(page.getByRole("tab", { name: /Workspace Inspector/i })).toBeVisible();
@@ -223,11 +258,15 @@ async function expectFutureDestinationBoundaries(page: Page, destination: "Lab" 
   await expect(status).toHaveAttribute("data-state", "future-only");
 
   if (destination === "Lab") {
-    await expect(page.getByText("Persistent experiments, notebooks, comparison sets, and reusable research assets are not implemented in GW1.")).toBeVisible();
+    await expect(page.getByText("Persistent experiments, notebooks, comparison sets, and reusable research assets are not implemented in GW1 or GW2.")).toBeVisible();
     await expect(page.getByText("The Lab route documents destination responsibility. It does not simulate persistence.")).toBeVisible();
+    await expect(page.getByText("GW2 exposes live run provenance in World. Persistent Lab records are still not implemented.")).toBeVisible();
   } else {
-    await expect(page.getByText("Discovery records, behavioral landscapes, sampled-region maps, and evidence-linked model regimes are not implemented in GW1.")).toBeVisible();
+    await expect(
+      page.getByText("Discovery records, behavioral landscapes, sampled-region maps, and evidence-linked model regimes are not implemented in GW1 or GW2.")
+    ).toBeVisible();
     await expect(page.getByText("Atlas will map investigated model behavior. It will not certify discoveries about the real world.")).toBeVisible();
+    await expect(page.getByText("GW2 does not create Discovery Atlas records. Atlas remains future-only.")).toBeVisible();
   }
 
   const mainText = await page.getByRole("main").innerText();
@@ -266,6 +305,8 @@ for (const destination of destinations) {
 
       if (destination.path === "/") {
         await expectWorldPreserved(page);
+        await expectWorldProvenanceLayer(page);
+        await expectNoDocumentHorizontalOverflow(page);
       }
       if (destination.path === "/builder") {
         await expectWorkshopPreserved(page);
@@ -345,6 +386,9 @@ test.describe("axe accessibility scans", () => {
       const diagnostics = observePageDiagnostics(page);
       await page.setViewportSize({ width: 1280, height: 720 });
       await openDestination(page, destination);
+      if (destination.path === "/") {
+        await expectWorldProvenanceLayer(page);
+      }
       await expectAxeClean(page);
       await expectNoDiagnostics(diagnostics);
     });

@@ -1,10 +1,10 @@
 # ORTUS Research World Progression Mini-Roadmap
 
-Status: Prompt GW0 documentation source of truth, updated after Prompt GW1.
+Status: Prompt GW0 documentation source of truth, updated after Prompt GW2.
 
 GW0 is documentation, product architecture, information architecture, and roadmap planning only.
 
-GW0 is documentation and progression architecture only. It does not implement routes, navigation, World/Lab/Atlas/Workshop pages, persistence, accounts, cloud storage, local storage, database schemas, progression state, unlocks, XP, levels, achievements, badges, streaks, missions, quests, daily rewards, discovery detection, regime classification, behavioral landscapes, contextual recommendations, notebooks, saved research assets, model composition, grand-system scenarios, runtime behavior, simulation behavior, template behavior, dependencies, assets, or mockups. Prompt UX2 later implements shared semantic visual tokens and a bounded shared primitive migration. Prompt GW1 later implements the first shared destination shell only; it still does not implement persistent Lab systems, Discovery Atlas behavior, behavioral landscapes, progression, runtime behavior, or template behavior.
+GW0 is documentation and progression architecture only. It does not implement routes, navigation, World/Lab/Atlas/Workshop pages, persistence, accounts, cloud storage, local storage, database schemas, progression state, unlocks, XP, levels, achievements, badges, streaks, missions, quests, daily rewards, discovery detection, regime classification, behavioral landscapes, contextual recommendations, notebooks, saved research assets, model composition, grand-system scenarios, runtime behavior, simulation behavior, template behavior, dependencies, assets, or mockups. Prompt UX2 later implements shared semantic visual tokens and a bounded shared primitive migration. Prompt GW1 later implements the first shared destination shell only; it still does not implement persistent Lab systems, Discovery Atlas behavior, behavioral landscapes, progression, runtime behavior, or template behavior. Prompt GW2 later implements a live World-only active-run provenance and observation layer; it still does not implement persistence, Lab records, Atlas records, behavioral landscapes, progression, runtime behavior, or template behavior.
 
 The central principle:
 
@@ -113,6 +113,8 @@ Prompt GW1 implements the route contract:
 ```
 
 In GW1, persistent shell means structurally present across routes, not persistent user data. Lab and Atlas are reachable future-only destinations, not locked destinations. GW1 does not add saved experiments, notebooks, reusable asset storage, Discovery Atlas logic, behavioral landscapes, progression, runtime behavior, template behavior, Builder execution behavior, dependencies, assets, fonts, `/world`, or `/workshop`.
+
+Prompt GW2 adds live active-run context inside World Observe. It makes the current model configuration and observed model state easier to inspect, but it deliberately stops before the future Lab/Atlas accumulation loop. GW2 does not save run records, document discoveries, classify behavioral landscapes, create notebooks, create reusable assets, or turn model output into empirical evidence.
 
 ## 5. Progression Without XP
 
@@ -370,7 +372,7 @@ The required sequence is:
 GW0 -> UX2 -> GW1 -> GW1B -> GW2 -> GW2B -> GW3 -> GW3B -> GW4 -> GW4B -> GW5 -> GW5B -> GW6 -> GW6B
 ```
 
-UX2 and GW1 are complete. GW1B must audit the destination shell before GW2-GW6 start, and GW2-GW6 remain future prompts that must not start without explicit direction.
+UX2, GW1, GW1B, and GW2 are complete. GW2B must audit the live active-run provenance layer before GW3-GW6 start, and GW2B-GW6 remain future prompts that must not start without explicit direction.
 
 ## 22. GW Roadmap Branch
 
@@ -390,13 +392,13 @@ Future shell work for World/Lab/Atlas/Workshop destination responsibilities, pre
 
 Audit GW1 boundaries, access preservation, labels, accessibility source behavior, and runtime honesty.
 
-### GW2: Research Notebook And Reusable Assets
+### GW2: Active Run Provenance And Observation Layer
 
-Future bounded local research artifacts, observations, experiment references, comparison organization, provenance, and stale behavior. Persistence technology is chosen there, not in GW0.
+Implemented live World-only active-run provenance and observation context. It derives current model configuration and observed model state from existing active run fields. It does not create saved records, Lab persistence, Atlas discoveries, notebooks, reusable assets, storage, or empirical evidence.
 
-### GW2B: Research Notebook And Reusable Assets Audit
+### GW2B: Active Run Provenance And Observation Layer Audit
 
-Audit persistence bounds, stale artifacts, provenance, import/export boundaries, and runtime activation risk.
+Future audit of GW2 persistence boundaries, evidence language, accessibility, viewport behavior, Lab/Atlas non-implementation, storage absence, and runtime activation risk.
 
 ### GW3: Discovery Atlas
 
@@ -502,7 +504,7 @@ GW0 documentation tests should confirm:
 - artifact/runtime boundaries remain literal,
 - current `/` and `/builder` workflows are preserved,
 - GW1 is implemented only as the bounded destination shell,
-- GW1B and GW2-GW6 remain future-only,
+- GW2B-GW6 remain future-only,
 - UX2 prepared the visual foundation between GW0 and GW1,
 - no production UI, CSS, runtime, persistence, route, asset, dependency, or package file is changed by GW0.
 

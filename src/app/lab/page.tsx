@@ -22,14 +22,15 @@ const principles = [
   "Persistent research records must preserve provenance and model boundaries.",
   "Reusable assets will not become universally compatible by being saved.",
   "Lab artifacts must not imply calibrated, validated, or empirical truth.",
-  "GW1 adds no storage, accounts, notebooks, or cross-session research state."
+  "GW1 adds no storage, accounts, notebooks, or cross-session research state.",
+  "GW2 exposes live run provenance in World. Persistent Lab records are still not implemented."
 ] as const;
 
 export default function LabPage() {
   return (
     <FutureDestinationSurface
       destinationId="lab"
-      implementationCopy="Lab is a future Research World destination. Persistent experiments, notebooks, comparison sets, and reusable research assets are not implemented in GW1."
+      implementationCopy="Lab is a future Research World destination. Persistent experiments, notebooks, comparison sets, and reusable research assets are not implemented in GW1 or GW2."
       boundaryCopy="The Lab route documents destination responsibility. It does not simulate persistence."
       plannedResponsibilities={plannedResponsibilities}
       principles={principles}

@@ -1,6 +1,6 @@
 # Research World Destination Shell Audit
 
-Status: Prompt GW1B audit and hardening record. This audit reviews the GW1 destination shell. It does not implement GW2, persistence, fake Lab/Atlas data, Discovery Atlas logic, behavioral landscapes, progression systems, runtime behavior, template behavior, Builder execution behavior, dependencies, assets, fonts, `/world`, `/workshop`, or redirects.
+Status: Prompt GW1B audit and hardening record, updated after Prompt GW2. This audit reviews the GW1 destination shell. GW2 later adds live World-only active-run provenance and observation context; it does not change this GW1B shell audit into a persistence, Discovery Atlas, behavioral landscape, progression, runtime, template, Builder-execution, dependency, asset, font, `/world`, `/workshop`, or redirect implementation record.
 
 ## 1. Scope
 
@@ -168,6 +168,8 @@ The page does not render fake saved experiments, fake notebooks, fake counts, fa
 Atlas remains reachable and future-only. It documents future Discovery Atlas responsibilities without implementing discovery records, behavioral landscapes, sampled-region maps, evidence-linked regimes, fake maps, fake discoveries, fake sampled regions, fake evidence scores, locked territories, achievements, or progress percentages.
 
 Atlas copy continues to say it will not certify discoveries about the real world.
+
+After GW2, Lab and Atlas additionally state that live run provenance exists in World only. Persistent Lab records and Discovery Atlas records remain unimplemented.
 
 ## 17. Status Semantics
 
