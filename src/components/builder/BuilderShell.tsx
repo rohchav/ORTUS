@@ -59,7 +59,8 @@ export function BuilderShell({ initialWorkspace }: BuilderShellProps) {
   }
 
   return (
-    <main className="builder-shell" aria-label="Safe visual builder shell" data-product-context="ORTUS structural Builder">
+    <section className="builder-shell" aria-label="Builder structural shell" data-product-context="ORTUS structural Builder">
+      <h1 className="sr-only">Workshop</h1>
       <BuilderHeader
         activeMode={activeMode}
         viewModel={viewModel}
@@ -127,6 +128,6 @@ export function BuilderShell({ initialWorkspace }: BuilderShellProps) {
       </section>
       <ModelSchemaAuthoringShell hidden={activeMode !== "authorSchema"} />
       {activeMode === "graph" ? <BuilderGraphView workspace={workspace} /> : null}
-    </main>
+    </section>
   );
 }

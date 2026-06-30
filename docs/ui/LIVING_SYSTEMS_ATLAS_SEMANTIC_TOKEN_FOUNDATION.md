@@ -1,12 +1,14 @@
 # Living Systems Atlas Semantic Token Foundation
 
-Status: Prompt UX2 implementation source of truth.
+Status: Prompt UX2 implementation source of truth, updated after Prompt GW1.
 
 UX2 establishes shared visual semantics.
 It does not perform the Research World shell transformation.
 
 UX2 prepares the visual language.
 GW1 performs the structural shell transformation.
+
+Prompt GW1 uses these tokens for the shared destination shell and future-only Lab/Atlas informational routes. GW1 does not change the UX2 token model, add dependencies, or turn future-only destination status into locked, disabled, supported, or validated state.
 
 ## Purpose And Scope
 
@@ -33,12 +35,14 @@ introduce semantic tokens
 
 ## Constraints
 
-UX2 does not add World, Lab, Atlas, or Workshop routes, navigation, shell behavior, persistence, notebooks, saved assets, Discovery Atlas, behavioral landscapes, contextual capability guidance, progression, onboarding, templates, simulation runtime behavior, model-schema runtime behavior, graph execution, external framework interop, icon libraries, chart libraries, graph libraries, animation libraries, Tailwind, Sass, CSS-in-JS, component libraries, local font files, remote fonts, token generation, theme providers, or runtime styling dependencies.
+UX2 itself does not add World, Lab, Atlas, or Workshop routes, navigation, shell behavior, persistence, notebooks, saved assets, Discovery Atlas, behavioral landscapes, contextual capability guidance, progression, onboarding, templates, simulation runtime behavior, model-schema runtime behavior, graph execution, external framework interop, icon libraries, chart libraries, graph libraries, animation libraries, Tailwind, Sass, CSS-in-JS, component libraries, local font files, remote fonts, token generation, theme providers, or runtime styling dependencies. Prompt GW1 later adds only the bounded route shell and future-only informational Lab/Atlas pages.
 
-The implemented routes remain:
+After GW1, the implemented routes are:
 
 ```text
 /
+/lab
+/atlas
 /builder
 ```
 
@@ -340,9 +344,9 @@ The next implementation branch should not treat these deferred areas as already 
 
 UX2 defines how shared design foundations communicate interface, evidence, uncertainty, and capability state.
 
-GW1 must decide how the structural destination shell wraps current validated workflows. It must preserve current `/` and `/builder` access until a dedicated implementation and audit prove replacement safe.
+GW1 uses the UX2 semantic foundation for the structural destination shell while preserving current `/` and `/builder` access.
 
-GW1 is conditionally ready after UX2B, but it must still begin only from a dedicated prompt and must preserve `/` and `/builder` until its own implementation and audit prove replacement safe.
+GW1 is now implemented as a bounded shell. GW1B still must audit the shell before broader readiness claims.
 
 Required boundary:
 

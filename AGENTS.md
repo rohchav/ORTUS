@@ -452,6 +452,31 @@
 - UX2B conditionally readies GW1; it does not implement GW1, verify actual browser zoom, verify screen-reader or assistive-technology behavior, verify forced-colors behavior, or establish WCAG conformance.
 - Do not redesign unrelated legacy surfaces while adding or repairing the UX2B harness.
 - Do not claim rendered UX, accessibility, responsive, browser, zoom, screen-reader, assistive-technology, or WCAG readiness for Research World work without direct evidence.
+- GW1 implements the shared World/Lab/Atlas/Workshop destination shell only.
+- In GW1, "persistent" means structurally present across routes, not persistent user data.
+- Preserve `/` as World.
+- Preserve `/builder` as Workshop.
+- Lab and Atlas are future-only informational destinations.
+- Do not fabricate experiments, discoveries, maps, evidence, counts, or user activity.
+- Do not describe Lab or Atlas as locked.
+- Do not add XP, levels, achievements, progress bars, or unlock systems.
+- Do not add localStorage, IndexedDB, databases, accounts, or cloud persistence for the destination shell.
+- Do not modify simulation, template, or Builder execution behavior from GW1 shell work.
+- Keep World runtime controls inside World.
+- Keep Builder-specific controls inside Workshop.
+- Do not create duplicate global headers, navigation, main landmarks, or route-level headings.
+- Use native route links and `aria-current="page"` for destination navigation.
+- Preserve visible keyboard focus.
+- Shell skip links and focused destination controls must be fully visible inside the viewport immediately on focus; do not hide focused elements behind reveal transitions.
+- Future-only status must be visible and accessible.
+- Current destination must remain distinct from active, selected, supported, and validated states.
+- Use the UX2 semantic-token system for the Research World shell.
+- Do not add remote fonts, CSS frameworks, component libraries, icon libraries, or state-management dependencies for GW1.
+- Preserve current validated workflows before reorganizing them further.
+- Use the existing Playwright/Axe harness for rendered destination-shell verification.
+- Do not claim screen-reader, AT, forced-colors, browser-zoom, or WCAG verification without evidence.
+- Do not start GW2 from GW1.
+- Complete and commit GW1 before starting GW1B.
 - Treat UX0 as documentation and design planning only.
 - Do not implement World/Lab/Atlas/Workshop without a dedicated prompt.
 - Preserve ORTUS as a living laboratory, not a tactical command interface.

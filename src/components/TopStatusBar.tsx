@@ -1,8 +1,6 @@
 "use client";
 
-import Link from "next/link";
 import { PhaseStateReadout } from "./PhaseStateReadout";
-import { OrtusBrand } from "./branding";
 import { getRunStatusPillModel } from "./runStatusSemantics";
 import { StatusPill } from "./ui/StatusPill";
 import { getTemplateDescriptor } from "../lib/templateVisuals";
@@ -25,16 +23,10 @@ export function TopStatusBar({ activeWorkspaceMode }: TopStatusBarProps) {
 
   return (
     <header className="top-status">
-      <div className="top-status__global">
-        <OrtusBrand href="/" showDescriptor className="top-status__brand" />
-        <nav className="top-status__routes" aria-label="Global destinations">
-          <Link href="/" className="top-status__route is-active" aria-current="page">
-            Simulate
-          </Link>
-          <Link href="/builder" className="top-status__route" aria-label="Open Builder structural shell">
-            Builder
-          </Link>
-        </nav>
+      <div className="top-status__runtime" aria-label="World runtime scope">
+        <span>World runtime</span>
+        <strong>Active modeled system</strong>
+        <p>Model output is exploratory, not empirical truth.</p>
       </div>
       <div className="top-status__context" aria-label="Current simulation context">
         <div>

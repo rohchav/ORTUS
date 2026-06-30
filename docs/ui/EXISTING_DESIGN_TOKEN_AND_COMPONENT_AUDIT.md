@@ -1,6 +1,6 @@
 # UX1: Existing Design Token And Component Audit
 
-Status: Prompt UX1 source-level audit and documentation only, updated after Prompt UX2. UX1 does not redesign the interface, add design tokens, modify CSS, restyle components, change routes, add dependencies, add assets, change font configuration, implement World/Lab/Atlas/Workshop, or claim rendered accessibility/responsive verification. Prompt GW0 later adds Research World progression architecture in `../RESEARCH_WORLD_PROGRESSION_MINI_ROADMAP.md` without changing the UX1 source audit evidence. Prompt UX2 later implements shared semantic token foundations in `LIVING_SYSTEMS_ATLAS_SEMANTIC_TOKEN_FOUNDATION.md` without changing UX1's source-audit evidence.
+Status: Prompt UX1 source-level audit and documentation only, updated after Prompt GW1. UX1 does not redesign the interface, add design tokens, modify CSS, restyle components, change routes, add dependencies, add assets, change font configuration, implement World/Lab/Atlas/Workshop, or claim rendered accessibility/responsive verification. Prompt GW0 later adds Research World progression architecture in `../RESEARCH_WORLD_PROGRESSION_MINI_ROADMAP.md` without changing the UX1 source audit evidence. Prompt UX2 later implements shared semantic token foundations in `LIVING_SYSTEMS_ATLAS_SEMANTIC_TOKEN_FOUNDATION.md`. Prompt GW1 later implements the bounded destination shell in `RESEARCH_WORLD_DESTINATION_SHELL.md`; this update records the new shell source locations without turning UX1 into a rendered audit.
 
 Required framing:
 
@@ -37,7 +37,7 @@ Inspected source groups:
 
 - Documentation: `README.md`, `planned_roadmap.md`, `docs/roadmap.md`, `docs/concepts.md`, `docs/PRODUCT_PHILOSOPHY_AND_LEARNING_MISSION.md`, `docs/RESEARCH_WORLD_PROGRESSION_MINI_ROADMAP.md`, `docs/ui/LIVING_SYSTEMS_ATLAS_VISUAL_DIRECTION.md`, `docs/ui/HCI_AUDIT.md`, `docs/ui/WORKSPACE_INFORMATION_ARCHITECTURE.md`, `docs/codex/CURRENT_CONTEXT.md`, `docs/codex/SESSION_LOG.md`, `src/simulation/README.md`, and `AGENTS.md`.
 - Styling: `src/app/globals.css`; no CSS modules were present.
-- Shell and navigation: `src/components/AppShell.tsx`, `src/components/TopStatusBar.tsx`, `src/components/LeftInstrumentStack.tsx`, `src/components/TimelineControlStrip.tsx`, `src/components/WorldStage.tsx`, `src/components/RightContextDrawer.tsx`.
+- Shell and navigation: `src/components/researchWorld/ResearchWorldShell.tsx`, `ResearchDestinationNavigation.tsx`, `ResearchDestinationContext.tsx`, `src/lib/researchDestinations.ts`, `src/components/AppShell.tsx`, `src/components/TopStatusBar.tsx`, `src/components/LeftInstrumentStack.tsx`, `src/components/TimelineControlStrip.tsx`, `src/components/WorldStage.tsx`, `src/components/RightContextDrawer.tsx`.
 - Builder: `src/components/builder/BuilderShell.tsx`, `BuilderHeader.tsx`, `BuilderModeTabs.tsx`, `BuilderViewport.tsx`, `ModelSchemaAuthoringShell.tsx`, `ModelSchemaSectionEditor.tsx`, and `src/components/builder/graph/BuilderGraphView.tsx`.
 - Specialized surfaces: `src/components/NeuralRuntimeLabPanel.tsx`, `src/components/MetricGraphPanel.tsx`, `src/components/RunComparisonPanel.tsx`, `src/components/ExperimentPanel.tsx`, `src/components/ScenarioBuilderPanel.tsx`, `src/components/SimulationCanvas.tsx`, `src/components/Legend.tsx`, and `src/lib/templateVisuals.ts`.
 - Shared primitives: `src/components/ui/CornerFramePanel.tsx`, `StatusPill.tsx`, `IconButton.tsx`, `SectionLabel.tsx`, plus branding components.
@@ -51,7 +51,8 @@ Inspected source groups:
 | `src/app/globals.css` | Global tokens, shell, Builder, schema forms, charts, panels, responsive rules | CSS custom properties plus broad selectors and local feature blocks | Shared/global | Extensive raw RGBA/hex, sizes, clip paths, grids | Critical |
 | `src/app/layout.tsx` | Root layout, global background, metadata | Imports `globals.css`, renders `TemplateBackgroundLayer` | Shared | None in JSX | Low |
 | `src/components/AppShell.tsx` | Simulation shell and run loop | Global class names; local React state for workspace mode | Shared shell | No visual literals | High |
-| `src/components/TopStatusBar.tsx` | Brand, global routes, current model/scenario/workspace, run status | Global classes plus `StatusPill` | Shared shell | No visual literals | Medium |
+| `src/components/researchWorld/ResearchWorldShell.tsx` | Shared destination shell, ORTUS identity, destination nav, current destination context, main boundary | Global classes plus semantic tokens | Shared shell | No visual literals | Medium |
+| `src/components/TopStatusBar.tsx` | World route runtime scope, current model/scenario/workspace, run status | Global classes plus `StatusPill` | Route-specific World surface | No visual literals | Medium |
 | `src/components/LeftInstrumentStack.tsx` | Simulation workspace modes and selected panel stack | Global classes; ARIA tabs; panel composition | Shared shell | No visual literals | High |
 | `src/components/TimelineControlStrip.tsx` | Persistent run controls | Global classes; text glyph icons | Shared shell | Text glyph icons | Medium |
 | `src/components/WorldStage.tsx` | World viewport, background, canvas frame, error overlay | Global classes | Shared shell | Text close glyph | High |

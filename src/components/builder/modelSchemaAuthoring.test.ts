@@ -337,7 +337,7 @@ describe("model schema authoring UI architecture", () => {
     expect(source).toContain('role="tabpanel"');
     expect(source).toContain("ArrowRight");
     expect(source).toContain("ArrowLeft");
-    expect(source).toContain("Safe visual builder shell");
+    expect(source).toContain("Builder structural shell");
     expect(source).toContain("No workspace loaded");
   });
 

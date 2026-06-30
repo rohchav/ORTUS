@@ -1,6 +1,6 @@
 # ORTUS Product Philosophy And Learning Mission
 
-Status: Prompt P0 documentation-only source of truth, updated after Prompt UX2. This document records product philosophy, learning goals, future progression principles, and guardrails. It does not implement runtime behavior, UI progression, unlocks, missions, scoring, achievements, discovery detection, model composition, templates, simulation features, fractal metrics, Research World state, persistence, accounts, social features, onboarding flows, dependencies, or new capability flags.
+Status: Prompt P0 documentation-only source of truth, updated after Prompt GW1. This document records product philosophy, learning goals, future progression principles, and guardrails. GW1 implements only the shared World / Lab / Atlas / Workshop destination shell around existing workflows. This document does not implement runtime behavior, UI progression, unlocks, missions, scoring, achievements, discovery detection, model composition, templates, simulation features, fractal metrics, persistent Research World state, persistence, accounts, social features, onboarding flows, dependencies, or new capability flags.
 
 ## Core Mission
 

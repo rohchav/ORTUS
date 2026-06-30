@@ -112,8 +112,10 @@ describe("Living Systems Atlas semantic token foundation", () => {
 
     expect(existsSync(join(repoRoot, "src", "app", "page.tsx"))).toBe(true);
     expect(existsSync(join(repoRoot, "src", "app", "builder", "page.tsx"))).toBe(true);
-    for (const futureRoute of ["world", "lab", "atlas", "workshop"]) {
-      expect(existsSync(join(repoRoot, "src", "app", futureRoute))).toBe(false);
+    expect(existsSync(join(repoRoot, "src", "app", "lab", "page.tsx"))).toBe(true);
+    expect(existsSync(join(repoRoot, "src", "app", "atlas", "page.tsx"))).toBe(true);
+    for (const forbiddenAlias of ["world", "workshop"]) {
+      expect(existsSync(join(repoRoot, "src", "app", forbiddenAlias))).toBe(false);
     }
     for (const forbiddenPath of ["src/persistence", "src/discovery", "src/researchWorld", "src/progression"]) {
       expect(existsSync(join(repoRoot, forbiddenPath))).toBe(false);
@@ -127,8 +129,9 @@ describe("Living Systems Atlas semantic token foundation", () => {
     expect(appSources).not.toMatch(/@import\s+url|https?:\/\//i);
   });
 
-  it("keeps a level-one simulation route heading available without changing the visual shell", () => {
-    expect(source("src/components/AppShell.tsx")).toContain('<h1 className="sr-only">ORTUS Simulation Workbench</h1>');
+  it("keeps a level-one World route heading available inside the shared destination shell", () => {
+    expect(source("src/components/AppShell.tsx")).toContain('<h1 className="sr-only">World</h1>');
+    expect(source("src/components/builder/BuilderShell.tsx")).toContain('<h1 className="sr-only">Workshop</h1>');
     expect(source("src/app/globals.css")).toContain(".sr-only");
     expect(source("src/app/globals.css")).toContain("clip: rect(0, 0, 0, 0);");
   });

@@ -215,7 +215,7 @@ function workspaceFixture(overrides: Partial<VisualBuilderWorkspaceDefinition> =
 describe("safe builder UI shell", () => {
   it("defines empty and loaded shell UI states with non-runnable capability language", () => {
     const componentSource = readBuilderSource();
-    expect(componentSource).toContain("Safe visual builder shell");
+    expect(componentSource).toContain("Builder structural shell");
     expect(componentSource).toContain("No workspace loaded");
     expect(componentSource).toContain("Structural only");
     expect(componentSource).toContain("Not runnable");
@@ -320,7 +320,7 @@ describe("safe builder UI shell", () => {
   it("keeps accessibility hooks text-readable without pointer-only or color-only semantics", () => {
     const componentSource = readBuilderSource();
     const viewModel = createBuilderWorkspaceViewModel(workspaceFixture());
-    expect(componentSource).toContain('aria-label="Safe visual builder shell"');
+    expect(componentSource).toContain('aria-label="Builder structural shell"');
     expect(componentSource).toContain('aria-label="Builder navigation and import"');
     expect(componentSource).toContain('aria-label="Read-only visual workspace descriptors"');
     expect(componentSource).toContain('aria-label="Selected workspace item inspector"');

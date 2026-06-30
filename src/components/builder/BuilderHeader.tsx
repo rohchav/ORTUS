@@ -1,7 +1,6 @@
 "use client";
 
 import type { ChangeEvent } from "react";
-import { OrtusBrand } from "../branding";
 import { maxVisualBuilderWorkspaceJsonLength, visualBuilderWorkspaceArtifactType } from "../../simulation/visualBuilderWorkspace";
 import { BuilderStatusBadge } from "./BuilderStatusBadge";
 import type { BuilderModeId } from "./BuilderModeTabs";
@@ -115,7 +114,6 @@ export function BuilderHeader({
   return (
     <header className="builder-header" aria-label="ORTUS Builder header">
       <div className="builder-header__identity">
-        <OrtusBrand href="/" showDescriptor={false} className="builder-header__brand" />
         <div>
           <span className="builder-header__eyebrow">
             {authoring
@@ -124,7 +122,7 @@ export function BuilderHeader({
                 ? "Builder / Visual Builder Graph View V1"
                 : "Builder Workspace / Safe UI Shell V1"}
           </span>
-          <h1>{authoring ? "Model Schema Authoring" : graphViewing ? "Structural Graph View" : (workspace?.name ?? "No workspace loaded")}</h1>
+          <h2>{authoring ? "Model Schema Authoring" : graphViewing ? "Structural Graph View" : (workspace?.name ?? "No workspace loaded")}</h2>
           {authoring ? (
             <p>ortus.modelSchema · structural artifact forms · local in-memory draft</p>
           ) : graphViewing ? (

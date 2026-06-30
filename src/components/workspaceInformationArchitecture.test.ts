@@ -89,11 +89,15 @@ describe("simulation workspace information architecture", () => {
 
   it("moves model, seed, parameter, and export work out of the crowded header without removing them", () => {
     const topStatus = source("src/components/TopStatusBar.tsx");
+    const destinationNav = source("src/components/researchWorld/ResearchDestinationNavigation.tsx");
     const runSettings = source("src/components/RunSettingsPanel.tsx");
     const leftStack = source("src/components/LeftInstrumentStack.tsx");
 
-    expect(topStatus).toContain('<OrtusBrand href="/" showDescriptor className="top-status__brand" />');
-    expect(topStatus).toContain('href="/builder"');
+    expect(destinationNav).toContain('aria-label="Research World destinations"');
+    expect(destinationNav).toContain("aria-current={current ? \"page\" : undefined}");
+    expect(topStatus).toContain("World runtime");
+    expect(topStatus).not.toContain("OrtusBrand");
+    expect(topStatus).not.toContain('href="/builder"');
     expect(topStatus).toContain("descriptor.template.name");
     expect(topStatus).toContain("scenarioName");
     expect(topStatus).toContain("StatusPill");
@@ -133,13 +137,17 @@ describe("simulation workspace information architecture", () => {
   it("removes fixed-height header clipping sources and preserves visible global navigation", () => {
     const topStatus = cssBlock(".top-status");
     const topStatusSource = source("src/components/TopStatusBar.tsx");
+    const destinationNavSource = source("src/components/researchWorld/ResearchDestinationNavigation.tsx");
 
     expect(topStatus).toContain("min-height: 58px;");
     expect(topStatus).toContain("overflow: visible;");
     expect(topStatus).not.toContain("height: 50px;");
     expect(topStatus).not.toContain("overflow-y: hidden;");
-    expect(topStatusSource).toContain("Simulate");
-    expect(topStatusSource).toContain("Builder");
+    expect(destinationNavSource).toContain("researchDestinations.map");
+    expect(destinationNavSource).toContain('aria-label="Research World destinations"');
+    expect(topStatusSource).toContain("World runtime");
+    expect(topStatusSource).not.toContain("Simulate");
+    expect(topStatusSource).not.toContain('href="/builder"');
     expect(topStatusSource).not.toContain(">Run Model<");
     expect(topStatusSource).not.toContain(">Compile<");
     expect(topStatusSource).not.toContain(">Apply to Template<");

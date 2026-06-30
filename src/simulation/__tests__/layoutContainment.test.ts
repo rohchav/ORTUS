@@ -20,10 +20,17 @@ function expectDeclarations(block: string, declarations: string[]): void {
 }
 
 describe("viewport layout containment", () => {
-  it("locks the app shell to the viewport and prevents document-level scroll", () => {
+  it("locks the research shell to the viewport and keeps the world shell contained", () => {
     expectDeclarations(cssBlock("html,\nbody"), ["height: 100%;", "overflow: hidden;"]);
-    expectDeclarations(cssBlock(".ortus-shell"), [
+    expectDeclarations(cssBlock(".research-shell"), [
       "height: 100dvh;",
+      "overflow: hidden;",
+      "display: grid;",
+      "grid-template-rows: auto minmax(0, 1fr);"
+    ]);
+    expectDeclarations(cssBlock(".ortus-shell"), [
+      "height: 100%;",
+      "min-height: 0;",
       "overflow: hidden;",
       "display: grid;",
       "grid-template-rows: auto minmax(0, 1fr) auto;"

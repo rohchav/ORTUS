@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { TemplateBackgroundLayer } from "../components/TemplateBackgroundLayer";
+import { ResearchWorldShell } from "../components/researchWorld/ResearchWorldShell";
 
 export const metadata: Metadata = {
   title: "ORTUS",
@@ -12,7 +13,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="en">
       <body>
         <TemplateBackgroundLayer />
-        {children}
+        <ResearchWorldShell>{children}</ResearchWorldShell>
       </body>
     </html>
   );

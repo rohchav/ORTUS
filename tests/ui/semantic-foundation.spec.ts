@@ -16,13 +16,13 @@ const routes = [
     label: "simulate",
     path: "/",
     readySelector: ".ortus-shell:not(.ortus-shell--hydrating)",
-    landmarkName: "Simulation workspace"
+    routeRegionName: "Simulation workspace"
   },
   {
     label: "builder",
     path: "/builder",
-    readySelector: "main.builder-shell",
-    landmarkName: "Safe visual builder shell"
+    readySelector: "section.builder-shell",
+    routeRegionName: "Builder structural shell"
   }
 ] as const;
 
@@ -72,10 +72,11 @@ async function openRoute(page: Page, route: Route) {
   await page.goto(route.path, { waitUntil: "domcontentloaded" });
   await page.waitForLoadState("networkidle", { timeout: 5_000 }).catch(() => undefined);
   await expect(page.locator(route.readySelector), `${route.path} should render its route shell`).toBeVisible();
+  await expect(page.getByRole("main"), `${route.path} should expose exactly one shared main landmark`).toHaveCount(1);
   if (route.path === "/") {
-    await expect(page.getByRole("region", { name: route.landmarkName }), `${route.path} should expose its workspace landmark`).toBeVisible();
+    await expect(page.getByRole("region", { name: route.routeRegionName }), `${route.path} should expose its workspace landmark`).toBeVisible();
   } else {
-    await expect(page.getByRole("main", { name: route.landmarkName }), `${route.path} should expose its main landmark`).toBeVisible();
+    await expect(page.getByRole("region", { name: route.routeRegionName }), `${route.path} should expose its route landmark`).toBeVisible();
   }
 }
 

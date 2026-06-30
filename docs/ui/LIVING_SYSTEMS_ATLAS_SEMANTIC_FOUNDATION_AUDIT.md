@@ -1,8 +1,8 @@
 # Living Systems Atlas Semantic Foundation Audit
 
-Status: Prompt UX2B rendered browser audit complete; GW1 is conditionally ready.
+Status: Prompt UX2B rendered browser audit complete; updated after Prompt GW1 implementation.
 
-UX2B verifies and hardens the shared semantic foundation that exists. It does not extend product architecture, add Research World routes, implement GW1, redesign unrelated surfaces, or turn automation into a WCAG, screen-reader, assistive-technology, or browser-zoom claim.
+UX2B verifies and hardens the shared semantic foundation that existed before GW1. It does not itself extend product architecture, add Research World routes, implement GW1, redesign unrelated surfaces, or turn automation into a WCAG, screen-reader, assistive-technology, or browser-zoom claim. Prompt GW1 adds separate destination-shell tests in `tests/ui/research-world-shell.spec.ts`; GW1B remains required to audit and harden the shell.
 
 ## Harness Added
 

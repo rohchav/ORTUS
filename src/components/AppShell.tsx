@@ -74,18 +74,18 @@ export function AppShell() {
 
   if (!mounted) {
     return (
-      <main className="ortus-shell ortus-shell--hydrating" aria-busy="true">
+      <section className="ortus-shell ortus-shell--hydrating" aria-busy="true" aria-label="World simulation workbench">
         <div className="ortus-hydration-shell">
           <OrtusBrand variant="soft" showDescriptor />
           <span>Initializing simulation instrument</span>
         </div>
-      </main>
+      </section>
     );
   }
 
   return (
-    <main className="ortus-shell">
-      <h1 className="sr-only">ORTUS Simulation Workbench</h1>
+    <section className="ortus-shell" aria-label="World simulation workbench" data-destination-route="world">
+      <h1 className="sr-only">World</h1>
       <TopStatusBar activeWorkspaceMode={activeWorkspaceMode} />
       <div className="ortus-layout">
         <LeftInstrumentStack activeMode={activeWorkspaceMode} onModeChange={setActiveWorkspaceMode} />
@@ -97,6 +97,6 @@ export function AppShell() {
         </section>
       </div>
       <TimelineControlStrip />
-    </main>
+    </section>
   );
 }

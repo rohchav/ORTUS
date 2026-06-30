@@ -62,19 +62,21 @@ describe("ORTUS brand integration", () => {
     const appShell = source("src/components/AppShell.tsx");
     const builderHeader = source("src/components/builder/BuilderHeader.tsx");
     const builderViewport = source("src/components/builder/BuilderViewport.tsx");
+    const researchShell = source("src/components/researchWorld/ResearchWorldShell.tsx");
     const worldStage = source("src/components/WorldStage.tsx");
     const css = source("src/app/globals.css");
 
-    expect(topStatus).toContain('<OrtusBrand href="/" showDescriptor className="top-status__brand" />');
+    expect(researchShell).toContain('<OrtusBrand href="/" showDescriptor className="research-shell__brand" />');
+    expect(topStatus).not.toContain("OrtusBrand");
     expect(appShell).toContain('<OrtusBrand variant="soft" showDescriptor />');
-    expect(builderHeader).toContain('<OrtusBrand href="/" showDescriptor={false} className="builder-header__brand" />');
+    expect(builderHeader).not.toContain("OrtusBrand");
     expect(builderHeader).toContain("Builder Workspace / Safe UI Shell V1");
     expect(builderViewport).not.toContain("OrtusBrand");
     expect(builderViewport).not.toContain("/branding/");
     expect(worldStage).not.toContain("OrtusBrand");
     expect(worldStage).not.toContain("/branding/");
-    expect(css).toContain(".top-status__brand .ortus-brand__descriptor");
-    expect(css).toContain(".top-status__brand .ortus-brand__wordmark");
+    expect(css).toContain(".research-shell__brand .ortus-brand__descriptor");
+    expect(css).toContain(".research-shell__brand .ortus-brand__wordmark");
     expect(css).toContain("a:focus-visible");
     expect(css).toContain(".ortus-logo--header");
     expect(css).not.toContain("background-image: url(\"/branding");
@@ -97,4 +99,3 @@ describe("ORTUS brand integration", () => {
     expect(docs).toContain("HCI findings must distinguish observed defects, inferred risks, subjective style preferences, and unverified concerns.");
   });
 });
-

@@ -1,6 +1,6 @@
 # ORTUS Living Systems Atlas Visual Direction
 
-Status: Prompt UX0 documentation, design-system planning, and UX-principle definition only, updated after Prompt UX2. UX0 does not implement routes, navigation, a World/Lab/Atlas/Workshop shell, component redesigns, CSS rewrites, typography changes, color-token changes, icons, animations, persistent lab state, progression, unlocks, discoveries, behavioral landscapes, model composition, runtime behavior, template behavior, dependencies, remote fonts, image assets, or generated mockups. Prompt UX1 audits the existing UI source in `EXISTING_DESIGN_TOKEN_AND_COMPONENT_AUDIT.md` without implementing UX0. Prompt GW0 defines Research World progression architecture in `../RESEARCH_WORLD_PROGRESSION_MINI_ROADMAP.md` without implementing UX0, GW1, routes, navigation, persistence, discovery logic, behavioral landscapes, UI shell behavior, runtime behavior, or template behavior. Prompt UX2 implements shared semantic token foundations in `LIVING_SYSTEMS_ATLAS_SEMANTIC_TOKEN_FOUNDATION.md` without performing the Research World shell transformation.
+Status: Prompt UX0 documentation, design-system planning, and UX-principle definition only, updated after Prompt GW1. UX0 does not implement routes, navigation, a World/Lab/Atlas/Workshop shell, component redesigns, CSS rewrites, typography changes, color-token changes, icons, animations, persistent lab state, progression, unlocks, discoveries, behavioral landscapes, model composition, runtime behavior, template behavior, dependencies, remote fonts, image assets, or generated mockups. Prompt UX1 audits the existing UI source in `EXISTING_DESIGN_TOKEN_AND_COMPONENT_AUDIT.md` without implementing UX0. Prompt GW0 defines Research World progression architecture in `../RESEARCH_WORLD_PROGRESSION_MINI_ROADMAP.md` without implementing UX0, GW1, routes, navigation, persistence, discovery logic, behavioral landscapes, UI shell behavior, runtime behavior, or template behavior. Prompt UX2 implements shared semantic token foundations in `LIVING_SYSTEMS_ATLAS_SEMANTIC_TOKEN_FOUNDATION.md`. Prompt GW1 implements the first bounded destination shell in `RESEARCH_WORLD_DESTINATION_SHELL.md`; it still does not implement persistent lab state, Discovery Atlas behavior, behavioral landscapes, progression, runtime behavior, template behavior, dependencies, remote fonts, image assets, or generated mockups.
 
 ## Purpose
 
@@ -596,7 +596,7 @@ Prompt UX2 introduced semantic colors, typography roles, shape tokens, material/
 
 ### Stage 3 — GW1 Destination Shell
 
-GW1 may introduce World, Lab, Atlas, and Workshop destination responsibilities after UX2. It must preserve existing feature access and avoid full persistence, discovery logic, behavioral landscapes, or unsupported runtime claims.
+GW1 introduces the shared World, Lab, Atlas, and Workshop destination shell after UX2. It preserves `/` as World and `/builder` as Workshop, adds `/lab` and `/atlas` as reachable future-only informational routes, and avoids persistence, discovery logic, behavioral landscapes, progression, fake data, and unsupported runtime claims. GW1B must audit and harden this shell before further Research World implementation.
 
 ### Stage 4 — Contextual Panels
 

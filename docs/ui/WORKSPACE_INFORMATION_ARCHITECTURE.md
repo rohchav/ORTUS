@@ -1,8 +1,8 @@
 # ORTUS Workspace Information Architecture
 
-Date: 2026-06-25
-Prompt: UI-REMEDIATION-1, audited and hardened by Prompt 34B, extended by Prompt 35, audited by Prompt 35B, extended by Prompt 36, audited by Prompt 36B, extended by Prompt 37, audited by Prompt 37B, extended by Prompt 38, audited by Prompt 38B, extended by Prompt 39, audited by Prompt 39B, extended by Prompt NUX1, audited by Prompt NUX1B, extended by Prompt N2, audited by Prompt N2B, documented by Prompt MR0, documented by Prompt F0, documented by Prompt P0, documented by Prompt UX0, audited by Prompt UX1, documented by Prompt GW0, and visually founded by Prompt UX2
-Status: implemented and source-audited; rendered screenshot and browser zoom tooling remain unavailable in this environment
+Date: 2026-06-29
+Prompt: UI-REMEDIATION-1, audited and hardened by Prompt 34B, extended by Prompt 35, audited by Prompt 35B, extended by Prompt 36, audited by Prompt 36B, extended by Prompt 37, audited by Prompt 37B, extended by Prompt 38, audited by Prompt 38B, extended by Prompt 39, audited by Prompt 39B, extended by Prompt NUX1, audited by Prompt NUX1B, extended by Prompt N2, audited by Prompt N2B, documented by Prompt MR0, documented by Prompt F0, documented by Prompt P0, documented by Prompt UX0, audited by Prompt UX1, documented by Prompt GW0, visually founded by Prompt UX2, rendered-audited by Prompt UX2B, and structurally extended by Prompt GW1
+Status: implemented, source-audited, and rendered-smoke-tested by the GW1 Playwright shell suite; GW1B hardening is still required before broader readiness claims
 
 ## Problem
 
@@ -19,10 +19,21 @@ The attachment directory for this prompt did not include a screenshot file, and 
 
 ORTUS now uses three levels:
 
-- Global destinations: Simulate and Builder.
+- Global destinations: World, Lab, Atlas, and Workshop.
 - Simulation workspace modes: Setup, Understand, Observe, Intervene, Experiment, Compare, and Debug.
 - Builder modes: Workspace Inspector, Author Schema, and Graph View.
 - Panels inside the selected mode.
+
+GW1 route contract:
+
+```text
+/         -> World
+/lab      -> Lab informational foundation
+/atlas    -> Atlas informational foundation
+/builder  -> Workshop
+```
+
+Lab and Atlas are reachable future-only informational destinations, not locked destinations. They do not contain persistent experiments, notebooks, Discovery Atlas behavior, behavioral landscapes, progression, fake counts, or fake user activity.
 
 The World Stage remains mounted while the user changes simulation workspace modes. Workspace mode selection is local React UI state in `AppShell`; it is not simulation state and does not reset, regenerate, or mutate the engine.
 
@@ -74,14 +85,22 @@ Prompt UX1 is documentation and source-level audit only and does not change the 
 
 Prompt GW0 is documentation and progression architecture only and does not change the workspace hierarchy. It defines future Research World destination responsibilities for World, Lab, Atlas, and Workshop while preserving current `/` and `/builder` access. GW0 defines destination responsibilities. It does not implement destination navigation or persistence. The Research World architecture must wrap and reorganize validated workflows before attempting to replace them. GW0 does not add routes, shell state, persistence, discovery logic, behavioral landscapes, contextual guidance, progression state, notebooks, saved assets, CSS, components, runtime behavior, or template behavior. The required future sequence is GW0 -> UX2 -> GW1 -> GW1B -> GW2 -> GW2B -> GW3 -> GW3B -> GW4 -> GW4B -> GW5 -> GW5B -> GW6 -> GW6B.
 
-Prompt UX2 changes shared visual semantics, not workspace IA. It adds the Living Systems Atlas Semantic Token Foundation, preserves legacy CSS variable compatibility, and migrates only shared panels, buttons/icon controls, form controls, and status badges. UX2 establishes shared visual semantics. It does not perform the Research World shell transformation. UX2 does not add routes, destination navigation, persistence, discovery logic, behavioral landscapes, contextual guidance, progression state, notebooks, saved assets, runtime behavior, template behavior, or new workspace modes. Current `/` and `/builder` remain the implemented surfaces.
+Prompt UX2 changes shared visual semantics, not workspace IA. It adds the Living Systems Atlas Semantic Token Foundation, preserves legacy CSS variable compatibility, and migrates only shared panels, buttons/icon controls, form controls, and status badges. UX2 establishes shared visual semantics. It does not perform the Research World shell transformation. UX2 does not add routes, destination navigation, persistence, discovery logic, behavioral landscapes, contextual guidance, progression state, notebooks, saved assets, runtime behavior, template behavior, or new workspace modes.
+
+Prompt GW1 adds the shared Research World destination shell. `/` remains World, `/builder` remains Workshop, `/lab` is a Lab informational foundation, and `/atlas` is an Atlas informational foundation. Lab and Atlas are reachable future-only destinations, not locked routes, and GW1 adds no persistence, discovery logic, behavioral landscapes, progression, runtime behavior, or template behavior.
+
+The GW1 rendered continuation fixed a shell-level focus defect: the skip link was the active element but could remain partially or fully offscreen during its reveal transition. The skip link now reveals immediately on focus and remains in the viewport in the Playwright shell suite.
 
 ## Header
 
-The top header now contains:
+The shared Research World header now contains:
 
 - ORTUS brand.
-- Global route links for Simulate and Builder.
+- Destination links for World, Lab, Atlas, and Workshop.
+- Current destination context and capability status.
+
+The World-specific `TopStatusBar` now contains:
+
 - Current model.
 - Current scenario when engine metadata provides one, otherwise `Default run`.
 - Current workspace mode.

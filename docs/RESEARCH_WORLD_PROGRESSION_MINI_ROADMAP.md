@@ -1,10 +1,10 @@
 # ORTUS Research World Progression Mini-Roadmap
 
-Status: Prompt GW0 documentation source of truth, updated after Prompt UX2.
+Status: Prompt GW0 documentation source of truth, updated after Prompt GW1.
 
 GW0 is documentation, product architecture, information architecture, and roadmap planning only.
 
-GW0 is documentation and progression architecture only. It does not implement routes, navigation, World/Lab/Atlas/Workshop pages, persistence, accounts, cloud storage, local storage, database schemas, progression state, unlocks, XP, levels, achievements, badges, streaks, missions, quests, daily rewards, discovery detection, regime classification, behavioral landscapes, contextual recommendations, notebooks, saved research assets, model composition, grand-system scenarios, runtime behavior, simulation behavior, template behavior, dependencies, assets, or mockups. Prompt UX2 later implements shared semantic visual tokens and a bounded shared primitive migration; UX2 still does not implement the Research World shell.
+GW0 is documentation and progression architecture only. It does not implement routes, navigation, World/Lab/Atlas/Workshop pages, persistence, accounts, cloud storage, local storage, database schemas, progression state, unlocks, XP, levels, achievements, badges, streaks, missions, quests, daily rewards, discovery detection, regime classification, behavioral landscapes, contextual recommendations, notebooks, saved research assets, model composition, grand-system scenarios, runtime behavior, simulation behavior, template behavior, dependencies, assets, or mockups. Prompt UX2 later implements shared semantic visual tokens and a bounded shared primitive migration. Prompt GW1 later implements the first shared destination shell only; it still does not implement persistent Lab systems, Discovery Atlas behavior, behavioral landscapes, progression, runtime behavior, or template behavior.
 
 The central principle:
 
@@ -99,9 +99,20 @@ Current implemented workflows include `/`, `/builder`, template selection/runtim
 
 The Research World architecture must wrap and reorganize validated workflows before attempting to replace them.
 
-GW0 does not authorize a flag-day rewrite. GW1 and later prompts must preserve direct access to the existing `/` and `/builder` surfaces until a dedicated implementation prompt and audit prove a replacement is safe.
+GW0 does not authorize a flag-day rewrite. GW1 preserves direct access to the existing `/` and `/builder` surfaces and adds `/lab` and `/atlas` as future-only informational foundations.
 
 Prompt UX2 prepares the visual language for this future shell by distinguishing operational, interaction, evidence, uncertainty, and capability states. UX2 does not create destination routes, destination navigation, persistence, notebooks, Discovery Atlas, behavioral landscapes, contextual guidance, or progression state.
+
+Prompt GW1 implements the route contract:
+
+```text
+/         -> World
+/lab      -> Lab informational foundation
+/atlas    -> Atlas informational foundation
+/builder  -> Workshop
+```
+
+In GW1, persistent shell means structurally present across routes, not persistent user data. Lab and Atlas are reachable future-only destinations, not locked destinations. GW1 does not add saved experiments, notebooks, reusable asset storage, Discovery Atlas logic, behavioral landscapes, progression, runtime behavior, template behavior, Builder execution behavior, dependencies, assets, fonts, `/world`, or `/workshop`.
 
 ## 5. Progression Without XP
 
@@ -359,7 +370,7 @@ The required sequence is:
 GW0 -> UX2 -> GW1 -> GW1B -> GW2 -> GW2B -> GW3 -> GW3B -> GW4 -> GW4B -> GW5 -> GW5B -> GW6 -> GW6B
 ```
 
-UX2 and GW1-GW6 remain future prompts and must not start without explicit direction.
+UX2 and GW1 are complete. GW1B must audit the destination shell before GW2-GW6 start, and GW2-GW6 remain future prompts that must not start without explicit direction.
 
 ## 22. GW Roadmap Branch
 
@@ -490,8 +501,9 @@ GW0 documentation tests should confirm:
 - open questions, contradictions, unsupported conclusions, and failed hypotheses count as progress,
 - artifact/runtime boundaries remain literal,
 - current `/` and `/builder` workflows are preserved,
-- GW1-GW6 and audits remain future-only,
-- UX2 sits between GW0 and GW1,
+- GW1 is implemented only as the bounded destination shell,
+- GW1B and GW2-GW6 remain future-only,
+- UX2 prepared the visual foundation between GW0 and GW1,
 - no production UI, CSS, runtime, persistence, route, asset, dependency, or package file is changed by GW0.
 
 ## 27. Summary Boundary

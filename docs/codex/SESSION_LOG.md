@@ -1863,3 +1863,115 @@ Result:
 - UX2B rendered browser audit is complete.
 - GW1 readiness decision: conditionally ready. GW1 still requires an explicit prompt and its own audit.
 - The worktree remains intentionally dirty and uncommitted for user review.
+
+## 2026-06-26 - Prompt GW1 Persistent Destination Shell
+
+Goal: implement the first bounded Research World destination shell without adding persistence, progression, fake Lab/Atlas data, runtime behavior, template behavior, Builder execution behavior, dependencies, assets, fonts, `/world`, `/workshop`, redirects, or visual-builder/runtime overclaims.
+
+Starting state:
+
+- Current commit: `1a94375`.
+- Starting worktree was clean.
+- Baseline `npm run test:ui` passed before GW1 work: 15 tests passed for the UX2B `/` and `/builder` rendered suite, with only repeated Node `NO_COLOR`/`FORCE_COLOR` warnings.
+- Baseline `npm test -- roadmap control` passed: 2 files and 12 tests.
+
+Implemented:
+
+- Added `src/lib/researchDestinations.ts` and focused registry tests for the canonical destination model.
+- Added the shared Research World shell with ORTUS identity, skip link, native destination navigation, current destination context, and one shared primary `main` landmark.
+- Kept `/` as World and `/builder` as Workshop; added `/lab` and `/atlas` as reachable future-only informational routes.
+- Converted `AppShell` and `BuilderShell` from route-level `main` owners into route surfaces inside the shared shell.
+- Kept `TopStatusBar` World-specific and `BuilderHeader` Workshop-specific.
+- Added Lab and Atlas informational pages with explicit no-persistence, no-discovery-infrastructure, no-real-world-certification, and future-only copy.
+- Added `docs/ui/RESEARCH_WORLD_DESTINATION_SHELL.md` as the GW1 source of truth.
+- Added `tests/ui/research-world-shell.spec.ts` for four-route shell coverage, destination navigation, route preservation, Lab/Atlas boundary copy, responsive viewport checks, keyboard smoke, reduced motion, and Axe scans.
+- Updated README, planned roadmap, roadmap/concepts docs, simulation README, UI docs, current context, AGENTS guardrails, workspace IA docs, and source tests so they identify GW1 as a bounded shell implementation and GW1B as the next required audit.
+
+Boundaries preserved:
+
+- GW1 persistence means persistent application structure across routes, not persistent user research data.
+- Lab and Atlas are reachable future-only destinations, not locked destinations.
+- No saved experiments, notebooks, reusable-asset storage, Discovery Atlas logic, behavioral landscapes, progression state, XP, achievements, fake counts, fake activity, fake maps, storage, runtime behavior, template behavior, Builder execution behavior, dependencies, assets, fonts, `/world`, or `/workshop` were added.
+- Model schemas, Builder graphs, fit reports, scenario plans, visual-builder workspaces, and social/cognitive semantics remain structural/non-executable.
+
+Checks:
+
+- Focused source tests passed: `npm test -- researchDestinations semanticTokenFoundation workspaceInformationArchitecture ortusBrand builderUiShell modelSchemaAuthoring roadmap control`, 8 files and 58 tests.
+- Required focused roadmap/control check passed: `npm test -- roadmap control`, 2 files and 12 tests.
+- `npm run typecheck`: passed.
+- `npm test`: passed, 60 files and 485 tests.
+- `npm run build`: passed with Next.js 15.5.19; static routes include `/`, `/atlas`, `/builder`, and `/lab`.
+- `npm run perf:simulation`: passed. Local smoke results included Flocking 100 agents at 102.29 ticks/sec, Flocking 500 agents at 14.32 ticks/sec, Forest Fire 80x60 at 23.5 ticks/sec, and Predator-Prey default at 66.85 ticks/sec.
+- `git diff --check`: passed.
+- `npm run lint`: unavailable; npm reported `Missing script: "lint"` and could not write logs under `/home/rohchav/.npm/_logs`.
+
+Rendered UI check status:
+
+- Required post-GW1 `npm run test:ui` was not completed in this run.
+- Attempting the focused Playwright shell test with elevated local-server/Chromium permissions was rejected by the approval layer because the session hit a usage limit.
+- No workaround was attempted after that rejection.
+- The added GW1 Playwright suite remains unexecuted in this run, so GW1 must not claim rendered shell audit completion.
+
+Result:
+
+- Prompt GW1 implementation is complete in source, docs, and non-browser verification.
+- Prompt GW1B remains the next required Research World prompt before hardened-shell readiness claims.
+- The worktree remains intentionally dirty and uncommitted for user review.
+
+## 2026-06-29 - Prompt GW1 Continuation Skip-Link Focus Fix And Rendered Audit Completion
+
+Goal: fix the GW1 destination-shell focus-visibility defect exposed by the new Playwright shell suite, complete the rendered shell audit, rerun the full UI suite, and decide whether GW1 is commit-ready.
+
+Starting state:
+
+- Current commit: `1a94375`.
+- Worktree contained the expected dirty GW1 implementation files, docs, tests, and bounded shell changes.
+- Ignored Playwright artifacts were present under `test-results/` and `playwright-report/`; no generated Playwright artifact appeared in `git status --short`.
+
+Rendered failure investigated:
+
+- Failing test: `World shell contract holds at desktop 1440x900`.
+- Failure assertion: focused element top was expected to be at least `-2`, but received `-44`.
+- Active element at failure: `a.research-shell__skip`, text `Skip to destination content`, href `#research-world-main`.
+- Classification: Case A with transition timing. The skip link was focused while still offscreen because its hidden transform/reveal transition had not settled immediately after keyboard focus.
+- Root cause: `.research-shell__skip` only revealed through a transform transition on `:focus-visible`, so the active focused element could be temporarily outside the viewport.
+
+Fix:
+
+- Updated shell CSS only.
+- Made the skip link `position: fixed` with a high z-index, removed the reveal transition, and revealed it immediately on both `:focus` and `:focus-visible`.
+- Added explicit focus outline on the skip link focused state.
+- Added an AGENTS guardrail requiring shell skip links and focused destination controls to be visible inside the viewport immediately on focus.
+
+Rendered verification:
+
+- Focused shell rerun passed: `npx playwright test tests/ui/research-world-shell.spec.ts -g "World shell contract holds at desktop 1440x900"`, 1 passed.
+- Full GW1 shell suite passed: `npx playwright test tests/ui/research-world-shell.spec.ts`, 29 passed, 0 failed, 0 skipped.
+- Full UI suite passed: `npm run test:ui`, 44 passed, 0 failed, 0 skipped.
+- The only repeated warnings were Node web-server warnings that `NO_COLOR` was ignored because `FORCE_COLOR` was set; these were not page console errors.
+
+Final integrity checks:
+
+- `npm run typecheck`: passed.
+- `npm test`: passed, 60 files and 485 tests.
+- `npm run build`: passed with Next.js 15.5.19; static routes include `/`, `/atlas`, `/builder`, and `/lab`.
+- `npm run perf:simulation`: passed. Local smoke results included Flocking 100 agents at 256.07 ticks/sec, Flocking 500 agents at 32.09 ticks/sec, Forest Fire 80x60 at 53.12 ticks/sec, and Predator-Prey default at 155.6 ticks/sec.
+- `git diff --check`: passed.
+- `npm run lint`: unavailable, package.json has no lint script. npm reported `Missing script: "lint"`.
+
+Documentation updated:
+
+- Updated `docs/ui/RESEARCH_WORLD_DESTINATION_SHELL.md`, `docs/ui/HCI_AUDIT.md`, `docs/ui/WORKSPACE_INFORMATION_ARCHITECTURE.md`, `docs/codex/CURRENT_CONTEXT.md`, `README.md`, `planned_roadmap.md`, `docs/roadmap.md`, `AGENTS.md`, and this session log.
+- Documentation records the initial rendered failure, active focused element, root cause, production fix, focused shell pass, full shell pass, full UI pass, remaining limitations, and GW1 commit readiness.
+
+Remaining limitations:
+
+- GW1B has not been performed.
+- Actual browser UI zoom, screen-reader behavior, assistive-technology behavior, forced-colors behavior, complete WCAG conformance, and user-comprehension evidence remain unverified.
+- Focus-return behavior beyond covered smoke paths remains unverified.
+
+Result:
+
+- Prompt GW1 is now commit-ready from the requested verification standpoint.
+- No persistence, fake Lab content, fake Atlas content, progression, discovery logic, behavioral landscapes, `/world`, `/workshop`, redirects, simulation runtime behavior, Builder execution behavior, template behavior, dependencies, assets, or fonts were added.
+- The worktree remains intentionally dirty and uncommitted for user review.
