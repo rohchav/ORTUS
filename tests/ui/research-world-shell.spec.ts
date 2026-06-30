@@ -247,6 +247,60 @@ async function expectWorldProvenanceLayer(page: Page) {
   await expectFocusedElementVisible(page);
 }
 
+async function expectWorldInterventionReadinessLayer(page: Page) {
+  const interveneTab = page.getByRole("tab", { name: /Intervene/i });
+  await interveneTab.click();
+
+  const interventionRegion = page.getByRole("region", { name: "Intervention Readiness" });
+  const readinessSection = page.locator(".intervention-readiness");
+  await expect(interventionRegion).toBeVisible();
+  await expect(readinessSection).toHaveCount(1);
+  await expect(readinessSection).not.toHaveAttribute("tabindex", "0");
+  await expect(readinessSection).not.toHaveAttribute("role", /button|link|tab/);
+  await expect(interventionRegion.getByRole("heading", { name: "Intervention Readiness" })).toBeVisible();
+  await expect(
+    interventionRegion.getByText(
+      "Intervention readiness describes available model perturbation controls. It is not a saved intervention plan or experiment record."
+    )
+  ).toBeVisible();
+  await expect(
+    interventionRegion.getByText(
+      "Intervention in ORTUS means changing or inspecting model conditions. It does not certify real-world causal power, policy effectiveness, or empirical truth."
+    )
+  ).toBeVisible();
+  await expect(
+    interventionRegion.getByText(
+      "A response to an intervention is evidence about this model under this configuration. It is not automatic proof that the same intervention would work in the real system."
+    )
+  ).toBeVisible();
+  await expect(interventionRegion.getByText("No saved intervention plan, experiment record, notebook entry, or reusable Lab asset is created by this panel.")).toBeVisible();
+  await expect(interventionRegion.getByText("Persistent Lab intervention records are still not implemented.")).toBeVisible();
+  await expect(interventionRegion.getByText("Discovery Atlas records are not created from intervention responses.")).toBeVisible();
+
+  const availabilityStatus = interventionRegion.getByLabel(/Controls available:/);
+  await expect(availabilityStatus).toHaveAttribute("data-status-category", "capability");
+  await expect(availabilityStatus).toHaveAttribute("data-state", "supported");
+  const evidenceStatus = interventionRegion.getByLabel(/Model response:/);
+  await expect(evidenceStatus).toHaveAttribute("data-status-category", "evidence");
+  await expect(evidenceStatus).toHaveAttribute("data-state", "unresolved");
+
+  await expect(page.getByRole("combobox", { name: "Intervention type" })).toBeVisible();
+  await expect(page.getByRole("button", { name: /Apply Infect Radius|Apply Infect Selected Agent/ })).toBeVisible();
+  await expect(page.getByRole("region", { name: "Simulation workspace" })).toBeVisible();
+  await expect(page.getByRole("img", { name: "Simulation world. Agents are rendered from the latest engine snapshot." })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Run simulation" })).toBeVisible();
+
+  await interveneTab.focus();
+  await expect(interveneTab).toBeFocused();
+  await expectFocusedElementVisible(page);
+  await page.keyboard.press("Tab");
+  await expect(page.getByRole("tab", { name: /Experiment/i })).toBeFocused();
+  await expectFocusedElementVisible(page);
+  await page.keyboard.press("Shift+Tab");
+  await expect(interveneTab).toBeFocused();
+  await expectFocusedElementVisible(page);
+}
+
 async function expectWorkshopPreserved(page: Page) {
   await expect(page.getByRole("region", { name: "Builder structural shell" })).toBeVisible();
   await expect(page.getByRole("tab", { name: /Workspace Inspector/i })).toBeVisible();
@@ -262,17 +316,22 @@ async function expectFutureDestinationBoundaries(page: Page, destination: "Lab" 
   await expect(status).toHaveAttribute("data-status-category", "capability");
   await expect(status).toHaveAttribute("data-state", "future-only");
   await expect(page.locator(".active-run-context")).toHaveCount(0);
+  await expect(page.locator(".intervention-readiness")).toHaveCount(0);
 
   if (destination === "Lab") {
-    await expect(page.getByText("Persistent experiments, notebooks, comparison sets, and reusable research assets are not implemented in GW1 or GW2.")).toBeVisible();
+    await expect(page.getByText("Persistent experiments, notebooks, comparison sets, intervention records, and reusable research assets are not implemented in GW1, GW2, or GW3.")).toBeVisible();
     await expect(page.getByText("The Lab route documents destination responsibility. It does not simulate persistence.")).toBeVisible();
     await expect(page.getByText("GW2 exposes live run provenance in World. Persistent Lab records are still not implemented.")).toBeVisible();
+    await expect(page.getByText("GW3 exposes live intervention readiness in World. Persistent Lab intervention records are still not implemented.")).toBeVisible();
   } else {
     await expect(
-      page.getByText("Discovery records, behavioral landscapes, sampled-region maps, and evidence-linked model regimes are not implemented in GW1 or GW2.")
+      page.getByText(
+        "Discovery records, behavioral landscapes, sampled-region maps, intervention-response discoveries, and evidence-linked model regimes are not implemented in GW1, GW2, or GW3."
+      )
     ).toBeVisible();
     await expect(page.getByText("Atlas will map investigated model behavior. It will not certify discoveries about the real world.")).toBeVisible();
     await expect(page.getByText("GW2 does not create Discovery Atlas records. Atlas remains future-only.")).toBeVisible();
+    await expect(page.getByText("GW3 does not create Discovery Atlas records from intervention responses. Atlas remains future-only.")).toBeVisible();
   }
 
   const mainText = await page.getByRole("main").innerText();
@@ -312,6 +371,7 @@ for (const destination of destinations) {
       if (destination.path === "/") {
         await expectWorldPreserved(page);
         await expectWorldProvenanceLayer(page);
+        await expectWorldInterventionReadinessLayer(page);
         await expectNoDocumentHorizontalOverflow(page);
       }
       if (destination.path === "/builder") {
@@ -394,6 +454,7 @@ test.describe("axe accessibility scans", () => {
       await openDestination(page, destination);
       if (destination.path === "/") {
         await expectWorldProvenanceLayer(page);
+        await expectWorldInterventionReadinessLayer(page);
       }
       await expectAxeClean(page);
       await expectNoDiagnostics(diagnostics);

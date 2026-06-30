@@ -2489,6 +2489,102 @@ textarea[aria-invalid="true"] {
   line-height: 1.45;
 }
 
+.intervention-readiness {
+  min-width: 0;
+  display: grid;
+  gap: 10px;
+  padding: 9px;
+  background: rgba(243, 241, 232, 0.045);
+  box-shadow: inset 0 0 0 1px rgba(243, 241, 232, 0.08);
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%);
+}
+
+.intervention-readiness__heading,
+.intervention-readiness__subhead {
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.intervention-readiness h3,
+.intervention-readiness h4 {
+  margin: 0;
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  line-height: 1.05;
+  letter-spacing: 0;
+}
+
+.intervention-readiness h3 {
+  font-size: 14px;
+}
+
+.intervention-readiness h4 {
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.intervention-readiness__facts {
+  margin: 0;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 5px;
+}
+
+.intervention-readiness__facts div {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(88px, 0.52fr) minmax(0, 1fr);
+  align-items: baseline;
+  gap: 8px;
+  padding: 5px 0;
+  border-bottom: 1px solid rgba(243, 241, 232, 0.08);
+}
+
+.intervention-readiness__facts--compact div {
+  grid-template-columns: minmax(94px, 0.54fr) minmax(0, 1fr);
+}
+
+.intervention-readiness__facts dt {
+  min-width: 0;
+  color: var(--text-muted);
+  font-size: 10px;
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+
+.intervention-readiness__facts dd {
+  min-width: 0;
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 12px;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.intervention-readiness__subsection {
+  min-width: 0;
+  display: grid;
+  gap: 8px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(243, 241, 232, 0.1);
+}
+
+.intervention-readiness__boundary-list {
+  margin: 0;
+  padding-left: 16px;
+  display: grid;
+  gap: 6px;
+  color: var(--text-secondary);
+  font-size: 11.5px;
+  line-height: 1.45;
+}
+
 .metric-chart {
   width: 100%;
   height: 128px;

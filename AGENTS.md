@@ -475,7 +475,7 @@
 - Preserve current validated workflows before reorganizing them further.
 - Use the existing Playwright/Axe harness for rendered destination-shell verification.
 - Do not claim screen-reader, AT, forced-colors, browser-zoom, or WCAG verification without evidence.
-- Do not start a Research World implementation slice from a prior shell prompt without the required audit; after GW2B, GW3 is the next Research World prompt only if explicitly approved.
+- Do not start a Research World implementation slice from a prior shell prompt without the required audit; after GW3, GW3B is the next Research World prompt only if explicitly approved.
 - GW2 live provenance belongs only in World Observe; do not turn it into saved Lab records, Atlas discoveries, notebooks, reusable assets, storage, route state, or evidence claims.
 - Active run provenance describes current model configuration; it is not a saved experiment record.
 - Active run observations describe model state; they are not measured real-world data.
@@ -483,6 +483,12 @@
 - Visual patterns in a run are evidence about that model under that configuration, not automatically evidence about the real system.
 - Do not generate GW2 timestamps, UUIDs, random ids, storage keys, or decorative fingerprints for active run provenance.
 - Preserve Paused as an operational paused state when showing active run observation status.
+- GW3 live intervention readiness belongs only in World Intervene; do not turn it into saved intervention plans, saved experiments, Lab intervention records, Atlas discoveries, notebooks, reusable assets, behavioral landscapes, progression, storage, route state, or evidence claims.
+- Intervention readiness describes available model perturbation controls. It is not a saved intervention plan or experiment record.
+- Intervention in ORTUS means changing or inspecting model conditions. It does not certify real-world causal power, policy effectiveness, or empirical truth.
+- A response to an intervention is evidence about this model under this configuration. It is not automatic proof that the same intervention would work in the real system.
+- GW3 readiness may derive only from existing registered template-owned intervention definitions, selected target state, active engine presence, and current active-run intervention count; do not fabricate controls, targets, outcomes, evidence scores, or discovery records.
+- Do not generate GW3 timestamps, UUIDs, random ids, storage keys, saved plans, Lab records, Atlas records, sampled regions, behavioral landscapes, progression state, or decorative fingerprints for intervention readiness.
 - Complete and commit GW1 before starting GW1B.
 - Treat UX0 as documentation and design planning only.
 - Do not implement World/Lab/Atlas/Workshop without a dedicated prompt.

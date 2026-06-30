@@ -4,8 +4,16 @@ import { useEffect, useMemo, useState } from "react";
 import type { JsonValue, ParameterDefinition, ParameterValues } from "../simulation";
 import { getInterventionDefinitions } from "../simulation";
 import { formatNumber } from "../lib/format";
+import { getTemplateDescriptor } from "../lib/templateVisuals";
 import { useSimulationStore } from "../state/simulationStore";
+import {
+  deriveActiveInterventionReadiness,
+  describeInterventionTarget,
+  isInterventionTargetReady,
+  type ActiveInterventionReadiness
+} from "./activeInterventionReadiness";
 import { CornerFramePanel } from "./ui/CornerFramePanel";
+import { StatusPill } from "./ui/StatusPill";
 
 interface InterventionPanelProps {
   collapsed?: boolean;
@@ -14,6 +22,7 @@ interface InterventionPanelProps {
 
 export function InterventionPanel({ collapsed = false, onToggle }: InterventionPanelProps) {
   const selectedTemplateId = useSimulationStore((state) => state.selectedTemplateId);
+  const engine = useSimulationStore((state) => state.engine);
   const selectedEntityId = useSimulationStore((state) => state.selectedEntityId);
   const targetPoint = useSimulationStore((state) => state.interventionTargetPoint);
   const targetCell = useSimulationStore((state) => state.interventionTargetCell);
@@ -35,20 +44,38 @@ export function InterventionPanel({ collapsed = false, onToggle }: InterventionP
     setParameters(defaultInterventionParameters(selectedDefinition?.parameterDefinitions ?? []));
   }, [selectedDefinition]);
 
-  const targetStatus = targetSummary(selectedDefinition?.targetType, selectedEntityId, targetPoint, targetCell);
-  const targetReady = isTargetReady(selectedDefinition?.targetType, selectedEntityId, targetPoint, targetCell);
+  const descriptor = getTemplateDescriptor(selectedTemplateId);
+  const readiness = useMemo(
+    () =>
+      deriveActiveInterventionReadiness({
+        selectedTemplateId,
+        template: descriptor.template,
+        templateLabel: descriptor.template.name,
+        definitions,
+        selectedInterventionId: selectedDefinition?.id,
+        selectedEntityId,
+        targetPoint,
+        targetCell,
+        hasActiveEngine: Boolean(engine),
+        activeInterventionCount: history.length
+      }),
+    [definitions, descriptor.template, engine, history.length, selectedDefinition?.id, selectedEntityId, selectedTemplateId, targetCell, targetPoint]
+  );
+  const targetStatus = readiness.selectedTarget?.targetStatusLabel ?? describeInterventionTarget(selectedDefinition?.targetType, selectedEntityId, targetPoint, targetCell);
+  const targetReady = readiness.selectedTarget?.targetReady ?? isInterventionTargetReady(selectedDefinition?.targetType, selectedEntityId, targetPoint, targetCell);
   const parameterError = selectedDefinition ? interventionParameterError(selectedDefinition.parameterDefinitions, parameters) : null;
 
   return (
     <CornerFramePanel title="Interventions" eyebrow="Perturb" variant="compact" collapsed={collapsed} onToggle={onToggle}>
       <div className="intervention-panel">
+        <InterventionReadinessView context={readiness} />
         <p className="intervention-panel__note">
           Interventions apply immediately through engine-validated commands. They do not advance time; the next normal step continues from the perturbed state.
         </p>
         {definitions.length > 0 && selectedDefinition ? (
           <>
             <label className="intervention-field">
-              <span>Intervention</span>
+              <span>Intervention type</span>
               <select value={selectedDefinition.id} onChange={(event) => setSelectedInterventionId(event.target.value)} suppressHydrationWarning>
                 {definitions.map((definition) => (
                   <option key={definition.id} value={definition.id}>
@@ -90,6 +117,94 @@ export function InterventionPanel({ collapsed = false, onToggle }: InterventionP
         <InterventionHistory history={history} onClear={clearInterventions} />
       </div>
     </CornerFramePanel>
+  );
+}
+
+function InterventionReadinessView({ context }: { context: ActiveInterventionReadiness }) {
+  const { readiness, selectedTarget, boundary } = context;
+
+  return (
+    <section className="intervention-readiness" aria-labelledby="intervention-readiness-heading">
+      <div className="intervention-readiness__heading">
+        <h3 id="intervention-readiness-heading">Intervention Readiness</h3>
+        <StatusPill
+          label={readiness.availabilityStatus.label}
+          tone={readiness.availabilityStatus.tone}
+          category={readiness.availabilityStatus.category}
+          state={readiness.availabilityStatus.state}
+          description={readiness.availabilityStatus.description}
+          size="compact"
+        />
+      </div>
+
+      <p className="microcopy">{readiness.readinessCopy}</p>
+      <p className="microcopy">{readiness.modelBoundaryCopy}</p>
+
+      <dl className="intervention-readiness__facts">
+        <ReadinessFact label="Model" value={readiness.templateLabel} />
+        <ReadinessFact label="Mode" value={readiness.worldModeLabel} />
+        <ReadinessFact label="Controls" value={readiness.registeredControlLabel} />
+        <ReadinessFact label="Selected" value={readiness.selectedControlLabel} />
+        <ReadinessFact label="Timing" value={readiness.applicationTimingLabel} />
+        <ReadinessFact label="Runtime path" value={readiness.runtimePathLabel} />
+        <ReadinessFact label="Current run" value={readiness.activeRunRecordLabel} />
+      </dl>
+
+      {selectedTarget ? (
+        <div className="intervention-readiness__subsection" aria-label="Selected intervention target">
+          <div className="intervention-readiness__subhead">
+            <h4>Selected Control Boundary</h4>
+            <StatusPill
+              label={selectedTarget.availabilityStatus.label}
+              tone={selectedTarget.availabilityStatus.tone}
+              category={selectedTarget.availabilityStatus.category}
+              state={selectedTarget.availabilityStatus.state}
+              description={selectedTarget.availabilityStatus.description}
+              size="compact"
+            />
+          </div>
+          <dl className="intervention-readiness__facts intervention-readiness__facts--compact">
+            <ReadinessFact label="Target kind" value={selectedTarget.targetKindLabel} />
+            <ReadinessFact label="Current target" value={selectedTarget.targetStatusLabel} />
+            <ReadinessFact label="Parameters" value={selectedTarget.parameterSummaryLabel} />
+            <ReadinessFact label="Mutation scope" value={selectedTarget.mutatesLabel} />
+          </dl>
+          <p className="microcopy">{selectedTarget.documentation}</p>
+        </div>
+      ) : null}
+
+      <div className="intervention-readiness__subsection" aria-label="Intervention interpretation boundary">
+        <div className="intervention-readiness__subhead">
+          <h4>Intervention Boundary</h4>
+          <StatusPill
+            label={boundary.evidenceStatus.label}
+            tone={boundary.evidenceStatus.tone}
+            category={boundary.evidenceStatus.category}
+            state={boundary.evidenceStatus.state}
+            description={boundary.evidenceStatus.description}
+            size="compact"
+          />
+        </div>
+        <p className="microcopy">{boundary.responseBoundaryCopy}</p>
+        <ul className="intervention-readiness__boundary-list">
+          {boundary.claimBoundaries.map((claim) => (
+            <li key={claim}>{claim}</li>
+          ))}
+        </ul>
+        <p className="microcopy">{readiness.persistenceBoundaryLabel}</p>
+        <p className="microcopy">{readiness.labBoundaryLabel}</p>
+        <p className="microcopy">{readiness.atlasBoundaryLabel}</p>
+      </div>
+    </section>
+  );
+}
+
+function ReadinessFact({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <dt>{label}</dt>
+      <dd>{value}</dd>
+    </div>
   );
 }
 
@@ -218,46 +333,4 @@ function parameterIssue(definition: ParameterDefinition, value: JsonValue): stri
     return `${definition.label} must be no more than ${formatNumber(definition.max, 3)}.`;
   }
   return null;
-}
-
-function isTargetReady(
-  targetType: string | undefined,
-  selectedEntityId: string | null,
-  point: { x: number; y: number } | null,
-  gridCell: { row: number; col: number } | null
-): boolean {
-  if (!targetType || targetType === "none") {
-    return true;
-  }
-  if (targetType === "selectedEntity") {
-    return Boolean(selectedEntityId);
-  }
-  if (targetType === "worldPoint" || targetType === "radius") {
-    return Boolean(point || selectedEntityId);
-  }
-  if (targetType === "gridCell") {
-    return Boolean(gridCell);
-  }
-  return false;
-}
-
-function targetSummary(
-  targetType: string | undefined,
-  selectedEntityId: string | null,
-  point: { x: number; y: number } | null,
-  gridCell: { row: number; col: number } | null
-): string {
-  if (!targetType || targetType === "none") {
-    return "No target required";
-  }
-  if (targetType === "selectedEntity") {
-    return selectedEntityId ? `Selected entity ${selectedEntityId}` : "No entity selected";
-  }
-  if (targetType === "gridCell") {
-    return gridCell ? `Cell ${gridCell.row}, ${gridCell.col}` : "No grid cell selected";
-  }
-  if (point) {
-    return `Point ${formatNumber(point.x, 1)}, ${formatNumber(point.y, 1)}`;
-  }
-  return selectedEntityId ? `Selected entity ${selectedEntityId}` : "No point selected";
 }

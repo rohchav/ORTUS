@@ -1,6 +1,6 @@
 # ORTUS Research World Destination Shell
 
-Status: Prompt GW1 implementation source of truth, audited and hardened by Prompt GW1B, updated after Prompt GW2. GW1 introduces a persistent World / Lab / Atlas / Workshop destination shell across routes. GW1B hardens the shell evidence without expanding product behavior. GW2 adds live active-run provenance inside World only. This destination shell does not implement persistent research data, Discovery Atlas logic, behavioral landscapes, progression systems, runtime behavior, template behavior, Builder execution behavior, dependencies, assets, fonts, or storage.
+Status: Prompt GW1 implementation source of truth, audited and hardened by Prompt GW1B, updated after Prompt GW3. GW1 introduces a persistent World / Lab / Atlas / Workshop destination shell across routes. GW1B hardens the shell evidence without expanding product behavior. GW2 adds live active-run provenance inside World only. GW3 adds live intervention readiness inside World only. This destination shell does not implement persistent research data, saved intervention plans, Lab intervention records, Discovery Atlas logic, behavioral landscapes, progression systems, runtime behavior, template behavior, Builder execution behavior, dependencies, assets, fonts, or storage.
 
 ## 1. Purpose And Scope
 
@@ -81,6 +81,8 @@ World has a route-level `h1` of `World` and receives the shared destination shel
 
 GW2 adds `Active Run Context` in the World Observe rail. It is live UI context over the active engine and latest snapshot. It does not save a run, create a Lab record, create an Atlas record, or validate model output.
 
+GW3 adds `Intervention Readiness` in the World Intervene rail. It is live UI context over existing registered template-owned intervention definitions, target state, active engine presence, and current active-run intervention count. It does not save an intervention plan, create a persistent Lab intervention record, create a Discovery Atlas record, certify causal power, or validate model output.
+
 ## 9. Workshop Integration
 
 `/builder` remains the direct expert route and becomes the Workshop destination. The internal surface remains Builder because that name is precise for current structural authoring and inspection tools.
@@ -94,9 +96,10 @@ Workshop preserves Builder modes, Author Schema, Graph View, validation and repa
 Required boundary:
 
 ```text
-Lab is a future Research World destination. Persistent experiments, notebooks, comparison sets, and reusable research assets are not implemented in GW1 or GW2.
+Lab is a future Research World destination. Persistent experiments, notebooks, comparison sets, intervention records, and reusable research assets are not implemented in GW1, GW2, or GW3.
 The Lab route documents destination responsibility. It does not simulate persistence.
 GW2 exposes live run provenance in World. Persistent Lab records are still not implemented.
+GW3 exposes live intervention readiness in World. Persistent Lab intervention records are still not implemented.
 ```
 
 The page lists planned artifact categories only as future responsibilities. It renders no fake saved experiments, fake notebooks, fake counts, fake timestamps, fake recent activity, fake charts, fake storage, or disabled controls.
@@ -108,9 +111,10 @@ The page lists planned artifact categories only as future responsibilities. It r
 Required boundary:
 
 ```text
-Atlas is a future Research World destination. Discovery records, behavioral landscapes, sampled-region maps, and evidence-linked model regimes are not implemented in GW1 or GW2.
+Atlas is a future Research World destination. Discovery records, behavioral landscapes, sampled-region maps, intervention-response discoveries, and evidence-linked model regimes are not implemented in GW1, GW2, or GW3.
 Atlas will map investigated model behavior. It will not certify discoveries about the real world.
 GW2 does not create Discovery Atlas records. Atlas remains future-only.
+GW3 does not create Discovery Atlas records from intervention responses. Atlas remains future-only.
 ```
 
 The page lists future Atlas concepts only as planned responsibilities. It renders no fake maps, fake discoveries, fake sampled regions, fake evidence scores, fake regime labels, achievements, locked regions, or progress percentages.
@@ -164,7 +168,7 @@ GW1 adds no XP, levels, ranks, achievements, badges, unlocks, progress bars, fir
 
 GW1 adds `tests/ui/research-world-shell.spec.ts` to cover all four routes, destination navigation, `aria-current`, route preservation, Lab/Atlas boundaries, viewports, keyboard focus, reduced motion, and Axe scans.
 
-GW1B hardens that suite with route-alias, unique-landmark, clean-navigation, single-current-destination, no-disabled-future-link, skip-link focus, reduced-motion focus, and stricter Lab/Atlas honesty checks. It also hardens destination-registry tests for query/hash normalization and `/world`/`/workshop` alias rejection.
+GW1B hardens that suite with route-alias, unique-landmark, clean-navigation, single-current-destination, no-disabled-future-link, skip-link focus, reduced-motion focus, and stricter Lab/Atlas honesty checks. It also hardens destination-registry tests for query/hash normalization and `/world`/`/workshop` alias rejection. GW3 extends the same rendered shell suite to cover the World Intervene readiness layer and absence of that layer on Lab/Atlas.
 
 Focused rerun passed: `npx playwright test tests/ui/research-world-shell.spec.ts -g "World shell contract holds at desktop 1440x900"`.
 
@@ -177,6 +181,7 @@ The existing UX2B rendered suite remains in `tests/ui/semantic-foundation.spec.t
 Deferred to future prompts:
 
 - persistent research notebook and reusable assets;
+- persistent intervention records;
 - Discovery Atlas behavior;
 - behavioral landscapes;
 - contextual capability guidance;
@@ -192,4 +197,4 @@ Actual browser zoom at 125%, 150%, and 200% was not verified. Screen-reader beha
 
 ## 21. Non-Goals And Guardrails
 
-GW1 must not modify simulation runtime, template runtime, Builder execution, schema execution, model-schema runtime, graph execution, persistence, storage, dependencies, assets, font configuration, progression, Discovery Atlas logic, behavioral landscapes, fake research data, fake counts, or fake user activity.
+GW1/GW3 destination work must not modify simulation runtime, template runtime, Builder execution, schema execution, model-schema runtime, graph execution, persistence, storage, dependencies, assets, font configuration, progression, Discovery Atlas logic, behavioral landscapes, fake research data, fake intervention outcomes, fake counts, or fake user activity.

@@ -1,6 +1,6 @@
 # ORTUS Product Philosophy And Learning Mission
 
-Status: Prompt P0 documentation-only source of truth, updated after Prompt GW2. This document records product philosophy, learning goals, future progression principles, and guardrails. GW1 implements only the shared World / Lab / Atlas / Workshop destination shell around existing workflows. GW2 adds live active-run provenance and observation context in World only. This document does not implement runtime behavior, UI progression, unlocks, missions, scoring, achievements, discovery detection, model composition, templates, simulation features, fractal metrics, persistent Research World state, persistence, accounts, social features, onboarding flows, dependencies, or new capability flags.
+Status: Prompt P0 documentation-only source of truth, updated after Prompt GW3. This document records product philosophy, learning goals, future progression principles, and guardrails. GW1 implements only the shared World / Lab / Atlas / Workshop destination shell around existing workflows. GW2 adds live active-run provenance and observation context in World only. GW3 adds live intervention readiness and model-response boundaries in World only. This document does not implement runtime behavior, UI progression, unlocks, missions, scoring, achievements, discovery detection, model composition, templates, simulation features, fractal metrics, persistent Research World state, persistence, accounts, social features, onboarding flows, dependencies, or new capability flags.
 
 ## Core Mission
 
@@ -113,6 +113,8 @@ This is the core anti-pseudo-ABM rule. ORTUS can help users explore consequences
 
 Prompt GW2 operationalizes this rule in the World Observe surface. The active-run provenance summary describes current model configuration, not a saved experiment record. Observed values describe model state, not measured real-world data. A visual pattern in a run is evidence about that model under that configuration, not automatically evidence about the real system.
 
+Prompt GW3 operationalizes the same rule in the World Intervene surface. Intervention readiness describes registered model perturbation controls, not a saved intervention plan or experiment record. A response to an intervention is evidence about the model under its current configuration, not automatic proof of real-world causal power, policy effectiveness, or empirical truth.
+
 ## Product Experience Principles
 
 The first product question should be:
@@ -137,7 +139,7 @@ Good ORTUS experiences should:
 
 ## Research World Direction
 
-Research World is an incremental product branch, not a finished research platform. Prompt P0 reserves philosophy and direction. Prompt GW0, documented in `RESEARCH_WORLD_PROGRESSION_MINI_ROADMAP.md`, adds a documentation-only progression and information-architecture roadmap for that branch. GW1 adds the destination shell, and GW2 adds live World-only active-run provenance. These prompts still do not implement progression, persistence, missions, unlocks, discovery detection, achievements, scoring, accounts, social systems, runtime behavior, or persistent Research World state.
+Research World is an incremental product branch, not a finished research platform. Prompt P0 reserves philosophy and direction. Prompt GW0, documented in `RESEARCH_WORLD_PROGRESSION_MINI_ROADMAP.md`, adds a documentation-only progression and information-architecture roadmap for that branch. GW1 adds the destination shell, GW2 adds live World-only active-run provenance, and GW3 adds live World-only intervention readiness. These prompts still do not implement progression, persistence, missions, unlocks, discovery detection, achievements, scoring, accounts, social systems, runtime behavior, or persistent Research World state.
 
 Future branch names:
 
@@ -147,14 +149,16 @@ Future branch names:
 - GW1B: Persistent Destination Shell Audit
 - GW2: Active Run Provenance And Observation Layer
 - GW2B: Active Run Provenance And Observation Layer Audit
-- GW3: Discovery Atlas
-- GW3B: Discovery Atlas Audit
-- GW4: Behavioral Landscape Exploration
-- GW4B: Behavioral Landscape Exploration Audit
-- GW5: Contextual Capability Guidance
-- GW5B: Contextual Capability Guidance Audit
-- GW6: Composition Frontiers And Grand Systems Challenges
-- GW6B: Composition Frontiers And Grand Systems Challenges Audit
+- GW3: Active Intervention Boundary And Perturbation Readiness
+- GW3B: Active Intervention Boundary Audit And Hardening
+- GW4: Discovery Atlas
+- GW4B: Discovery Atlas Audit
+- GW5: Behavioral Landscape Exploration
+- GW5B: Behavioral Landscape Exploration Audit
+- GW6: Contextual Capability Guidance
+- GW6B: Contextual Capability Guidance Audit
+
+Composition frontiers and Grand Systems Challenges remain future product directions beyond this near-term branch unless a dedicated roadmap prompt scopes them with explicit audit gates.
 
 ORTUS progression should emerge from building a capable laboratory, discovering system behavior, and reaching new modeling frontiers—not from completing a prescribed checklist.
 

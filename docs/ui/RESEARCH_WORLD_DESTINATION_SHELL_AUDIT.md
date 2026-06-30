@@ -1,6 +1,6 @@
 # Research World Destination Shell Audit
 
-Status: Prompt GW1B audit and hardening record, updated after Prompt GW2. This audit reviews the GW1 destination shell. GW2 later adds live World-only active-run provenance and observation context; it does not change this GW1B shell audit into a persistence, Discovery Atlas, behavioral landscape, progression, runtime, template, Builder-execution, dependency, asset, font, `/world`, `/workshop`, or redirect implementation record.
+Status: Prompt GW1B audit and hardening record, updated after Prompt GW3. This audit reviews the GW1 destination shell. GW2 later adds live World-only active-run provenance and observation context, and GW3 later adds live World-only intervention readiness context. They do not change this GW1B shell audit into a persistence, Lab intervention record, Discovery Atlas, behavioral landscape, progression, runtime, template, Builder-execution, dependency, asset, font, `/world`, `/workshop`, or redirect implementation record.
 
 ## 1. Scope
 
@@ -169,7 +169,7 @@ Atlas remains reachable and future-only. It documents future Discovery Atlas res
 
 Atlas copy continues to say it will not certify discoveries about the real world.
 
-After GW2, Lab and Atlas additionally state that live run provenance exists in World only. Persistent Lab records and Discovery Atlas records remain unimplemented.
+After GW2, Lab and Atlas additionally state that live run provenance exists in World only. After GW3, they additionally state that live intervention readiness exists in World only. Persistent Lab records, persistent Lab intervention records, and Discovery Atlas records remain unimplemented.
 
 ## 17. Status Semantics
 
@@ -262,7 +262,7 @@ Hardening was intentionally bounded:
 - `src/lib/researchDestinations.test.ts` now asserts query/hash normalization and rejects `/world` and `/workshop` aliases with query/hash variants.
 - Documentation now records the GW1B audit result and remaining unverified areas.
 
-No production runtime, route, UI feature, persistence, dependency, asset, font, template behavior, Builder execution behavior, model-schema execution behavior, or Lab/Atlas functionality was added.
+No production runtime, route, UI feature, persistence, dependency, asset, font, template behavior, Builder execution behavior, model-schema execution behavior, saved intervention plan, Lab intervention record, Atlas discovery, or Lab/Atlas functionality was added by this GW1B audit.
 
 ## 28. Findings And Defects
 
@@ -313,4 +313,5 @@ Meaning:
 - The destination shell is audited enough to stop blocking the next explicitly approved Research World prompt.
 - GW2 must still arrive through its own implementation prompt and audit.
 - GW1B does not make Lab persistent, Atlas functional, Discovery Atlas implemented, behavioral landscapes implemented, progression implemented, templates changed, Builder executable, schemas runnable, visual builder graphs executable, or model output empirical truth.
+- Later GW3 intervention-readiness work remains a separate World Intervene layer and does not make Lab persistent, Atlas functional, intervention outcomes causal proof, or model output empirical truth.
 - Actual browser zoom, screen-reader behavior, assistive-technology behavior, forced-colors behavior, full WCAG conformance, and user-comprehension evidence remain open.

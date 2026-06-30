@@ -622,19 +622,22 @@ UX0: Living Systems Atlas Visual Direction
 UX1: Existing Design Token and Component Audit
 GW0: Research World Progression Mini-Roadmap
 UX2: Shared Design Foundations
+UX2B: Semantic Foundation Rendered Browser Audit
 GW1: Persistent Destination Shell
 GW1B: Persistent Destination Shell Audit
 GW2: Active Run Provenance and Observation Layer
 GW2B: Active Run Provenance and Observation Layer Audit
-GW3: Discovery Atlas
-GW3B: Discovery Atlas Audit
-GW4: Behavioral Landscape Exploration
-GW4B: Behavioral Landscape Exploration Audit
-GW5: Contextual Capability Guidance
-GW5B: Contextual Capability Guidance Audit
-GW6: Composition Frontiers and Grand Systems Challenges
-GW6B: Composition Frontiers and Grand Systems Challenges Audit
+GW3: Active Intervention Boundary and Perturbation Readiness
+GW3B: Active Intervention Boundary Audit and Hardening
+GW4: Discovery Atlas
+GW4B: Discovery Atlas Audit
+GW5: Behavioral Landscape Exploration
+GW5B: Behavioral Landscape Exploration Audit
+GW6: Contextual Capability Guidance
+GW6B: Contextual Capability Guidance Audit
 ```
+
+Composition frontiers and Grand Systems Challenges remain future directions beyond this near-term branch unless a dedicated roadmap prompt reintroduces them with explicit scope and audit gates.
 
 UX0 must not implement GW0-GW6.
 

@@ -1,6 +1,6 @@
 # Active Run Provenance And Observation
 
-Status: Prompt GW2 implementation source of truth, audited and hardened by Prompt GW2B. GW2 adds a live, non-persistent World-only provenance and observation layer for the active run. GW2B fixes missing-snapshot observation labeling and hardens rendered focus/placement evidence. This slice does not create persistent Lab records, Discovery Atlas records, behavioral landscapes, saved experiments, notebooks, reusable assets, progression systems, runtime behavior, template behavior, Builder execution behavior, routes, storage, dependencies, or external analytics.
+Status: Prompt GW2 implementation source of truth, audited and hardened by Prompt GW2B, with Prompt GW3 adding a separate Intervene-mode intervention-readiness layer. GW2 adds a live, non-persistent World-only provenance and observation layer for the active run. GW2B fixes missing-snapshot observation labeling and hardens rendered focus/placement evidence. This slice does not create persistent Lab records, Discovery Atlas records, behavioral landscapes, saved experiments, notebooks, reusable assets, progression systems, runtime behavior, template behavior, Builder execution behavior, routes, storage, dependencies, or external analytics.
 
 ## 1. Core Principle
 
@@ -72,6 +72,8 @@ The panel also states that configuration, seed, assumptions, and template limits
 GW2 lives in the World route Observe mode as `Active Run Context`. It does not appear in the shared destination shell, Lab, Atlas, Workshop, Builder, Graph View, Author Schema, fit reports, scenario planning, or simulation engine.
 
 The World canvas and persistent run controls remain visible and remain the primary functional surface.
+
+Prompt GW3 lives separately in World Intervene mode. It describes live intervention readiness and model-response boundaries; it does not replace GW2 observation or turn active-run provenance into an intervention plan.
 
 ## 8. Status Semantics
 
@@ -165,6 +167,10 @@ Continuation verification passed: `npx playwright test tests/ui/research-world-s
 
 `npm run lint` remains unavailable because `package.json` has no lint script.
 
-## 16. Next Audit
+## 16. GW3 Relationship
 
-Prompt GW2B is recorded in `docs/ui/ACTIVE_RUN_PROVENANCE_AND_OBSERVATION_AUDIT.md`. GW3 must arrive through a dedicated future prompt and must not treat this live World context as Lab persistence, Atlas discovery, behavioral landscape evidence, or empirical truth.
+GW3 is documented in `docs/ui/ACTIVE_INTERVENTION_BOUNDARY_AND_READINESS.md`. It adds live intervention readiness in World Intervene and must not treat GW2 observation as saved Lab persistence, Atlas discovery, behavioral landscape evidence, validation, or empirical truth.
+
+## 17. Next Audit
+
+Prompt GW2B is recorded in `docs/ui/ACTIVE_RUN_PROVENANCE_AND_OBSERVATION_AUDIT.md`. Prompt GW3B must audit the new intervention-readiness layer before ORTUS treats it as hardened.

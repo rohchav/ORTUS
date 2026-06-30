@@ -2198,3 +2198,78 @@ Readiness decision:
 
 - Ready for GW3 after GW2B is committed, with strict boundaries.
 - GW3 must arrive through a dedicated future prompt and must not treat GW2 live provenance as Lab persistence, Atlas discovery, behavioral landscape evidence, validation, or empirical truth.
+
+## 2026-06-30 - Prompt GW3 Active Intervention Boundary And Perturbation Readiness
+
+Goal: add a bounded live intervention-readiness and model-response boundary layer in World Intervene without adding saved intervention plans, Lab intervention records, Atlas discoveries, behavioral landscapes, progression, runtime behavior, template behavior, Builder execution behavior, routes, dependencies, storage, timestamps, random ids, fingerprints, validation, calibration, policy-effectiveness claims, or real-world causal proof.
+
+Starting state:
+
+- Current commit: `c13840b`.
+- Starting worktree was clean.
+- Recent history showed GW2B committed after GW2.
+
+Baseline before edits:
+
+- `npm run test:ui`: passed, 45 passed.
+- `npm run typecheck`: passed.
+- `npm test`: passed, 61 files and 491 tests.
+- `npm run build`: passed with Next.js 15.5.19; static routes included `/`, `/_not-found`, `/atlas`, `/builder`, and `/lab`.
+- `npm run perf:simulation`: passed.
+- `git diff --check`: passed.
+- `npm run lint`: unavailable, package.json has no lint script.
+
+Implemented:
+
+- Added `src/components/activeInterventionReadiness.ts` as a pure derivation adapter for live intervention readiness, selected-control target readiness, and response-boundary copy.
+- Added the World Intervene `Intervention Readiness` static readable section above existing template-owned intervention controls.
+- Derived GW3 context only from existing registered template-owned intervention definitions, selected target state, active engine presence, and current active-run intervention count.
+- Kept existing intervention application behavior unchanged: controls still apply through existing template-owned definitions and the headless intervention executor/command-buffer path.
+- Updated Lab and Atlas copy to state that GW3 exposes live readiness in World only and does not create persistent Lab intervention records or Discovery Atlas records.
+- Added `docs/ui/ACTIVE_INTERVENTION_BOUNDARY_AND_READINESS.md` and updated durable roadmap/context docs.
+- Updated roadmap tests for the revised GW3/GW3B/GW4-GW6 sequence.
+
+Required boundary copy preserved:
+
+- `Intervention readiness describes available model perturbation controls. It is not a saved intervention plan or experiment record.`
+- `Intervention in ORTUS means changing or inspecting model conditions. It does not certify real-world causal power, policy effectiveness, or empirical truth.`
+- `A response to an intervention is evidence about this model under this configuration. It is not automatic proof that the same intervention would work in the real system.`
+- `GW3 exposes live intervention readiness in World. Persistent Lab intervention records are still not implemented.`
+- `GW3 does not create Discovery Atlas records from intervention responses. Atlas remains future-only.`
+
+Boundaries preserved:
+
+- No saved intervention plans, persistent Lab intervention records, Discovery Atlas records, behavioral landscapes, progression, runtime behavior, template behavior, Builder execution behavior, routes, dependencies, storage, timestamps, UUIDs, random ids, fingerprints, validation, calibration, policy-effectiveness claim, or real-world causal proof was added.
+- Existing bounded active-run/snapshot intervention history predates GW3. GW3 did not expand it into saved plans, Lab records, Atlas records, or replay.
+- Scope-creep search produced expected hits in docs/tests and older run-summary or storage features, but the GW3 production readiness path has no storage/time/random/fingerprint APIs.
+
+Verification:
+
+- `npm test -- intervention readiness`: passed, 2 files and 13 tests.
+- `npm test -- roadmap`: passed, 1 file and 4 tests.
+- `npm run typecheck`: passed after removing an unnecessary fake template fixture from the GW3 test.
+- `npm test`: passed, 62 files and 497 tests.
+- `npm run build`: passed with Next.js 15.5.19; static routes include `/`, `/_not-found`, `/atlas`, `/builder`, and `/lab`.
+- `npm run perf:simulation`: passed. Local smoke results included Flocking 100 agents at 77.47 ticks/sec, Flocking 500 agents at 12.59 ticks/sec, Forest Fire medium grid at 18.85 ticks/sec, and Predator-Prey default at 57.14 ticks/sec.
+- `git diff --check`: passed.
+- `npm run lint`: unavailable, package.json has no lint script. npm reported `Missing script: "lint"`.
+
+Rendered verification and continuation:
+
+- Initial post-GW3 rendered verification failed in `tests/ui/research-world-shell.spec.ts`, `World shell contract holds at desktop 1440x900`.
+- Root cause: the test used broad `page.getByLabel("Intervention")`, which matched the new `Intervention Readiness` region, status pills, subsections, the intervention selector, and the radius intervention input.
+- Product accessibility finding: the intervention selector's visible/accessibility label was too generic for the richer Intervene surface, so it was changed from `Intervention` to `Intervention type`.
+- Rendered test fix: the helper now targets `getByRole("region", { name: "Intervention Readiness" })`, scopes readiness/boundary assertions to that region, and targets the actual selector with `getByRole("combobox", { name: "Intervention type" })`.
+- Focused rendered test passed: `npx playwright test tests/ui/research-world-shell.spec.ts -g "World shell contract holds at desktop 1440x900"`, 1 passed.
+- Full shell rendered suite passed: `npx playwright test tests/ui/research-world-shell.spec.ts`, 30 passed, 0 failed, 0 skipped.
+- Full UI rendered suite passed: `npm run test:ui`, 45 passed, 0 failed, 0 skipped.
+
+Remaining limits:
+
+- No screen-reader walkthrough, assistive-technology walkthrough, forced-colors audit, actual browser zoom verification, full WCAG conformance audit, or user-comprehension validation was completed.
+
+Readiness decision:
+
+- GW3 source implementation, rendered verification, and non-browser verification are complete.
+- GW3 is ready to commit.
+- Prompt GW3B is the next required Research World prompt after GW3 is committed.

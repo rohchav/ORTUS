@@ -211,9 +211,9 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(roadmap).toContain("Completed Prompt 39 scenario-planning foundation");
     expect(roadmap).toContain("Completed Prompt 39 scenario-planning audit");
     expect(roadmap).toContain("Prompt 35 adds a separate `Author Schema` Builder mode");
-    expect(roadmap).toContain("Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, MR0, F0, P0, UX0, UX1, GW0, UX2, UX2B, GW1, GW1B, GW2, and GW2B are complete.");
+    expect(roadmap).toContain("Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, MR0, F0, P0, UX0, UX1, GW0, UX2, UX2B, GW1, GW1B, GW2, GW2B, and GW3 are complete.");
     expect(roadmap).toContain(
-      "GW3 is the next Research World prompt only if explicitly approved; do not start GW3-GW6 Research World implementation, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any further Research World/fractal/multiscale implementation without explicit approval."
+      "GW3B is the next Research World prompt only if explicitly approved; do not start GW4-GW6 Research World implementation, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any further Research World/fractal/multiscale implementation without explicit approval."
     );
     expect(roadmap).toContain("Prompt GW1 implements the shared Research World destination shell.");
     expect(roadmap).toContain("Prompt GW1B audits and hardens the destination shell without expanding product behavior.");
@@ -306,16 +306,19 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(roadmap).toContain("GW1B: Persistent Destination Shell Audit.");
     expect(roadmap).toContain("GW2: Active Run Provenance And Observation Layer.");
     expect(roadmap).toContain("GW2B: Active Run Provenance And Observation Layer Audit.");
-    expect(roadmap).toContain("GW3: Discovery Atlas.");
-    expect(roadmap).toContain("GW3B: Discovery Atlas Audit.");
-    expect(roadmap).toContain("GW4: Behavioral Landscape Exploration.");
-    expect(roadmap).toContain("GW4B: Behavioral Landscape Exploration Audit.");
-    expect(roadmap).toContain("GW5: Contextual Capability Guidance.");
-    expect(roadmap).toContain("GW5B: Contextual Capability Guidance Audit.");
-    expect(roadmap).toContain("GW6: Composition Frontiers And Grand Systems Challenges.");
-    expect(roadmap).toContain("GW6B: Composition Frontiers And Grand Systems Challenges Audit.");
+    expect(roadmap).toContain("GW3: Active Intervention Boundary And Perturbation Readiness.");
+    expect(roadmap).toContain("GW3B: Active Intervention Boundary Audit And Hardening.");
+    expect(roadmap).toContain("GW4: Discovery Atlas.");
+    expect(roadmap).toContain("GW4B: Discovery Atlas Audit.");
+    expect(roadmap).toContain("GW5: Behavioral Landscape Exploration.");
+    expect(roadmap).toContain("GW5B: Behavioral Landscape Exploration Audit.");
+    expect(roadmap).toContain("GW6: Contextual Capability Guidance.");
+    expect(roadmap).toContain("GW6B: Contextual Capability Guidance Audit.");
     expect(roadmap).toContain(
-      "P0, UX0, UX1, and GW0 are complete as documentation-only prompts, UX2/UX2B are complete as bounded shared visual-foundation and rendered-audit prompts, and GW1/GW1B are complete as the first bounded destination-shell implementation and audit pair."
+      "Composition frontiers and Grand Systems Challenges remain future product directions beyond this near-term branch unless a dedicated roadmap prompt scopes them with explicit audit gates."
+    );
+    expect(roadmap).toContain(
+      "P0, UX0, UX1, and GW0 are complete as documentation-only prompts, UX2/UX2B are complete as bounded shared visual-foundation and rendered-audit prompts, GW1/GW1B are complete as the first bounded destination-shell implementation and audit pair, GW2/GW2B are complete as live World active-run context and audit, and GW3 is complete as live World intervention readiness only."
     );
     expect(roadmap).toContain("UX2 - Living Systems Atlas Semantic Token Foundation.");
     expect(roadmap).toContain("Prompt UX0 is a docs-only visual direction and UX-principle branch");
@@ -603,7 +606,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(docs).toContain("Preserve `/` as World.");
     expect(docs).toContain("Preserve `/builder` as Workshop.");
     expect(docs).toContain("Lab and Atlas are future-only informational destinations.");
-    expect(docs).toContain("after GW2B, GW3 is the next Research World prompt only if explicitly approved.");
+    expect(docs).toContain("after GW3, GW3B is the next Research World prompt only if explicitly approved.");
     expect(docs).toContain("UX2 establishes shared visual semantics. It does not perform the Research World shell transformation.");
     expect(docs).toContain("UX2 prepares the visual language. GW1 performs the structural shell transformation.");
     expect(docs).toContain("A visual state must communicate what kind of state it represents: operational, interaction, evidence, uncertainty, or capability.");
