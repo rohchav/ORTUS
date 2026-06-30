@@ -1975,3 +1975,65 @@ Result:
 - Prompt GW1 is now commit-ready from the requested verification standpoint.
 - No persistence, fake Lab content, fake Atlas content, progression, discovery logic, behavioral landscapes, `/world`, `/workshop`, redirects, simulation runtime behavior, Builder execution behavior, template behavior, dependencies, assets, or fonts were added.
 - The worktree remains intentionally dirty and uncommitted for user review.
+
+## 2026-06-29 - Prompt GW1B Destination Shell Audit And Hardening
+
+Goal: audit and harden the completed GW1 destination shell without starting GW2 or adding persistence, fake Lab/Atlas content, Discovery Atlas logic, behavioral landscapes, progression, runtime behavior, template behavior, Builder execution behavior, dependencies, assets, fonts, `/world`, `/workshop`, or redirects.
+
+Starting state:
+
+- Current commit: `380755d`.
+- Starting worktree was clean.
+- Recent commits included `380755d feat: Implement ORTUS Research World shell with future-only destinations`.
+- Ignored Playwright artifacts were present but did not appear in `git status --short`.
+
+Baseline before edits:
+
+- `npm run test:ui`: passed, 44 passed.
+- `npm run typecheck`: passed.
+- `npm test`: passed, 60 files and 485 tests.
+- `npm run build`: passed.
+- `npm run perf:simulation`: passed. Local smoke results included Flocking 100 agents at 216.94 ticks/sec, Flocking 500 agents at 30.23 ticks/sec, Forest Fire 80x60 at 46.56 ticks/sec, and Predator-Prey default at 142.02 ticks/sec.
+- `git diff --check`: passed.
+- `npm run lint`: unavailable, package.json has no lint script. npm reported `Missing script: "lint"`.
+
+Audit findings:
+
+- No new production shell defect was found.
+- The existing rendered suite covered the main route-shell behavior, but it did not explicitly assert unique shell landmarks, clean nav URLs, absence of disabled future-only navigation links, or `/world`/`/workshop` non-alias behavior.
+- Actual browser zoom at 125%, 150%, and 200% was not verified.
+- Screen-reader behavior, assistive-technology behavior, forced-colors behavior, full WCAG conformance, and user-comprehension evidence remain unverified.
+
+Hardening:
+
+- Strengthened `tests/ui/research-world-shell.spec.ts` with unique shell landmark checks, single ORTUS home link, clean destination navigation URLs, exactly one current nav item, no disabled future-only nav links, visible skip-link focus, reduced-motion focus visibility, stricter Lab/Atlas fake-data exclusions, and explicit `/world` and `/workshop` non-redirect/404 coverage.
+- Strengthened `src/lib/researchDestinations.test.ts` with query/hash normalization and alias-rejection coverage.
+- Added `docs/ui/RESEARCH_WORLD_DESTINATION_SHELL_AUDIT.md`.
+- Updated README, planned roadmap, roadmap, Research World shell docs, HCI audit, workspace IA, current context, and roadmap tests so GW1B is complete and GW2 remains future work requiring explicit approval.
+
+Boundaries preserved:
+
+- No GW2 implementation was started.
+- No persistence, fake Lab content, fake Atlas content, progression, Discovery Atlas logic, behavioral landscapes, runtime behavior, template behavior, Builder execution behavior, dependencies, assets, fonts, `/world`, `/workshop`, redirects, model-schema execution, visual-builder execution, or hidden interpreter behavior was added.
+- AGENTS.md was not changed because no new durable guardrail was needed beyond existing route-shell and runtime-honesty rules.
+
+Rendered verification:
+
+- `npx playwright test tests/ui/research-world-shell.spec.ts`: passed, 30 passed.
+- `npm run test:ui`: passed, 45 passed.
+- The only repeated warnings were Node web-server warnings that `NO_COLOR` was ignored because `FORCE_COLOR` was set; these were not page console errors.
+
+Final integrity checks:
+
+- `npm run typecheck`: passed.
+- `npm test`: passed, 60 files and 485 tests.
+- `npm run build`: passed with Next.js 15.5.19; static routes include `/`, `/_not-found`, `/atlas`, `/builder`, and `/lab`.
+- `npm run perf:simulation`: passed. Local smoke results included Flocking 100 agents at 216.14 ticks/sec, Flocking 500 agents at 30.15 ticks/sec, Forest Fire 80x60 at 43.94 ticks/sec, and Predator-Prey default at 139.18 ticks/sec.
+- `git diff --check`: passed.
+- `npm run lint`: unavailable, package.json has no lint script. npm reported `Missing script: "lint"`.
+
+Result:
+
+- Prompt GW1B is complete.
+- Readiness decision: ready for GW2 only as a route-shell prerequisite, with strict boundaries and only after explicit user approval.
+- The worktree remains intentionally dirty and uncommitted for user review.

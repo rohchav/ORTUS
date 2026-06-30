@@ -1,8 +1,8 @@
 # ORTUS Workspace Information Architecture
 
 Date: 2026-06-29
-Prompt: UI-REMEDIATION-1, audited and hardened by Prompt 34B, extended by Prompt 35, audited by Prompt 35B, extended by Prompt 36, audited by Prompt 36B, extended by Prompt 37, audited by Prompt 37B, extended by Prompt 38, audited by Prompt 38B, extended by Prompt 39, audited by Prompt 39B, extended by Prompt NUX1, audited by Prompt NUX1B, extended by Prompt N2, audited by Prompt N2B, documented by Prompt MR0, documented by Prompt F0, documented by Prompt P0, documented by Prompt UX0, audited by Prompt UX1, documented by Prompt GW0, visually founded by Prompt UX2, rendered-audited by Prompt UX2B, and structurally extended by Prompt GW1
-Status: implemented, source-audited, and rendered-smoke-tested by the GW1 Playwright shell suite; GW1B hardening is still required before broader readiness claims
+Prompt: UI-REMEDIATION-1, audited and hardened by Prompt 34B, extended by Prompt 35, audited by Prompt 35B, extended by Prompt 36, audited by Prompt 36B, extended by Prompt 37, audited by Prompt 37B, extended by Prompt 38, audited by Prompt 38B, extended by Prompt 39, audited by Prompt 39B, extended by Prompt NUX1, audited by Prompt NUX1B, extended by Prompt N2, audited by Prompt N2B, documented by Prompt MR0, documented by Prompt F0, documented by Prompt P0, documented by Prompt UX0, audited by Prompt UX1, documented by Prompt GW0, visually founded by Prompt UX2, rendered-audited by Prompt UX2B, structurally extended by Prompt GW1, and audited/hardened by Prompt GW1B
+Status: implemented, source-audited, and rendered-smoke-tested by the GW1/GW1B Playwright shell suite; broader mobile-readiness, actual browser-zoom, screen-reader, assistive-technology, forced-colors, and WCAG claims remain unverified
 
 ## Problem
 
@@ -90,6 +90,8 @@ Prompt UX2 changes shared visual semantics, not workspace IA. It adds the Living
 Prompt GW1 adds the shared Research World destination shell. `/` remains World, `/builder` remains Workshop, `/lab` is a Lab informational foundation, and `/atlas` is an Atlas informational foundation. Lab and Atlas are reachable future-only destinations, not locked routes, and GW1 adds no persistence, discovery logic, behavioral landscapes, progression, runtime behavior, or template behavior.
 
 The GW1 rendered continuation fixed a shell-level focus defect: the skip link was the active element but could remain partially or fully offscreen during its reveal transition. The skip link now reveals immediately on focus and remains in the viewport in the Playwright shell suite.
+
+Prompt GW1B audits and hardens that same destination hierarchy without changing it. The audit adds route-alias, unique-landmark, clean-navigation, single-current-destination, no-disabled-future-link, skip-link focus, reduced-motion focus, query/hash normalization, and future-only honesty checks. It does not add persistence, Discovery Atlas behavior, behavioral landscapes, progression, runtime behavior, template behavior, Builder execution behavior, `/world`, `/workshop`, redirects, dependencies, assets, or fonts.
 
 ## Header
 

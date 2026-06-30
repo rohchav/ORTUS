@@ -62,8 +62,16 @@ async function openDestination(page: Page, destination: (typeof destinations)[nu
   await page.goto(destination.path, { waitUntil: "domcontentloaded" });
   await page.waitForLoadState("networkidle", { timeout: 5_000 }).catch(() => undefined);
   await expect(page.locator(destination.readySelector), `${destination.path} should render the destination surface`).toBeVisible();
-  await expect(page.getByRole("main"), `${destination.path} should expose one shared main landmark`).toHaveCount(1);
-  await expect(page.getByRole("heading", { level: 1, name: destination.label }), `${destination.path} should expose its route h1`).toBeAttached();
+  await expectShellStructure(page, destination.label);
+}
+
+async function expectShellStructure(page: Page, destinationLabel: string) {
+  await expect(page.getByRole("link", { name: "Skip to destination content" })).toHaveCount(1);
+  await expect(page.getByRole("banner", { name: "ORTUS Research World shell" })).toHaveCount(1);
+  await expect(page.getByRole("link", { name: "ORTUS home" })).toHaveCount(1);
+  await expect(page.getByRole("navigation", { name: "Research World destinations" })).toHaveCount(1);
+  await expect(page.getByRole("main"), "each destination should expose one shared main landmark").toHaveCount(1);
+  await expect(page.getByRole("heading", { level: 1, name: destinationLabel }), "each route should expose exactly one route h1").toHaveCount(1);
 }
 
 async function expectNoDiagnostics(diagnostics: PageDiagnostics) {
@@ -83,15 +91,23 @@ async function expectDestinationNavContract(page: Page, currentPath: string) {
     anchors.map((anchor) => ({
       label: anchor.querySelector("[data-destination-label]")?.textContent?.trim() ?? "",
       path: new URL((anchor as HTMLAnchorElement).href).pathname,
+      search: new URL((anchor as HTMLAnchorElement).href).search,
+      hash: new URL((anchor as HTMLAnchorElement).href).hash,
       current: anchor.getAttribute("aria-current") === "page",
       ariaLabel: anchor.getAttribute("aria-label") ?? "",
+      ariaDisabled: anchor.getAttribute("aria-disabled") ?? "",
+      disabled: anchor.hasAttribute("disabled"),
       text: anchor.textContent?.trim() ?? ""
     }))
   );
 
   expect(linkModels.map((link) => link.label)).toEqual(["World", "Lab", "Atlas", "Workshop"]);
   expect(linkModels.map((link) => link.path)).toEqual(["/", "/lab", "/atlas", "/builder"]);
+  expect(linkModels.map((link) => link.search)).toEqual(["", "", "", ""]);
+  expect(linkModels.map((link) => link.hash)).toEqual(["", "", "", ""]);
   expect(linkModels.filter((link) => link.current).map((link) => link.path)).toEqual([currentPath]);
+  expect(linkModels.filter((link) => link.current)).toHaveLength(1);
+  expect(linkModels.some((link) => link.disabled || link.ariaDisabled === "true")).toBe(false);
   expect(linkModels.find((link) => link.label === "Lab")).toMatchObject({ ariaLabel: "Lab, future-only destination" });
   expect(linkModels.find((link) => link.label === "Atlas")).toMatchObject({ ariaLabel: "Atlas, future-only destination" });
   expect(linkModels.find((link) => link.label === "Lab")?.text).toContain("Future");
@@ -215,7 +231,9 @@ async function expectFutureDestinationBoundaries(page: Page, destination: "Lab" 
   }
 
   const mainText = await page.getByRole("main").innerText();
-  expect(mainText).not.toMatch(/saved worlds|saved experiments|recent activity|storage usage|\bxp\b|unlock|achievement|locked|progress percentage/i);
+  expect(mainText).not.toMatch(
+    /saved worlds|saved experiments|recent activity|storage usage|\bxp\b|unlock|achievement|locked|progress percentage|evidence score|locked territory/i
+  );
   await expect(page.getByRole("link", { name: "Return to World" })).toHaveAttribute("href", "/");
   await expect(page.getByRole("link", { name: "Open Workshop" })).toHaveAttribute("href", "/builder");
 }
@@ -272,6 +290,7 @@ test("skip link and destination links preserve native keyboard route navigation"
   const skip = page.getByRole("link", { name: "Skip to destination content" });
   await page.keyboard.press("Tab");
   await expect(skip).toBeFocused();
+  await expectFocusedElementVisible(page);
   await page.keyboard.press("Enter");
   await expect(page.locator("#research-world-main")).toBeFocused();
 
@@ -288,6 +307,17 @@ test("skip link and destination links preserve native keyboard route navigation"
   await expectNoDiagnostics(diagnostics);
 });
 
+test("legacy destination aliases do not redirect into canonical destinations", async ({ page }) => {
+  for (const path of ["/world", "/workshop"]) {
+    const response = await page.goto(path, { waitUntil: "domcontentloaded" });
+    await page.waitForLoadState("networkidle", { timeout: 5_000 }).catch(() => undefined);
+    expect(new URL(page.url()).pathname, `${path} should not redirect`).toBe(path);
+    expect(response?.status(), `${path} should remain an unavailable route rather than an alias`).toBe(404);
+    await expect(page.getByRole("main")).toHaveCount(1);
+    await expect(page.getByRole("navigation", { name: "Research World destinations" })).toHaveCount(1);
+  }
+});
+
 test.describe("reduced motion", () => {
   test.use({ reducedMotion: "reduce" });
 
@@ -302,6 +332,8 @@ test.describe("reduced motion", () => {
         page.evaluate(() => window.matchMedia("(prefers-reduced-motion: reduce)").matches),
         "browser context should expose reduced motion preference"
       ).resolves.toBe(true);
+      await page.keyboard.press("Tab");
+      await expectFocusedElementVisible(page);
       await expectNoDiagnostics(diagnostics);
     });
   }

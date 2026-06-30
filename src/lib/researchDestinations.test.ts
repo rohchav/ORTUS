@@ -26,8 +26,14 @@ describe("Research World destination registry", () => {
     expect(getResearchDestinationByPathname("/builder")?.id).toBe("workshop");
     expect(getResearchDestinationByPathname("/builder/graph")?.id).toBe("workshop");
     expect(getResearchDestinationByPathname("/lab/notes")?.id).toBe("lab");
+    expect(getResearchDestinationByPathname("/lab?panel=notes")?.id).toBe("lab");
+    expect(getResearchDestinationByPathname("/atlas#regimes")?.id).toBe("atlas");
+    expect(getResearchDestinationByPathname("/builder/?mode=graph#node-a")?.id).toBe("workshop");
+    expect(getResearchDestinationByPathname("lab/notes")?.id).toBe("lab");
     expect(getResearchDestinationByPathname("/world")).toBeNull();
     expect(getResearchDestinationByPathname("/workshop")).toBeNull();
+    expect(getResearchDestinationByPathname("/world?alias=true")).toBeNull();
+    expect(getResearchDestinationByPathname("/workshop#builder")).toBeNull();
     expect(existsSync(join(repoRoot, "src", "app", "world"))).toBe(false);
     expect(existsSync(join(repoRoot, "src", "app", "workshop"))).toBe(false);
   });

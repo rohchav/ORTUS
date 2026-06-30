@@ -1,10 +1,10 @@
 # ORTUS Full Prompt Roadmap
 
-*Last updated after Prompt GW1 rendered shell continuation.*
+*Last updated after Prompt GW1B destination-shell audit and hardening.*
 
 ## Current Status
 
-ORTUS has completed the core runtime/template foundation, scenario system, uncertainty layer, assumptions/limits layer, systems primitive registry, hybrid composition, multi-scale structure, scale-view state, boundary/environment models, spatial fields, observability, causality, quantity semantics, emergence pattern descriptors, robustness/resilience semantics, strategy/control semantics, model schema declarations, knowledge/memory/social-learning semantics, visual builder workspace schemas, template/schema compatibility mapping, the template/schema compatibility mapping audit, a narrow Opinion Dynamics social-learning behavior mode, the Opinion Dynamics social-learning runtime audit, Safe Builder UI Shell V1, the Safe Builder UI Shell + workspace information architecture audit, Model Schema Authoring Forms V1, the Model Schema Authoring Forms Audit, Visual Builder Graph View V1, the Visual Builder Graph View Audit, Schema Validation UX + Repair Suggestions V1, the Schema Validation UX + Repair Suggestions Audit, Schema-to-Template Fit Report V1, the Schema-to-Template Fit Report Audit, Scenario Planning From Schema V1, the Scenario Planning From Schema Audit, non-roadmap Prompt N1 Neural Excitation Network Template V1, non-roadmap Prompt N1B Neural Excitation Network Template Audit + Decision Readout V1, non-roadmap Prompt NUX1 Neural Runtime Lab UX V1, non-roadmap Prompt NUX1B Neural Runtime Lab UX Audit + Build Investigation, non-roadmap Prompt N2 Neural Strategy Adaptation V1, non-roadmap Prompt N2B Neural Strategy Adaptation Audit, non-roadmap Prompt MR0 Templates + Decision Clusters Mini-Roadmap, docs-only Prompt F0 Fractal and Multiscale Analysis Mini-Roadmap, docs-only Prompt P0 ORTUS Product Philosophy and Learning Mission, docs-only Prompt UX0 ORTUS Living Systems Atlas Visual Direction, docs-only Prompt UX1 Existing Design Token and Component Audit, docs-only Prompt GW0 ORTUS Research World Progression Mini-Roadmap, Prompt UX2 Living Systems Atlas Semantic Token Foundation, Prompt UX2B Living Systems Atlas Semantic Foundation Rendered Browser Audit, and Prompt GW1 Persistent World / Lab / Atlas / Workshop Shell.
+ORTUS has completed the core runtime/template foundation, scenario system, uncertainty layer, assumptions/limits layer, systems primitive registry, hybrid composition, multi-scale structure, scale-view state, boundary/environment models, spatial fields, observability, causality, quantity semantics, emergence pattern descriptors, robustness/resilience semantics, strategy/control semantics, model schema declarations, knowledge/memory/social-learning semantics, visual builder workspace schemas, template/schema compatibility mapping, the template/schema compatibility mapping audit, a narrow Opinion Dynamics social-learning behavior mode, the Opinion Dynamics social-learning runtime audit, Safe Builder UI Shell V1, the Safe Builder UI Shell + workspace information architecture audit, Model Schema Authoring Forms V1, the Model Schema Authoring Forms Audit, Visual Builder Graph View V1, the Visual Builder Graph View Audit, Schema Validation UX + Repair Suggestions V1, the Schema Validation UX + Repair Suggestions Audit, Schema-to-Template Fit Report V1, the Schema-to-Template Fit Report Audit, Scenario Planning From Schema V1, the Scenario Planning From Schema Audit, non-roadmap Prompt N1 Neural Excitation Network Template V1, non-roadmap Prompt N1B Neural Excitation Network Template Audit + Decision Readout V1, non-roadmap Prompt NUX1 Neural Runtime Lab UX V1, non-roadmap Prompt NUX1B Neural Runtime Lab UX Audit + Build Investigation, non-roadmap Prompt N2 Neural Strategy Adaptation V1, non-roadmap Prompt N2B Neural Strategy Adaptation Audit, non-roadmap Prompt MR0 Templates + Decision Clusters Mini-Roadmap, docs-only Prompt F0 Fractal and Multiscale Analysis Mini-Roadmap, docs-only Prompt P0 ORTUS Product Philosophy and Learning Mission, docs-only Prompt UX0 ORTUS Living Systems Atlas Visual Direction, docs-only Prompt UX1 Existing Design Token and Component Audit, docs-only Prompt GW0 ORTUS Research World Progression Mini-Roadmap, Prompt UX2 Living Systems Atlas Semantic Token Foundation, Prompt UX2B Living Systems Atlas Semantic Foundation Rendered Browser Audit, Prompt GW1 Persistent World / Lab / Atlas / Workshop Shell, and Prompt GW1B Destination Shell Audit and Hardening.
 
 Current project status:
 
@@ -24,9 +24,10 @@ Completed docs-only prompt: Prompt UX1 — Existing Design Token and Component A
 Completed docs-only prompt: Prompt GW0 — ORTUS Research World Progression Mini-Roadmap
 Completed implementation prompt: Prompt UX2 — Living Systems Atlas Semantic Token Foundation
 Completed audit prompt: Prompt UX2B — rendered browser audit passed for `/` and `/builder`; this prepared the shared visual foundation for GW1
-Completed implementation prompt: Prompt GW1 — persistent destination shell with `/` World, `/lab` Lab informational foundation, `/atlas` Atlas informational foundation, and `/builder` Workshop; rendered shell continuation fixed skip-link focus visibility and passed the full 44-test UI suite
+Completed implementation prompt: Prompt GW1 — persistent destination shell with `/` World, `/lab` Lab informational foundation, `/atlas` Atlas informational foundation, and `/builder` Workshop; rendered shell continuation fixed skip-link focus visibility, and GW1B hardening passes the full 45-test UI suite
+Completed audit prompt: Prompt GW1B — destination shell audit and hardening; tightened route-alias, landmark, navigation-state, skip-link, reduced-motion focus, and Lab/Atlas future-only evidence without adding product behavior
 Post-30B stabilization completed: repo hygiene, durable Codex context, dependency repair, generated-artifact cleanup, and runtime performance/scalability baseline
-Next prompt: GW1B Destination Shell Audit and Hardening; do not start GW2-GW6 Research World implementation, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any further Research World/fractal/multiscale implementation without explicit approval
+Next Research World implementation prompt: GW2 only if explicitly approved; do not start GW2-GW6 Research World implementation, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any further Research World/fractal/multiscale implementation without explicit approval
 ```
 
 Critical global boundary:
@@ -94,6 +95,8 @@ Prompt UX2 establishes shared visual semantics, preserves legacy visual-variable
 Prompt GW1 implements the shared World/Lab/Atlas/Workshop destination shell only. GW1 persistence refers to persistent application structure across routes, not persistent user research data. It preserves `/` as World and `/builder` as Workshop, adds `/lab` and `/atlas` as reachable future-only informational destinations, and adds no persistent experiments, notebooks, reusable asset storage, Discovery Atlas logic, behavioral landscapes, progression, runtime behavior, template behavior, Builder execution behavior, dependencies, assets, or fonts.
 
 Prompt GW1 rendered continuation fixed a destination-shell focus-visibility defect: the active skip link could remain offscreen during its reveal transition immediately after keyboard focus. The skip link now reveals immediately on both `:focus` and `:focus-visible`, and the full Playwright UI suite passes.
+
+Prompt GW1B audits and hardens the destination shell without expanding product behavior. It adds explicit route-alias, shell-landmark, navigation-state, skip-link, reduced-motion focus, query/hash route matching, and Lab/Atlas future-only evidence checks, plus `docs/ui/RESEARCH_WORLD_DESTINATION_SHELL_AUDIT.md`. It does not implement GW2, persistence, Discovery Atlas logic, behavioral landscapes, progression, runtime behavior, template behavior, Builder execution behavior, dependencies, assets, fonts, `/world`, `/workshop`, or redirects.
 Measure multiscale structure before generating synthetic fractal structure.
 Fractal and multiscale tools describe how measured structure changes across scale. They do not prove that a system is fundamentally fractal.
 A complex-looking, nested, branching, or irregular pattern is not automatically fractal.
@@ -115,7 +118,7 @@ missing from this full roadmap. Prompt 31C and Prompt 31D are now corrected belo
 after Prompt 31B and before Prompt 32, with a later narrow Opinion Dynamics
 social-learning runtime slice placed after template/schema compatibility mapping.
 The social/cognitive semantics insertion was corrected after manual review, and
-Prompt 31C, Prompt 31D, Prompt 32, Prompt 32B, Prompt 33, Prompt 33B, Prompt 33C, Prompt 33D, Prompt 34, Prompt 34B, Prompt 35, Prompt 35B, Prompt 36, Prompt 36B, Prompt 37, Prompt 37B, Prompt 38, Prompt 38B, Prompt 39, and Prompt 39B are now marked complete. Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, MR0, F0, P0, UX0, UX1, GW0, UX2, UX2B, and GW1 are complete. GW1B remains required before claiming the destination shell is audited or hardened.
+Prompt 31C, Prompt 31D, Prompt 32, Prompt 32B, Prompt 33, Prompt 33B, Prompt 33C, Prompt 33D, Prompt 34, Prompt 34B, Prompt 35, Prompt 35B, Prompt 36, Prompt 36B, Prompt 37, Prompt 37B, Prompt 38, Prompt 38B, Prompt 39, and Prompt 39B are now marked complete. Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, MR0, F0, P0, UX0, UX1, GW0, UX2, UX2B, GW1, and GW1B are complete. GW2 remains future work and must not start without an explicit prompt.
 
 Safe Builder UI Shell V1 displays structural workspace artifacts; it does not execute workspace nodes or edges. The builder shell is not a compiler, interpreter, visual programming environment, or custom simulation runtime. A structurally valid workspace is still not a runnable model. Importing a workspace artifact does not activate model schemas, compatibility mappings, or social-learning semantics.
 
@@ -3634,10 +3637,9 @@ No global service availability treated as template runtime support.
 Recommended immediate next steps:
 
 ```text
-1. Review and commit Prompt GW1 destination-shell work if this worktree is still uncommitted.
-2. Run Prompt GW1B: Destination Shell Audit and Hardening before starting GW2-GW6 or claiming the shell is audited.
-3. Wait for explicit user direction before starting GW2-GW6 Research World implementation, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any further Research World/fractal/multiscale implementation.
-4. Run a dedicated rendered responsive/design-system audit before making mobile-readiness, WCAG, clipboard, focus-return, or polished visual-workbench claims.
+1. Review and commit Prompt GW1/GW1B destination-shell work if this worktree is still uncommitted.
+2. Wait for explicit user direction before starting GW2-GW6 Research World implementation, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any further Research World/fractal/multiscale implementation.
+3. Run a dedicated rendered responsive/design-system audit before making mobile-readiness, WCAG, clipboard, focus-return, actual browser-zoom, screen-reader, assistive-technology, forced-colors, or polished visual-workbench claims.
 ```
 
 Do not start graph editing, visual programming, or runtime-mapping prompts until the repo status and roadmap docs clearly reflect:
@@ -3669,5 +3671,6 @@ Prompt 38B schema-to-template fit report audit is complete.
 Prompt 39 scenario planning from schema is complete.
 Prompt 39B scenario planning from schema audit is complete.
 Prompt GW1 persistent destination shell is complete.
-Next prompt: Prompt GW1B Destination Shell Audit and Hardening.
+Prompt GW1B destination shell audit and hardening is complete.
+Next Research World implementation prompt: Prompt GW2 only if explicitly approved.
 ```

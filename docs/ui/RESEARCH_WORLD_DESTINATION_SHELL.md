@@ -1,10 +1,10 @@
 # ORTUS Research World Destination Shell
 
-Status: Prompt GW1 implementation source of truth. GW1 introduces a persistent World / Lab / Atlas / Workshop destination shell across routes. It does not implement persistent research data, Discovery Atlas logic, behavioral landscapes, progression systems, runtime behavior, template behavior, Builder execution behavior, dependencies, assets, fonts, or storage.
+Status: Prompt GW1 implementation source of truth, audited and hardened by Prompt GW1B. GW1 introduces a persistent World / Lab / Atlas / Workshop destination shell across routes. GW1B hardens the shell evidence without expanding product behavior. This destination shell does not implement persistent research data, Discovery Atlas logic, behavioral landscapes, progression systems, runtime behavior, template behavior, Builder execution behavior, dependencies, assets, fonts, or storage.
 
 ## 1. Purpose And Scope
 
-GW1 creates the first structural Research World shell around workflows that already exist.
+GW1 creates the first structural Research World shell around workflows that already exist. GW1B audits and hardens that shell. The GW1B audit record is `docs/ui/RESEARCH_WORLD_DESTINATION_SHELL_AUDIT.md`.
 
 Required principle:
 
@@ -160,17 +160,18 @@ GW1 adds no XP, levels, ranks, achievements, badges, unlocks, progress bars, fir
 
 GW1 adds `tests/ui/research-world-shell.spec.ts` to cover all four routes, destination navigation, `aria-current`, route preservation, Lab/Atlas boundaries, viewports, keyboard focus, reduced motion, and Axe scans.
 
+GW1B hardens that suite with route-alias, unique-landmark, clean-navigation, single-current-destination, no-disabled-future-link, skip-link focus, reduced-motion focus, and stricter Lab/Atlas honesty checks. It also hardens destination-registry tests for query/hash normalization and `/world`/`/workshop` alias rejection.
+
 Focused rerun passed: `npx playwright test tests/ui/research-world-shell.spec.ts -g "World shell contract holds at desktop 1440x900"`.
 
-Full shell suite passed: `npx playwright test tests/ui/research-world-shell.spec.ts`, 29 passed, 0 failed, 0 skipped.
+Full shell suite passed after GW1B hardening: `npx playwright test tests/ui/research-world-shell.spec.ts`, 30 passed, 0 failed, 0 skipped.
 
-The existing UX2B rendered suite remains in `tests/ui/semantic-foundation.spec.ts`. Full UI suite passed after GW1 continuation: `npm run test:ui`, 44 passed, 0 failed, 0 skipped.
+The existing UX2B rendered suite remains in `tests/ui/semantic-foundation.spec.ts`. Full UI suite passed after GW1B hardening: `npm run test:ui`, 45 passed, 0 failed, 0 skipped.
 
 ## 19. Deferred Work
 
 Deferred to future prompts:
 
-- GW1B audit and hardening;
 - persistent research notebook and reusable assets;
 - Discovery Atlas behavior;
 - behavioral landscapes;
@@ -181,7 +182,9 @@ Deferred to future prompts:
 
 ## 20. GW1B Requirements
 
-GW1B must audit route clarity, duplicate shell chrome, World canvas allocation, Builder workspace allocation, short-height behavior, narrow-width behavior, keyboard order, focus return, nav comprehension, Lab/Atlas honesty, status semantics, Axe results, browser zoom where possible, screen-reader/AT limitations, and regression risk.
+GW1B audited route clarity, duplicate shell chrome, World canvas allocation, Builder workspace allocation, short-height behavior, narrow-width behavior, keyboard order, focus smoke, nav comprehension, Lab/Atlas honesty, status semantics, Axe results, browser zoom limitations, screen-reader/AT limitations, and regression risk.
+
+Actual browser zoom at 125%, 150%, and 200% was not verified. Screen-reader behavior, assistive-technology behavior, forced-colors behavior, complete WCAG conformance, and user comprehension remain unverified.
 
 ## 21. Non-Goals And Guardrails
 
