@@ -2273,3 +2273,73 @@ Readiness decision:
 - GW3 source implementation, rendered verification, and non-browser verification are complete.
 - GW3 is ready to commit.
 - Prompt GW3B is the next required Research World prompt after GW3 is committed.
+
+## 2026-06-30 - Prompt GW3B Active Intervention Boundary Audit And Hardening
+
+Goal: audit and harden the committed GW3 active intervention-readiness layer without starting GW4 or adding saved intervention plans, Lab intervention records, Atlas discoveries, behavioral landscapes, progression, runtime behavior, template behavior, Builder execution behavior, routes, dependencies, assets, or fonts.
+
+Starting state:
+
+- Current commit: `8962c7f`.
+- Starting worktree was clean.
+- Ignored Playwright artifacts existed in `playwright-report/` and `test-results/` only.
+
+Baseline before edits:
+
+- `npm run test:ui`: passed, 45 passed.
+- `npm run typecheck`: passed.
+- `npm test`: passed, 62 files and 497 tests.
+- `npm run build`: passed with Next.js 15.5.19; static routes included `/`, `/_not-found`, `/atlas`, `/builder`, and `/lab`.
+- `npm run perf:simulation`: passed. Local smoke results included Flocking 100 agents at 102.13 ticks/sec, Flocking 500 agents at 17.42 ticks/sec, Forest Fire medium grid at 29.67 ticks/sec, and Predator-Prey default at 88.58 ticks/sec.
+- `git diff --check`: passed.
+- `npm run lint`: unavailable, package.json has no lint script.
+
+Audit findings:
+
+- The pure readiness adapter still derives only from existing selected template, registered template-owned intervention definitions, target state, active-engine presence, and active-run intervention count.
+- No hidden runtime expansion, schema execution, Builder execution, Lab persistence, Atlas discovery, storage, timestamps, random ids, fingerprints, validation/calibration claim, policy-effectiveness claim, or real-world causal claim was found.
+- Status semantics remained correct: control availability is capability status, target readiness is interaction status, model response is evidence/unresolved, and Lab/Atlas remain capability/future-only.
+- Lab and Atlas remain future-only informational routes and do not render fake intervention records, fake Discovery Atlas records, fake counts, evidence scores, recent activity, maps, progression, XP, or route locks.
+- The main hardening targets were language and test coverage, not behavior.
+
+Defects or risks hardened:
+
+- Added explicit coverage for registered controls with a present target but no active engine; readiness and selected target now prove `Engine required` capability/unsupported semantics.
+- Changed adjacent intervention list copy from `Recent interventions` to `Current run intervention entries`.
+- Changed the empty state to `No interventions applied in the current run yet.` and the clear button to `Clear entries`.
+- Changed the clear notice to `Current-run intervention entries cleared.`
+- Changed active-run readiness copy from active-run intervention records to current-run intervention entries in engine/snapshot state, not saved Lab records.
+- Changed visible command-path copy from `engine-validated` or `validated deterministic perturbations` to `engine-checked` language to avoid confusing software checks with scientific validation.
+- Added source guards against regressing to `Recent interventions` or `engine-validated commands`.
+- Added rendered assertions for `Intervention type`, `Radius intervention value`, current-run entry copy, empty-state copy, and the disabled `Clear entries` control.
+- Added durable AGENTS guardrails that user-facing intervention copy must not imply scientific validation and current-run intervention entries are not saved plans, Lab records, Atlas discoveries, or validation evidence.
+
+Browser zoom:
+
+- Attempted actual Chromium keyboard zoom checks at target 125%, 150%, and 200% on `/`, `/builder`, `/lab`, and `/atlas` against a local dev server.
+- In headless Playwright, `devicePixelRatio`, `innerWidth`, `clientWidth`, `visualViewport.scale`, `visualViewport.width`, and `scrollWidth` did not change after zoom attempts.
+- Actual browser zoom at 125%, 150%, and 200% was attempted but not verified. Viewport automation is not browser zoom.
+
+Focused post-hardening verification:
+
+- `npm test -- intervention readiness`: passed, 2 files and 14 tests.
+- `npx playwright test tests/ui/research-world-shell.spec.ts -g "World shell contract holds at desktop 1440x900"`: passed, 1 passed.
+
+Full post-hardening verification:
+
+- `npm run test:ui`: passed, 45 passed.
+- `npm run typecheck`: passed.
+- `npm test`: passed, 62 files and 498 tests.
+- `npm run build`: passed with Next.js 15.5.19; static routes included `/`, `/_not-found`, `/atlas`, `/builder`, and `/lab`.
+- `npm run perf:simulation`: passed. Local smoke results included Flocking 100 agents at 93.53 ticks/sec, Flocking 500 agents at 14.08 ticks/sec, Forest Fire medium grid at 21.64 ticks/sec, and Predator-Prey default at 56.97 ticks/sec.
+- `git diff --check`: passed.
+- `npm run lint`: unavailable, package.json has no lint script.
+
+Remaining limits:
+
+- No screen-reader walkthrough, assistive-technology walkthrough, forced-colors audit, actual browser zoom verification, full WCAG conformance audit, or user-comprehension validation was completed.
+
+Readiness decision:
+
+- Ready for GW4 after GW3B is committed, with strict boundaries.
+- GW4 must arrive through an explicit future prompt and must not treat GW3/GW3B as Lab persistence, saved intervention plans, Atlas discoveries, behavioral landscapes, validation/calibration, policy effectiveness, real-world causal proof, or general intervention-strategy runtime.

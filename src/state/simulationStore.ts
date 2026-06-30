@@ -344,7 +344,7 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
       return;
     }
     clearInterventionHistory(engine);
-    set({ interventionHistory: [], lastNotice: "Intervention history cleared.", lastError: null });
+    set({ interventionHistory: [], lastNotice: "Current-run intervention entries cleared.", lastError: null });
   },
 
   applyScenario(scenario) {

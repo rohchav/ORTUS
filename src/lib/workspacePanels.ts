@@ -132,7 +132,7 @@ export const workspacePanelDefinitions: readonly WorkspacePanelDefinition[] = [
     id: "interventions",
     label: "Interventions",
     eyebrow: "Perturb",
-    description: "Apply validated deterministic perturbations during a run.",
+    description: "Apply engine-checked deterministic perturbations during a run.",
     defaultPlacement: "modePanel",
     supportedPlacements: ["modePanel"],
     defaultSize: "compact",

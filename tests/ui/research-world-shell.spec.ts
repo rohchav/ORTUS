@@ -285,7 +285,11 @@ async function expectWorldInterventionReadinessLayer(page: Page) {
   await expect(evidenceStatus).toHaveAttribute("data-state", "unresolved");
 
   await expect(page.getByRole("combobox", { name: "Intervention type" })).toBeVisible();
+  await expect(page.getByRole("spinbutton", { name: "Radius intervention value" })).toBeVisible();
   await expect(page.getByRole("button", { name: /Apply Infect Radius|Apply Infect Selected Agent/ })).toBeVisible();
+  await expect(page.getByText("Current run intervention entries")).toBeVisible();
+  await expect(page.getByText("No interventions applied in the current run yet.")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Clear entries" })).toBeDisabled();
   await expect(page.getByRole("region", { name: "Simulation workspace" })).toBeVisible();
   await expect(page.getByRole("img", { name: "Simulation world. Agents are rendered from the latest engine snapshot." })).toBeVisible();
   await expect(page.getByRole("button", { name: "Run simulation" })).toBeVisible();

@@ -1,6 +1,6 @@
 # Active Run Provenance And Observation Audit
 
-Status: Prompt GW2B audit and bounded hardening record, with Prompt GW3 now adding a separate World Intervene readiness layer that must receive its own GW3B audit.
+Status: Prompt GW2B audit and bounded hardening record, with Prompt GW3 now adding a separate World Intervene readiness layer that has been audited and hardened by Prompt GW3B.
 
 ## 1. Scope
 
@@ -223,4 +223,4 @@ Decision: ready for GW3 after GW2B is committed, with strict boundaries.
 
 Meaning: GW2B does not itself implement GW3. GW3 may begin only through an explicit future prompt and must not treat GW2 live provenance as saved Lab records, Atlas discoveries, behavioral landscapes, persistence, validation evidence, or empirical truth.
 
-Prompt GW3 has since added live intervention readiness in World Intervene. That does not change the GW2B audit result and does not turn Observe provenance into saved intervention plans, Lab records, Atlas discoveries, behavioral landscapes, validation evidence, or empirical truth. GW3B remains required.
+Prompt GW3 has since added live intervention readiness in World Intervene, and Prompt GW3B has audited and hardened that layer. That does not change the GW2B audit result and does not turn Observe provenance into saved intervention plans, Lab records, Atlas discoveries, behavioral landscapes, validation evidence, or empirical truth.

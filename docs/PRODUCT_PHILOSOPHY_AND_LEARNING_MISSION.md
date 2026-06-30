@@ -1,6 +1,6 @@
 # ORTUS Product Philosophy And Learning Mission
 
-Status: Prompt P0 documentation-only source of truth, updated after Prompt GW3. This document records product philosophy, learning goals, future progression principles, and guardrails. GW1 implements only the shared World / Lab / Atlas / Workshop destination shell around existing workflows. GW2 adds live active-run provenance and observation context in World only. GW3 adds live intervention readiness and model-response boundaries in World only. This document does not implement runtime behavior, UI progression, unlocks, missions, scoring, achievements, discovery detection, model composition, templates, simulation features, fractal metrics, persistent Research World state, persistence, accounts, social features, onboarding flows, dependencies, or new capability flags.
+Status: Prompt P0 documentation-only source of truth, updated after Prompt GW3B. This document records product philosophy, learning goals, future progression principles, and guardrails. GW1 implements only the shared World / Lab / Atlas / Workshop destination shell around existing workflows. GW2 adds live active-run provenance and observation context in World only. GW3 adds live intervention readiness and model-response boundaries in World only, and GW3B audits/hardens that layer without adding persistence or runtime behavior. This document does not implement runtime behavior, UI progression, unlocks, missions, scoring, achievements, discovery detection, model composition, templates, simulation features, fractal metrics, persistent Research World state, persistence, accounts, social features, onboarding flows, dependencies, or new capability flags.
 
 ## Core Mission
 
@@ -113,7 +113,7 @@ This is the core anti-pseudo-ABM rule. ORTUS can help users explore consequences
 
 Prompt GW2 operationalizes this rule in the World Observe surface. The active-run provenance summary describes current model configuration, not a saved experiment record. Observed values describe model state, not measured real-world data. A visual pattern in a run is evidence about that model under that configuration, not automatically evidence about the real system.
 
-Prompt GW3 operationalizes the same rule in the World Intervene surface. Intervention readiness describes registered model perturbation controls, not a saved intervention plan or experiment record. A response to an intervention is evidence about the model under its current configuration, not automatic proof of real-world causal power, policy effectiveness, or empirical truth.
+Prompt GW3 operationalizes the same rule in the World Intervene surface. GW3B audits and hardens that surface. Intervention readiness describes registered model perturbation controls, not a saved intervention plan or experiment record. Current-run intervention entries are engine/snapshot state, not persistent Lab records. A response to an intervention is evidence about the model under its current configuration, not automatic proof of real-world causal power, policy effectiveness, or empirical truth.
 
 ## Product Experience Principles
 

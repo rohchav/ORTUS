@@ -124,7 +124,42 @@ describe("active intervention readiness", () => {
       targetReady: true
     });
     expect(selectedTarget.readiness.activeRunRecordLabel).toBe(
-      "1 active-run intervention record in current engine/snapshot state; not a saved Lab record."
+      "1 current-run intervention entry in engine/snapshot state; not a saved Lab record."
+    );
+  });
+
+  it("requires an active engine before registered controls are described as apply-ready", () => {
+    const definitions = getInterventionDefinitions(epidemicTemplate.id);
+    const readiness = deriveActiveInterventionReadiness({
+      selectedTemplateId: epidemicTemplate.id,
+      template: epidemicTemplate,
+      definitions,
+      selectedInterventionId: "epidemic.infectRadius",
+      selectedEntityId: null,
+      targetPoint: { x: 4, y: 8 },
+      targetCell: null,
+      hasActiveEngine: false,
+      activeInterventionCount: 2
+    });
+
+    expect(readiness.readiness.availability).toBe("unavailable");
+    expect(readiness.readiness.availabilityStatus).toMatchObject({
+      label: "Engine required",
+      category: "capability",
+      state: "unsupported"
+    });
+    expect(readiness.selectedTarget).toMatchObject({
+      id: "epidemic.infectRadius",
+      targetReady: true,
+      availability: "unavailable"
+    });
+    expect(readiness.selectedTarget?.availabilityStatus).toMatchObject({
+      label: "Engine required",
+      category: "capability",
+      state: "unsupported"
+    });
+    expect(readiness.readiness.activeRunRecordLabel).toBe(
+      "2 current-run intervention entries in engine/snapshot state; not a saved Lab record."
     );
   });
 
@@ -158,6 +193,9 @@ describe("active intervention readiness", () => {
     expect(utilitySource).not.toMatch(forbiddenRuntimeApis);
     expect(panelSource).not.toMatch(forbiddenRuntimeApis);
     expect(panelSource).toContain('className="intervention-readiness" aria-labelledby="intervention-readiness-heading"');
+    expect(panelSource).toContain("Current run intervention entries");
+    expect(panelSource).toContain("engine-checked commands");
+    expect(panelSource).not.toMatch(/Recent interventions|engine-validated commands/);
     expect(panelSource).not.toMatch(/intervention-readiness[^>]+tabIndex=\{0\}/);
     expect(panelSource).not.toMatch(/intervention-readiness[^>]+role="button"/);
   });

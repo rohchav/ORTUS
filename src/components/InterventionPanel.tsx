@@ -70,7 +70,7 @@ export function InterventionPanel({ collapsed = false, onToggle }: InterventionP
       <div className="intervention-panel">
         <InterventionReadinessView context={readiness} />
         <p className="intervention-panel__note">
-          Interventions apply immediately through engine-validated commands. They do not advance time; the next normal step continues from the perturbed state.
+          Interventions apply immediately through engine-checked commands. They do not advance time; the next normal step continues from the perturbed state.
         </p>
         {definitions.length > 0 && selectedDefinition ? (
           <>
@@ -272,13 +272,13 @@ function InterventionHistory({
   return (
     <div className="intervention-history">
       <div className="intervention-history__head">
-        <span>Recent interventions</span>
+        <span>Current run intervention entries</span>
         <button type="button" onClick={onClear} disabled={history.length === 0} suppressHydrationWarning>
-          Clear
+          Clear entries
         </button>
       </div>
       {history.length === 0 ? (
-        <p className="microcopy">No interventions applied yet.</p>
+        <p className="microcopy">No interventions applied in the current run yet.</p>
       ) : (
         <ol>
           {history.slice(-6).reverse().map((record) => (

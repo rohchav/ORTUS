@@ -49,6 +49,8 @@
 - Experiment runs must create fresh engine instances through the template registry and should store metrics/outcomes, not full per-run snapshots, unless explicitly requested.
 - Keep experiment execution chunked/cancellable in the UI so local sweeps do not create unbounded browser loops.
 - Interventions must be template-defined, validated, and applied through the headless intervention executor or engine command buffer. UI and canvas code may report targets, but must not mutate agents, components, spaces, or engine internals.
+- User-facing intervention copy must not use validation language in a way that implies scientific validation, calibration, or real-world effectiveness. Prefer engine-checked or command-checked language for software command paths.
+- Current-run intervention entries/history are engine/snapshot state, not saved intervention plans, persistent Lab intervention records, Atlas discoveries, or validation evidence.
 - Snapshot export may preserve applied intervention history. Scenario export must not claim mid-run intervention replay unless replay is implemented.
 - Scenario Builder scenarios are initial-condition and supported model-variant recipes, not snapshots or run summaries. Preview and apply must create fresh engine instances, scenarios must not store full world state by default, and behavior modes must be template-defined rather than arbitrary UI-authored rules.
 - Assumption profiles are structured modeling-transparency metadata, not simulation state. They must not affect engine dynamics, claim predictive validation, or duplicate full live run state inside scenarios/runs/results.
@@ -475,7 +477,7 @@
 - Preserve current validated workflows before reorganizing them further.
 - Use the existing Playwright/Axe harness for rendered destination-shell verification.
 - Do not claim screen-reader, AT, forced-colors, browser-zoom, or WCAG verification without evidence.
-- Do not start a Research World implementation slice from a prior shell prompt without the required audit; after GW3, GW3B is the next Research World prompt only if explicitly approved.
+- Do not start a Research World implementation slice from a prior shell prompt without the required audit; after GW3B, GW4 is the next Research World prompt only if explicitly approved.
 - GW2 live provenance belongs only in World Observe; do not turn it into saved Lab records, Atlas discoveries, notebooks, reusable assets, storage, route state, or evidence claims.
 - Active run provenance describes current model configuration; it is not a saved experiment record.
 - Active run observations describe model state; they are not measured real-world data.

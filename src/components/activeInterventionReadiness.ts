@@ -297,5 +297,6 @@ function activeRunRecordLabel(count: number): string {
   if (count === 0) {
     return "No interventions applied in the current active run.";
   }
-  return `${count} active-run intervention record${count === 1 ? "" : "s"} in current engine/snapshot state; not a saved Lab record.`;
+  const entryNoun = count === 1 ? "entry" : "entries";
+  return `${count} current-run intervention ${entryNoun} in engine/snapshot state; not a saved Lab record.`;
 }

@@ -1,6 +1,6 @@
 # ORTUS Research World Destination Shell
 
-Status: Prompt GW1 implementation source of truth, audited and hardened by Prompt GW1B, updated after Prompt GW3. GW1 introduces a persistent World / Lab / Atlas / Workshop destination shell across routes. GW1B hardens the shell evidence without expanding product behavior. GW2 adds live active-run provenance inside World only. GW3 adds live intervention readiness inside World only. This destination shell does not implement persistent research data, saved intervention plans, Lab intervention records, Discovery Atlas logic, behavioral landscapes, progression systems, runtime behavior, template behavior, Builder execution behavior, dependencies, assets, fonts, or storage.
+Status: Prompt GW1 implementation source of truth, audited and hardened by Prompt GW1B, updated after Prompt GW3B. GW1 introduces a persistent World / Lab / Atlas / Workshop destination shell across routes. GW1B hardens the shell evidence without expanding product behavior. GW2 adds live active-run provenance inside World only. GW3 adds live intervention readiness inside World only, and GW3B audits/hardens that readiness layer. This destination shell does not implement persistent research data, saved intervention plans, Lab intervention records, Discovery Atlas logic, behavioral landscapes, progression systems, runtime behavior, template behavior, Builder execution behavior, dependencies, assets, fonts, or storage.
 
 ## 1. Purpose And Scope
 
@@ -81,7 +81,7 @@ World has a route-level `h1` of `World` and receives the shared destination shel
 
 GW2 adds `Active Run Context` in the World Observe rail. It is live UI context over the active engine and latest snapshot. It does not save a run, create a Lab record, create an Atlas record, or validate model output.
 
-GW3 adds `Intervention Readiness` in the World Intervene rail. It is live UI context over existing registered template-owned intervention definitions, target state, active engine presence, and current active-run intervention count. It does not save an intervention plan, create a persistent Lab intervention record, create a Discovery Atlas record, certify causal power, or validate model output.
+GW3 adds `Intervention Readiness` in the World Intervene rail. GW3B audits and hardens it. It is live UI context over existing registered template-owned intervention definitions, target state, active engine presence, and current active-run intervention count. Current-run intervention entries are engine/snapshot state, not persistent Lab records. The readiness layer does not save an intervention plan, create a persistent Lab intervention record, create a Discovery Atlas record, certify causal power, or validate model output.
 
 ## 9. Workshop Integration
 
@@ -168,7 +168,7 @@ GW1 adds no XP, levels, ranks, achievements, badges, unlocks, progress bars, fir
 
 GW1 adds `tests/ui/research-world-shell.spec.ts` to cover all four routes, destination navigation, `aria-current`, route preservation, Lab/Atlas boundaries, viewports, keyboard focus, reduced motion, and Axe scans.
 
-GW1B hardens that suite with route-alias, unique-landmark, clean-navigation, single-current-destination, no-disabled-future-link, skip-link focus, reduced-motion focus, and stricter Lab/Atlas honesty checks. It also hardens destination-registry tests for query/hash normalization and `/world`/`/workshop` alias rejection. GW3 extends the same rendered shell suite to cover the World Intervene readiness layer and absence of that layer on Lab/Atlas.
+GW1B hardens that suite with route-alias, unique-landmark, clean-navigation, single-current-destination, no-disabled-future-link, skip-link focus, reduced-motion focus, and stricter Lab/Atlas honesty checks. It also hardens destination-registry tests for query/hash normalization and `/world`/`/workshop` alias rejection. GW3 extends the same rendered shell suite to cover the World Intervene readiness layer and absence of that layer on Lab/Atlas. GW3B hardens the rendered Intervene assertions for control labels, current-run entry copy, and disabled clear-entry state.
 
 Focused rerun passed: `npx playwright test tests/ui/research-world-shell.spec.ts -g "World shell contract holds at desktop 1440x900"`.
 

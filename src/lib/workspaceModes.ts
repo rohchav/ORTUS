@@ -38,7 +38,7 @@ export const simulationWorkspaceModes: readonly SimulationWorkspaceModeDefinitio
     id: "intervene",
     label: "Intervene",
     eyebrow: "Perturb",
-    description: "Apply template-defined perturbations through validated engine paths.",
+    description: "Apply template-defined perturbations through engine-checked paths.",
     panelIds: ["interventions"]
   },
   {

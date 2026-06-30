@@ -1,6 +1,6 @@
 # Active Run Provenance And Observation
 
-Status: Prompt GW2 implementation source of truth, audited and hardened by Prompt GW2B, with Prompt GW3 adding a separate Intervene-mode intervention-readiness layer. GW2 adds a live, non-persistent World-only provenance and observation layer for the active run. GW2B fixes missing-snapshot observation labeling and hardens rendered focus/placement evidence. This slice does not create persistent Lab records, Discovery Atlas records, behavioral landscapes, saved experiments, notebooks, reusable assets, progression systems, runtime behavior, template behavior, Builder execution behavior, routes, storage, dependencies, or external analytics.
+Status: Prompt GW2 implementation source of truth, audited and hardened by Prompt GW2B, with Prompt GW3 adding and Prompt GW3B auditing a separate Intervene-mode intervention-readiness layer. GW2 adds a live, non-persistent World-only provenance and observation layer for the active run. GW2B fixes missing-snapshot observation labeling and hardens rendered focus/placement evidence. This slice does not create persistent Lab records, Discovery Atlas records, behavioral landscapes, saved experiments, notebooks, reusable assets, progression systems, runtime behavior, template behavior, Builder execution behavior, routes, storage, dependencies, or external analytics.
 
 ## 1. Core Principle
 
@@ -169,8 +169,8 @@ Continuation verification passed: `npx playwright test tests/ui/research-world-s
 
 ## 16. GW3 Relationship
 
-GW3 is documented in `docs/ui/ACTIVE_INTERVENTION_BOUNDARY_AND_READINESS.md`. It adds live intervention readiness in World Intervene and must not treat GW2 observation as saved Lab persistence, Atlas discovery, behavioral landscape evidence, validation, or empirical truth.
+GW3 is documented in `docs/ui/ACTIVE_INTERVENTION_BOUNDARY_AND_READINESS.md` and audited in `docs/ui/ACTIVE_INTERVENTION_BOUNDARY_AND_READINESS_AUDIT.md`. It adds live intervention readiness in World Intervene and must not treat GW2 observation as saved Lab persistence, Atlas discovery, behavioral landscape evidence, validation, or empirical truth.
 
 ## 17. Next Audit
 
-Prompt GW2B is recorded in `docs/ui/ACTIVE_RUN_PROVENANCE_AND_OBSERVATION_AUDIT.md`. Prompt GW3B must audit the new intervention-readiness layer before ORTUS treats it as hardened.
+Prompt GW2B is recorded in `docs/ui/ACTIVE_RUN_PROVENANCE_AND_OBSERVATION_AUDIT.md`. Prompt GW3B is recorded in `docs/ui/ACTIVE_INTERVENTION_BOUNDARY_AND_READINESS_AUDIT.md`.

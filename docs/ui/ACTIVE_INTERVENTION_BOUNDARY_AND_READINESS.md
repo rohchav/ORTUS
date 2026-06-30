@@ -1,6 +1,6 @@
 # Active Intervention Boundary And Readiness
 
-Status: Prompt GW3 implementation source of truth. Prompt GW3 adds a live, non-persistent World-only intervention-readiness and interpretation-boundary layer in Intervene mode. It must be followed by Prompt GW3B before ORTUS treats this slice as audited.
+Status: Prompt GW3 implementation source of truth, audited and hardened by Prompt GW3B. Prompt GW3 adds a live, non-persistent World-only intervention-readiness and interpretation-boundary layer in Intervene mode. The GW3B audit record is `ACTIVE_INTERVENTION_BOUNDARY_AND_READINESS_AUDIT.md`.
 
 ## 1. Purpose
 
@@ -68,7 +68,7 @@ Intervention responses are model behavior shaped by assumptions, seed, starting 
 
 GW3 appears only inside World Intervene mode, above the existing intervention controls.
 
-The new section is static readable content. It is not forced into the normal Tab order and does not add a fake interactive role. The existing intervention selector, parameter controls, target status, apply button, and active-run intervention list remain the actionable controls.
+The new section is static readable content. It is not forced into the normal Tab order and does not add a fake interactive role. The existing intervention selector, parameter controls, target status, apply button, and current-run intervention entry list remain the actionable controls.
 
 ## 7. Relationship To GW2 Observation
 
@@ -90,7 +90,7 @@ GW3 does not merge the Observe and Intervene panels into one generic research-co
 
 GW3 adds no localStorage, sessionStorage, IndexedDB, cookies, database storage, cloud storage, accounts, timestamps, UUIDs, random ids, fingerprints, export/import behavior, or route state.
 
-ORTUS already had bounded active-run/snapshot intervention history before GW3. GW3 does not expand that into saved intervention plans or persistent Lab records. Snapshot preservation of applied intervention history remains existing snapshot state behavior, not a new GW3 persistence feature.
+ORTUS already had bounded active-run/snapshot intervention history before GW3. GW3 does not expand that into saved intervention plans or persistent Lab records. Snapshot preservation of applied intervention history remains existing snapshot state behavior, not a new GW3 persistence feature. GW3B hardens visible UI copy to call these current-run intervention entries rather than recent intervention records.
 
 ## 9. Lab Relationship
 
@@ -175,7 +175,7 @@ GW3 adds focused unit/contract coverage for:
 - no GW3 storage, timestamps, random ids, UUIDs, or fake tab stops;
 - Lab and Atlas future-only copy.
 
-Rendered Playwright coverage verifies World Intervene visibility, heading, non-persistence copy, causal-boundary copy, status semantics, run controls, canvas visibility, focus movement, no page overflow, Lab/Atlas future-only copy, and Axe scans.
+Rendered Playwright coverage verifies World Intervene visibility, heading, non-persistence copy, causal-boundary copy, status semantics, run controls, canvas visibility, focus movement, no page overflow, Lab/Atlas future-only copy, and Axe scans. GW3B adds rendered checks for the precise `Intervention type` combobox, the `Radius intervention value` input, current-run entry copy, and the disabled `Clear entries` control.
 
 The GW3 continuation rendered checks passed:
 
@@ -191,9 +191,23 @@ GW3 does not add saved interventions, intervention-history persistence, undo/rep
 
 Deferred work includes persistent Lab intervention records, Atlas evidence records, behavioral landscapes, reusable research assets, richer intervention comparison, validation/calibration support, actual browser zoom verification, screen-reader walkthroughs, assistive-technology walkthroughs, forced-colors checks, and user-comprehension testing.
 
-## 17. GW3B Audit Requirement
+## 17. GW3B Audit Result
 
-Prompt GW3B must audit whether:
+Prompt GW3B audited and hardened this slice in `ACTIVE_INTERVENTION_BOUNDARY_AND_READINESS_AUDIT.md`.
+
+GW3B found no hidden runtime expansion, false runtime-support claim, Lab persistence, Atlas discovery, Builder execution, schema execution, or causal/validation claim in the readiness layer.
+
+Bounded hardening included:
+
+- explicit engine-required readiness coverage when registered controls exist without an active engine;
+- current-run intervention entry copy for the adjacent applied-intervention list;
+- visible copy changed from `validated` to `engine-checked` where the intended meaning is command-path checking rather than scientific validation;
+- source guards against regressing to `Recent interventions` or `engine-validated commands`;
+- rendered Intervene assertions for labels and current-run entry controls.
+
+Actual browser zoom at 125%, 150%, and 200% was attempted but not verified because headless Chromium metrics did not change under keyboard zoom shortcuts. Screen-reader, assistive-technology, forced-colors, complete WCAG, and user-comprehension validation remain unverified.
+
+GW3B audited whether:
 
 - readiness fields accurately reflect existing controls;
 - unavailable controls and missing targets are labeled honestly;
@@ -204,3 +218,5 @@ Prompt GW3B must audit whether:
 - status semantics are correct;
 - keyboard/focus/reflow behavior remains acceptable;
 - copy avoids real-world causal overclaim.
+
+Decision: ready for GW4 after GW3B is committed, with strict boundaries. GW4 must still arrive through an explicit future prompt and must not treat GW3/GW3B as Lab persistence, saved intervention plans, Atlas discoveries, behavioral landscapes, validation/calibration, policy effectiveness, real-world causal proof, or general strategy/control runtime.
