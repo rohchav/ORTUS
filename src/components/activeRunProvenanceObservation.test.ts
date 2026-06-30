@@ -76,7 +76,9 @@ describe("active run provenance observation", () => {
     expect(summary.observation).toMatchObject({
       advancingLabel: "Advancing",
       aliveEntityCount: 1,
+      aliveEntityCountLabel: "1",
       metricRecordCount: 1,
+      metricRecordCountLabel: "1",
       interventionCount: 2,
       boundaryCopy: RUN_OBSERVATION_MODEL_STATE_COPY
     });
@@ -124,6 +126,12 @@ describe("active run provenance observation", () => {
     });
     expect(summary.provenance.runConfigurationStatus).toMatchObject({ label: "Incomplete", state: "idle" });
     expect(summary.observation.lifecycleStatus).toMatchObject({ label: "Not initialized", state: "idle" });
+    expect(summary.observation).toMatchObject({
+      tickLabel: "No snapshot",
+      timeLabel: "No snapshot",
+      aliveEntityCountLabel: "No snapshot",
+      metricRecordCountLabel: "No snapshot"
+    });
     expect(summary.observation.latestMetricRows).toEqual([]);
   });
 

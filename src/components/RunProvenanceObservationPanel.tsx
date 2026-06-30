@@ -110,8 +110,8 @@ function RunProvenanceObservationView({ context }: { context: ActiveRunProvenanc
             <Fact label="Tick" value={observation.tickLabel} />
             <Fact label="Time" value={observation.timeLabel} />
             <Fact label="Advance" value={observation.advancingLabel} />
-            <Fact label="Living entities" value={String(observation.aliveEntityCount)} />
-            <Fact label="Metric records" value={String(observation.metricRecordCount)} />
+            <Fact label="Living entities" value={observation.aliveEntityCountLabel} />
+            <Fact label="Metric records" value={observation.metricRecordCountLabel} />
             <Fact label="Interventions" value={String(observation.interventionCount)} />
           </dl>
 

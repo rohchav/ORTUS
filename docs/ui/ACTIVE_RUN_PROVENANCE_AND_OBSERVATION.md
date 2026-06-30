@@ -1,6 +1,6 @@
 # Active Run Provenance And Observation
 
-Status: Prompt GW2 implementation source of truth. GW2 adds a live, non-persistent World-only provenance and observation layer for the active run. It does not create persistent Lab records, Discovery Atlas records, behavioral landscapes, saved experiments, notebooks, reusable assets, progression systems, runtime behavior, template behavior, Builder execution behavior, routes, storage, dependencies, or external analytics.
+Status: Prompt GW2 implementation source of truth, audited and hardened by Prompt GW2B. GW2 adds a live, non-persistent World-only provenance and observation layer for the active run. GW2B fixes missing-snapshot observation labeling and hardens rendered focus/placement evidence. This slice does not create persistent Lab records, Discovery Atlas records, behavioral landscapes, saved experiments, notebooks, reusable assets, progression systems, runtime behavior, template behavior, Builder execution behavior, routes, storage, dependencies, or external analytics.
 
 ## 1. Core Principle
 
@@ -45,7 +45,7 @@ This is configuration context, not proof that the configuration is scientificall
 
 ## 5. Observation Summary
 
-The observation summary displays operational state, lifecycle state, tick, model time, advancing state, living entity count, metric-record count, intervention count, and bounded latest metric rows when available.
+The observation summary displays operational state, lifecycle state, tick, model time, advancing state, living entity count, metric-record count, intervention count, and bounded latest metric rows when available. If no current snapshot is available, observation labels say `No snapshot` rather than presenting zero-like values as observed model state.
 
 Required copy:
 
@@ -167,4 +167,4 @@ Continuation verification passed: `npx playwright test tests/ui/research-world-s
 
 ## 16. Next Audit
 
-Prompt GW2B is required next. It should audit the active-run context for false runtime-support claims, persistence creep, evidence overclaims, focus and viewport regressions, status semantic drift, Lab/Atlas overreach, and source-level coupling to runtime internals.
+Prompt GW2B is recorded in `docs/ui/ACTIVE_RUN_PROVENANCE_AND_OBSERVATION_AUDIT.md`. GW3 must arrive through a dedicated future prompt and must not treat this live World context as Lab persistence, Atlas discovery, behavioral landscape evidence, or empirical truth.

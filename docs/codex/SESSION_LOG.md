@@ -2137,3 +2137,64 @@ Result:
 
 - GW2 rendered verification is complete.
 - Prompt GW2B remains the next required audit prompt after GW2 is committed.
+
+## 2026-06-30 - Prompt GW2B Active Run Provenance And Observation Audit And Hardening
+
+Goal: audit and harden the committed GW2 active-run provenance and observation layer without starting GW3 or adding saved runs, Lab records, Atlas discoveries, behavioral landscapes, progression, runtime behavior, template behavior, Builder execution behavior, routes, dependencies, assets, or fonts.
+
+Starting state:
+
+- Current commit: `51743b1`.
+- Starting worktree was clean.
+- Recent history showed GW2 committed after GW1B.
+
+Baseline before edits:
+
+- `npm run test:ui`: passed, 45 passed.
+- `npm run typecheck`: passed.
+- `npm test`: passed, 61 files and 491 tests.
+- `npm run build`: passed with Next.js 15.5.19; static routes include `/`, `/_not-found`, `/atlas`, `/builder`, and `/lab`.
+- `npm run perf:simulation`: passed.
+- `git diff --check`: passed.
+- `npm run lint`: unavailable, package.json has no lint script. npm reported `Missing script: "lint"`.
+
+Audit findings:
+
+- Provenance derivation remains pure active-state/configuration derivation. No storage, timestamps, random ids, UUIDs, generated run ids, fake fingerprints, server calls, hidden mutation, or empirical-validation claims were found in the GW2 derivation path.
+- Observation remains distinct from provenance and keeps the required model-state copy.
+- Interpretation boundary keeps evidence status unresolved and does not claim validation, calibration, causal proof, or empirical truth.
+- `.active-run-context` remains static readable content, not a normal Tab stop.
+- Lab and Atlas remain future-only informational routes; no persistent Lab records or Discovery Atlas records were added.
+- Scope-creep search produced expected hits in docs/tests/older run-comparison or scenario persistence, but the GW2 production surfaces have no storage/time/random/fingerprint APIs.
+
+Defects fixed:
+
+- Missing-snapshot observation labels previously fell back to zero-like tick/time/entity/metric values. GW2B now renders `No snapshot` labels instead.
+- Panel heading/subheading rows now wrap so status pills cannot force clipped single-row layout.
+- Rendered tests now assert no active-run `tabindex="0"`, no fake interactive role, Shift+Tab behavior around Observe/Intervene, and absence of `.active-run-context` on Lab/Atlas.
+
+Browser zoom:
+
+- Attempted local Chromium keyboard zoom checks at 125%, 150%, and 200% for `/`, `/builder`, `/lab`, and `/atlas`.
+- In this headless Playwright environment, `devicePixelRatio`, viewport width, client width, and `visualViewport.scale` did not change, so actual browser zoom was not verified.
+
+Post-hardening verification:
+
+- `npm test -- provenance observation`: passed, 1 file and 6 tests.
+- `npx playwright test tests/ui/research-world-shell.spec.ts`: passed, 30 passed.
+- `npm run test:ui`: passed, 45 passed.
+- `npm run typecheck`: passed.
+- `npm test`: passed, 61 files and 491 tests.
+- `npm run build`: passed with Next.js 15.5.19; static routes include `/`, `/_not-found`, `/atlas`, `/builder`, and `/lab`.
+- `npm run perf:simulation`: passed. Local smoke results included Flocking 100 agents at 95.64 ticks/sec, Flocking 500 agents at 12.41 ticks/sec, Forest Fire medium grid at 19.47 ticks/sec, and Predator-Prey default at 54.28 ticks/sec.
+- `git diff --check`: passed.
+- `npm run lint`: unavailable, package.json has no lint script. npm reported `Missing script: "lint"`.
+
+Remaining limits:
+
+- No screen-reader walkthrough, assistive-technology walkthrough, forced-colors audit, actual browser zoom verification, full WCAG conformance audit, or user-comprehension validation was completed.
+
+Readiness decision:
+
+- Ready for GW3 after GW2B is committed, with strict boundaries.
+- GW3 must arrive through a dedicated future prompt and must not treat GW2 live provenance as Lab persistence, Atlas discovery, behavioral landscape evidence, validation, or empirical truth.

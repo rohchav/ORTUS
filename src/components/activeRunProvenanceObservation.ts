@@ -61,7 +61,9 @@ export interface RunObservationSummary {
   timeLabel: string;
   advancingLabel: string;
   aliveEntityCount: number;
+  aliveEntityCountLabel: string;
   metricRecordCount: number;
+  metricRecordCountLabel: string;
   latestMetricRows: readonly RunMetricObservationRow[];
   interventionCount: number;
   boundaryCopy: string;
@@ -165,6 +167,8 @@ export function deriveRunObservationSummary(input: ActiveRunProvenanceInput): Ru
   const latestMetricRecord = snapshot?.metricsHistory.at(-1);
   const metricLabelForKey = input.metricLabelForKey ?? humanizeKey;
   const maxMetricRows = Math.max(0, Math.min(input.maxMetricRows ?? 5, 8));
+  const aliveEntityCount = snapshot?.entities.filter((entity) => entity.alive).length ?? 0;
+  const metricRecordCount = snapshot?.metricsHistory.length ?? 0;
   const latestMetricRows = Object.entries(latestMetricRecord?.values ?? {})
     .sort(([left], [right]) => left.localeCompare(right))
     .slice(0, maxMetricRows)
@@ -179,11 +183,13 @@ export function deriveRunObservationSummary(input: ActiveRunProvenanceInput): Ru
     runStatus: getRunStatusPillModel(input.isRunning),
     lifecycleStatus: deriveLifecycleStatus(input),
     runtimeStatusLabel: deriveRuntimeStatusLabel(input),
-    tickLabel: formatInteger(snapshot?.tick ?? 0),
-    timeLabel: formatDecimal(snapshot?.time ?? 0, 2),
+    tickLabel: snapshot ? formatInteger(snapshot.tick) : "No snapshot",
+    timeLabel: snapshot ? formatDecimal(snapshot.time, 2) : "No snapshot",
     advancingLabel: input.isRunning ? "Advancing" : "Not advancing",
-    aliveEntityCount: snapshot?.entities.filter((entity) => entity.alive).length ?? 0,
-    metricRecordCount: snapshot?.metricsHistory.length ?? 0,
+    aliveEntityCount,
+    aliveEntityCountLabel: snapshot ? formatInteger(aliveEntityCount) : "No snapshot",
+    metricRecordCount,
+    metricRecordCountLabel: snapshot ? formatInteger(metricRecordCount) : "No snapshot",
     latestMetricRows,
     interventionCount: input.interventionCount ?? 0,
     boundaryCopy: RUN_OBSERVATION_MODEL_STATE_COPY

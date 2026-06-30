@@ -213,6 +213,8 @@ async function expectWorldProvenanceLayer(page: Page) {
 
   const panel = page.locator(".active-run-context");
   await expect(panel).toBeVisible();
+  await expect(panel).not.toHaveAttribute("tabindex", "0");
+  await expect(panel).not.toHaveAttribute("role", /button|link|tab/);
   await expect(page.getByRole("heading", { name: "Active Run Provenance" })).toBeVisible();
   await expect(page.getByText("This provenance summary describes the active model configuration. It is not a saved experiment record.")).toBeVisible();
   await expect(page.getByText("Observed values describe the model’s current state, not measured real-world data.")).toBeVisible();
@@ -240,6 +242,9 @@ async function expectWorldProvenanceLayer(page: Page) {
   await page.keyboard.press("Tab");
   await expect(page.getByRole("tab", { name: /Intervene/i })).toBeFocused();
   await expectFocusedElementVisible(page);
+  await page.keyboard.press("Shift+Tab");
+  await expect(observeTab).toBeFocused();
+  await expectFocusedElementVisible(page);
 }
 
 async function expectWorkshopPreserved(page: Page) {
@@ -256,6 +261,7 @@ async function expectFutureDestinationBoundaries(page: Page, destination: "Lab" 
   await expect(status).toBeVisible();
   await expect(status).toHaveAttribute("data-status-category", "capability");
   await expect(status).toHaveAttribute("data-state", "future-only");
+  await expect(page.locator(".active-run-context")).toHaveCount(0);
 
   if (destination === "Lab") {
     await expect(page.getByText("Persistent experiments, notebooks, comparison sets, and reusable research assets are not implemented in GW1 or GW2.")).toBeVisible();

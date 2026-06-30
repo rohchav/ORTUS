@@ -211,9 +211,9 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(roadmap).toContain("Completed Prompt 39 scenario-planning foundation");
     expect(roadmap).toContain("Completed Prompt 39 scenario-planning audit");
     expect(roadmap).toContain("Prompt 35 adds a separate `Author Schema` Builder mode");
-    expect(roadmap).toContain("Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, MR0, F0, P0, UX0, UX1, GW0, UX2, UX2B, GW1, GW1B, and GW2 are complete.");
+    expect(roadmap).toContain("Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, MR0, F0, P0, UX0, UX1, GW0, UX2, UX2B, GW1, GW1B, GW2, and GW2B are complete.");
     expect(roadmap).toContain(
-      "GW2B is the next Research World audit prompt only if explicitly approved; do not start GW3-GW6 Research World implementation, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any further Research World/fractal/multiscale implementation without explicit approval."
+      "GW3 is the next Research World prompt only if explicitly approved; do not start GW3-GW6 Research World implementation, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any further Research World/fractal/multiscale implementation without explicit approval."
     );
     expect(roadmap).toContain("Prompt GW1 implements the shared Research World destination shell.");
     expect(roadmap).toContain("Prompt GW1B audits and hardens the destination shell without expanding product behavior.");
@@ -603,7 +603,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(docs).toContain("Preserve `/` as World.");
     expect(docs).toContain("Preserve `/builder` as Workshop.");
     expect(docs).toContain("Lab and Atlas are future-only informational destinations.");
-    expect(docs).toContain("after GW2, GW2B is the next required audit.");
+    expect(docs).toContain("after GW2B, GW3 is the next Research World prompt only if explicitly approved.");
     expect(docs).toContain("UX2 establishes shared visual semantics. It does not perform the Research World shell transformation.");
     expect(docs).toContain("UX2 prepares the visual language. GW1 performs the structural shell transformation.");
     expect(docs).toContain("A visual state must communicate what kind of state it represents: operational, interaction, evidence, uncertainty, or capability.");
