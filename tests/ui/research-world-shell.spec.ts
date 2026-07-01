@@ -109,9 +109,9 @@ async function expectDestinationNavContract(page: Page, currentPath: string) {
   expect(linkModels.filter((link) => link.current)).toHaveLength(1);
   expect(linkModels.some((link) => link.disabled || link.ariaDisabled === "true")).toBe(false);
   expect(linkModels.find((link) => link.label === "Lab")).toMatchObject({ ariaLabel: "Lab, future-only destination" });
-  expect(linkModels.find((link) => link.label === "Atlas")).toMatchObject({ ariaLabel: "Atlas, future-only destination" });
+  expect(linkModels.find((link) => link.label === "Atlas")).toMatchObject({ ariaLabel: "Atlas" });
   expect(linkModels.find((link) => link.label === "Lab")?.text).toContain("Future");
-  expect(linkModels.find((link) => link.label === "Atlas")?.text).toContain("Future");
+  expect(linkModels.find((link) => link.label === "Atlas")?.text).not.toContain("Future");
 }
 
 async function expectNoDocumentHorizontalOverflow(page: Page) {
@@ -205,6 +205,7 @@ async function expectWorldPreserved(page: Page) {
   const paused = page.locator(".status-pill", { hasText: "Paused" }).first();
   await expect(paused).toHaveAttribute("data-status-category", "operational");
   await expect(paused).toHaveAttribute("data-state", "paused");
+  await expect(page.getByRole("main")).not.toContainText(/Map this run|Save to Atlas|Create discovery|Save discovery/i);
 }
 
 async function expectWorldProvenanceLayer(page: Page) {
@@ -313,7 +314,8 @@ async function expectWorkshopPreserved(page: Page) {
   await expect(badge).toHaveAttribute("data-state", "non-runnable");
 }
 
-async function expectFutureDestinationBoundaries(page: Page, destination: "Lab" | "Atlas") {
+async function expectLabFutureDestinationBoundaries(page: Page) {
+  const destination = "Lab";
   await expect(page.getByRole("heading", { level: 1, name: destination })).toBeVisible();
   const status = page.locator(".status-pill", { hasText: "Future-only" }).first();
   await expect(status).toBeVisible();
@@ -322,25 +324,69 @@ async function expectFutureDestinationBoundaries(page: Page, destination: "Lab" 
   await expect(page.locator(".active-run-context")).toHaveCount(0);
   await expect(page.locator(".intervention-readiness")).toHaveCount(0);
 
-  if (destination === "Lab") {
-    await expect(page.getByText("Persistent experiments, notebooks, comparison sets, intervention records, and reusable research assets are not implemented in GW1, GW2, or GW3.")).toBeVisible();
-    await expect(page.getByText("The Lab route documents destination responsibility. It does not simulate persistence.")).toBeVisible();
-    await expect(page.getByText("GW2 exposes live run provenance in World. Persistent Lab records are still not implemented.")).toBeVisible();
-    await expect(page.getByText("GW3 exposes live intervention readiness in World. Persistent Lab intervention records are still not implemented.")).toBeVisible();
-  } else {
-    await expect(
-      page.getByText(
-        "Discovery records, behavioral landscapes, sampled-region maps, intervention-response discoveries, and evidence-linked model regimes are not implemented in GW1, GW2, or GW3."
-      )
-    ).toBeVisible();
-    await expect(page.getByText("Atlas will map investigated model behavior. It will not certify discoveries about the real world.")).toBeVisible();
-    await expect(page.getByText("GW2 does not create Discovery Atlas records. Atlas remains future-only.")).toBeVisible();
-    await expect(page.getByText("GW3 does not create Discovery Atlas records from intervention responses. Atlas remains future-only.")).toBeVisible();
-  }
+  await expect(
+    page.getByText(
+      "Persistent experiments, notebooks, comparison sets, intervention records, evidence records, and reusable research assets are not implemented in GW1, GW2, GW3, or GW4."
+    )
+  ).toBeVisible();
+  await expect(page.getByText("The Lab route documents destination responsibility. It does not simulate persistence.")).toBeVisible();
+  await expect(page.getByText("GW2 exposes live run provenance in World. Persistent Lab records are still not implemented.")).toBeVisible();
+  await expect(page.getByText("GW3 exposes live intervention readiness in World. Persistent Lab intervention records are still not implemented.")).toBeVisible();
+  await expect(page.getByText("GW4 defines Atlas evidence semantics. Persistent Lab evidence records are still not implemented.")).toBeVisible();
 
   const mainText = await page.getByRole("main").innerText();
   expect(mainText).not.toMatch(
     /saved worlds|saved experiments|recent activity|storage usage|\bxp\b|unlock|achievement|locked|progress percentage|evidence score|locked territory/i
+  );
+  await expect(page.getByRole("link", { name: "Return to World" })).toHaveAttribute("href", "/");
+  await expect(page.getByRole("link", { name: "Open Workshop" })).toHaveAttribute("href", "/builder");
+}
+
+async function expectAtlasFoundation(page: Page) {
+  await expect(page.getByRole("heading", { level: 1, name: "Atlas" })).toBeVisible();
+  await expect(page.locator(".active-run-context")).toHaveCount(0);
+  await expect(page.locator(".intervention-readiness")).toHaveCount(0);
+
+  const foundationStatus = page.getByLabel(/GW4 foundation:/);
+  await expect(foundationStatus).toBeVisible();
+  await expect(foundationStatus).toHaveAttribute("data-status-category", "capability");
+  await expect(foundationStatus).toHaveAttribute("data-state", "planning-only");
+
+  await expect(page.getByText("Atlas is a non-persistent foundation in GW4.")).toBeVisible();
+  await expect(
+    page.getByText("Discovery records, behavioral landscapes, sampled-region maps, and evidence-linked model regimes are not implemented yet.")
+  ).toBeVisible();
+  await expect(page.getByText("Atlas will organize evidence about model behavior. It will not certify discoveries about the real world.")).toBeVisible();
+  await expect(page.getByText("Nothing on this Atlas route is a saved discovery, saved evidence record, or persistent map.")).toBeVisible();
+  await expect(page.getByText("Conceptual scaffold - not run data.")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Atlas Boundaries" })).toBeVisible();
+  await expect(
+    page.getByText("World currently exposes live provenance, observation, and intervention readiness. GW4 Atlas does not save those runs or convert them into discoveries.")
+  ).toBeVisible();
+  await expect(page.getByText("GW4 defines Atlas evidence semantics. Persistent Lab evidence records are still not implemented.")).toBeVisible();
+
+  const unsampled = page.getByLabel(/Unsampled:/).first();
+  await expect(unsampled).toHaveAttribute("data-status-category", "evidence");
+  await expect(unsampled).toHaveAttribute("data-state", "unresolved");
+  const sampled = page.getByLabel(/Sampled:/).first();
+  await expect(sampled).toHaveAttribute("data-status-category", "evidence");
+  await expect(sampled).toHaveAttribute("data-state", "observed");
+  const supported = page.getByLabel(/Supported within model:/).first();
+  await expect(supported).toHaveAttribute("data-status-category", "evidence");
+  await expect(supported).toHaveAttribute("data-state", "supported");
+  const contradicted = page.getByLabel(/Contradicted within model:/).first();
+  await expect(contradicted).toHaveAttribute("data-status-category", "evidence");
+  await expect(contradicted).toHaveAttribute("data-state", "contradicted");
+  const unsupported = page.getByLabel(/Unsupported:/).first();
+  await expect(unsupported).toHaveAttribute("data-status-category", "evidence");
+  await expect(unsupported).toHaveAttribute("data-state", "unsupported");
+  const futureOnly = page.getByLabel(/Future-only:/).first();
+  await expect(futureOnly).toHaveAttribute("data-status-category", "capability");
+  await expect(futureOnly).toHaveAttribute("data-state", "future-only");
+
+  const mainText = await page.getByRole("main").innerText();
+  expect(mainText).not.toMatch(
+    /Map this run|Save to Atlas|Create discovery|Save discovery|Publish finding|discovery unlocked|recent activity|\bxp\b|achievement|rank|streak|evidence score|coverage percentage|regime confidence/i
   );
   await expect(page.getByRole("link", { name: "Return to World" })).toHaveAttribute("href", "/");
   await expect(page.getByRole("link", { name: "Open Workshop" })).toHaveAttribute("href", "/builder");
@@ -381,8 +427,11 @@ for (const destination of destinations) {
       if (destination.path === "/builder") {
         await expectWorkshopPreserved(page);
       }
-      if (destination.path === "/lab" || destination.path === "/atlas") {
-        await expectFutureDestinationBoundaries(page, destination.label as "Lab" | "Atlas");
+      if (destination.path === "/lab") {
+        await expectLabFutureDestinationBoundaries(page);
+      }
+      if (destination.path === "/atlas") {
+        await expectAtlasFoundation(page);
       }
 
       await page.keyboard.press("Tab");

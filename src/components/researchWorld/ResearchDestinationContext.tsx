@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { getResearchDestinationByPathname, isFutureOnlyResearchDestination } from "../../lib/researchDestinations";
+import { getResearchDestinationByPathname } from "../../lib/researchDestinations";
 import { StatusPill } from "../ui/StatusPill";
 
 export function ResearchDestinationContext() {
@@ -18,8 +18,6 @@ export function ResearchDestinationContext() {
     );
   }
 
-  const futureOnly = isFutureOnlyResearchDestination(destination);
-
   return (
     <section className="research-destination-context" aria-label="Current destination">
       <div className="research-destination-context__copy">
@@ -27,7 +25,7 @@ export function ResearchDestinationContext() {
         <strong>{destination.label}</strong>
         <p>{destination.purpose}</p>
       </div>
-      {futureOnly && destination.status ? (
+      {destination.status ? (
         <StatusPill
           label={destination.status.label}
           tone="neutral"

@@ -1,11 +1,11 @@
 export type ResearchDestinationId = "world" | "lab" | "atlas" | "workshop";
 
-export type ResearchDestinationAvailability = "available" | "future-only";
+export type ResearchDestinationAvailability = "available" | "foundation" | "future-only";
 
 export interface ResearchDestinationStatus {
-  label: "Future-only";
+  label: "Foundation" | "Future-only";
   category: "capability";
-  state: "future-only";
+  state: "planning-only" | "future-only";
   description: string;
 }
 
@@ -48,10 +48,15 @@ export const researchDestinations: readonly ResearchDestinationDefinition[] = Ob
     id: "atlas",
     label: "Atlas",
     route: "/atlas",
-    purpose: "Map investigated model behavior, evidence, uncertainty, and unknown territory.",
-    availability: "future-only",
+    purpose: "Orient evidence about investigated model behavior without certifying real-world discovery.",
+    availability: "foundation",
     navigationOrder: 3,
-    status: futureOnlyStatus("Atlas is an informational foundation in GW1; discovery records and behavioral maps are not implemented.")
+    status: {
+      label: "Foundation",
+      category: "capability",
+      state: "planning-only",
+      description: "GW4 adds non-persistent Atlas information architecture; Discovery Atlas records are not implemented."
+    }
   },
   {
     id: "workshop",

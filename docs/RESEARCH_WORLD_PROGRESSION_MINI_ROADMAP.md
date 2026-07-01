@@ -1,10 +1,10 @@
 # ORTUS Research World Progression Mini-Roadmap
 
-Status: Prompt GW0 documentation source of truth, updated after Prompt GW3B.
+Status: Prompt GW0 documentation source of truth, updated after Prompt GW4.
 
 GW0 is documentation, product architecture, information architecture, and roadmap planning only.
 
-GW0 is documentation and progression architecture only. It does not implement routes, navigation, World/Lab/Atlas/Workshop pages, persistence, accounts, cloud storage, local storage, database schemas, progression state, unlocks, XP, levels, achievements, badges, streaks, missions, quests, daily rewards, discovery detection, regime classification, behavioral landscapes, contextual recommendations, notebooks, saved research assets, model composition, grand-system scenarios, runtime behavior, simulation behavior, template behavior, dependencies, assets, or mockups. Prompt UX2 later implements shared semantic visual tokens and a bounded shared primitive migration. Prompt GW1 later implements the first shared destination shell only; it still does not implement persistent Lab systems, Discovery Atlas behavior, behavioral landscapes, progression, runtime behavior, or template behavior. Prompt GW2 later implements a live World-only active-run provenance and observation layer; it still does not implement persistence, Lab records, Atlas records, behavioral landscapes, progression, runtime behavior, or template behavior. Prompt GW3 later implements a live World-only intervention readiness and boundary layer; it still does not implement saved intervention plans, Lab intervention records, Atlas discoveries, behavioral landscapes, progression, runtime behavior, or template behavior. Prompt GW3B later audits and hardens that intervention-readiness layer without adding persistence, Lab records, Atlas records, behavioral landscapes, progression, runtime behavior, or template behavior.
+GW0 is documentation and progression architecture only. It does not implement routes, navigation, World/Lab/Atlas/Workshop pages, persistence, accounts, cloud storage, local storage, database schemas, progression state, unlocks, XP, levels, achievements, badges, streaks, missions, quests, daily rewards, discovery detection, regime classification, behavioral landscapes, contextual recommendations, notebooks, saved research assets, model composition, grand-system scenarios, runtime behavior, simulation behavior, template behavior, dependencies, assets, or mockups. Prompt UX2 later implements shared semantic visual tokens and a bounded shared primitive migration. Prompt GW1 later implements the first shared destination shell only; it still does not implement persistent Lab systems, Discovery Atlas behavior, behavioral landscapes, progression, runtime behavior, or template behavior. Prompt GW2 later implements a live World-only active-run provenance and observation layer; it still does not implement persistence, Lab records, Atlas records, behavioral landscapes, progression, runtime behavior, or template behavior. Prompt GW3 later implements a live World-only intervention readiness and boundary layer; it still does not implement saved intervention plans, Lab intervention records, Atlas discoveries, behavioral landscapes, progression, runtime behavior, or template behavior. Prompt GW3B later audits and hardens that intervention-readiness layer without adding persistence, Lab records, Atlas records, behavioral landscapes, progression, runtime behavior, or template behavior. Prompt GW4 later implements non-persistent Atlas information architecture and evidence semantics without adding saved Discovery Atlas records, persistent evidence maps, behavioral landscapes, Lab records, storage, progression, runtime behavior, or template behavior.
 
 The central principle:
 
@@ -117,6 +117,8 @@ In GW1, persistent shell means structurally present across routes, not persisten
 Prompt GW2 adds live active-run context inside World Observe. It makes the current model configuration and observed model state easier to inspect, but it deliberately stops before the future Lab/Atlas accumulation loop. GW2 does not save run records, document discoveries, classify behavioral landscapes, create notebooks, create reusable assets, or turn model output into empirical evidence.
 
 Prompt GW3 adds live active-intervention readiness inside World Intervene. Prompt GW3B audits and hardens that layer. It makes registered perturbation controls, target readiness, current-run intervention entries, and response boundaries easier to inspect, but it deliberately stops before saved intervention plans, persistent Lab records, Discovery Atlas entries, behavioral landscapes, and real-world causal claims.
+
+Prompt GW4 adds non-persistent Atlas information architecture on `/atlas`. It defines evidence-state vocabulary, sampled/unsampled interpretation, a conceptual scaffold labeled as not run data, model-vs-world boundaries, and World/Lab relationship copy. It deliberately stops before saved Discovery Atlas records, persistent evidence maps, behavioral landscapes, sampled-region maps backed by run data, Lab records, run history, save/map actions, storage, progression, validation, calibration, or real-world discovery certification.
 
 ## 5. Progression Without XP
 
@@ -374,7 +376,7 @@ The required sequence is:
 GW0 -> UX2 -> GW1 -> GW1B -> GW2 -> GW2B -> GW3 -> GW3B -> GW4 -> GW4B -> GW5 -> GW5B -> GW6 -> GW6B
 ```
 
-UX2, GW1, GW1B, GW2, GW2B, GW3, and GW3B are complete. GW4-GW6 remain future prompts that must not start without explicit direction.
+UX2, GW1, GW1B, GW2, GW2B, GW3, GW3B, and GW4 are complete. GW4B-GW6 remain future prompts that must not start without explicit direction.
 
 ## 22. GW Roadmap Branch
 
@@ -412,11 +414,11 @@ Future audit of GW3 readiness accuracy, no-fake-target boundaries, non-persisten
 
 ### GW4: Discovery Atlas
 
-Future evidence-oriented model-behavior records. It must not certify real-world discoveries or turn patterns into achievements.
+Implemented non-persistent Atlas information architecture and evidence-state semantics. It does not implement saved Discovery Atlas records, persistent evidence maps, behavioral landscapes, sampled-region maps backed by run data, Lab records, run history, save/map actions, storage, progression, validation, calibration, or real-world discovery certification.
 
 ### GW4B: Discovery Atlas Audit
 
-Audit evidence states, contradictory-run handling, provenance, stale records, and claim boundaries.
+Audit GW4 evidence-state semantics, non-persistence clarity, sampled/unsampled honesty, model-vs-real-world boundaries, absence of fake discoveries/maps/scores, Lab/World relationships, keyboard/focus/reflow behavior, Axe results, status semantics, and scope-creep risk.
 
 ### GW5: Behavioral Landscape Exploration
 
@@ -507,7 +509,8 @@ GW0 documentation tests should confirm:
 - current `/` and `/builder` workflows are preserved,
 - GW1 is implemented only as the bounded destination shell,
 - GW2/GW2B, GW3, and GW3B are implemented only as bounded World live-context/audit layers,
-- GW4-GW6 remain future-only,
+- GW4 is implemented only as a bounded non-persistent Atlas foundation,
+- GW4B-GW6 remain future-only,
 - UX2 prepared the visual foundation between GW0 and GW1,
 - no production UI, CSS, runtime, persistence, route, asset, dependency, or package file is changed by GW0.
 

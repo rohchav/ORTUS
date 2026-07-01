@@ -458,7 +458,7 @@
 - In GW1, "persistent" means structurally present across routes, not persistent user data.
 - Preserve `/` as World.
 - Preserve `/builder` as Workshop.
-- Lab and Atlas are future-only informational destinations.
+- In GW1, Lab and Atlas were future-only informational destinations; after GW4, Lab remains future-only and Atlas is a non-persistent foundation route.
 - Do not fabricate experiments, discoveries, maps, evidence, counts, or user activity.
 - Do not describe Lab or Atlas as locked.
 - Do not add XP, levels, achievements, progress bars, or unlock systems.
@@ -477,7 +477,7 @@
 - Preserve current validated workflows before reorganizing them further.
 - Use the existing Playwright/Axe harness for rendered destination-shell verification.
 - Do not claim screen-reader, AT, forced-colors, browser-zoom, or WCAG verification without evidence.
-- Do not start a Research World implementation slice from a prior shell prompt without the required audit; after GW3B, GW4 is the next Research World prompt only if explicitly approved.
+- Do not start a Research World implementation slice from a prior shell prompt without the required audit; after GW4, GW4B is the next required Research World prompt.
 - GW2 live provenance belongs only in World Observe; do not turn it into saved Lab records, Atlas discoveries, notebooks, reusable assets, storage, route state, or evidence claims.
 - Active run provenance describes current model configuration; it is not a saved experiment record.
 - Active run observations describe model state; they are not measured real-world data.
@@ -491,6 +491,12 @@
 - A response to an intervention is evidence about this model under this configuration. It is not automatic proof that the same intervention would work in the real system.
 - GW3 readiness may derive only from existing registered template-owned intervention definitions, selected target state, active engine presence, and current active-run intervention count; do not fabricate controls, targets, outcomes, evidence scores, or discovery records.
 - Do not generate GW3 timestamps, UUIDs, random ids, storage keys, saved plans, Lab records, Atlas records, sampled regions, behavioral landscapes, progression state, or decorative fingerprints for intervention readiness.
+- GW4 Atlas is non-persistent information architecture and evidence semantics only.
+- GW4 Atlas evidence states describe model-behavior interpretation, not real-world truth.
+- Do not add saved Atlas discoveries, saved evidence records, persistent maps, behavioral landscapes, sampled-region maps from fake data, discovery history, run history, Lab records, storage, export/import, or Atlas save/map actions from GW4.
+- Do not use progress, unlocks, achievements, fake discovery counts, evidence scores, regime confidence, recent activity, or sampled coverage percentages in Atlas.
+- Future-only is capability status, not evidence support; do not use operational statuses for epistemic support.
+- Preserve the route contract: `/` is World, `/lab` is Lab, `/atlas` is Atlas, `/builder` is Workshop, and `/world` or `/workshop` aliases remain absent.
 - Complete and commit GW1 before starting GW1B.
 - Treat UX0 as documentation and design planning only.
 - Do not implement World/Lab/Atlas/Workshop without a dedicated prompt.

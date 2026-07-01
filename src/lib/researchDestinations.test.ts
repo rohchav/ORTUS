@@ -47,8 +47,8 @@ describe("Research World destination registry", () => {
       status: { category: "capability", state: "future-only" }
     });
     expect(byId.atlas).toMatchObject({
-      availability: "future-only",
-      status: { category: "capability", state: "future-only" }
+      availability: "foundation",
+      status: { category: "capability", state: "planning-only" }
     });
     expect(JSON.stringify(researchDestinations)).not.toMatch(/\b(locked|disabled|unlock|xp|level|achievement|progress)\b/i);
   });

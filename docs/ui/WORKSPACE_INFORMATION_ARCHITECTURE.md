@@ -1,7 +1,7 @@
 # ORTUS Workspace Information Architecture
 
 Date: 2026-06-29
-Prompt: UI-REMEDIATION-1, audited and hardened by Prompt 34B, extended by Prompt 35, audited by Prompt 35B, extended by Prompt 36, audited by Prompt 36B, extended by Prompt 37, audited by Prompt 37B, extended by Prompt 38, audited by Prompt 38B, extended by Prompt 39, audited by Prompt 39B, extended by Prompt NUX1, audited by Prompt NUX1B, extended by Prompt N2, audited by Prompt N2B, documented by Prompt MR0, documented by Prompt F0, documented by Prompt P0, documented by Prompt UX0, audited by Prompt UX1, documented by Prompt GW0, visually founded by Prompt UX2, rendered-audited by Prompt UX2B, structurally extended by Prompt GW1, audited/hardened by Prompt GW1B, extended by Prompt GW2, audited/hardened by Prompt GW2B, extended by Prompt GW3, and audited/hardened by Prompt GW3B
+Prompt: UI-REMEDIATION-1, audited and hardened by Prompt 34B, extended by Prompt 35, audited by Prompt 35B, extended by Prompt 36, audited by Prompt 36B, extended by Prompt 37, audited by Prompt 37B, extended by Prompt 38, audited by Prompt 38B, extended by Prompt 39, audited by Prompt 39B, extended by Prompt NUX1, audited by Prompt NUX1B, extended by Prompt N2, audited by Prompt N2B, documented by Prompt MR0, documented by Prompt F0, documented by Prompt P0, documented by Prompt UX0, audited by Prompt UX1, documented by Prompt GW0, visually founded by Prompt UX2, rendered-audited by Prompt UX2B, structurally extended by Prompt GW1, audited/hardened by Prompt GW1B, extended by Prompt GW2, audited/hardened by Prompt GW2B, extended by Prompt GW3, audited/hardened by Prompt GW3B, and extended by Prompt GW4
 Status: implemented, source-audited, and rendered-smoke-tested by the GW1/GW1B Playwright shell suite; broader mobile-readiness, actual browser-zoom, screen-reader, assistive-technology, forced-colors, and WCAG claims remain unverified
 
 ## Problem
@@ -29,11 +29,11 @@ GW1 route contract:
 ```text
 /         -> World
 /lab      -> Lab informational foundation
-/atlas    -> Atlas informational foundation
+/atlas    -> Atlas non-persistent foundation
 /builder  -> Workshop
 ```
 
-Lab and Atlas are reachable future-only informational destinations, not locked destinations. They do not contain persistent experiments, notebooks, Discovery Atlas behavior, behavioral landscapes, progression, fake counts, or fake user activity.
+Lab is a reachable future-only informational destination, not a locked destination. Atlas is a reachable non-persistent GW4 foundation. They do not contain persistent experiments, notebooks, saved Discovery Atlas records, behavioral landscapes, progression, fake counts, fake maps, or fake user activity.
 
 The World Stage remains mounted while the user changes simulation workspace modes. Workspace mode selection is local React UI state in `AppShell`; it is not simulation state and does not reset, regenerate, or mutate the engine.
 
@@ -87,7 +87,7 @@ Prompt GW0 is documentation and progression architecture only and does not chang
 
 Prompt UX2 changes shared visual semantics, not workspace IA. It adds the Living Systems Atlas Semantic Token Foundation, preserves legacy CSS variable compatibility, and migrates only shared panels, buttons/icon controls, form controls, and status badges. UX2 establishes shared visual semantics. It does not perform the Research World shell transformation. UX2 does not add routes, destination navigation, persistence, discovery logic, behavioral landscapes, contextual guidance, progression state, notebooks, saved assets, runtime behavior, template behavior, or new workspace modes.
 
-Prompt GW1 adds the shared Research World destination shell. `/` remains World, `/builder` remains Workshop, `/lab` is a Lab informational foundation, and `/atlas` is an Atlas informational foundation. Lab and Atlas are reachable future-only destinations, not locked routes, and GW1 adds no persistence, discovery logic, behavioral landscapes, progression, runtime behavior, or template behavior.
+Prompt GW1 adds the shared Research World destination shell. `/` remains World, `/builder` remains Workshop, `/lab` is a Lab informational foundation, and `/atlas` begins as an Atlas informational foundation. Lab and Atlas are reachable destinations, not locked routes, and GW1 adds no persistence, discovery logic, behavioral landscapes, progression, runtime behavior, or template behavior.
 
 The GW1 rendered continuation fixed a shell-level focus defect: the skip link was the active element but could remain partially or fully offscreen during its reveal transition. The skip link now reveals immediately on focus and remains in the viewport in the Playwright shell suite.
 
@@ -96,6 +96,8 @@ Prompt GW1B audits and hardens that same destination hierarchy without changing 
 Prompt GW2 extends Observe only. Active Run Context appears before Macro Field so model configuration, operational status, current snapshot observations, and interpretation boundaries are visible near model outputs. It is a live, non-persistent surface over existing World state. It is semantic readable content, not a fake interactive Tab stop. Prompt GW2B hardens the no-snapshot labels and rendered focus/placement assertions without changing the IA. It does not create a new workspace mode, mutate simulation state, save run records, create Lab artifacts, create Atlas discoveries, add storage, or change template/runtime behavior.
 
 Prompt GW3 extends Intervene only, and Prompt GW3B audits/hardens that slice. Intervention Readiness appears above the existing intervention controls so registered template-owned perturbation controls, selected-target readiness, current active-run intervention count, and model-response boundaries are visible near actions that can perturb model state. It is live, non-persistent context over existing World state and intervention definitions. It is semantic readable content, not a fake interactive Tab stop. Current-run intervention entries are engine/snapshot state, not saved Lab records. The Intervene panel uses engine-checked copy for command paths rather than language that could imply scientific validation. It does not create a new workspace mode, mutate simulation state by itself, save intervention plans, create Lab artifacts, create Atlas discoveries, add storage, or change template/runtime behavior.
+
+Prompt GW4 extends Atlas only. `/atlas` now renders non-persistent Discovery Atlas information architecture: evidence-state legend, sampled/unsampled explanation, model-vs-world boundary, non-persistence boundary, World/Lab relationship copy, and a conceptual scaffold labeled as not run data. It does not create a new World workspace mode, mutate simulation state, ingest active runs, save evidence records, create Lab artifacts, create behavioral landscapes, add storage, add save/map actions, or change template/runtime/Builder behavior.
 
 ## Header
 

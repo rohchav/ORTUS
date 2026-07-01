@@ -2343,3 +2343,66 @@ Readiness decision:
 
 - Ready for GW4 after GW3B is committed, with strict boundaries.
 - GW4 must arrive through an explicit future prompt and must not treat GW3/GW3B as Lab persistence, saved intervention plans, Atlas discoveries, behavioral landscapes, validation/calibration, policy effectiveness, real-world causal proof, or general intervention-strategy runtime.
+
+## 2026-07-01 - Prompt GW4 Discovery Atlas Information Architecture And Non-Persistent Evidence Map Foundation
+
+Goal: add a bounded Atlas foundation on `/atlas` without saved discoveries, persistent evidence records, behavioral landscapes, sampled-region maps backed by run data, Lab records, run history, storage, progression, validation, calibration, runtime behavior, template behavior, Builder execution behavior, dependencies, assets, or fonts.
+
+Starting state:
+
+- Current commit: `270a169`.
+- Starting worktree was clean.
+- GW3B was committed.
+
+Baseline before edits:
+
+- `npm run test:ui`: initial sandbox run failed because the Playwright web server could not bind `127.0.0.1:3000` with `listen EPERM`; rerun with escalation passed, 45 passed.
+- `npm run typecheck`: passed.
+- `npm test`: passed, 62 files and 498 tests.
+- `npm run build`: passed with Next.js 15.5.19; static routes included `/`, `/_not-found`, `/atlas`, `/builder`, and `/lab`.
+- `npm run perf:simulation`: passed. Local smoke results included Flocking 100 agents at 92.96 ticks/sec, Flocking 500 agents at 13.10 ticks/sec, Forest Fire medium grid at 19.53 ticks/sec, and Predator-Prey default at 60.15 ticks/sec.
+- `git diff --check`: passed.
+- `npm run lint`: unavailable, package.json has no lint script.
+
+Implementation:
+
+- Added `src/lib/atlasFoundation.ts` as the small source model for Atlas foundation semantics.
+- Added evidence states: unsampled, sampled, unresolved, supported within model, contradicted within model, unsupported, and externally unvalidated.
+- Kept future-only as capability status, not evidence support.
+- Changed Atlas destination availability from future-only to foundation while leaving Lab future-only.
+- Replaced the old generic `/atlas` future-only surface with a bespoke non-persistent Atlas foundation route.
+- Added evidence-state legend, required model-vs-world boundary copy, non-persistence copy, World relationship copy, Lab relationship copy, and a text-only conceptual scaffold labeled as not run data.
+- Updated Lab copy to state that GW4 defines Atlas evidence semantics while persistent Lab evidence records remain unimplemented.
+- Added `docs/ui/DISCOVERY_ATLAS_INFORMATION_ARCHITECTURE.md`.
+- Updated roadmap, concept, HCI, shell, workspace IA, durable context, simulation README, README, and AGENTS references.
+
+Boundaries preserved:
+
+- No saved Discovery Atlas records, saved evidence records, persistent maps, behavioral landscapes, sampled-region maps backed by run data, Lab records, run history, save/map actions, storage, progression, runtime behavior, template behavior, Builder execution behavior, validation, calibration, or real-world discovery certification were added.
+- Atlas maps investigated model behavior. It does not certify discoveries about the real world.
+- Nothing on the Atlas route is a saved discovery, saved evidence record, or persistent map.
+
+Focused verification during implementation:
+
+- `npm test -- atlas foundation researchDestinations`: passed, 3 files and 16 tests.
+- `npm run typecheck`: passed.
+- `npx playwright test tests/ui/research-world-shell.spec.ts -g "Atlas shell contract holds at desktop"`: passed, 1 passed.
+- `npm test -- roadmap atlas foundation researchDestinations activeInterventionReadiness`: passed, 5 files and 27 tests.
+- `npm test -- atlas evidence`: passed, 1 file and 6 tests.
+- `npx playwright test tests/ui/research-world-shell.spec.ts`: passed, 30 passed.
+
+Full post-implementation verification:
+
+- `npm run test:ui`: passed, 45 passed.
+- `npm run typecheck`: passed.
+- `npm test`: passed, 63 files and 504 tests.
+- `npm run build`: passed with Next.js 15.5.19; static routes included `/`, `/_not-found`, `/atlas`, `/builder`, and `/lab`.
+- `npm run perf:simulation`: passed. Local smoke results included Flocking 100 agents at 88.01 ticks/sec, Flocking 500 agents at 13.09 ticks/sec, Forest Fire medium grid at 20.70 ticks/sec, and Predator-Prey default at 57.67 ticks/sec.
+- `git diff --check`: passed.
+- `npm run lint`: unavailable, package.json has no lint script.
+- Scope-creep search found expected hits in docs/tests/guardrails and pre-existing unrelated saved-run/scenario/runtime code. The new Atlas source and route did not introduce storage APIs, timestamps, generated ids, fake evidence scores, fake sampled-region counts, recent activity, or persistent records.
+
+Remaining limits before GW4B:
+
+- GW4 has not been audited by GW4B.
+- Actual browser zoom, screen-reader behavior, assistive-technology behavior, forced-colors behavior, complete WCAG conformance, and user comprehension remain unverified.

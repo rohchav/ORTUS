@@ -24,14 +24,15 @@ const principles = [
   "Lab artifacts must not imply calibrated, validated, or empirical truth.",
   "GW1 adds no storage, accounts, notebooks, or cross-session research state.",
   "GW2 exposes live run provenance in World. Persistent Lab records are still not implemented.",
-  "GW3 exposes live intervention readiness in World. Persistent Lab intervention records are still not implemented."
+  "GW3 exposes live intervention readiness in World. Persistent Lab intervention records are still not implemented.",
+  "GW4 defines Atlas evidence semantics. Persistent Lab evidence records are still not implemented."
 ] as const;
 
 export default function LabPage() {
   return (
     <FutureDestinationSurface
       destinationId="lab"
-      implementationCopy="Lab is a future Research World destination. Persistent experiments, notebooks, comparison sets, intervention records, and reusable research assets are not implemented in GW1, GW2, or GW3."
+      implementationCopy="Lab is a future Research World destination. Persistent experiments, notebooks, comparison sets, intervention records, evidence records, and reusable research assets are not implemented in GW1, GW2, GW3, or GW4."
       boundaryCopy="The Lab route documents destination responsibility. It does not simulate persistence."
       plannedResponsibilities={plannedResponsibilities}
       principles={principles}

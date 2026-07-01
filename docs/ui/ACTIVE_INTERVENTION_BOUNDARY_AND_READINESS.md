@@ -1,6 +1,6 @@
 # Active Intervention Boundary And Readiness
 
-Status: Prompt GW3 implementation source of truth, audited and hardened by Prompt GW3B. Prompt GW3 adds a live, non-persistent World-only intervention-readiness and interpretation-boundary layer in Intervene mode. The GW3B audit record is `ACTIVE_INTERVENTION_BOUNDARY_AND_READINESS_AUDIT.md`.
+Status: Prompt GW3 implementation source of truth, audited and hardened by Prompt GW3B, with Prompt GW4 adding a separate non-persistent Atlas foundation. Prompt GW3 adds a live, non-persistent World-only intervention-readiness and interpretation-boundary layer in Intervene mode. The GW3B audit record is `ACTIVE_INTERVENTION_BOUNDARY_AND_READINESS_AUDIT.md`.
 
 ## 1. Purpose
 
@@ -105,11 +105,11 @@ No Lab intervention records, notebooks, experiment records, reusable assets, fak
 
 ## 10. Atlas Relationship
 
-Atlas remains future-only. GW3 may state:
+Atlas now has a non-persistent GW4 foundation, but GW3 did not create Atlas records. GW3 may state:
 
 ```text
 GW3 does not create Discovery Atlas records from intervention responses.
-Atlas remains future-only.
+Atlas does not save or map intervention responses.
 ```
 
 No Discovery Atlas records, maps, evidence scores, sampled-region maps, regime detection, or map-to-Atlas behavior are implemented.
@@ -214,9 +214,9 @@ GW3B audited whether:
 - intervention and observation remain distinct;
 - no fake targets or outcomes were added;
 - non-persistence is clear;
-- Lab and Atlas remain future-only;
+- Lab remains future-only and Atlas records remain unimplemented;
 - status semantics are correct;
 - keyboard/focus/reflow behavior remains acceptable;
 - copy avoids real-world causal overclaim.
 
-Decision: ready for GW4 after GW3B is committed, with strict boundaries. GW4 must still arrive through an explicit future prompt and must not treat GW3/GW3B as Lab persistence, saved intervention plans, Atlas discoveries, behavioral landscapes, validation/calibration, policy effectiveness, real-world causal proof, or general strategy/control runtime.
+Decision: GW3/GW3B remained ready for GW4 after commit. GW4 has since added only non-persistent Atlas information architecture. GW4B must audit that Atlas foundation before GW5, and no future prompt may treat GW3/GW3B as Lab persistence, saved intervention plans, Atlas discoveries, behavioral landscapes, validation/calibration, policy effectiveness, real-world causal proof, or general strategy/control runtime.

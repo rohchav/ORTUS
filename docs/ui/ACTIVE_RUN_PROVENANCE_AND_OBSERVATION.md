@@ -1,6 +1,6 @@
 # Active Run Provenance And Observation
 
-Status: Prompt GW2 implementation source of truth, audited and hardened by Prompt GW2B, with Prompt GW3 adding and Prompt GW3B auditing a separate Intervene-mode intervention-readiness layer. GW2 adds a live, non-persistent World-only provenance and observation layer for the active run. GW2B fixes missing-snapshot observation labeling and hardens rendered focus/placement evidence. This slice does not create persistent Lab records, Discovery Atlas records, behavioral landscapes, saved experiments, notebooks, reusable assets, progression systems, runtime behavior, template behavior, Builder execution behavior, routes, storage, dependencies, or external analytics.
+Status: Prompt GW2 implementation source of truth, audited and hardened by Prompt GW2B, with Prompt GW3 adding and Prompt GW3B auditing a separate Intervene-mode intervention-readiness layer and Prompt GW4 adding a separate non-persistent Atlas foundation. GW2 adds a live, non-persistent World-only provenance and observation layer for the active run. GW2B fixes missing-snapshot observation labeling and hardens rendered focus/placement evidence. This slice does not create persistent Lab records, Discovery Atlas records, behavioral landscapes, saved experiments, notebooks, reusable assets, progression systems, runtime behavior, template behavior, Builder execution behavior, routes, storage, dependencies, or external analytics.
 
 ## 1. Core Principle
 
@@ -116,7 +116,7 @@ GW2 exposes live run provenance in World. Persistent Lab records are still not i
 Atlas copy acknowledges:
 
 ```text
-GW2 does not create Discovery Atlas records. Atlas remains future-only.
+GW2 does not create Discovery Atlas records. GW4 Atlas may define evidence semantics later, but GW2 does not save or map runs.
 ```
 
 Those statements are boundaries, not feature claims.
