@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { CapabilityGuidancePanel } from "../../components/researchWorld/CapabilityGuidancePanel";
 import { CornerFramePanel } from "../../components/ui/CornerFramePanel";
 import { StatusPill } from "../../components/ui/StatusPill";
 import {
@@ -34,6 +35,8 @@ export default function LabPage() {
         </div>
         <p>{destination.purpose}</p>
       </div>
+
+      <CapabilityGuidancePanel destinationId="lab" className="capability-guidance--route" />
 
       <div className="lab-foundation__grid">
         <CornerFramePanel title="Current Boundary" eyebrow="GW5 scope" variant="standard" className="lab-foundation__panel">

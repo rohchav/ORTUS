@@ -176,4 +176,10 @@ docs/ui/DISCOVERY_ATLAS_INFORMATION_ARCHITECTURE_AUDIT.md
 
 GW4B inspected evidence-state semantics, non-persistence clarity, sampled/unsampled honesty, model-vs-real-world boundaries, absence of fake discoveries/maps/scores, Lab/World relationships, keyboard/focus/reflow behavior, Axe results, status semantics, and scope-creep risk.
 
-GW4B changed `Sampled` from evidence / observed to evidence / unresolved because the current Atlas route has no source-backed Atlas records. The GW4B continuation completed the post-hardening rendered shell and full UI Playwright/Axe gates. GW5 remains a future prompt only; GW4B does not implement persistence, behavioral landscapes, Lab records, validation, calibration, or real-world discovery certification.
+GW4B changed `Sampled` from evidence / observed to evidence / unresolved because the current Atlas route has no source-backed Atlas records. The GW4B continuation completed the post-hardening rendered shell and full UI Playwright/Axe gates. GW5 later adds non-persistent Lab evidence-record semantics, not Lab-to-Atlas publication. GW6 later adds static capability guidance to Atlas. Neither prompt implements persistence, behavioral landscapes, Lab records, validation, calibration, or real-world discovery certification.
+
+## 17. GW6 Capability Guidance Relationship
+
+Prompt GW6 adds static capability guidance to the Atlas route from `src/lib/capabilityGuidance.ts`.
+
+That guidance describes current Atlas capability. It does not create Atlas capability. It does not create Discovery Atlas records, persistent evidence maps, sampled-region displays backed by run data, behavioral landscapes, evidence-rating surfaces, validation, calibration, storage, generated advice, or real-world discovery certification.

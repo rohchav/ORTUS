@@ -114,6 +114,73 @@ async function expectDestinationNavContract(page: Page, currentPath: string) {
   expect(linkModels.find((link) => link.label === "Atlas")?.text).not.toContain("Future");
 }
 
+async function expectCapabilityGuidance(page: Page, destination: (typeof destinations)[number]) {
+  const destinationId =
+    destination.path === "/"
+      ? "world"
+      : destination.path === "/builder"
+        ? "workshop"
+        : destination.path === "/lab"
+          ? "lab"
+          : "atlas";
+  const guidance = page.locator(`[data-capability-guidance-destination="${destinationId}"]`);
+  await expect(guidance).toHaveCount(1);
+  await expect(guidance).toBeVisible();
+  await expect(guidance).toHaveAttribute("data-capability-guidance-route", destination.path);
+  await expect(guidance.getByRole("heading", { name: "Capability Guidance" })).toHaveCount(1);
+  await expect(guidance.getByText("Guidance describes current ORTUS capabilities. It does not create saved records, validation, discoveries, or persistence.")).toBeVisible();
+  await expect(guidance.getByText("Capability guidance describes current product capability. It does not create capability.")).toBeVisible();
+  await expect(guidance.getByRole("heading", { name: "Available here" })).toBeVisible();
+  await expect(guidance.getByRole("heading", { name: "Planning-only" })).toBeVisible();
+  await expect(guidance.getByRole("heading", { name: "Not implemented" })).toBeVisible();
+  await expect(guidance.getByRole("heading", { name: "Do not assume" })).toBeVisible();
+  await expect(guidance.getByRole("heading", { name: "Related destination" })).toBeVisible();
+
+  const availableStatus = guidance.locator(".status-pill", { hasText: "Available here" }).first();
+  await expect(availableStatus).toHaveAttribute("data-status-category", "capability");
+  await expect(availableStatus).toHaveAttribute("data-state", "supported");
+  const planningStatus = guidance.locator(".status-pill", { hasText: "Planning-only" }).first();
+  await expect(planningStatus).toHaveAttribute("data-status-category", "capability");
+  await expect(planningStatus).toHaveAttribute("data-state", "planning-only");
+  const notImplementedStatus = guidance.locator(".status-pill", { hasText: "Not implemented" }).first();
+  await expect(notImplementedStatus).toHaveAttribute("data-status-category", "capability");
+  await expect(notImplementedStatus).toHaveAttribute("data-state", "future-only");
+  await expect(guidance.locator(".status-pill[data-status-category='operational']")).toHaveCount(0);
+  await expect(guidance.locator(".status-pill[data-status-category='interaction']")).toHaveCount(0);
+
+  const routeSpecificCopy =
+    destinationId === "world"
+      ? "World hosts the active simulation surface, run controls, snapshots, metrics, and template-defined command paths for the current local run."
+      : destinationId === "workshop"
+        ? "Workshop supports structural schema authoring, validation assistance, graph inspection, fit reports, and scenario planning as planning surfaces."
+        : destinationId === "lab"
+          ? "Lab exposes non-persistent lifecycle semantics, model-only evidence boundaries, and a conceptual experiment-ledger scaffold."
+          : "Atlas exposes non-persistent evidence states, sampled/unsampled interpretation, and a conceptual scaffold for investigated model behavior.";
+  const routeCopy = guidance.getByText(routeSpecificCopy);
+  await routeCopy.scrollIntoViewIfNeeded();
+  await expect(routeCopy).toBeVisible();
+
+  const tabStops = await guidance.evaluate((element) =>
+    Array.from(
+      element.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      )
+    ).filter((candidate) => {
+      const style = window.getComputedStyle(candidate);
+      return style.display !== "none" && style.visibility !== "hidden";
+    }).length
+  );
+  expect(tabStops, "capability guidance should not add route-local fake controls or static Tab stops").toBe(0);
+
+  const guidanceText = await guidance.innerText();
+  expect(guidanceText).not.toMatch(
+    /Recommended for you|Next mission|Unlocked|Progress|Complete this step|AI suggestion|Smart recommendation|Personalized/i
+  );
+  expect(guidanceText).not.toMatch(
+    /Save this run|Send to Lab|Create evidence record|Record experiment|Publish to Atlas|Create discovery|Map this run|Save to Atlas|Save discovery|evidence score|coverage percentage|confidence score/i
+  );
+}
+
 async function expectNoDocumentHorizontalOverflow(page: Page) {
   const overflow = await page.evaluate(() => {
     const tolerance = 2;
@@ -447,6 +514,7 @@ for (const destination of destinations) {
       await page.setViewportSize({ width: viewport.width, height: viewport.height });
       await openDestination(page, destination);
       await expectDestinationNavContract(page, destination.path);
+      await expectCapabilityGuidance(page, destination);
       await expectNoDocumentHorizontalOverflow(page);
 
       if (destination.path === "/") {

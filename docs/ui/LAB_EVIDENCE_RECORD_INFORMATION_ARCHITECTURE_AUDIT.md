@@ -71,10 +71,14 @@ Actual browser zoom at 125%, 150%, and 200% was not verified.
 
 Screen-reader behavior, assistive-technology behavior, forced-colors behavior, complete WCAG conformance, and user comprehension remain unverified.
 
+## GW6 Relationship
+
+GW6 adds static source-backed capability guidance on the Lab route. That panel does not change the GW5/GW5B audit result: Lab remains a non-persistent evidence-record foundation, not a saved experiment system, notebook system, run history, Lab-to-Atlas publication path, validation system, generated-advice system, or storage layer.
+
 ## Decision
 
 Source, documentation, rendered-shell, full UI, unit, typecheck, build, performance-smoke, and diff hardening gates are complete for the defects found. GW5B is ready for the requested commit gate after the final rerun checks remain passing.
 
-GW6 remains a future prompt and must not start until GW5B is committed and the user provides explicit approval.
+GW6 is now implemented as static capability guidance. GW6B remains the required next audit before further Research World expansion.
 
 No persistence, saved experiments, notebooks, run history, Lab-to-Atlas publication, behavioral landscapes, progression, runtime behavior, template behavior, Builder execution behavior, dependencies, assets, or fonts were added.

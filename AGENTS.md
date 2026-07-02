@@ -477,7 +477,7 @@
 - Preserve current validated workflows before reorganizing them further.
 - Use the existing Playwright/Axe harness for rendered destination-shell verification.
 - Do not claim screen-reader, AT, forced-colors, browser-zoom, or WCAG verification without evidence.
-- Do not start a Research World implementation slice from a prior shell prompt without the required audit; after GW5B, GW6 is the next Research World prompt only with explicit approval.
+- Do not start a Research World implementation slice from a prior shell prompt without the required audit; after GW6, GW6B is the next Research World prompt only with explicit approval.
 - Lab evidence-record semantics are non-persistent information architecture until a later audited prompt implements storage. Do not treat `LabRecordLifecycleState`, conceptual ledger scaffolds, or Lab route copy as saved evidence records, experiment histories, notebooks, saved comparisons, run history, reusable assets, or validation evidence.
 - GW5 Lab does not save active World runs, import active-run provenance, create experiment ledgers, create notebooks, create saved comparisons, publish to Atlas, create discoveries, add storage, add timestamps, generate ids, add progression, or change simulation/template/Builder runtime behavior.
 - Lab records will organize evidence about model investigations. They will not certify discoveries about the real world.
@@ -500,6 +500,13 @@
 - Atlas sampled evidence remains unresolved until a future source-backed Atlas record system exists; do not label sampled Atlas concepts as observed/current data without real provenance and a dedicated audit.
 - Do not add saved Atlas discoveries, saved evidence records, persistent maps, behavioral landscapes, sampled-region maps from fake data, discovery history, run history, Lab records, storage, export/import, or Atlas save/map actions from GW4.
 - Do not use progress, unlocks, achievements, fake discovery counts, evidence scores, regime confidence, recent activity, or sampled coverage percentages in Atlas.
+- GW6 guidance is source-backed and non-personalized.
+- Capability guidance describes capabilities; it does not create them.
+- Do not add persistent guidance, dismissed-tip state, onboarding progress, analytics, telemetry, or stored guidance preferences.
+- Do not add recommendation language based on user profiling.
+- Do not add save-to-Lab, publish-to-Atlas, create-discovery, or fake action guidance from capability guidance.
+- Do not use progression, unlocks, achievements, badges, gamified steps, missions, quests, streaks, XP, levels, ranks, or smart-recommendation language in capability guidance.
+- Preserve the World / Workshop / Lab / Atlas route shell contracts when adding or auditing guidance.
 - Future-only is capability status, not evidence support; do not use operational statuses for epistemic support.
 - Preserve the route contract: `/` is World, `/lab` is Lab, `/atlas` is Atlas, `/builder` is Workshop, and `/world` or `/workshop` aliases remain absent.
 - Complete and commit GW1 before starting GW1B.

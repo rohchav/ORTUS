@@ -2641,3 +2641,75 @@ Readiness decision:
 
 - GW5B is ready for the requested commit gate after final rerun checks remain passing.
 - GW6 remains a future prompt only with explicit user approval after GW5B is committed.
+
+## 2026-07-02 - Prompt GW6 Contextual Capability Guidance
+
+Goal: implement bounded source-backed contextual capability guidance for World, Workshop, Lab, and Atlas without creating persistence, saved records, Atlas discoveries, Lab experiments, behavioral landscapes, progression, generated advice, runtime behavior, template behavior, Builder execution behavior, validation, calibration, dependencies, assets, or fonts.
+
+Starting state:
+
+- Current commit before work: `f97371d`.
+- Starting worktree was clean.
+- GW5B was committed.
+
+Baseline before edits:
+
+- `npm run test:ui`: passed, 45 passed. The sandboxed first attempt failed because Next could not bind `127.0.0.1:3000`; the escalated rerun passed.
+- `npm run typecheck`: passed.
+- `npm test`: passed, 64 files and 512 tests.
+- `npm run build`: passed with Next.js 15.5.19.
+- `npm run perf:simulation`: passed.
+- `git diff --check`: passed.
+- `npm run lint`: unavailable, package.json has no lint script.
+
+Implementation:
+
+- Added `src/lib/capabilityGuidance.ts` with `CapabilityGuidanceSummary`, `CapabilityGuidanceItem`, `CapabilityBoundary`, `CapabilityDestinationRole`, and `CapabilityAvailability`.
+- Added `src/components/researchWorld/CapabilityGuidancePanel.tsx` as a static route-local panel.
+- Added guidance to World, Workshop, Lab, and Atlas.
+- Kept World and Workshop guidance compact so World remains canvas-dominant and Builder remains usable.
+- Made the existing Builder inspector scroll region keyboard-focusable with a visible focus style after the added Workshop guidance exposed an Axe `scrollable-region-focusable` issue.
+- Added `src/lib/capabilityGuidance.test.ts` and extended `tests/ui/research-world-shell.spec.ts`.
+- Added `docs/ui/CONTEXTUAL_CAPABILITY_GUIDANCE.md` and updated durable roadmap/context/guardrail docs.
+
+Boundary decisions:
+
+- Capability guidance describes current product capability. It does not create capability.
+- GW6 creates source-backed guidance and capability orientation. It does not create saved records, Atlas discoveries, Lab experiments, behavioral landscapes, progression, personalized coaching, or AI-generated advice.
+- The visible panel copy says: `Guidance describes current ORTUS capabilities. It does not create saved records, validation, discoveries, or persistence.`
+- Guidance has no storage, dismissal state, analytics, timestamps, random ids, generated ids, recommendation engine, generated advice, or route-local fake actions.
+
+Verification:
+
+- `npm test -- capability guidance`: passed, 1 file and 7 tests.
+- `npm run typecheck`: passed.
+- `git diff --check`: passed.
+- `npm test`: passed, 65 files and 519 tests.
+- `npm run build`: passed with Next.js 15.5.19.
+- `npm run perf:simulation`: passed. Local smoke results included Flocking 100 agents at 153.46 ticks/sec, Flocking 500 agents at 18.57 ticks/sec, Forest Fire medium grid at 28.94 ticks/sec, and Predator-Prey default at 88.53 ticks/sec.
+- `npm run lint`: unavailable, package.json has no lint script.
+- `npx playwright test tests/ui/research-world-shell.spec.ts`: passed earlier in the turn after the UI changes, 30 passed.
+- Continuation final `npx playwright test tests/ui/research-world-shell.spec.ts`: passed, 30 passed, 0 failed, 0 skipped.
+- Continuation final `npm run test:ui`: passed, 45 passed, 0 failed, 0 skipped.
+- Continuation final `npm run typecheck`: passed.
+- Continuation final `npm test`: passed, 65 files and 519 tests.
+- Continuation final `npm run build`: passed with Next.js 15.5.19.
+- Continuation final `npm run perf:simulation`: passed. Local smoke results included Flocking 100 agents at 78.43 ticks/sec, Flocking 500 agents at 10.31 ticks/sec, Forest Fire medium grid at 19.06 ticks/sec, and Predator-Prey default at 54.05 ticks/sec.
+- Continuation final `git diff --check`: passed.
+- Continuation final `npm run lint`: unavailable, package.json has no lint script.
+
+Scope search:
+
+- The required broad scope-creep search returned expected hits in docs, tests, guardrails, and pre-existing unrelated Scenario/Run Comparison/Experiment/Neural Runtime Lab/performance code.
+- GW6 production additions did not introduce storage APIs, timestamps, random ids, UUIDs, fingerprints, fake save/send/publish/create actions, generated advice behavior, persistent guidance state, Lab persistence, Atlas persistence, runtime behavior, template behavior, or Builder execution behavior.
+
+Remaining limits:
+
+- GW6B has not started.
+- The final focused shell and full UI Playwright/Axe reruns passed after documentation updates.
+- Actual browser zoom, screen-reader behavior, assistive-technology behavior, forced-colors behavior, complete WCAG conformance, and user-comprehension evidence remain unverified.
+
+Readiness decision:
+
+- GW6 is ready to commit based on final focused rendered shell verification, final full UI rendered verification, source, unit, typecheck, build, performance, diff, and scope-creep checks.
+- GW6B is the next Research World prompt only with explicit user approval.

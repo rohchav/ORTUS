@@ -172,7 +172,7 @@ GW1 adds no XP, levels, ranks, achievements, badges, unlocks, progress bars, fir
 
 GW1 adds `tests/ui/research-world-shell.spec.ts` to cover all four routes, destination navigation, `aria-current`, route preservation, Lab/Atlas boundaries, viewports, keyboard focus, reduced motion, and Axe scans.
 
-GW1B hardens that suite with route-alias, unique-landmark, clean-navigation, single-current-destination, no-disabled-future-link, skip-link focus, reduced-motion focus, and stricter Lab/Atlas honesty checks. It also hardens destination-registry tests for query/hash normalization and `/world`/`/workshop` alias rejection. GW3 extends the same rendered shell suite to cover the World Intervene readiness layer and absence of that layer on Lab/Atlas. GW3B hardens the rendered Intervene assertions for control labels, current-run entry copy, and disabled clear-entry state. GW4 extends Atlas rendered assertions for the evidence-state legend, non-persistence copy, model-vs-world boundary, no fake save/map actions, and Atlas foundation status. GW4B hardens sampled-state assertions so sampled evidence remains unresolved until source-backed Atlas records exist.
+GW1B hardens that suite with route-alias, unique-landmark, clean-navigation, single-current-destination, no-disabled-future-link, skip-link focus, reduced-motion focus, and stricter Lab/Atlas honesty checks. It also hardens destination-registry tests for query/hash normalization and `/world`/`/workshop` alias rejection. GW3 extends the same rendered shell suite to cover the World Intervene readiness layer and absence of that layer on Lab/Atlas. GW3B hardens the rendered Intervene assertions for control labels, current-run entry copy, and disabled clear-entry state. GW4 extends Atlas rendered assertions for the evidence-state legend, non-persistence copy, model-vs-world boundary, no fake save/map actions, and Atlas foundation status. GW4B hardens sampled-state assertions so sampled evidence remains unresolved until source-backed Atlas records exist. GW6 extends rendered route assertions for static source-backed capability guidance on World, Workshop, Lab, and Atlas without adding fake actions or static guidance Tab stops.
 
 Focused rerun passed: `npx playwright test tests/ui/research-world-shell.spec.ts -g "World shell contract holds at desktop 1440x900"`.
 
@@ -188,7 +188,7 @@ Deferred to future prompts:
 - persistent intervention records;
 - saved Discovery Atlas behavior;
 - behavioral landscapes;
-- contextual capability guidance;
+- GW6B audit of contextual capability guidance;
 - model composition frontiers;
 - Grand Systems Challenges;
 - actual browser zoom and assistive-technology audits.
@@ -201,4 +201,4 @@ Actual browser zoom at 125%, 150%, and 200% was not verified. Screen-reader beha
 
 ## 21. Non-Goals And Guardrails
 
-GW1-GW5 destination work must not modify simulation runtime, template runtime, Builder execution, schema execution, model-schema runtime, graph execution, persistence, storage, dependencies, assets, font configuration, progression, saved Lab record logic, saved Discovery Atlas logic, behavioral landscapes, fake research data, fake intervention outcomes, fake counts, or fake user activity.
+GW1-GW6 destination work must not modify simulation runtime, template runtime, Builder execution, schema execution, model-schema runtime, graph execution, persistence, storage, dependencies, assets, font configuration, progression, saved Lab record logic, saved Discovery Atlas logic, behavioral landscapes, fake research data, fake intervention outcomes, fake counts, generated advice, or fake user activity.

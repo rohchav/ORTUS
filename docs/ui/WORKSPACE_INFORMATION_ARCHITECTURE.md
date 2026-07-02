@@ -199,6 +199,7 @@ This is not a formal WCAG conformance claim.
 - Graph View is mounted only while active, preventing hidden graph layout/filter work; entering or leaving it does not mutate the loaded workspace or schema draft.
 - Hidden Builder panels have no simulation tick subscriptions or engine work.
 - Metric Trace now states near the chart that trace values are bounded model-output history over simulated ticks, not empirical measurements, calibrated probabilities, or validation evidence.
+- Prompt GW6 capability guidance is static route-local UI orientation from `src/lib/capabilityGuidance.ts`. It does not subscribe to simulation ticks, mutate active simulation state, execute Builder structures, persist guidance state, create Lab records, create Atlas records, or generate advice.
 
 ## Unresolved Limitations
 

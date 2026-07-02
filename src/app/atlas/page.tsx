@@ -8,6 +8,7 @@ import {
   atlasMapRegionStates
 } from "../../lib/atlasFoundation";
 import { getResearchDestinationById } from "../../lib/researchDestinations";
+import { CapabilityGuidancePanel } from "../../components/researchWorld/CapabilityGuidancePanel";
 import { CornerFramePanel } from "../../components/ui/CornerFramePanel";
 import { StatusPill } from "../../components/ui/StatusPill";
 
@@ -35,6 +36,8 @@ export default function AtlasPage() {
         </div>
         <p>{destination.purpose}</p>
       </div>
+
+      <CapabilityGuidancePanel destinationId="atlas" className="capability-guidance--route" />
 
       <div className="atlas-foundation__grid">
         <CornerFramePanel title="Current Boundary" eyebrow="GW4 scope" variant="standard" className="atlas-foundation__panel">

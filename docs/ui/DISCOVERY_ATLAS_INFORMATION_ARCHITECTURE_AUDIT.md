@@ -209,3 +209,9 @@ GW4B is still automated rendered smoke plus source audit. It does not prove scre
 Decision: ready for GW5 after GW4B is committed, provided GW5 arrives only through an explicit future prompt and does not treat the GW4/GW4B Atlas foundation as persistence, behavioral landscapes, validation, real-world discovery, or sampled run-backed evidence.
 
 This readiness is a process/readiness decision for the next prompt, not scientific validation of Atlas evidence.
+
+## 30. GW6 Capability Guidance Relationship
+
+GW6 later adds static source-backed capability guidance on Atlas. That panel does not change the GW4/GW4B audit result: Atlas remains a non-persistent evidence-orientation foundation, not a saved Discovery Atlas, persistent evidence map, behavioral landscape, source-backed sampled-region display, validation system, generated-advice system, or storage layer.
+
+GW6B remains the required audit before further Research World expansion.

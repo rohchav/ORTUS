@@ -114,3 +114,9 @@ Axe passing is rendered smoke evidence only, not screen-reader readiness, assist
 GW5 adds unit contracts for `src/lib/labFoundation.ts` and extends `tests/ui/research-world-shell.spec.ts` for rendered Lab foundation semantics.
 
 Required checks include typecheck, unit tests, rendered UI tests, production build, performance smoke, `git diff --check`, lint availability reporting, and a scope-creep search for persistence, fake records, fake scores, progression, timestamps, random ids, and Lab/Atlas publication actions.
+
+## 13. GW6 Capability Guidance Relationship
+
+Prompt GW6 adds static capability guidance to the Lab route from `src/lib/capabilityGuidance.ts`.
+
+That guidance describes current Lab capability. It does not create Lab capability. It does not create persistent evidence records, experiment ledgers, notebooks, saved comparisons, run history, Lab-to-Atlas publication, validation, calibration, storage, generated advice, or real-world discovery certification.

@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { validateVisualBuilderWorkspaceDefinition, type VisualBuilderWorkspaceDefinition } from "../../simulation/visualBuilderWorkspace";
+import { CapabilityGuidancePanel } from "../researchWorld/CapabilityGuidancePanel";
 import { BuilderHeader } from "./BuilderHeader";
 import { BuilderInspector } from "./BuilderInspector";
 import { BuilderModeTabs, type BuilderModeId } from "./BuilderModeTabs";
@@ -89,6 +90,7 @@ export function BuilderShell({ initialWorkspace }: BuilderShellProps) {
         onToggleWarnings={() => setShowWarnings((value) => !value)}
       />
       <BuilderModeTabs activeMode={activeMode} onModeChange={setActiveMode} />
+      <CapabilityGuidancePanel destinationId="workshop" className="capability-guidance--workshop" maxItemsPerGroup={1} />
       <section
         id="builder-mode-panel-workspace"
         className="builder-shell__body"
@@ -116,7 +118,7 @@ export function BuilderShell({ initialWorkspace }: BuilderShellProps) {
           onResetViewport={() => setViewport({ x: 0, y: 0, zoom: 1 })}
           onSelect={setSelection}
         />
-        <aside className="builder-side" aria-label="Builder inspector and validation">
+        <aside className="builder-side" aria-label="Builder inspector and validation" tabIndex={0}>
           <BuilderInspector
             viewModel={viewModel}
             selection={selection}
