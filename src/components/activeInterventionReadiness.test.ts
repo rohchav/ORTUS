@@ -200,15 +200,19 @@ describe("active intervention readiness", () => {
     expect(panelSource).not.toMatch(/intervention-readiness[^>]+role="button"/);
   });
 
-  it("keeps Lab future-only and Atlas non-persistent rather than creating records", () => {
+  it("keeps Lab and Atlas foundations non-persistent rather than creating records", () => {
     const labSource = readFileSync(join(repoRoot, "src", "app", "lab", "page.tsx"), "utf8");
+    const labFoundationSource = readFileSync(join(repoRoot, "src", "lib", "labFoundation.ts"), "utf8");
     const atlasSource = readFileSync(join(repoRoot, "src", "app", "atlas", "page.tsx"), "utf8");
     const atlasFoundationSource = readFileSync(join(repoRoot, "src", "lib", "atlasFoundation.ts"), "utf8");
 
-    expect(labSource).toContain("Persistent Lab intervention records are still not implemented.");
+    expect(labFoundationSource).toContain("Persistent evidence records, experiment ledgers, notebooks, saved comparisons, and run history are not implemented yet.");
+    expect(labFoundationSource).toContain("GW5 Lab does not save those runs or convert them into evidence records.");
     expect(atlasSource).toContain("atlasFoundationSummary.nonPersistenceBoundary");
     expect(atlasFoundationSource).toContain("Nothing on this Atlas route is a saved discovery, saved evidence record, or persistent map.");
     expect(atlasFoundationSource).toContain("Atlas will organize evidence about model behavior. It will not certify discoveries about the real world.");
-    expect(labSource + atlasSource + atlasFoundationSource).not.toMatch(/send to Lab|map to Atlas|recent activity|evidence score|saved intervention/i);
+    expect(labSource + labFoundationSource + atlasSource + atlasFoundationSource).not.toMatch(
+      /send to Lab|map to Atlas|recent activity|evidence score|saved intervention/i
+    );
   });
 });

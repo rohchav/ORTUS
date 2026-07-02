@@ -99,13 +99,13 @@ describe("Atlas foundation semantics", () => {
     expect(atlasSources).not.toMatch(/export\s+interface\s+.*Record|type\s+.*Record\s*=/);
   });
 
-  it("keeps route contracts unchanged while distinguishing Lab future-only from Atlas foundation", () => {
+  it("keeps route contracts unchanged while distinguishing Lab and Atlas as separate non-persistent foundations", () => {
     const destinationSource = source("src/lib/researchDestinations.ts");
     expect(destinationSource).toContain('id: "atlas"');
     expect(destinationSource).toContain('availability: "foundation"');
     expect(destinationSource).toContain('state: "planning-only"');
     expect(destinationSource).toContain('id: "lab"');
-    expect(destinationSource).toContain('availability: "future-only"');
+    expect(destinationSource).toContain("GW5 adds non-persistent Lab information architecture");
     expect(destinationSource).not.toContain('route: "/world"');
     expect(destinationSource).not.toContain('route: "/workshop"');
   });

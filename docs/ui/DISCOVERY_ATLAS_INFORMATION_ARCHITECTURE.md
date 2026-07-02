@@ -1,6 +1,6 @@
 # Discovery Atlas Information Architecture
 
-Status: Prompt GW4 implementation source of truth, audited and hardened by Prompt GW4B. GW4 creates a non-persistent Atlas information architecture and evidence-state vocabulary on `/atlas`. GW4B keeps sampled evidence unresolved until source-backed Atlas records exist. It does not create saved discoveries, saved evidence records, behavioral landscapes, sampled-region maps backed by run data, Lab records, run history, storage, progression, validation, calibration, real-world discovery certification, runtime behavior, template behavior, Builder execution behavior, dependencies, assets, or fonts.
+Status: Prompt GW4 implementation source of truth, audited and hardened by Prompt GW4B, updated after Prompt GW5. GW4 creates a non-persistent Atlas information architecture and evidence-state vocabulary on `/atlas`. GW4B keeps sampled evidence unresolved until source-backed Atlas records exist. GW5 adds non-persistent Lab evidence-record information architecture, not Lab-to-Atlas publication. This Atlas foundation does not create saved discoveries, saved evidence records, behavioral landscapes, sampled-region maps backed by run data, persistent Lab records, run history, storage, progression, validation, calibration, real-world discovery certification, runtime behavior, template behavior, Builder execution behavior, dependencies, assets, or fonts.
 
 ## 1. Purpose
 
@@ -85,9 +85,9 @@ No `Map this run`, `Save to Atlas`, `Create discovery`, or `Record evidence` act
 
 ## 9. Relationship To Lab
 
-Lab remains future-only.
+Lab is a non-persistent GW5 foundation.
 
-GW4 defines Atlas evidence semantics. Persistent Lab evidence records are still not implemented.
+GW5 defines Lab evidence-record lifecycle semantics. Persistent Lab evidence records and Lab-to-Atlas publication are still not implemented.
 
 GW4 does not create Lab records, experiment records, notebooks, saved interventions, reusable research assets, or run history.
 

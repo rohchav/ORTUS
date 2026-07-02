@@ -75,9 +75,9 @@ Atlas states that it does not save those runs or convert them into discoveries. 
 
 ## 12. Lab Relationship Findings
 
-Lab remains future-only. The Lab route says persistent experiments, notebooks, comparison sets, intervention records, evidence records, and reusable research assets are not implemented.
+Lab is now a non-persistent GW5 foundation. The Lab route says persistent evidence records, experiment ledgers, notebooks, saved comparisons, and run history are not implemented.
 
-GW4/GW4B do not create Lab evidence records, saved experiments, notebook entries, comparison sets, reusable evidence assets, activity feeds, recent records, or Lab send/open actions.
+GW4/GW4B do not create Lab evidence records, saved experiments, notebook entries, comparison sets, reusable evidence assets, activity feeds, recent records, or Lab send/open actions. GW5 adds Lab record semantics only; it does not publish Lab records to Atlas.
 
 ## 13. Route Contract Findings
 

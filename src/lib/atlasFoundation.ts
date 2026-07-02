@@ -190,8 +190,9 @@ export const atlasBoundarySummaries = [
     id: "lab-relationship",
     title: "Relationship To Lab",
     category: "capability",
-    state: "future-only",
-    summary: "GW4 defines Atlas evidence semantics. Persistent Lab evidence records are still not implemented."
+    state: "planning-only",
+    summary:
+      "GW5 Lab defines non-persistent evidence-record semantics. Persistent Lab evidence records and Lab-to-Atlas publication are still not implemented."
   }
 ] as const satisfies readonly AtlasBoundarySummary[];
 

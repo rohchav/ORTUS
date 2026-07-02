@@ -1,7 +1,7 @@
 # ORTUS Workspace Information Architecture
 
 Date: 2026-06-29
-Prompt: UI-REMEDIATION-1, audited and hardened by Prompt 34B, extended by Prompt 35, audited by Prompt 35B, extended by Prompt 36, audited by Prompt 36B, extended by Prompt 37, audited by Prompt 37B, extended by Prompt 38, audited by Prompt 38B, extended by Prompt 39, audited by Prompt 39B, extended by Prompt NUX1, audited by Prompt NUX1B, extended by Prompt N2, audited by Prompt N2B, documented by Prompt MR0, documented by Prompt F0, documented by Prompt P0, documented by Prompt UX0, audited by Prompt UX1, documented by Prompt GW0, visually founded by Prompt UX2, rendered-audited by Prompt UX2B, structurally extended by Prompt GW1, audited/hardened by Prompt GW1B, extended by Prompt GW2, audited/hardened by Prompt GW2B, extended by Prompt GW3, audited/hardened by Prompt GW3B, extended by Prompt GW4, and audited/hardened by Prompt GW4B
+Prompt: UI-REMEDIATION-1, audited and hardened by Prompt 34B, extended by Prompt 35, audited by Prompt 35B, extended by Prompt 36, audited by Prompt 36B, extended by Prompt 37, audited by Prompt 37B, extended by Prompt 38, audited by Prompt 38B, extended by Prompt 39, audited by Prompt 39B, extended by Prompt NUX1, audited by Prompt NUX1B, extended by Prompt N2, audited by Prompt N2B, documented by Prompt MR0, documented by Prompt F0, documented by Prompt P0, documented by Prompt UX0, audited by Prompt UX1, documented by Prompt GW0, visually founded by Prompt UX2, rendered-audited by Prompt UX2B, structurally extended by Prompt GW1, audited/hardened by Prompt GW1B, extended by Prompt GW2, audited/hardened by Prompt GW2B, extended by Prompt GW3, audited/hardened by Prompt GW3B, extended by Prompt GW4, audited/hardened by Prompt GW4B, and extended by Prompt GW5
 Status: implemented, source-audited, and rendered-smoke-tested by the GW1/GW1B Playwright shell suite; broader mobile-readiness, actual browser-zoom, screen-reader, assistive-technology, forced-colors, and WCAG claims remain unverified
 
 ## Problem
@@ -33,7 +33,7 @@ GW1 route contract:
 /builder  -> Workshop
 ```
 
-Lab is a reachable future-only informational destination, not a locked destination. Atlas is a reachable non-persistent GW4 foundation. They do not contain persistent experiments, notebooks, saved Discovery Atlas records, behavioral landscapes, progression, fake counts, fake maps, or fake user activity.
+Lab is a reachable non-persistent GW5 foundation, not a saved evidence-record system. Atlas is a reachable non-persistent GW4 foundation. They do not contain persistent experiments, notebooks, saved Discovery Atlas records, behavioral landscapes, progression, fake counts, fake maps, fake records, or fake user activity.
 
 The World Stage remains mounted while the user changes simulation workspace modes. Workspace mode selection is local React UI state in `AppShell`; it is not simulation state and does not reset, regenerate, or mutate the engine.
 
@@ -98,6 +98,8 @@ Prompt GW2 extends Observe only. Active Run Context appears before Macro Field s
 Prompt GW3 extends Intervene only, and Prompt GW3B audits/hardens that slice. Intervention Readiness appears above the existing intervention controls so registered template-owned perturbation controls, selected-target readiness, current active-run intervention count, and model-response boundaries are visible near actions that can perturb model state. It is live, non-persistent context over existing World state and intervention definitions. It is semantic readable content, not a fake interactive Tab stop. Current-run intervention entries are engine/snapshot state, not saved Lab records. The Intervene panel uses engine-checked copy for command paths rather than language that could imply scientific validation. It does not create a new workspace mode, mutate simulation state by itself, save intervention plans, create Lab artifacts, create Atlas discoveries, add storage, or change template/runtime behavior.
 
 Prompt GW4 extends Atlas only. `/atlas` now renders non-persistent Discovery Atlas information architecture: evidence-state legend, sampled/unsampled explanation, model-vs-world boundary, non-persistence boundary, World/Lab relationship copy, and a conceptual scaffold labeled as not run data. Prompt GW4B audits and hardens that layer by keeping sampled evidence unresolved until source-backed Atlas records exist. It does not create a new World workspace mode, mutate simulation state, ingest active runs, save evidence records, create Lab artifacts, create behavioral landscapes, add storage, add save/map actions, or change template/runtime/Builder behavior.
+
+Prompt GW5 extends Lab only. `/lab` now renders non-persistent Lab evidence-record information architecture: lifecycle legend, model-only and externally unvalidated interpretation, non-persistence boundary, World/Atlas relationship copy, and a conceptual experiment-ledger scaffold labeled as not saved Lab data. It does not create a new World workspace mode, mutate simulation state, ingest active runs, save evidence records, create experiment ledgers, create notebooks, create saved comparisons, create run history, publish to Atlas, add storage, add save/send/publish actions, or change template/runtime/Builder behavior.
 
 ## Header
 

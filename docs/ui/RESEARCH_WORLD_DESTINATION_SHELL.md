@@ -1,6 +1,6 @@
 # ORTUS Research World Destination Shell
 
-Status: Prompt GW1 implementation source of truth, audited and hardened by Prompt GW1B, updated after Prompt GW4B. GW1 introduces a persistent World / Lab / Atlas / Workshop destination shell across routes. GW1B hardens the shell evidence without expanding product behavior. GW2 adds live active-run provenance inside World only. GW3 adds live intervention readiness inside World only, GW3B audits/hardens that readiness layer, GW4 adds non-persistent Atlas information architecture, and GW4B audits/hardens that Atlas foundation. This destination shell does not implement persistent research data, saved intervention plans, Lab intervention records, saved Discovery Atlas records, behavioral landscapes, progression systems, runtime behavior, template behavior, Builder execution behavior, dependencies, assets, fonts, or storage.
+Status: Prompt GW1 implementation source of truth, audited and hardened by Prompt GW1B, updated after Prompt GW5. GW1 introduces a persistent World / Lab / Atlas / Workshop destination shell across routes. GW1B hardens the shell evidence without expanding product behavior. GW2 adds live active-run provenance inside World only. GW3 adds live intervention readiness inside World only, GW3B audits/hardens that readiness layer, GW4 adds non-persistent Atlas information architecture, GW4B audits/hardens that Atlas foundation, and GW5 adds non-persistent Lab evidence-record information architecture. This destination shell does not implement persistent research data, saved intervention plans, persistent Lab evidence records, saved Discovery Atlas records, behavioral landscapes, progression systems, runtime behavior, template behavior, Builder execution behavior, dependencies, assets, fonts, or storage.
 
 ## 1. Purpose And Scope
 
@@ -31,7 +31,7 @@ Destination order:
 3. Atlas
 4. Workshop
 
-World and Workshop are available destinations. Lab is a future-only informational foundation. Atlas is a non-persistent foundation route after GW4. Future-only destination does not mean locked destination.
+World and Workshop are available destinations. Lab is a non-persistent foundation route after GW5. Atlas is a non-persistent foundation route after GW4. Future-only capability status does not mean locked destination.
 
 ## 4. Route Contract
 
@@ -89,21 +89,22 @@ GW3 adds `Intervention Readiness` in the World Intervene rail. GW3B audits and h
 
 Workshop preserves Builder modes, Author Schema, Graph View, validation and repair suggestions, fit reports, scenario planning, status badges, and current local Builder state. It does not add execution, model composition, persistent assets, or runtime activation.
 
-## 10. Lab Informational Foundation
+## 10. Lab Non-Persistent Foundation
 
-`/lab` is an honest future-only route. It documents Lab responsibility and does not simulate persistence.
+`/lab` is a non-persistent GW5 foundation route. It documents future Lab evidence-record responsibility and does not simulate persistence.
 
 Required boundary:
 
 ```text
-Lab is a future Research World destination. Persistent experiments, notebooks, comparison sets, intervention records, and reusable research assets are not implemented in GW1, GW2, or GW3.
-The Lab route documents destination responsibility. It does not simulate persistence.
-GW2 exposes live run provenance in World. Persistent Lab records are still not implemented.
-GW3 exposes live intervention readiness in World. Persistent Lab intervention records are still not implemented.
-GW4 defines Atlas evidence semantics. Persistent Lab evidence records are still not implemented.
+Lab is a non-persistent foundation in GW5.
+Persistent evidence records, experiment ledgers, notebooks, saved comparisons, and run history are not implemented yet.
+Lab records will organize evidence about model investigations. They will not certify discoveries about the real world.
+Nothing on this Lab route is a saved experiment, saved evidence record, or persistent run history.
+World currently exposes live provenance, observation, and intervention readiness. GW5 Lab does not save those runs or convert them into evidence records.
+Atlas currently defines non-persistent evidence-state semantics. GW5 Lab does not publish records to Atlas or create discoveries.
 ```
 
-The page lists planned artifact categories only as future responsibilities. It renders no fake saved experiments, fake notebooks, fake counts, fake timestamps, fake recent activity, fake charts, fake storage, or disabled controls.
+The page renders evidence-record lifecycle semantics and a conceptual scaffold labeled `Conceptual scaffold - not saved Lab data.` It renders no fake saved experiments, fake evidence records, fake notebooks, fake counts, fake timestamps, fake recent activity, fake charts, fake storage, save/send/publish actions, or disabled controls.
 
 ## 11. Atlas Non-Persistent Foundation
 
@@ -122,11 +123,11 @@ The page renders a compact evidence-state legend and a text-only conceptual scaf
 
 ## 12. Status Semantics
 
-Lab uses UX2 future-only capability status:
+Lab uses capability / planning-only status for the GW5 foundation route. Persistent evidence records, experiment ledgers, notebooks, saved comparisons, and run history remain capability / future-only when referenced. Evidence-record lifecycle states use evidence statuses such as unresolved and unverified. Future-only is not evidence support.
 
 ```text
 category: capability
-state: future-only
+state: planning-only
 ```
 
 Atlas uses capability / planning-only status for the GW4 foundation route. Atlas records, sampled maps, and behavioral landscapes remain capability / future-only when referenced. Atlas evidence states use evidence category statuses such as unresolved, supported, contradicted, unsupported, and unverified. Future-only is not evidence support. GW4B keeps sampled evidence unresolved because the current Atlas route has no source-backed run provenance.
@@ -200,4 +201,4 @@ Actual browser zoom at 125%, 150%, and 200% was not verified. Screen-reader beha
 
 ## 21. Non-Goals And Guardrails
 
-GW1-GW4B destination work must not modify simulation runtime, template runtime, Builder execution, schema execution, model-schema runtime, graph execution, persistence, storage, dependencies, assets, font configuration, progression, saved Discovery Atlas logic, behavioral landscapes, fake research data, fake intervention outcomes, fake counts, or fake user activity.
+GW1-GW5 destination work must not modify simulation runtime, template runtime, Builder execution, schema execution, model-schema runtime, graph execution, persistence, storage, dependencies, assets, font configuration, progression, saved Lab record logic, saved Discovery Atlas logic, behavioral landscapes, fake research data, fake intervention outcomes, fake counts, or fake user activity.

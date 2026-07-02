@@ -112,13 +112,15 @@ Prompt GW1 implements the route contract:
 /builder  -> Workshop
 ```
 
-In GW1, persistent shell means structurally present across routes, not persistent user data. Lab and Atlas are reachable future-only destinations, not locked destinations. GW1 does not add saved experiments, notebooks, reusable asset storage, Discovery Atlas logic, behavioral landscapes, progression, runtime behavior, template behavior, Builder execution behavior, dependencies, assets, fonts, `/world`, or `/workshop`.
+In GW1, persistent shell means structurally present across routes, not persistent user data. Lab and Atlas are reachable destinations, not locked destinations. GW1 does not add saved experiments, notebooks, reusable asset storage, Discovery Atlas logic, behavioral landscapes, progression, runtime behavior, template behavior, Builder execution behavior, dependencies, assets, fonts, `/world`, or `/workshop`.
 
 Prompt GW2 adds live active-run context inside World Observe. It makes the current model configuration and observed model state easier to inspect, but it deliberately stops before the future Lab/Atlas accumulation loop. GW2 does not save run records, document discoveries, classify behavioral landscapes, create notebooks, create reusable assets, or turn model output into empirical evidence.
 
 Prompt GW3 adds live active-intervention readiness inside World Intervene. Prompt GW3B audits and hardens that layer. It makes registered perturbation controls, target readiness, current-run intervention entries, and response boundaries easier to inspect, but it deliberately stops before saved intervention plans, persistent Lab records, Discovery Atlas entries, behavioral landscapes, and real-world causal claims.
 
 Prompt GW4 adds non-persistent Atlas information architecture on `/atlas`. It defines evidence-state vocabulary, sampled/unsampled interpretation, a conceptual scaffold labeled as not run data, model-vs-world boundaries, and World/Lab relationship copy. It deliberately stops before saved Discovery Atlas records, persistent evidence maps, behavioral landscapes, sampled-region maps backed by run data, Lab records, run history, save/map actions, storage, progression, validation, calibration, or real-world discovery certification.
+
+Prompt GW5 adds non-persistent Lab evidence-record information architecture on `/lab`. It defines record lifecycle vocabulary, model-only and externally unvalidated evidence interpretation, a conceptual experiment-ledger scaffold labeled as not saved Lab data, model-vs-world boundaries, and World/Atlas relationship copy. It deliberately stops before persistent evidence records, experiment ledgers, notebooks, saved comparisons, run history, Lab-to-Atlas publication, save/send/publish actions, storage, progression, validation, calibration, or real-world discovery certification.
 
 ## 5. Progression Without XP
 
@@ -376,7 +378,7 @@ The required sequence is:
 GW0 -> UX2 -> GW1 -> GW1B -> GW2 -> GW2B -> GW3 -> GW3B -> GW4 -> GW4B -> GW5 -> GW5B -> GW6 -> GW6B
 ```
 
-UX2, GW1, GW1B, GW2, GW2B, GW3, GW3B, GW4, and GW4B are complete. GW5-GW6 remain future prompts that must not start without explicit direction.
+UX2, GW1, GW1B, GW2, GW2B, GW3, GW3B, GW4, GW4B, and GW5 are complete. GW5B-GW6 remain future prompts that must not start without explicit direction.
 
 ## 22. GW Roadmap Branch
 
@@ -420,13 +422,13 @@ Implemented non-persistent Atlas information architecture and evidence-state sem
 
 Completed audit and hardening of GW4 evidence-state semantics, non-persistence clarity, sampled/unsampled honesty, model-vs-real-world boundaries, absence of fake discoveries/maps/scores, Lab/World relationships, keyboard/focus/reflow behavior, Axe results, status semantics, and scope-creep risk. GW4B keeps sampled evidence unresolved until source-backed Atlas records exist and does not add saved Atlas records, persistent evidence maps, behavioral landscapes, Lab records, storage, progression, runtime behavior, template behavior, Builder execution, dependencies, assets, or fonts.
 
-### GW5: Behavioral Landscape Exploration
+### GW5: Lab Evidence Record Information Architecture
 
-Future sampled/unsampled map of investigated model behavior. It must preserve unknown regions and avoid false interpolation.
+Completed non-persistent Lab evidence-record lifecycle semantics and conceptual experiment-ledger scaffold. It does not implement persistent evidence records, experiment ledgers, notebooks, saved comparisons, run history, Lab-to-Atlas publication, storage, progression, runtime behavior, template behavior, Builder execution, dependencies, assets, or fonts.
 
-### GW5B: Behavioral Landscape Exploration Audit
+### GW5B: Lab Evidence Record Information Architecture Audit
 
-Audit sampled/unsampled distinctions, visual overclaim risk, accessibility alternatives, and evidence boundaries.
+Future audit of GW5 record semantics, non-persistence clarity, fake-record exclusions, status semantics, accessibility, viewport behavior, World/Atlas relationship boundaries, storage absence, and validation-overclaim risk.
 
 ### GW6: Contextual Capability Guidance
 

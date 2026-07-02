@@ -94,7 +94,7 @@ ORTUS already had bounded active-run/snapshot intervention history before GW3. G
 
 ## 9. Lab Relationship
 
-Lab remains future-only. GW3 may state:
+At GW3 time, Lab was future-only. After GW5, Lab is a non-persistent evidence-record foundation, but GW3 current-run intervention entries still are not persistent Lab records. GW3 may state:
 
 ```text
 GW3 exposes live intervention readiness in World.
@@ -214,9 +214,9 @@ GW3B audited whether:
 - intervention and observation remain distinct;
 - no fake targets or outcomes were added;
 - non-persistence is clear;
-- Lab remains future-only and Atlas records remain unimplemented;
+- Lab persistence, Lab intervention records, and Atlas records remain unimplemented;
 - status semantics are correct;
 - keyboard/focus/reflow behavior remains acceptable;
 - copy avoids real-world causal overclaim.
 
-Decision: GW3/GW3B remained ready for GW4 after commit. GW4 has since added only non-persistent Atlas information architecture. GW4B must audit that Atlas foundation before GW5, and no future prompt may treat GW3/GW3B as Lab persistence, saved intervention plans, Atlas discoveries, behavioral landscapes, validation/calibration, policy effectiveness, real-world causal proof, or general strategy/control runtime.
+Decision: GW3/GW3B remained ready for GW4 after commit. GW4 has since added only non-persistent Atlas information architecture, GW4B audited that foundation, and GW5 has since added only non-persistent Lab evidence-record information architecture. No future prompt may treat GW3/GW3B as Lab persistence, saved intervention plans, Atlas discoveries, behavioral landscapes, validation/calibration, policy effectiveness, real-world causal proof, or general strategy/control runtime.

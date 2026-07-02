@@ -631,8 +631,8 @@ GW3: Active Intervention Boundary and Perturbation Readiness
 GW3B: Active Intervention Boundary Audit and Hardening
 GW4: Discovery Atlas
 GW4B: Discovery Atlas Audit
-GW5: Behavioral Landscape Exploration
-GW5B: Behavioral Landscape Exploration Audit
+GW5: Lab Evidence Record Information Architecture
+GW5B: Lab Evidence Record Information Architecture Audit
 GW6: Contextual Capability Guidance
 GW6B: Contextual Capability Guidance Audit
 ```

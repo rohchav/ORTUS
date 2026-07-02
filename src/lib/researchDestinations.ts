@@ -19,13 +19,6 @@ export interface ResearchDestinationDefinition {
   status?: ResearchDestinationStatus;
 }
 
-const futureOnlyStatus = (description: string): ResearchDestinationStatus => ({
-  label: "Future-only",
-  category: "capability",
-  state: "future-only",
-  description
-});
-
 export const researchDestinations: readonly ResearchDestinationDefinition[] = Object.freeze([
   {
     id: "world",
@@ -39,10 +32,15 @@ export const researchDestinations: readonly ResearchDestinationDefinition[] = Ob
     id: "lab",
     label: "Lab",
     route: "/lab",
-    purpose: "Organize experiments, evidence, and reusable research assets.",
-    availability: "future-only",
+    purpose: "Structure future evidence records and experiment ledgers without saving Lab data in GW5.",
+    availability: "foundation",
     navigationOrder: 2,
-    status: futureOnlyStatus("Lab is an informational foundation in GW1; persistent research data is not implemented.")
+    status: {
+      label: "Foundation",
+      category: "capability",
+      state: "planning-only",
+      description: "GW5 adds non-persistent Lab information architecture; persistent evidence records are not implemented."
+    }
   },
   {
     id: "atlas",

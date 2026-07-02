@@ -38,13 +38,13 @@ describe("Research World destination registry", () => {
     expect(existsSync(join(repoRoot, "src", "app", "workshop"))).toBe(false);
   });
 
-  it("distinguishes available routes from future-only informational destinations", () => {
+  it("distinguishes available routes from non-persistent foundation destinations", () => {
     const byId = Object.fromEntries(researchDestinations.map((destination) => [destination.id, destination]));
     expect(byId.world?.availability).toBe("available");
     expect(byId.workshop?.availability).toBe("available");
     expect(byId.lab).toMatchObject({
-      availability: "future-only",
-      status: { category: "capability", state: "future-only" }
+      availability: "foundation",
+      status: { category: "capability", state: "planning-only" }
     });
     expect(byId.atlas).toMatchObject({
       availability: "foundation",

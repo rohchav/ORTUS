@@ -1,6 +1,6 @@
 # ORTUS Product Philosophy And Learning Mission
 
-Status: Prompt P0 documentation-only source of truth, updated after Prompt GW4B. This document records product philosophy, learning goals, future progression principles, and guardrails. GW1 implements only the shared World / Lab / Atlas / Workshop destination shell around existing workflows. GW2 adds live active-run provenance and observation context in World only. GW3 adds live intervention readiness and model-response boundaries in World only, GW3B audits/hardens that layer without adding persistence or runtime behavior, GW4 adds a non-persistent Atlas foundation for evidence-state semantics, and GW4B audits/hardens that foundation without expanding product behavior. This document does not implement runtime behavior, UI progression, unlocks, missions, scoring, achievements, discovery detection, model composition, templates, simulation features, fractal metrics, persistent Research World state, persistence, accounts, social features, onboarding flows, dependencies, or new capability flags.
+Status: Prompt P0 documentation-only source of truth, updated after Prompt GW5. This document records product philosophy, learning goals, future progression principles, and guardrails. GW1 implements only the shared World / Lab / Atlas / Workshop destination shell around existing workflows. GW2 adds live active-run provenance and observation context in World only. GW3 adds live intervention readiness and model-response boundaries in World only, GW3B audits/hardens that layer without adding persistence or runtime behavior, GW4 adds a non-persistent Atlas foundation for evidence-state semantics, GW4B audits/hardens that foundation without expanding product behavior, and GW5 adds a non-persistent Lab foundation for evidence-record semantics. This document does not implement runtime behavior, UI progression, unlocks, missions, scoring, achievements, discovery detection, model composition, templates, simulation features, fractal metrics, persistent Research World state, persistence, accounts, social features, onboarding flows, dependencies, or new capability flags.
 
 ## Core Mission
 
@@ -143,7 +143,7 @@ Good ORTUS experiences should:
 
 ## Research World Direction
 
-Research World is an incremental product branch, not a finished research platform. Prompt P0 reserves philosophy and direction. Prompt GW0, documented in `RESEARCH_WORLD_PROGRESSION_MINI_ROADMAP.md`, adds a documentation-only progression and information-architecture roadmap for that branch. GW1 adds the destination shell, GW2 adds live World-only active-run provenance, GW3 adds live World-only intervention readiness, GW4 adds non-persistent Atlas information architecture, and GW4B audits/hardens that Atlas foundation. These prompts still do not implement progression, persistence, missions, unlocks, discovery detection, achievements, scoring, accounts, social systems, runtime behavior, or persistent Research World state.
+Research World is an incremental product branch, not a finished research platform. Prompt P0 reserves philosophy and direction. Prompt GW0, documented in `RESEARCH_WORLD_PROGRESSION_MINI_ROADMAP.md`, adds a documentation-only progression and information-architecture roadmap for that branch. GW1 adds the destination shell, GW2 adds live World-only active-run provenance, GW3 adds live World-only intervention readiness, GW4 adds non-persistent Atlas information architecture, GW4B audits/hardens that Atlas foundation, and GW5 adds non-persistent Lab evidence-record information architecture. These prompts still do not implement progression, persistence, missions, unlocks, discovery detection, achievements, scoring, accounts, social systems, runtime behavior, or persistent Research World state.
 
 Future branch names:
 
@@ -157,8 +157,8 @@ Future branch names:
 - GW3B: Active Intervention Boundary Audit And Hardening
 - GW4: Discovery Atlas
 - GW4B: Discovery Atlas Audit
-- GW5: Behavioral Landscape Exploration
-- GW5B: Behavioral Landscape Exploration Audit
+- GW5: Lab Evidence Record Information Architecture
+- GW5B: Lab Evidence Record Information Architecture Audit
 - GW6: Contextual Capability Guidance
 - GW6B: Contextual Capability Guidance Audit
 

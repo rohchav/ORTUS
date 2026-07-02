@@ -1,10 +1,10 @@
 # ORTUS Full Prompt Roadmap
 
-*Last updated after Prompt GW4B Discovery Atlas foundation audit and hardening.*
+*Last updated after Prompt GW5 Lab evidence record information architecture.*
 
 ## Current Status
 
-ORTUS has completed the core runtime/template foundation, scenario system, uncertainty layer, assumptions/limits layer, systems primitive registry, hybrid composition, multi-scale structure, scale-view state, boundary/environment models, spatial fields, observability, causality, quantity semantics, emergence pattern descriptors, robustness/resilience semantics, strategy/control semantics, model schema declarations, knowledge/memory/social-learning semantics, visual builder workspace schemas, template/schema compatibility mapping, the template/schema compatibility mapping audit, a narrow Opinion Dynamics social-learning behavior mode, the Opinion Dynamics social-learning runtime audit, Safe Builder UI Shell V1, the Safe Builder UI Shell + workspace information architecture audit, Model Schema Authoring Forms V1, the Model Schema Authoring Forms Audit, Visual Builder Graph View V1, the Visual Builder Graph View Audit, Schema Validation UX + Repair Suggestions V1, the Schema Validation UX + Repair Suggestions Audit, Schema-to-Template Fit Report V1, the Schema-to-Template Fit Report Audit, Scenario Planning From Schema V1, the Scenario Planning From Schema Audit, non-roadmap Prompt N1 Neural Excitation Network Template V1, non-roadmap Prompt N1B Neural Excitation Network Template Audit + Decision Readout V1, non-roadmap Prompt NUX1 Neural Runtime Lab UX V1, non-roadmap Prompt NUX1B Neural Runtime Lab UX Audit + Build Investigation, non-roadmap Prompt N2 Neural Strategy Adaptation V1, non-roadmap Prompt N2B Neural Strategy Adaptation Audit, non-roadmap Prompt MR0 Templates + Decision Clusters Mini-Roadmap, docs-only Prompt F0 Fractal and Multiscale Analysis Mini-Roadmap, docs-only Prompt P0 ORTUS Product Philosophy and Learning Mission, docs-only Prompt UX0 ORTUS Living Systems Atlas Visual Direction, docs-only Prompt UX1 Existing Design Token and Component Audit, docs-only Prompt GW0 ORTUS Research World Progression Mini-Roadmap, Prompt UX2 Living Systems Atlas Semantic Token Foundation, Prompt UX2B Living Systems Atlas Semantic Foundation Rendered Browser Audit, Prompt GW1 Persistent World / Lab / Atlas / Workshop Shell, Prompt GW1B Destination Shell Audit and Hardening, Prompt GW2 Active Run Provenance and Observation Layer, Prompt GW2B Active Run Provenance and Observation Audit and Hardening, Prompt GW3 Active Intervention Boundary and Perturbation Readiness, Prompt GW3B Active Intervention Boundary Audit and Hardening, Prompt GW4 Discovery Atlas Information Architecture and Non-Persistent Evidence Map Foundation, and Prompt GW4B Discovery Atlas Foundation Audit and Hardening.
+ORTUS has completed the core runtime/template foundation, scenario system, uncertainty layer, assumptions/limits layer, systems primitive registry, hybrid composition, multi-scale structure, scale-view state, boundary/environment models, spatial fields, observability, causality, quantity semantics, emergence pattern descriptors, robustness/resilience semantics, strategy/control semantics, model schema declarations, knowledge/memory/social-learning semantics, visual builder workspace schemas, template/schema compatibility mapping, the template/schema compatibility mapping audit, a narrow Opinion Dynamics social-learning behavior mode, the Opinion Dynamics social-learning runtime audit, Safe Builder UI Shell V1, the Safe Builder UI Shell + workspace information architecture audit, Model Schema Authoring Forms V1, the Model Schema Authoring Forms Audit, Visual Builder Graph View V1, the Visual Builder Graph View Audit, Schema Validation UX + Repair Suggestions V1, the Schema Validation UX + Repair Suggestions Audit, Schema-to-Template Fit Report V1, the Schema-to-Template Fit Report Audit, Scenario Planning From Schema V1, the Scenario Planning From Schema Audit, non-roadmap Prompt N1 Neural Excitation Network Template V1, non-roadmap Prompt N1B Neural Excitation Network Template Audit + Decision Readout V1, non-roadmap Prompt NUX1 Neural Runtime Lab UX V1, non-roadmap Prompt NUX1B Neural Runtime Lab UX Audit + Build Investigation, non-roadmap Prompt N2 Neural Strategy Adaptation V1, non-roadmap Prompt N2B Neural Strategy Adaptation Audit, non-roadmap Prompt MR0 Templates + Decision Clusters Mini-Roadmap, docs-only Prompt F0 Fractal and Multiscale Analysis Mini-Roadmap, docs-only Prompt P0 ORTUS Product Philosophy and Learning Mission, docs-only Prompt UX0 ORTUS Living Systems Atlas Visual Direction, docs-only Prompt UX1 Existing Design Token and Component Audit, docs-only Prompt GW0 ORTUS Research World Progression Mini-Roadmap, Prompt UX2 Living Systems Atlas Semantic Token Foundation, Prompt UX2B Living Systems Atlas Semantic Foundation Rendered Browser Audit, Prompt GW1 Persistent World / Lab / Atlas / Workshop Shell, Prompt GW1B Destination Shell Audit and Hardening, Prompt GW2 Active Run Provenance and Observation Layer, Prompt GW2B Active Run Provenance and Observation Audit and Hardening, Prompt GW3 Active Intervention Boundary and Perturbation Readiness, Prompt GW3B Active Intervention Boundary Audit and Hardening, Prompt GW4 Discovery Atlas Information Architecture and Non-Persistent Evidence Map Foundation, Prompt GW4B Discovery Atlas Foundation Audit and Hardening, and Prompt GW5 Lab Evidence Record Information Architecture.
 
 Current project status:
 
@@ -32,8 +32,9 @@ Completed implementation prompt: Prompt GW3 — active intervention boundary and
 Completed audit prompt: Prompt GW3B — active intervention boundary audit and hardening; tightens current-run intervention entry copy, engine-required readiness coverage, validation-language boundaries, and rendered Intervene assertions without adding persistence or runtime behavior
 Completed implementation prompt: Prompt GW4 — Discovery Atlas information architecture and non-persistent evidence map foundation; adds a bounded `/atlas` evidence-state vocabulary and conceptual scaffold without saved discoveries, persistent evidence records, behavioral landscapes, sampled-region maps backed by run data, Lab records, progression, storage, runtime behavior, template behavior, Builder execution, validation, calibration, or real-world discovery certification
 Completed audit prompt: Prompt GW4B — Discovery Atlas foundation audit and hardening; keeps sampled evidence unresolved until source-backed Atlas records exist and completes the post-hardening rendered-verification gate without adding persistence, behavioral landscapes, Lab records, progression, runtime behavior, template behavior, Builder execution, dependencies, assets, or fonts
+Completed implementation prompt: Prompt GW5 — Lab evidence record information architecture; adds a bounded non-persistent `/lab` foundation, evidence-record lifecycle semantics, and conceptual experiment-ledger scaffold without saved Lab records, experiment history, notebooks, saved comparisons, run history, Lab-to-Atlas publication, storage, runtime behavior, template behavior, Builder execution, progression, dependencies, assets, or fonts
 Post-30B stabilization completed: repo hygiene, durable Codex context, dependency repair, generated-artifact cleanup, and runtime performance/scalability baseline
-Next Research World prompt: GW5 only with explicit approval; do not start GW5-GW6 Research World implementation, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any further Research World/fractal/multiscale implementation without explicit approval
+Next Research World prompt: GW5B Lab evidence record information architecture audit only with explicit approval; do not start GW5B-GW6 Research World implementation, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any further Research World/fractal/multiscale implementation without explicit approval
 ```
 
 Critical global boundary:
@@ -111,6 +112,8 @@ Prompt GW3 adds Active Intervention Boundary and Perturbation Readiness in World
 Prompt GW3B audits and hardens the active intervention-readiness layer without expanding product behavior. It adds `docs/ui/ACTIVE_INTERVENTION_BOUNDARY_AND_READINESS_AUDIT.md`, hardens current-run intervention entry copy, changes visible command-path copy from validated to engine-checked, adds engine-required readiness coverage, and strengthens rendered Intervene assertions. It adds no saved interventions, Lab records, Atlas discoveries, behavioral landscapes, progression, runtime behavior, template behavior, Builder execution, storage, dependencies, or causal/validation claims.
 
 Prompt GW4 adds the first Atlas-focused foundation in `docs/ui/DISCOVERY_ATLAS_INFORMATION_ARCHITECTURE.md` and `/atlas`. It defines evidence-state semantics for future Atlas interpretation, a non-persistent conceptual scaffold labeled as not run data, sampled/unsampled copy, model-vs-world boundaries, World/Lab relationship copy, and explicit non-persistence. It adds no saved Discovery Atlas records, persistent maps, behavioral landscapes, sampled-region maps backed by run data, Lab records, run history, save/map actions, storage, progression, runtime behavior, template behavior, Builder execution, validation, calibration, or real-world discovery certification.
+
+Prompt GW5 adds the first Lab-focused evidence-record foundation in `docs/ui/LAB_EVIDENCE_RECORD_INFORMATION_ARCHITECTURE.md` and `/lab`. It defines future evidence-record lifecycle semantics, a non-persistent conceptual experiment-ledger scaffold, model-only and externally unvalidated evidence boundaries, World/Atlas relationship copy, and explicit non-persistence. It adds no persistent evidence records, experiment ledgers, notebooks, saved comparisons, run history, Lab-to-Atlas publication, save/send/publish actions, storage, progression, runtime behavior, template behavior, Builder execution, validation, calibration, or real-world discovery certification.
 Measure multiscale structure before generating synthetic fractal structure.
 Fractal and multiscale tools describe how measured structure changes across scale. They do not prove that a system is fundamentally fractal.
 A complex-looking, nested, branching, or irregular pattern is not automatically fractal.
@@ -132,7 +135,7 @@ missing from this full roadmap. Prompt 31C and Prompt 31D are now corrected belo
 after Prompt 31B and before Prompt 32, with a later narrow Opinion Dynamics
 social-learning runtime slice placed after template/schema compatibility mapping.
 The social/cognitive semantics insertion was corrected after manual review, and
-Prompt 31C, Prompt 31D, Prompt 32, Prompt 32B, Prompt 33, Prompt 33B, Prompt 33C, Prompt 33D, Prompt 34, Prompt 34B, Prompt 35, Prompt 35B, Prompt 36, Prompt 36B, Prompt 37, Prompt 37B, Prompt 38, Prompt 38B, Prompt 39, and Prompt 39B are now marked complete. Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, MR0, F0, P0, UX0, UX1, GW0, UX2, UX2B, GW1, GW1B, GW2, GW2B, GW3, GW3B, GW4, and GW4B are complete. GW5 remains future implementation work and must not start without explicit approval.
+Prompt 31C, Prompt 31D, Prompt 32, Prompt 32B, Prompt 33, Prompt 33B, Prompt 33C, Prompt 33D, Prompt 34, Prompt 34B, Prompt 35, Prompt 35B, Prompt 36, Prompt 36B, Prompt 37, Prompt 37B, Prompt 38, Prompt 38B, Prompt 39, and Prompt 39B are now marked complete. Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, MR0, F0, P0, UX0, UX1, GW0, UX2, UX2B, GW1, GW1B, GW2, GW2B, GW3, GW3B, GW4, GW4B, and GW5 are complete. GW5B remains future audit work and must not start without explicit approval.
 
 Safe Builder UI Shell V1 displays structural workspace artifacts; it does not execute workspace nodes or edges. The builder shell is not a compiler, interpreter, visual programming environment, or custom simulation runtime. A structurally valid workspace is still not a runnable model. Importing a workspace artifact does not activate model schemas, compatibility mappings, or social-learning semantics.
 
@@ -2087,8 +2090,8 @@ Research World branch:
 8. GW3B: Active Intervention Boundary Audit And Hardening.
 9. GW4: Discovery Atlas.
 10. GW4B: Discovery Atlas Audit.
-11. GW5: Behavioral Landscape Exploration.
-12. GW5B: Behavioral Landscape Exploration Audit.
+11. GW5: Lab Evidence Record Information Architecture.
+12. GW5B: Lab Evidence Record Information Architecture Audit.
 13. GW6: Contextual Capability Guidance.
 14. GW6B: Contextual Capability Guidance Audit.
 
@@ -2174,8 +2177,8 @@ GW3: Active Intervention Boundary and Perturbation Readiness
 GW3B: Active Intervention Boundary Audit and Hardening
 GW4: Discovery Atlas
 GW4B: Discovery Atlas Audit
-GW5: Behavioral Landscape Exploration
-GW5B: Behavioral Landscape Exploration Audit
+GW5: Lab Evidence Record Information Architecture
+GW5B: Lab Evidence Record Information Architecture Audit
 GW6: Contextual Capability Guidance
 GW6B: Contextual Capability Guidance Audit
 ```
@@ -2329,7 +2332,7 @@ Non-goals:
 
 ```text
 GW0 does not implement routes, navigation, World/Lab/Atlas/Workshop pages, persistence, accounts, cloud storage, local storage, database schemas, progression state, unlocks, XP, levels, achievements, badges, streaks, missions, quests, daily rewards, discovery detection, regime classification, behavioral landscapes, contextual recommendations, notebooks, saved research assets, model composition, grand-system scenarios, design tokens, CSS, components, runtime behavior, simulation behavior, template behavior, dependencies, assets, or mockups.
-GW1 is implemented as the first structural destination shell. GW2 is implemented as a live World-only provenance and observation layer. GW2B is implemented as an audit and hardening pass over that layer. GW3 is implemented as a live World-only intervention readiness and boundary layer. GW3B is implemented as an audit and hardening pass over that layer. GW4 is implemented as a non-persistent Atlas foundation. GW4B is implemented as an audit and hardening pass over that foundation. GW5-GW6 remain future prompts and must not start without explicit direction.
+GW1 is implemented as the first structural destination shell. GW2 is implemented as a live World-only provenance and observation layer. GW2B is implemented as an audit and hardening pass over that layer. GW3 is implemented as a live World-only intervention readiness and boundary layer. GW3B is implemented as an audit and hardening pass over that layer. GW4 is implemented as a non-persistent Atlas foundation. GW4B is implemented as an audit and hardening pass over that foundation. GW5 is implemented as a non-persistent Lab evidence-record foundation. GW5B-GW6 remain future prompts and must not start without explicit direction.
 ```
 
 ## Prompt 40 — Safe Scenario Draft Workspace V1
@@ -3653,8 +3656,8 @@ No global service availability treated as template runtime support.
 Recommended immediate next steps:
 
 ```text
-1. Review and commit Prompt GW4B Discovery Atlas audit/hardening work if this worktree is still uncommitted.
-2. Do not start GW5-GW6 Research World work unless the user explicitly directs it; also do not start F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any further Research World/fractal/multiscale implementation.
+1. Review and commit Prompt GW5 Lab evidence record information architecture work if this worktree is still uncommitted.
+2. Do not start GW5B-GW6 Research World work unless the user explicitly directs it; also do not start F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any further Research World/fractal/multiscale implementation.
 3. Run a dedicated rendered responsive/design-system audit before making mobile-readiness, WCAG, clipboard, focus-return, actual browser-zoom, screen-reader, assistive-technology, forced-colors, or polished visual-workbench claims.
 ```
 

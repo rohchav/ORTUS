@@ -458,7 +458,7 @@
 - In GW1, "persistent" means structurally present across routes, not persistent user data.
 - Preserve `/` as World.
 - Preserve `/builder` as Workshop.
-- In GW1, Lab and Atlas were future-only informational destinations; after GW4, Lab remains future-only and Atlas is a non-persistent foundation route.
+- In GW1, Lab and Atlas were future-only informational destinations; after GW4, Atlas is a non-persistent foundation route; after GW5, Lab is a non-persistent foundation route.
 - Do not fabricate experiments, discoveries, maps, evidence, counts, or user activity.
 - Do not describe Lab or Atlas as locked.
 - Do not add XP, levels, achievements, progress bars, or unlock systems.
@@ -477,7 +477,11 @@
 - Preserve current validated workflows before reorganizing them further.
 - Use the existing Playwright/Axe harness for rendered destination-shell verification.
 - Do not claim screen-reader, AT, forced-colors, browser-zoom, or WCAG verification without evidence.
-- Do not start a Research World implementation slice from a prior shell prompt without the required audit; after GW4B, GW5 is the next Research World implementation prompt only with explicit approval.
+- Do not start a Research World implementation slice from a prior shell prompt without the required audit; after GW5, GW5B is the next Research World audit prompt only with explicit approval.
+- Lab evidence-record semantics are non-persistent information architecture until a later audited prompt implements storage. Do not treat `LabRecordLifecycleState`, conceptual ledger scaffolds, or Lab route copy as saved evidence records, experiment histories, notebooks, saved comparisons, run history, reusable assets, or validation evidence.
+- GW5 Lab does not save active World runs, import active-run provenance, create experiment ledgers, create notebooks, create saved comparisons, publish to Atlas, create discoveries, add storage, add timestamps, generate ids, add progression, or change simulation/template/Builder runtime behavior.
+- Lab records will organize evidence about model investigations. They will not certify discoveries about the real world.
+- Do not add `Save this run`, `Send to Lab`, `Create evidence record`, `Record experiment`, `Open notebook`, `Publish to Atlas`, `Create discovery`, or `Map evidence` actions without a dedicated future implementation prompt and audit.
 - GW2 live provenance belongs only in World Observe; do not turn it into saved Lab records, Atlas discoveries, notebooks, reusable assets, storage, route state, or evidence claims.
 - Active run provenance describes current model configuration; it is not a saved experiment record.
 - Active run observations describe model state; they are not measured real-world data.

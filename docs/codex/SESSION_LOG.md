@@ -2522,3 +2522,49 @@ Readiness decision:
 - Ready for GW5 after GW4B is committed, with strict boundaries.
 - GW5 remains a future prompt only with explicit user approval.
 - GW5 must not treat GW4/GW4B Atlas as persistence, behavioral landscapes, validation, real-world discovery, or sampled run-backed evidence.
+
+## 2026-07-01 - Prompt GW5 Lab Evidence Record Information Architecture
+
+Goal: add a bounded, non-persistent `/lab` information architecture for future Lab evidence-record lifecycle semantics and experiment-ledger scaffolding without adding saved records, experiment history, notebooks, comparisons, run history, storage, Lab-to-Atlas publication, progression, runtime behavior, template behavior, Builder execution, dependencies, assets, or fonts.
+
+Starting state:
+
+- Current commit before work: `d4fb2fc`.
+- Worktree was clean.
+- Baseline checks passed before editing: `npm run test:ui`, `npm run typecheck`, `npm test`, `npm run build`, `npm run perf:simulation`, and `git diff --check`.
+- `npm run lint` remained unavailable because `package.json` has no lint script.
+
+Implementation:
+
+- Added `src/lib/labFoundation.ts` as a bounded source model for Lab route status, evidence-record lifecycle states, experiment-ledger scaffold states, and World/Atlas/model-vs-world/non-persistence boundaries.
+- Updated `/lab` from a generic future-only destination page to a structured non-persistent GW5 foundation route with `Lab` H1, capability/planning-only route status, lifecycle legend, conceptual scaffold labeled as not saved Lab data, and explicit World/Atlas relationship copy.
+- Updated the destination registry so Lab is a foundation route rather than a future-only route while still denying persistent Lab records.
+- Updated Atlas relationship copy so Atlas no longer says Lab remains future-only, while still denying Lab-to-Atlas publication.
+- Added/updated unit and rendered tests for Lab lifecycle semantics, route contracts, status categories, no fake actions, no storage/timestamps/random ids, and no runtime/persistence expansion.
+- Added `docs/ui/LAB_EVIDENCE_RECORD_INFORMATION_ARCHITECTURE.md` and updated roadmap/status/context docs and durable AGENTS guardrails.
+
+Verification:
+
+- `npm test -- lab evidence researchDestinations atlas roadmap activeInterventionReadiness`: passed, 6 files and 40 tests.
+- `npm run typecheck`: passed.
+- `npx playwright test tests/ui/research-world-shell.spec.ts`: passed, 30 tests.
+- `npm test`: passed, 64 files and 512 tests.
+- `npm run build`: passed with Next.js 15.5.19; static routes included `/`, `/_not-found`, `/atlas`, `/builder`, and `/lab`.
+- `npm run perf:simulation`: passed. Local smoke results included Flocking 100 agents at 128.68 ticks/sec, Flocking 500 agents at 19.48 ticks/sec, Forest Fire medium grid at 28.81 ticks/sec, and Predator-Prey default at 83.93 ticks/sec.
+- `git diff --check`: passed.
+- `npm run lint`: unavailable, package.json has no lint script.
+- `npm run test:ui`: passed, 45 tests.
+
+Scope-creep search:
+
+- The required broad search returned expected hits in docs, tests, guardrails, pre-existing run-summary/store code, and pre-existing performance/time helpers.
+- Narrow changed-production-source search across Lab, Atlas, and destination registry files found no storage APIs, timestamps, random ids, fake score fields, fake recent activity, or save/send/publish/create actions.
+
+Boundaries preserved:
+
+- GW5 did not save active World runs, import active-run provenance, create persistent Lab evidence records, create experiment ledgers, create notebooks, create saved comparisons, create run history, publish records to Atlas, create discoveries, add storage, add generated ids or timestamps, add progression, change simulation/template runtime behavior, or change Builder execution behavior.
+- Lab records are described as future evidence about model investigations, not certification of real-world discoveries.
+
+Next prompt:
+
+- Prompt GW5B: Lab Evidence Record Information Architecture Audit, only with explicit user approval.
