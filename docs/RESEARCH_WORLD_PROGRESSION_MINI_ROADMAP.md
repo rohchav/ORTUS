@@ -378,7 +378,7 @@ The required sequence is:
 GW0 -> UX2 -> GW1 -> GW1B -> GW2 -> GW2B -> GW3 -> GW3B -> GW4 -> GW4B -> GW5 -> GW5B -> GW6 -> GW6B
 ```
 
-UX2, GW1, GW1B, GW2, GW2B, GW3, GW3B, GW4, GW4B, and GW5 are complete. GW5B-GW6 remain future prompts that must not start without explicit direction.
+UX2, GW1, GW1B, GW2, GW2B, GW3, GW3B, GW4, GW4B, GW5, and GW5B are complete. GW6 remains a future prompt that must not start without explicit direction.
 
 ## 22. GW Roadmap Branch
 

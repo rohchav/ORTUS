@@ -211,10 +211,11 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(roadmap).toContain("Completed Prompt 39 scenario-planning foundation");
     expect(roadmap).toContain("Completed Prompt 39 scenario-planning audit");
     expect(roadmap).toContain("Prompt 35 adds a separate `Author Schema` Builder mode");
-    expect(roadmap).toContain("Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, MR0, F0, P0, UX0, UX1, GW0, UX2, UX2B, GW1, GW1B, GW2, GW2B, GW3, GW3B, GW4, GW4B, and GW5 are complete.");
+    expect(roadmap).toContain("Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, MR0, F0, P0, UX0, UX1, GW0, UX2, UX2B, GW1, GW1B, GW2, GW2B, GW3, GW3B, GW4, GW4B, GW5, and GW5B are complete.");
     expect(roadmap).toContain(
-      "GW5B is the next Research World audit prompt only with explicit approval; do not start GW5B-GW6 Research World implementation, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any further Research World/fractal/multiscale implementation without explicit approval."
+      "GW6 Contextual Capability Guidance is the next Research World prompt only with explicit approval; do not start GW6 Research World implementation, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any further Research World/fractal/multiscale implementation without explicit approval."
     );
+    expect(roadmap).not.toContain("Prompt GW5 Behavioral Landscape Exploration");
     expect(roadmap).toContain("Prompt GW1 implements the shared Research World destination shell.");
     expect(roadmap).toContain("Prompt GW1B audits and hardens the destination shell without expanding product behavior.");
     expect(roadmap).toContain("Prompt GW2 adds Active Run Provenance and Observation in World Observe only.");
@@ -318,7 +319,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
       "Composition frontiers and Grand Systems Challenges remain future product directions beyond this near-term branch unless a dedicated roadmap prompt scopes them with explicit audit gates."
     );
     expect(roadmap).toContain(
-      "P0, UX0, UX1, and GW0 are complete as documentation-only prompts, UX2/UX2B are complete as bounded shared visual-foundation and rendered-audit prompts, GW1/GW1B are complete as the first bounded destination-shell implementation and audit pair, GW2/GW2B are complete as live World active-run context and audit, and GW3 is complete as live World intervention readiness only."
+      "P0, UX0, UX1, and GW0 are complete as documentation-only prompts, UX2/UX2B are complete as bounded shared visual-foundation and rendered-audit prompts, GW1/GW1B are complete as the first bounded destination-shell implementation and audit pair, GW2/GW2B are complete as live World active-run context and audit, GW3/GW3B are complete as live World intervention readiness and audit, GW4/GW4B are complete as non-persistent Atlas foundation and audit, and GW5/GW5B are complete as non-persistent Lab evidence-record foundation and audit."
     );
     expect(roadmap).toContain("UX2 - Living Systems Atlas Semantic Token Foundation.");
     expect(roadmap).toContain("Prompt UX0 is a docs-only visual direction and UX-principle branch");
@@ -575,6 +576,8 @@ describe("roadmap alignment and missing pillar reservations", () => {
       readFileSync(join(repoRoot, "docs", "ui", "LIVING_SYSTEMS_ATLAS_VISUAL_DIRECTION.md"), "utf8"),
       readFileSync(join(repoRoot, "docs", "ui", "EXISTING_DESIGN_TOKEN_AND_COMPONENT_AUDIT.md"), "utf8"),
       readFileSync(join(repoRoot, "docs", "ui", "LIVING_SYSTEMS_ATLAS_SEMANTIC_TOKEN_FOUNDATION.md"), "utf8"),
+      readFileSync(join(repoRoot, "planned_roadmap.md"), "utf8"),
+      readFileSync(join(repoRoot, "docs", "codex", "CURRENT_CONTEXT.md"), "utf8"),
       readFileSync(join(repoRoot, "src", "simulation", "README.md"), "utf8"),
       readFileSync(join(repoRoot, "AGENTS.md"), "utf8")
     ].join("\n");
@@ -607,7 +610,8 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(docs).toContain("Preserve `/` as World.");
     expect(docs).toContain("Preserve `/builder` as Workshop.");
     expect(docs).toContain("after GW4, Atlas is a non-persistent foundation route; after GW5, Lab is a non-persistent foundation route.");
-    expect(docs).toContain("after GW5, GW5B is the next Research World audit prompt only with explicit approval.");
+    expect(docs).toContain("after GW5B, GW6 is the next Research World prompt only with explicit approval.");
+    expect(docs).not.toContain("Prompt GW5 Behavioral Landscape Exploration");
     expect(docs).toContain("UX2 establishes shared visual semantics. It does not perform the Research World shell transformation.");
     expect(docs).toContain("UX2 prepares the visual language. GW1 performs the structural shell transformation.");
     expect(docs).toContain("A visual state must communicate what kind of state it represents: operational, interaction, evidence, uncertainty, or capability.");

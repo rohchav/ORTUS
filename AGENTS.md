@@ -477,7 +477,7 @@
 - Preserve current validated workflows before reorganizing them further.
 - Use the existing Playwright/Axe harness for rendered destination-shell verification.
 - Do not claim screen-reader, AT, forced-colors, browser-zoom, or WCAG verification without evidence.
-- Do not start a Research World implementation slice from a prior shell prompt without the required audit; after GW5, GW5B is the next Research World audit prompt only with explicit approval.
+- Do not start a Research World implementation slice from a prior shell prompt without the required audit; after GW5B, GW6 is the next Research World prompt only with explicit approval.
 - Lab evidence-record semantics are non-persistent information architecture until a later audited prompt implements storage. Do not treat `LabRecordLifecycleState`, conceptual ledger scaffolds, or Lab route copy as saved evidence records, experiment histories, notebooks, saved comparisons, run history, reusable assets, or validation evidence.
 - GW5 Lab does not save active World runs, import active-run provenance, create experiment ledgers, create notebooks, create saved comparisons, publish to Atlas, create discoveries, add storage, add timestamps, generate ids, add progression, or change simulation/template/Builder runtime behavior.
 - Lab records will organize evidence about model investigations. They will not certify discoveries about the real world.

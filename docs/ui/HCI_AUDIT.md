@@ -1,8 +1,8 @@
 # ORTUS HCI / UX / Visual-Direction Audit
 
 Date: 2026-06-11  
-Updated: 2026-07-01 after Prompt GW5 Lab evidence record information architecture
-Prompt: UI-BRAND-1, UI-REMEDIATION-1, Prompt 34B, Prompt 35, Prompt 35B, Prompt 36, Prompt 36B, Prompt 37, Prompt 37B, Prompt 38, Prompt 38B, Prompt 39, Prompt 39B, Prompt F0, Prompt P0, Prompt UX0, Prompt UX1, Prompt GW0, Prompt UX2, Prompt UX2B, Prompt GW1, Prompt GW1B, Prompt GW2, Prompt GW2B, Prompt GW3, Prompt GW3B, Prompt GW4, Prompt GW4B, Prompt GW5, Prompt N1, Prompt N1B, Prompt NUX1, Prompt NUX1B, Prompt N2, Prompt N2B, Prompt MR0
+Updated: 2026-07-01 during Prompt GW5B Lab evidence record foundation audit
+Prompt: UI-BRAND-1, UI-REMEDIATION-1, Prompt 34B, Prompt 35, Prompt 35B, Prompt 36, Prompt 36B, Prompt 37, Prompt 37B, Prompt 38, Prompt 38B, Prompt 39, Prompt 39B, Prompt F0, Prompt P0, Prompt UX0, Prompt UX1, Prompt GW0, Prompt UX2, Prompt UX2B, Prompt GW1, Prompt GW1B, Prompt GW2, Prompt GW2B, Prompt GW3, Prompt GW3B, Prompt GW4, Prompt GW4B, Prompt GW5, Prompt GW5B, Prompt N1, Prompt N1B, Prompt NUX1, Prompt NUX1B, Prompt N2, Prompt N2B, Prompt MR0
 Status: source-based audit, not a formal WCAG audit
 
 ## 1. Executive Verdict
@@ -106,6 +106,9 @@ GW4B audits and hardens the Atlas foundation without expanding product behavior.
 
 Prompt GW5 update:
 GW5 turns `/lab` into a non-persistent Lab foundation. The HCI gain is a clearer evidence-record orientation surface: route H1, lifecycle legend, conceptual experiment-ledger scaffold labeled as not saved Lab data, model-vs-world boundary, non-persistence boundary, and World/Atlas relationship copy. The HCI risk is high: "Lab" can look like a saved experiment database. GW5 counters that by avoiding fake saved experiments, fake evidence records, fake notebooks, fake comparisons, fake run history, fake evidence scores, recent activity, progress mechanics, and save/send/publish actions. Lab is capability/planning-only at the route level; persistent record features remain capability/future-only when referenced. Evidence statuses remain evidence semantics. This is source and Playwright/Axe smoke evidence, not screen-reader, assistive-technology, forced-colors, actual browser-zoom, full WCAG, or user-comprehension evidence.
+
+Prompt GW5B update:
+GW5B audits the Lab foundation without expanding it into persistent Lab storage, saved experiments, notebooks, run history, Atlas publication, or behavioral landscapes. The audit found no Lab runtime/persistence leakage in the source model or route; the concrete defect was roadmap/context drift that still named an obsolete next prompt and skipped the required GW5B audit gate. The continuation completed the focused shell and full UI rendered Playwright/Axe smoke gates, so the Lab foundation has fresh rendered smoke evidence. Actual browser zoom at 125%, 150%, and 200% was not verified, and no screen-reader readiness, assistive-technology readiness, forced-colors readiness, WCAG conformance, or user-comprehension claim is made.
 
 ## 2. Audit Scope
 

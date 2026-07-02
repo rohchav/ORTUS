@@ -2568,3 +2568,76 @@ Boundaries preserved:
 Next prompt:
 
 - Prompt GW5B: Lab Evidence Record Information Architecture Audit, only with explicit user approval.
+
+## 2026-07-01 - Prompt GW5B Lab Evidence Record Foundation Audit
+
+Goal: audit and harden the committed GW5 Lab foundation without adding persistent Lab storage, saved experiments, notebooks, run history, Atlas publication, behavioral landscapes, progression, runtime behavior, template behavior, Builder execution behavior, dependencies, assets, or fonts.
+
+Starting state:
+
+- Current commit before work: `7d60b32`.
+- Starting worktree was clean.
+- GW5 was committed.
+
+Baseline before edits:
+
+- `npm run test:ui`: blocked before execution by environment/tooling escalation usage limits. Classified as an environment issue, not a detected GW5 regression.
+- `npm run typecheck`: passed.
+- `npm test`: passed, 64 files and 512 tests.
+- `npm run build`: passed with Next.js 15.5.19; static routes included `/`, `/_not-found`, `/atlas`, `/builder`, and `/lab`.
+- `npm run perf:simulation`: passed. Local smoke results included Flocking 100 agents at 121.96 ticks/sec, Flocking 500 agents at 15.38 ticks/sec, Forest Fire medium grid at 25.87 ticks/sec, and Predator-Prey default at 68.72 ticks/sec.
+- `git diff --check`: passed.
+- `npm run lint`: unavailable, package.json has no lint script.
+
+Audit findings:
+
+- The Lab source model remains bounded static information architecture, not saved evidence-record storage.
+- `/lab` keeps route status capability/planning-only, persistent record capabilities future-only, model-only evidence unresolved, and externally unvalidated evidence unverified.
+- The route keeps the conceptual ledger labeled as not saved Lab data and contains no fake save/send/publish controls, fake records, fake notebooks, fake comparisons, fake counts, evidence scores, recent activity, progression, storage, timestamps, generated ids, or Lab-to-Atlas publication path.
+- The concrete defect found was stale durable context/roadmap tail wording that named `Prompt GW5 Behavioral Landscape Exploration` as next and skipped the required GW5B audit gate.
+
+Hardening:
+
+- Added `docs/ui/LAB_EVIDENCE_RECORD_INFORMATION_ARCHITECTURE_AUDIT.md`.
+- Corrected stale next-prompt wording in durable context and planned roadmap docs.
+- Added a roadmap regression assertion against the stale audit-skipping phrase.
+
+Post-hardening verification:
+
+- `npm test -- roadmap labFoundation`: passed, 2 files and 11 tests.
+- `npm run typecheck`: passed.
+- `git diff --check`: passed.
+- `npm test`: passed, 64 files and 512 tests.
+- `npm run perf:simulation`: passed. Local smoke results included Flocking 100 agents at 117.38 ticks/sec, Flocking 500 agents at 15.00 ticks/sec, Forest Fire medium grid at 25.30 ticks/sec, and Predator-Prey default at 74.11 ticks/sec.
+- `npm run build`: passed with Next.js 15.5.19; static routes included `/`, `/_not-found`, `/atlas`, `/builder`, and `/lab`.
+- `npm run lint`: unavailable, package.json has no lint script.
+
+Continuation rendered verification:
+
+- `npx playwright test tests/ui/research-world-shell.spec.ts`: passed, 30 passed.
+- `npm run test:ui`: passed, 45 passed.
+- Dev-server `NO_COLOR` / `FORCE_COLOR` warnings appeared again and remain classified as expected dev-server noise.
+
+Final integrity checks:
+
+- `npm run typecheck`: passed.
+- `npm test`: passed, 64 files and 512 tests.
+- `npm run build`: passed with Next.js 15.5.19; static routes included `/`, `/_not-found`, `/atlas`, `/builder`, and `/lab`.
+- `npm run perf:simulation`: passed. Local smoke results included Flocking 100 agents at 228.42 ticks/sec, Flocking 500 agents at 31.11 ticks/sec, Forest Fire medium grid at 52.09 ticks/sec, and Predator-Prey default at 148.11 ticks/sec.
+- `git diff --check`: passed.
+- `npm run lint`: unavailable, package.json has no lint script.
+
+Scope-creep search:
+
+- The required broad search returned expected hits in docs, tests, guardrails, and pre-existing unrelated Scenario/Run Comparison/Experiment/Neural Runtime Lab/performance code.
+- Lab-specific production source still did not introduce persistence, storage, saved experiments, evidence records, notebooks, run histories, Lab-to-Atlas publication, behavioral landscapes, progression, timestamps, random IDs, UUIDs, fingerprints, fake scores, fake recent activity, or save/send/publish/create actions.
+
+Remaining limits:
+
+- Actual browser zoom at 125%, 150%, and 200% was not verified.
+- No screen-reader walkthrough, assistive-technology walkthrough, forced-colors audit, full WCAG conformance audit, or user-comprehension validation was completed.
+
+Readiness decision:
+
+- GW5B is ready for the requested commit gate after final rerun checks remain passing.
+- GW6 remains a future prompt only with explicit user approval after GW5B is committed.

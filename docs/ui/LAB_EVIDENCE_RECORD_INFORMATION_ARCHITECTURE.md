@@ -1,6 +1,6 @@
 # Lab Evidence Record Information Architecture
 
-Status: Prompt GW5 implementation source of truth. GW5 turns `/lab` into a non-persistent Lab information architecture for future evidence records and experiment-ledger semantics. It does not create persistent evidence records, experiment ledgers, notebooks, saved comparisons, run history, Lab-to-Atlas publication, storage, timestamps, generated ids, fake records, fake scores, progression, runtime behavior, template behavior, Builder execution behavior, dependencies, assets, or fonts.
+Status: Prompt GW5 implementation source of truth, audited by Prompt GW5B in `docs/ui/LAB_EVIDENCE_RECORD_INFORMATION_ARCHITECTURE_AUDIT.md`. GW5 turns `/lab` into a non-persistent Lab information architecture for future evidence records and experiment-ledger semantics. It does not create persistent evidence records, experiment ledgers, notebooks, saved comparisons, run history, Lab-to-Atlas publication, storage, timestamps, generated ids, fake records, fake scores, progression, runtime behavior, template behavior, Builder execution behavior, dependencies, assets, or fonts.
 
 ## 1. Purpose
 
