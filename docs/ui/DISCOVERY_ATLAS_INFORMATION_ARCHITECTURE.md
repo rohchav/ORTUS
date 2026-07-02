@@ -1,6 +1,6 @@
 # Discovery Atlas Information Architecture
 
-Status: Prompt GW4 implementation source of truth. GW4 creates a non-persistent Atlas information architecture and evidence-state vocabulary on `/atlas`. It does not create saved discoveries, saved evidence records, behavioral landscapes, sampled-region maps backed by run data, Lab records, run history, storage, progression, validation, calibration, real-world discovery certification, runtime behavior, template behavior, Builder execution behavior, dependencies, assets, or fonts.
+Status: Prompt GW4 implementation source of truth, audited and hardened by Prompt GW4B. GW4 creates a non-persistent Atlas information architecture and evidence-state vocabulary on `/atlas`. GW4B keeps sampled evidence unresolved until source-backed Atlas records exist. It does not create saved discoveries, saved evidence records, behavioral landscapes, sampled-region maps backed by run data, Lab records, run history, storage, progression, validation, calibration, real-world discovery certification, runtime behavior, template behavior, Builder execution behavior, dependencies, assets, or fonts.
 
 ## 1. Purpose
 
@@ -44,7 +44,7 @@ The Atlas evidence vocabulary is defined in `src/lib/atlasFoundation.ts`.
 Current evidence states:
 
 - `Unsampled`: evidence / unresolved.
-- `Sampled`: evidence / observed.
+- `Sampled`: evidence / unresolved.
 - `Unresolved`: evidence / unresolved.
 - `Supported within model`: evidence / supported.
 - `Contradicted within model`: evidence / contradicted.
@@ -59,7 +59,7 @@ Sampled in model space is not validated in the real world.
 
 Unsampled means no source-backed model-space sample is attached. It does not mean the software failed, the region is locked, or the future result is known.
 
-GW4 does not display sampled regions from run data. The route only defines how future sampled and unsampled states should be interpreted.
+GW4 does not display sampled regions from run data. The route only defines how future sampled and unsampled states should be interpreted. A sampled state remains unresolved in GW4 because no current Atlas record is backed by run provenance.
 
 ## 6. Model Behavior Versus Real-World Discovery
 
@@ -102,7 +102,7 @@ Atlas evidence state is separate from:
 - real-world validation;
 - future-only capability status.
 
-Supported, contradicted, unsupported, unresolved, observed, and unverified are evidence states. Future-only is capability status. Foundation is capability / planning-only route status.
+Supported, contradicted, unsupported, unresolved, and unverified are evidence states. Future-only is capability status. Foundation is capability / planning-only route status. GW4B keeps sampled evidence unresolved because no current Atlas record is source-backed by run provenance.
 
 ## 11. Accessibility And Keyboard Behavior
 
@@ -166,14 +166,14 @@ GW4 does not implement:
 
 Deferred work includes persistent Lab records, real Discovery Atlas evidence records, source-backed sampled-region maps, behavioral landscapes, stale-record handling, provenance-preserving Atlas records, comparison-backed contradictions, validation/calibration workflows, screen-reader walkthroughs, assistive-technology walkthroughs, forced-colors checks, actual browser-zoom verification, and user-comprehension testing.
 
-## 16. GW4B Audit Requirement
+## 16. GW4B Audit Result
 
-GW4 must be followed by:
+GW4B audit record:
 
 ```text
-GW4B: Discovery Atlas Foundation Audit and Hardening
+docs/ui/DISCOVERY_ATLAS_INFORMATION_ARCHITECTURE_AUDIT.md
 ```
 
-GW4B should inspect evidence-state semantics, non-persistence clarity, sampled/unsampled honesty, model-vs-real-world boundaries, absence of fake discoveries/maps/scores, Lab/World relationships, keyboard/focus/reflow behavior, Axe results, status semantics, and scope-creep risk.
+GW4B inspected evidence-state semantics, non-persistence clarity, sampled/unsampled honesty, model-vs-real-world boundaries, absence of fake discoveries/maps/scores, Lab/World relationships, keyboard/focus/reflow behavior, Axe results, status semantics, and scope-creep risk.
 
-GW4 is not fully validated before GW4B.
+GW4B changed `Sampled` from evidence / observed to evidence / unresolved because the current Atlas route has no source-backed Atlas records. The GW4B continuation completed the post-hardening rendered shell and full UI Playwright/Axe gates. GW5 remains a future prompt only; GW4B does not implement persistence, behavioral landscapes, Lab records, validation, calibration, or real-world discovery certification.

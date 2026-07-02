@@ -477,7 +477,7 @@
 - Preserve current validated workflows before reorganizing them further.
 - Use the existing Playwright/Axe harness for rendered destination-shell verification.
 - Do not claim screen-reader, AT, forced-colors, browser-zoom, or WCAG verification without evidence.
-- Do not start a Research World implementation slice from a prior shell prompt without the required audit; after GW4, GW4B is the next required Research World prompt.
+- Do not start a Research World implementation slice from a prior shell prompt without the required audit; after GW4B, GW5 is the next Research World implementation prompt only with explicit approval.
 - GW2 live provenance belongs only in World Observe; do not turn it into saved Lab records, Atlas discoveries, notebooks, reusable assets, storage, route state, or evidence claims.
 - Active run provenance describes current model configuration; it is not a saved experiment record.
 - Active run observations describe model state; they are not measured real-world data.
@@ -493,6 +493,7 @@
 - Do not generate GW3 timestamps, UUIDs, random ids, storage keys, saved plans, Lab records, Atlas records, sampled regions, behavioral landscapes, progression state, or decorative fingerprints for intervention readiness.
 - GW4 Atlas is non-persistent information architecture and evidence semantics only.
 - GW4 Atlas evidence states describe model-behavior interpretation, not real-world truth.
+- Atlas sampled evidence remains unresolved until a future source-backed Atlas record system exists; do not label sampled Atlas concepts as observed/current data without real provenance and a dedicated audit.
 - Do not add saved Atlas discoveries, saved evidence records, persistent maps, behavioral landscapes, sampled-region maps from fake data, discovery history, run history, Lab records, storage, export/import, or Atlas save/map actions from GW4.
 - Do not use progress, unlocks, achievements, fake discovery counts, evidence scores, regime confidence, recent activity, or sampled coverage percentages in Atlas.
 - Future-only is capability status, not evidence support; do not use operational statuses for epistemic support.

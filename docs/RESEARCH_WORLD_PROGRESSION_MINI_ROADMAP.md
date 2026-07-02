@@ -376,7 +376,7 @@ The required sequence is:
 GW0 -> UX2 -> GW1 -> GW1B -> GW2 -> GW2B -> GW3 -> GW3B -> GW4 -> GW4B -> GW5 -> GW5B -> GW6 -> GW6B
 ```
 
-UX2, GW1, GW1B, GW2, GW2B, GW3, GW3B, and GW4 are complete. GW4B-GW6 remain future prompts that must not start without explicit direction.
+UX2, GW1, GW1B, GW2, GW2B, GW3, GW3B, GW4, and GW4B are complete. GW5-GW6 remain future prompts that must not start without explicit direction.
 
 ## 22. GW Roadmap Branch
 
@@ -418,7 +418,7 @@ Implemented non-persistent Atlas information architecture and evidence-state sem
 
 ### GW4B: Discovery Atlas Audit
 
-Audit GW4 evidence-state semantics, non-persistence clarity, sampled/unsampled honesty, model-vs-real-world boundaries, absence of fake discoveries/maps/scores, Lab/World relationships, keyboard/focus/reflow behavior, Axe results, status semantics, and scope-creep risk.
+Completed audit and hardening of GW4 evidence-state semantics, non-persistence clarity, sampled/unsampled honesty, model-vs-real-world boundaries, absence of fake discoveries/maps/scores, Lab/World relationships, keyboard/focus/reflow behavior, Axe results, status semantics, and scope-creep risk. GW4B keeps sampled evidence unresolved until source-backed Atlas records exist and does not add saved Atlas records, persistent evidence maps, behavioral landscapes, Lab records, storage, progression, runtime behavior, template behavior, Builder execution, dependencies, assets, or fonts.
 
 ### GW5: Behavioral Landscape Exploration
 
@@ -510,7 +510,7 @@ GW0 documentation tests should confirm:
 - GW1 is implemented only as the bounded destination shell,
 - GW2/GW2B, GW3, and GW3B are implemented only as bounded World live-context/audit layers,
 - GW4 is implemented only as a bounded non-persistent Atlas foundation,
-- GW4B-GW6 remain future-only,
+- GW5-GW6 remain future-only,
 - UX2 prepared the visual foundation between GW0 and GW1,
 - no production UI, CSS, runtime, persistence, route, asset, dependency, or package file is changed by GW0.
 

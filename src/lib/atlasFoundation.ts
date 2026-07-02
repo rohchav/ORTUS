@@ -19,7 +19,7 @@ export interface AtlasEvidenceState {
   id: AtlasEvidenceStateId;
   label: string;
   category: Extract<StatusPillCategory, "evidence">;
-  state: Extract<StatusPillState, "observed" | "supported" | "contradicted" | "unresolved" | "unsupported" | "unverified">;
+  state: Extract<StatusPillState, "supported" | "contradicted" | "unresolved" | "unsupported" | "unverified">;
   summary: string;
   interpretation: string;
 }
@@ -28,7 +28,7 @@ export interface AtlasMapRegionState {
   id: AtlasMapRegionStateId;
   label: string;
   category: Extract<StatusPillCategory, "evidence" | "capability">;
-  state: Extract<StatusPillState, "observed" | "unresolved" | "unverified" | "planning-only" | "future-only">;
+  state: Extract<StatusPillState, "unresolved" | "unverified" | "planning-only" | "future-only">;
   summary: string;
 }
 
@@ -77,9 +77,9 @@ export const atlasEvidenceStates = [
     id: "sampled",
     label: "Sampled",
     category: "evidence",
-    state: "observed",
-    summary: "A future Atlas item has source-backed model-run evidence.",
-    interpretation: "Sampled in model space does not mean validated in the real world."
+    state: "unresolved",
+    summary: "A future Atlas item would need source-backed model-run evidence before it could be treated as sampled.",
+    interpretation: "Sampled is a future model-space evidence concept in GW4, not current data or real-world validation."
   },
   {
     id: "unresolved",

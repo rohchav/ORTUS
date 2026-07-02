@@ -41,7 +41,7 @@ describe("Atlas foundation semantics", () => {
     expect(atlasEvidenceStates.every((state) => state.category === "evidence")).toBe(true);
     expect(atlasEvidenceStates.map((state) => state.state)).toEqual([
       "unresolved",
-      "observed",
+      "unresolved",
       "unresolved",
       "supported",
       "contradicted",
@@ -62,6 +62,16 @@ describe("Atlas foundation semantics", () => {
     });
     expect(atlasEvidenceStates.map((state) => state.state)).not.toContain("future-only");
     expect(atlasEvidenceStates.map((state) => state.label)).not.toContain("Future-only");
+    expect(atlasEvidenceStates.map((state) => state.state)).not.toContain("observed");
+  });
+
+  it("keeps sampled as a future model-space concept rather than current observed data", () => {
+    expect(getAtlasEvidenceStateById("sampled")).toMatchObject({
+      category: "evidence",
+      state: "unresolved"
+    });
+    expect(getAtlasEvidenceStateById("sampled").summary).toContain("would need source-backed model-run evidence");
+    expect(getAtlasEvidenceStateById("sampled").interpretation).toContain("not current data");
   });
 
   it("keeps supported, contradicted, and unsupported as evidence states rather than operational states", () => {

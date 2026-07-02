@@ -370,7 +370,8 @@ async function expectAtlasFoundation(page: Page) {
   await expect(unsampled).toHaveAttribute("data-state", "unresolved");
   const sampled = page.getByLabel(/Sampled:/).first();
   await expect(sampled).toHaveAttribute("data-status-category", "evidence");
-  await expect(sampled).toHaveAttribute("data-state", "observed");
+  await expect(sampled).toHaveAttribute("data-state", "unresolved");
+  await expect(page.getByText("Sampled is a future model-space evidence concept in GW4, not current data or real-world validation.")).toBeVisible();
   const supported = page.getByLabel(/Supported within model:/).first();
   await expect(supported).toHaveAttribute("data-status-category", "evidence");
   await expect(supported).toHaveAttribute("data-state", "supported");

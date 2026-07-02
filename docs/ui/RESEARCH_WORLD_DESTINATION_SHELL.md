@@ -1,6 +1,6 @@
 # ORTUS Research World Destination Shell
 
-Status: Prompt GW1 implementation source of truth, audited and hardened by Prompt GW1B, updated after Prompt GW4. GW1 introduces a persistent World / Lab / Atlas / Workshop destination shell across routes. GW1B hardens the shell evidence without expanding product behavior. GW2 adds live active-run provenance inside World only. GW3 adds live intervention readiness inside World only, GW3B audits/hardens that readiness layer, and GW4 adds non-persistent Atlas information architecture. This destination shell does not implement persistent research data, saved intervention plans, Lab intervention records, saved Discovery Atlas records, behavioral landscapes, progression systems, runtime behavior, template behavior, Builder execution behavior, dependencies, assets, fonts, or storage.
+Status: Prompt GW1 implementation source of truth, audited and hardened by Prompt GW1B, updated after Prompt GW4B. GW1 introduces a persistent World / Lab / Atlas / Workshop destination shell across routes. GW1B hardens the shell evidence without expanding product behavior. GW2 adds live active-run provenance inside World only. GW3 adds live intervention readiness inside World only, GW3B audits/hardens that readiness layer, GW4 adds non-persistent Atlas information architecture, and GW4B audits/hardens that Atlas foundation. This destination shell does not implement persistent research data, saved intervention plans, Lab intervention records, saved Discovery Atlas records, behavioral landscapes, progression systems, runtime behavior, template behavior, Builder execution behavior, dependencies, assets, fonts, or storage.
 
 ## 1. Purpose And Scope
 
@@ -129,7 +129,7 @@ category: capability
 state: future-only
 ```
 
-Atlas uses capability / planning-only status for the GW4 foundation route. Atlas records, sampled maps, and behavioral landscapes remain capability / future-only when referenced. Atlas evidence states use evidence category statuses such as unresolved, observed, supported, contradicted, unsupported, and unverified. Future-only is not evidence support.
+Atlas uses capability / planning-only status for the GW4 foundation route. Atlas records, sampled maps, and behavioral landscapes remain capability / future-only when referenced. Atlas evidence states use evidence category statuses such as unresolved, supported, contradicted, unsupported, and unverified. Future-only is not evidence support. GW4B keeps sampled evidence unresolved because the current Atlas route has no source-backed run provenance.
 
 They do not use disabled, failed, locked, unavailable, supported, or validated states.
 
@@ -171,7 +171,7 @@ GW1 adds no XP, levels, ranks, achievements, badges, unlocks, progress bars, fir
 
 GW1 adds `tests/ui/research-world-shell.spec.ts` to cover all four routes, destination navigation, `aria-current`, route preservation, Lab/Atlas boundaries, viewports, keyboard focus, reduced motion, and Axe scans.
 
-GW1B hardens that suite with route-alias, unique-landmark, clean-navigation, single-current-destination, no-disabled-future-link, skip-link focus, reduced-motion focus, and stricter Lab/Atlas honesty checks. It also hardens destination-registry tests for query/hash normalization and `/world`/`/workshop` alias rejection. GW3 extends the same rendered shell suite to cover the World Intervene readiness layer and absence of that layer on Lab/Atlas. GW3B hardens the rendered Intervene assertions for control labels, current-run entry copy, and disabled clear-entry state. GW4 extends Atlas rendered assertions for the evidence-state legend, non-persistence copy, model-vs-world boundary, no fake save/map actions, and Atlas foundation status.
+GW1B hardens that suite with route-alias, unique-landmark, clean-navigation, single-current-destination, no-disabled-future-link, skip-link focus, reduced-motion focus, and stricter Lab/Atlas honesty checks. It also hardens destination-registry tests for query/hash normalization and `/world`/`/workshop` alias rejection. GW3 extends the same rendered shell suite to cover the World Intervene readiness layer and absence of that layer on Lab/Atlas. GW3B hardens the rendered Intervene assertions for control labels, current-run entry copy, and disabled clear-entry state. GW4 extends Atlas rendered assertions for the evidence-state legend, non-persistence copy, model-vs-world boundary, no fake save/map actions, and Atlas foundation status. GW4B hardens sampled-state assertions so sampled evidence remains unresolved until source-backed Atlas records exist.
 
 Focused rerun passed: `npx playwright test tests/ui/research-world-shell.spec.ts -g "World shell contract holds at desktop 1440x900"`.
 
@@ -200,4 +200,4 @@ Actual browser zoom at 125%, 150%, and 200% was not verified. Screen-reader beha
 
 ## 21. Non-Goals And Guardrails
 
-GW1-GW4 destination work must not modify simulation runtime, template runtime, Builder execution, schema execution, model-schema runtime, graph execution, persistence, storage, dependencies, assets, font configuration, progression, saved Discovery Atlas logic, behavioral landscapes, fake research data, fake intervention outcomes, fake counts, or fake user activity.
+GW1-GW4B destination work must not modify simulation runtime, template runtime, Builder execution, schema execution, model-schema runtime, graph execution, persistence, storage, dependencies, assets, font configuration, progression, saved Discovery Atlas logic, behavioral landscapes, fake research data, fake intervention outcomes, fake counts, or fake user activity.

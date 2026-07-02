@@ -1,6 +1,6 @@
 # ORTUS Product Philosophy And Learning Mission
 
-Status: Prompt P0 documentation-only source of truth, updated after Prompt GW4. This document records product philosophy, learning goals, future progression principles, and guardrails. GW1 implements only the shared World / Lab / Atlas / Workshop destination shell around existing workflows. GW2 adds live active-run provenance and observation context in World only. GW3 adds live intervention readiness and model-response boundaries in World only, GW3B audits/hardens that layer without adding persistence or runtime behavior, and GW4 adds a non-persistent Atlas foundation for evidence-state semantics. This document does not implement runtime behavior, UI progression, unlocks, missions, scoring, achievements, discovery detection, model composition, templates, simulation features, fractal metrics, persistent Research World state, persistence, accounts, social features, onboarding flows, dependencies, or new capability flags.
+Status: Prompt P0 documentation-only source of truth, updated after Prompt GW4B. This document records product philosophy, learning goals, future progression principles, and guardrails. GW1 implements only the shared World / Lab / Atlas / Workshop destination shell around existing workflows. GW2 adds live active-run provenance and observation context in World only. GW3 adds live intervention readiness and model-response boundaries in World only, GW3B audits/hardens that layer without adding persistence or runtime behavior, GW4 adds a non-persistent Atlas foundation for evidence-state semantics, and GW4B audits/hardens that foundation without expanding product behavior. This document does not implement runtime behavior, UI progression, unlocks, missions, scoring, achievements, discovery detection, model composition, templates, simulation features, fractal metrics, persistent Research World state, persistence, accounts, social features, onboarding flows, dependencies, or new capability flags.
 
 ## Core Mission
 
@@ -117,6 +117,8 @@ Prompt GW3 operationalizes the same rule in the World Intervene surface. GW3B au
 
 Prompt GW4 operationalizes the same rule in the Atlas surface. Atlas is a non-persistent foundation for organizing future evidence about investigated model behavior. It does not create saved discoveries, persistent evidence records, behavioral landscapes, sampled-region maps backed by run data, validation, calibration, or real-world discovery certification.
 
+Prompt GW4B hardens that rule by keeping sampled Atlas evidence unresolved until source-backed Atlas records exist. A conceptual sampled state is not current observed run evidence, and it is not real-world validation.
+
 ## Product Experience Principles
 
 The first product question should be:
@@ -141,7 +143,7 @@ Good ORTUS experiences should:
 
 ## Research World Direction
 
-Research World is an incremental product branch, not a finished research platform. Prompt P0 reserves philosophy and direction. Prompt GW0, documented in `RESEARCH_WORLD_PROGRESSION_MINI_ROADMAP.md`, adds a documentation-only progression and information-architecture roadmap for that branch. GW1 adds the destination shell, GW2 adds live World-only active-run provenance, GW3 adds live World-only intervention readiness, and GW4 adds non-persistent Atlas information architecture. These prompts still do not implement progression, persistence, missions, unlocks, discovery detection, achievements, scoring, accounts, social systems, runtime behavior, or persistent Research World state.
+Research World is an incremental product branch, not a finished research platform. Prompt P0 reserves philosophy and direction. Prompt GW0, documented in `RESEARCH_WORLD_PROGRESSION_MINI_ROADMAP.md`, adds a documentation-only progression and information-architecture roadmap for that branch. GW1 adds the destination shell, GW2 adds live World-only active-run provenance, GW3 adds live World-only intervention readiness, GW4 adds non-persistent Atlas information architecture, and GW4B audits/hardens that Atlas foundation. These prompts still do not implement progression, persistence, missions, unlocks, discovery detection, achievements, scoring, accounts, social systems, runtime behavior, or persistent Research World state.
 
 Future branch names:
 

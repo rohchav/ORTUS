@@ -2406,3 +2406,119 @@ Remaining limits before GW4B:
 
 - GW4 has not been audited by GW4B.
 - Actual browser zoom, screen-reader behavior, assistive-technology behavior, forced-colors behavior, complete WCAG conformance, and user comprehension remain unverified.
+
+## 2026-07-01 - Prompt GW4B Discovery Atlas Foundation Audit And Hardening
+
+Goal: audit and harden the committed GW4 Atlas foundation without starting GW5 or adding persistent Atlas records, behavioral landscapes, Lab records, saved evidence, progression, runtime behavior, template behavior, Builder execution behavior, dependencies, assets, or fonts.
+
+Starting state:
+
+- Current commit: `c051334`.
+- Starting worktree was clean.
+- GW4 was committed.
+
+Baseline before edits:
+
+- `npm run test:ui`: passed, 45 passed.
+- `npm run typecheck`: passed.
+- `npm test`: passed, 63 files and 504 tests.
+- `npm run build`: passed with Next.js 15.5.19; static routes included `/`, `/_not-found`, `/atlas`, `/builder`, and `/lab`.
+- `npm run perf:simulation`: passed. Local smoke results included Flocking 100 agents at 95.74 ticks/sec, Flocking 500 agents at 15.08 ticks/sec, Forest Fire medium grid at 24.87 ticks/sec, and Predator-Prey default at 74.35 ticks/sec.
+- `git diff --check`: passed.
+- `npm run lint`: unavailable, package.json has no lint script.
+
+Audit findings:
+
+- `src/lib/atlasFoundation.ts` remains a bounded static Atlas information-architecture source model, not a persistent Discovery Atlas.
+- No Atlas persistence, storage API, saved discovery, saved evidence record, saved map, run history, Lab record, timestamp, UUID, random id, fingerprint, fake data ingestion, generated evidence score, fake sampled-region count, progression mechanic, runtime behavior, template behavior, Builder execution behavior, dependency, asset, or font was added.
+- One semantic defect was found: `Sampled` used evidence / observed even though the current Atlas route has no source-backed Atlas records.
+- The defect mattered: `observed` could make a structural future evidence-state concept look like current sampled data.
+
+Hardening:
+
+- Changed `Sampled` from evidence / observed to evidence / unresolved.
+- Updated sampled copy to state that source-backed model-run evidence would be needed before a future Atlas item could be treated as sampled.
+- Removed `observed` from the Atlas evidence-state type surface.
+- Added unit assertions that sampled remains unresolved and that Atlas evidence states do not use `observed`.
+- Updated rendered assertions so the Atlas sampled pill must be `data-state="unresolved"` and the future-concept copy must be visible.
+- Updated the Atlas audit record and concise roadmap/status references.
+- Added a durable AGENTS guardrail that Atlas sampled evidence remains unresolved until a future source-backed Atlas record system exists.
+
+Scope-creep search:
+
+- The required broad search returned expected hits in docs, tests, guardrails, and pre-existing unrelated run/scenario/runtime code.
+- Atlas-specific production source did not introduce persistence, storage, saved discoveries, saved evidence, fake records, fake maps, fake scores, progression, behavioral landscapes, evidence maps backed by fake data, timestamps, random IDs, UUIDs, or fingerprints.
+
+Browser zoom:
+
+- Attempted actual Chromium keyboard zoom checks at target 125%, 150%, and 200% on `/`, `/builder`, `/lab`, and `/atlas` against a local dev server.
+- In headless Playwright, `devicePixelRatio`, `innerWidth`, `clientWidth`, `visualViewport.scale`, `visualViewport.width`, and `scrollWidth` did not change after zoom attempts.
+- Actual browser zoom at 125%, 150%, and 200% was attempted but not verified.
+
+Post-hardening verification:
+
+- `npm test -- atlas evidence researchDestinations roadmap`: passed, 3 files and 15 tests.
+- `npm run typecheck`: passed.
+- `git diff --check`: passed.
+- `npm test`: passed, 63 files and 505 tests.
+- `npm run build`: passed with Next.js 15.5.19; static routes included `/`, `/_not-found`, `/atlas`, `/builder`, and `/lab`.
+- `npm run perf:simulation`: passed. Local smoke results included Flocking 100 agents at 92.73 ticks/sec, Flocking 500 agents at 10.91 ticks/sec, Forest Fire medium grid at 22.50 ticks/sec, and Predator-Prey default at 58.88 ticks/sec.
+- `npm run lint`: unavailable, package.json has no lint script.
+
+Blocked rendered verification:
+
+- Required `npx playwright test tests/ui/research-world-shell.spec.ts` post-hardening rerun was blocked before execution by the local tool escalation usage limit after the sandbox path required Playwright/localhost escalation.
+- Required `npm run test:ui` post-hardening rerun was not attempted again because it depends on the same local Playwright/localhost escalation path and the escalation was blocked.
+- This is not a passing rendered result.
+
+Remaining limits:
+
+- No screen-reader walkthrough, assistive-technology walkthrough, forced-colors audit, actual browser zoom verification, full WCAG conformance audit, or user-comprehension validation was completed.
+
+Readiness decision:
+
+- Not ready for GW5 under the GW4B prompt gate until the required post-hardening rendered shell suite and full UI Playwright/Axe suite can run and pass.
+- GW4B is not ready to commit under the prompt gate while those rendered checks remain blocked.
+
+## 2026-07-01 - Prompt GW4B Continuation Rendered Verification And Commit Gate
+
+Goal: complete the previously blocked GW4B post-hardening rendered verification gate, rerun final integrity checks, update docs, and commit only if all gates pass.
+
+Starting state:
+
+- Current commit: `c051334`.
+- Worktree contained only expected uncommitted GW4B audit/hardening changes.
+- The Atlas semantic fix was present: `Sampled` is evidence / unresolved, not evidence / observed.
+- `/atlas` still states that Atlas is non-persistent, Discovery records are not implemented, behavioral landscapes are not implemented, sampled-region maps are not implemented, evidence-linked regimes are not implemented, and model behavior is not real-world certification.
+
+Rendered verification:
+
+- `npx playwright test tests/ui/research-world-shell.spec.ts`: passed, 30 passed.
+- `npm run test:ui`: passed, 45 passed.
+- The full UI suite covered Research World shell routes, `/atlas`, `/lab`, `/`, `/builder`, reduced motion, Axe scans, semantic foundation routes, and status semantics.
+- Dev-server `NO_COLOR` / `FORCE_COLOR` warnings appeared again and remain classified as expected dev-server noise.
+
+Final integrity checks:
+
+- `npm run typecheck`: passed.
+- `npm test`: passed, 63 files and 505 tests.
+- `npm run build`: passed with Next.js 15.5.19; static routes included `/`, `/_not-found`, `/atlas`, `/builder`, and `/lab`.
+- `npm run perf:simulation`: passed. Local smoke results included Flocking 100 agents at 97.69 ticks/sec, Flocking 500 agents at 12.87 ticks/sec, Forest Fire medium grid at 19.65 ticks/sec, and Predator-Prey default at 50.75 ticks/sec.
+- `git diff --check`: passed.
+- `npm run lint`: unavailable, package.json has no lint script.
+
+Scope-creep search:
+
+- The required broad search returned expected hits in docs, tests, guardrails, and pre-existing unrelated run/scenario/runtime code.
+- Atlas-specific production source still did not introduce persistence, storage, saved discoveries, saved evidence, fake records, fake maps, fake scores, progression, behavioral landscapes, timestamps, random IDs, UUIDs, or fingerprints.
+
+Documentation updates:
+
+- Updated the GW4B audit record, README, roadmap/status docs, concepts, simulation README, current context, and planned roadmap so they no longer describe the rendered gate as blocked.
+- Remaining limitations still include no screen-reader walkthrough, assistive-technology walkthrough, forced-colors audit, actual browser zoom verification, full WCAG conformance audit, or user-comprehension validation.
+
+Readiness decision:
+
+- Ready for GW5 after GW4B is committed, with strict boundaries.
+- GW5 remains a future prompt only with explicit user approval.
+- GW5 must not treat GW4/GW4B Atlas as persistence, behavioral landscapes, validation, real-world discovery, or sampled run-backed evidence.
