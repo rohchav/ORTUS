@@ -295,8 +295,9 @@ describe("uncertainty layer", () => {
     expect(() => runUncertaintyEnsemble(base, epidemicUncertaintyConfig(), { ticksPerRun: maxUncertaintyTicksPerRun + 1 })).toThrow(/ticksPerRun/);
   });
 
-  it("supports uncertainty over one safe numeric parameter for every production template", () => {
-    for (const template of productionTemplates) {
+  it.each(productionTemplates.map((template) => [template.id, template] as const))(
+    "supports production-template numeric-parameter uncertainty for %s",
+    (_templateId, template) => {
       const base = createDefaultRunConfig({ template, seed: `uncertainty-${template.id}` });
       const variable = variableForTemplate(template);
       const metric = template.metricDefinitions?.[0]?.key;
@@ -341,7 +342,7 @@ describe("uncertainty layer", () => {
         }
       }
     }
-  });
+  );
 
   it("computes controlled summary statistics while handling missing and non-finite metrics with warnings", () => {
     const summary = summarizeMetricValues([1, 2, 3, 4]);

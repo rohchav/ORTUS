@@ -58,7 +58,7 @@ export const capabilityGuidancePrinciple =
   "Capability guidance describes current product capability. It does not create capability.";
 
 export const capabilityGuidanceBoundary =
-  "GW6 creates source-backed guidance and capability orientation. It does not create saved records, Atlas discoveries, Lab experiments, behavioral landscapes, progression, personalized coaching, or AI-generated advice.";
+  "GW6 creates source-backed guidance and capability orientation. It does not create saved records, Atlas discoveries, Lab experiments, behavioral landscapes, progression, user-derived routing, or behavior-derived task ordering.";
 
 export const capabilityGuidanceVisibleBoundary =
   "Guidance describes current ORTUS capabilities. It does not create saved records, validation, discoveries, or persistence.";
@@ -207,7 +207,7 @@ export const capabilityGuidanceSummaries: readonly CapabilityGuidanceSummary[] =
         "world-guidance-only",
         "Guidance is route-scoped orientation",
         capabilityBoundaryStatus,
-        "This panel is static product capability guidance, not user profiling, coaching, or generated advice."
+        "This panel is static product capability guidance; it does not infer user needs from behavior."
       )
     ],
     [
@@ -326,9 +326,9 @@ export const capabilityGuidanceSummaries: readonly CapabilityGuidanceSummary[] =
       ),
       boundary(
         "lab-not-user-advice",
-        "Guidance is not coaching",
+        "Guidance is static",
         capabilityBoundaryStatus,
-        "Capability orientation is static and source-backed; it is not inferred from the user or generated from user behavior."
+        "Capability orientation is static and source-backed; it is not inferred from the user or derived from user behavior."
       )
     ],
     [
@@ -383,9 +383,9 @@ export const capabilityGuidanceSummaries: readonly CapabilityGuidanceSummary[] =
       ),
       boundary(
         "atlas-not-user-advice",
-        "Guidance is not generated advice",
+        "Guidance is static",
         capabilityBoundaryStatus,
-        "Capability orientation is static and source-backed; it is not an assistant, coach, recommender, or targeting system."
+        "Capability orientation is static and source-backed; it does not infer user needs, order route choices, or target users."
       )
     ],
     [

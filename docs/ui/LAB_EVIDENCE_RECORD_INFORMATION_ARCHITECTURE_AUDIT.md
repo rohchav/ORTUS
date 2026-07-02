@@ -73,12 +73,12 @@ Screen-reader behavior, assistive-technology behavior, forced-colors behavior, c
 
 ## GW6 Relationship
 
-GW6 adds static source-backed capability guidance on the Lab route. That panel does not change the GW5/GW5B audit result: Lab remains a non-persistent evidence-record foundation, not a saved experiment system, notebook system, run history, Lab-to-Atlas publication path, validation system, generated-advice system, or storage layer.
+GW6 adds static source-backed capability guidance on the Lab route. That panel does not change the GW5/GW5B audit result: Lab remains a non-persistent evidence-record foundation, not a saved experiment system, notebook system, run history, Lab-to-Atlas publication path, validation system, generated-guidance system, or storage layer.
 
 ## Decision
 
 Source, documentation, rendered-shell, full UI, unit, typecheck, build, performance-smoke, and diff hardening gates are complete for the defects found. GW5B is ready for the requested commit gate after the final rerun checks remain passing.
 
-GW6 is now implemented as static capability guidance. GW6B remains the required next audit before further Research World expansion.
+GW6 is implemented as static capability guidance, and GW6B is complete as the contextual capability guidance audit and hardening pass. Further Research World expansion remains future work requiring an explicit prompt.
 
 No persistence, saved experiments, notebooks, run history, Lab-to-Atlas publication, behavioral landscapes, progression, runtime behavior, template behavior, Builder execution behavior, dependencies, assets, or fonts were added.

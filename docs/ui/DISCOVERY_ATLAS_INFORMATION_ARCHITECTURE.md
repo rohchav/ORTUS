@@ -182,4 +182,4 @@ GW4B changed `Sampled` from evidence / observed to evidence / unresolved because
 
 Prompt GW6 adds static capability guidance to the Atlas route from `src/lib/capabilityGuidance.ts`.
 
-That guidance describes current Atlas capability. It does not create Atlas capability. It does not create Discovery Atlas records, persistent evidence maps, sampled-region displays backed by run data, behavioral landscapes, evidence-rating surfaces, validation, calibration, storage, generated advice, or real-world discovery certification.
+That guidance describes current Atlas capability. It does not create Atlas capability. It does not create Discovery Atlas records, persistent evidence maps, sampled-region displays backed by run data, behavioral landscapes, evidence-rating surfaces, validation, calibration, storage, generated guidance, or real-world discovery certification.

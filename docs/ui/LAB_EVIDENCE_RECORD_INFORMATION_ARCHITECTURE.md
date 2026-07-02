@@ -119,4 +119,4 @@ Required checks include typecheck, unit tests, rendered UI tests, production bui
 
 Prompt GW6 adds static capability guidance to the Lab route from `src/lib/capabilityGuidance.ts`.
 
-That guidance describes current Lab capability. It does not create Lab capability. It does not create persistent evidence records, experiment ledgers, notebooks, saved comparisons, run history, Lab-to-Atlas publication, validation, calibration, storage, generated advice, or real-world discovery certification.
+That guidance describes current Lab capability. It does not create Lab capability. It does not create persistent evidence records, experiment ledgers, notebooks, saved comparisons, run history, Lab-to-Atlas publication, validation, calibration, storage, generated guidance, or real-world discovery certification.

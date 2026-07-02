@@ -212,6 +212,6 @@ This readiness is a process/readiness decision for the next prompt, not scientif
 
 ## 30. GW6 Capability Guidance Relationship
 
-GW6 later adds static source-backed capability guidance on Atlas. That panel does not change the GW4/GW4B audit result: Atlas remains a non-persistent evidence-orientation foundation, not a saved Discovery Atlas, persistent evidence map, behavioral landscape, source-backed sampled-region display, validation system, generated-advice system, or storage layer.
+GW6 later adds static source-backed capability guidance on Atlas. That panel does not change the GW4/GW4B audit result: Atlas remains a non-persistent evidence-orientation foundation, not a saved Discovery Atlas, persistent evidence map, behavioral landscape, source-backed sampled-region display, validation system, generated-guidance system, or storage layer.
 
-GW6B remains the required audit before further Research World expansion.
+GW6B is complete as the contextual capability guidance audit and hardening pass. Further Research World expansion remains future work requiring an explicit prompt.

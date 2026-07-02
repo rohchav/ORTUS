@@ -2644,7 +2644,7 @@ Readiness decision:
 
 ## 2026-07-02 - Prompt GW6 Contextual Capability Guidance
 
-Goal: implement bounded source-backed contextual capability guidance for World, Workshop, Lab, and Atlas without creating persistence, saved records, Atlas discoveries, Lab experiments, behavioral landscapes, progression, generated advice, runtime behavior, template behavior, Builder execution behavior, validation, calibration, dependencies, assets, or fonts.
+Goal: implement bounded source-backed contextual capability guidance for World, Workshop, Lab, and Atlas without creating persistence, saved records, Atlas discoveries, Lab experiments, behavioral landscapes, progression, generated guidance, runtime behavior, template behavior, Builder execution behavior, validation, calibration, dependencies, assets, or fonts.
 
 Starting state:
 
@@ -2675,9 +2675,9 @@ Implementation:
 Boundary decisions:
 
 - Capability guidance describes current product capability. It does not create capability.
-- GW6 creates source-backed guidance and capability orientation. It does not create saved records, Atlas discoveries, Lab experiments, behavioral landscapes, progression, personalized coaching, or AI-generated advice.
+- GW6 creates source-backed guidance and capability orientation. It does not create saved records, Atlas discoveries, Lab experiments, behavioral landscapes, progression, user-derived routing, or behavior-derived task ordering.
 - The visible panel copy says: `Guidance describes current ORTUS capabilities. It does not create saved records, validation, discoveries, or persistence.`
-- Guidance has no storage, dismissal state, analytics, timestamps, random ids, generated ids, recommendation engine, generated advice, or route-local fake actions.
+- Guidance has no storage, dismissal state, analytics, timestamps, random ids, generated ids, user-derived routing, behavior-derived task ordering, generated guidance, or route-local fake actions.
 
 Verification:
 
@@ -2701,15 +2701,58 @@ Verification:
 Scope search:
 
 - The required broad scope-creep search returned expected hits in docs, tests, guardrails, and pre-existing unrelated Scenario/Run Comparison/Experiment/Neural Runtime Lab/performance code.
-- GW6 production additions did not introduce storage APIs, timestamps, random ids, UUIDs, fingerprints, fake save/send/publish/create actions, generated advice behavior, persistent guidance state, Lab persistence, Atlas persistence, runtime behavior, template behavior, or Builder execution behavior.
+- GW6 production additions did not introduce storage APIs, timestamps, random ids, UUIDs, fingerprints, fake save/send/publish/create actions, generated guidance behavior, persistent guidance state, Lab persistence, Atlas persistence, runtime behavior, template behavior, or Builder execution behavior.
 
 Remaining limits:
 
-- GW6B has not started.
 - The final focused shell and full UI Playwright/Axe reruns passed after documentation updates.
 - Actual browser zoom, screen-reader behavior, assistive-technology behavior, forced-colors behavior, complete WCAG conformance, and user-comprehension evidence remain unverified.
 
 Readiness decision:
 
-- GW6 is ready to commit based on final focused rendered shell verification, final full UI rendered verification, source, unit, typecheck, build, performance, diff, and scope-creep checks.
-- GW6B is the next Research World prompt only with explicit user approval.
+- GW6 was ready to commit based on final focused rendered shell verification, final full UI rendered verification, source, unit, typecheck, build, performance, diff, and scope-creep checks.
+
+## 2026-07-02 - Prompt GW6B Contextual Capability Guidance Audit And Hardening
+
+Goal: audit and harden the committed GW6 contextual capability guidance layer without starting GW7, adding persistence, recommendations, onboarding, fake actions, Lab records, Atlas discoveries, behavioral landscapes, progression, runtime behavior, template behavior, Builder execution behavior, dependencies, assets, or fonts.
+
+Starting state:
+
+- Current commit before work: `c594546`.
+- Starting worktree was clean.
+- GW6 was committed.
+
+Baseline blockers:
+
+- `npm test` reproduced a timeout in `src/simulation/__tests__/uncertainty.test.ts` for the production-template numeric-parameter coverage.
+- The prompt-supplied focused filter initially skipped because the old test name did not contain `production-template numeric-parameter`.
+- The first rendered shell Playwright attempts reused a stale local Next.js dev server on port 3000. The page SSR output loaded, but CSS and JavaScript app chunks returned 404, so the World route stayed in the hydrating shell.
+
+Hardening:
+
+- Split the aggregate uncertainty production-template numeric-parameter test into per-template `it.each` cases without weakening generated-run, determinism, snapshot-equality, or finite-metric assertions.
+- Renamed the split cases so `npm test -- src/simulation/__tests__/uncertainty.test.ts -t "production-template numeric-parameter"` exercises the intended coverage.
+- Stopped the stale Next.js dev server and reran rendered verification against a fresh server.
+- Added `docs/ui/CONTEXTUAL_CAPABILITY_GUIDANCE_AUDIT.md`.
+- Hardened capability-guidance source and docs away from advice-system vocabulary. Guidance remains static route-local capability orientation, not user-derived routing, behavior-derived task ordering, or generated guidance.
+- Updated README, planned roadmap, roadmap, HCI audit, workspace IA, current context, contextual-guidance docs, Lab/Atlas foundation references, and session log.
+
+Verification:
+
+- `npm test -- src/simulation/__tests__/uncertainty.test.ts`: passed, 1 file and 15 tests.
+- `npm test -- src/simulation/__tests__/uncertainty.test.ts -t "production-template numeric-parameter"`: passed, 7 tests exercised and 8 skipped.
+- `npm test`: passed, 65 files and 525 tests.
+- `npx playwright test tests/ui/research-world-shell.spec.ts`: first fresh-server rerun passed, 30 passed.
+- `npm run test:ui`: passed, 45 passed.
+- `npm test -- capabilityGuidance`: passed, 1 file and 7 tests.
+
+Remaining limits:
+
+- Actual browser zoom at 125%, 150%, and 200% was not verified.
+- No screen-reader walkthrough, assistive-technology walkthrough, forced-colors audit, full WCAG conformance audit, or user-comprehension validation was completed.
+- Playwright/Axe evidence is rendered smoke evidence, not accessibility certification.
+
+Readiness decision:
+
+- GW6B is ready for GW7 and commit after typecheck, full unit, build, performance smoke, diff check, lint availability, scope-creep search, and final documentation state remain clean.
+- GW7 remains future work requiring explicit user approval.
