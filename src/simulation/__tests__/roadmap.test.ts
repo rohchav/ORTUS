@@ -185,6 +185,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
     const existingDesignAuditPath = join(repoRoot, "docs", "ui", "EXISTING_DESIGN_TOKEN_AND_COMPONENT_AUDIT.md");
     const semanticTokenFoundationPath = join(repoRoot, "docs", "ui", "LIVING_SYSTEMS_ATLAS_SEMANTIC_TOKEN_FOUNDATION.md");
     const behavioralLandscapeFoundationPath = join(repoRoot, "docs", "ui", "BEHAVIORAL_LANDSCAPE_EXPLORATION_FOUNDATION.md");
+    const behavioralLandscapeFoundationAuditPath = join(repoRoot, "docs", "ui", "BEHAVIORAL_LANDSCAPE_EXPLORATION_FOUNDATION_AUDIT.md");
     expect(existsSync(roadmapPath)).toBe(true);
     expect(existsSync(missingPillarsPath)).toBe(true);
     expect(existsSync(productPhilosophyPath)).toBe(true);
@@ -193,6 +194,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(existsSync(existingDesignAuditPath)).toBe(true);
     expect(existsSync(semanticTokenFoundationPath)).toBe(true);
     expect(existsSync(behavioralLandscapeFoundationPath)).toBe(true);
+    expect(existsSync(behavioralLandscapeFoundationAuditPath)).toBe(true);
 
     const roadmap = readFileSync(roadmapPath, "utf8");
     const productPhilosophy = readFileSync(productPhilosophyPath, "utf8");
@@ -201,6 +203,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
     const existingDesignAudit = readFileSync(existingDesignAuditPath, "utf8");
     const semanticTokenFoundation = readFileSync(semanticTokenFoundationPath, "utf8");
     const behavioralLandscapeFoundation = readFileSync(behavioralLandscapeFoundationPath, "utf8");
+    const behavioralLandscapeFoundationAudit = readFileSync(behavioralLandscapeFoundationAuditPath, "utf8");
     expect(roadmap).toContain("completed through Prompt 39B");
     expect(roadmap).toContain("Post-30B stabilization");
     expect(roadmap).toContain(
@@ -217,11 +220,12 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(roadmap).toContain("Completed Prompt 39 scenario-planning foundation");
     expect(roadmap).toContain("Completed Prompt 39 scenario-planning audit");
     expect(roadmap).toContain("Prompt 35 adds a separate `Author Schema` Builder mode");
-    expect(roadmap).toContain("Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, MR0, F0, P0, UX0, UX1, GW0, UX2, UX2B, GW1, GW1B, GW2, GW2B, GW3, GW3B, GW4, GW4B, GW5, GW5B, GW6, GW6B, and GW7 are complete.");
+    expect(roadmap).toContain("Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, MR0, F0, P0, UX0, UX1, GW0, UX2, UX2B, GW1, GW1B, GW2, GW2B, GW3, GW3B, GW4, GW4B, GW5, GW5B, GW6, GW6B, GW7, and GW7B are complete.");
     expect(roadmap).toContain(
-      "GW7B is the next Research World prompt only with explicit approval; do not start GW7B, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any further Research World/fractal/multiscale implementation without explicit approval."
+      "GW8 is the next Research World prompt only with explicit approval; do not start GW8, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any further Research World/fractal/multiscale implementation without explicit approval."
     );
     expect(roadmap).toContain("Prompt GW7 adds non-persistent Behavioral Landscape Exploration Foundation");
+    expect(roadmap).toContain("Prompt GW7B audits and hardens the Behavioral Landscape Exploration Foundation");
     expect(behavioralLandscapeFoundation).toContain(
       "A behavioral landscape describes how model behavior may vary across model conditions. It is not a real-world map, empirical proof, or Discovery Atlas record."
     );
@@ -229,7 +233,10 @@ describe("roadmap alignment and missing pillar reservations", () => {
       "GW7 creates behavioral-landscape vocabulary and non-persistent exploration scaffolding. It does not create saved landscapes, sampled-region maps, evidence records, Atlas discoveries, Lab experiments, regime detection, or real-world validation."
     );
     expect(behavioralLandscapeFoundation).toContain("Conceptual scaffold - not sampled run data.");
-    expect(behavioralLandscapeFoundation).toContain("GW7B: Behavioral Landscape Foundation Audit and Hardening");
+    expect(behavioralLandscapeFoundation).toContain("GW7B is complete");
+    expect(behavioralLandscapeFoundationAudit).toContain("Decision: ready for GW8");
+    expect(behavioralLandscapeFoundationAudit).toContain("Actual browser zoom at 125%, 150%, and 200% was not verified.");
+    expect(behavioralLandscapeFoundationAudit).toContain("The rendered landscape scaffold adds no fake interactive controls, route-local buttons, inputs, links, or static Tab stops.");
     expect(roadmap).not.toContain("Prompt GW5 Behavioral Landscape Exploration");
     expect(roadmap).toContain("Prompt GW1 implements the shared Research World destination shell.");
     expect(roadmap).toContain("Prompt GW1B audits and hardens the destination shell without expanding product behavior.");
@@ -437,7 +444,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
       "simulation output ≠ empirical truth",
       "Progression must not rely only on color, maps, animation, drag/drop, hover, or decorative metaphor.",
       "GW0 defines what the product must communicate. UX2 defines how shared design foundations communicate it. GW1 implements the first structural shell using both.",
-      "GW0 -> UX2 -> GW1 -> GW1B -> GW2 -> GW2B -> GW3 -> GW3B -> GW4 -> GW4B -> GW5 -> GW5B -> GW6 -> GW6B -> GW7 -> GW7B",
+      "GW0 -> UX2 -> GW1 -> GW1B -> GW2 -> GW2B -> GW3 -> GW3B -> GW4 -> GW4B -> GW5 -> GW5B -> GW6 -> GW6B -> GW7 -> GW7B -> GW8",
       "Prompt GW1 implements the route contract:",
       "Lab and Atlas are reachable destinations, not locked destinations.",
       "no production UI, CSS, runtime, persistence, route, asset, dependency, or package file is changed by GW0"
@@ -592,6 +599,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
       readFileSync(join(repoRoot, "docs", "ui", "EXISTING_DESIGN_TOKEN_AND_COMPONENT_AUDIT.md"), "utf8"),
       readFileSync(join(repoRoot, "docs", "ui", "LIVING_SYSTEMS_ATLAS_SEMANTIC_TOKEN_FOUNDATION.md"), "utf8"),
       readFileSync(join(repoRoot, "docs", "ui", "BEHAVIORAL_LANDSCAPE_EXPLORATION_FOUNDATION.md"), "utf8"),
+      readFileSync(join(repoRoot, "docs", "ui", "BEHAVIORAL_LANDSCAPE_EXPLORATION_FOUNDATION_AUDIT.md"), "utf8"),
       readFileSync(join(repoRoot, "planned_roadmap.md"), "utf8"),
       readFileSync(join(repoRoot, "docs", "codex", "CURRENT_CONTEXT.md"), "utf8"),
       readFileSync(join(repoRoot, "src", "simulation", "README.md"), "utf8"),
@@ -626,8 +634,9 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(docs).toContain("Preserve `/` as World.");
     expect(docs).toContain("Preserve `/builder` as Workshop.");
     expect(docs).toContain("after GW4, Atlas is a non-persistent foundation route; after GW5, Lab is a non-persistent foundation route.");
-    expect(docs).toContain("after GW7, GW7B is the next Research World prompt only with explicit approval.");
+    expect(docs).toContain("after GW7B, GW8 is the next Research World prompt only with explicit approval.");
     expect(docs).toContain("GW7 behavioral landscape foundation is non-persistent Atlas vocabulary and conceptual scaffolding only.");
+    expect(docs).toContain("GW7B audits and hardens the behavioral landscape foundation; it does not add persistent maps, sampled data, run sweeps, regime detection, runtime behavior, template behavior, Builder execution behavior, validation, calibration, or real-world discovery certification.");
     expect(docs).toContain("Do not add fake maps, heatmaps, contours, sampled regions, evidence scores, confidence scores, coverage percentages, run sweeps, batch execution, or regime detection from GW7.");
     expect(docs).not.toContain("Prompt GW5 Behavioral Landscape Exploration");
     expect(docs).toContain("UX2 establishes shared visual semantics. It does not perform the Research World shell transformation.");

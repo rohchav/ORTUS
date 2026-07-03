@@ -1,6 +1,6 @@
 # Behavioral Landscape Exploration Foundation
 
-Status: Prompt GW7 implementation source of truth. GW7 adds source-backed behavioral-landscape vocabulary and a non-persistent conceptual scaffold on `/atlas`. It does not create saved landscapes, sampled-region maps, evidence records, Atlas discoveries, Lab experiments, regime detection, parameter sweeps, batch execution, persistence, progression, runtime behavior, template behavior, Builder execution behavior, validation, calibration, dependencies, assets, fonts, or real-world discovery certification.
+Status: Prompt GW7 implementation source of truth, audited by Prompt GW7B in `docs/ui/BEHAVIORAL_LANDSCAPE_EXPLORATION_FOUNDATION_AUDIT.md`. GW7 adds source-backed behavioral-landscape vocabulary and a non-persistent conceptual scaffold on `/atlas`. GW7B hardens the vocabulary, status semantics, rendered copy, and zero-Tab-stop scaffold contract. These prompts do not create saved landscapes, sampled-region maps, evidence records, Atlas discoveries, Lab experiments, regime detection, parameter sweeps, batch execution, persistence, progression, runtime behavior, template behavior, Builder execution behavior, validation, calibration, dependencies, assets, fonts, or real-world discovery certification.
 
 ## 1. Purpose
 
@@ -138,8 +138,8 @@ GW7 does not implement:
 
 Deferred work includes source-backed landscape sampling, real sampled-region representations, persistence, provenance-preserving landscape records, Lab evidence integration, Atlas publication rules, stale-landscape handling, comparison-backed contradictions, validation/calibration workflows, browser zoom verification, screen-reader and assistive-technology walkthroughs, forced-colors checks, and user-comprehension testing.
 
-## 19. GW7B Audit Requirement
+## 19. GW7B Audit Result
 
-GW7 must be followed by `GW7B: Behavioral Landscape Foundation Audit and Hardening`.
+GW7B is complete in `docs/ui/BEHAVIORAL_LANDSCAPE_EXPLORATION_FOUNDATION_AUDIT.md`.
 
-GW7B should inspect vocabulary accuracy, conceptual scaffold honesty, sampled/unsampled clarity, absence of fake maps/scores/regions, non-persistence clarity, model-vs-real-world boundaries, World/Lab/Atlas relationships, keyboard/focus/reflow behavior, Axe results, status semantics, and scope-creep risk.
+GW7B found no production runtime or persistence defect. It hardened source vocabulary tests, rendered Atlas copy assertions, and the static-scaffold zero-Tab-stop contract. Future GW8 work must not treat this audited foundation as sampled data, a saved map, runtime support, validation, empirical evidence, or progression.

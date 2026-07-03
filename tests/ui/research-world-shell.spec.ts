@@ -507,6 +507,14 @@ async function expectAtlasFoundation(page: Page) {
       "A landscape region can describe model behavior only after source-backed sampling. It does not certify real-world regimes or policy effects."
     )
   ).toBeVisible();
+  await expect(landscape.getByText("Sampled in model space is not empirically validated.")).toBeVisible();
+  await expect(landscape.getByText("Model regime is not a real-world law.")).toBeVisible();
+  await expect(landscape.getByText("A model regime is not a real-world law or policy effect.")).toBeVisible();
+  await expect(landscape.getByText("Transition zone is not a proven tipping point.")).toBeVisible();
+  await expect(landscape.getByText("A transition zone is not a proven real-world tipping point.")).toBeVisible();
+  await expect(landscape.getByText("Sensitivity is not causal certainty.").first()).toBeVisible();
+  await expect(landscape.getByText("Sampling in model space would still not validate real-world claims.")).toBeVisible();
+  await expect(landscape.getByText("Future-only is not locked progression and not current evidence support.")).toBeVisible();
   await expect(
     landscape.getByText("World is where live model behavior is observed. GW7 does not turn World runs into sampled landscape data.")
   ).toBeVisible();
@@ -534,6 +542,18 @@ async function expectAtlasFoundation(page: Page) {
   await expect(landscapeContradicted).toHaveAttribute("data-state", "contradicted");
   await expect(landscape.locator(".status-pill[data-status-category='operational']")).toHaveCount(0);
   await expect(landscape.locator(".status-pill[data-status-category='interaction']")).toHaveCount(0);
+
+  const landscapeTabStops = await landscape.evaluate((element) =>
+    Array.from(
+      element.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      )
+    ).filter((candidate) => {
+      const style = window.getComputedStyle(candidate);
+      return style.display !== "none" && style.visibility !== "hidden";
+    }).length
+  );
+  expect(landscapeTabStops, "behavioral landscape scaffold should remain static readable content with no fake controls").toBe(0);
 
   const mainText = await page.getByRole("main").innerText();
   expect(mainText).not.toMatch(

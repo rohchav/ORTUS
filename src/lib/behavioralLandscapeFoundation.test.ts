@@ -120,14 +120,39 @@ describe("Behavioral landscape foundation semantics", () => {
     expect(behavioralLandscapeFoundation.boundary).toContain("does not create saved landscapes");
   });
 
+  it("locks high-risk landscape vocabulary to model-space interpretations", () => {
+    expect(getLandscapeConceptById("sampled-area").distinction).toBe("Sampled in model space is not empirically validated.");
+    expect(getLandscapeConceptById("model-regime").distinction).toBe("Model regime is not a real-world law.");
+    expect(getLandscapeConceptById("transition-zone").distinction).toBe("Transition zone is not a proven tipping point.");
+    expect(getLandscapeConceptById("sensitivity-zone").distinction).toBe("Sensitivity is not causal certainty.");
+    expect(getLandscapeConceptById("conceptual-scaffold").distinction).toBe("Conceptual scaffold is not run data.");
+    expect(getLandscapeConceptById("future-sampled-landscape").distinction).toContain("not locked progression");
+    expect(getLandscapeConceptById("future-sampled-landscape").distinction).toContain("not current evidence support");
+
+    expect(getLandscapeRegionStateById("future-sampled").interpretation).toBe(
+      "Sampling in model space would still not validate real-world claims."
+    );
+    expect(getLandscapeRegionStateById("model-regime").interpretation).toBe(
+      "A model regime is not a real-world law or policy effect."
+    );
+    expect(getLandscapeRegionStateById("transition-zone").interpretation).toBe(
+      "A transition zone is not a proven real-world tipping point."
+    );
+    expect(getLandscapeRegionStateById("sensitivity-zone").interpretation).toBe("Sensitivity is not causal certainty.");
+    expect(getLandscapeRegionStateById("future-sampled-landscape").interpretation).toContain("not evidence support");
+    expect(getLandscapeRegionStateById("future-sampled-landscape").interpretation).toContain("locked progression");
+  });
+
   it("defines no persistence, generated ids, storage keys, timestamps, or fake data fields", () => {
     const allKeys = collectKeys(behavioralLandscapeFoundation);
     const forbiddenKeyPattern =
-      /^(storageKey|localStorageKey|database|landscapeId|recordId|evidenceId|discoveryId|runHistoryId|savedCount|recentItems|timestamp|createdAt|updatedAt|fingerprint|uuid|confidenceScore|evidenceScore|coveragePercentage)$/i;
+      /^(storageKey|localStorageKey|database|landscapeId|recordId|evidenceId|discoveryId|runHistoryId|sampledRegionId|sampledRegionCount|sampleCount|savedCount|recentItems|timestamp|createdAt|updatedAt|fingerprint|uuid|confidenceScore|evidenceScore|regimeConfidence|scoreValue|coveragePercentage|coveragePercent)$/i;
 
     expect(allKeys.filter((key) => forbiddenKeyPattern.test(key))).toEqual([]);
     expect(JSON.stringify(behavioralLandscapeFoundation)).not.toMatch(/Date\.now|Math\.random|crypto\.randomUUID|uuid|fingerprint/i);
-    expect(JSON.stringify(behavioralLandscapeFoundation)).not.toMatch(/confidence score|evidence score|coverage percentage/i);
+    expect(JSON.stringify(behavioralLandscapeFoundation)).not.toMatch(
+      /confidence score|evidence score|coverage percentage|regime confidence|sample count|sampled region count/i
+    );
   });
 
   it("keeps route contracts and production surfaces bounded to Atlas route integration", () => {

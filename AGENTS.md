@@ -477,7 +477,7 @@
 - Preserve current validated workflows before reorganizing them further.
 - Use the existing Playwright/Axe harness for rendered destination-shell verification.
 - Do not claim screen-reader, AT, forced-colors, browser-zoom, or WCAG verification without evidence.
-- Do not start a Research World implementation slice from a prior shell prompt without the required audit; after GW7, GW7B is the next Research World prompt only with explicit approval.
+- Do not start a Research World implementation slice from a prior shell prompt without the required audit; after GW7B, GW8 is the next Research World prompt only with explicit approval.
 - Lab evidence-record semantics are non-persistent information architecture until a later audited prompt implements storage. Do not treat `LabRecordLifecycleState`, conceptual ledger scaffolds, or Lab route copy as saved evidence records, experiment histories, notebooks, saved comparisons, run history, reusable assets, or validation evidence.
 - GW5 Lab does not save active World runs, import active-run provenance, create experiment ledgers, create notebooks, create saved comparisons, publish to Atlas, create discoveries, add storage, add timestamps, generate ids, add progression, or change simulation/template/Builder runtime behavior.
 - Lab records will organize evidence about model investigations. They will not certify discoveries about the real world.
@@ -502,6 +502,7 @@
 - Do not use progress, unlocks, achievements, fake discovery counts, evidence scores, regime confidence, recent activity, or sampled coverage percentages in Atlas.
 - GW7 behavioral landscape foundation is non-persistent Atlas vocabulary and conceptual scaffolding only.
 - GW7 conceptual scaffolds are not sampled run data.
+- GW7B audits and hardens the behavioral landscape foundation; it does not add persistent maps, sampled data, run sweeps, regime detection, runtime behavior, template behavior, Builder execution behavior, validation, calibration, or real-world discovery certification.
 - Do not add fake maps, heatmaps, contours, sampled regions, evidence scores, confidence scores, coverage percentages, run sweeps, batch execution, or regime detection from GW7.
 - Do not add saved landscape records, Atlas discoveries, Lab records, persistence, progression, runtime behavior, template behavior, Builder execution behavior, or route aliases from GW7.
 - Do not frame model regions as real-world regimes, policy effects, empirical proof, validation, calibration, or discovery certification.

@@ -2816,4 +2816,61 @@ Remaining limits:
 
 Next:
 
-- GW7B: Behavioral Landscape Foundation Audit and Hardening is required before further Research World expansion.
+- GW7B: Behavioral Landscape Foundation Audit and Hardening followed this work and is recorded in the next session-log entry.
+
+## 2026-07-03 - Prompt GW7B Behavioral Landscape Foundation Audit and Hardening
+
+Goal: audit and harden the GW7 Behavioral Landscape Exploration Foundation without adding persistent maps, sampled data, run sweeps, regime detection, Atlas discoveries, Lab records, progression, runtime behavior, template behavior, Builder execution behavior, dependencies, assets, or fonts.
+
+Starting state:
+
+- Current commit before work: `3da99c3`.
+- Starting worktree was clean.
+- Prompt GW7 was committed.
+
+Baseline:
+
+- `npm run test:ui` failed in the sandbox because the local dev server could not bind to `127.0.0.1:3000` (`listen EPERM`), not because of an app crash.
+- Escalated `npm run test:ui`: passed, 45 tests.
+- `npm run typecheck`: passed.
+- `npm test`: passed, 66 files and 534 tests.
+- `npm run build`: passed.
+- `npm run perf:simulation`: passed.
+- `git diff --check`: passed.
+- `npm run lint`: unavailable, package.json has no lint script.
+
+Audit and hardening:
+
+- Added `docs/ui/BEHAVIORAL_LANDSCAPE_EXPLORATION_FOUNDATION_AUDIT.md`.
+- Hardened `src/lib/behavioralLandscapeFoundation.test.ts` around high-risk vocabulary: sampled areas, model regimes, transition zones, sensitivity zones, conceptual scaffold, and future sampled landscape status.
+- Expanded forbidden structural-key/source checks for sampled-region counts, sample counts, coverage percentages, regime confidence, and score values.
+- Hardened `tests/ui/research-world-shell.spec.ts` with rendered assertions for high-risk Atlas vocabulary and a zero-Tab-stop contract for the behavioral landscape scaffold.
+- Updated roadmap, concepts, Atlas, HCI, workspace IA, AGENTS, README, current context, and session-log references so GW7B is complete and GW8 is the next Research World prompt only with explicit approval.
+
+Browser zoom:
+
+- A Playwright keyboard-zoom probe against `/`, `/builder`, `/lab`, and `/atlas` did not change `devicePixelRatio`, viewport width, or `visualViewport.scale` in headless Chromium.
+- Actual browser zoom at 125%, 150%, and 200% remains unverified.
+
+Verification:
+
+- `npm test -- behavioralLandscapeFoundation roadmap`: passed, 2 files and 14 tests.
+- `npx playwright test tests/ui/research-world-shell.spec.ts`: passed, 30 tests.
+- `npm run test:ui`: passed, 45 tests.
+- `npm run typecheck`: passed.
+- `npm test`: passed, 66 files and 535 tests.
+- `npm run build`: passed.
+- `npm run perf:simulation`: passed. Local smoke results: Flocking 100 agents at 111.7 ticks/sec, Flocking 500 agents at 16.58 ticks/sec, Forest Fire medium grid at 26.23 ticks/sec, and Predator-Prey default at 87.89 ticks/sec.
+- `git diff --check`: passed.
+- `npm run lint`: unavailable, package.json has no lint script.
+- Scoped source search found no storage/runtime coupling in the behavioral-landscape source or Atlas route. Saved-landscape/regime hits were explicit non-implementation copy.
+
+Remaining limits:
+
+- GW7B is automated source/rendered smoke evidence and documentation audit, not user-comprehension validation.
+- Actual browser zoom, screen-reader behavior, assistive-technology behavior, forced-colors behavior, full WCAG conformance, and scientific validation remain unverified.
+
+Readiness decision:
+
+- Ready for GW8 only after this work is committed, and only if GW8 arrives through an explicit future prompt.
+- GW8 must not treat GW7/GW7B as sampled data, saved maps, runtime support, validation, empirical evidence, or progression.
