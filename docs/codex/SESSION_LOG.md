@@ -2754,5 +2754,66 @@ Remaining limits:
 
 Readiness decision:
 
-- GW6B is ready for GW7 and commit after typecheck, full unit, build, performance smoke, diff check, lint availability, scope-creep search, and final documentation state remain clean.
-- GW7 remains future work requiring explicit user approval.
+- GW6B was ready for GW7 after typecheck, full unit, build, performance smoke, diff check, lint availability, scope-creep search, and final documentation state remained clean.
+- At GW6B close, GW7 still required explicit user approval.
+
+## 2026-07-02 - Prompt GW7 Behavioral Landscape Exploration Foundation
+
+Goal: implement a bounded behavioral-landscape foundation without creating saved landscapes, sampled-region maps, evidence records, Atlas discoveries, Lab experiments, run sweeps, batch execution, regime detection, progression, persistence, runtime behavior, template behavior, Builder execution behavior, dependencies, assets, or fonts.
+
+Starting state:
+
+- Current commit before work: `b90d655`.
+- Starting worktree was clean.
+- GW6B was committed.
+
+Baseline:
+
+- `npm run test:ui`: passed after rerun against an available fresh dev-server context, 45 passed.
+- `npm run typecheck`: passed.
+- `npm test`: passed, 65 files and 525 tests.
+- `npm run build`: passed.
+- `npm run perf:simulation`: passed.
+- `git diff --check`: passed.
+- `npm run lint`: unavailable, package.json has no lint script.
+
+Implementation:
+
+- Added `src/lib/behavioralLandscapeFoundation.ts` as the source model for behavioral-landscape vocabulary, axes, region states, scaffold summary, and boundaries.
+- Added `src/lib/behavioralLandscapeFoundation.test.ts` for uniqueness, status semantics, future-only/evidence-state boundaries, non-persistence, no fake score/storage/time/random fields, and route-contract checks.
+- Extended `/atlas` with a text-only `Behavioral Landscape Foundation` section.
+- Extended rendered shell tests for Atlas behavioral-landscape visibility, required non-persistence/model-vs-world copy, status semantics, no fake heatmap/contour/score/action language, and World/Lab/Builder non-action boundaries.
+- Added `docs/ui/BEHAVIORAL_LANDSCAPE_EXPLORATION_FOUNDATION.md`.
+- Updated roadmap, concept, Atlas, Lab, guidance, HCI, workspace IA, AGENTS, and Codex context references.
+
+Boundary:
+
+- A behavioral landscape describes how model behavior may vary across model conditions. It is not a real-world map, empirical proof, or Discovery Atlas record.
+- GW7 creates behavioral-landscape vocabulary and non-persistent exploration scaffolding. It does not create saved landscapes, sampled-region maps, evidence records, Atlas discoveries, Lab experiments, regime detection, or real-world validation.
+- The scaffold is text-only because a plot-like placeholder would be too easy to misread as sampled data.
+
+Verification:
+
+- `npm test -- behavioralLandscapeFoundation`: passed, 1 file and 9 tests.
+- `npm test -- behavioral landscape`: passed, 1 file and 9 tests.
+- `npm test -- atlasFoundation capabilityGuidance researchDestinations roadmap`: passed, 4 files and 22 tests.
+- Initial `npx playwright test tests/ui/research-world-shell.spec.ts`: blocked in sandbox with `Process from config.webServer exited early`; manual `npm run dev -- --hostname 127.0.0.1 --port 3000` classified the cause as sandbox `listen EPERM`, not an app crash.
+- Continuation `npx playwright test tests/ui/research-world-shell.spec.ts` with local-server permission: passed, 30 tests.
+- Continuation `npm run test:ui` with local-server permission: passed, 45 tests.
+- Continuation `npm run typecheck`: passed.
+- Continuation `npm test`: passed, 66 files and 534 tests.
+- Continuation `npm run build`: passed with Next.js 15.5.19.
+- Continuation `npm run perf:simulation`: passed. Local smoke results included Flocking 100 agents at 108.15 ticks/sec, Flocking 500 agents at 13.67 ticks/sec, Forest Fire medium grid at 20.18 ticks/sec, and Predator-Prey default at 62.34 ticks/sec.
+- Continuation `git diff --check`: passed.
+- `npm run lint`: unavailable, package.json has no lint script.
+- Required broad scope-creep search returned expected hits in docs/tests/guardrails and pre-existing unrelated experiment/run/performance code. GW7 production additions did not introduce persistence, fake maps, fake sampled regions, fake scores, run sweeps, batch execution, regime detection, discoveries, progression, timestamps, random IDs, UUIDs, or fingerprints.
+
+Remaining limits:
+
+- GW7 is not validated by GW7B yet.
+- Rendered Playwright/Axe smoke verification passed in the July 3 continuation. This is not accessibility certification.
+- Actual browser zoom at 125%, 150%, and 200%, screen-reader behavior, assistive-technology behavior, forced-colors behavior, complete WCAG conformance, and user-comprehension evidence remain unverified.
+
+Next:
+
+- GW7B: Behavioral Landscape Foundation Audit and Hardening is required before further Research World expansion.

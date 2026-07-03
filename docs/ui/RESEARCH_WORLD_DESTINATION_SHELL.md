@@ -1,6 +1,6 @@
 # ORTUS Research World Destination Shell
 
-Status: Prompt GW1 implementation source of truth, audited and hardened by Prompt GW1B, updated after Prompt GW5. GW1 introduces a persistent World / Lab / Atlas / Workshop destination shell across routes. GW1B hardens the shell evidence without expanding product behavior. GW2 adds live active-run provenance inside World only. GW3 adds live intervention readiness inside World only, GW3B audits/hardens that readiness layer, GW4 adds non-persistent Atlas information architecture, GW4B audits/hardens that Atlas foundation, and GW5 adds non-persistent Lab evidence-record information architecture. This destination shell does not implement persistent research data, saved intervention plans, persistent Lab evidence records, saved Discovery Atlas records, behavioral landscapes, progression systems, runtime behavior, template behavior, Builder execution behavior, dependencies, assets, fonts, or storage.
+Status: Prompt GW1 implementation source of truth, audited and hardened by Prompt GW1B, updated after Prompt GW7. GW1 introduces a persistent World / Lab / Atlas / Workshop destination shell across routes. GW1B hardens the shell evidence without expanding product behavior. GW2 adds live active-run provenance inside World only. GW3 adds live intervention readiness inside World only, GW3B audits/hardens that readiness layer, GW4 adds non-persistent Atlas information architecture, GW4B audits/hardens that Atlas foundation, GW5 adds non-persistent Lab evidence-record information architecture, GW6 adds route-local capability guidance, and GW7 adds non-persistent behavioral-landscape vocabulary on Atlas. This destination shell does not implement persistent research data, saved intervention plans, persistent Lab evidence records, saved Discovery Atlas records, saved behavioral landscape maps, progression systems, runtime behavior, template behavior, Builder execution behavior, dependencies, assets, fonts, or storage.
 
 ## 1. Purpose And Scope
 
@@ -114,7 +114,7 @@ Required boundary:
 
 ```text
 Atlas is a non-persistent foundation in GW4.
-Discovery records, behavioral landscapes, sampled-region maps, and evidence-linked model regimes are not implemented yet.
+Discovery records, saved behavioral landscape maps, sampled-region maps, and evidence-linked model regimes are not implemented yet.
 Atlas will organize evidence about model behavior. It will not certify discoveries about the real world.
 Nothing on this Atlas route is a saved discovery, saved evidence record, or persistent map.
 ```
@@ -130,7 +130,7 @@ category: capability
 state: planning-only
 ```
 
-Atlas uses capability / planning-only status for the GW4 foundation route. Atlas records, sampled maps, and behavioral landscapes remain capability / future-only when referenced. Atlas evidence states use evidence category statuses such as unresolved, supported, contradicted, unsupported, and unverified. Future-only is not evidence support. GW4B keeps sampled evidence unresolved because the current Atlas route has no source-backed run provenance.
+Atlas uses capability / planning-only status for the GW4 foundation route. Atlas records, sampled maps, and saved behavioral landscapes remain capability / future-only when referenced. Atlas evidence states use evidence category statuses such as unresolved, supported, contradicted, unsupported, and unverified. GW7 adds behavioral-landscape vocabulary with future sampled landscape as capability / future-only and externally unvalidated as evidence / unresolved. Future-only is not evidence support. GW4B keeps sampled evidence unresolved because the current Atlas route has no source-backed run provenance.
 
 They do not use disabled, failed, locked, unavailable, supported, or validated states.
 
@@ -187,8 +187,9 @@ Deferred to future prompts:
 - persistent research notebook and reusable assets;
 - persistent intervention records;
 - saved Discovery Atlas behavior;
-- behavioral landscapes;
+- saved behavioral landscape maps;
 - GW6B audit of contextual capability guidance;
+- GW7B audit of behavioral landscape vocabulary and scaffold honesty;
 - model composition frontiers;
 - Grand Systems Challenges;
 - actual browser zoom and assistive-technology audits.
@@ -201,4 +202,4 @@ Actual browser zoom at 125%, 150%, and 200% was not verified. Screen-reader beha
 
 ## 21. Non-Goals And Guardrails
 
-GW1-GW6 destination work must not modify simulation runtime, template runtime, Builder execution, schema execution, model-schema runtime, graph execution, persistence, storage, dependencies, assets, font configuration, progression, saved Lab record logic, saved Discovery Atlas logic, behavioral landscapes, fake research data, fake intervention outcomes, fake counts, generated guidance, or fake user activity.
+GW1-GW7 destination work must not modify simulation runtime, template runtime, Builder execution, schema execution, model-schema runtime, graph execution, persistence, storage, dependencies, assets, font configuration, progression, saved Lab record logic, saved Discovery Atlas logic, saved behavioral landscape logic, fake research data, fake intervention outcomes, fake counts, generated guidance, or fake user activity.

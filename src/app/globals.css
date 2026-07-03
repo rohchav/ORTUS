@@ -1107,6 +1107,10 @@ textarea[aria-invalid="true"] {
 
 .atlas-evidence-legend,
 .atlas-map-scaffold,
+.landscape-axis-list,
+.landscape-concept-list,
+.landscape-scaffold-list,
+.landscape-region-list,
 .lab-record-legend,
 .lab-ledger-scaffold {
   min-width: 0;
@@ -1119,7 +1123,11 @@ textarea[aria-invalid="true"] {
 
 .atlas-evidence-legend li,
 .atlas-map-scaffold li,
+.landscape-axis-list li,
+.landscape-concept-list li,
+.landscape-region-list li,
 .atlas-boundary-card,
+.landscape-boundary-card,
 .lab-record-legend li,
 .lab-ledger-scaffold li,
 .lab-boundary-card {
@@ -1131,8 +1139,20 @@ textarea[aria-invalid="true"] {
   background: var(--surface-panel-inset);
 }
 
+.landscape-scaffold-list {
+  padding-left: var(--space-4);
+  list-style: decimal;
+}
+
+.landscape-scaffold-list li {
+  color: var(--text-secondary);
+  line-height: 1.45;
+}
+
 .atlas-evidence-legend__head,
 .atlas-boundary-card header,
+.landscape-list__head,
+.landscape-boundary-card header,
 .lab-record-legend__head,
 .lab-boundary-card header {
   min-width: 0;
@@ -1144,12 +1164,100 @@ textarea[aria-invalid="true"] {
 }
 
 .atlas-evidence-legend__head span:last-child,
+.landscape-list__head span:last-child,
 .lab-record-legend__head span:last-child {
   color: var(--text-muted);
   font-family: var(--font-label);
   font-size: var(--font-size-caption);
   letter-spacing: var(--tracking-label);
   text-transform: uppercase;
+}
+
+.behavioral-landscape-foundation {
+  min-width: 0;
+  margin-top: var(--space-5);
+  display: grid;
+  gap: var(--space-3);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--border-default);
+}
+
+.behavioral-landscape-foundation__header {
+  min-width: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.behavioral-landscape-foundation__eyebrow {
+  display: block;
+  margin-bottom: var(--space-1);
+  color: var(--text-muted);
+  font-family: var(--font-label);
+  font-size: var(--font-size-label);
+  font-weight: var(--weight-label);
+  line-height: var(--line-label);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.behavioral-landscape-foundation h2,
+.landscape-region-semantics h3,
+.landscape-boundaries h3,
+.landscape-boundary-card h4 {
+  margin: 0;
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  line-height: var(--line-display);
+  letter-spacing: var(--tracking-display);
+  text-transform: uppercase;
+}
+
+.behavioral-landscape-foundation h2 {
+  font-size: var(--font-size-section-title);
+}
+
+.landscape-region-semantics h3,
+.landscape-boundaries h3 {
+  font-size: var(--font-size-panel-title);
+}
+
+.landscape-boundary-card h4 {
+  font-size: var(--font-size-control);
+}
+
+.behavioral-landscape-foundation > p,
+.landscape-region-list p,
+.landscape-boundary-card p {
+  margin: 0;
+  color: var(--text-secondary);
+  overflow-wrap: anywhere;
+}
+
+.behavioral-landscape-foundation__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: var(--space-3);
+  align-items: start;
+}
+
+.landscape-region-semantics,
+.landscape-boundaries {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.landscape-region-list {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+}
+
+.landscape-boundaries__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: var(--space-3);
 }
 
 .atlas-boundaries,

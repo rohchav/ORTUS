@@ -75,7 +75,7 @@ describe("capability guidance source model", () => {
   it("states the GW6 capability boundary without turning guidance into capability", () => {
     expect(capabilityGuidancePrinciple).toBe("Capability guidance describes current product capability. It does not create capability.");
     expect(capabilityGuidanceBoundary).toBe(
-      "GW6 creates source-backed guidance and capability orientation. It does not create saved records, Atlas discoveries, Lab experiments, behavioral landscapes, progression, user-derived routing, or behavior-derived task ordering."
+      "GW6 creates source-backed guidance and capability orientation. It does not create saved records, Atlas discoveries, Lab experiments, saved behavioral landscapes, progression, user-derived routing, or behavior-derived task ordering."
     );
     expect(capabilityGuidanceVisibleBoundary).toBe(
       "Guidance describes current ORTUS capabilities. It does not create saved records, validation, discoveries, or persistence."

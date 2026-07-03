@@ -1,6 +1,6 @@
 # ORTUS Product Philosophy And Learning Mission
 
-Status: Prompt P0 documentation-only source of truth, updated after Prompt GW6B. This document records product philosophy, learning goals, future progression principles, and guardrails. GW1 implements only the shared World / Lab / Atlas / Workshop destination shell around existing workflows. GW2 adds live active-run provenance and observation context in World only. GW3 adds live intervention readiness and model-response boundaries in World only, GW3B audits/hardens that layer without adding persistence or runtime behavior, GW4 adds a non-persistent Atlas foundation for evidence-state semantics, GW4B audits/hardens that foundation without expanding product behavior, GW5 adds a non-persistent Lab foundation for evidence-record semantics, GW6 adds static source-backed capability guidance, and GW6B audits/hardens that guidance layer. This document does not implement runtime behavior, UI progression, unlocks, missions, scoring, achievements, discovery detection, model composition, templates, simulation features, fractal metrics, persistent Research World state, persistence, accounts, social features, onboarding flows, dependencies, generated guidance, or new capability flags.
+Status: Prompt P0 documentation-only source of truth, updated after Prompt GW7. This document records product philosophy, learning goals, future progression principles, and guardrails. GW1 implements only the shared World / Lab / Atlas / Workshop destination shell around existing workflows. GW2 adds live active-run provenance and observation context in World only. GW3 adds live intervention readiness and model-response boundaries in World only, GW3B audits/hardens that layer without adding persistence or runtime behavior, GW4 adds a non-persistent Atlas foundation for evidence-state semantics, GW4B audits/hardens that foundation without expanding product behavior, GW5 adds a non-persistent Lab foundation for evidence-record semantics, GW6 adds static source-backed capability guidance, GW6B audits/hardens that guidance layer, and GW7 adds non-persistent behavioral-landscape vocabulary and a conceptual Atlas scaffold. This document does not implement runtime behavior, UI progression, unlocks, missions, scoring, achievements, discovery detection, model composition, templates, simulation features, fractal metrics, persistent Research World state, persistence, accounts, social features, onboarding flows, dependencies, generated guidance, or new capability flags.
 
 ## Core Mission
 
@@ -115,11 +115,13 @@ Prompt GW2 operationalizes this rule in the World Observe surface. The active-ru
 
 Prompt GW3 operationalizes the same rule in the World Intervene surface. GW3B audits and hardens that surface. Intervention readiness describes registered model perturbation controls, not a saved intervention plan or experiment record. Current-run intervention entries are engine/snapshot state, not persistent Lab records. A response to an intervention is evidence about the model under its current configuration, not automatic proof of real-world causal power, policy effectiveness, or empirical truth.
 
-Prompt GW4 operationalizes the same rule in the Atlas surface. Atlas is a non-persistent foundation for organizing future evidence about investigated model behavior. It does not create saved discoveries, persistent evidence records, behavioral landscapes, sampled-region maps backed by run data, validation, calibration, or real-world discovery certification.
+Prompt GW4 operationalizes the same rule in the Atlas surface. Atlas is a non-persistent foundation for organizing future evidence about investigated model behavior. It does not create saved discoveries, persistent evidence records, saved behavioral landscapes, sampled-region maps backed by run data, validation, calibration, or real-world discovery certification.
 
 Prompt GW4B hardens that rule by keeping sampled Atlas evidence unresolved until source-backed Atlas records exist. A conceptual sampled state is not current observed run evidence, and it is not real-world validation.
 
 Prompt GW6 operationalizes capability honesty across World, Workshop, Lab, and Atlas. Prompt GW6B audits and hardens that layer. Capability guidance describes current product capability; it does not create capability. It is static route-local orientation, not saved records, validation, discoveries, persistence, progression, user-derived routing, behavior-derived task ordering, generated guidance, or runtime support.
+
+Prompt GW7 operationalizes model-space honesty for behavioral-landscape language. A behavioral landscape describes how model behavior may vary across model conditions. It is not a real-world map, empirical proof, or Discovery Atlas record. GW7 provides vocabulary and a text-only conceptual scaffold, not saved landscapes, sampled-region maps, evidence records, Lab experiments, Atlas discoveries, regime detection, or validation.
 
 ## Product Experience Principles
 
@@ -145,7 +147,7 @@ Good ORTUS experiences should:
 
 ## Research World Direction
 
-Research World is an incremental product branch, not a finished research platform. Prompt P0 reserves philosophy and direction. Prompt GW0, documented in `RESEARCH_WORLD_PROGRESSION_MINI_ROADMAP.md`, adds a documentation-only progression and information-architecture roadmap for that branch. GW1 adds the destination shell, GW2 adds live World-only active-run provenance, GW3 adds live World-only intervention readiness, GW4 adds non-persistent Atlas information architecture, GW4B audits/hardens that Atlas foundation, GW5 adds non-persistent Lab evidence-record information architecture, GW6 adds source-backed capability guidance, and GW6B audits/hardens that guidance layer. These prompts still do not implement progression, persistence, missions, unlocks, discovery detection, achievements, scoring, accounts, social systems, runtime behavior, generated guidance, or persistent Research World state.
+Research World is an incremental product branch, not a finished research platform. Prompt P0 reserves philosophy and direction. Prompt GW0, documented in `RESEARCH_WORLD_PROGRESSION_MINI_ROADMAP.md`, adds a documentation-only progression and information-architecture roadmap for that branch. GW1 adds the destination shell, GW2 adds live World-only active-run provenance, GW3 adds live World-only intervention readiness, GW4 adds non-persistent Atlas information architecture, GW4B audits/hardens that Atlas foundation, GW5 adds non-persistent Lab evidence-record information architecture, GW6 adds source-backed capability guidance, GW6B audits/hardens that guidance layer, and GW7 adds non-persistent behavioral-landscape vocabulary. These prompts still do not implement progression, persistence, missions, unlocks, discovery detection, achievements, scoring, accounts, social systems, runtime behavior, generated guidance, or persistent Research World state.
 
 Future branch names:
 
@@ -163,6 +165,8 @@ Future branch names:
 - GW5B: Lab Evidence Record Information Architecture Audit
 - GW6: Contextual Capability Guidance
 - GW6B: Contextual Capability Guidance Audit
+- GW7: Behavioral Landscape Exploration Foundation
+- GW7B: Behavioral Landscape Foundation Audit
 
 Composition frontiers and Grand Systems Challenges remain future product directions beyond this near-term branch unless a dedicated roadmap prompt scopes them with explicit audit gates.
 

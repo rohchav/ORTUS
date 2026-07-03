@@ -1,6 +1,6 @@
 # Discovery Atlas Information Architecture
 
-Status: Prompt GW4 implementation source of truth, audited and hardened by Prompt GW4B, updated during Prompt GW5B. GW4 creates a non-persistent Atlas information architecture and evidence-state vocabulary on `/atlas`. GW4B keeps sampled evidence unresolved until source-backed Atlas records exist. GW5 adds non-persistent Lab evidence-record information architecture, not Lab-to-Atlas publication. GW5B audits the Lab side of that boundary without adding publication. This Atlas foundation does not create saved discoveries, saved evidence records, behavioral landscapes, sampled-region maps backed by run data, persistent Lab records, run history, storage, progression, validation, calibration, real-world discovery certification, runtime behavior, template behavior, Builder execution behavior, dependencies, assets, or fonts.
+Status: Prompt GW4 implementation source of truth, audited and hardened by Prompt GW4B, updated during Prompt GW7. GW4 creates a non-persistent Atlas information architecture and evidence-state vocabulary on `/atlas`. GW4B keeps sampled evidence unresolved until source-backed Atlas records exist. GW5 adds non-persistent Lab evidence-record information architecture, not Lab-to-Atlas publication. GW6 adds static capability guidance. GW7 adds non-persistent behavioral-landscape vocabulary and a conceptual scaffold, not saved or sampled landscapes. This Atlas foundation does not create saved discoveries, saved evidence records, saved behavioral landscape maps, sampled-region maps backed by run data, persistent Lab records, run history, storage, progression, validation, calibration, real-world discovery certification, runtime behavior, template behavior, Builder execution behavior, dependencies, assets, or fonts.
 
 ## 1. Purpose
 
@@ -27,7 +27,7 @@ GW4 adds:
 - tests for Atlas semantics and route behavior;
 - documentation and durable guardrails.
 
-GW4 does not add persistence, storage, records, run ingestion, evidence scoring, Atlas save actions, behavioral landscapes, new routes, redirects, dependencies, or simulation behavior.
+GW4 does not add persistence, storage, records, run ingestion, evidence scoring, Atlas save actions, saved behavioral landscapes, new routes, redirects, dependencies, or simulation behavior.
 
 ## 3. What Atlas Means In GW4
 
@@ -35,7 +35,7 @@ Atlas is a non-persistent foundation in GW4.
 
 It is an orientation surface for future evidence about model behavior. It is not yet a Discovery Atlas product surface with stored records.
 
-Discovery records, behavioral landscapes, sampled-region maps, and evidence-linked model regimes are not implemented yet.
+Discovery records, saved behavioral landscape maps, sampled-region maps, and evidence-linked model regimes are not implemented yet.
 
 ## 4. Evidence-State Vocabulary
 
@@ -146,7 +146,7 @@ GW4 does not implement:
 
 - saved Discovery Atlas records;
 - persistent evidence maps;
-- behavioral landscapes;
+- saved behavioral landscape maps;
 - sampled-region maps backed by real run data;
 - regime detection;
 - evidence-linked discoveries;
@@ -164,7 +164,7 @@ GW4 does not implement:
 
 ## 15. Deferred Work
 
-Deferred work includes persistent Lab records, real Discovery Atlas evidence records, source-backed sampled-region maps, behavioral landscapes, stale-record handling, provenance-preserving Atlas records, comparison-backed contradictions, validation/calibration workflows, screen-reader walkthroughs, assistive-technology walkthroughs, forced-colors checks, actual browser-zoom verification, and user-comprehension testing.
+Deferred work includes persistent Lab records, real Discovery Atlas evidence records, source-backed sampled-region maps, saved behavioral landscapes, stale-record handling, provenance-preserving Atlas records, comparison-backed contradictions, validation/calibration workflows, screen-reader walkthroughs, assistive-technology walkthroughs, forced-colors checks, actual browser-zoom verification, and user-comprehension testing.
 
 ## 16. GW4B Audit Result
 
@@ -176,10 +176,14 @@ docs/ui/DISCOVERY_ATLAS_INFORMATION_ARCHITECTURE_AUDIT.md
 
 GW4B inspected evidence-state semantics, non-persistence clarity, sampled/unsampled honesty, model-vs-real-world boundaries, absence of fake discoveries/maps/scores, Lab/World relationships, keyboard/focus/reflow behavior, Axe results, status semantics, and scope-creep risk.
 
-GW4B changed `Sampled` from evidence / observed to evidence / unresolved because the current Atlas route has no source-backed Atlas records. The GW4B continuation completed the post-hardening rendered shell and full UI Playwright/Axe gates. GW5 later adds non-persistent Lab evidence-record semantics, not Lab-to-Atlas publication. GW6 later adds static capability guidance to Atlas. Neither prompt implements persistence, behavioral landscapes, Lab records, validation, calibration, or real-world discovery certification.
+GW4B changed `Sampled` from evidence / observed to evidence / unresolved because the current Atlas route has no source-backed Atlas records. The GW4B continuation completed the post-hardening rendered shell and full UI Playwright/Axe gates. GW5 later adds non-persistent Lab evidence-record semantics, not Lab-to-Atlas publication. GW6 later adds static capability guidance to Atlas. GW7 later adds non-persistent behavioral-landscape vocabulary and a conceptual scaffold. These prompts do not implement persistence, saved behavioral landscape maps, Lab records, validation, calibration, or real-world discovery certification.
 
 ## 17. GW6 Capability Guidance Relationship
 
 Prompt GW6 adds static capability guidance to the Atlas route from `src/lib/capabilityGuidance.ts`.
 
-That guidance describes current Atlas capability. It does not create Atlas capability. It does not create Discovery Atlas records, persistent evidence maps, sampled-region displays backed by run data, behavioral landscapes, evidence-rating surfaces, validation, calibration, storage, generated guidance, or real-world discovery certification.
+That guidance describes current Atlas capability. It does not create Atlas capability. It does not create Discovery Atlas records, persistent evidence maps, sampled-region displays backed by run data, saved behavioral landscape maps, evidence-rating surfaces, validation, calibration, storage, generated guidance, or real-world discovery certification.
+
+## Prompt GW7 Update
+
+GW7 adds `docs/ui/BEHAVIORAL_LANDSCAPE_EXPLORATION_FOUNDATION.md`, `src/lib/behavioralLandscapeFoundation.ts`, and a bounded Atlas section for behavioral-landscape vocabulary. A behavioral landscape describes how model behavior may vary across model conditions. It is not a real-world map, empirical proof, or Discovery Atlas record. The GW7 conceptual scaffold is text-only and not sampled run data.

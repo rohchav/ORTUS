@@ -58,7 +58,7 @@ export const capabilityGuidancePrinciple =
   "Capability guidance describes current product capability. It does not create capability.";
 
 export const capabilityGuidanceBoundary =
-  "GW6 creates source-backed guidance and capability orientation. It does not create saved records, Atlas discoveries, Lab experiments, behavioral landscapes, progression, user-derived routing, or behavior-derived task ordering.";
+  "GW6 creates source-backed guidance and capability orientation. It does not create saved records, Atlas discoveries, Lab experiments, saved behavioral landscapes, progression, user-derived routing, or behavior-derived task ordering.";
 
 export const capabilityGuidanceVisibleBoundary =
   "Guidance describes current ORTUS capabilities. It does not create saved records, validation, discoveries, or persistence.";
@@ -347,7 +347,7 @@ export const capabilityGuidanceSummaries: readonly CapabilityGuidanceSummary[] =
         "Evidence-state vocabulary",
         "available",
         availableStatus,
-        "Atlas exposes non-persistent evidence states, sampled/unsampled interpretation, and a conceptual scaffold for investigated model behavior."
+        "Atlas exposes non-persistent evidence states, sampled/unsampled interpretation, behavioral-landscape vocabulary, and conceptual scaffolds for investigated model behavior."
       )
     ],
     [
@@ -356,16 +356,16 @@ export const capabilityGuidanceSummaries: readonly CapabilityGuidanceSummary[] =
         "Model-behavior map semantics",
         "planning-only",
         planningStatus,
-        "Future Atlas work may organize investigated regions, but the current route does not contain sampled data or durable maps."
+        "Future Atlas work may organize source-backed sampled regions, but the current route does not contain sampled data or durable maps."
       )
     ],
     [
       item(
         "atlas-persistence",
-        "Discovery records and landscapes",
+        "Discovery records and sampled landscapes",
         "not-implemented",
         notImplementedStatus,
-        "Discovery Atlas records, persistent evidence maps, sampled-region displays backed by run data, behavioral landscapes, and evidence-rating surfaces are not implemented."
+        "Discovery Atlas records, persistent evidence maps, sampled-region displays backed by run data, saved behavioral landscape maps, and evidence-rating surfaces are not implemented."
       )
     ],
     [
@@ -379,7 +379,7 @@ export const capabilityGuidanceSummaries: readonly CapabilityGuidanceSummary[] =
         "atlas-no-hidden-samples",
         "Unsampled regions remain unknown",
         evidenceBoundaryStatus,
-        "A conceptual scaffold does not imply sampled parameter space, inferred regimes, or validated behavioral landscapes."
+        "A conceptual landscape scaffold does not imply sampled parameter space, inferred regimes, saved maps, or validated behavioral landscapes."
       ),
       boundary(
         "atlas-not-user-advice",

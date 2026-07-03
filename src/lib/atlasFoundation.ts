@@ -58,7 +58,7 @@ export const atlasFoundationSummary: AtlasFoundationSummary = {
   state: "planning-only",
   purpose: "Orient future evidence about investigated model behavior without creating saved Atlas records.",
   currentBoundary:
-    "Atlas is a non-persistent foundation in GW4. Discovery records, behavioral landscapes, sampled-region maps, and evidence-linked model regimes are not implemented yet.",
+    "Atlas is a non-persistent foundation in GW4. Discovery records, saved behavioral landscape maps, sampled-region maps, and evidence-linked model regimes are not implemented yet.",
   epistemicBoundary:
     "Atlas will organize evidence about model behavior. It will not certify discoveries about the real world.",
   nonPersistenceBoundary: "Nothing on this Atlas route is a saved discovery, saved evidence record, or persistent map."

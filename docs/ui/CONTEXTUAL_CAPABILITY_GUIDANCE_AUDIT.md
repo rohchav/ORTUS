@@ -1,6 +1,6 @@
 # Contextual Capability Guidance Audit
 
-Status: Prompt GW6B audit and hardening record. GW6B audits the static contextual capability guidance added in GW6. It does not add GW7 features, persistence, recommendations, onboarding, Lab records, Atlas discoveries, behavioral landscapes, progression, runtime behavior, template behavior, or Builder execution behavior.
+Status: Prompt GW6B audit and hardening record, updated after Prompt GW7. GW6B audits the static contextual capability guidance added in GW6. It does not add persistence, recommendations, onboarding, Lab records, Atlas discoveries, saved behavioral landscapes, progression, runtime behavior, template behavior, or Builder execution behavior. GW7 later adds Atlas-side behavioral-landscape vocabulary and a conceptual scaffold without changing the GW6B guidance audit result.
 
 ## 1. Scope
 
@@ -62,7 +62,7 @@ Workshop guidance describes structural authoring and inspection. It does not imp
 
 Lab guidance describes non-persistent evidence-record information architecture and lifecycle vocabulary. It does not imply saved experiments, notebooks, stored run history, or durable comparison records.
 
-Atlas guidance describes non-persistent evidence-state information architecture for investigated model behavior. It does not imply Discovery Atlas records, saved maps, behavioral landscapes, or discovery certification.
+Atlas guidance describes non-persistent evidence-state information architecture for investigated model behavior. It does not imply Discovery Atlas records, saved maps, saved behavioral landscapes, or discovery certification.
 
 ## 9. Route Integration Findings
 

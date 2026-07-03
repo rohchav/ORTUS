@@ -79,6 +79,6 @@ GW6 adds static source-backed capability guidance on the Lab route. That panel d
 
 Source, documentation, rendered-shell, full UI, unit, typecheck, build, performance-smoke, and diff hardening gates are complete for the defects found. GW5B is ready for the requested commit gate after the final rerun checks remain passing.
 
-GW6 is implemented as static capability guidance, and GW6B is complete as the contextual capability guidance audit and hardening pass. Further Research World expansion remains future work requiring an explicit prompt.
+GW6 is implemented as static capability guidance, and GW6B is complete as the contextual capability guidance audit and hardening pass. GW7 later adds Atlas-side behavioral-landscape vocabulary and a conceptual scaffold. It does not change the Lab audit result: no landscape records, experiment ledgers, notebooks, run history, Lab-to-Atlas publication, or saved evidence were added.
 
 No persistence, saved experiments, notebooks, run history, Lab-to-Atlas publication, behavioral landscapes, progression, runtime behavior, template behavior, Builder execution behavior, dependencies, assets, or fonts were added.
