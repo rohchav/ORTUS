@@ -1,6 +1,6 @@
 # Lab Evidence Record Information Architecture
 
-Status: Prompt GW5 implementation source of truth, audited by Prompt GW5B in `docs/ui/LAB_EVIDENCE_RECORD_INFORMATION_ARCHITECTURE_AUDIT.md` and updated after Prompt GW7. GW5 turns `/lab` into a non-persistent Lab information architecture for future evidence records and experiment-ledger semantics. GW7 adds Atlas-side behavioral-landscape vocabulary but does not create Lab landscape records. Lab does not create persistent evidence records, experiment ledgers, notebooks, saved comparisons, run history, Lab-to-Atlas publication, storage, timestamps, generated ids, fake records, fake scores, progression, runtime behavior, template behavior, Builder execution behavior, dependencies, assets, or fonts.
+Status: Prompt GW5 implementation source of truth, audited by Prompt GW5B in `docs/ui/LAB_EVIDENCE_RECORD_INFORMATION_ARCHITECTURE_AUDIT.md` and updated after Prompt GW8. GW5 turns `/lab` into a non-persistent Lab information architecture for future evidence records and experiment-ledger semantics. GW7 adds Atlas-side behavioral-landscape vocabulary but does not create Lab landscape records. GW8 adds Atlas-side landscape probe planning vocabulary but does not create Lab probe records. Lab does not create persistent evidence records, experiment ledgers, notebooks, saved comparisons, run history, Lab-to-Atlas publication, storage, timestamps, generated ids, fake records, fake scores, progression, runtime behavior, template behavior, Builder execution behavior, dependencies, assets, or fonts.
 
 ## 1. Purpose
 
@@ -124,3 +124,7 @@ That guidance describes current Lab capability. It does not create Lab capabilit
 ## 14. GW7 Behavioral Landscape Relationship
 
 GW7 adds behavioral-landscape vocabulary and a conceptual scaffold on Atlas only. Lab describes how future evidence records could be organized. GW7 does not create landscape records, experiment ledgers, notebooks, run history, saved evidence, or Lab-to-Atlas publication.
+
+## 15. GW8 Landscape Probe Planning Relationship
+
+GW8 adds landscape probe planning vocabulary and a conceptual probe-plan scaffold on Atlas only. Lab describes how future evidence records could be organized. GW8 does not create probe records, saved probe plans, experiment ledgers, notebooks, run history, saved evidence, or Lab-to-Atlas publication.

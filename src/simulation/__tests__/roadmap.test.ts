@@ -111,6 +111,9 @@ const requiredDocPhrases = [
   "A behavioral landscape describes how model behavior may vary across model conditions.",
   "It is not a real-world map, empirical proof, or Discovery Atlas record.",
   "Conceptual landscape anatomy is not sampled run data, and a future sampled landscape would still describe model behavior rather than empirical truth.",
+  "A landscape probe plan describes how a future model-space investigation could be framed.",
+  "It is not a sampled landscape, run queue, saved experiment, evidence record, or discovery.",
+  "Conceptual probe plan - not executable and not saved.",
   "Persistence must preserve provenance and model boundaries.",
   "Reusable does not mean universally compatible.",
   "Finding that the model cannot support a conclusion is meaningful progress.",
@@ -186,6 +189,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
     const semanticTokenFoundationPath = join(repoRoot, "docs", "ui", "LIVING_SYSTEMS_ATLAS_SEMANTIC_TOKEN_FOUNDATION.md");
     const behavioralLandscapeFoundationPath = join(repoRoot, "docs", "ui", "BEHAVIORAL_LANDSCAPE_EXPLORATION_FOUNDATION.md");
     const behavioralLandscapeFoundationAuditPath = join(repoRoot, "docs", "ui", "BEHAVIORAL_LANDSCAPE_EXPLORATION_FOUNDATION_AUDIT.md");
+    const landscapeProbePlanningFoundationPath = join(repoRoot, "docs", "ui", "LANDSCAPE_PROBE_PLANNING_FOUNDATION.md");
     expect(existsSync(roadmapPath)).toBe(true);
     expect(existsSync(missingPillarsPath)).toBe(true);
     expect(existsSync(productPhilosophyPath)).toBe(true);
@@ -195,6 +199,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(existsSync(semanticTokenFoundationPath)).toBe(true);
     expect(existsSync(behavioralLandscapeFoundationPath)).toBe(true);
     expect(existsSync(behavioralLandscapeFoundationAuditPath)).toBe(true);
+    expect(existsSync(landscapeProbePlanningFoundationPath)).toBe(true);
 
     const roadmap = readFileSync(roadmapPath, "utf8");
     const productPhilosophy = readFileSync(productPhilosophyPath, "utf8");
@@ -204,6 +209,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
     const semanticTokenFoundation = readFileSync(semanticTokenFoundationPath, "utf8");
     const behavioralLandscapeFoundation = readFileSync(behavioralLandscapeFoundationPath, "utf8");
     const behavioralLandscapeFoundationAudit = readFileSync(behavioralLandscapeFoundationAuditPath, "utf8");
+    const landscapeProbePlanningFoundation = readFileSync(landscapeProbePlanningFoundationPath, "utf8");
     expect(roadmap).toContain("completed through Prompt 39B");
     expect(roadmap).toContain("Post-30B stabilization");
     expect(roadmap).toContain(
@@ -220,12 +226,13 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(roadmap).toContain("Completed Prompt 39 scenario-planning foundation");
     expect(roadmap).toContain("Completed Prompt 39 scenario-planning audit");
     expect(roadmap).toContain("Prompt 35 adds a separate `Author Schema` Builder mode");
-    expect(roadmap).toContain("Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, MR0, F0, P0, UX0, UX1, GW0, UX2, UX2B, GW1, GW1B, GW2, GW2B, GW3, GW3B, GW4, GW4B, GW5, GW5B, GW6, GW6B, GW7, and GW7B are complete.");
+    expect(roadmap).toContain("Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, MR0, F0, P0, UX0, UX1, GW0, UX2, UX2B, GW1, GW1B, GW2, GW2B, GW3, GW3B, GW4, GW4B, GW5, GW5B, GW6, GW6B, GW7, GW7B, and GW8 are complete.");
     expect(roadmap).toContain(
-      "GW8 is the next Research World prompt only with explicit approval; do not start GW8, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any further Research World/fractal/multiscale implementation without explicit approval."
+      "GW8B is the next Research World prompt only with explicit approval; do not start GW8B, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any further Research World/fractal/multiscale implementation without explicit approval."
     );
     expect(roadmap).toContain("Prompt GW7 adds non-persistent Behavioral Landscape Exploration Foundation");
     expect(roadmap).toContain("Prompt GW7B audits and hardens the Behavioral Landscape Exploration Foundation");
+    expect(roadmap).toContain("Prompt GW8 adds non-persistent Landscape Probe Planning Foundation");
     expect(behavioralLandscapeFoundation).toContain(
       "A behavioral landscape describes how model behavior may vary across model conditions. It is not a real-world map, empirical proof, or Discovery Atlas record."
     );
@@ -237,6 +244,14 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(behavioralLandscapeFoundationAudit).toContain("Decision: ready for GW8");
     expect(behavioralLandscapeFoundationAudit).toContain("Actual browser zoom at 125%, 150%, and 200% was not verified.");
     expect(behavioralLandscapeFoundationAudit).toContain("The rendered landscape scaffold adds no fake interactive controls, route-local buttons, inputs, links, or static Tab stops.");
+    expect(landscapeProbePlanningFoundation).toContain(
+      "A landscape probe plan describes how a future model-space investigation could be framed. It is not a sampled landscape, run queue, saved experiment, evidence record, or discovery."
+    );
+    expect(landscapeProbePlanningFoundation).toContain(
+      "GW8 creates non-persistent landscape probe planning semantics. It does not execute probes, run parameter sweeps, generate samples, save plans, create Lab records, create Atlas discoveries, detect regimes, or validate real-world claims."
+    );
+    expect(landscapeProbePlanningFoundation).toContain("Conceptual probe plan - not executable and not saved.");
+    expect(landscapeProbePlanningFoundation).toContain("GW8 must be followed by `GW8B: Landscape Probe Planning Audit and Hardening`.");
     expect(roadmap).not.toContain("Prompt GW5 Behavioral Landscape Exploration");
     expect(roadmap).toContain("Prompt GW1 implements the shared Research World destination shell.");
     expect(roadmap).toContain("Prompt GW1B audits and hardens the destination shell without expanding product behavior.");
@@ -444,7 +459,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
       "simulation output ≠ empirical truth",
       "Progression must not rely only on color, maps, animation, drag/drop, hover, or decorative metaphor.",
       "GW0 defines what the product must communicate. UX2 defines how shared design foundations communicate it. GW1 implements the first structural shell using both.",
-      "GW0 -> UX2 -> GW1 -> GW1B -> GW2 -> GW2B -> GW3 -> GW3B -> GW4 -> GW4B -> GW5 -> GW5B -> GW6 -> GW6B -> GW7 -> GW7B -> GW8",
+      "GW0 -> UX2 -> GW1 -> GW1B -> GW2 -> GW2B -> GW3 -> GW3B -> GW4 -> GW4B -> GW5 -> GW5B -> GW6 -> GW6B -> GW7 -> GW7B -> GW8 -> GW8B",
       "Prompt GW1 implements the route contract:",
       "Lab and Atlas are reachable destinations, not locked destinations.",
       "no production UI, CSS, runtime, persistence, route, asset, dependency, or package file is changed by GW0"
@@ -452,7 +467,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
       expect(researchWorldRoadmap).toContain(phrase);
     }
     expect(researchWorldRoadmap).not.toMatch(/XP[^.\n]*(implemented|added)|implemented[^.\n]*XP/i);
-    for (const futureName of ["GW0", "GW1", "GW2", "GW3", "GW4", "GW5", "GW6", "GW7"]) {
+    for (const futureName of ["GW0", "GW1", "GW2", "GW3", "GW4", "GW5", "GW6", "GW7", "GW8"]) {
       expect(productPhilosophy).toContain(futureName);
     }
     expect(productPhilosophy).not.toMatch(/GW[2-6].*implemented/i);
@@ -600,6 +615,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
       readFileSync(join(repoRoot, "docs", "ui", "LIVING_SYSTEMS_ATLAS_SEMANTIC_TOKEN_FOUNDATION.md"), "utf8"),
       readFileSync(join(repoRoot, "docs", "ui", "BEHAVIORAL_LANDSCAPE_EXPLORATION_FOUNDATION.md"), "utf8"),
       readFileSync(join(repoRoot, "docs", "ui", "BEHAVIORAL_LANDSCAPE_EXPLORATION_FOUNDATION_AUDIT.md"), "utf8"),
+      readFileSync(join(repoRoot, "docs", "ui", "LANDSCAPE_PROBE_PLANNING_FOUNDATION.md"), "utf8"),
       readFileSync(join(repoRoot, "planned_roadmap.md"), "utf8"),
       readFileSync(join(repoRoot, "docs", "codex", "CURRENT_CONTEXT.md"), "utf8"),
       readFileSync(join(repoRoot, "src", "simulation", "README.md"), "utf8"),
@@ -634,10 +650,12 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(docs).toContain("Preserve `/` as World.");
     expect(docs).toContain("Preserve `/builder` as Workshop.");
     expect(docs).toContain("after GW4, Atlas is a non-persistent foundation route; after GW5, Lab is a non-persistent foundation route.");
-    expect(docs).toContain("after GW7B, GW8 is the next Research World prompt only with explicit approval.");
+    expect(docs).toContain("after GW8, GW8B is the next Research World prompt only with explicit approval.");
     expect(docs).toContain("GW7 behavioral landscape foundation is non-persistent Atlas vocabulary and conceptual scaffolding only.");
     expect(docs).toContain("GW7B audits and hardens the behavioral landscape foundation; it does not add persistent maps, sampled data, run sweeps, regime detection, runtime behavior, template behavior, Builder execution behavior, validation, calibration, or real-world discovery certification.");
     expect(docs).toContain("Do not add fake maps, heatmaps, contours, sampled regions, evidence scores, confidence scores, coverage percentages, run sweeps, batch execution, or regime detection from GW7.");
+    expect(docs).toContain("GW8 landscape probe planning is non-executable and non-persistent.");
+    expect(docs).toContain("Do not add run-probe, run-sweep, save-probe, save-landscape, send-to-Lab, or publish-to-Atlas actions from GW8.");
     expect(docs).not.toContain("Prompt GW5 Behavioral Landscape Exploration");
     expect(docs).toContain("UX2 establishes shared visual semantics. It does not perform the Research World shell transformation.");
     expect(docs).toContain("UX2 prepares the visual language. GW1 performs the structural shell transformation.");

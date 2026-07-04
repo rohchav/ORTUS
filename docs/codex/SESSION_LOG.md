@@ -2874,3 +2874,63 @@ Readiness decision:
 
 - Ready for GW8 only after this work is committed, and only if GW8 arrives through an explicit future prompt.
 - GW8 must not treat GW7/GW7B as sampled data, saved maps, runtime support, validation, empirical evidence, or progression.
+
+## 2026-07-03 - Prompt GW8 Landscape Probe Planning Foundation
+
+Goal: implement a bounded landscape probe planning foundation without creating executable probes, saved probe plans, sampled landscapes, run queues, parameter sweeps, batch execution, regime detection, Lab records, Atlas discoveries, progression, persistence, runtime behavior, template behavior, Builder execution behavior, dependencies, assets, or fonts.
+
+Starting state:
+
+- Current commit before work: `c69a878`.
+- Starting worktree was clean.
+- Prompt GW7B was committed.
+
+Baseline:
+
+- `npm run test:ui` failed in the sandbox because the local dev server exited early, consistent with the known sandbox local-socket limitation.
+- Escalated `npm run test:ui`: passed, 45 tests.
+- `npm run typecheck`: passed.
+- `npm test`: passed, 66 files and 535 tests.
+- `npm run build`: passed.
+- `npm run perf:simulation`: passed.
+- `git diff --check`: passed.
+- `npm run lint`: unavailable, package.json has no lint script.
+
+Implementation:
+
+- Added `src/lib/landscapeProbePlanningFoundation.ts` as the source model for landscape probe planning vocabulary, candidate axes, candidate outcomes, constraints, conceptual scaffold, and relationship boundaries.
+- Added `src/lib/landscapeProbePlanningFoundation.test.ts` for uniqueness, UX2 status semantics, required distinctions, non-execution/non-persistence, no fake storage/time/random/result fields, route-contract checks, and source-coupling checks.
+- Extended `/atlas` with a static `Landscape Probe Planning` section.
+- Extended rendered shell tests for Atlas probe-planning visibility, conceptual probe-plan copy, non-execution, non-persistence, model-vs-real-world boundaries, status semantics, no fake run-probe/sweep/save/result/score actions, and zero local Tab stops.
+- Added `docs/ui/LANDSCAPE_PROBE_PLANNING_FOUNDATION.md`.
+- Updated roadmap, concept, Atlas, Lab, guidance, HCI, workspace IA, AGENTS, README, current context, and session-log references.
+
+Boundary:
+
+- A landscape probe plan describes how a future model-space investigation could be framed. It is not a sampled landscape, run queue, saved experiment, evidence record, or discovery.
+- GW8 creates non-persistent landscape probe planning semantics. It does not execute probes, run parameter sweeps, generate samples, save plans, create Lab records, create Atlas discoveries, detect regimes, or validate real-world claims.
+- The scaffold is text/cards only because a table or queue-like surface would invite users to see fake saved plans or fake samples.
+
+Verification:
+
+- `npm test -- landscapeProbePlanningFoundation roadmap`: passed, 2 files and 12 tests.
+- Sandboxed `npx playwright test tests/ui/research-world-shell.spec.ts`: blocked because the local dev server exited early under sandboxed local-socket restrictions.
+- Escalated `npx playwright test tests/ui/research-world-shell.spec.ts`: passed, 30 tests, after tightening two false-positive rendered assertions.
+- Escalated `npm run test:ui`: passed, 45 tests.
+- `npm run typecheck`: passed.
+- `npm test`: passed, 67 files and 543 tests.
+- `npm run build`: passed.
+- `npm run perf:simulation`: passed. Local smoke results included Flocking 100 agents at 193.92 ticks/sec, Flocking 500 agents at 29.7 ticks/sec, Forest Fire medium grid at 39.52 ticks/sec, and Predator-Prey default at 114.28 ticks/sec.
+- `git diff --check`: passed.
+- `npm run lint`: unavailable, package.json has no lint script.
+- Required broad scope-creep search returned expected hits in docs/tests/guardrails and pre-existing unrelated run-comparison/store/runtime code. A focused production-source search on `src/lib/landscapeProbePlanningFoundation.ts` and `src/app/atlas/page.tsx` found no storage APIs, timestamps/random IDs/fingerprints, fake run actions, runtime coupling, compilers, or interpreters.
+
+Remaining limits:
+
+- GW8 is not audited by GW8B yet.
+- Rendered Playwright/Axe smoke verification is not accessibility certification.
+- Actual browser zoom at 125%, 150%, and 200%, screen-reader behavior, assistive-technology behavior, forced-colors behavior, complete WCAG conformance, and user-comprehension evidence remain unverified.
+
+Next:
+
+- GW8B: Landscape Probe Planning Audit and Hardening must follow only with explicit user approval.

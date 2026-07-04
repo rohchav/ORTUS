@@ -1,6 +1,6 @@
 # Behavioral Landscape Exploration Foundation
 
-Status: Prompt GW7 implementation source of truth, audited by Prompt GW7B in `docs/ui/BEHAVIORAL_LANDSCAPE_EXPLORATION_FOUNDATION_AUDIT.md`. GW7 adds source-backed behavioral-landscape vocabulary and a non-persistent conceptual scaffold on `/atlas`. GW7B hardens the vocabulary, status semantics, rendered copy, and zero-Tab-stop scaffold contract. These prompts do not create saved landscapes, sampled-region maps, evidence records, Atlas discoveries, Lab experiments, regime detection, parameter sweeps, batch execution, persistence, progression, runtime behavior, template behavior, Builder execution behavior, validation, calibration, dependencies, assets, fonts, or real-world discovery certification.
+Status: Prompt GW7 implementation source of truth, audited by Prompt GW7B in `docs/ui/BEHAVIORAL_LANDSCAPE_EXPLORATION_FOUNDATION_AUDIT.md` and updated after Prompt GW8. GW7 adds source-backed behavioral-landscape vocabulary and a non-persistent conceptual scaffold on `/atlas`. GW7B hardens the vocabulary, status semantics, rendered copy, and zero-Tab-stop scaffold contract. GW8 adds non-persistent landscape probe planning vocabulary near this section, but does not make GW7 sampled, executable, saved, or validated. These prompts do not create saved landscapes, sampled-region maps, evidence records, Atlas discoveries, Lab experiments, regime detection, parameter sweeps, batch execution, persistence, progression, runtime behavior, template behavior, Builder execution behavior, validation, calibration, dependencies, assets, fonts, or real-world discovery certification.
 
 ## 1. Purpose
 
@@ -143,3 +143,9 @@ Deferred work includes source-backed landscape sampling, real sampled-region rep
 GW7B is complete in `docs/ui/BEHAVIORAL_LANDSCAPE_EXPLORATION_FOUNDATION_AUDIT.md`.
 
 GW7B found no production runtime or persistence defect. It hardened source vocabulary tests, rendered Atlas copy assertions, and the static-scaffold zero-Tab-stop contract. Future GW8 work must not treat this audited foundation as sampled data, a saved map, runtime support, validation, empirical evidence, or progression.
+
+## 20. GW8 Probe Planning Relationship
+
+GW8 adds `docs/ui/LANDSCAPE_PROBE_PLANNING_FOUNDATION.md`, `src/lib/landscapeProbePlanningFoundation.ts`, and a bounded Atlas section for landscape probe planning. A landscape probe plan describes how a future model-space investigation could be framed. It is not a sampled landscape, run queue, saved experiment, evidence record, or discovery.
+
+GW8 does not turn GW7 behavioral landscape vocabulary into sampled data, executable probes, saved probe plans, Atlas discoveries, Lab records, run sweeps, regime detection, validation, calibration, or real-world claims.

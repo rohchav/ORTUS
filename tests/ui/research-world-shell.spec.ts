@@ -189,7 +189,7 @@ async function expectNoDocumentHorizontalOverflow(page: Page) {
     const viewportWidth = window.innerWidth;
     const visibleWideElements = Array.from(
       document.querySelectorAll<HTMLElement>(
-        "main, header, nav, section, aside, .research-shell__header, .research-destination-nav, .future-destination, .atlas-foundation, .behavioral-landscape-foundation, .lab-foundation, .corner-panel, .builder-header, .top-status, .timeline-strip"
+        "main, header, nav, section, aside, .research-shell__header, .research-destination-nav, .future-destination, .atlas-foundation, .behavioral-landscape-foundation, .landscape-probe-planning-foundation, .lab-foundation, .corner-panel, .builder-header, .top-status, .timeline-strip"
       )
     )
       .filter((element) => {
@@ -274,7 +274,9 @@ async function expectWorldPreserved(page: Page) {
   await expect(paused).toHaveAttribute("data-state", "paused");
   await expect(page.getByRole("main")).not.toContainText(/Map this run|Save to Atlas|Create discovery|Save discovery/i);
   await expect(page.getByRole("main")).not.toContainText(/Save this run|Send to Lab|Create evidence record|Record experiment/i);
-  await expect(page.getByRole("main")).not.toContainText(/Run sweep|Map this run|Save landscape|Save map|Create landscape|Generate landscape/i);
+  await expect(page.getByRole("main")).not.toContainText(
+    /Run probe|Run sweep|Map this run|Save landscape|Save map|Save probe|Create landscape|Generate landscape|probe action/i
+  );
 }
 
 async function expectWorldProvenanceLayer(page: Page) {
@@ -381,6 +383,7 @@ async function expectWorkshopPreserved(page: Page) {
   const badge = page.locator(".builder-status-badge", { hasText: "Not runnable" }).first();
   await expect(badge).toHaveAttribute("data-status-category", "capability");
   await expect(badge).toHaveAttribute("data-state", "non-runnable");
+  await expect(page.getByRole("main")).not.toContainText(/Run probe|Generate probe|Probe generation|Landscape probe/i);
 }
 
 async function expectLabFoundation(page: Page) {
@@ -429,7 +432,7 @@ async function expectLabFoundation(page: Page) {
 
   const mainText = await page.getByRole("main").innerText();
   expect(mainText).not.toMatch(
-    /Save this run|Send to Lab|Create evidence record|Record experiment|Open notebook|Publish to Atlas|Create discovery|Map evidence|recent activity|\bxp\b|achievement|rank|streak|evidence score|coverage percentage|confidence score|experiment complete|Experiment #|Run #|Notebook entry #|saved landscape record|landscape ledger|run history notebook/i
+    /Save this run|Send to Lab|Create evidence record|Record experiment|Open notebook|Publish to Atlas|Create discovery|Map evidence|recent activity|\bxp\b|achievement|rank|streak|evidence score|coverage percentage|confidence score|experiment complete|Experiment #|Run #|Notebook entry #|saved landscape record|landscape ledger|run history notebook|probe record|landscape record|saved probe plan|probe ledger/i
   );
   await expect(page.getByRole("link", { name: "Return to World" })).toHaveAttribute("href", "/");
   await expect(page.getByRole("link", { name: "Open Workshop" })).toHaveAttribute("href", "/builder");
@@ -555,9 +558,86 @@ async function expectAtlasFoundation(page: Page) {
   );
   expect(landscapeTabStops, "behavioral landscape scaffold should remain static readable content with no fake controls").toBe(0);
 
+  const probePlanning = page.locator("[data-landscape-probe-planning-foundation='conceptual']");
+  await expect(probePlanning).toBeVisible();
+  await expect(probePlanning.getByRole("heading", { level: 2, name: "Landscape Probe Planning" })).toBeVisible();
+  await expect(probePlanning.getByText("Conceptual probe plan - not executable and not saved.")).toBeVisible();
+  await expect(
+    probePlanning.getByText(
+      "A landscape probe plan describes how a future model-space investigation could be framed. It is not a sampled landscape, run queue, saved experiment, evidence record, or discovery."
+    )
+  ).toBeVisible();
+  await expect(
+    probePlanning.getByText(
+      "GW8 creates non-persistent landscape probe planning semantics. It does not execute probes, run parameter sweeps, generate samples, save plans, create Lab records, create Atlas discoveries, detect regimes, or validate real-world claims."
+    ).first()
+  ).toBeVisible();
+  await expect(
+    probePlanning.getByText(
+      "This scaffold has no selected parameter values, no samples, no run queue, no saved plan, no probe result, and no detected regime."
+    )
+  ).toBeVisible();
+  await expect(probePlanning.getByText("Probe plan is not an executed probe.")).toBeVisible();
+  await expect(probePlanning.getByText("Candidate axis is not a sampled parameter.")).toBeVisible();
+  await expect(probePlanning.getByText("Candidate range is not an explored range.")).toBeVisible();
+  await expect(probePlanning.getByText("Planned outcome is not observed evidence.")).toBeVisible();
+  await expect(probePlanning.getByText("Sampling intent is not a sampling result.")).toBeVisible();
+  await expect(probePlanning.getByText("Model hypothesis is not a real-world claim.")).toBeVisible();
+  await expect(probePlanning.getByText("Planning scaffold is not a run queue.")).toBeVisible();
+  await expect(probePlanning.getByText("Future-only is not locked progression.")).toBeVisible();
+  await expect(
+    probePlanning.getByText("World is where live model behavior is observed. GW8 does not execute landscape probes or turn World runs into planned samples.")
+  ).toBeVisible();
+  await expect(
+    probePlanning.getByText("Lab describes how future evidence records could be organized. GW8 does not create probe records, experiment ledgers, notebooks, or run history.")
+  ).toBeVisible();
+  await expect(
+    probePlanning.getByText(
+      "Landscape probe planning is non-executable in GW8. No probe plans are saved, no samples are generated, and no landscape regions are promoted to evidence."
+    )
+  ).toBeVisible();
+  await expect(
+    probePlanning.getByText(
+      "A planned probe can frame a future model-space investigation. It does not show that sampled behavior exists, that a regime has been detected, or that any real-world claim is supported."
+    )
+  ).toBeVisible();
+
+  const probeStatus = probePlanning.getByLabel(/GW8 foundation:/);
+  await expect(probeStatus).toHaveAttribute("data-status-category", "capability");
+  await expect(probeStatus).toHaveAttribute("data-state", "planning-only");
+  const candidateAxis = probePlanning.getByLabel(/Candidate parameter axis:/).first();
+  await expect(candidateAxis).toHaveAttribute("data-status-category", "capability");
+  await expect(candidateAxis).toHaveAttribute("data-state", "future-only");
+  const candidateOutcome = probePlanning.getByLabel(/Candidate outcome measure:/).first();
+  await expect(candidateOutcome).toHaveAttribute("data-status-category", "capability");
+  await expect(candidateOutcome).toHaveAttribute("data-state", "future-only");
+  const unresolvedFeasibility = probePlanning.getByLabel(/Unresolved feasibility:/).first();
+  await expect(unresolvedFeasibility).toHaveAttribute("data-status-category", "evidence");
+  await expect(unresolvedFeasibility).toHaveAttribute("data-state", "unresolved");
+  const externallyUnvalidatedHypothesis = probePlanning.getByLabel(/Externally unvalidated hypothesis:/).first();
+  await expect(externallyUnvalidatedHypothesis).toHaveAttribute("data-status-category", "evidence");
+  await expect(externallyUnvalidatedHypothesis).toHaveAttribute("data-state", "unresolved");
+  const nonExecutablePlan = probePlanning.getByLabel(/Non-executable plan:/).first();
+  await expect(nonExecutablePlan).toHaveAttribute("data-status-category", "capability");
+  await expect(nonExecutablePlan).toHaveAttribute("data-state", "future-only");
+  await expect(probePlanning.locator(".status-pill[data-status-category='operational']")).toHaveCount(0);
+  await expect(probePlanning.locator(".status-pill[data-status-category='interaction']")).toHaveCount(0);
+
+  const probePlanningTabStops = await probePlanning.evaluate((element) =>
+    Array.from(
+      element.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      )
+    ).filter((candidate) => {
+      const style = window.getComputedStyle(candidate);
+      return style.display !== "none" && style.visibility !== "hidden";
+    }).length
+  );
+  expect(probePlanningTabStops, "landscape probe planning scaffold should remain static readable content with no fake controls").toBe(0);
+
   const mainText = await page.getByRole("main").innerText();
   expect(mainText).not.toMatch(
-    /Map this run|Save to Atlas|Create discovery|Save discovery|Publish finding|discovery unlocked|recent activity|\bxp\b|achievement|rank|streak|evidence score|coverage percentage|regime confidence|Run sweep|batch simulation|confidence value|fake heatmap|fake contour|fake cluster|sampled region record/i
+    /Map this run|Save to Atlas|Create discovery|Save discovery|Publish finding|Save probe now|Save probe plan|Run probe now|Run sweep now|Run sweep control|Ready to execute|Probe complete|discovery unlocked|recent activity|\bxp\b|achievement|rank|streak|Evidence score \d|Coverage percentage \d|regime confidence|batch simulation job|confidence value|fake heatmap|fake contour|fake cluster|sampled region record|Sampled result #|Saved plan #/i
   );
   await expect(page.getByRole("link", { name: "Return to World" })).toHaveAttribute("href", "/");
   await expect(page.getByRole("link", { name: "Open Workshop" })).toHaveAttribute("href", "/builder");

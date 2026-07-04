@@ -1,6 +1,6 @@
 # Contextual Capability Guidance
 
-Status: Prompt GW6 implementation source of truth, audited by Prompt GW6B in `docs/ui/CONTEXTUAL_CAPABILITY_GUIDANCE_AUDIT.md` and updated after Prompt GW7. GW6 adds source-backed route-local capability guidance to World, Workshop, Lab, and Atlas. It does not create saved records, Atlas discoveries, Lab experiments, saved behavioral landscapes, progression, user-derived routing, behavior-derived task ordering, persistence, validation, calibration, runtime behavior, template behavior, or Builder execution behavior.
+Status: Prompt GW6 implementation source of truth, audited by Prompt GW6B in `docs/ui/CONTEXTUAL_CAPABILITY_GUIDANCE_AUDIT.md` and updated after Prompt GW8. GW6 adds source-backed route-local capability guidance to World, Workshop, Lab, and Atlas. It does not create saved records, Atlas discoveries, Lab experiments, saved behavioral landscapes, saved probe plans, progression, user-derived routing, behavior-derived task ordering, persistence, validation, calibration, runtime behavior, template behavior, or Builder execution behavior.
 
 ## 1. Boundary
 
@@ -63,7 +63,7 @@ Workshop guidance clarifies that authoring, validation assistance, graph inspect
 
 Lab guidance clarifies that `/lab` is a non-persistent evidence-record foundation. Persistent evidence records, experiment ledgers, notebooks, saved comparisons, run history, and Lab-to-Atlas publication are not implemented.
 
-Atlas guidance clarifies that `/atlas` is a non-persistent evidence-orientation foundation. Discovery Atlas records, persistent evidence maps, sampled-region displays backed by run data, saved behavioral landscape maps, and evidence-rating surfaces are not implemented. GW7 adds behavioral-landscape vocabulary and a conceptual scaffold; it does not make sampled landscapes or saved maps available.
+Atlas guidance clarifies that `/atlas` is a non-persistent evidence-orientation foundation. Discovery Atlas records, persistent evidence maps, sampled-region displays backed by run data, saved behavioral landscape maps, saved probe plans, executable probes, and evidence-rating surfaces are not implemented. GW7 adds behavioral-landscape vocabulary and a conceptual scaffold; it does not make sampled landscapes or saved maps available. GW8 adds landscape probe planning vocabulary and a conceptual scaffold; it does not make executable probes, saved plans, samples, run queues, or regime detection available.
 
 ## 6. Tests
 

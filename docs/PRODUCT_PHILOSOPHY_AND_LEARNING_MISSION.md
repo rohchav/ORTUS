@@ -1,6 +1,6 @@
 # ORTUS Product Philosophy And Learning Mission
 
-Status: Prompt P0 documentation-only source of truth, updated after Prompt GW7. This document records product philosophy, learning goals, future progression principles, and guardrails. GW1 implements only the shared World / Lab / Atlas / Workshop destination shell around existing workflows. GW2 adds live active-run provenance and observation context in World only. GW3 adds live intervention readiness and model-response boundaries in World only, GW3B audits/hardens that layer without adding persistence or runtime behavior, GW4 adds a non-persistent Atlas foundation for evidence-state semantics, GW4B audits/hardens that foundation without expanding product behavior, GW5 adds a non-persistent Lab foundation for evidence-record semantics, GW6 adds static source-backed capability guidance, GW6B audits/hardens that guidance layer, and GW7 adds non-persistent behavioral-landscape vocabulary and a conceptual Atlas scaffold. This document does not implement runtime behavior, UI progression, unlocks, missions, scoring, achievements, discovery detection, model composition, templates, simulation features, fractal metrics, persistent Research World state, persistence, accounts, social features, onboarding flows, dependencies, generated guidance, or new capability flags.
+Status: Prompt P0 documentation-only source of truth, updated after Prompt GW8. This document records product philosophy, learning goals, future progression principles, and guardrails. GW1 implements only the shared World / Lab / Atlas / Workshop destination shell around existing workflows. GW2 adds live active-run provenance and observation context in World only. GW3 adds live intervention readiness and model-response boundaries in World only, GW3B audits/hardens that layer without adding persistence or runtime behavior, GW4 adds a non-persistent Atlas foundation for evidence-state semantics, GW4B audits/hardens that foundation without expanding product behavior, GW5 adds a non-persistent Lab foundation for evidence-record semantics, GW6 adds static source-backed capability guidance, GW6B audits/hardens that guidance layer, GW7 adds non-persistent behavioral-landscape vocabulary and a conceptual Atlas scaffold, and GW8 adds non-persistent landscape probe planning vocabulary and a conceptual Atlas scaffold. This document does not implement runtime behavior, UI progression, unlocks, missions, scoring, achievements, discovery detection, model composition, templates, simulation features, fractal metrics, persistent Research World state, persistence, accounts, social features, onboarding flows, dependencies, generated guidance, or new capability flags.
 
 ## Core Mission
 
@@ -123,6 +123,8 @@ Prompt GW6 operationalizes capability honesty across World, Workshop, Lab, and A
 
 Prompt GW7 operationalizes model-space honesty for behavioral-landscape language. A behavioral landscape describes how model behavior may vary across model conditions. It is not a real-world map, empirical proof, or Discovery Atlas record. GW7 provides vocabulary and a text-only conceptual scaffold, not saved landscapes, sampled-region maps, evidence records, Lab experiments, Atlas discoveries, regime detection, or validation.
 
+Prompt GW8 operationalizes model-space honesty for probe planning language. A landscape probe plan describes how a future model-space investigation could be framed. It is not a sampled landscape, run queue, saved experiment, evidence record, or discovery. GW8 provides vocabulary and a conceptual scaffold, not executable probes, saved probe plans, sampled landscapes, parameter sweeps, Lab records, Atlas discoveries, regime detection, or validation.
+
 ## Product Experience Principles
 
 The first product question should be:
@@ -147,7 +149,7 @@ Good ORTUS experiences should:
 
 ## Research World Direction
 
-Research World is an incremental product branch, not a finished research platform. Prompt P0 reserves philosophy and direction. Prompt GW0, documented in `RESEARCH_WORLD_PROGRESSION_MINI_ROADMAP.md`, adds a documentation-only progression and information-architecture roadmap for that branch. GW1 adds the destination shell, GW2 adds live World-only active-run provenance, GW3 adds live World-only intervention readiness, GW4 adds non-persistent Atlas information architecture, GW4B audits/hardens that Atlas foundation, GW5 adds non-persistent Lab evidence-record information architecture, GW6 adds source-backed capability guidance, GW6B audits/hardens that guidance layer, and GW7 adds non-persistent behavioral-landscape vocabulary. These prompts still do not implement progression, persistence, missions, unlocks, discovery detection, achievements, scoring, accounts, social systems, runtime behavior, generated guidance, or persistent Research World state.
+Research World is an incremental product branch, not a finished research platform. Prompt P0 reserves philosophy and direction. Prompt GW0, documented in `RESEARCH_WORLD_PROGRESSION_MINI_ROADMAP.md`, adds a documentation-only progression and information-architecture roadmap for that branch. GW1 adds the destination shell, GW2 adds live World-only active-run provenance, GW3 adds live World-only intervention readiness, GW4 adds non-persistent Atlas information architecture, GW4B audits/hardens that Atlas foundation, GW5 adds non-persistent Lab evidence-record information architecture, GW6 adds source-backed capability guidance, GW6B audits/hardens that guidance layer, GW7 adds non-persistent behavioral-landscape vocabulary, and GW8 adds non-persistent landscape probe planning vocabulary. These prompts still do not implement progression, persistence, missions, unlocks, discovery detection, achievements, scoring, accounts, social systems, runtime behavior, generated guidance, or persistent Research World state.
 
 Future branch names:
 
@@ -167,6 +169,7 @@ Future branch names:
 - GW6B: Contextual Capability Guidance Audit
 - GW7: Behavioral Landscape Exploration Foundation
 - GW7B: Behavioral Landscape Foundation Audit
+- GW8: Landscape Probe Planning Foundation
 
 Composition frontiers and Grand Systems Challenges remain future product directions beyond this near-term branch unless a dedicated roadmap prompt scopes them with explicit audit gates.
 

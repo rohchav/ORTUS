@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { behavioralLandscapeFoundation } from "../../lib/behavioralLandscapeFoundation";
+import { landscapeProbePlanningFoundation } from "../../lib/landscapeProbePlanningFoundation";
 import {
   atlasBoundarySummaries,
   atlasCapabilityLegendState,
@@ -245,6 +246,166 @@ export default function AtlasPage() {
           <div className="landscape-boundaries__grid">
             {behavioralLandscapeFoundation.boundaries.map((boundary) => (
               <article key={boundary.id} className="landscape-boundary-card">
+                <header>
+                  <h4>{boundary.title}</h4>
+                  <StatusPill
+                    label={boundary.status.label}
+                    tone="neutral"
+                    category={boundary.status.category}
+                    state={boundary.status.state}
+                    description={boundary.summary}
+                    size="compact"
+                  />
+                </header>
+                <p>{boundary.summary}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+      </section>
+
+      <section
+        className="landscape-probe-planning-foundation"
+        aria-labelledby="landscape-probe-planning-title"
+        data-landscape-probe-planning-foundation="conceptual"
+      >
+        <div className="landscape-probe-planning-foundation__header">
+          <div>
+            <span className="landscape-probe-planning-foundation__eyebrow">GW8 scope</span>
+            <h2 id="landscape-probe-planning-title">{landscapeProbePlanningFoundation.title}</h2>
+          </div>
+          <StatusPill
+            label={landscapeProbePlanningFoundation.statusLabel}
+            tone="neutral"
+            category={landscapeProbePlanningFoundation.status.category}
+            state={landscapeProbePlanningFoundation.status.state}
+            description={landscapeProbePlanningFoundation.boundary}
+          />
+        </div>
+        <p>{landscapeProbePlanningFoundation.principle}</p>
+        <p>{landscapeProbePlanningFoundation.boundary}</p>
+        <p>{landscapeProbePlanningFoundation.purpose}</p>
+
+        <div className="landscape-probe-planning-foundation__grid">
+          <CornerFramePanel title="Probe Vocabulary" eyebrow="Concepts, not actions" variant="standard" className="atlas-foundation__panel">
+            <h3 className="sr-only">Probe Vocabulary</h3>
+            <ul className="probe-planning-concept-list">
+              {landscapeProbePlanningFoundation.concepts.map((concept) => (
+                <li key={concept.id}>
+                  <div className="landscape-list__head">
+                    <StatusPill
+                      label={concept.label}
+                      tone="neutral"
+                      category={concept.status.category}
+                      state={concept.status.state}
+                      description={concept.distinction}
+                    />
+                    <span>
+                      {concept.status.category} / {concept.status.state}
+                    </span>
+                  </div>
+                  <p>{concept.summary}</p>
+                  <p>{concept.distinction}</p>
+                </li>
+              ))}
+            </ul>
+          </CornerFramePanel>
+
+          <CornerFramePanel title="Axes And Outcomes" eyebrow="Candidates, not samples" variant="standard" className="atlas-foundation__panel">
+            <h3 className="sr-only">Axes And Outcomes</h3>
+            <ul className="probe-planning-axis-list">
+              {landscapeProbePlanningFoundation.axes.map((axis) => (
+                <li key={axis.id}>
+                  <div className="landscape-list__head">
+                    <StatusPill
+                      label={axis.label}
+                      tone="neutral"
+                      category={axis.status.category}
+                      state={axis.status.state}
+                      description={axis.notSampled}
+                    />
+                    <span>
+                      {axis.status.category} / {axis.status.state}
+                    </span>
+                  </div>
+                  <p>{axis.summary}</p>
+                  <p>{axis.notSampled}</p>
+                </li>
+              ))}
+              {landscapeProbePlanningFoundation.outcomes.map((outcome) => (
+                <li key={outcome.id}>
+                  <div className="landscape-list__head">
+                    <StatusPill
+                      label={outcome.label}
+                      tone="neutral"
+                      category={outcome.status.category}
+                      state={outcome.status.state}
+                      description={outcome.notEvidence}
+                    />
+                    <span>
+                      {outcome.status.category} / {outcome.status.state}
+                    </span>
+                  </div>
+                  <p>{outcome.summary}</p>
+                  <p>{outcome.notEvidence}</p>
+                </li>
+              ))}
+            </ul>
+          </CornerFramePanel>
+
+          <CornerFramePanel title="Conceptual Probe Plan" eyebrow="Not executable" variant="standard" className="atlas-foundation__panel">
+            <h3 className="sr-only">Conceptual Probe Plan</h3>
+            <div className="landscape-list__head">
+              <StatusPill
+                label={landscapeProbePlanningFoundation.scaffold.label}
+                tone="neutral"
+                category={landscapeProbePlanningFoundation.scaffold.status.category}
+                state={landscapeProbePlanningFoundation.scaffold.status.state}
+                description={landscapeProbePlanningFoundation.scaffold.boundary}
+              />
+              <span>
+                {landscapeProbePlanningFoundation.scaffold.status.category} / {landscapeProbePlanningFoundation.scaffold.status.state}
+              </span>
+            </div>
+            <p>{landscapeProbePlanningFoundation.scaffold.summary}</p>
+            <ol className="probe-planning-scaffold-list">
+              {landscapeProbePlanningFoundation.scaffold.anatomy.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ol>
+            <p>{landscapeProbePlanningFoundation.scaffold.boundary}</p>
+          </CornerFramePanel>
+
+          <CornerFramePanel title="Planning Constraints" eyebrow="Boundaries, not blockers" variant="standard" className="atlas-foundation__panel">
+            <h3 className="sr-only">Planning Constraints</h3>
+            <ul className="probe-planning-constraint-list">
+              {landscapeProbePlanningFoundation.constraints.map((constraint) => (
+                <li key={constraint.id}>
+                  <div className="landscape-list__head">
+                    <StatusPill
+                      label={constraint.label}
+                      tone="neutral"
+                      category={constraint.status.category}
+                      state={constraint.status.state}
+                      description={constraint.boundary}
+                    />
+                    <span>
+                      {constraint.status.category} / {constraint.status.state}
+                    </span>
+                  </div>
+                  <p>{constraint.summary}</p>
+                  <p>{constraint.boundary}</p>
+                </li>
+              ))}
+            </ul>
+          </CornerFramePanel>
+        </div>
+
+        <section className="probe-planning-boundaries" aria-labelledby="probe-planning-boundaries-title">
+          <h3 id="probe-planning-boundaries-title">Landscape Probe Planning Boundaries</h3>
+          <div className="probe-planning-boundaries__grid">
+            {landscapeProbePlanningFoundation.boundaries.map((boundary) => (
+              <article key={boundary.id} className="probe-planning-boundary-card">
                 <header>
                   <h4>{boundary.title}</h4>
                   <StatusPill

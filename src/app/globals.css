@@ -1111,6 +1111,10 @@ textarea[aria-invalid="true"] {
 .landscape-concept-list,
 .landscape-scaffold-list,
 .landscape-region-list,
+.probe-planning-concept-list,
+.probe-planning-axis-list,
+.probe-planning-constraint-list,
+.probe-planning-scaffold-list,
 .lab-record-legend,
 .lab-ledger-scaffold {
   min-width: 0;
@@ -1128,6 +1132,10 @@ textarea[aria-invalid="true"] {
 .landscape-region-list li,
 .atlas-boundary-card,
 .landscape-boundary-card,
+.probe-planning-concept-list li,
+.probe-planning-axis-list li,
+.probe-planning-constraint-list li,
+.probe-planning-boundary-card,
 .lab-record-legend li,
 .lab-ledger-scaffold li,
 .lab-boundary-card {
@@ -1139,12 +1147,14 @@ textarea[aria-invalid="true"] {
   background: var(--surface-panel-inset);
 }
 
-.landscape-scaffold-list {
+.landscape-scaffold-list,
+.probe-planning-scaffold-list {
   padding-left: var(--space-4);
   list-style: decimal;
 }
 
-.landscape-scaffold-list li {
+.landscape-scaffold-list li,
+.probe-planning-scaffold-list li {
   color: var(--text-secondary);
   line-height: 1.45;
 }
@@ -1153,6 +1163,7 @@ textarea[aria-invalid="true"] {
 .atlas-boundary-card header,
 .landscape-list__head,
 .landscape-boundary-card header,
+.probe-planning-boundary-card header,
 .lab-record-legend__head,
 .lab-boundary-card header {
   min-width: 0;
@@ -1173,7 +1184,8 @@ textarea[aria-invalid="true"] {
   text-transform: uppercase;
 }
 
-.behavioral-landscape-foundation {
+.behavioral-landscape-foundation,
+.landscape-probe-planning-foundation {
   min-width: 0;
   margin-top: var(--space-5);
   display: grid;
@@ -1182,7 +1194,8 @@ textarea[aria-invalid="true"] {
   border-top: 1px solid var(--border-default);
 }
 
-.behavioral-landscape-foundation__header {
+.behavioral-landscape-foundation__header,
+.landscape-probe-planning-foundation__header {
   min-width: 0;
   display: flex;
   align-items: flex-start;
@@ -1191,7 +1204,8 @@ textarea[aria-invalid="true"] {
   flex-wrap: wrap;
 }
 
-.behavioral-landscape-foundation__eyebrow {
+.behavioral-landscape-foundation__eyebrow,
+.landscape-probe-planning-foundation__eyebrow {
   display: block;
   margin-bottom: var(--space-1);
   color: var(--text-muted);
@@ -1204,9 +1218,12 @@ textarea[aria-invalid="true"] {
 }
 
 .behavioral-landscape-foundation h2,
+.landscape-probe-planning-foundation h2,
 .landscape-region-semantics h3,
 .landscape-boundaries h3,
-.landscape-boundary-card h4 {
+.landscape-boundary-card h4,
+.probe-planning-boundaries h3,
+.probe-planning-boundary-card h4 {
   margin: 0;
   color: var(--text-primary);
   font-family: var(--font-display);
@@ -1216,28 +1233,37 @@ textarea[aria-invalid="true"] {
   text-transform: uppercase;
 }
 
-.behavioral-landscape-foundation h2 {
+.behavioral-landscape-foundation h2,
+.landscape-probe-planning-foundation h2 {
   font-size: var(--font-size-section-title);
 }
 
 .landscape-region-semantics h3,
-.landscape-boundaries h3 {
+.landscape-boundaries h3,
+.probe-planning-boundaries h3 {
   font-size: var(--font-size-panel-title);
 }
 
-.landscape-boundary-card h4 {
+.landscape-boundary-card h4,
+.probe-planning-boundary-card h4 {
   font-size: var(--font-size-control);
 }
 
 .behavioral-landscape-foundation > p,
+.landscape-probe-planning-foundation > p,
 .landscape-region-list p,
-.landscape-boundary-card p {
+.landscape-boundary-card p,
+.probe-planning-concept-list p,
+.probe-planning-axis-list p,
+.probe-planning-constraint-list p,
+.probe-planning-boundary-card p {
   margin: 0;
   color: var(--text-secondary);
   overflow-wrap: anywhere;
 }
 
-.behavioral-landscape-foundation__grid {
+.behavioral-landscape-foundation__grid,
+.landscape-probe-planning-foundation__grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
   gap: var(--space-3);
@@ -1245,7 +1271,8 @@ textarea[aria-invalid="true"] {
 }
 
 .landscape-region-semantics,
-.landscape-boundaries {
+.landscape-boundaries,
+.probe-planning-boundaries {
   display: grid;
   gap: var(--space-3);
 }
@@ -1254,7 +1281,8 @@ textarea[aria-invalid="true"] {
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
 }
 
-.landscape-boundaries__grid {
+.landscape-boundaries__grid,
+.probe-planning-boundaries__grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
   gap: var(--space-3);

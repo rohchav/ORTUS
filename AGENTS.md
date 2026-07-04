@@ -477,7 +477,7 @@
 - Preserve current validated workflows before reorganizing them further.
 - Use the existing Playwright/Axe harness for rendered destination-shell verification.
 - Do not claim screen-reader, AT, forced-colors, browser-zoom, or WCAG verification without evidence.
-- Do not start a Research World implementation slice from a prior shell prompt without the required audit; after GW7B, GW8 is the next Research World prompt only with explicit approval.
+- Do not start a Research World implementation slice from a prior shell prompt without the required audit; after GW8, GW8B is the next Research World prompt only with explicit approval.
 - Lab evidence-record semantics are non-persistent information architecture until a later audited prompt implements storage. Do not treat `LabRecordLifecycleState`, conceptual ledger scaffolds, or Lab route copy as saved evidence records, experiment histories, notebooks, saved comparisons, run history, reusable assets, or validation evidence.
 - GW5 Lab does not save active World runs, import active-run provenance, create experiment ledgers, create notebooks, create saved comparisons, publish to Atlas, create discoveries, add storage, add timestamps, generate ids, add progression, or change simulation/template/Builder runtime behavior.
 - Lab records will organize evidence about model investigations. They will not certify discoveries about the real world.
@@ -507,6 +507,13 @@
 - Do not add saved landscape records, Atlas discoveries, Lab records, persistence, progression, runtime behavior, template behavior, Builder execution behavior, or route aliases from GW7.
 - Do not frame model regions as real-world regimes, policy effects, empirical proof, validation, calibration, or discovery certification.
 - Preserve the current route shell contract when adding or auditing behavioral-landscape vocabulary.
+- GW8 landscape probe planning is non-executable and non-persistent.
+- GW8 conceptual probe plans are not saved plans, run queues, sampled data, evidence records, Lab records, Atlas discoveries, or runtime behavior.
+- Do not add run-probe, run-sweep, save-probe, save-landscape, send-to-Lab, or publish-to-Atlas actions from GW8.
+- Do not add fake sampled results, fake evidence scores, fake confidence scores, fake coverage percentages, fake regimes, fake run history, fake timestamps, or fake ids from GW8.
+- Do not add run queues, job queues, batch execution, parameter sweep execution, regime detection, progression, persistence, runtime behavior, template behavior, Builder execution behavior, or route aliases from GW8.
+- Do not frame planned probes as real-world validation, policy evidence, causal evidence, empirical proof, or discovery certification.
+- Preserve the current route shell contract when adding or auditing landscape probe planning vocabulary.
 - GW6 guidance is source-backed and non-personalized.
 - Capability guidance describes capabilities; it does not create them.
 - Do not add persistent guidance, dismissed-tip state, onboarding progress, analytics, telemetry, or stored guidance preferences.

@@ -1,6 +1,6 @@
 # Discovery Atlas Information Architecture
 
-Status: Prompt GW4 implementation source of truth, audited and hardened by Prompt GW4B, updated during Prompt GW7 and Prompt GW7B. GW4 creates a non-persistent Atlas information architecture and evidence-state vocabulary on `/atlas`. GW4B keeps sampled evidence unresolved until source-backed Atlas records exist. GW5 adds non-persistent Lab evidence-record information architecture, not Lab-to-Atlas publication. GW6 adds static capability guidance. GW7 adds non-persistent behavioral-landscape vocabulary and a conceptual scaffold, not saved or sampled landscapes. GW7B audits and hardens that vocabulary/scaffold boundary without adding persistence or runtime behavior. This Atlas foundation does not create saved discoveries, saved evidence records, saved behavioral landscape maps, sampled-region maps backed by run data, persistent Lab records, run history, storage, progression, validation, calibration, real-world discovery certification, runtime behavior, template behavior, Builder execution behavior, dependencies, assets, or fonts.
+Status: Prompt GW4 implementation source of truth, audited and hardened by Prompt GW4B, updated through Prompt GW8. GW4 creates a non-persistent Atlas information architecture and evidence-state vocabulary on `/atlas`. GW4B keeps sampled evidence unresolved until source-backed Atlas records exist. GW5 adds non-persistent Lab evidence-record information architecture, not Lab-to-Atlas publication. GW6 adds static capability guidance. GW7 adds non-persistent behavioral-landscape vocabulary and a conceptual scaffold, not saved or sampled landscapes. GW7B audits and hardens that vocabulary/scaffold boundary without adding persistence or runtime behavior. GW8 adds non-persistent landscape probe planning vocabulary and a conceptual probe-plan scaffold, not executable probes or saved plans. This Atlas foundation does not create saved discoveries, saved evidence records, saved behavioral landscape maps, saved probe plans, sampled-region maps backed by run data, persistent Lab records, run history, storage, progression, validation, calibration, real-world discovery certification, runtime behavior, template behavior, Builder execution behavior, dependencies, assets, or fonts.
 
 ## 1. Purpose
 
@@ -164,7 +164,7 @@ GW4 does not implement:
 
 ## 15. Deferred Work
 
-Deferred work includes persistent Lab records, real Discovery Atlas evidence records, source-backed sampled-region maps, saved behavioral landscapes, stale-record handling, provenance-preserving Atlas records, comparison-backed contradictions, validation/calibration workflows, screen-reader walkthroughs, assistive-technology walkthroughs, forced-colors checks, actual browser-zoom verification, and user-comprehension testing.
+Deferred work includes persistent Lab records, real Discovery Atlas evidence records, source-backed sampled-region maps, saved behavioral landscapes, executable landscape probes, saved probe plans, stale-record handling, provenance-preserving Atlas records, comparison-backed contradictions, validation/calibration workflows, screen-reader walkthroughs, assistive-technology walkthroughs, forced-colors checks, actual browser-zoom verification, and user-comprehension testing.
 
 ## 16. GW4B Audit Result
 
@@ -176,7 +176,7 @@ docs/ui/DISCOVERY_ATLAS_INFORMATION_ARCHITECTURE_AUDIT.md
 
 GW4B inspected evidence-state semantics, non-persistence clarity, sampled/unsampled honesty, model-vs-real-world boundaries, absence of fake discoveries/maps/scores, Lab/World relationships, keyboard/focus/reflow behavior, Axe results, status semantics, and scope-creep risk.
 
-GW4B changed `Sampled` from evidence / observed to evidence / unresolved because the current Atlas route has no source-backed Atlas records. The GW4B continuation completed the post-hardening rendered shell and full UI Playwright/Axe gates. GW5 later adds non-persistent Lab evidence-record semantics, not Lab-to-Atlas publication. GW6 later adds static capability guidance to Atlas. GW7 later adds non-persistent behavioral-landscape vocabulary and a conceptual scaffold. GW7B audits and hardens that scaffold without creating saved maps, sampled data, run sweeps, regime detection, Lab records, validation, calibration, or real-world discovery certification.
+GW4B changed `Sampled` from evidence / observed to evidence / unresolved because the current Atlas route has no source-backed Atlas records. The GW4B continuation completed the post-hardening rendered shell and full UI Playwright/Axe gates. GW5 later adds non-persistent Lab evidence-record semantics, not Lab-to-Atlas publication. GW6 later adds static capability guidance to Atlas. GW7 later adds non-persistent behavioral-landscape vocabulary and a conceptual scaffold. GW7B audits and hardens that scaffold without creating saved maps, sampled data, run sweeps, regime detection, Lab records, validation, calibration, or real-world discovery certification. GW8 later adds non-persistent landscape probe planning vocabulary and a conceptual probe-plan scaffold without executing probes, saving plans, generating samples, or detecting regimes.
 
 ## 17. GW6 Capability Guidance Relationship
 
@@ -191,3 +191,7 @@ GW7 adds `docs/ui/BEHAVIORAL_LANDSCAPE_EXPLORATION_FOUNDATION.md`, `src/lib/beha
 ## Prompt GW7B Update
 
 GW7B adds `docs/ui/BEHAVIORAL_LANDSCAPE_EXPLORATION_FOUNDATION_AUDIT.md` and hardens source/rendered checks for vocabulary honesty, evidence/capability status semantics, non-persistence, and the zero-Tab-stop conceptual scaffold. It does not add saved behavioral landscape maps, sampled-region maps, persistent Atlas records, run sweeps, regime detection, Lab records, runtime behavior, template behavior, Builder execution, validation, calibration, or real-world discovery certification.
+
+## Prompt GW8 Update
+
+GW8 adds `docs/ui/LANDSCAPE_PROBE_PLANNING_FOUNDATION.md`, `src/lib/landscapeProbePlanningFoundation.ts`, and a bounded Atlas section for landscape probe planning vocabulary. A landscape probe plan describes how a future model-space investigation could be framed. It is not a sampled landscape, run queue, saved experiment, evidence record, or discovery. The GW8 conceptual scaffold is text-only and not executable or saved.
