@@ -2927,10 +2927,69 @@ Verification:
 
 Remaining limits:
 
-- GW8 is not audited by GW8B yet.
+- At GW8 close, GW8 had not yet been audited by GW8B.
 - Rendered Playwright/Axe smoke verification is not accessibility certification.
 - Actual browser zoom at 125%, 150%, and 200%, screen-reader behavior, assistive-technology behavior, forced-colors behavior, complete WCAG conformance, and user-comprehension evidence remain unverified.
 
 Next:
 
-- GW8B: Landscape Probe Planning Audit and Hardening must follow only with explicit user approval.
+- GW8B: Landscape Probe Planning Audit and Hardening followed with explicit user approval and is recorded in the next session-log entry.
+
+## 2026-07-06 - Prompt GW8B Landscape Probe Planning Audit and Hardening
+
+Goal: audit and harden the committed GW8 Landscape Probe Planning foundation without adding executable probes, saved plans, sampled results, run queues, sweeps, regime detection, Lab records, Atlas discoveries, progression, persistence, runtime behavior, template behavior, Builder execution behavior, dependencies, assets, or fonts.
+
+Starting state:
+
+- Current commit before work: `798e3dc`.
+- Starting worktree was clean.
+- Prompt GW8 was committed.
+
+Baseline:
+
+- `npm run test:ui` failed in the sandbox because the configured local web server exited early, consistent with the known sandbox local-server limitation.
+- Escalated `npm run test:ui`: passed, 45 tests.
+- `npm run typecheck`: passed.
+- `npm test`: passed, 67 files and 543 tests.
+- `npm run build`: passed.
+- `npm run perf:simulation`: passed.
+- `git diff --check`: passed.
+- `npm run lint`: unavailable, package.json has no lint script.
+
+Audit and hardening:
+
+- Added `docs/ui/LANDSCAPE_PROBE_PLANNING_FOUNDATION_AUDIT.md`.
+- Found one bounded vocabulary defect: `Planned comparison is not a completed analysis.` was true but too weak for the required result boundary.
+- Hardened the source wording to `Planned comparison is not a comparison result.`
+- Added unit and rendered assertions for the planned-comparison distinction.
+- Updated roadmap, concepts, Research World mini-roadmap, README, Atlas, Lab, guidance, destination shell, behavioral landscape, HCI, workspace IA, current context, session log, and AGENTS references so GW8B is complete and GW9 is the next Research World prompt only with explicit approval.
+
+Browser zoom:
+
+- A headless Chromium keyboard-zoom attempt visited `/`, `/builder`, `/lab`, and `/atlas`, pressed Ctrl+plus repeatedly, and measured `devicePixelRatio`, `innerWidth`, and `visualViewport.scale`.
+- Those metrics did not change, so actual browser zoom was not verified.
+- Actual browser zoom at 125%, 150%, and 200% was not verified.
+
+Verification:
+
+- `npm test -- landscapeProbePlanningFoundation roadmap`: passed, 2 files and 12 tests.
+- Sandboxed `npx playwright test tests/ui/research-world-shell.spec.ts`: blocked because the local dev server exited early under sandboxed local-socket restrictions.
+- Escalated `npx playwright test tests/ui/research-world-shell.spec.ts`: passed, 30 tests.
+- Sandboxed `npm run test:ui`: blocked because the local dev server exited early under sandboxed local-socket restrictions.
+- Escalated `npm run test:ui`: passed, 45 tests.
+- `npm run typecheck`: passed.
+- `npm test`: passed, 67 files and 543 tests.
+- `npm run build`: passed with Next.js 15.5.19.
+- `npm run perf:simulation`: passed. Local smoke results included Flocking 100 agents at 107.86 ticks/sec, Flocking 500 agents at 16.08 ticks/sec, Forest Fire medium grid at 23.85 ticks/sec, and Predator-Prey default at 72.54 ticks/sec.
+- `npm run lint`: unavailable, package.json has no lint script.
+- Required broad scope-creep search returned expected hits in docs/tests/guardrails and pre-existing unrelated run-comparison/store/runtime/performance code. Focused GW8 production-source inspection found no storage APIs, timestamps/random IDs/fingerprints, fake run actions, runtime coupling, compilers, interpreters, saved plans, queues, sampled results, scores, sweeps, or regime detection.
+
+Remaining limits:
+
+- Rendered Playwright/Axe smoke verification is not accessibility certification.
+- Actual browser zoom at 125%, 150%, and 200%, screen-reader behavior, assistive-technology behavior, forced-colors behavior, complete WCAG conformance, user-comprehension evidence, scientific validation, and calibration remain unverified.
+
+Readiness decision:
+
+- Ready for GW9 after commit, only if GW9 arrives through an explicit future prompt.
+- GW9 must not inherit executable probes, saved plans, sampled results, sweeps, regime detection, Lab records, Atlas discoveries, progression, persistence, runtime behavior, template behavior, Builder execution behavior, validation, calibration, or real-world discovery claims from GW8/GW8B.

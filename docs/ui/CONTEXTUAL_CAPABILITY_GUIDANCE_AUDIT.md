@@ -1,6 +1,6 @@
 # Contextual Capability Guidance Audit
 
-Status: Prompt GW6B audit and hardening record, updated after Prompt GW8. GW6B audits the static contextual capability guidance added in GW6. It does not add persistence, recommendations, onboarding, Lab records, Atlas discoveries, saved behavioral landscapes, saved probe plans, progression, runtime behavior, template behavior, or Builder execution behavior. GW7 later adds Atlas-side behavioral-landscape vocabulary and a conceptual scaffold without changing the GW6B guidance audit result. GW8 later adds Atlas-side landscape probe planning vocabulary and a conceptual scaffold without creating executable probes, saved plans, samples, run queues, or regime detection.
+Status: Prompt GW6B audit and hardening record, updated after Prompt GW8B. GW6B audits the static contextual capability guidance added in GW6. It does not add persistence, recommendations, onboarding, Lab records, Atlas discoveries, saved behavioral landscapes, saved probe plans, progression, runtime behavior, template behavior, or Builder execution behavior. GW7 later adds Atlas-side behavioral-landscape vocabulary and a conceptual scaffold without changing the GW6B guidance audit result. GW8 later adds Atlas-side landscape probe planning vocabulary and a conceptual scaffold without creating executable probes, saved plans, samples, run queues, or regime detection. GW8B audits that probe-planning boundary without changing GW6B guidance behavior.
 
 ## 1. Scope
 

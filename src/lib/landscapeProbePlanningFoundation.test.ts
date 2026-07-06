@@ -82,6 +82,9 @@ describe("Landscape probe planning foundation semantics", () => {
       "Planned outcome is not observed evidence."
     );
     expect(getLandscapeProbePlanConceptById("sampling-intent").distinction).toBe("Sampling intent is not a sampling result.");
+    expect(getLandscapeProbePlanConceptById("planned-comparison").distinction).toBe(
+      "Planned comparison is not a comparison result."
+    );
     expect(getLandscapeProbePlanConceptById("externally-unvalidated-hypothesis").distinction).toBe(
       "Model hypothesis is not a real-world claim."
     );

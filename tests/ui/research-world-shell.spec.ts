@@ -582,6 +582,7 @@ async function expectAtlasFoundation(page: Page) {
   await expect(probePlanning.getByText("Candidate range is not an explored range.")).toBeVisible();
   await expect(probePlanning.getByText("Planned outcome is not observed evidence.")).toBeVisible();
   await expect(probePlanning.getByText("Sampling intent is not a sampling result.")).toBeVisible();
+  await expect(probePlanning.getByText("Planned comparison is not a comparison result.")).toBeVisible();
   await expect(probePlanning.getByText("Model hypothesis is not a real-world claim.")).toBeVisible();
   await expect(probePlanning.getByText("Planning scaffold is not a run queue.")).toBeVisible();
   await expect(probePlanning.getByText("Future-only is not locked progression.")).toBeVisible();

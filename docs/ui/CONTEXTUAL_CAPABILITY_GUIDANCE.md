@@ -1,6 +1,6 @@
 # Contextual Capability Guidance
 
-Status: Prompt GW6 implementation source of truth, audited by Prompt GW6B in `docs/ui/CONTEXTUAL_CAPABILITY_GUIDANCE_AUDIT.md` and updated after Prompt GW8. GW6 adds source-backed route-local capability guidance to World, Workshop, Lab, and Atlas. It does not create saved records, Atlas discoveries, Lab experiments, saved behavioral landscapes, saved probe plans, progression, user-derived routing, behavior-derived task ordering, persistence, validation, calibration, runtime behavior, template behavior, or Builder execution behavior.
+Status: Prompt GW6 implementation source of truth, audited by Prompt GW6B in `docs/ui/CONTEXTUAL_CAPABILITY_GUIDANCE_AUDIT.md` and updated after Prompt GW8B. GW6 adds source-backed route-local capability guidance to World, Workshop, Lab, and Atlas. GW8B audits landscape probe planning without changing capability-guidance behavior. Guidance does not create saved records, Atlas discoveries, Lab experiments, saved behavioral landscapes, saved probe plans, progression, user-derived routing, behavior-derived task ordering, persistence, validation, calibration, runtime behavior, template behavior, or Builder execution behavior.
 
 ## 1. Boundary
 

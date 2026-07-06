@@ -1,6 +1,6 @@
 # Landscape Probe Planning Foundation
 
-Status: Prompt GW8 implementation source of truth. GW8 adds source-backed landscape probe planning vocabulary and a non-persistent conceptual planning scaffold on `/atlas`. It does not execute probes, run parameter sweeps, generate samples, save plans, create Lab records, create Atlas discoveries, detect regimes, validate real-world claims, add progression, change runtime behavior, change template behavior, change Builder execution behavior, add dependencies, add assets, or add fonts.
+Status: Prompt GW8 implementation source of truth, audited by Prompt GW8B in `docs/ui/LANDSCAPE_PROBE_PLANNING_FOUNDATION_AUDIT.md`. GW8 adds source-backed landscape probe planning vocabulary and a non-persistent conceptual planning scaffold on `/atlas`. GW8B hardens the planned-comparison distinction, verifies source/rendered boundaries, and finds the foundation ready for GW9 only as a process decision. These prompts do not execute probes, run parameter sweeps, generate samples, save plans, create Lab records, create Atlas discoveries, detect regimes, validate real-world claims, add progression, change runtime behavior, change template behavior, change Builder execution behavior, add dependencies, add assets, or add fonts.
 
 ## 1. Purpose
 
@@ -49,6 +49,8 @@ Candidate range is not an explored range. Constraints such as template capabilit
 Sampling intent names what a future probe might try to compare.
 
 Sampling intent is not a sampling result. GW8 produces no sample list, sampled region, coverage percentage, heatmap, contour, cluster, score, or regime label.
+
+Planned comparison is not a comparison result. It names future framing only and does not imply completed analysis, sampled evidence, or detected regimes.
 
 ## 9. Conceptual Plan Versus Executable Plan
 
@@ -163,10 +165,10 @@ Deferred work includes executable probe-plan design, source-backed landscape sam
 
 Deferred does not mean promised or locked. Future-only is not progression.
 
-## 22. GW8B Audit Requirement
+## 22. GW8B Audit Result
 
-GW8 must be followed by `GW8B: Landscape Probe Planning Audit and Hardening`.
+GW8B is complete in `docs/ui/LANDSCAPE_PROBE_PLANNING_FOUNDATION_AUDIT.md`.
 
-GW8B should inspect probe planning vocabulary accuracy, non-execution clarity, non-persistence clarity, candidate-axis/outcome/range honesty, absence of fake samples/results/queues, absence of run sweeps and regime detection, model-vs-real-world boundaries, World/Lab/Atlas relationships, keyboard/focus/reflow behavior, Axe results, status semantics, and scope-creep risk.
+GW8B found no production runtime, persistence, route-contract, or fake-result defect. It hardened the planned-comparison vocabulary to state that planned comparison is not a comparison result, verified source and rendered boundaries, and documents that actual browser zoom at 125%, 150%, and 200% remains unverified.
 
-GW8 must not claim the probe planning foundation is fully validated before GW8B.
+Decision: ready for GW9. GW9 must still arrive only through an explicit future prompt and must not inherit executable probes, saved plans, sampled results, sweeps, regime detection, Lab records, Atlas discoveries, progression, runtime behavior, template behavior, Builder execution behavior, validation, calibration, or real-world discovery claims from GW8/GW8B.

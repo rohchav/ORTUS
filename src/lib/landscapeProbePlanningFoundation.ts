@@ -172,7 +172,7 @@ export const landscapeProbePlanConcepts = [
     label: "Planned comparison",
     status: capabilityFutureStatus,
     summary: "Names a possible future comparison across model conditions.",
-    distinction: "Planned comparison is not a completed analysis."
+    distinction: "Planned comparison is not a comparison result."
   },
   {
     id: "unresolved-feasibility",
