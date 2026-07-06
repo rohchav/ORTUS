@@ -2993,3 +2993,62 @@ Readiness decision:
 
 - Ready for GW9 after commit, only if GW9 arrives through an explicit future prompt.
 - GW9 must not inherit executable probes, saved plans, sampled results, sweeps, regime detection, Lab records, Atlas discoveries, progression, persistence, runtime behavior, template behavior, Builder execution behavior, validation, calibration, or real-world discovery claims from GW8/GW8B.
+
+## 2026-07-06 - Prompt UX3 Full UI/UX Comprehension and Sandbox-Theme Audit
+
+Goal: complete a rendered UI/UX comprehension and sandbox-theme audit across World, Workshop, Lab, and Atlas without implementing production redesign, theme tokens, component changes, route changes, preferences, onboarding, progression, guided Builder behavior, persistence, runtime behavior, Lab records, Atlas discoveries, probes, sweeps, sampling, or GW9.
+
+Starting state:
+
+- Current commit before work: `466213b`.
+- Starting worktree was clean.
+- Prompt GW8B was committed.
+
+Rendered evidence:
+
+- Sandboxed local-server checks failed with the known local-socket restriction: `Process from config.webServer exited early` and manual server start showed `listen EPERM`.
+- Escalated `npx playwright test tests/ui/research-world-shell.spec.ts`: passed, 30 tests.
+- Escalated `npm run test:ui`: passed, 45 tests.
+- Rendered route inventory covered `/`, `/builder`, `/lab`, and `/atlas` at `1440x900`, `1280x720`, `1024x768`, `900x700`, and `1280x600`.
+- All 20 route/viewport inventory entries reported no horizontal overflow, no page errors, and no browser console error/warning messages.
+- Screenshot inspection found World closest to a sandbox, Workshop functioning as an expert Advanced Builder surface, and Lab/Atlas remaining honest but concept-heavy static scaffolds.
+- A headless Chromium keyboard-zoom attempt did not change `devicePixelRatio`, `innerWidth`, or `visualViewport.scale`.
+
+Audit result:
+
+- Added `docs/ui/FULL_UI_UX_COMPREHENSION_AND_SANDBOX_THEME_AUDIT.md`.
+- Updated README, roadmap, HCI, workspace IA, visual-direction, current-context, session-log, AGENTS, and roadmap tests with the UX3 pause decision.
+- UX3 complete.
+- GW9 paused until the sandbox-theme and guided-comprehension track is addressed or explicitly waived.
+- Next recommended prompt: UX4.
+
+Recommended sequence:
+
+- UX4: Sandbox Visual Language Foundation.
+- UX4B: Sandbox Visual Language Audit and Hardening.
+- UX5: Progressive Disclosure and Beginner/Advanced Information Architecture.
+- UX5B: Progressive Disclosure Audit and Hardening.
+- UX6: Step-by-Step Builder and Configuration Flow Foundation.
+- UX6B: Builder Flow Audit and Hardening.
+- GW9: Ephemeral Landscape Sampling Preview V1.
+
+Scope-creep findings:
+
+- The required broad search returned expected hits in docs/tests/guardrails and pre-existing production code for local run/scenario/panel storage, avatar/performance instrumentation localStorage, UI timestamp ids, experiment progress, and rejection vocabulary.
+- UX3 added no production storage, preferences, onboarding, progression, recommendations, saved Lab/Atlas behavior, run queues, sampling, regime detection, fake scores, random runtime behavior, or Builder/runtime execution path.
+
+Verification:
+
+- `npm run test:ui`: passed, 45 tests.
+- `npm run typecheck`: passed.
+- `npm test`: passed, 67 files and 543 tests.
+- `npm run build`: passed.
+- `npm run perf:simulation`: passed. Local smoke results included Flocking 100 agents at 257.18 ticks/sec, Flocking 500 agents at 32.28 ticks/sec, Forest Fire medium grid at 52.81 ticks/sec, and Predator-Prey default at 160.78 ticks/sec.
+- `git diff --check`: passed.
+- `npm run lint`: unavailable, package.json has no lint script.
+
+Remaining limits:
+
+- UX3 is rendered smoke evidence and expert review, not a user-comprehension study.
+- Actual browser zoom at 125%, 150%, and 200% was not verified.
+- Screen-reader behavior, assistive-technology behavior, forced-colors behavior, complete WCAG conformance, and user-comprehension evidence remain unverified.
