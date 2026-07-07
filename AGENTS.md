@@ -479,7 +479,9 @@
 - Do not claim screen-reader, AT, forced-colors, browser-zoom, or WCAG verification without evidence.
 - Do not start a Research World implementation slice from a prior shell prompt without the required audit; after UX3, GW9 is paused until the UX4/UX5/UX6 sandbox-theme and guided-comprehension track is complete or explicitly waived.
 - UX3 is audit and planning only. Do not implement UX4, UX5, UX6, GW9, sandbox visual overhaul, beginner mode, advanced mode, guided builder, preferences, onboarding, persistence, Lab records, Atlas discoveries, probes, sweeps, sampling, regime detection, runtime behavior, template behavior, or Builder execution from UX3 alone.
-- Next recommended prompt after UX3 is UX4: Sandbox Visual Language Foundation.
+- Next recommended prompt after UX4 is UX4B: Sandbox Visual Language Audit and Hardening.
+- UX4 visual language is presentational only. Do not treat softer sandbox/workbench styling, rounded panels, route accents, or quieter caveat/status treatments as new runtime, template, Builder, Lab, Atlas, sampling, persistence, progression, or validation capability.
+- UX4 must be audited by UX4B before starting UX5, UX6, or GW9 unless the user explicitly waives that sequence.
 - Lab evidence-record semantics are non-persistent information architecture until a later audited prompt implements storage. Do not treat `LabRecordLifecycleState`, conceptual ledger scaffolds, or Lab route copy as saved evidence records, experiment histories, notebooks, saved comparisons, run history, reusable assets, or validation evidence.
 - GW5 Lab does not save active World runs, import active-run provenance, create experiment ledgers, create notebooks, create saved comparisons, publish to Atlas, create discoveries, add storage, add timestamps, generate ids, add progression, or change simulation/template/Builder runtime behavior.
 - Lab records will organize evidence about model investigations. They will not certify discoveries about the real world.

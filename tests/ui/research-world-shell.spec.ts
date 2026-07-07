@@ -657,6 +657,78 @@ async function expectAxeClean(page: Page) {
   ).toEqual([]);
 }
 
+async function expectSandboxVisualLanguageFoundation(page: Page, destination: (typeof destinations)[number]) {
+  const visualContract = await page.evaluate(() => {
+    const rootStyle = getComputedStyle(document.documentElement);
+    const readStyle = (selector: string, pseudo?: string) => {
+      const element = document.querySelector<HTMLElement>(selector);
+      if (!element) {
+        return null;
+      }
+      const style = getComputedStyle(element, pseudo);
+      return {
+        borderLeftWidth: style.borderLeftWidth,
+        borderRadius: style.borderRadius,
+        clipPath: style.clipPath,
+        content: style.content,
+        textTransform: style.textTransform
+      };
+    };
+
+    return {
+      tokens: {
+        workbench: rootStyle.getPropertyValue("--surface-workbench").trim(),
+        instrument: rootStyle.getPropertyValue("--surface-instrument").trim(),
+        caveat: rootStyle.getPropertyValue("--surface-caveat").trim(),
+        panelRadius: rootStyle.getPropertyValue("--radius-panel").trim()
+      },
+      navLink: readStyle(".research-destination-nav__link"),
+      statusPill: readStyle(".status-pill, .builder-status-badge"),
+      cornerPanel: readStyle(".corner-panel"),
+      capabilityGroup: readStyle(".capability-guidance__group"),
+      worldStage: readStyle(".world-stage"),
+      worldStageLabel: readStyle(".world-stage", "::before"),
+      timeline: readStyle(".timeline-strip"),
+      builderModeButton: readStyle(".builder-mode-tabs button"),
+      labNote: readStyle(".lab-record-legend li, .lab-ledger-scaffold li, .lab-boundary-card"),
+      atlasNote: readStyle(".atlas-evidence-legend li, .atlas-map-scaffold li, .atlas-boundary-card")
+    };
+  });
+
+  expect(visualContract.tokens, "UX4 workbench semantic tokens should be available").toEqual({
+    workbench: expect.stringMatching(/\S/),
+    instrument: expect.stringMatching(/\S/),
+    caveat: expect.stringMatching(/\S/),
+    panelRadius: expect.stringMatching(/\S/)
+  });
+  expect(visualContract.navLink?.borderRadius, "destination nav should render as workbench navigation, not hard-edged HUD controls").not.toBe("0px");
+  expect(visualContract.statusPill?.textTransform, "status pills should keep visible labels without shouting").toBe("none");
+  expect(visualContract.statusPill?.borderRadius, "status pills should be secondary chips, not command panels").not.toBe("0px");
+  expect(visualContract.cornerPanel?.borderRadius, "CornerFramePanel should keep the shared panel primitive but soften the frame").not.toBe("0px");
+  expect(visualContract.capabilityGroup?.borderRadius, "capability caveat groups should have inspectable workbench grouping").not.toBe("0px");
+
+  if (destination.path === "/") {
+    expect(visualContract.worldStage?.borderRadius, "World remains the primary rounded model surface").not.toBe("0px");
+    expect(visualContract.worldStage?.clipPath, "World surface should not use a tactical clipped viewport shape").toBe("none");
+    expect(visualContract.worldStageLabel?.content, "World surface label should identify the model surface").toContain("MODEL SURFACE");
+    expect(visualContract.timeline?.borderRadius, "persistent run controls should read as instruments").not.toBe("0px");
+  }
+
+  if (destination.path === "/builder") {
+    expect(visualContract.builderModeButton?.borderRadius, "Workshop mode tabs should read as bench tools").not.toBe("0px");
+  }
+
+  if (destination.path === "/lab") {
+    expect(visualContract.labNote?.borderRadius, "Lab scaffold items should read as notebook-like structural notes").not.toBe("0px");
+    expect(parseFloat(visualContract.labNote?.borderLeftWidth ?? "0"), "Lab scaffold items should keep a non-color grouping cue").toBeGreaterThanOrEqual(3);
+  }
+
+  if (destination.path === "/atlas") {
+    expect(visualContract.atlasNote?.borderRadius, "Atlas scaffold items should read as model-space orientation notes").not.toBe("0px");
+    expect(parseFloat(visualContract.atlasNote?.borderLeftWidth ?? "0"), "Atlas scaffold items should keep a non-color grouping cue").toBeGreaterThanOrEqual(3);
+  }
+}
+
 function isDataLikeUrl(url: string): boolean {
   return /^(data|blob|about):/i.test(url);
 }
@@ -670,6 +742,7 @@ for (const destination of destinations) {
       await expectDestinationNavContract(page, destination.path);
       await expectCapabilityGuidance(page, destination);
       await expectNoDocumentHorizontalOverflow(page);
+      await expectSandboxVisualLanguageFoundation(page, destination);
 
       if (destination.path === "/") {
         await expectWorldPreserved(page);

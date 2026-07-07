@@ -3052,3 +3052,51 @@ Remaining limits:
 - UX3 is rendered smoke evidence and expert review, not a user-comprehension study.
 - Actual browser zoom at 125%, 150%, and 200% was not verified.
 - Screen-reader behavior, assistive-technology behavior, forced-colors behavior, complete WCAG conformance, and user-comprehension evidence remain unverified.
+
+### Prompt UX4: Sandbox Visual Language Foundation
+
+Starting state:
+
+- Current commit before work: `f1c2a5a`.
+- Starting worktree was clean.
+- Prompt UX3 was committed.
+
+Implementation:
+
+- Added `docs/ui/SANDBOX_VISUAL_LANGUAGE_FOUNDATION.md` with the required 30-section UX4 implementation record.
+- Retuned shared sandbox/workbench visual tokens in `src/app/globals.css`.
+- Softened panel, chip, route, World surface, Workshop bench, Lab scaffold, Atlas scaffold, status/caveat, and capability-guidance presentation without changing route behavior.
+- Added rendered visual-contract checks in `tests/ui/research-world-shell.spec.ts` for UX4 semantic tokens, softened status/panel treatment, World model-surface framing, Workshop bench styling, and Lab/Atlas non-color grouping cues.
+- Updated roadmap/context docs and durable AGENTS guardrails so UX4 is complete, GW9 remains paused, and UX4B is next.
+
+Boundary result:
+
+- UX4 changes visual language only.
+- UX4 adds no persistence, preferences, onboarding, progression, Guided Builder, beginner/advanced modes, route aliases, Lab records, Atlas discoveries, saved maps, saved probe plans, sampled results, run queues, sweeps, regime detection, runtime behavior, template behavior, Builder execution, schema execution, graph execution, dependencies, assets, fonts, or icon libraries.
+- Actual browser zoom at 125%, 150%, and 200% was not verified.
+
+Rendered evidence:
+
+- Sandboxed local-server checks hit the known local-server restriction: `Process from config.webServer exited early`.
+- Escalated focused `npx playwright test tests/ui/research-world-shell.spec.ts`: passed, 30 tests, after correcting inherited uppercase status-pill styling.
+- In the continuation verification pass, sandboxed `npx playwright test tests/ui/research-world-shell.spec.ts` again hit `Process from config.webServer exited early`; manual `npm run dev -- --hostname 127.0.0.1 --port 3000` showed `listen EPERM`, classifying this as a sandbox local-server permission issue.
+- Continuation escalated `npx playwright test tests/ui/research-world-shell.spec.ts`: passed, 30 tests.
+- Sandboxed `npm run test:ui` also hit `Process from config.webServer exited early`.
+- Continuation escalated `npm run test:ui`: passed, 45 tests.
+- Actual browser zoom at 125%, 150%, and 200% was not verified.
+
+Verification:
+
+- `npm run typecheck`: passed after rerunning alone. An earlier concurrent run raced with `next build` while `.next/types` were being regenerated and was not a source defect.
+- `npm test`: passed, 67 files and 543 tests.
+- `npm run build`: passed.
+- `npm run perf:simulation`: passed. Local smoke results included Flocking 100 agents at 81.55 ticks/sec, Flocking 500 agents at 10.75 ticks/sec, Forest Fire medium grid at 18.92 ticks/sec, and Predator-Prey default at 53.82 ticks/sec.
+- `git diff --check`: passed.
+- `npm run lint`: unavailable, package.json has no lint script.
+- UX4 is commit-ready after the rendered continuation gate.
+
+Roadmap result:
+
+- UX4 complete.
+- GW9 remains paused.
+- Next recommended prompt: UX4B.

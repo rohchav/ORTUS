@@ -60,6 +60,8 @@ UX3 complete.
 GW9 paused until the sandbox-theme and guided-comprehension track is addressed or explicitly waived.
 Next recommended prompt: UX4.
 
+Post-UX4 note: `docs/ui/SANDBOX_VISUAL_LANGUAGE_FOUNDATION.md` now records the first bounded sandbox visual-language implementation. UX4 complete. GW9 remains paused. Next recommended prompt: UX4B.
+
 ## 7. Sandbox-Theme Fit Findings
 
 World partially fits the sandbox target. The canvas dominates at wide viewports, run controls are visible, and the current model/scenario/run state is clear. At `900x700`, World becomes more approachable because the operational controls and world surface are visible without the full left context wall.
