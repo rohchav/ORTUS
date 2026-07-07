@@ -179,7 +179,7 @@ UX4 added this document: `docs/ui/SANDBOX_VISUAL_LANGUAGE_FOUNDATION.md`.
 
 `tests/ui/research-world-shell.spec.ts` now includes sandbox visual-language contract checks for workbench tokens, softened chips/panels, World model-surface framing, Workshop bench controls, and Lab/Atlas non-color grouping cues.
 
-`src/simulation/__tests__/roadmap.test.ts` is updated to require the UX4 documentation boundary, UX4 complete status, UX4B next status, and GW9 pause.
+`src/simulation/__tests__/roadmap.test.ts` is updated to require the UX4 documentation boundary. Prompt UX4B later updates that contract for UX4B completion, UX5 next status, and GW9 pause.
 
 ## 27. Verification commands
 
@@ -218,14 +218,17 @@ UX4 is not the final visual overhaul. It does not solve progressive disclosure, 
 
 The blunt risk: better styling can make static scaffolds feel more capable than they are. UX4B needs to attack that risk directly.
 
-## 29. UX4B audit requirement
+## 29. UX4B audit result
 
-UX4 must be followed by UX4B: Sandbox Visual Language Audit and Hardening.
+UX4 was followed by UX4B: Sandbox Visual Language Audit and Hardening.
 
-UX4B should audit sandbox/workbench fit, command-console reduction, route visual hierarchy, status/caveat treatment, accessibility, keyboard/focus, responsive behavior, browser zoom status, Axe results, console/hydration, no fake functionality, no runtime/template/Builder behavior changes, no persistence/progression, and no UX5/UX6/GW9 creep.
+The UX4B audit record is `docs/ui/SANDBOX_VISUAL_LANGUAGE_FOUNDATION_AUDIT.md`. UX4B audited sandbox/workbench fit, command-console reduction, route visual hierarchy, status/caveat treatment, accessibility, keyboard/focus, responsive behavior, browser zoom status, Axe results, console/hydration, no fake functionality, no runtime/template/Builder behavior changes, no persistence/progression, and no UX5/UX6/GW9 creep.
+
+UX4B found the foundation ready for UX5. It did not add production behavior, runtime behavior, template behavior, Builder execution, persistence, progression, onboarding, records, samples, route aliases, dependencies, assets, fonts, icon libraries, UX5, UX6, or GW9 implementation.
 
 ## 30. Final decision
 
 UX4 complete.
 GW9 remains paused.
-Next recommended prompt: UX4B.
+UX4B complete.
+Next recommended prompt: UX5.

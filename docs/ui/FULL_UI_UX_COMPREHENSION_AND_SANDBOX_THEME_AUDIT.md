@@ -60,7 +60,9 @@ UX3 complete.
 GW9 paused until the sandbox-theme and guided-comprehension track is addressed or explicitly waived.
 Next recommended prompt: UX4.
 
-Post-UX4 note: `docs/ui/SANDBOX_VISUAL_LANGUAGE_FOUNDATION.md` now records the first bounded sandbox visual-language implementation. UX4 complete. GW9 remains paused. Next recommended prompt: UX4B.
+Post-UX4 note: `docs/ui/SANDBOX_VISUAL_LANGUAGE_FOUNDATION.md` records the first bounded sandbox visual-language implementation. UX4 complete. GW9 remains paused.
+
+Post-UX4B note: `docs/ui/SANDBOX_VISUAL_LANGUAGE_FOUNDATION_AUDIT.md` audits the UX4 foundation, finds it ready for UX5, and keeps GW9 paused. UX4B complete. Next recommended prompt: UX5.
 
 ## 7. Sandbox-Theme Fit Findings
 
@@ -391,6 +393,6 @@ Rendered inspection covered the route/viewports listed in this document and the 
 
 UX3 complete.
 GW9 paused until the sandbox-theme and guided-comprehension track is addressed or explicitly waived.
-Next recommended prompt: UX4.
+Post-UX4B next recommended prompt: UX5.
 
-Do not start GW9 from the current state unless the user explicitly waives the UX4/UX5/UX6 track.
+Do not start GW9 from the current state unless the user explicitly waives the UX5/UX6 track.

@@ -3100,3 +3100,48 @@ Roadmap result:
 - UX4 complete.
 - GW9 remains paused.
 - Next recommended prompt: UX4B.
+
+### Prompt UX4B: Sandbox Visual Language Audit and Hardening
+
+Starting state:
+
+- Starting commit: `9e7aaef feat: add sandbox visual language foundation`.
+- Starting worktree was clean.
+- Prompt UX4 was committed.
+
+Audit result:
+
+- Added `docs/ui/SANDBOX_VISUAL_LANGUAGE_FOUNDATION_AUDIT.md`.
+- Audited the UX4 `src/app/globals.css` token/style diff and confirmed it is visual-only production work.
+- Performed rendered screenshot inspection for `/`, `/builder`, `/lab`, and `/atlas` at `1280x720`.
+- Classified World as strong sandbox/workbench fit.
+- Classified Workshop, Lab, and Atlas as partial sandbox/workbench fit.
+- Found command-console feel improved but not fully resolved in dense advanced Builder contexts.
+- Found status/caveat treatment quieter while preserving visible text and status attributes.
+- Found no bounded production CSS/component defect requiring hardening.
+
+Boundary result:
+
+- UX4B adds documentation/audit state and roadmap-test contract updates only.
+- UX4B adds no runtime behavior, template behavior, Builder execution, persistence, progression, onboarding, Lab records, Atlas discoveries, samples, run queues, sweeps, route aliases, dependencies, assets, fonts, icon libraries, UX5, UX6, or GW9 implementation.
+- Actual browser zoom at 125%, 150%, and 200% was not verified.
+- Screen-reader behavior, assistive-technology behavior, forced-colors behavior, full WCAG conformance, and user-comprehension evidence remain unverified.
+
+Baseline and verification:
+
+- Sandboxed `npm run test:ui` hit the known local-server restriction: `Process from config.webServer exited early`.
+- Manual sandboxed `npm run dev -- --hostname 127.0.0.1 --port 3000` showed `listen EPERM`, classifying the UI blocker as sandbox local-socket permission rather than app failure.
+- Escalated `npm run test:ui`: passed, 45 tests.
+- `npm run typecheck`: passed.
+- `npm test`: passed, 67 files and 543 tests.
+- `npm run build`: passed.
+- `npm run perf:simulation`: passed. Local smoke results included Flocking 100 agents at 117.32 ticks/sec, Flocking 500 agents at 16.74 ticks/sec, Forest Fire medium grid at 26.12 ticks/sec, and Predator-Prey default at 78.95 ticks/sec.
+- `git diff --check`: passed.
+- `npm run lint`: unavailable, package.json has no lint script.
+
+Roadmap result:
+
+- UX4B complete.
+- Ready for UX5.
+- GW9 remains paused.
+- Next recommended prompt: UX5.

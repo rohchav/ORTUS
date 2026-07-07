@@ -193,6 +193,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
     const landscapeProbePlanningFoundationAuditPath = join(repoRoot, "docs", "ui", "LANDSCAPE_PROBE_PLANNING_FOUNDATION_AUDIT.md");
     const fullUiUxAuditPath = join(repoRoot, "docs", "ui", "FULL_UI_UX_COMPREHENSION_AND_SANDBOX_THEME_AUDIT.md");
     const sandboxVisualLanguageFoundationPath = join(repoRoot, "docs", "ui", "SANDBOX_VISUAL_LANGUAGE_FOUNDATION.md");
+    const sandboxVisualLanguageFoundationAuditPath = join(repoRoot, "docs", "ui", "SANDBOX_VISUAL_LANGUAGE_FOUNDATION_AUDIT.md");
     expect(existsSync(roadmapPath)).toBe(true);
     expect(existsSync(missingPillarsPath)).toBe(true);
     expect(existsSync(productPhilosophyPath)).toBe(true);
@@ -206,6 +207,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(existsSync(landscapeProbePlanningFoundationAuditPath)).toBe(true);
     expect(existsSync(fullUiUxAuditPath)).toBe(true);
     expect(existsSync(sandboxVisualLanguageFoundationPath)).toBe(true);
+    expect(existsSync(sandboxVisualLanguageFoundationAuditPath)).toBe(true);
 
     const roadmap = readFileSync(roadmapPath, "utf8");
     const productPhilosophy = readFileSync(productPhilosophyPath, "utf8");
@@ -219,6 +221,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
     const landscapeProbePlanningFoundationAudit = readFileSync(landscapeProbePlanningFoundationAuditPath, "utf8");
     const fullUiUxAudit = readFileSync(fullUiUxAuditPath, "utf8");
     const sandboxVisualLanguageFoundation = readFileSync(sandboxVisualLanguageFoundationPath, "utf8");
+    const sandboxVisualLanguageFoundationAudit = readFileSync(sandboxVisualLanguageFoundationAuditPath, "utf8");
     expect(roadmap).toContain("completed through Prompt 39B");
     expect(roadmap).toContain("Post-30B stabilization");
     expect(roadmap).toContain(
@@ -235,10 +238,10 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(roadmap).toContain("Completed Prompt 39 scenario-planning foundation");
     expect(roadmap).toContain("Completed Prompt 39 scenario-planning audit");
     expect(roadmap).toContain("Prompt 35 adds a separate `Author Schema` Builder mode");
-    expect(roadmap).toContain("Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, MR0, F0, P0, UX0, UX1, UX3, UX4, GW0, UX2, UX2B, GW1, GW1B, GW2, GW2B, GW3, GW3B, GW4, GW4B, GW5, GW5B, GW6, GW6B, GW7, GW7B, GW8, and GW8B are complete.");
-    expect(roadmap).toContain("UX4 complete.");
+    expect(roadmap).toContain("Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, MR0, F0, P0, UX0, UX1, UX3, UX4, UX4B, GW0, UX2, UX2B, GW1, GW1B, GW2, GW2B, GW3, GW3B, GW4, GW4B, GW5, GW5B, GW6, GW6B, GW7, GW7B, GW8, and GW8B are complete.");
+    expect(roadmap).toContain("UX4B complete.");
     expect(roadmap).toContain("GW9 remains paused.");
-    expect(roadmap).toContain("Next recommended prompt: UX4B.");
+    expect(roadmap).toContain("Next recommended prompt: UX5.");
     expect(roadmap).toContain("Prompt GW7 adds non-persistent Behavioral Landscape Exploration Foundation");
     expect(roadmap).toContain("Prompt GW7B audits and hardens the Behavioral Landscape Exploration Foundation");
     expect(roadmap).toContain("Prompt GW8 adds non-persistent Landscape Probe Planning Foundation");
@@ -283,7 +286,13 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(sandboxVisualLanguageFoundation).toContain("No persistence, saved preferences, onboarding state");
     expect(sandboxVisualLanguageFoundation).toContain("UX4 complete.");
     expect(sandboxVisualLanguageFoundation).toContain("GW9 remains paused.");
-    expect(sandboxVisualLanguageFoundation).toContain("Next recommended prompt: UX4B.");
+    expect(sandboxVisualLanguageFoundation).toContain("UX4B complete.");
+    expect(sandboxVisualLanguageFoundation).toContain("Next recommended prompt: UX5.");
+    expect(sandboxVisualLanguageFoundationAudit).toContain("UX4B audits the committed UX4 sandbox visual-language foundation.");
+    expect(sandboxVisualLanguageFoundationAudit).toContain("Ready for UX5.");
+    expect(sandboxVisualLanguageFoundationAudit).toContain("GW9 remains paused.");
+    expect(sandboxVisualLanguageFoundationAudit).toContain("Actual browser zoom at 125%, 150%, and 200% was not verified.");
+    expect(sandboxVisualLanguageFoundationAudit).toContain("No production defect was fixed.");
     expect(roadmap).not.toContain("Prompt GW5 Behavioral Landscape Exploration");
     expect(roadmap).toContain("Prompt GW1 implements the shared Research World destination shell.");
     expect(roadmap).toContain("Prompt GW1B audits and hardens the destination shell without expanding product behavior.");
@@ -651,6 +660,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
       readFileSync(join(repoRoot, "docs", "ui", "LANDSCAPE_PROBE_PLANNING_FOUNDATION_AUDIT.md"), "utf8"),
       readFileSync(join(repoRoot, "docs", "ui", "FULL_UI_UX_COMPREHENSION_AND_SANDBOX_THEME_AUDIT.md"), "utf8"),
       readFileSync(join(repoRoot, "docs", "ui", "SANDBOX_VISUAL_LANGUAGE_FOUNDATION.md"), "utf8"),
+      readFileSync(join(repoRoot, "docs", "ui", "SANDBOX_VISUAL_LANGUAGE_FOUNDATION_AUDIT.md"), "utf8"),
       readFileSync(join(repoRoot, "planned_roadmap.md"), "utf8"),
       readFileSync(join(repoRoot, "docs", "codex", "CURRENT_CONTEXT.md"), "utf8"),
       readFileSync(join(repoRoot, "src", "simulation", "README.md"), "utf8"),
@@ -690,7 +700,8 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(docs).toContain("Next recommended prompt: UX4.");
     expect(docs).toContain("UX4 complete.");
     expect(docs).toContain("GW9 remains paused.");
-    expect(docs).toContain("Next recommended prompt: UX4B.");
+    expect(docs).toContain("UX4B complete.");
+    expect(docs).toContain("Next recommended prompt: UX5.");
     expect(docs).toContain("UX4: Sandbox Visual Language Foundation");
     expect(docs).toContain("UX4 implements the first bounded sandbox visual-language foundation");
     expect(docs).toContain("Change visual language, not product capability.");
