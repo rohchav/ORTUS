@@ -3145,3 +3145,83 @@ Roadmap result:
 - Ready for UX5.
 - GW9 remains paused.
 - Next recommended prompt: UX5.
+
+### Prompt RH1: Remote State and Mission-Alignment Hygiene Check
+
+Starting state:
+
+- Starting commit: `5713b79 test: audit sandbox visual language foundation`.
+- Starting worktree was clean.
+- Local branch: `main`.
+
+Remote-state result:
+
+- `git fetch origin` succeeded.
+- `origin/main` was `9e7aaef feat: add sandbox visual language foundation`.
+- Local `main` was ahead of `origin/main` by one commit at RH1 start.
+- `f1c2a5a` and `9e7aaef` were visible locally and remotely.
+- `5713b79` was visible locally only.
+- Remote is stale relative to local UX4B.
+- No push was performed; RH1 did not explicitly authorize pushing.
+- Required command after RH1 is committed: `git push origin main`.
+
+Baseline:
+
+- `npm run typecheck`: passed.
+- `npm test`: passed, 67 files and 543 tests.
+- `npm run build`: passed.
+- `npm run perf:simulation`: passed.
+- `git diff --check`: passed.
+- `npx playwright test tests/ui/research-world-shell.spec.ts`: passed, 30 tests, through the local-server permission path.
+- `npm run test:ui`: passed, 45 tests, through the local-server permission path.
+- `npm run lint`: unavailable, package.json has no lint script.
+
+Hygiene result:
+
+- Added `docs/RH1_REMOTE_STATE_AND_MISSION_ALIGNMENT_HYGIENE.md`.
+- Added public README "What exists now" and "What is future / not implemented yet" sections.
+- Clarified that existing local World run-comparison storage is not persistent Lab evidence, Atlas discovery storage, saved behavioral landscapes, saved probe plans, or real-world validation.
+- Clarified that existing local Experiment Runner sweeps are not Atlas landscape sampling, landscape probe execution, saved sampled regions, run queues, or regime detection.
+- Chose documentation-only for package-name drift: `package.json` remains `abm-simulation-engine`.
+- Chose not to add lint tooling; missing lint remains an explicitly reported unavailable gate until a dedicated tooling prompt.
+- Added durable AGENTS guardrails for the persistence/sweep/lint distinctions.
+
+Boundary result:
+
+- RH1 adds no production behavior, runtime behavior, template behavior, Builder execution, persistence features, progression, onboarding, Lab records, Atlas discoveries, samples, route aliases, dependencies, assets, fonts, icon libraries, UX5, UX6, or GW9 implementation.
+- RH1 complete locally, but GitHub remote remains stale until pushed.
+- UX5 remains next.
+- GW9 remains paused.
+
+### Prompt RH1 Continuation: Rendered Verification And Remote Alignment
+
+Continuation starting state:
+
+- Local branch: `main` at `5713b79 test: audit sandbox visual language foundation`.
+- Worktree contained only the expected uncommitted RH1 documentation and roadmap-contract changes.
+- `origin/main` remained `9e7aaef`, was an ancestor of local `main`, and did not yet contain UX4B.
+
+Rendered verification:
+
+- The sandboxed focused Playwright run exited before tests because the configured Next.js server reported `listen EPERM` on `127.0.0.1:3000`.
+- Classification: sandbox local-server permission issue, not an application crash.
+- Escalated `npx playwright test tests/ui/research-world-shell.spec.ts`: passed, 30 tests, 0 failed, 0 skipped.
+- Escalated `npm run test:ui`: passed, 45 tests, 0 failed, 0 skipped.
+- This is rendered Playwright/Axe smoke evidence, not screen-reader, assistive-technology, forced-colors, actual browser-zoom, full WCAG, or user-comprehension validation.
+
+Final local gates before commit:
+
+- `npm run typecheck`: passed.
+- `npm test`: passed, 67 files and 543 tests.
+- `npm run build`: passed.
+- `npm run perf:simulation`: passed.
+- `git diff --check`: passed.
+- `npm run lint: unavailable, package.json has no lint script.`
+
+Continuation boundary:
+
+- RH1 remains documentation, durable guardrails, and one roadmap documentation-contract test only.
+- No product behavior, runtime/template behavior, Builder execution, persistence feature, progression, onboarding, dependency, asset, font, icon, route, UX5, UX6, or GW9 implementation was added.
+- The continuation explicitly authorizes a normal fast-forward push of UX4B and RH1 after commit; force-push remains prohibited.
+- UX5 remains next after remote alignment is confirmed.
+- GW9 remains paused.

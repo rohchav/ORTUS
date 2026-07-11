@@ -64,6 +64,8 @@ Post-UX4 note: `docs/ui/SANDBOX_VISUAL_LANGUAGE_FOUNDATION.md` records the first
 
 Post-UX4B note: `docs/ui/SANDBOX_VISUAL_LANGUAGE_FOUNDATION_AUDIT.md` audits the UX4 foundation, finds it ready for UX5, and keeps GW9 paused. UX4B complete. Next recommended prompt: UX5.
 
+Post-RH1 note: `docs/RH1_REMOTE_STATE_AND_MISSION_ALIGNMENT_HYGIENE.md` records that local `main` was ahead of `origin/main` and GitHub was stale before the RH1 continuation push. RH1 also clarifies that existing local World run-comparison storage and Experiment Runner sweeps are real, bounded product surfaces, but they are not persistent Lab/Atlas research records, Atlas landscape sampling, landscape probe execution, saved sampled regions, run queues, or regime detection. RH1 is complete. UX5 remains next. GW9 remains paused.
+
 ## 7. Sandbox-Theme Fit Findings
 
 World partially fits the sandbox target. The canvas dominates at wide viewports, run controls are visible, and the current model/scenario/run state is clear. At `900x700`, World becomes more approachable because the operational controls and world surface are visible without the full left context wall.

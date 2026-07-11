@@ -48,6 +48,9 @@
 - Avoid unnecessary simulation-store subscriptions in navigation components.
 - Experiment runs must create fresh engine instances through the template registry and should store metrics/outcomes, not full per-run snapshots, unless explicitly requested.
 - Keep experiment execution chunked/cancellable in the UI so local sweeps do not create unbounded browser loops.
+- Existing Experiment Runner sweeps are bounded local World/Experiment model-comparison tooling; they are not Atlas landscape sampling, landscape probe execution, saved sampled regions, run queues, or regime detection.
+- Existing local World comparison storage may preserve bounded run summaries for comparison; it is not persistent Lab evidence, Atlas discovery storage, saved behavioral landscapes, saved probe plans, or real-world validation.
+- Lint is intentionally unavailable until a dedicated lint/tooling prompt adds it. Do not treat missing lint as a failing gate; report exactly `npm run lint: unavailable, package.json has no lint script.`
 - Interventions must be template-defined, validated, and applied through the headless intervention executor or engine command buffer. UI and canvas code may report targets, but must not mutate agents, components, spaces, or engine internals.
 - User-facing intervention copy must not use validation language in a way that implies scientific validation, calibration, or real-world effectiveness. Prefer engine-checked or command-checked language for software command paths.
 - Current-run intervention entries/history are engine/snapshot state, not saved intervention plans, persistent Lab intervention records, Atlas discoveries, or validation evidence.
