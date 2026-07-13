@@ -378,12 +378,12 @@ The required sequence is:
 GW0 -> UX2 -> GW1 -> GW1B -> GW2 -> GW2B -> GW3 -> GW3B -> GW4 -> GW4B -> GW5 -> GW5B -> GW6 -> GW6B -> GW7 -> GW7B -> GW8 -> GW8B -> UX3 -> UX4 -> UX4B -> RH1 -> UX5 -> UX5B -> UX6 -> UX6B -> GW9
 ```
 
-UX2, GW1, GW1B, GW2, GW2B, GW3, GW3B, GW4, GW4B, GW5, GW5B, GW6, GW6B, GW7, GW7B, GW8, GW8B, UX3, UX4, UX4B, RH1, and UX5 are complete.
+UX2, GW1, GW1B, GW2, GW2B, GW3, GW3B, GW4, GW4B, GW5, GW5B, GW6, GW6B, GW7, GW7B, GW8, GW8B, UX3, UX4, UX4B, RH1, UX5, and UX5B are complete.
 
-UX5 complete.
-UX5B required next.
+UX5B complete.
+UX6 is next.
 GW9 remains paused.
-Next recommended prompt: UX5B.
+Next recommended prompt: UX6.
 
 ## 22. GW Roadmap Branch
 
@@ -494,7 +494,15 @@ Completed bounded information-architecture implementation. UX5 adds source-backe
 
 UX5 adds no Guided Builder, saved mode, preference, personalization, recommendation, onboarding state, progression, runtime/template/Builder execution, Lab/Atlas persistence, landscape sampling, probe execution, dependency, asset, font, icon, or route.
 
-UX5 complete. UX5B required next. GW9 remains paused.
+UX5 complete. UX5B followed and is now complete. GW9 remains paused.
+
+### UX5B: Progressive Disclosure and Beginner/Advanced Information Architecture Audit and Hardening
+
+Completed source and rendered audit of UX5. UX5B verifies coherent route orientation, accurate plain/technical language pairing, visible capability caveats, direct expert access, component-local disclosure state, reload defaults, correct landmarks, responsive and short-height behavior, expanded-state Axe results, and no fake functionality. It finds no production defect in the covered paths.
+
+UX5B adds audit records and roadmap contracts only. It adds no UX6 Guided Builder, persistence, personalization, recommendation, onboarding, progression, runtime/template/Builder execution, Lab/Atlas behavior, sampling, probe execution, dependency, asset, font, icon, route, or GW9 behavior.
+
+UX5B complete. UX6 is next. GW9 remains paused.
 
 ## 23. Implementation Dependencies
 
@@ -594,4 +602,6 @@ UX5 implements progressive disclosure and beginner/advanced information architec
 
 This is not stored beginner mode, personalization, recommendation, onboarding state, progression, Guided Builder, runtime support, Lab/Atlas persistence, landscape sampling, or probe execution. Existing bounded World comparison storage remains World-local, and existing Experiment Runner sweeps remain local experiment tooling rather than Atlas sampling.
 
-UX5 complete. UX5B required next. GW9 remains paused.
+UX5B audits that implementation in source and rendered browsers. It finds the hierarchy clear in the covered paths, retains direct expert access, verifies local reload-reset disclosure state and expanded-state Axe results, and finds no production defect. This remains expert and automated evidence, not a beginner user study, browser-zoom verification, screen-reader/assistive-technology verification, mobile-workflow validation, or WCAG conformance claim.
+
+UX5B complete. UX6 is next. GW9 remains paused.

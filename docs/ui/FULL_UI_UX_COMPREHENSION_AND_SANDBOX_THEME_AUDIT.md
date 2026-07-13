@@ -62,9 +62,11 @@ Next recommended prompt: UX4.
 
 Post-UX4 note: `docs/ui/SANDBOX_VISUAL_LANGUAGE_FOUNDATION.md` records the first bounded sandbox visual-language implementation. UX4 complete. GW9 remains paused.
 
-Post-UX4B note: `docs/ui/SANDBOX_VISUAL_LANGUAGE_FOUNDATION_AUDIT.md` audits the UX4 foundation and found it ready for UX5. UX5 has now followed and is complete; UX5B is required next. GW9 remains paused.
+Post-UX4B note: `docs/ui/SANDBOX_VISUAL_LANGUAGE_FOUNDATION_AUDIT.md` audits the UX4 foundation and found it ready for UX5. UX5 and UX5B have now followed and are complete. GW9 remains paused.
 
 Post-RH1 note: `docs/RH1_REMOTE_STATE_AND_MISSION_ALIGNMENT_HYGIENE.md` records that local `main` was ahead of `origin/main` and GitHub was stale before the RH1 continuation push. RH1 also clarifies that existing local World run-comparison storage and Experiment Runner sweeps are real, bounded product surfaces, but they are not persistent Lab/Atlas research records, Atlas landscape sampling, landscape probe execution, saved sampled regions, run queues, or regime detection. RH1 is complete. UX5 followed and is now complete. GW9 remains paused.
+
+Post-UX5B note: `docs/ui/PROGRESSIVE_DISCLOSURE_AND_BEGINNER_ADVANCED_INFORMATION_ARCHITECTURE_AUDIT.md` audits UX5 in source and rendered browsers. It finds no production defect in the covered paths, preserves the limitations on user-comprehension, browser-zoom, screen-reader, assistive-technology, forced-colors, mobile-workflow, and WCAG claims, and marks UX6 next. GW9 remains paused.
 
 ## 7. Sandbox-Theme Fit Findings
 
@@ -395,6 +397,6 @@ Rendered inspection covered the route/viewports listed in this document and the 
 
 UX3 complete.
 GW9 paused until the sandbox-theme and guided-comprehension track is addressed or explicitly waived.
-UX4, UX4B, and UX5 have now followed this audit. UX5 implements the progressive-disclosure layer identified here; it does not validate user comprehension.
+UX4, UX4B, UX5, and UX5B have now followed this audit. UX5 implements the progressive-disclosure layer identified here; UX5B audits it without claiming validated user comprehension.
 
-UX5 complete. UX5B required next. GW9 remains paused.
+UX5B complete. UX6 is next. GW9 remains paused.

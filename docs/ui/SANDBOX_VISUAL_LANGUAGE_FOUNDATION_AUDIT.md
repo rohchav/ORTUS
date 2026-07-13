@@ -213,8 +213,8 @@ UX5 must preserve direct expert access while making first-run orientation less p
 Ready for UX5.
 GW9 remains paused.
 
-## 36. Post-UX5 status
+## 36. Post-UX5/UX5B status
 
 UX5 followed this audit with source-backed route orientation, component-local non-persistent disclosure, layered capability guidance, and concise Lab/Atlas defaults. It did not add Guided Builder, persistence, personalization, progression, runtime/template/Builder execution, Lab/Atlas records, sampling, or probe execution.
 
-UX5 complete. UX5B required next. GW9 remains paused.
+UX5B then audited that layer in source and rendered browsers, found no production defect in the covered paths, and added no product behavior. UX5B complete. UX6 is next. GW9 remains paused.

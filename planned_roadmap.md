@@ -1,10 +1,10 @@
 # ORTUS Full Prompt Roadmap
 
-*Last updated after Prompt UX5 Progressive Disclosure and Beginner/Advanced Information Architecture.*
+*Last updated after Prompt UX5B Progressive Disclosure and Beginner/Advanced Information Architecture Audit and Hardening.*
 
 ## Current Status
 
-ORTUS has completed the core runtime/template and modeling-workbench foundations through Prompt 39B, the neural/runtime-lab side track, the Research World sequence through GW8B, the UX3/UX4/UX4B comprehension and visual-language track, RH1 source-of-truth hygiene, and Prompt UX5 Progressive Disclosure and Beginner/Advanced Information Architecture.
+ORTUS has completed the core runtime/template and modeling-workbench foundations through Prompt 39B, the neural/runtime-lab side track, the Research World sequence through GW8B, the UX3/UX4/UX4B comprehension and visual-language track, RH1 source-of-truth hygiene, Prompt UX5 Progressive Disclosure and Beginner/Advanced Information Architecture, and the UX5B audit.
 
 Current project status:
 
@@ -45,14 +45,15 @@ Completed implementation prompt: Prompt UX4 — Sandbox Visual Language Foundati
 Completed audit prompt: Prompt UX4B — Sandbox Visual Language Audit and Hardening; audits the UX4 foundation, finds it ready for UX5, and adds no runtime behavior, template behavior, Builder execution, persistence, progression, onboarding, Lab records, Atlas discoveries, sampling, route aliases, dependencies, assets, fonts, or icon libraries
 Completed hygiene prompt: Prompt RH1 — Remote State and Mission-Alignment Hygiene Check; documents that local main is ahead of origin/main, clarifies World-local comparison persistence versus Lab/Atlas research non-persistence, clarifies existing World experiment sweeps versus future Atlas landscape/probe sweeps, documents package-name drift and lint-gate decisions, and adds public README status without adding product behavior
 Completed implementation prompt: Prompt UX5 — Progressive Disclosure and Beginner/Advanced Information Architecture; adds source-backed route orientation, component-local non-persistent disclosure, layered capability guidance, concise Lab/Atlas defaults, and exact technical-detail access without Guided Builder, persistence, personalization, progression, runtime/template/Builder execution, Lab/Atlas records, landscape sampling, or probe execution
+Completed audit prompt: Prompt UX5B — Progressive Disclosure and Beginner/Advanced Information Architecture Audit and Hardening; audits source and rendered hierarchy, expert reachability, expanded-state accessibility, reload defaults, non-persistence, and scope boundaries, finds no production defect, and adds no UX6, GW9, runtime, persistence, or product behavior
 Post-30B stabilization completed: repo hygiene, durable Codex context, dependency repair, generated-artifact cleanup, and runtime performance/scalability baseline
-UX5 complete.
-UX5B required next.
+UX5B complete.
+UX6 is next.
 GW9 remains paused.
-Next recommended prompt: UX5B.
-Next Research World implementation prompt: GW9 only after the UX5B/UX6/UX6B track is addressed or explicitly waived; do not start GW9 or further Research World implementation, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any further Research World/fractal/multiscale implementation without explicit approval
+Next recommended prompt: UX6.
+Next Research World implementation prompt: GW9 only after the UX6/UX6B track is addressed or explicitly waived; do not start GW9 or further Research World implementation, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any further Research World/fractal/multiscale implementation without explicit approval
 
-Recommended sandbox-theme sequence: UX5B -> UX6 -> UX6B -> GW9.
+Recommended sandbox-theme sequence: UX6 -> UX6B -> GW9.
 ```
 
 Critical global boundary:
@@ -3682,9 +3683,9 @@ No global service availability treated as template runtime support.
 Recommended immediate next steps:
 
 ```text
-1. Run Prompt UX5B: Progressive Disclosure Audit and Hardening next.
-2. Continue to UX6 and UX6B only through their dedicated prompts and audits.
-3. Do not start GW9 or further Research World work until UX5B/UX6/UX6B is addressed or explicitly waived; also do not start F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any further Research World/fractal/multiscale implementation without explicit approval.
+1. Run Prompt UX6: Step-by-Step Builder and Configuration Flow Foundation next.
+2. Continue to UX6B only through its dedicated audit prompt.
+3. Do not start GW9 or further Research World work until UX6/UX6B is addressed or explicitly waived; also do not start F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any further Research World/fractal/multiscale implementation without explicit approval.
 4. Do not make mobile-readiness, WCAG, clipboard, focus-return, actual browser-zoom, screen-reader, assistive-technology, forced-colors, or user-comprehension claims without direct evidence.
 ```
 
@@ -3736,7 +3737,9 @@ Prompt UX3 Full UI/UX Comprehension and Sandbox-Theme Audit is complete.
 Prompt UX4B Sandbox Visual Language Audit and Hardening is complete.
 Prompt RH1 Remote State and Mission-Alignment Hygiene Check is complete.
 Prompt UX5 Progressive Disclosure and Beginner/Advanced Information Architecture is complete.
-UX5B required next.
+Prompt UX5B Progressive Disclosure and Beginner/Advanced Information Architecture Audit and Hardening is complete.
+UX5B complete.
+UX6 is next.
 GW9 remains paused.
-Next recommended prompt: UX5B.
+Next recommended prompt: UX6.
 ```

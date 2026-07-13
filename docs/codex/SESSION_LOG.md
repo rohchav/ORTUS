@@ -3284,3 +3284,59 @@ Roadmap result:
 - UX5 complete.
 - UX5B required next.
 - GW9 remains paused.
+
+### Prompt UX5B: Progressive Disclosure and Beginner/Advanced Information Architecture Audit and Hardening
+
+Starting state:
+
+- Starting commit: `7938e67 feat: add progressive disclosure information architecture`.
+- Local branch: `main`.
+- `HEAD` matched `origin/main`.
+- Starting worktree was clean.
+- UX6 and GW9 had not started.
+
+Baseline:
+
+- Sandboxed focused Playwright exited before tests because the configured server could not bind.
+- A direct sandboxed dev-server attempt confirmed `listen EPERM` on `127.0.0.1:3000`; classification: sandbox local-socket restriction, not an application failure.
+- Escalated focused Playwright: passed, 34 tests.
+- Escalated full UI Playwright: passed, 49 tests.
+- Typecheck: passed.
+- Unit tests: passed, 68 files and 548 tests.
+- Production build: passed.
+- Simulation performance smoke: passed.
+- `git diff --check`: passed.
+- `npm run lint: unavailable, package.json has no lint script.`
+
+Audit result:
+
+- Added `docs/ui/PROGRESSIVE_DISCLOSURE_AND_BEGINNER_ADVANCED_INFORMATION_ARCHITECTURE_AUDIT.md` with the required 40-section audit record.
+- Audited the UX5 commit and confirmed its production changes are limited to route UI, shared disclosure/orientation/capability components, route-orientation data, and CSS.
+- Classified the shared hierarchy as clear in the covered routes: orientation, current work, visible caveat, then explicit technical disclosure.
+- Found strong first-read orientation on World and adequate first-read orientation on Workshop, Lab, and Atlas. This is expert review, not a user study.
+- Confirmed exact plain/technical term pairing, direct expert access, visible valid-vs-runnable and model-vs-world boundaries, and complete source-backed capability detail.
+- Confirmed component-local disclosure state, reload-reset defaults, no new storage key, and no Lab/Atlas persistence.
+- Confirmed existing bounded World comparison storage and existing Experiment Runner sweeps remain unchanged and are not relabeled as Lab/Atlas capability.
+- Found no UX5 production defect in the audited paths. No production or UI-test file changed.
+
+Rendered evidence:
+
+- All four routes were audited at `1440x900`, `1280x720`, `1024x768`, `900x700`, and `1280x600`.
+- Direct expanded-state Axe scans passed with zero violations for all 20 route/viewport combinations.
+- Every combination had one `main`, one H1, no document horizontal overflow, keyboard-focusable disclosure controls, active reduced-motion semantics, and no console/page/request/critical-response/hydration diagnostic.
+- Default and expanded screenshots were inspected directly, including Workshop at `1280x720` and `1280x600`.
+- The first direct Axe script used an incompatible browser-page convenience API. It was corrected to explicit browser contexts before evidence was recorded; this was an audit-harness error, not an ORTUS defect.
+- Headless `Ctrl++` attempts for 125%, 150%, and 200% left browser metrics unchanged. Actual browser zoom at 125%, 150%, and 200% was not verified.
+
+Boundary result:
+
+- UX5 adds no new persistence. Existing bounded World comparison and UI storage remain unchanged. Lab and Atlas research persistence remain unimplemented.
+- UX5B adds documentation, durable guardrails, and roadmap contract assertions only.
+- UX5B adds no Guided Builder, saved disclosure state, preferences, onboarding, personalization, recommendation, progression, runtime behavior, template behavior, Builder/schema/graph execution, Lab records, Atlas discoveries, saved maps, sampling, probe execution, queues, regimes, dependencies, assets, fonts, icons, routes, aliases, UX6 implementation, or GW9 implementation.
+- User-comprehension, screen-reader, assistive-technology, forced-colors, actual browser-zoom, mobile-workflow, and full WCAG claims remain unverified.
+
+Roadmap result:
+
+- UX5B complete.
+- UX6 is next.
+- GW9 remains paused.

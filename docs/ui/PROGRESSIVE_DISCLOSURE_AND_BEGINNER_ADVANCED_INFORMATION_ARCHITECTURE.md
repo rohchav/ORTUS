@@ -152,9 +152,9 @@ Final post-change verification: focused Playwright passed `34` tests; full UI Pl
 
 UX5 is expert design work plus automated contracts, not a user-comprehension study. Actual browser zoom at 125%, 150%, and 200% was not verified. Screen-reader behavior, assistive-technology behavior, forced-colors behavior, full WCAG conformance, and mobile workflow readiness remain unverified. Model output remains model output, not empirical truth.
 
-## 34. UX5B Requirement
+## 34. UX5B Requirement And Completion
 
-UX5B is required next to audit the implemented hierarchy, disclosure defaults, expert efficiency, language precision, rendered accessibility evidence, and any layout defects. UX5B must not be skipped merely because UX5 tests pass.
+UX5B was required to audit the implemented hierarchy, disclosure defaults, expert efficiency, language precision, rendered accessibility evidence, and any layout defects. That audit is now complete in `PROGRESSIVE_DISCLOSURE_AND_BEGINNER_ADVANCED_INFORMATION_ARCHITECTURE_AUDIT.md` and must not be retroactively treated as optional merely because UX5 tests passed.
 
 ## 35. GW9 Pause Decision
 
@@ -162,4 +162,12 @@ GW9 remains paused. UX5 does not implement ephemeral landscape sampling, probe e
 
 ## 36. Final Decision
 
-The post-change rendered and full verification gates pass. The bounded responsive and landmark defects found by those gates are fixed and reverified. No blocking UX5 accessibility, hierarchy, scope, persistence, or runtime defect remains in the covered paths. UX5 complete. Ready for UX5B. UX5B is required next. GW9 remains paused.
+The post-change rendered and full verification gates pass. The bounded responsive and landmark defects found by those gates are fixed and reverified. No blocking UX5 accessibility, hierarchy, scope, persistence, or runtime defect remains in the covered paths. UX5 complete. UX5B followed and is now complete. UX6 is next. GW9 remains paused.
+
+## 37. UX5B Audit Result
+
+UX5B audits this implementation in source and rendered browsers. The canonical audit record is `PROGRESSIVE_DISCLOSURE_AND_BEGINNER_ADVANCED_INFORMATION_ARCHITECTURE_AUDIT.md`. It classifies the shared hierarchy as clear in the covered paths, preserves exact technical language and direct expert access, verifies reload-reset local state and expanded-state Axe results across all 20 route/viewport combinations, and finds no production defect requiring hardening.
+
+UX5B changes audit records and roadmap contracts only. It does not add Guided Builder, persistence, personalization, progression, runtime/template/Builder execution, Lab/Atlas behavior, sampling, probe execution, or GW9 behavior. User-comprehension, actual browser zoom, screen-reader, assistive-technology, forced-colors, mobile-workflow, and WCAG claims remain unverified.
+
+UX5B complete. UX6 is next. GW9 remains paused.

@@ -494,6 +494,9 @@
 - Preserve the exact visible Lab boundary: `Nothing on this route is a saved experiment, evidence record, notebook, or run history.`
 - Preserve the exact visible Atlas boundary: `No sampled landscape, saved map, probe execution, regime detection, or discovery record exists here yet.`
 - UX5 must be audited by UX5B before UX6 or GW9 unless the user explicitly waives that sequence. GW9 remains paused.
+- UX5B is complete as a source and rendered audit. It adds no production behavior, persistence, personalization, progression, runtime/template/Builder execution, Lab/Atlas behavior, sampling, probe execution, UX6 implementation, or GW9 implementation.
+- UX6 is next. GW9 remains paused until UX6 and UX6B are complete or the sequence is explicitly waived.
+- UX6 must preserve direct access to the current Advanced Builder and use existing bounded schema-authoring and validation services. A guided flow must not compile, run, preview, generate templates/scenarios/RunConfigs, execute schemas or graphs, mutate the active World run, persist onboarding state, profile users, or imply that structural validity means runtime or scientific validity.
 - Lab evidence-record semantics are non-persistent information architecture until a later audited prompt implements storage. Do not treat `LabRecordLifecycleState`, conceptual ledger scaffolds, or Lab route copy as saved evidence records, experiment histories, notebooks, saved comparisons, run history, reusable assets, or validation evidence.
 - GW5 Lab does not save active World runs, import active-run provenance, create experiment ledgers, create notebooks, create saved comparisons, publish to Atlas, create discoveries, add storage, add timestamps, generate ids, add progression, or change simulation/template/Builder runtime behavior.
 - Lab records will organize evidence about model investigations. They will not certify discoveries about the real world.

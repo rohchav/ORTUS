@@ -217,7 +217,7 @@ This is not a formal WCAG conformance claim.
 
 ## Unresolved Limitations
 
-- No browser screenshot/DOM measurement pass was possible in this environment.
+- UX5B adds rendered screenshot, DOM, focus, overflow, landmark, and expanded-state Axe evidence for the shared route/disclosure architecture; it does not validate every legacy workspace task.
 - Canvas agent states still rely partly on color/glyph conventions and need a dedicated visualization accessibility pass.
 - The dense technical visual language still needs a broader design-system pass.
 - Pending-change detection is not implemented because the current runtime immediately rebuilds for template, seed, and parameter changes.
@@ -237,4 +237,10 @@ Visual Builder Graph View V1 visualizes structural relationships; it does not ex
 
 World, Workshop, Lab, and Atlas now share source-backed route orientation and component-local disclosure. World keeps current mode controls before capability detail. Workshop remains the Advanced Builder and retains direct access to Workspace Inspector, Author Schema, Graph View, imports/exports, validation, repairs, fit reports, scenario plans, metadata, and graph outlines. Lab and Atlas remain non-persistent conceptual routes; disclosure reorganizes their existing semantics but creates no records, maps, samples, probes, or runtime behavior.
 
-No disclosure state is stored. Existing bounded World comparison storage, panel/avatar preferences, and Experiment Runner sweeps remain unchanged and are not reused by UX5. UX5B is required next. GW9 remains paused.
+No disclosure state is stored. Existing bounded World comparison storage, panel/avatar preferences, and Experiment Runner sweeps remain unchanged and are not reused by UX5.
+
+## UX5B Progressive-Disclosure Audit Update
+
+UX5B audits the shared hierarchy in source and rendered browsers. World retains direct task-mode and run-control access; Workshop retains direct access to every Advanced Builder mode and its exact structural metadata; Lab and Atlas remain conceptual and non-persistent. All 20 established route/viewport combinations pass expanded-state overflow, landmark, Axe, reduced-motion, and diagnostics checks. No production workspace defect was found, so UX5B changes no production UI or workspace state logic.
+
+Actual browser zoom, screen-reader/assistive-technology behavior, forced-colors behavior, mobile-workflow readiness, and full WCAG conformance remain unverified. UX5B complete. UX6 is next. GW9 remains paused.
