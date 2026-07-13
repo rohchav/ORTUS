@@ -14,7 +14,8 @@ describe("Visual Builder Graph View UI", () => {
     expect(source).toContain('role="tabpanel"');
     expect(source).toContain('aria-labelledby="builder-mode-tab-graph"');
     expect(source).toContain('{activeMode === "graph" ? <BuilderGraphView workspace={workspace} /> : null}');
-    expect(source).toContain('<ModelSchemaAuthoringShell hidden={activeMode !== "authorSchema"} />');
+    expect(source).toContain("<ModelSchemaAuthoringShell");
+    expect(source).toContain('hidden={activeMode !== "authorSchema"}');
   });
 
   it("keeps structural-only and non-runnable language adjacent to the graph", () => {

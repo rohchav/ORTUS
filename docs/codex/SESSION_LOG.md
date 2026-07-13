@@ -3099,6 +3099,7 @@ Roadmap result:
 
 - UX4 complete.
 - GW9 remains paused.
+
 - Next recommended prompt: UX4B.
 
 ### Prompt UX4B: Sandbox Visual Language Audit and Hardening
@@ -3339,4 +3340,44 @@ Roadmap result:
 
 - UX5B complete.
 - UX6 is next.
+- GW9 remains paused.
+
+### Prompt UX6: Guided Builder and Step-by-Step Configuration Flow Foundation
+
+Date: 2026-07-13
+
+Goal: add a beginner-accessible but capability-honest Guided Builder to Workshop, preserve the complete Advanced Builder, and stop before schema execution, runtime generation, World mutation, persistence, personalization, progression, Lab/Atlas behavior, or GW9.
+
+Starting state:
+
+- Branch `main` at clean, aligned `c6233ec test: audit progressive disclosure information architecture`.
+- Baseline focused Playwright `34 passed`; full UI `49 passed`; typecheck passed; unit tests `68 files / 548 tests`; build passed; performance smoke passed; `git diff --check` passed.
+- `npm run lint: unavailable, package.json has no lint script.`
+
+Implementation:
+
+- Added a real Guided/Advanced outer tablist to `/builder`; Guided is the non-persistent reload default and Advanced remains one action away.
+- Added a typed, bounded six-step draft for identity, entities/scalar state, zero-or-one space, descriptive rules/entity references, parameters/assumption, and exact review.
+- Added deterministic normalized ids with stable collision suffixes and static non-executable schema defaults. No timestamps, random ids, AI, inference, formulas, or executable expressions participate.
+- Reused the existing model-schema draft view and validator as final authority. The review says structural validity is neither runnability nor real-world validity.
+- Added immediate/step/final error handling, warnings, field focus, Back retention, direct review, accessible confirmations for Start over/removals, and exact JSON preview.
+- Added explicit handoff to Advanced Author Schema. Existing Advanced work triggers a named overwrite confirmation; Cancel preserves both drafts and returns focus; confirm replaces only the Advanced schema draft.
+- Added data-loss decisions for destination links, reload/close, and client-side browser Back while meaningful Guided data exists.
+- Preserved Workspace Inspector, Author Schema, Graph View, import/export, validation assistance, repair suggestions, fit reports, scenario planning, exact metadata, and accessible graph outline.
+- Updated Workshop capability/orientation copy and responsive styling. The rendered gate found and fixed an existing short-height Advanced import-textarea focus/clipping defect at `1280x600`.
+
+Evidence and boundaries:
+
+- Guided assembly and explicit handoff leave active World context and all existing storage entries unchanged.
+- Reload resets Guided draft, current step, and selected outer mode without adding a storage key.
+- Source searches found no Guided execution, runtime generation, nondeterministic identity, persistence, personalization, progression, Lab/Atlas, sampling, or probe path.
+- Headless Chromium received keyboard zoom commands targeting 125%, 150%, and 200%, but all browser metrics remained unchanged. Actual browser zoom at 125%, 150%, and 200% was not verified.
+- Focused Playwright passed `41` tests and full UI Playwright passed `56` tests after correcting one stale Advanced-only semantic assertion to enter Advanced explicitly.
+- Typecheck passed; full unit tests passed `69 files / 564 tests`; production build passed; simulation performance smoke passed; and `git diff --check` passed.
+- `npm run lint: unavailable, package.json has no lint script.`
+
+Roadmap result:
+
+- UX6 complete.
+- UX6B required next.
 - GW9 remains paused.

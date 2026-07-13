@@ -243,4 +243,10 @@ No disclosure state is stored. Existing bounded World comparison storage, panel/
 
 UX5B audits the shared hierarchy in source and rendered browsers. World retains direct task-mode and run-control access; Workshop retains direct access to every Advanced Builder mode and its exact structural metadata; Lab and Atlas remain conceptual and non-persistent. All 20 established route/viewport combinations pass expanded-state overflow, landmark, Axe, reduced-motion, and diagnostics checks. No production workspace defect was found, so UX5B changes no production UI or workspace state logic.
 
-Actual browser zoom, screen-reader/assistive-technology behavior, forced-colors behavior, mobile-workflow readiness, and full WCAG conformance remain unverified. UX5B complete. UX6 is next. GW9 remains paused.
+Actual browser zoom, screen-reader/assistive-technology behavior, forced-colors behavior, mobile-workflow readiness, and full WCAG conformance remain unverified. UX5B complete. UX6 followed and is now complete. GW9 remains paused.
+
+## UX6 Guided-Builder Update
+
+Workshop now has two real outer authoring views. Guided is the local default and provides six bounded structural steps; Advanced remains immediately available and retains Workspace Inspector, Author Schema, Graph View, exact import/export, validation assistance, fit reports, scenario planning, and the accessible graph outline. Switching views preserves mounted local work. Explicit handoff replaces only Advanced Author Schema after any required confirmation and never mutates World.
+
+Guided state is typed, local, deterministic, and reset on reload. Start over, destination links, client-side browser Back, and Advanced overwrite are protected where meaningful data could be lost. UX6 adds no stored mode, saved draft, progression, recommendation, runtime/schema/graph execution, template/scenario/RunConfig generation, or Lab/Atlas behavior. UX6 complete. UX6B required next. GW9 remains paused.

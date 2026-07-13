@@ -9,6 +9,7 @@ import {
   createModelSchemaDraftView,
   exportModelSchemaDraft,
   importModelSchemaDraft,
+  isEmptyModelSchemaAuthoringDraft,
   isModelSchemaDraftDirty,
   modelSchemaAuthoringSections,
   removeModelSchemaDeclaration,
@@ -46,15 +47,28 @@ type PendingAction =
   | { type: "reset"; triggerId: string; focusAfterId: string }
   | { type: "restore"; triggerId: string; focusAfterId: string }
   | { type: "import"; artifact: ModelSchemaDefinition; triggerId: string; focusAfterId: string }
+  | {
+      type: "guidedHandoff";
+      artifact: ModelSchemaDefinition;
+      currentDraftName: string;
+      triggerId: string;
+      focusAfterId: string;
+    }
   | { type: "removeMetadata"; metadataKey: string; triggerId: string; focusAfterId: string }
   | { type: "repair"; suggestion: SchemaRepairSuggestion; triggerId: string; focusAfterId: string }
   | ({ type: "remove" } & RemovalRequest);
 
 interface ModelSchemaAuthoringShellProps {
   hidden?: boolean;
+  guidedHandoffRequest?: { requestId: number; artifact: ModelSchemaDefinition } | null;
+  onGuidedHandoffResolution?: (requestId: number, status: "applied" | "canceled") => void;
 }
 
-export function ModelSchemaAuthoringShell({ hidden = false }: ModelSchemaAuthoringShellProps) {
+export function ModelSchemaAuthoringShell({
+  hidden = false,
+  guidedHandoffRequest = null,
+  onGuidedHandoffResolution
+}: ModelSchemaAuthoringShellProps) {
   const initialDraft = useMemo(() => createEmptyModelSchemaDraft(), []);
   const [draft, setDraft] = useState<ModelSchemaDefinition>(initialDraft);
   const [baseline, setBaseline] = useState<ModelSchemaDefinition>(initialDraft);
@@ -73,6 +87,7 @@ export function ModelSchemaAuthoringShell({ hidden = false }: ModelSchemaAuthori
   const [scenarioPlanSnapshot, setScenarioPlanSnapshot] = useState<SchemaScenarioPlanSnapshot | null>(null);
   const confirmButtonRef = useRef<HTMLButtonElement>(null);
   const cancelButtonRef = useRef<HTMLButtonElement>(null);
+  const handledGuidedHandoffRequestRef = useRef<number | null>(null);
   const deferredDraft = useDeferredValue(draft);
   const validationPending = deferredDraft !== draft;
   const view = useMemo(() => createModelSchemaDraftView(deferredDraft), [deferredDraft]);
@@ -104,6 +119,25 @@ export function ModelSchemaAuthoringShell({ hidden = false }: ModelSchemaAuthori
       confirmButtonRef.current?.focus();
     }
   }, [pendingAction]);
+
+  useEffect(() => {
+    if (!guidedHandoffRequest || handledGuidedHandoffRequestRef.current === guidedHandoffRequest.requestId) {
+      return;
+    }
+    handledGuidedHandoffRequestRef.current = guidedHandoffRequest.requestId;
+    if (isEmptyModelSchemaAuthoringDraft(draft)) {
+      applyGuidedHandoffArtifact(guidedHandoffRequest.artifact, guidedHandoffRequest.requestId);
+      return;
+    }
+    setPendingAction({
+      type: "guidedHandoff",
+      artifact: guidedHandoffRequest.artifact,
+      currentDraftName: draft.name || "Untitled Advanced Author Schema draft",
+      triggerId: "builder-experience-tab-advanced",
+      focusAfterId: "schema-section-tab-identity"
+    });
+    setStatusMessage("Guided handoff staged. Confirm before replacing the current Advanced Author Schema draft.");
+  }, [draft, guidedHandoffRequest]);
 
   useEffect(() => {
     if (validationPending || !view.structurallyValid || fitReportSnapshot) {
@@ -156,6 +190,20 @@ export function ModelSchemaAuthoringShell({ hidden = false }: ModelSchemaAuthori
     setExportError(null);
     setExportText("");
     setStatusMessage("Valid model-schema artifact imported. It remains structural and not runnable.");
+  }
+
+  function applyGuidedHandoffArtifact(artifact: ModelSchemaDefinition, requestId: number) {
+    setDraft(artifact);
+    setLastValidArtifact(artifact);
+    setActiveSection("identity");
+    setImportError(null);
+    setExportError(null);
+    setExportText("");
+    setFitReportSnapshot(null);
+    setScenarioPlanSnapshot(null);
+    setStatusMessage("Guided structural draft opened in Advanced Author Schema. It remains local, unsaved, and not runnable.");
+    onGuidedHandoffResolution?.(requestId, "applied");
+    focusAfterRender("schema-section-tab-identity");
   }
 
   async function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
@@ -400,6 +448,8 @@ export function ModelSchemaAuthoringShell({ hidden = false }: ModelSchemaAuthori
       restoreLastValid();
     } else if (action.type === "import") {
       applyImportedArtifact(action.artifact);
+    } else if (action.type === "guidedHandoff") {
+      applyGuidedHandoffArtifact(action.artifact, guidedHandoffRequest?.requestId ?? -1);
     } else if (action.type === "removeMetadata") {
       removeMetadataItem(action.metadataKey);
     } else if (action.type === "repair") {
@@ -413,6 +463,9 @@ export function ModelSchemaAuthoringShell({ hidden = false }: ModelSchemaAuthori
 
   function cancelPendingAction() {
     const focusId = pendingAction?.triggerId;
+    if (pendingAction?.type === "guidedHandoff" && guidedHandoffRequest) {
+      onGuidedHandoffResolution?.(guidedHandoffRequest.requestId, "canceled");
+    }
     setPendingAction(null);
     if (focusId) {
       focusAfterRender(focusId);
@@ -1092,6 +1145,9 @@ function confirmationTitle(action: PendingAction): string {
   if (action.type === "import") {
     return "Replace unsaved draft with imported schema?";
   }
+  if (action.type === "guidedHandoff") {
+    return "Replace the current Advanced Author Schema draft?";
+  }
   if (action.type === "removeMetadata") {
     return `Remove metadata ${action.metadataKey}?`;
   }
@@ -1110,6 +1166,9 @@ function confirmationDescription(action: PendingAction): string {
   }
   if (action.type === "import") {
     return "This discards current unsaved edits and replaces the draft with the validated imported model-schema artifact.";
+  }
+  if (action.type === "guidedHandoff") {
+    return `Current Advanced draft ${action.currentDraftName} will be replaced by guided structural draft ${action.artifact.name}. Cancel preserves both drafts. No World or runtime state will change.`;
   }
   if (action.type === "removeMetadata") {
     return "This removes the selected inert metadata entry from the draft. The action does not affect simulation state.";

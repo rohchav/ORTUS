@@ -51,9 +51,9 @@ export const routeOrientations: readonly RouteOrientationDefinition[] = [
   {
     destinationId: "workshop",
     routeName: "Workshop",
-    purpose: "Describe, author, and inspect model structure with the current Advanced Builder tools.",
+    purpose: "Describe, author, and inspect model structure through Guided or Advanced Builder tools.",
     startLabel: "Start here",
-    startHere: "load, import, or author a structural artifact, then inspect its validation and boundaries.",
+    startHere: "create a bounded guided draft or open the complete Advanced Builder for exact structural editing.",
     boundary: "A valid structure is not automatically runnable.",
     technicalDetails: [
       {

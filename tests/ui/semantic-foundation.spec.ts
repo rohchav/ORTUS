@@ -149,6 +149,8 @@ async function expectSharedPrimitiveCoverage(page: Page, route: Route) {
     await expect(page.locator(".status-pill").first(), "simulate route should render StatusPill").toBeVisible();
     await expect(page.locator(".timeline-strip__button span[aria-hidden='true']").first(), "run controls should include icon-bearing controls").toBeVisible();
   } else {
+    await page.getByRole("tab", { name: /Advanced Builder/i }).click();
+    await expect(page.getByRole("tab", { name: /Advanced Builder/i })).toHaveAttribute("aria-selected", "true");
     await expect(page.locator(".builder-status-badge").first(), "builder route should render Builder status badges").toBeVisible();
   }
 
@@ -459,6 +461,8 @@ test.describe("axe accessibility scans", () => {
     await page.setViewportSize({ width: 1280, height: 720 });
     await openRoute(page, routes[1]);
     await expectAxeClean(page);
+    await page.getByRole("tab", { name: /Advanced Builder/i }).click();
+    await expect(page.getByRole("tab", { name: /Advanced Builder/i })).toHaveAttribute("aria-selected", "true");
     await page.getByRole("tab", { name: /Author Schema/i }).click();
     await expect(page.getByRole("tab", { name: /Author Schema/i })).toHaveAttribute("aria-selected", "true");
     await expectAxeClean(page);

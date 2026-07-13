@@ -1,10 +1,10 @@
 # ORTUS Full Prompt Roadmap
 
-*Last updated after Prompt UX5B Progressive Disclosure and Beginner/Advanced Information Architecture Audit and Hardening.*
+*Last updated after Prompt UX6 Guided Builder and Step-by-Step Configuration Flow Foundation.*
 
 ## Current Status
 
-ORTUS has completed the core runtime/template and modeling-workbench foundations through Prompt 39B, the neural/runtime-lab side track, the Research World sequence through GW8B, the UX3/UX4/UX4B comprehension and visual-language track, RH1 source-of-truth hygiene, Prompt UX5 Progressive Disclosure and Beginner/Advanced Information Architecture, and the UX5B audit.
+ORTUS has completed the core runtime/template and modeling-workbench foundations through Prompt 39B, the neural/runtime-lab side track, the Research World sequence through GW8B, the UX3 through UX6 comprehension, visual-language, progressive-disclosure, and Guided Builder track, and RH1 source-of-truth hygiene.
 
 Current project status:
 
@@ -46,14 +46,15 @@ Completed audit prompt: Prompt UX4B — Sandbox Visual Language Audit and Harden
 Completed hygiene prompt: Prompt RH1 — Remote State and Mission-Alignment Hygiene Check; documents that local main is ahead of origin/main, clarifies World-local comparison persistence versus Lab/Atlas research non-persistence, clarifies existing World experiment sweeps versus future Atlas landscape/probe sweeps, documents package-name drift and lint-gate decisions, and adds public README status without adding product behavior
 Completed implementation prompt: Prompt UX5 — Progressive Disclosure and Beginner/Advanced Information Architecture; adds source-backed route orientation, component-local non-persistent disclosure, layered capability guidance, concise Lab/Atlas defaults, and exact technical-detail access without Guided Builder, persistence, personalization, progression, runtime/template/Builder execution, Lab/Atlas records, landscape sampling, or probe execution
 Completed audit prompt: Prompt UX5B — Progressive Disclosure and Beginner/Advanced Information Architecture Audit and Hardening; audits source and rendered hierarchy, expert reachability, expanded-state accessibility, reload defaults, non-persistence, and scope boundaries, finds no production defect, and adds no UX6, GW9, runtime, persistence, or product behavior
+Completed implementation prompt: Prompt UX6 — Guided Builder and Step-by-Step Configuration Flow Foundation; adds a deterministic, non-persistent, six-step `ortus.modelSchema` drafting flow, real existing-validator review, explicit overwrite-protected handoff to Advanced Author Schema, and rendered accessibility/World-isolation coverage without schema execution, runtime/template/scenario/RunConfig behavior, persistence, personalization, progression, onboarding, Lab/Atlas behavior, dependencies, assets, fonts, or icons
 Post-30B stabilization completed: repo hygiene, durable Codex context, dependency repair, generated-artifact cleanup, and runtime performance/scalability baseline
-UX5B complete.
-UX6 is next.
+UX6 complete.
+UX6B required next.
 GW9 remains paused.
-Next recommended prompt: UX6.
+Next recommended prompt: UX6B.
 Next Research World implementation prompt: GW9 only after the UX6/UX6B track is addressed or explicitly waived; do not start GW9 or further Research World implementation, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any further Research World/fractal/multiscale implementation without explicit approval
 
-Recommended sandbox-theme sequence: UX6 -> UX6B -> GW9.
+Recommended sandbox-theme sequence: UX6B -> GW9.
 ```
 
 Critical global boundary:
@@ -3738,8 +3739,9 @@ Prompt UX4B Sandbox Visual Language Audit and Hardening is complete.
 Prompt RH1 Remote State and Mission-Alignment Hygiene Check is complete.
 Prompt UX5 Progressive Disclosure and Beginner/Advanced Information Architecture is complete.
 Prompt UX5B Progressive Disclosure and Beginner/Advanced Information Architecture Audit and Hardening is complete.
-UX5B complete.
-UX6 is next.
+Prompt UX6 Guided Builder and Step-by-Step Configuration Flow Foundation is complete.
+UX6 complete.
+UX6B required next.
 GW9 remains paused.
-Next recommended prompt: UX6.
+Next recommended prompt: UX6B.
 ```

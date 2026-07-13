@@ -378,12 +378,12 @@ The required sequence is:
 GW0 -> UX2 -> GW1 -> GW1B -> GW2 -> GW2B -> GW3 -> GW3B -> GW4 -> GW4B -> GW5 -> GW5B -> GW6 -> GW6B -> GW7 -> GW7B -> GW8 -> GW8B -> UX3 -> UX4 -> UX4B -> RH1 -> UX5 -> UX5B -> UX6 -> UX6B -> GW9
 ```
 
-UX2, GW1, GW1B, GW2, GW2B, GW3, GW3B, GW4, GW4B, GW5, GW5B, GW6, GW6B, GW7, GW7B, GW8, GW8B, UX3, UX4, UX4B, RH1, UX5, and UX5B are complete.
+UX2, GW1, GW1B, GW2, GW2B, GW3, GW3B, GW4, GW4B, GW5, GW5B, GW6, GW6B, GW7, GW7B, GW8, GW8B, UX3, UX4, UX4B, RH1, UX5, UX5B, and UX6 are complete.
 
-UX5B complete.
-UX6 is next.
+UX6 complete.
+UX6B required next.
 GW9 remains paused.
-Next recommended prompt: UX6.
+Next recommended prompt: UX6B.
 
 ## 22. GW Roadmap Branch
 
@@ -502,7 +502,15 @@ Completed source and rendered audit of UX5. UX5B verifies coherent route orienta
 
 UX5B adds audit records and roadmap contracts only. It adds no UX6 Guided Builder, persistence, personalization, recommendation, onboarding, progression, runtime/template/Builder execution, Lab/Atlas behavior, sampling, probe execution, dependency, asset, font, icon, route, or GW9 behavior.
 
-UX5B complete. UX6 is next. GW9 remains paused.
+UX5B complete. UX6 followed and is now complete. GW9 remains paused.
+
+### UX6: Guided Builder and Step-by-Step Configuration Flow Foundation
+
+Completed bounded Workshop implementation. Guided Builder is the local default, Advanced Builder remains immediately available, and six structural steps deterministically assemble a supported `ortus.modelSchema` subset. Existing schema validation remains authoritative. Handoff to Advanced Author Schema is explicit and overwrite-protected, while reload resets Guided state.
+
+UX6 adds no schema execution, runtime template, scenario, RunConfig, active World mutation, persistence, personalization, onboarding, progression, Lab/Atlas record, landscape sampling, probe execution, dependency, asset, font, icon, or route. Structural validity remains distinct from runnability and real-world validity.
+
+UX6 complete. UX6B required next. GW9 remains paused.
 
 ## 23. Implementation Dependencies
 
@@ -604,4 +612,12 @@ This is not stored beginner mode, personalization, recommendation, onboarding st
 
 UX5B audits that implementation in source and rendered browsers. It finds the hierarchy clear in the covered paths, retains direct expert access, verifies local reload-reset disclosure state and expanded-state Axe results, and finds no production defect. This remains expert and automated evidence, not a beginner user study, browser-zoom verification, screen-reader/assistive-technology verification, mobile-workflow validation, or WCAG conformance claim.
 
-UX5B complete. UX6 is next. GW9 remains paused.
+UX5B complete. UX6 followed and is now complete. UX6B required next. GW9 remains paused.
+
+## 29. UX6 Implementation Status
+
+UX6 implements a deterministic, typed, page-session-only Guided Builder over the existing model-schema services. It authors a bounded structural subset, keeps unsupported concepts visible as Advanced-only or unavailable, protects Start over and Advanced workspace replacement, and leaves World state and existing storage unchanged. Rendered coverage includes the established five viewports, keyboard/focus behavior, reload reset, browser-Back and destination-link decisions, handoff, overwrite cancellation/confirmation, short-height behavior, reduced motion, diagnostics, and Axe.
+
+This is automated and expert evidence, not proof of beginner comprehension, mobile workflow readiness, actual browser zoom, screen-reader or assistive-technology quality, forced-colors behavior, WCAG conformance, model correctness, or scientific validity.
+
+UX6 complete. UX6B required next. GW9 remains paused.

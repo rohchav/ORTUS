@@ -223,10 +223,17 @@ export const capabilityGuidanceSummaries: readonly CapabilityGuidanceSummary[] =
     [
       item(
         "workshop-authoring",
-        "Schema and workspace authoring",
+        "Guided and Advanced structural authoring",
         "available",
         availableStatus,
-        "Workshop supports structural schema authoring, validation assistance, graph inspection, fit reports, and scenario planning as planning surfaces."
+        "Workshop supports bounded Guided drafting and the complete Advanced structural authoring, import, export, validation-assistance, and inspection surfaces."
+      ),
+      item(
+        "workshop-guided-handoff",
+        "Explicit structural handoff",
+        "available",
+        availableStatus,
+        "A structurally valid Guided draft can replace the Advanced Author Schema draft only through an explicit, overwrite-protected handoff."
       ),
       item(
         "workshop-readonly-graph",
@@ -239,10 +246,10 @@ export const capabilityGuidanceSummaries: readonly CapabilityGuidanceSummary[] =
     [
       item(
         "workshop-runtime-bridge",
-        "Runtime bridge",
+        "Structural rules and starting conditions",
         "planning-only",
         planningStatus,
-        "Authored structures can inform later runtime work, but they are not engines, scenarios, RunConfigs, or template behavior."
+        "Rule descriptions, parameter defaults, scenario questions, and compatibility summaries remain structural planning material rather than runtime behavior."
       )
     ],
     [
@@ -251,7 +258,7 @@ export const capabilityGuidanceSummaries: readonly CapabilityGuidanceSummary[] =
         "Execution and generation",
         "not-implemented",
         notImplementedStatus,
-        "Workshop does not compile schemas, execute builder graphs, generate templates, produce scenarios, or apply authored structure to the active simulation."
+        "Workshop does not compile schemas, execute builder graphs, create runtime templates, produce scenarios or RunConfigs, preview simulations, mutate World, or establish scientific validation."
       )
     ],
     [
@@ -260,6 +267,12 @@ export const capabilityGuidanceSummaries: readonly CapabilityGuidanceSummary[] =
         "Valid is not runnable",
         capabilityBoundaryStatus,
         "A structurally valid schema or workspace remains planning structure unless separate template runtime support exists."
+      ),
+      boundary(
+        "workshop-guided-correctness",
+        "Guided completion is not scientific correctness",
+        evidenceBoundaryStatus,
+        "Completing the bounded flow or passing structural validation does not calibrate the model, validate it against reality, or make its assumptions correct."
       ),
       boundary(
         "workshop-no-runtime-mutation",

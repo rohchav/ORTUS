@@ -1533,4 +1533,10 @@ Disclosure state is component-local and resets on reload. UX5 adds no stored mod
 
 UX5B re-audits source and rendered behavior across all four routes and five established viewports. It verifies the visible orientation/caveat hierarchy, direct expert access, expanded-state accessibility, reload defaults, one H1 and one shared main per route, no horizontal overflow, no fake Lab/Atlas behavior, and no new persistence or personalization. It finds no production defect in the covered paths.
 
-This does not erase the research questions above. Actual beginner comprehension, screen-reader and assistive-technology use, forced colors, actual browser zoom, mobile workflow readiness, and full WCAG conformance remain unverified. UX5B complete. UX6 is next. GW9 remains paused.
+This does not erase the research questions above. Actual beginner comprehension, screen-reader and assistive-technology use, forced colors, actual browser zoom, mobile workflow readiness, and full WCAG conformance remain unverified. UX5B complete. UX6 followed and is now complete. GW9 remains paused.
+
+## UX6 Guided-Builder Update
+
+UX6 makes Guided Builder the reload-reset Workshop default while preserving Advanced Builder one action away. The HCI gain is a six-step structural path with plain/technical language pairing, immediate field checks, accessible error summaries, reversible navigation, protected Start over, exact review, and explicit overwrite-protected handoff. The epistemic boundary remains visible: a structurally valid draft is neither runnable nor scientifically valid.
+
+Rendered coverage includes all five established viewports, short-height focus, Back retention, validation focus, destructive-dialog keyboard behavior, route-leave and browser-Back decisions, handoff overwrite protection, World/storage isolation, reduced motion, diagnostics, and Axe. This remains automated smoke plus expert review, not observed beginner comprehension, actual browser zoom verification, screen-reader/assistive-technology validation, forced-colors validation, mobile-workflow validation, or WCAG conformance. UX6 complete. UX6B required next. GW9 remains paused.

@@ -27,7 +27,7 @@ const orientationContracts = {
   },
   Workshop: {
     id: "workshop",
-    purpose: "Describe, author, and inspect model structure with the current Advanced Builder tools.",
+    purpose: "Describe, author, and inspect model structure through Guided or Advanced Builder tools.",
     boundary: "A valid structure is not automatically runnable.",
     technicalTerm: "ortus.modelSchema structural artifact."
   },
@@ -202,7 +202,7 @@ async function expectCapabilityGuidance(page: Page, destination: (typeof destina
     destinationId === "world"
       ? "World hosts the active simulation surface, run controls, snapshots, metrics, and template-defined command paths for the current local run."
       : destinationId === "workshop"
-        ? "Workshop supports structural schema authoring, validation assistance, graph inspection, fit reports, and scenario planning as planning surfaces."
+        ? "Workshop supports bounded Guided drafting and the complete Advanced structural authoring, import, export, validation-assistance, and inspection surfaces."
         : destinationId === "lab"
           ? "Lab exposes non-persistent lifecycle semantics, model-only evidence boundaries, and a conceptual experiment-ledger scaffold."
           : "Atlas exposes non-persistent evidence states, sampled/unsampled interpretation, behavioral-landscape vocabulary, and conceptual scaffolds for investigated model behavior.";
@@ -455,6 +455,18 @@ async function expectWorldInterventionReadinessLayer(page: Page) {
 
 async function expectWorkshopPreserved(page: Page) {
   await expect(page.getByRole("region", { name: "Builder structural shell" })).toBeVisible();
+  const guidedTab = page.getByRole("tab", { name: /Guided Builder/i });
+  const advancedTab = page.getByRole("tab", { name: /Advanced Builder/i });
+  await expect(guidedTab).toBeVisible();
+  await expect(guidedTab).toHaveAttribute("aria-selected", "true");
+  await expect(advancedTab).toHaveAttribute("aria-selected", "false");
+  await expect(page.getByRole("heading", { name: "Model purpose", level: 3 })).toBeVisible();
+  await expect(page.getByRole("form", { name: "Model purpose" })).toBeVisible();
+  await expect(page.getByText("Guided Builder supports a bounded subset of the structural artifact.")).toBeVisible();
+  await expect(page.getByText("Structural validity does not mean runtime support or real-world validity.")).toHaveCount(0);
+
+  await advancedTab.click();
+  await expect(advancedTab).toHaveAttribute("aria-selected", "true");
   await expect(page.getByRole("tab", { name: /Workspace Inspector/i })).toBeVisible();
   await expect(page.getByRole("tab", { name: /Author Schema/i })).toBeVisible();
   await expect(page.getByRole("tab", { name: /Graph View/i })).toBeVisible();
@@ -472,6 +484,18 @@ async function expectWorkshopPreserved(page: Page) {
   await importEditor.focus();
   await expect(importEditor).toBeFocused();
   await expectFocusedElementVisible(page);
+}
+
+async function fillMinimalGuidedDraft(page: Page, modelName = "Exchange Commons") {
+  await page.getByRole("textbox", { name: /Model name/i }).fill(modelName);
+  await page.getByRole("textbox", { name: /Short description/i }).fill("A bounded structural draft for local exchange.");
+  await page.getByRole("textbox", { name: /Explicit limitation/i }).fill("This stylized structure does not represent or predict real people.");
+  await page.getByRole("button", { name: "Continue", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "Entities and state", level: 3 })).toBeFocused();
+  await page.getByRole("textbox", { name: /Entity name/i }).fill("Resource holder");
+  await page.getByRole("button", { name: "Review", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "Review", level: 3 })).toBeFocused();
+  await expect(page.getByRole("button", { name: "Open draft in Advanced Builder" })).toBeEnabled();
 }
 
 async function expectLabFoundation(page: Page) {
@@ -814,7 +838,7 @@ async function expectSandboxVisualLanguageFoundation(page: Page, destination: (t
       worldStage: readStyle(".world-stage"),
       worldStageLabel: readStyle(".world-stage", "::before"),
       timeline: readStyle(".timeline-strip"),
-      builderModeButton: readStyle(".builder-mode-tabs button"),
+      builderModeButton: readStyle(".builder-experience-tabs button"),
       labNote: readStyle(".lab-record-legend li, .lab-ledger-scaffold li, .lab-boundary-card"),
       atlasNote: readStyle(".atlas-evidence-legend li, .atlas-map-scaffold li, .atlas-boundary-card")
     };
@@ -936,6 +960,253 @@ for (const destination of destinations) {
   });
 }
 
+test("Guided Builder is the default semantic authoring view and Advanced remains one keyboard action away", async ({ page }) => {
+  const diagnostics = observePageDiagnostics(page);
+  await page.setViewportSize({ width: 1280, height: 720 });
+  await openDestination(page, destinations[3]);
+
+  const viewTabs = page.getByRole("tablist", { name: "Workshop authoring views" });
+  const guidedTab = viewTabs.getByRole("tab", { name: /Guided Builder/i });
+  const advancedTab = viewTabs.getByRole("tab", { name: /Advanced Builder/i });
+  await expect(viewTabs.getByRole("tab")).toHaveCount(2);
+  await expect(guidedTab).toHaveAttribute("aria-selected", "true");
+  await expect(page.getByRole("form", { name: "Model purpose" })).toBeVisible();
+
+  const stepNavigation = page.getByRole("navigation", { name: "Guided structural authoring steps" });
+  for (const step of ["Model purpose", "Entities and state", "Environment and space", "Rules and interactions", "Starting conditions", "Review"]) {
+    await expect(stepNavigation.getByRole("button", { name: new RegExp(step, "i") })).toBeVisible();
+  }
+  await expect(page.getByRole("group", { name: "Structural identity" })).toBeVisible();
+  await expect(page.getByRole("textbox", { name: /Model name/i })).toHaveAttribute("aria-describedby", /guided-model-name-description/);
+
+  await guidedTab.focus();
+  await page.keyboard.press("ArrowRight");
+  await expect(advancedTab).toBeFocused();
+  await expect(advancedTab).toHaveAttribute("aria-selected", "true");
+  await expect(page.getByRole("tab", { name: /Workspace Inspector/i })).toBeVisible();
+  await expect(page.getByRole("tab", { name: /Author Schema/i })).toBeVisible();
+  await expect(page.getByRole("tab", { name: /Graph View/i })).toBeVisible();
+
+  await page.keyboard.press("ArrowLeft");
+  await expect(guidedTab).toBeFocused();
+  await expect(guidedTab).toHaveAttribute("aria-selected", "true");
+  await expectNoDocumentHorizontalOverflow(page);
+  await expectNoDiagnostics(diagnostics);
+});
+
+test("Guided step validation focuses errors and Back preserves exact entered values", async ({ page }) => {
+  const diagnostics = observePageDiagnostics(page);
+  await page.setViewportSize({ width: 1280, height: 720 });
+  await openDestination(page, destinations[3]);
+
+  await page.getByRole("button", { name: "Continue", exact: true }).click();
+  const errorSummary = page.locator("#guided-error-summary-purpose");
+  await expect(errorSummary).toBeFocused();
+  await expect(errorSummary.getByRole("heading", { name: "Check this step" })).toBeVisible();
+  const modelName = page.getByRole("textbox", { name: /Model name/i });
+  await expect(modelName).toHaveAttribute("aria-invalid", "true");
+  await errorSummary.getByRole("button", { name: "Model name is required." }).click();
+  await expect(modelName).toBeFocused();
+
+  await modelName.fill("Retained Draft");
+  await page.getByRole("textbox", { name: /Short description/i }).fill("A structural retention test.");
+  await page.getByRole("textbox", { name: /Explicit limitation/i }).fill("No real-world accuracy is claimed.");
+  await page.getByRole("button", { name: "Continue", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "Entities and state", level: 3 })).toBeFocused();
+
+  const entityName = page.getByRole("textbox", { name: /Entity name/i });
+  await entityName.fill("Carrier");
+  await page.getByRole("button", { name: "Add state field" }).click();
+  await page.getByRole("textbox", { name: /State field 1 name/i }).fill("Load");
+  const stateDefault = page.getByRole("textbox", { name: /Default description/i });
+  await stateDefault.fill("not-a-number");
+  await stateDefault.blur();
+  await expect(stateDefault).toHaveAttribute("aria-invalid", "true");
+  await stateDefault.fill("5");
+  await page.getByRole("button", { name: "Continue", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "Environment and space", level: 3 })).toBeFocused();
+  await page.getByRole("button", { name: "Back", exact: true }).click();
+  await expect(entityName).toHaveValue("Carrier");
+  await expect(page.getByRole("textbox", { name: /State field 1 name/i })).toHaveValue("Load");
+  await expect(stateDefault).toHaveValue("5");
+  await expectNoDiagnostics(diagnostics);
+});
+
+test("Start over requires keyboard-safe confirmation and Cancel preserves the local draft", async ({ page }) => {
+  const diagnostics = observePageDiagnostics(page);
+  await page.setViewportSize({ width: 1280, height: 720 });
+  await openDestination(page, destinations[3]);
+
+  const modelName = page.getByRole("textbox", { name: /Model name/i });
+  const startOver = page.getByRole("button", { name: "Start over", exact: true });
+  await expect(startOver).toBeDisabled();
+  await modelName.fill("Local Unsaved Draft");
+  await expect(startOver).toBeEnabled();
+  await startOver.click();
+
+  const dialog = page.getByRole("alertdialog", { name: "Start over with an empty Guided Builder draft?" });
+  await expect(dialog).toBeVisible();
+  await expect(dialog.getByRole("button", { name: "Start over", exact: true })).toBeFocused();
+  await page.keyboard.press("Tab");
+  await expect(dialog.getByRole("button", { name: "Cancel" })).toBeFocused();
+  await page.keyboard.press("Enter");
+  await expect(dialog).toHaveCount(0);
+  await expect(startOver).toBeFocused();
+  await expect(modelName).toHaveValue("Local Unsaved Draft");
+
+  await startOver.click();
+  await dialog.getByRole("button", { name: "Start over", exact: true }).click();
+  await expect(modelName).toHaveValue("");
+  await expect(startOver).toBeDisabled();
+  await expect(page.getByText("Guided Builder reset. Advanced Builder and World were not changed.")).toBeVisible();
+  await expectNoDiagnostics(diagnostics);
+});
+
+test("Guided draft, step, and selected view reset on reload without adding storage keys", async ({ page }) => {
+  const diagnostics = observePageDiagnostics(page);
+  await page.setViewportSize({ width: 1280, height: 720 });
+  await openDestination(page, destinations[3]);
+  const storageBefore = await readStorageKeys(page);
+
+  await page.getByRole("textbox", { name: /Model name/i }).fill("Ephemeral Draft");
+  await page.getByRole("tab", { name: /Advanced Builder/i }).click();
+  await page.getByRole("tab", { name: /Guided Builder/i }).click();
+  await expect(page.getByRole("textbox", { name: /Model name/i })).toHaveValue("Ephemeral Draft");
+
+  page.once("dialog", (dialog) => void dialog.accept());
+  await page.reload({ waitUntil: "domcontentloaded" });
+  await page.waitForLoadState("networkidle", { timeout: 5_000 }).catch(() => undefined);
+  await expect(page.getByRole("tab", { name: /Guided Builder/i })).toHaveAttribute("aria-selected", "true");
+  await expect(page.getByRole("textbox", { name: /Model name/i })).toHaveValue("");
+  await expect(page.getByRole("heading", { name: "Model purpose", level: 3 })).toBeVisible();
+  expect(await readStorageKeys(page)).toEqual(storageBefore);
+  expect([...storageBefore.local, ...storageBefore.session]).not.toEqual(
+    expect.arrayContaining([expect.stringMatching(/ux6|guided|builder-draft|builder-step|authoring-view/i)])
+  );
+  await expectNoDiagnostics(diagnostics);
+});
+
+test("explicit handoff opens the exact Advanced draft and protects an existing Advanced draft", async ({ page }) => {
+  const diagnostics = observePageDiagnostics(page);
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await openDestination(page, destinations[3]);
+
+  await fillMinimalGuidedDraft(page, "First Guided Draft");
+  await page.getByRole("button", { name: "Open draft in Advanced Builder" }).click();
+  await expect(page.getByRole("tab", { name: /Advanced Builder/i })).toHaveAttribute("aria-selected", "true");
+  await expect(page.getByRole("tab", { name: /Author Schema/i })).toHaveAttribute("aria-selected", "true");
+  const advancedName = page.locator("#builder-mode-panel-authorSchema #schema-identity-name");
+  await expect(advancedName).toHaveValue("First Guided Draft");
+  await expect(page.getByText("Guided structural draft opened in Advanced Author Schema. It remains local, unsaved, and not runnable.")).toBeVisible();
+
+  await page.getByRole("tab", { name: /Guided Builder/i }).click();
+  await page.getByRole("navigation", { name: "Guided structural authoring steps" }).getByRole("button", { name: /Model purpose/i }).click();
+  await page.getByRole("textbox", { name: /Model name/i }).fill("Second Guided Draft");
+  await page.getByRole("button", { name: "Review", exact: true }).click();
+  await page.getByRole("button", { name: "Open draft in Advanced Builder" }).click();
+
+  const overwriteDialog = page.getByRole("alertdialog", { name: "Replace the current Advanced Author Schema draft?" });
+  await expect(overwriteDialog).toContainText("First Guided Draft");
+  await expect(overwriteDialog).toContainText("Second Guided Draft");
+  await overwriteDialog.getByRole("button", { name: "Cancel" }).click();
+  await expect(page.getByRole("tab", { name: /Guided Builder/i })).toHaveAttribute("aria-selected", "true");
+  await expect(page.getByText("Second Guided Draft", { exact: true }).first()).toBeVisible();
+  await expect(page.getByRole("button", { name: "Open draft in Advanced Builder" })).toBeFocused();
+
+  await page.getByRole("button", { name: "Open draft in Advanced Builder" }).click();
+  await overwriteDialog.getByRole("button", { name: "Confirm" }).click();
+  await expect(page.getByRole("tab", { name: /Advanced Builder/i })).toHaveAttribute("aria-selected", "true");
+  await expect(advancedName).toHaveValue("Second Guided Draft");
+  await expectNoDiagnostics(diagnostics);
+});
+
+test("Guided authoring and Advanced handoff leave the active World context and storage unchanged", async ({ page }) => {
+  const diagnostics = observePageDiagnostics(page);
+  await page.setViewportSize({ width: 1280, height: 720 });
+  await openDestination(page, destinations[0]);
+
+  const templateBefore = await page.getByLabel("Model template").inputValue();
+  const seedBefore = await page.locator("#ortus-setup-seed").inputValue();
+  const contextBefore = await page.getByLabel("Current simulation context").textContent();
+  const runStatusBefore = await page.getByLabel("Current run status").textContent();
+  const storageBefore = await readStorageEntries(page);
+
+  await page.getByRole("navigation", { name: "Research World destinations" }).getByRole("link", { name: "Workshop" }).click();
+  await expect(page).toHaveURL(/\/builder$/);
+  await fillMinimalGuidedDraft(page, "World Isolation Draft");
+  await expect
+    .poll(() => page.evaluate(() => Boolean((window.history.state as Record<string, unknown> | null)?.__ortusGuidedDraftGuard)))
+    .toBe(true);
+  await page.evaluate(() => window.history.back());
+  const leaveDialog = page.getByRole("alertdialog", { name: "Leave Workshop and discard the local Guided draft?" });
+  await expect(leaveDialog).toBeVisible();
+  await leaveDialog.getByRole("button", { name: "Cancel" }).click();
+  await expect(page).toHaveURL(/\/builder$/);
+  await page.getByRole("navigation", { name: "Guided structural authoring steps" }).getByRole("button", { name: /Model purpose/i }).click();
+  await expect(page.getByRole("textbox", { name: /Model name/i })).toHaveValue("World Isolation Draft");
+  await page.getByRole("button", { name: "Review", exact: true }).click();
+
+  await page.getByRole("button", { name: "Open draft in Advanced Builder" }).click();
+  await expect(page.getByRole("tab", { name: /Author Schema/i })).toHaveAttribute("aria-selected", "true");
+
+  const worldLink = page.getByRole("navigation", { name: "Research World destinations" }).getByRole("link", { name: "World" });
+  await worldLink.click();
+  await expect(leaveDialog).toBeVisible();
+  await leaveDialog.getByRole("button", { name: "Cancel" }).click();
+  await expect(page).toHaveURL(/\/builder$/);
+  await expect(worldLink).toBeFocused();
+  await page.evaluate(() => window.history.back());
+  await expect(leaveDialog).toBeVisible();
+  await leaveDialog.getByRole("button", { name: "Leave Workshop" }).click();
+  await expect(page).toHaveURL(/\/$/);
+  await expect(page.getByRole("region", { name: "Simulation workspace" })).toBeVisible();
+
+  await expect(page.getByLabel("Model template")).toHaveValue(templateBefore);
+  await expect(page.locator("#ortus-setup-seed")).toHaveValue(seedBefore);
+  expect(await page.getByLabel("Current simulation context").textContent()).toBe(contextBefore);
+  expect(await page.getByLabel("Current run status").textContent()).toBe(runStatusBefore);
+  expect(await readStorageEntries(page)).toEqual(storageBefore);
+  await expectNoDiagnostics(diagnostics);
+});
+
+test.describe("Guided Builder reduced motion and review accessibility", () => {
+  test.use({ reducedMotion: "reduce" });
+
+  test("review remains readable, Axe-clean, non-executable, and free of fake action labels", async ({ page }) => {
+    const diagnostics = observePageDiagnostics(page);
+    await page.setViewportSize({ width: 1280, height: 600 });
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await openDestination(page, destinations[3]);
+    await fillMinimalGuidedDraft(page, "Reduced Motion Draft");
+
+    await expect(page.getByText("Structural validity does not mean runtime support or real-world validity.")).toBeVisible();
+    await expect(page.getByText("Reduced Motion Draft", { exact: true }).first()).toBeVisible();
+    for (const label of [
+      "Run model",
+      "Run in World",
+      "Preview simulation",
+      "Compile model",
+      "Generate template",
+      "Generate scenario",
+      "Generate RunConfig",
+      "Publish to Lab",
+      "Publish to Atlas",
+      "Validate scientifically",
+      "Calibrate automatically",
+      "AI recommendation",
+      "Recommended configuration"
+    ]) {
+      await expect(page.getByRole("button", { name: label, exact: true })).toHaveCount(0);
+    }
+    await expect(
+      page.evaluate(() => window.matchMedia("(prefers-reduced-motion: reduce)").matches)
+    ).resolves.toBe(true);
+    await expectNoDocumentHorizontalOverflow(page);
+    await expectAxeClean(page);
+    await expectNoDiagnostics(diagnostics);
+  });
+});
+
 test("skip link and destination links preserve native keyboard route navigation", async ({ page }) => {
   const diagnostics = observePageDiagnostics(page);
   await page.setViewportSize({ width: 1280, height: 720 });
@@ -965,6 +1236,17 @@ async function readStorageKeys(page: Page): Promise<{ local: string[]; session: 
   return page.evaluate(() => ({
     local: Object.keys(window.localStorage).sort(),
     session: Object.keys(window.sessionStorage).sort()
+  }));
+}
+
+async function readStorageEntries(page: Page): Promise<{ local: Array<[string, string]>; session: Array<[string, string]> }> {
+  return page.evaluate(() => ({
+    local: Object.keys(window.localStorage)
+      .sort()
+      .map((key) => [key, window.localStorage.getItem(key) ?? ""]),
+    session: Object.keys(window.sessionStorage)
+      .sort()
+      .map((key) => [key, window.sessionStorage.getItem(key) ?? ""])
   }));
 }
 

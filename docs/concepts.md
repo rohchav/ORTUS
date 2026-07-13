@@ -82,6 +82,12 @@ Model Schema Authoring Forms V1 creates structural model-schema artifacts; it do
 
 Prompt 35B hardened import size checks, unsafe profiling/persuasion/targeting payload rejection, destructive confirmations, tab semantics, validation announcements, non-text JSON preservation, and medium-width layout behavior. The audit did not add schema execution, compatibility conversion, graph authoring, runtime preview, or simulation-state mutation.
 
+### Guided Builder
+
+Prompt UX6 adds a six-step Guided Builder as the default Workshop authoring view while preserving the existing Advanced Builder one action away. Guided Builder deterministically assembles only a bounded `ortus.modelSchema` subset: identity, entity types, scalar/category state attributes, zero or one space, non-executable rule declarations, parameters, one assumption note, and one limitation note. It uses the existing model-schema validator and transfers a valid structural draft to Advanced Author Schema only through an explicit overwrite-protected handoff.
+
+Guided completion and structural validity do not mean runtime support, scientific validity, or real-world accuracy. UX6 does not execute schemas or rule descriptions, generate templates/scenarios/RunConfigs, mutate World, persist drafts or mode state, add personalization/progression, or create Lab/Atlas records. Advanced-only fields remain Advanced-only rather than being approximated or silently dropped.
+
 Prompt 36 adds a read-only structural Graph View for a loaded `ortus.visualBuilderWorkspace`. The graph adapter validates and clones the workspace, preserves node/edge ids, statuses, artifact references, markers, warnings, and missing-capability language, and assigns deterministic display coordinates without force simulation. Search, filters, neighborhood highlighting, selection, pan, and zoom remain local presentation state. The visual plane is bounded to 120 nodes and 240 edges; larger artifacts retain a filtered outline and text edge list instead of attempting an unbounded drawing. Author Schema drafts are not converted into workspaces or graph artifacts in V1.
 
 Visual Builder Graph View V1 visualizes structural relationships; it does not execute nodes or edges. Graph selection, filtering, panning, and zooming are UI-only state. Graph View is not visual programming, schema execution, or runtime generation. A graph that looks complete is still not a runnable model.

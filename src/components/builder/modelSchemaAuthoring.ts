@@ -151,6 +151,10 @@ export function isModelSchemaDraftDirty(draft: ModelSchemaDefinition, baseline: 
   return JSON.stringify(draft) !== JSON.stringify(baseline);
 }
 
+export function isEmptyModelSchemaAuthoringDraft(draft: ModelSchemaDefinition): boolean {
+  return JSON.stringify(draft) === JSON.stringify(createEmptyModelSchemaDraft());
+}
+
 export function updateModelSchemaDeclaration<K extends ModelSchemaRepeatedKey>(
   draft: ModelSchemaDefinition,
   key: K,

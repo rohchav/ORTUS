@@ -399,4 +399,10 @@ UX3 complete.
 GW9 paused until the sandbox-theme and guided-comprehension track is addressed or explicitly waived.
 UX4, UX4B, UX5, and UX5B have now followed this audit. UX5 implements the progressive-disclosure layer identified here; UX5B audits it without claiming validated user comprehension.
 
-UX5B complete. UX6 is next. GW9 remains paused.
+UX5B complete. UX6 followed and is now complete. GW9 remains paused.
+
+## 38. Post-UX6 Status
+
+UX6 implements the bounded Guided Builder proposed by this audit. Guided is now the non-persistent Workshop default; Advanced remains immediately available with its expert tools intact. The six-step flow assembles only a deterministic `ortus.modelSchema` subset, uses existing structural validation, and hands off only through an explicit overwrite-protected action. It does not execute schemas, generate runtime artifacts, mutate World, persist drafts, personalize defaults, or add progression.
+
+UX6 complete. UX6B required next. GW9 remains paused. Beginner comprehension, actual browser zoom, screen-reader/assistive-technology use, forced colors, mobile workflow readiness, and WCAG conformance remain unverified.
