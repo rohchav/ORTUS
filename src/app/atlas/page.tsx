@@ -9,9 +9,10 @@ import {
   atlasFoundationSummary,
   atlasMapRegionStates
 } from "../../lib/atlasFoundation";
-import { getResearchDestinationById } from "../../lib/researchDestinations";
 import { CapabilityGuidancePanel } from "../../components/researchWorld/CapabilityGuidancePanel";
+import { RouteOrientationPanel } from "../../components/researchWorld/RouteOrientationPanel";
 import { CornerFramePanel } from "../../components/ui/CornerFramePanel";
+import { Disclosure } from "../../components/ui/Disclosure";
 import { StatusPill } from "../../components/ui/StatusPill";
 
 export const metadata: Metadata = {
@@ -20,28 +21,76 @@ export const metadata: Metadata = {
 };
 
 export default function AtlasPage() {
-  const destination = getResearchDestinationById("atlas");
-
   return (
-    <section className="atlas-foundation" aria-labelledby="atlas-title" data-destination-surface="atlas">
-      <div className="atlas-foundation__header">
-        <span className="atlas-foundation__eyebrow">Research World destination</span>
-        <div className="atlas-foundation__title-row">
-          <h1 id="atlas-title">{atlasFoundationSummary.routeLabel}</h1>
-          <StatusPill
-            label={atlasFoundationSummary.statusLabel}
-            tone="neutral"
-            category={atlasFoundationSummary.category}
-            state={atlasFoundationSummary.state}
-            description="Non-persistent information architecture and evidence semantics only."
-          />
+    <section className="atlas-foundation" data-destination-surface="atlas">
+      <RouteOrientationPanel destinationId="atlas" headingLevel={1} />
+
+      <section className="atlas-foundation__overview" aria-labelledby="atlas-overview-title">
+        <div className="atlas-foundation__section-heading">
+          <span>Start with model space</span>
+          <h2 id="atlas-overview-title">Model Space At A Glance</h2>
         </div>
-        <p>{destination.purpose}</p>
-      </div>
+        <div className="atlas-foundation__grid">
+          <CornerFramePanel title="What Exists Now" eyebrow="Conceptual orientation" variant="standard" className="atlas-foundation__panel">
+            <h3 className="sr-only">What Exists Now</h3>
+            <p>{atlasFoundationSummary.currentBoundary}</p>
+            <p>{atlasFoundationSummary.epistemicBoundary}</p>
+          </CornerFramePanel>
+
+          <CornerFramePanel title="Sampled Versus Unsampled" eyebrow="Evidence distinction" variant="standard" className="atlas-foundation__panel">
+            <h3 className="sr-only">Sampled Versus Unsampled</h3>
+            <ul className="atlas-evidence-legend atlas-evidence-preview">
+              {atlasEvidenceStates.slice(0, 2).map((evidenceState) => (
+                <li key={evidenceState.id}>
+                  <div className="atlas-evidence-legend__head">
+                    <StatusPill
+                      label={evidenceState.label}
+                      tone="neutral"
+                      category={evidenceState.category}
+                      state={evidenceState.state}
+                      description={evidenceState.summary}
+                    />
+                    <span>
+                      {evidenceState.category} / {evidenceState.state}
+                    </span>
+                  </div>
+                  <p>{evidenceState.interpretation}</p>
+                </li>
+              ))}
+            </ul>
+          </CornerFramePanel>
+
+          <CornerFramePanel title="Conceptual Model-Space Map" eyebrow="Vocabulary, not data" variant="standard" className="atlas-foundation__panel">
+            <h3 className="sr-only">Conceptual Model-Space Map</h3>
+            <ol className="atlas-map-scaffold atlas-map-preview">
+              {atlasMapRegionStates.map((regionState) => (
+                <li key={regionState.id}>
+                  <StatusPill
+                    label={regionState.label}
+                    tone="neutral"
+                    category={regionState.category}
+                    state={regionState.state}
+                    description={regionState.summary}
+                  />
+                  <p>{regionState.summary}</p>
+                </li>
+              ))}
+            </ol>
+          </CornerFramePanel>
+        </div>
+      </section>
 
       <CapabilityGuidancePanel destinationId="atlas" className="capability-guidance--route" />
 
-      <div className="atlas-foundation__grid">
+      <Disclosure
+        expandLabel="Show Atlas technical details"
+        collapseLabel="Hide Atlas technical details"
+        contentId="atlas-technical-details"
+        className="route-technical-disclosure"
+      >
+        <div className="atlas-foundation__technical">
+
+          <div className="atlas-foundation__grid">
         <CornerFramePanel title="Current Boundary" eyebrow="GW4 scope" variant="standard" className="atlas-foundation__panel">
           <h2 className="sr-only">Current Boundary</h2>
           <p>{atlasFoundationSummary.currentBoundary}</p>
@@ -119,7 +168,7 @@ export default function AtlasPage() {
             ))}
           </ol>
         </CornerFramePanel>
-      </div>
+          </div>
 
       <section
         className="behavioral-landscape-foundation"
@@ -424,7 +473,7 @@ export default function AtlasPage() {
         </section>
       </section>
 
-      <section className="atlas-boundaries" aria-labelledby="atlas-boundaries-title">
+          <section className="atlas-boundaries" aria-labelledby="atlas-boundaries-title">
         <h2 id="atlas-boundaries-title">Atlas Boundaries</h2>
         <div className="atlas-boundaries__grid">
           {atlasBoundarySummaries.map((boundary) => (
@@ -444,7 +493,9 @@ export default function AtlasPage() {
             </article>
           ))}
         </div>
-      </section>
+          </section>
+        </div>
+      </Disclosure>
 
       <nav className="atlas-foundation__links" aria-label="Atlas destination links">
         <Link href="/">Return to World</Link>

@@ -1,6 +1,6 @@
 # Contextual Capability Guidance Audit
 
-Status: Prompt GW6B audit and hardening record, updated after Prompt GW8B. GW6B audits the static contextual capability guidance added in GW6. It does not add persistence, recommendations, onboarding, Lab records, Atlas discoveries, saved behavioral landscapes, saved probe plans, progression, runtime behavior, template behavior, or Builder execution behavior. GW7 later adds Atlas-side behavioral-landscape vocabulary and a conceptual scaffold without changing the GW6B guidance audit result. GW8 later adds Atlas-side landscape probe planning vocabulary and a conceptual scaffold without creating executable probes, saved plans, samples, run queues, or regime detection. GW8B audits that probe-planning boundary without changing GW6B guidance behavior.
+Status: Prompt GW6B audit and hardening record, updated after Prompt UX5. GW6B audits the static contextual capability guidance added in GW6. UX5 later adds component-local progressive disclosure around the unchanged source-backed guidance content. It does not add persistence, recommendations, onboarding, Lab records, Atlas discoveries, saved behavioral landscapes, saved probe plans, progression, runtime behavior, template behavior, or Builder execution behavior.
 
 ## 1. Scope
 
@@ -96,7 +96,7 @@ Rendered shell tests confirm the Workshop route remains usable after `.builder-s
 
 ## 15. Static Guidance Accessibility Findings
 
-Capability guidance panels remain static readable sections. Rendered tests confirm the panels do not add route-local fake controls or static Tab stops. Status labels are visible text, not color-only state.
+Capability guidance content remains static and source-backed. UX5 adds exactly one intentional disclosure Tab stop per panel, with `aria-expanded`, keyboard toggling, and reload reset. Rendered contracts reject additional fake capability actions. Status labels remain visible text, not color-only state.
 
 ## 16. Status Semantics Findings
 

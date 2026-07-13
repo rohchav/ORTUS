@@ -378,12 +378,12 @@ The required sequence is:
 GW0 -> UX2 -> GW1 -> GW1B -> GW2 -> GW2B -> GW3 -> GW3B -> GW4 -> GW4B -> GW5 -> GW5B -> GW6 -> GW6B -> GW7 -> GW7B -> GW8 -> GW8B -> UX3 -> UX4 -> UX4B -> RH1 -> UX5 -> UX5B -> UX6 -> UX6B -> GW9
 ```
 
-UX2, GW1, GW1B, GW2, GW2B, GW3, GW3B, GW4, GW4B, GW5, GW5B, GW6, GW6B, GW7, GW7B, GW8, GW8B, UX3, UX4, and UX4B are complete.
+UX2, GW1, GW1B, GW2, GW2B, GW3, GW3B, GW4, GW4B, GW5, GW5B, GW6, GW6B, GW7, GW7B, GW8, GW8B, UX3, UX4, UX4B, RH1, and UX5 are complete.
 
-RH1 is complete; the GitHub remote was stale before the RH1 continuation push.
-UX5 remains next after RH1 remote alignment is confirmed.
+UX5 complete.
+UX5B required next.
 GW9 remains paused.
-Next recommended prompt: UX5.
+Next recommended prompt: UX5B.
 
 ## 22. GW Roadmap Branch
 
@@ -470,7 +470,7 @@ Completed first bounded sandbox visual-language foundation. UX4 retunes semantic
 UX4 complete.
 GW9 remains paused.
 UX4B complete.
-Next recommended prompt: UX5.
+UX5 followed and is now complete.
 
 ### UX4B: Sandbox Visual Language Audit and Hardening
 
@@ -478,15 +478,23 @@ Completed audit of the UX4 sandbox visual-language foundation. UX4B finds the fo
 
 UX4B complete.
 GW9 remains paused.
-Next recommended prompt: UX5.
+UX5 followed and is now complete.
 
 ### RH1: Remote State and Mission-Alignment Hygiene Check
 
 Completed local source-of-truth hygiene checkpoint. RH1 records that local `main` contained UX4B while `origin/main` was stale before the RH1 continuation push. RH1 clarifies that existing local World run-comparison storage is not persistent Lab evidence, Atlas discovery storage, saved behavioral landscapes, saved probe plans, or real-world validation. RH1 also clarifies that existing World Experiment Runner sweeps are bounded local model-comparison tooling, not Atlas landscape sampling, landscape probe execution, saved sampled regions, run queues, or regime detection. RH1 adds no product behavior.
 
 RH1 is complete; the GitHub remote was stale before the RH1 continuation push.
-UX5 remains next.
+UX5 followed and is now complete.
 GW9 remains paused.
+
+### UX5: Progressive Disclosure and Beginner/Advanced Information Architecture
+
+Completed bounded information-architecture implementation. UX5 adds source-backed route orientation to World, Workshop, Lab, and Atlas; component-local non-persistent disclosure; layered capability guidance; and concise Lab/Atlas defaults. Exact technical vocabulary and all existing expert tools remain reachable. Workshop remains the Advanced Builder.
+
+UX5 adds no Guided Builder, saved mode, preference, personalization, recommendation, onboarding state, progression, runtime/template/Builder execution, Lab/Atlas persistence, landscape sampling, probe execution, dependency, asset, font, icon, or route.
+
+UX5 complete. UX5B required next. GW9 remains paused.
 
 ## 23. Implementation Dependencies
 
@@ -579,3 +587,11 @@ GW0 gives ORTUS a sharper spine for future Research World work:
 - current workflows are wrapped before they are replaced.
 
 Anything beyond that belongs to a dedicated future implementation prompt and audit.
+
+## 28. UX5 Implementation Status
+
+UX5 implements progressive disclosure and beginner/advanced information architecture without changing the GW0 progression model. World, Workshop, Lab, and Atlas now lead with plain-language route orientation and preserve exact technical terms through explicit local disclosures. Capability guidance layers available capability and a nearby do-not-assume boundary before the full source-backed inventory. Lab and Atlas show concise conceptual overviews before their complete future-oriented vocabularies.
+
+This is not stored beginner mode, personalization, recommendation, onboarding state, progression, Guided Builder, runtime support, Lab/Atlas persistence, landscape sampling, or probe execution. Existing bounded World comparison storage remains World-local, and existing Experiment Runner sweeps remain local experiment tooling rather than Atlas sampling.
+
+UX5 complete. UX5B required next. GW9 remains paused.

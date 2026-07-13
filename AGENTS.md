@@ -485,6 +485,15 @@
 - Next recommended prompt after UX4 is UX4B: Sandbox Visual Language Audit and Hardening.
 - UX4 visual language is presentational only. Do not treat softer sandbox/workbench styling, rounded panels, route accents, or quieter caveat/status treatments as new runtime, template, Builder, Lab, Atlas, sampling, persistence, progression, or validation capability.
 - UX4 must be audited by UX4B before starting UX5, UX6, or GW9 unless the user explicitly waives that sequence.
+- UX5 changes route orientation, copy layering, disclosure, and component-local view state only. Do not treat progressive disclosure as runtime, template, Builder, Lab, Atlas, sampling, persistence, progression, validation, or calibration capability.
+- UX5 disclosure state must remain non-persistent. Do not store it in localStorage, sessionStorage, IndexedDB, cookies, Zustand persistence, panel persistence, user profiles, preferences, onboarding records, or analytics.
+- Keep plain-language orientation first and exact technical language visible or one explicit disclosure away. Do not delete runtime-honesty, model-vs-world, valid-vs-runnable, non-persistence, or no-execution boundaries to reduce density.
+- No introductory sequence may gate World or Workshop expert tools. Workshop remains the Advanced Builder; UX5 does not implement Guided Builder, model-authoring wizards, compilation, preview, generation, or Apply-to-Simulation behavior.
+- Capability guidance must remain source-backed and non-personalized. Its disclosure changes presentation only; full available, planning-only, not-implemented, do-not-assume, and related-destination content must remain reachable.
+- Lab and Atlas disclosures reorganize existing static conceptual semantics only. They must not create forms, records, timestamps, ids, notebooks, maps, samples, probe controls, sweep controls, queues, scores, regimes, discoveries, publication actions, or World transfer actions.
+- Preserve the exact visible Lab boundary: `Nothing on this route is a saved experiment, evidence record, notebook, or run history.`
+- Preserve the exact visible Atlas boundary: `No sampled landscape, saved map, probe execution, regime detection, or discovery record exists here yet.`
+- UX5 must be audited by UX5B before UX6 or GW9 unless the user explicitly waives that sequence. GW9 remains paused.
 - Lab evidence-record semantics are non-persistent information architecture until a later audited prompt implements storage. Do not treat `LabRecordLifecycleState`, conceptual ledger scaffolds, or Lab route copy as saved evidence records, experiment histories, notebooks, saved comparisons, run history, reusable assets, or validation evidence.
 - GW5 Lab does not save active World runs, import active-run provenance, create experiment ledgers, create notebooks, create saved comparisons, publish to Atlas, create discoveries, add storage, add timestamps, generate ids, add progression, or change simulation/template/Builder runtime behavior.
 - Lab records will organize evidence about model investigations. They will not certify discoveries about the real world.

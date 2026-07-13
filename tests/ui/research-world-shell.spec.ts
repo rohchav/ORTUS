@@ -18,6 +18,33 @@ const viewports = [
   { label: "short-desktop", width: 1280, height: 600 }
 ] as const;
 
+const orientationContracts = {
+  World: {
+    id: "world",
+    purpose: "Watch a model change over time and test supported perturbations.",
+    boundary: "Model output describes this simulation, not automatically the real world.",
+    technicalTerm: "Deterministic seed."
+  },
+  Workshop: {
+    id: "workshop",
+    purpose: "Describe, author, and inspect model structure with the current Advanced Builder tools.",
+    boundary: "A valid structure is not automatically runnable.",
+    technicalTerm: "ortus.modelSchema structural artifact."
+  },
+  Lab: {
+    id: "lab",
+    purpose: "Understand how future investigation records would organize evidence about model behavior.",
+    boundary: "Nothing on this route is a saved experiment, evidence record, notebook, or run history.",
+    technicalTerm: "Model-behavior evidence state, not empirical validation."
+  },
+  Atlas: {
+    id: "atlas",
+    purpose: "Understand how model behavior could vary across model conditions and how future evidence would be organized.",
+    boundary: "No sampled landscape, saved map, probe execution, regime detection, or discovery record exists here yet.",
+    technicalTerm: "Non-executable landscape probe plan; no probe execution or saved plan exists."
+  }
+} as const;
+
 interface PageDiagnostics {
   consoleErrors: string[];
   pageErrors: string[];
@@ -114,6 +141,35 @@ async function expectDestinationNavContract(page: Page, currentPath: string) {
   expect(linkModels.find((link) => link.label === "Atlas")?.text).not.toContain("Future");
 }
 
+async function expectRouteOrientation(page: Page, destination: (typeof destinations)[number]) {
+  const contract = orientationContracts[destination.label];
+  const orientation = page.locator(`[data-route-orientation="${contract.id}"]`);
+  await expect(orientation).toHaveCount(1);
+  await expect(orientation).toBeVisible();
+  await expect(orientation.getByText(contract.purpose)).toBeVisible();
+  await expect(orientation.getByText(contract.boundary)).toBeVisible();
+
+  const control = orientation.locator("[data-disclosure-control]");
+  const content = orientation.locator("[data-disclosure-content]");
+  await expect(control).toHaveText("Technical details");
+  await expect(control).toHaveAttribute("aria-expanded", "false");
+  await expect(content).toBeHidden();
+
+  await control.focus();
+  await expect(control).toBeFocused();
+  await expectFocusedElementVisible(page);
+  await page.keyboard.press("Enter");
+  await expect(control).toHaveAttribute("aria-expanded", "true");
+  await expect(content).toBeVisible();
+  await expect(orientation.getByText(contract.technicalTerm)).toBeVisible();
+  await expectNoDocumentHorizontalOverflow(page);
+
+  await page.keyboard.press("Space");
+  await expect(control).toHaveAttribute("aria-expanded", "false");
+  await expect(content).toBeHidden();
+  await expect(control).toBeFocused();
+}
+
 async function expectCapabilityGuidance(page: Page, destination: (typeof destinations)[number]) {
   const destinationId =
     destination.path === "/"
@@ -131,20 +187,14 @@ async function expectCapabilityGuidance(page: Page, destination: (typeof destina
   await expect(guidance.getByText("Guidance describes current ORTUS capabilities. It does not create saved records, validation, discoveries, or persistence.")).toBeVisible();
   await expect(guidance.getByText("Capability guidance describes current product capability. It does not create capability.")).toBeVisible();
   await expect(guidance.getByRole("heading", { name: "Available here" })).toBeVisible();
-  await expect(guidance.getByRole("heading", { name: "Planning-only" })).toBeVisible();
-  await expect(guidance.getByRole("heading", { name: "Not implemented" })).toBeVisible();
   await expect(guidance.getByRole("heading", { name: "Do not assume" })).toBeVisible();
-  await expect(guidance.getByRole("heading", { name: "Related destination" })).toBeVisible();
+  await expect(guidance.getByRole("heading", { name: "Planning-only" })).toBeHidden();
+  await expect(guidance.getByRole("heading", { name: "Not implemented" })).toBeHidden();
+  await expect(guidance.getByRole("heading", { name: "Related destination" })).toBeHidden();
 
   const availableStatus = guidance.locator(".status-pill", { hasText: "Available here" }).first();
   await expect(availableStatus).toHaveAttribute("data-status-category", "capability");
   await expect(availableStatus).toHaveAttribute("data-state", "supported");
-  const planningStatus = guidance.locator(".status-pill", { hasText: "Planning-only" }).first();
-  await expect(planningStatus).toHaveAttribute("data-status-category", "capability");
-  await expect(planningStatus).toHaveAttribute("data-state", "planning-only");
-  const notImplementedStatus = guidance.locator(".status-pill", { hasText: "Not implemented" }).first();
-  await expect(notImplementedStatus).toHaveAttribute("data-status-category", "capability");
-  await expect(notImplementedStatus).toHaveAttribute("data-state", "future-only");
   await expect(guidance.locator(".status-pill[data-status-category='operational']")).toHaveCount(0);
   await expect(guidance.locator(".status-pill[data-status-category='interaction']")).toHaveCount(0);
 
@@ -160,6 +210,24 @@ async function expectCapabilityGuidance(page: Page, destination: (typeof destina
   await routeCopy.scrollIntoViewIfNeeded();
   await expect(routeCopy).toBeVisible();
 
+  const capabilityControl = guidance.locator("[data-disclosure-control]");
+  await expect(capabilityControl).toHaveText("Show all capabilities");
+  await expect(capabilityControl).toHaveAttribute("aria-expanded", "false");
+  await capabilityControl.focus();
+  await page.keyboard.press("Enter");
+  await expect(capabilityControl).toHaveAttribute("aria-expanded", "true");
+  await expect(guidance.getByRole("heading", { name: "Planning-only" })).toBeVisible();
+  await expect(guidance.getByRole("heading", { name: "Not implemented" })).toBeVisible();
+  await expect(guidance.getByRole("heading", { name: "Related destination" })).toBeVisible();
+  await expectNoDocumentHorizontalOverflow(page);
+
+  const planningStatus = guidance.locator(".status-pill", { hasText: "Planning-only" }).first();
+  await expect(planningStatus).toHaveAttribute("data-status-category", "capability");
+  await expect(planningStatus).toHaveAttribute("data-state", "planning-only");
+  const notImplementedStatus = guidance.locator(".status-pill", { hasText: "Not implemented" }).first();
+  await expect(notImplementedStatus).toHaveAttribute("data-status-category", "capability");
+  await expect(notImplementedStatus).toHaveAttribute("data-state", "future-only");
+
   const tabStops = await guidance.evaluate((element) =>
     Array.from(
       element.querySelectorAll<HTMLElement>(
@@ -170,15 +238,19 @@ async function expectCapabilityGuidance(page: Page, destination: (typeof destina
       return style.display !== "none" && style.visibility !== "hidden";
     }).length
   );
-  expect(tabStops, "capability guidance should not add route-local fake controls or static Tab stops").toBe(0);
+  expect(tabStops, "capability guidance should add only its disclosure control, not fake capability actions").toBe(1);
 
-  const guidanceText = await guidance.innerText();
+  const guidanceText = (await guidance.textContent()) ?? "";
   expect(guidanceText).not.toMatch(
     /Recommended for you|Next mission|Unlocked|Progress|Complete this step|AI suggestion|Smart recommendation|Personalized/i
   );
   expect(guidanceText).not.toMatch(
     /Save this run|Send to Lab|Create evidence record|Record experiment|Publish to Atlas|Create discovery|Map this run|Save to Atlas|Save discovery|evidence score|coverage percentage|confidence score/i
   );
+
+  await capabilityControl.focus();
+  await page.keyboard.press("Space");
+  await expect(capabilityControl).toHaveAttribute("aria-expanded", "false");
 }
 
 async function expectNoDocumentHorizontalOverflow(page: Page) {
@@ -263,12 +335,16 @@ async function expectFocusedElementVisible(page: Page) {
   expect(focusState?.left ?? -1).toBeGreaterThanOrEqual(-2);
   expect(focusState?.top ?? -1).toBeGreaterThanOrEqual(-2);
   expect(focusState?.right ?? Number.POSITIVE_INFINITY).toBeLessThanOrEqual((await page.viewportSize())!.width + 2);
+  expect(focusState?.bottom ?? Number.POSITIVE_INFINITY).toBeLessThanOrEqual((await page.viewportSize())!.height + 2);
   expect(focusState?.outlineStyle !== "none" || focusState?.outlineWidth !== "0px" || focusState?.boxShadow !== "none").toBe(true);
 }
 
 async function expectWorldPreserved(page: Page) {
   await expect(page.getByRole("region", { name: "Simulation workspace" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Run simulation" })).toBeVisible();
+  for (const mode of ["Setup", "Understand", "Observe", "Intervene", "Experiment", "Compare", "Debug"]) {
+    await expect(page.getByRole("tab", { name: new RegExp(mode, "i") })).toHaveCount(1);
+  }
   const paused = page.locator(".status-pill", { hasText: "Paused" }).first();
   await expect(paused).toHaveAttribute("data-status-category", "operational");
   await expect(paused).toHaveAttribute("data-state", "paused");
@@ -380,10 +456,22 @@ async function expectWorldInterventionReadinessLayer(page: Page) {
 async function expectWorkshopPreserved(page: Page) {
   await expect(page.getByRole("region", { name: "Builder structural shell" })).toBeVisible();
   await expect(page.getByRole("tab", { name: /Workspace Inspector/i })).toBeVisible();
+  await expect(page.getByRole("tab", { name: /Author Schema/i })).toBeVisible();
+  await expect(page.getByRole("tab", { name: /Graph View/i })).toBeVisible();
+  await expect(page.getByText("Import File", { exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Load Workspace JSON" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Export Workspace JSON" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Validation Panel" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Warnings Panel" })).toBeVisible();
   const badge = page.locator(".builder-status-badge", { hasText: "Not runnable" }).first();
   await expect(badge).toHaveAttribute("data-status-category", "capability");
   await expect(badge).toHaveAttribute("data-state", "non-runnable");
   await expect(page.getByRole("main")).not.toContainText(/Run probe|Generate probe|Probe generation|Landscape probe/i);
+
+  const importEditor = page.getByRole("textbox", { name: "Visual builder workspace JSON to import" });
+  await importEditor.focus();
+  await expect(importEditor).toBeFocused();
+  await expectFocusedElementVisible(page);
 }
 
 async function expectLabFoundation(page: Page) {
@@ -395,6 +483,19 @@ async function expectLabFoundation(page: Page) {
   await expect(foundationStatus).toBeVisible();
   await expect(foundationStatus).toHaveAttribute("data-status-category", "capability");
   await expect(foundationStatus).toHaveAttribute("data-state", "planning-only");
+
+  await expect(page.getByText("Nothing on this route is a saved experiment, evidence record, notebook, or run history.")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "What Lab Means Right Now" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Conceptual Lifecycle" })).toBeVisible();
+  const technicalControl = page.locator('[aria-controls="lab-technical-details"]');
+  await expect(technicalControl).toHaveText("Show Lab technical details");
+  await expect(technicalControl).toHaveAttribute("aria-expanded", "false");
+  await expect(page.locator("#lab-technical-details")).toBeHidden();
+
+  await technicalControl.click();
+  await expect(technicalControl).toHaveAttribute("aria-expanded", "true");
+  await expect(page.locator("#lab-technical-details")).toBeVisible();
+  await expectNoDocumentHorizontalOverflow(page);
 
   await expect(page.getByText("Lab is a non-persistent foundation in GW5.")).toBeVisible();
   await expect(
@@ -437,6 +538,7 @@ async function expectLabFoundation(page: Page) {
   await expect(page.getByRole("link", { name: "Return to World" })).toHaveAttribute("href", "/");
   await expect(page.getByRole("link", { name: "Open Workshop" })).toHaveAttribute("href", "/builder");
   await expect(page.getByRole("link", { name: "Open Atlas" })).toHaveAttribute("href", "/atlas");
+  await expect(page.getByRole("main").locator("button:not([disabled])")).toHaveCount(3);
 }
 
 async function expectAtlasFoundation(page: Page) {
@@ -449,11 +551,29 @@ async function expectAtlasFoundation(page: Page) {
   await expect(foundationStatus).toHaveAttribute("data-status-category", "capability");
   await expect(foundationStatus).toHaveAttribute("data-state", "planning-only");
 
-  await expect(page.getByText("Atlas is a non-persistent foundation in GW4.")).toBeVisible();
+  await expect(page.getByText("No sampled landscape, saved map, probe execution, regime detection, or discovery record exists here yet.")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Model Space At A Glance" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Sampled Versus Unsampled" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Conceptual Model-Space Map" })).toBeVisible();
+  const technicalControl = page.locator('[aria-controls="atlas-technical-details"]');
+  await expect(technicalControl).toHaveText("Show Atlas technical details");
+  await expect(technicalControl).toHaveAttribute("aria-expanded", "false");
+  await expect(page.locator("#atlas-technical-details")).toBeHidden();
+
+  await technicalControl.click();
+  await expect(technicalControl).toHaveAttribute("aria-expanded", "true");
+  await expect(page.locator("#atlas-technical-details")).toBeVisible();
+  await expectNoDocumentHorizontalOverflow(page);
+
+  await expect(page.getByText("Atlas is a non-persistent foundation in GW4.").first()).toBeVisible();
   await expect(
-    page.getByText("Discovery records, saved behavioral landscape maps, sampled-region maps, and evidence-linked model regimes are not implemented yet.")
+    page
+      .getByText("Discovery records, saved behavioral landscape maps, sampled-region maps, and evidence-linked model regimes are not implemented yet.")
+      .first()
   ).toBeVisible();
-  await expect(page.getByText("Atlas will organize evidence about model behavior. It will not certify discoveries about the real world.")).toBeVisible();
+  await expect(
+    page.getByText("Atlas will organize evidence about model behavior. It will not certify discoveries about the real world.").first()
+  ).toBeVisible();
   await expect(page.getByText("Nothing on this Atlas route is a saved discovery, saved evidence record, or persistent map.")).toBeVisible();
   await expect(page.getByText("Conceptual scaffold - not run data.")).toBeVisible();
   await expect(page.getByRole("heading", { name: "Atlas Boundaries" })).toBeVisible();
@@ -472,7 +592,11 @@ async function expectAtlasFoundation(page: Page) {
   const sampled = page.getByLabel(/Sampled:/).first();
   await expect(sampled).toHaveAttribute("data-status-category", "evidence");
   await expect(sampled).toHaveAttribute("data-state", "unresolved");
-  await expect(page.getByText("Sampled is a future model-space evidence concept in GW4, not current data or real-world validation.")).toBeVisible();
+  await expect(
+    page
+      .locator("#atlas-technical-details")
+      .getByText("Sampled is a future model-space evidence concept in GW4, not current data or real-world validation.")
+  ).toBeVisible();
   const supported = page.getByLabel(/Supported within model:/).first();
   await expect(supported).toHaveAttribute("data-status-category", "evidence");
   await expect(supported).toHaveAttribute("data-state", "supported");
@@ -642,6 +766,7 @@ async function expectAtlasFoundation(page: Page) {
   );
   await expect(page.getByRole("link", { name: "Return to World" })).toHaveAttribute("href", "/");
   await expect(page.getByRole("link", { name: "Open Workshop" })).toHaveAttribute("href", "/builder");
+  await expect(page.getByRole("main").locator("button:not([disabled])")).toHaveCount(3);
 }
 
 async function expectAxeClean(page: Page) {
@@ -740,6 +865,7 @@ for (const destination of destinations) {
       await page.setViewportSize({ width: viewport.width, height: viewport.height });
       await openDestination(page, destination);
       await expectDestinationNavContract(page, destination.path);
+      await expectRouteOrientation(page, destination);
       await expectCapabilityGuidance(page, destination);
       await expectNoDocumentHorizontalOverflow(page);
       await expectSandboxVisualLanguageFoundation(page, destination);
@@ -760,12 +886,54 @@ for (const destination of destinations) {
         await expectAtlasFoundation(page);
       }
 
+      const currentDestinationLink = page
+        .getByRole("navigation", { name: "Research World destinations" })
+        .getByRole("link", { name: destination.label, exact: true });
+      await currentDestinationLink.focus();
+      await expect(currentDestinationLink).toBeFocused();
       await page.keyboard.press("Tab");
       await expectFocusedElementVisible(page);
       await page.keyboard.press("Shift+Tab");
+      await expect(currentDestinationLink).toBeFocused();
       await expectNoDiagnostics(diagnostics);
     });
   }
+}
+
+for (const destination of destinations) {
+  test(`${destination.label} disclosure state is local and resets on reload without adding storage keys`, async ({ page }) => {
+    const diagnostics = observePageDiagnostics(page);
+    await page.setViewportSize({ width: 1280, height: 720 });
+    await openDestination(page, destination);
+
+    const storageBefore = await readStorageKeys(page);
+    const controls = page.locator("[data-disclosure-control]");
+    const expectedControlCount = destination.path === "/lab" || destination.path === "/atlas" ? 3 : 2;
+    await expect(controls).toHaveCount(expectedControlCount);
+
+    for (let index = 0; index < expectedControlCount; index += 1) {
+      const control = controls.nth(index);
+      await expect(control).toHaveAttribute("aria-expanded", "false");
+      await control.click();
+      await expect(control).toHaveAttribute("aria-expanded", "true");
+    }
+
+    expect(await readStorageKeys(page), "opening UX5 disclosures must not add local or session storage keys").toEqual(storageBefore);
+    expect([...storageBefore.local, ...storageBefore.session]).not.toEqual(
+      expect.arrayContaining([expect.stringMatching(/ux5|disclosure|beginner|advanced-mode/i)])
+    );
+
+    await page.reload({ waitUntil: "domcontentloaded" });
+    await page.waitForLoadState("networkidle", { timeout: 5_000 }).catch(() => undefined);
+    await expect(page.locator(destination.readySelector)).toBeVisible();
+    const reloadedControls = page.locator("[data-disclosure-control]");
+    await expect(reloadedControls).toHaveCount(expectedControlCount);
+    for (let index = 0; index < expectedControlCount; index += 1) {
+      await expect(reloadedControls.nth(index)).toHaveAttribute("aria-expanded", "false");
+    }
+    expect(await readStorageKeys(page), "reload must not add UX5 disclosure storage keys").toEqual(storageBefore);
+    await expectNoDiagnostics(diagnostics);
+  });
 }
 
 test("skip link and destination links preserve native keyboard route navigation", async ({ page }) => {
@@ -792,6 +960,13 @@ test("skip link and destination links preserve native keyboard route navigation"
   await expectDestinationNavContract(page, "/builder");
   await expectNoDiagnostics(diagnostics);
 });
+
+async function readStorageKeys(page: Page): Promise<{ local: string[]; session: string[] }> {
+  return page.evaluate(() => ({
+    local: Object.keys(window.localStorage).sort(),
+    session: Object.keys(window.sessionStorage).sort()
+  }));
+}
 
 test("legacy destination aliases do not redirect into canonical destinations", async ({ page }) => {
   for (const path of ["/world", "/workshop"]) {

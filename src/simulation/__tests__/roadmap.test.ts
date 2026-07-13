@@ -199,6 +199,12 @@ describe("roadmap alignment and missing pillar reservations", () => {
     const fullUiUxAuditPath = join(repoRoot, "docs", "ui", "FULL_UI_UX_COMPREHENSION_AND_SANDBOX_THEME_AUDIT.md");
     const sandboxVisualLanguageFoundationPath = join(repoRoot, "docs", "ui", "SANDBOX_VISUAL_LANGUAGE_FOUNDATION.md");
     const sandboxVisualLanguageFoundationAuditPath = join(repoRoot, "docs", "ui", "SANDBOX_VISUAL_LANGUAGE_FOUNDATION_AUDIT.md");
+    const progressiveDisclosureArchitecturePath = join(
+      repoRoot,
+      "docs",
+      "ui",
+      "PROGRESSIVE_DISCLOSURE_AND_BEGINNER_ADVANCED_INFORMATION_ARCHITECTURE.md"
+    );
     const remoteStateMissionHygienePath = join(repoRoot, "docs", "RH1_REMOTE_STATE_AND_MISSION_ALIGNMENT_HYGIENE.md");
     expect(existsSync(roadmapPath)).toBe(true);
     expect(existsSync(missingPillarsPath)).toBe(true);
@@ -214,6 +220,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(existsSync(fullUiUxAuditPath)).toBe(true);
     expect(existsSync(sandboxVisualLanguageFoundationPath)).toBe(true);
     expect(existsSync(sandboxVisualLanguageFoundationAuditPath)).toBe(true);
+    expect(existsSync(progressiveDisclosureArchitecturePath)).toBe(true);
     expect(existsSync(remoteStateMissionHygienePath)).toBe(true);
 
     const roadmap = readFileSync(roadmapPath, "utf8");
@@ -229,6 +236,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
     const fullUiUxAudit = readFileSync(fullUiUxAuditPath, "utf8");
     const sandboxVisualLanguageFoundation = readFileSync(sandboxVisualLanguageFoundationPath, "utf8");
     const sandboxVisualLanguageFoundationAudit = readFileSync(sandboxVisualLanguageFoundationAuditPath, "utf8");
+    const progressiveDisclosureArchitecture = readFileSync(progressiveDisclosureArchitecturePath, "utf8");
     const remoteStateMissionHygiene = readFileSync(remoteStateMissionHygienePath, "utf8");
     expect(roadmap).toContain("completed through Prompt 39B");
     expect(roadmap).toContain("Post-30B stabilization");
@@ -246,11 +254,11 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(roadmap).toContain("Completed Prompt 39 scenario-planning foundation");
     expect(roadmap).toContain("Completed Prompt 39 scenario-planning audit");
     expect(roadmap).toContain("Prompt 35 adds a separate `Author Schema` Builder mode");
-    expect(roadmap).toContain("Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, MR0, F0, P0, UX0, UX1, UX3, UX4, UX4B, RH1, GW0, UX2, UX2B, GW1, GW1B, GW2, GW2B, GW3, GW3B, GW4, GW4B, GW5, GW5B, GW6, GW6B, GW7, GW7B, GW8, and GW8B are complete.");
-    expect(roadmap).toContain("RH1 is complete; the GitHub remote was stale before the RH1 continuation push.");
-    expect(roadmap).toContain("UX5 remains next after RH1 remote alignment is confirmed.");
+    expect(roadmap).toContain("The documented side-track and Research World/UI prompts through UX5 are complete.");
+    expect(roadmap).toContain("UX5 complete.");
+    expect(roadmap).toContain("UX5B required next.");
     expect(roadmap).toContain("GW9 remains paused.");
-    expect(roadmap).toContain("Next recommended prompt: UX5.");
+    expect(roadmap).toContain("Next recommended prompt: UX5B.");
     expect(roadmap).toContain("Prompt GW7 adds non-persistent Behavioral Landscape Exploration Foundation");
     expect(roadmap).toContain("Prompt GW7B audits and hardens the Behavioral Landscape Exploration Foundation");
     expect(roadmap).toContain("Prompt GW8 adds non-persistent Landscape Probe Planning Foundation");
@@ -296,12 +304,25 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(sandboxVisualLanguageFoundation).toContain("UX4 complete.");
     expect(sandboxVisualLanguageFoundation).toContain("GW9 remains paused.");
     expect(sandboxVisualLanguageFoundation).toContain("UX4B complete.");
-    expect(sandboxVisualLanguageFoundation).toContain("Next recommended prompt: UX5.");
+    expect(sandboxVisualLanguageFoundation).toContain("UX5 followed and is now complete.");
+    expect(sandboxVisualLanguageFoundation).toContain("UX5B required next.");
     expect(sandboxVisualLanguageFoundationAudit).toContain("UX4B audits the committed UX4 sandbox visual-language foundation.");
     expect(sandboxVisualLanguageFoundationAudit).toContain("Ready for UX5.");
     expect(sandboxVisualLanguageFoundationAudit).toContain("GW9 remains paused.");
     expect(sandboxVisualLanguageFoundationAudit).toContain("Actual browser zoom at 125%, 150%, and 200% was not verified.");
     expect(sandboxVisualLanguageFoundationAudit).toContain("No production defect was fixed.");
+    expect(progressiveDisclosureArchitecture).toContain("UX5 changes information architecture, copy layering, disclosure, and component-local view state");
+    expect(progressiveDisclosureArchitecture).toContain("UX5 adds no new persistence.");
+    expect(progressiveDisclosureArchitecture).toContain("Existing bounded World comparison and UI storage remain unchanged.");
+    expect(progressiveDisclosureArchitecture).toContain("Existing local experiment sweeps remain implemented.");
+    expect(progressiveDisclosureArchitecture).toContain("Atlas landscape sampling and landscape probe execution remain unimplemented.");
+    expect(progressiveDisclosureArchitecture).toContain("Nothing on this route is a saved experiment, evidence record, notebook, or run history.");
+    expect(progressiveDisclosureArchitecture).toContain(
+      "No sampled landscape, saved map, probe execution, regime detection, or discovery record exists here yet."
+    );
+    expect(progressiveDisclosureArchitecture).toContain("Actual browser zoom at 125%, 150%, and 200% was not verified.");
+    expect(progressiveDisclosureArchitecture).toContain("UX5B is required next");
+    expect(progressiveDisclosureArchitecture).toContain("GW9 remains paused.");
     expect(remoteStateMissionHygiene).toContain("Remote was stale relative to local UX4B before the RH1 continuation push.");
     expect(remoteStateMissionHygiene).toContain("Existing local World comparison storage may preserve bounded run summaries for comparison.");
     expect(remoteStateMissionHygiene).toContain("Existing Experiment Runner sweeps are bounded local World/Experiment model-comparison tooling");
@@ -677,6 +698,10 @@ describe("roadmap alignment and missing pillar reservations", () => {
       readFileSync(join(repoRoot, "docs", "ui", "FULL_UI_UX_COMPREHENSION_AND_SANDBOX_THEME_AUDIT.md"), "utf8"),
       readFileSync(join(repoRoot, "docs", "ui", "SANDBOX_VISUAL_LANGUAGE_FOUNDATION.md"), "utf8"),
       readFileSync(join(repoRoot, "docs", "ui", "SANDBOX_VISUAL_LANGUAGE_FOUNDATION_AUDIT.md"), "utf8"),
+      readFileSync(
+        join(repoRoot, "docs", "ui", "PROGRESSIVE_DISCLOSURE_AND_BEGINNER_ADVANCED_INFORMATION_ARCHITECTURE.md"),
+        "utf8"
+      ),
       readFileSync(join(repoRoot, "docs", "RH1_REMOTE_STATE_AND_MISSION_ALIGNMENT_HYGIENE.md"), "utf8"),
       readFileSync(join(repoRoot, "planned_roadmap.md"), "utf8"),
       readFileSync(join(repoRoot, "docs", "codex", "CURRENT_CONTEXT.md"), "utf8"),
@@ -719,8 +744,9 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(docs).toContain("GW9 remains paused.");
     expect(docs).toContain("UX4B complete.");
     expect(docs).toContain("RH1 is complete; the GitHub remote was stale before the RH1 continuation push.");
-    expect(docs).toContain("UX5 remains next after RH1 remote alignment is confirmed.");
-    expect(docs).toContain("Next recommended prompt: UX5.");
+    expect(docs).toContain("UX5 complete.");
+    expect(docs).toContain("UX5B required next.");
+    expect(docs).toContain("Next recommended prompt: UX5B.");
     expect(docs).toContain("UX4: Sandbox Visual Language Foundation");
     expect(docs).toContain("UX4 implements the first bounded sandbox visual-language foundation");
     expect(docs).toContain("Change visual language, not product capability.");

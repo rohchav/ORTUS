@@ -3225,3 +3225,62 @@ Continuation boundary:
 - The continuation explicitly authorizes a normal fast-forward push of UX4B and RH1 after commit; force-push remains prohibited.
 - UX5 remains next after remote alignment is confirmed.
 - GW9 remains paused.
+
+### Prompt UX5: Progressive Disclosure and Beginner/Advanced Information Architecture
+
+Starting state:
+
+- Starting commit: `be3e05f docs: align remote state and product mission hygiene`.
+- Local branch: `main`.
+- Starting worktree was clean and `HEAD` matched `origin/main`.
+- UX5B, UX6, and GW9 had not started.
+
+Implementation:
+
+- Added `src/components/ui/Disclosure.tsx` with component-local `useState(false)`, native button semantics, `aria-expanded`, `aria-controls`, and hidden collapsed content.
+- Added source-backed route orientation for World, Workshop, Lab, and Atlas through `src/lib/routeOrientation.ts` and `RouteOrientationPanel`.
+- Layered capability guidance so concise available/current-boundary content remains visible and the complete source-backed inventory remains one disclosure away.
+- Kept World controls before capability detail and kept the World Stage and run dock dominant.
+- Kept Workshop as the Advanced Builder. The final rendered correction places the active expert workspace before capability guidance.
+- Added concise non-persistent Lab and Atlas defaults while keeping their complete existing vocabularies behind explicit technical-detail disclosures.
+- Added focused source contracts and expanded the rendered shell suite from 30 to 34 tests with one reload/non-persistence case per route.
+
+Rendered blocker and defect classification:
+
+- The initial post-change rendered gate was blocked by exhausted automatic local-server escalation quota. The UX5 continuation explicitly authorized focused/full Playwright outside the sandbox.
+- The first focused failure counted the Next.js development-toolbar button as a Lab action. Classification: UX5 test-locator brittleness. The assertion was scoped to application `main` without weakening the no-fake-action count.
+- The next focused failure matched Atlas sampled-state copy in both the concise preview and expanded technical legend. Classification: UX5 test-locator brittleness. The assertion was scoped to the expanded technical region.
+- Workshop at `1280x720` left the import editor focus target below the viewport because explanatory rows preceded the active expert workspace. Classification: genuine UX5 responsive/focus defect. Workshop now orders orientation, current actions, active expert workspace, then capability caveats; short-height shells provide a bounded workspace row and vertical scroll path. The import editor passes full focus-visibility checks at the tested sizes.
+- Axe found duplicate named `Lab` and `Atlas` landmarks because outer page wrappers repeated the route-orientation names. Classification: genuine UX5 accessibility defect. Removing the redundant outer accessible names preserved one H1 and one named orientation landmark per route.
+- No test was skipped, quarantined, weakened, or broadly suppressed.
+
+Rendered evidence:
+
+- Escalated focused `npx playwright test tests/ui/research-world-shell.spec.ts`: passed, 34 tests.
+- Escalated full `npm run test:ui`: passed, 49 tests.
+- All four routes passed at `1440x900`, `1280x720`, `1024x768`, `900x700`, and `1280x600`.
+- Disclosure keyboard semantics, visible focus, expanded-content reachability, no horizontal overflow, reload-reset defaults, storage-key stability, reduced motion, Axe, and console/page/request/hydration diagnostics passed.
+- Direct Chromium screenshot inspection covered all four routes at `1280x720` and `1280x600`.
+- Headless Chromium keyboard zoom attempts at 125%, 150%, and 200% did not change browser metrics on any route. Actual browser zoom at 125%, 150%, and 200% was not verified.
+
+Boundary result:
+
+- UX5 adds no new persistence. Existing bounded World comparison and UI storage remain unchanged. Lab and Atlas research persistence remain unimplemented.
+- Existing local experiment sweeps remain implemented. Atlas landscape sampling and landscape probe execution remain unimplemented.
+- UX5 adds no Guided Builder, saved beginner/advanced mode, preference, personalization, recommendation, onboarding state, progression, runtime behavior, template behavior, Builder/schema/graph execution, Lab record, Atlas discovery, saved map, sample, probe execution, regime detection, run queue, dependency, asset, font, icon library, route, or alias.
+- Model output remains model output, not empirical truth.
+
+Final verification:
+
+- `npm run typecheck`: passed.
+- `npm test`: passed, 68 files and 548 tests.
+- `npm run build`: passed.
+- `npm run perf:simulation`: passed.
+- `git diff --check`: passed.
+- `npm run lint: unavailable, package.json has no lint script.`
+
+Roadmap result:
+
+- UX5 complete.
+- UX5B required next.
+- GW9 remains paused.

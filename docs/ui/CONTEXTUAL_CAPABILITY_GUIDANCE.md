@@ -41,7 +41,7 @@ The shared route-local panel is `src/components/researchWorld/CapabilityGuidance
 
 World renders compact guidance inside the existing World workspace rail so the canvas remains dominant. Workshop renders compact guidance below Builder mode tabs. Lab and Atlas render fuller guidance below each route header.
 
-The panel is static readable content. It is not a modal, command palette, onboarding checklist, quest log, dismissed-tip system, stored preference, analytics surface, user-routing system, behavior-derived task-ordering system, or generated guidance surface.
+The guidance content is static and source-backed. UX5 adds one component-local disclosure control to layer the complete inventory; that control changes presentation only. The panel is not a modal, command palette, onboarding checklist, quest log, dismissed-tip system, stored preference, analytics surface, user-routing system, behavior-derived task-ordering system, or generated guidance surface.
 
 ## 4. Status Semantics
 
@@ -69,7 +69,7 @@ Atlas guidance clarifies that `/atlas` is a non-persistent evidence-orientation 
 
 Focused source tests live in `src/lib/capabilityGuidance.test.ts`.
 
-Rendered route coverage is in `tests/ui/research-world-shell.spec.ts` and checks guidance visibility, route-specific copy, status semantics, absence of fake action language, absence of static Tab stops in the guidance panel, viewport behavior, reduced motion, and Axe scans.
+Rendered route coverage is in `tests/ui/research-world-shell.spec.ts` and checks concise default guidance, full-detail disclosure, `aria-expanded`, keyboard toggling, route-specific copy, status semantics, absence of fake action language, exactly one guidance disclosure Tab stop, reload reset, storage-key stability, viewport behavior, reduced motion, and Axe scans.
 
 GW6B continuation resolved the timing-sensitive uncertainty-test blocker by splitting the aggregate production-template numeric-parameter coverage into per-template cases without weakening assertions. It also resolved a stale local Next.js dev-server blocker that served missing app chunks before hydration.
 

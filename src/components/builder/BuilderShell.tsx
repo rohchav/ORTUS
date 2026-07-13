@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { validateVisualBuilderWorkspaceDefinition, type VisualBuilderWorkspaceDefinition } from "../../simulation/visualBuilderWorkspace";
 import { CapabilityGuidancePanel } from "../researchWorld/CapabilityGuidancePanel";
+import { RouteOrientationPanel } from "../researchWorld/RouteOrientationPanel";
 import { BuilderHeader } from "./BuilderHeader";
 import { BuilderInspector } from "./BuilderInspector";
 import { BuilderModeTabs, type BuilderModeId } from "./BuilderModeTabs";
@@ -62,6 +63,7 @@ export function BuilderShell({ initialWorkspace }: BuilderShellProps) {
   return (
     <section className="builder-shell" aria-label="Builder structural shell" data-product-context="ORTUS structural Builder">
       <h1 className="sr-only">Workshop</h1>
+      <RouteOrientationPanel destinationId="workshop" className="route-orientation--workshop-shell" />
       <BuilderHeader
         activeMode={activeMode}
         viewModel={viewModel}
@@ -90,7 +92,6 @@ export function BuilderShell({ initialWorkspace }: BuilderShellProps) {
         onToggleWarnings={() => setShowWarnings((value) => !value)}
       />
       <BuilderModeTabs activeMode={activeMode} onModeChange={setActiveMode} />
-      <CapabilityGuidancePanel destinationId="workshop" className="capability-guidance--workshop" maxItemsPerGroup={1} />
       <section
         id="builder-mode-panel-workspace"
         className="builder-shell__body"
@@ -130,6 +131,7 @@ export function BuilderShell({ initialWorkspace }: BuilderShellProps) {
       </section>
       <ModelSchemaAuthoringShell hidden={activeMode !== "authorSchema"} />
       {activeMode === "graph" ? <BuilderGraphView workspace={workspace} /> : null}
+      <CapabilityGuidancePanel destinationId="workshop" className="capability-guidance--workshop" maxItemsPerGroup={1} />
     </section>
   );
 }

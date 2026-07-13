@@ -6,7 +6,7 @@ Status: Prompt UX0 documentation, design-system planning, and UX-principle defin
 
 UX0 defines the replacement visual and interaction direction for ORTUS before Research World progression work begins.
 
-Prompt UX4 applies the first bounded visual-language slice toward this direction: softer workbench surfaces, calmer status/caveat treatment, less tactical panel framing, and stronger World/Workshop/Lab/Atlas route hierarchy. Prompt UX4B audits that slice and finds it ready for UX5. GW9 remains paused. Next recommended prompt: UX5. UX4/UX4B do not implement progressive disclosure, Guided Builder, persistence, records, samples, runtime behavior, template behavior, Builder execution, dependencies, assets, fonts, icon libraries, UX5, UX6, or GW9.
+Prompt UX4 applies the first bounded visual-language slice toward this direction: softer workbench surfaces, calmer status/caveat treatment, less tactical panel framing, and stronger World/Workshop/Lab/Atlas route hierarchy. Prompt UX4B audits that slice. Prompt UX5 now adds progressive disclosure and beginner/advanced information architecture without Guided Builder, persistence, records, samples, runtime behavior, template behavior, Builder execution, dependencies, assets, fonts, icon libraries, UX6, or GW9. UX5B is required next. GW9 remains paused.
 
 The direction is:
 

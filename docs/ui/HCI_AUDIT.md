@@ -138,7 +138,7 @@ Prompt UX4B update:
 UX4B audits the UX4 foundation and does not find a bounded production visual-language defect requiring CSS or component hardening. World is the strongest sandbox/workbench fit; Workshop is improved but still Advanced Builder; Lab and Atlas remain honest conceptual scaffolds. The audit decision is Ready for UX5. GW9 remains paused. UX4B adds no runtime behavior, template behavior, Builder execution, persistence, progression, onboarding, records, samples, route aliases, dependencies, assets, fonts, icon libraries, UX5, UX6, or GW9 implementation. Actual browser zoom, screen-reader behavior, assistive-technology behavior, forced-colors behavior, full WCAG conformance, and user-comprehension evidence remain unverified.
 
 Prompt RH1 update:
-RH1 is a repo-hygiene and source-of-truth checkpoint, not UX5 and not GW9. It records that local `main` contained UX4B while `origin/main` was stale before the RH1 continuation push. The useful HCI correction is language precision: existing local World run-comparison storage and existing local Experiment Runner sweeps are real product surfaces, but they do not create persistent Lab evidence records, Atlas discoveries, saved behavioral landscapes, saved probe plans, Atlas landscape sampling, landscape probe execution, run queues, regime detection, validation, calibration, or real-world discovery certification. RH1 is complete. UX5 remains next. GW9 remains paused.
+RH1 is a repo-hygiene and source-of-truth checkpoint, not UX5 and not GW9. It records that local `main` contained UX4B while `origin/main` was stale before the RH1 continuation push. The useful HCI correction is language precision: existing local World run-comparison storage and existing local Experiment Runner sweeps are real product surfaces, but they do not create persistent Lab evidence records, Atlas discoveries, saved behavioral landscapes, saved probe plans, Atlas landscape sampling, landscape probe execution, run queues, regime detection, validation, calibration, or real-world discovery certification. RH1 is complete. UX5 followed and is now complete. UX5B is required next. GW9 remains paused.
 
 ## 2. Audit Scope
 
@@ -1522,3 +1522,9 @@ Hard boundaries:
 - No Builder editing or graph execution.
 - No broad redesign.
 - No validation/calibration claims.
+
+## UX5 Progressive-Disclosure Update
+
+UX5 implements the first bounded response to the audit's information-density findings. All four routes now lead with shared plain-language orientation, preserve exact technical vocabulary through explicit disclosures, and layer source-backed capability guidance. World controls and Workshop expert tools remain direct. Lab and Atlas expose concise conceptual defaults while their full vocabularies remain one control away.
+
+Disclosure state is component-local and resets on reload. UX5 adds no stored mode, personalization, recommendation, onboarding, progression, Guided Builder, runtime/template/Builder execution, Lab/Atlas persistence, sampling, or probe execution. This is automated and expert-review evidence, not a user-comprehension study, screen-reader certification, or WCAG claim. UX5B is required next; GW9 remains paused.

@@ -17,6 +17,7 @@ import { RunSettingsPanel } from "./RunSettingsPanel";
 import { RunComparisonPanel } from "./RunComparisonPanel";
 import { ScenarioBuilderPanel } from "./ScenarioBuilderPanel";
 import { CapabilityGuidancePanel } from "./researchWorld/CapabilityGuidancePanel";
+import { RouteOrientationPanel } from "./researchWorld/RouteOrientationPanel";
 import { CornerFramePanel } from "./ui/CornerFramePanel";
 import { getWorkspacePanelDefinition } from "../lib/workspacePanels";
 import { getSimulationWorkspaceMode, simulationWorkspaceModes, type SimulationWorkspaceModeId } from "../lib/workspaceModes";
@@ -85,8 +86,9 @@ export function LeftInstrumentStack({ activeMode, onModeChange }: LeftInstrument
           <p>{mode.description}</p>
         </header>
         <div className="workspace-context-panel__scroll" data-intentional-scroll-region="workspace-context">
-          <CapabilityGuidancePanel destinationId="world" className="capability-guidance--world" maxItemsPerGroup={1} />
+          <RouteOrientationPanel destinationId="world" className="route-orientation--world-rail" />
           {renderWorkspaceMode(activeMode)}
+          <CapabilityGuidancePanel destinationId="world" className="capability-guidance--world" maxItemsPerGroup={1} />
         </div>
       </section>
     </aside>

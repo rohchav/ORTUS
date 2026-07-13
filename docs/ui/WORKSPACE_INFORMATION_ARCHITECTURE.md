@@ -232,3 +232,9 @@ This is not a formal WCAG conformance claim.
 A dedicated visual design-system prompt should start from Prompt UX1 evidence and should not begin without explicit UX2 direction. It should address semantic tokens, typography scale, color-independent state encoding, richer chart semantics and units where model definitions support them, responsive screenshot testing, keyboard walkthroughs, and zoom behavior without changing simulation semantics or implementing World/Lab/Atlas/Workshop by accident.
 
 Visual Builder Graph View V1 visualizes structural relationships; it does not execute nodes or edges. Graph selection, filtering, panning, and zooming are UI-only state. Graph View is not visual programming, schema execution, or runtime generation. A graph that looks complete is still not a runnable model.
+
+## UX5 Progressive-Disclosure Update
+
+World, Workshop, Lab, and Atlas now share source-backed route orientation and component-local disclosure. World keeps current mode controls before capability detail. Workshop remains the Advanced Builder and retains direct access to Workspace Inspector, Author Schema, Graph View, imports/exports, validation, repairs, fit reports, scenario plans, metadata, and graph outlines. Lab and Atlas remain non-persistent conceptual routes; disclosure reorganizes their existing semantics but creates no records, maps, samples, probes, or runtime behavior.
+
+No disclosure state is stored. Existing bounded World comparison storage, panel/avatar preferences, and Experiment Runner sweeps remain unchanged and are not reused by UX5. UX5B is required next. GW9 remains paused.
