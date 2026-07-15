@@ -220,3 +220,7 @@ GW6B establishes source and rendered smoke evidence for the contextual capabilit
 GW6B is ready for GW7 after the final check set remains green at commit time. GW7 still requires an explicit future prompt and must not be inferred from this audit.
 
 GW8 later adds non-persistent landscape probe planning vocabulary on Atlas. That later planning layer does not change this GW6B audit result: contextual guidance still describes capability and does not create capability.
+
+## GW9 Follow-Up
+
+GW9 updates Atlas guidance to describe the narrow preview that now exists while preserving planning-only probe fields and still-unimplemented persistence, analysis, publication, and validation. Guidance does not execute or persist the preview and remains static/source-backed. GW9B must audit the new implementation and these updated claims next.

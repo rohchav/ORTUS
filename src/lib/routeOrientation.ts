@@ -101,28 +101,22 @@ export const routeOrientations: readonly RouteOrientationDefinition[] = [
   {
     destinationId: "atlas",
     routeName: "Atlas",
-    purpose: "Understand how model behavior could vary across model conditions and how future evidence would be organized.",
-    startLabel: "Current state",
-    startHere: "conceptual, non-persistent model-space orientation and probe-planning foundation.",
-    boundary: "No sampled landscape, saved map, probe execution, regime detection, or discovery record exists here yet.",
-    status: {
-      label: "GW4 foundation",
-      description: "Non-persistent information architecture and evidence semantics only.",
-      category: "capability",
-      state: "planning-only"
-    },
+    purpose: "Sample a small supported slice of model behavior while preserving strict evidence and persistence boundaries.",
+    startLabel: "Start here",
+    startHere: "configure and explicitly run a bounded deterministic preview over one implemented template and scenario.",
+    boundary: "A sparse ephemeral preview is not a complete landscape, detected regime, saved discovery, or real-world claim.",
     technicalDetails: [
       {
-        plainLanguage: "Where behavior changes across model conditions",
-        technicalLanguage: "Behavioral landscape; no sampled landscape exists."
+        plainLanguage: "Bounded sampled preview",
+        technicalLanguage: "One- or two-axis exact parameter grid with isolated deterministic sample runs and final-tick numeric observation."
       },
       {
         plainLanguage: "Future investigation sketch",
-        technicalLanguage: "Non-executable landscape probe plan; no probe execution or saved plan exists."
+        technicalLanguage: "Non-executable landscape probe plan; the current planning scaffold cannot be converted into a Preview V1 request."
       },
       {
         plainLanguage: "Sampled versus unsampled",
-        technicalLanguage: "Evidence-state vocabulary; sampled would require source-backed model-run evidence."
+        technicalLanguage: "Only executed coordinates have numeric values; no values between them are inferred."
       }
     ]
   }

@@ -1,6 +1,6 @@
 # Contextual Capability Guidance
 
-Status: Prompt GW6 implementation source of truth, audited by Prompt GW6B in `docs/ui/CONTEXTUAL_CAPABILITY_GUIDANCE_AUDIT.md` and updated after Prompt GW8B. GW6 adds source-backed route-local capability guidance to World, Workshop, Lab, and Atlas. GW8B audits landscape probe planning without changing capability-guidance behavior. Guidance does not create saved records, Atlas discoveries, Lab experiments, saved behavioral landscapes, saved probe plans, progression, user-derived routing, behavior-derived task ordering, persistence, validation, calibration, runtime behavior, template behavior, or Builder execution behavior.
+Status: Prompt GW6 implementation source of truth, audited by GW6B and updated through GW9. Guidance describes the newly available bounded Atlas preview separately from planning-only probe artifacts and unimplemented persistence/analysis. Guidance itself still creates no runtime, record, persistence, validation, personalization, progression, or Builder behavior.
 
 ## 1. Boundary
 
@@ -63,7 +63,7 @@ Workshop guidance clarifies that authoring, validation assistance, graph inspect
 
 Lab guidance clarifies that `/lab` is a non-persistent evidence-record foundation. Persistent evidence records, experiment ledgers, notebooks, saved comparisons, run history, and Lab-to-Atlas publication are not implemented.
 
-Atlas guidance clarifies that `/atlas` is a non-persistent evidence-orientation foundation. Discovery Atlas records, persistent evidence maps, sampled-region displays backed by run data, saved behavioral landscape maps, saved probe plans, executable probes, and evidence-rating surfaces are not implemented. GW7 adds behavioral-landscape vocabulary and a conceptual scaffold; it does not make sampled landscapes or saved maps available. GW8 adds landscape probe planning vocabulary and a conceptual scaffold; it does not make executable probes, saved plans, samples, run queues, or regime detection available.
+Atlas guidance now distinguishes available GW9 behavior from adjacent concepts. Available here: configure a bounded ephemeral Flocking preview, run fresh deterministic sample engines, inspect exact final-tick numeric values and in-memory provenance, and cancel or clear the local result. Planning-only: broader probe plans, unsupported plan fields, investigation framing, and future research-record structure. Not implemented: saved landscapes/probe executions, Atlas history, interpolation, regime/transition detection, Discovery Atlas records, Lab publication, calibration, scientific validation, server execution, or unbounded sweeps. Users must not infer a complete landscape, continuous values, confidence from seeds, a regime from a pattern, real-world applicability, or generic plan execution.
 
 ## 6. Tests
 

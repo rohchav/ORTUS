@@ -210,7 +210,9 @@ describe("active intervention readiness", () => {
     expect(labFoundationSource).toContain("GW5 Lab does not save those runs or convert them into evidence records.");
     expect(atlasSource).toContain("atlasFoundationSummary.nonPersistenceBoundary");
     expect(atlasFoundationSource).toContain("Nothing on this Atlas route is a saved discovery, saved evidence record, or persistent map.");
-    expect(atlasFoundationSource).toContain("Atlas will organize evidence about model behavior. It will not certify discoveries about the real world.");
+    expect(atlasFoundationSource).toContain(
+      "Atlas previews exact model outputs at executed coordinates. They do not certify discoveries about the real world."
+    );
     expect(labSource + labFoundationSource + atlasSource + atlasFoundationSource).not.toMatch(
       /send to Lab|map to Atlas|recent activity|evidence score|saved intervention/i
     );

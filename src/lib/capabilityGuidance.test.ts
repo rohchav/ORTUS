@@ -118,9 +118,9 @@ describe("capability guidance source model", () => {
     expect(JSON.stringify(lab)).toMatch(/would not certify real-world truth/i);
 
     expect(JSON.stringify(atlas)).toMatch(/non-persistent/i);
-    expect(JSON.stringify(atlas)).toMatch(/Discovery Atlas records.*not implemented/i);
-    expect(JSON.stringify(atlas)).toMatch(/does not contain sampled data or durable maps/i);
-    expect(JSON.stringify(atlas)).toMatch(/do not certify discoveries about the real world/i);
+    expect(JSON.stringify(atlas)).toMatch(/Saved landscapes.*not implemented/i);
+    expect(JSON.stringify(atlas)).toMatch(/final-tick values only at executed coordinates/i);
+    expect(JSON.stringify(atlas)).toMatch(/not a confidence interval/i);
   });
 
   it("does not add storage, time, random, fingerprint, or runtime coupling to the guidance sources", () => {

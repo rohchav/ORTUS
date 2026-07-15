@@ -353,46 +353,93 @@ export const capabilityGuidanceSummaries: readonly CapabilityGuidanceSummary[] =
   summary(
     "atlas",
     "atlas-foundation",
-    "Evidence-orientation foundation",
+    "Bounded sampling and evidence orientation",
     [
       item(
-        "atlas-information-architecture",
-        "Evidence-state vocabulary",
+        "atlas-ephemeral-preview",
+        "Bounded ephemeral preview",
         "available",
         availableStatus,
-        "Atlas exposes non-persistent evidence states, sampled/unsampled interpretation, behavioral-landscape vocabulary, and conceptual scaffolds for investigated model behavior."
+        "Configure one- or two-axis supported numeric grids and explicitly run bounded local previews over the implemented Flocking runtime and bundled scenario."
+      ),
+      item(
+        "atlas-isolated-runs",
+        "Isolated deterministic samples",
+        "available",
+        availableStatus,
+        "Each parameter-coordinate and explicit seed uses a fresh engine instance without mutating World or Experiment Runner state."
+      ),
+      item(
+        "atlas-exact-values",
+        "Exact sampled numeric values",
+        "available",
+        availableStatus,
+        "Inspect final-tick values only at executed coordinates, with no interpolation, smoothing, or regime detection."
+      ),
+      item(
+        "atlas-preview-provenance",
+        "In-memory provenance",
+        "available",
+        availableStatus,
+        "Inspect the exact template, scenario, axes, fixed parameters, seeds, tick horizon, metric, work units, and run outcomes for the current preview."
+      ),
+      item(
+        "atlas-preview-controls",
+        "Cancel or clear local preview",
+        "available",
+        availableStatus,
+        "Cancellation takes effect between synchronous sample runs, and clear affects only component-local Atlas preview state."
       )
     ],
     [
       item(
-        "atlas-map-semantics",
-        "Model-behavior map semantics",
+        "atlas-probe-plans",
+        "Broader landscape probe plans",
         "planning-only",
         planningStatus,
-        "Future Atlas work may organize source-backed sampled regions, but the current route does not contain sampled data or durable maps."
+        "The current probe-plan scaffold and its unsupported fields remain planning-only; it has no stable values that Preview V1 can execute or copy safely."
+      ),
+      item(
+        "atlas-future-records",
+        "Future investigation framing and records",
+        "planning-only",
+        planningStatus,
+        "Broader investigation framing, research-record structure, and durable model-space evidence organization remain future work."
       )
     ],
     [
       item(
         "atlas-persistence",
-        "Discovery records and sampled landscapes",
+        "Saved landscapes and broader analysis",
         "not-implemented",
         notImplementedStatus,
-        "Discovery Atlas records, persistent evidence maps, sampled-region displays backed by run data, saved behavioral landscape maps, and evidence-rating surfaces are not implemented."
+        "Saved landscapes, saved probe executions, Atlas history, interpolation, regime or transition detection, discovery records, Lab publication, calibration, scientific validation, server execution, and unbounded sweeps are not implemented."
       )
     ],
     [
       boundary(
-        "atlas-not-discovery-certification",
-        "Atlas is not discovery certification",
+        "atlas-preview-not-complete-landscape",
+        "Sparse preview is not a complete landscape",
         evidenceBoundaryStatus,
-        "Evidence-state labels describe model-investigation semantics; they do not certify discoveries about the real world."
+        "A small exact grid does not establish values between coordinates, complete coverage, transition structure, or regimes."
       ),
       boundary(
-        "atlas-no-hidden-samples",
-        "Unsampled regions remain unknown",
+        "atlas-color-not-continuity",
+        "Display styling does not imply continuity",
         evidenceBoundaryStatus,
-        "A conceptual landscape scaffold does not imply sampled parameter space, inferred regimes, saved maps, or validated behavioral landscapes."
+        "Table or matrix styling does not imply continuous values, interpolation, or evidence between executed coordinates."
+      ),
+      boundary(
+        "atlas-seeds-not-confidence",
+        "Multiple seeds do not establish confidence",
+        evidenceBoundaryStatus,
+        "Seed variation describes selected deterministic model runs; it is not a confidence interval or real-world uncertainty estimate."
+      ),
+      boundary(
+        "atlas-pattern-not-regime",
+        "Metric pattern is not a detected regime",
+        evidenceBoundaryStatus,
+        "Visible numeric differences are model outputs, not detected regimes, causal findings, or empirical validation."
       ),
       boundary(
         "atlas-not-user-advice",
@@ -402,7 +449,7 @@ export const capabilityGuidanceSummaries: readonly CapabilityGuidanceSummary[] =
       )
     ],
     [
-      related("world", "Inspect current model state; World does not create Atlas records."),
+      related("world", "Inspect the active model run; Atlas preview engines remain isolated from it."),
       related("lab", "Read non-persistent evidence-record structure; Lab publication is not implemented."),
       related("workshop", "Author structural model artifacts; authoring does not create Atlas maps.")
     ]

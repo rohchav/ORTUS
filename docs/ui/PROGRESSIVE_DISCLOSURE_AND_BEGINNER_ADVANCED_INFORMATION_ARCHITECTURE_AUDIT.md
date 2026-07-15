@@ -255,3 +255,7 @@ GW9 remains paused.
 ## 41. Post-UX6 Status
 
 UX6 followed this audit and implements the bounded Guided Builder foundation without weakening direct Advanced access. UX6B then audited deterministic local mapping, existing-validator authority, overwrite protection, reload reset, route-leave protection, World isolation, non-execution, all required viewports, and representative-state Axe behavior. UX6B fixed bounded defects without changing the UX5 disclosure contract. UX6 complete. UX6B complete. GW9 is next. GW9 remains paused until UX6B is committed and remotely aligned.
+
+## Prompt GW9 Follow-Up
+
+GW9 follows the audited disclosure model for the new Atlas preview: the executable form is distinct from conceptual probe planning, exact work/provenance/status remains available, stale results retain their original request, and unsupported persistence/analysis claims stay visible. This is a new bounded capability, not evidence that beginner comprehension, actual browser zoom, screen-reader use, assistive technology, forced colors, mobile workflow, or WCAG conformance is verified. GW9 complete. GW9B required next.

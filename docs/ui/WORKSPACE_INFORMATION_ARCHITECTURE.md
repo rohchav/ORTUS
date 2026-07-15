@@ -1,7 +1,7 @@
 # ORTUS Workspace Information Architecture
 
 Date: 2026-07-07
-Prompt: UI-REMEDIATION-1, audited and hardened by Prompt 34B, extended by Prompt 35, audited by Prompt 35B, extended by Prompt 36, audited by Prompt 36B, extended by Prompt 37, audited by Prompt 37B, extended by Prompt 38, audited by Prompt 38B, extended by Prompt 39, audited by Prompt 39B, extended by Prompt NUX1, audited by Prompt NUX1B, extended by Prompt N2, audited by Prompt N2B, documented by Prompt MR0, documented by Prompt F0, documented by Prompt P0, documented by Prompt UX0, audited by Prompt UX1, audited/planned by Prompt UX3, visually refined by Prompt UX4, audited/hardened by Prompt UX4B, source-of-truth checked by Prompt RH1, documented by Prompt GW0, visually founded by Prompt UX2, rendered-audited by Prompt UX2B, structurally extended by Prompt GW1, audited/hardened by Prompt GW1B, extended by Prompt GW2, audited/hardened by Prompt GW2B, extended by Prompt GW3, audited/hardened by Prompt GW3B, extended by Prompt GW4, audited/hardened by Prompt GW4B, extended by Prompt GW5, audited by Prompt GW5B, extended by Prompt GW6, audited by Prompt GW6B, extended by Prompt GW7, audited by Prompt GW7B, extended by Prompt GW8, and audited by Prompt GW8B
+Prompt: UI-REMEDIATION-1, audited and hardened by Prompt 34B, extended by Prompt 35, audited by Prompt 35B, extended by Prompt 36, audited by Prompt 36B, extended by Prompt 37, audited by Prompt 37B, extended by Prompt 38, audited by Prompt 38B, extended by Prompt 39, audited by Prompt 39B, extended by Prompt NUX1, audited by Prompt NUX1B, extended by Prompt N2, audited by Prompt N2B, documented by Prompt MR0, documented by Prompt F0, documented by Prompt P0, documented by Prompt UX0, audited by Prompt UX1, audited/planned by Prompt UX3, visually refined by Prompt UX4, audited/hardened by Prompt UX4B, source-of-truth checked by Prompt RH1, documented by Prompt GW0, visually founded by Prompt UX2, rendered-audited by Prompt UX2B, structurally extended by Prompt GW1, audited/hardened by Prompt GW1B, extended by Prompt GW2, audited/hardened by Prompt GW2B, extended by Prompt GW3, audited/hardened by Prompt GW3B, extended by Prompt GW4, audited/hardened by Prompt GW4B, extended by Prompt GW5, audited by Prompt GW5B, extended by Prompt GW6, audited by Prompt GW6B, extended by Prompt GW7, audited by Prompt GW7B, extended by Prompt GW8, audited by Prompt GW8B, and extended by Prompt GW9
 Status: implemented, source-audited, rendered-smoke-tested by the GW1/GW1B Playwright shell suite, rendered-comprehension-audited by UX3, visually refined by UX4, visually audited by UX4B, and source-of-truth checked by RH1; broader mobile-readiness, actual browser-zoom, screen-reader, assistive-technology, forced-colors, and WCAG claims remain unverified
 
 ## Problem
@@ -29,11 +29,11 @@ GW1 route contract:
 ```text
 /         -> World
 /lab      -> Lab informational foundation
-/atlas    -> Atlas non-persistent foundation
+/atlas    -> Atlas non-persistent evidence foundations plus bounded ephemeral preview
 /builder  -> Workshop
 ```
 
-Lab is a reachable non-persistent GW5 foundation, not a saved evidence-record system. Atlas is a reachable non-persistent GW4/GW7/GW8 foundation, audited through GW8B. Atlas now includes behavioral-landscape vocabulary, landscape probe planning vocabulary, and conceptual scaffolds, but Lab and Atlas do not contain persistent experiments, notebooks, saved Discovery Atlas records, saved behavioral landscape maps, saved probe plans, sampled data, run queues, Atlas landscape/probe sweeps, regime detection, progression, fake counts, fake maps, fake records, or fake user activity.
+Lab is a reachable non-persistent GW5 foundation, not a saved evidence-record system. Atlas is a reachable non-persistent route with GW4/GW7/GW8 foundations and the bounded GW9 ephemeral preview. Atlas includes behavioral-landscape vocabulary, non-executable probe planning, and one exact-coordinate Flocking sampler. Lab and Atlas still do not contain persistent experiments, notebooks, saved Discovery Atlas records, saved landscapes or probe plans, run queues, generic sweeps, interpolation, regime detection, progression, fake counts, fake maps, fake records, or fake user activity.
 
 RH1 clarifies that existing local World comparison storage may preserve bounded run summaries for comparison. That is World-local UI workspace state, not persistent Lab evidence, Atlas discovery storage, saved behavioral landscapes, saved probe plans, or real-world validation. RH1 also clarifies that existing World Experiment Runner sweeps are bounded local model-comparison tooling, not Atlas landscape sampling, landscape probe execution, saved sampled regions, run queues, or regime detection.
 
@@ -254,3 +254,7 @@ Guided state is typed, local, deterministic, and reset on reload. Start over, de
 ## UX6B Guided-Builder Audit Update
 
 UX6B preserves the two-view Workshop architecture while hardening generated note-id bounds, visible-tab focus, canceled-handoff status, responsive content flow and import visibility, unique Advanced fit-report landmarks, intentional parent scrolling for scenario plans, and a keyboard-focusable Graph sidebar. The Guided subset, Advanced ownership boundaries, active World state, storage, routes, and runtime behavior are unchanged. UX6B complete. GW9 is next. GW9 remains paused until UX6B is committed and remotely aligned.
+
+## GW9 Atlas Preview Update
+
+Atlas now owns one route-local, component-memory preview form and result surface. The form produces a validated request for an explicit `flocking-boids` capability; the headless executor creates fresh engines without accessing World or Experiment Runner stores. Probe-planning scaffolds remain separate and non-executable. The result is temporary, exact-coordinate only, numeric, provenance-bearing, cancellable between samples, and stale-aware. It creates no new route, workspace mode, store, storage key, Lab record, Atlas history, comparison entry, interpolation, or regime analysis. GW9 complete. GW9B required next.

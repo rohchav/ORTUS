@@ -14,10 +14,11 @@ import { RouteOrientationPanel } from "../../components/researchWorld/RouteOrien
 import { CornerFramePanel } from "../../components/ui/CornerFramePanel";
 import { Disclosure } from "../../components/ui/Disclosure";
 import { StatusPill } from "../../components/ui/StatusPill";
+import { EphemeralLandscapePreview } from "../../components/atlas/EphemeralLandscapePreview";
 
 export const metadata: Metadata = {
   title: "Atlas | ORTUS",
-  description: "Non-persistent Atlas foundation for investigated model behavior and evidence boundaries."
+  description: "Bounded ephemeral Atlas sampling preview with explicit model-behavior evidence boundaries."
 };
 
 export default function AtlasPage() {
@@ -27,11 +28,11 @@ export default function AtlasPage() {
 
       <section className="atlas-foundation__overview" aria-labelledby="atlas-overview-title">
         <div className="atlas-foundation__section-heading">
-          <span>Start with model space</span>
+          <span>Orient before sampling</span>
           <h2 id="atlas-overview-title">Model Space At A Glance</h2>
         </div>
         <div className="atlas-foundation__grid">
-          <CornerFramePanel title="What Exists Now" eyebrow="Conceptual orientation" variant="standard" className="atlas-foundation__panel">
+          <CornerFramePanel title="What Exists Now" eyebrow="Current capability" variant="standard" className="atlas-foundation__panel">
             <h3 className="sr-only">What Exists Now</h3>
             <p>{atlasFoundationSummary.currentBoundary}</p>
             <p>{atlasFoundationSummary.epistemicBoundary}</p>
@@ -80,6 +81,8 @@ export default function AtlasPage() {
         </div>
       </section>
 
+      <EphemeralLandscapePreview />
+
       <CapabilityGuidancePanel destinationId="atlas" className="capability-guidance--route" />
 
       <Disclosure
@@ -91,7 +94,7 @@ export default function AtlasPage() {
         <div className="atlas-foundation__technical">
 
           <div className="atlas-foundation__grid">
-        <CornerFramePanel title="Current Boundary" eyebrow="GW4 scope" variant="standard" className="atlas-foundation__panel">
+        <CornerFramePanel title="Current Boundary" eyebrow="GW4 + GW9 scope" variant="standard" className="atlas-foundation__panel">
           <h2 className="sr-only">Current Boundary</h2>
           <p>{atlasFoundationSummary.currentBoundary}</p>
           <p>{atlasFoundationSummary.epistemicBoundary}</p>

@@ -630,3 +630,11 @@
 - When changing `Continuous2DSpace.queryNeighbors`, add brute-force parity tests for deterministic ordering and boundary behavior.
 - When optimizing hot loops, keep performance reports separated across scheduler compute, metrics, snapshot creation, and render-model preparation where practical.
 - Treat Forest Fire hot-loop optimizations as template implementation details, not SpatialFieldModel or BoundaryEnvironmentModel runtime support.
+- Atlas Ephemeral Landscape Preview V1 may execute only capabilities explicitly declared in `src/simulation/atlasPreview/capabilities.ts`; do not infer preview support from every numeric template parameter, metric, template, or scenario.
+- Landscape probe plans remain non-executable planning artifacts. Do not silently map, discard, invent, or execute probe-plan fields; the current GW8 scaffold cannot create a GW9 request.
+- Atlas preview requests must remain canonical, strictly validated, bounded to one or two axes, deterministic explicit seeds, final-tick numeric observation, and the declared grid/tick/work limits.
+- Every Atlas sample run must use a fresh headless engine through the validated RunConfig path. Execute sequentially, yield only between samples, retain no engines, and never access or mutate World, Experiment Runner, comparison, Builder, scenario source, template registry, or browser-storage state.
+- Atlas preview results are component-memory-only exact sampled coordinates. Do not add storage, saved records, history, publication, interpolation, smoothing, contours, inferred unsampled values, regime/transition/tipping-point detection, confidence/coverage/evidence scores, or scientific-validation claims.
+- Keep cancellation language honest: `Cancel after current sample` means the current synchronous sample finishes before cancellation is effective. Unstarted runs remain unsampled and partial results remain visibly partial.
+- Multiple preview seeds show selected deterministic model variation only; they are not confidence intervals, calibrated probabilities, or real-world uncertainty estimates.
+- GW9 does not generalize Atlas sampling, make the conceptual behavioral-landscape scaffold runtime-backed, make probe plans executable, or create Discovery Atlas/Lab persistence. GW9B audit and hardening is required next.

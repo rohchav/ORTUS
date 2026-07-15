@@ -1,6 +1,18 @@
 # ORTUS Current Context
 
-Last updated: 2026-07-15 after Prompt UX6B Guided Builder and Step-by-Step Configuration Flow Audit and Hardening
+Last updated: 2026-07-15 after Prompt GW9 Ephemeral Landscape Sampling Preview V1
+
+## Current Prompt Status
+
+Prompt GW9 adds the first real Atlas sampling slice. `/atlas` can explicitly run one bounded `flocking-boids` preview over one bundled validated scenario, one or two supported numeric axes, one supported final-tick metric, one to three explicit deterministic seeds, and no more than 5,000 work units. Each sample uses a fresh engine through the shared validated RunConfig factory. Execution is sequential, cancellation is checked between samples, exact provenance stays in component memory, stale results remain tied to their original request, and reload returns Atlas to unsampled state.
+
+The current GW8 probe-planning scaffold remains non-executable and cannot map safely because it lacks stable runtime IDs and exact values. GW9 does not mutate World or Experiment Runner, write storage, create Atlas/Lab/comparison records, interpolate, detect regimes or transitions, establish confidence, validate science, execute Builder artifacts, or generalize preview support beyond its explicit capability descriptor.
+
+GW9 complete.
+
+GW9B required next.
+
+Final GW9 gates: focused Playwright `50 passed`; full UI Playwright `65 passed`; typecheck passed; unit tests `70 files / 581 tests` passed; production build passed; simulation/per-preview performance smoke passed; and `git diff --check` passed. `npm run lint: unavailable, package.json has no lint script.` Actual browser zoom, screen-reader, assistive-technology, forced-colors, mobile-workflow, user-comprehension, and WCAG conformance remain unverified.
 
 ## Project Identity
 
@@ -10,21 +22,21 @@ The sharp ORTUS mark is the primary navigation brand. The soft ORTUS mark is a s
 
 The HCI audit is in `docs/ui/HCI_AUDIT.md`. HCI findings must distinguish observed defects, inferred risks, subjective style preferences, and unverified concerns. Broad UI remediation should be handled in dedicated prompts rather than mixed into branding integration.
 
-Prompt UX3 adds `docs/ui/FULL_UI_UX_COMPREHENSION_AND_SANDBOX_THEME_AUDIT.md` as the current full UI/UX comprehension and sandbox-theme audit. It used rendered route inventory across `/`, `/builder`, `/lab`, and `/atlas` at `1440x900`, `1280x720`, `1024x768`, `900x700`, and `1280x600`. The blunt finding is that ORTUS is honest and precise but still too command-console-like for the sandbox/workbench mission. UX3 complete. GW9 paused until the sandbox-theme and guided-comprehension track is addressed or explicitly waived. Next recommended prompt: UX4. UX3 adds no production redesign, theme tokens, guided Builder behavior, persistence, runtime behavior, Lab records, Atlas discoveries, probes, sweeps, sampling, or GW9 implementation.
+Prompt UX3 adds `docs/ui/FULL_UI_UX_COMPREHENSION_AND_SANDBOX_THEME_AUDIT.md` as the full UI/UX comprehension and sandbox-theme audit. It used rendered route inventory across `/`, `/builder`, `/lab`, and `/atlas` at `1440x900`, `1280x720`, `1024x768`, `900x700`, and `1280x600`. The blunt finding was that ORTUS remained too command-console-like for the sandbox/workbench mission. UX3 paused GW9 at that stage and recommended UX4. UX3 added no production redesign, persistence, runtime behavior, or GW9 implementation.
 
-Prompt UX4 adds `docs/ui/SANDBOX_VISUAL_LANGUAGE_FOUNDATION.md` as the current sandbox visual-language foundation. It retunes semantic workbench/instrument/caveat surfaces, softens panel and chip shapes, reduces tactical/HUD ornament, makes World read as the live model surface, keeps Workshop as an advanced structural bench, and makes Lab/Atlas static scaffolds quieter and more notebook/map-oriented without faking records or samples. UX4 changes visual language only. It adds no progressive disclosure, Guided Builder, preferences, onboarding, persistence, Lab records, Atlas discoveries, sampling, run queues, sweeps, regime detection, runtime behavior, template behavior, Builder execution, route aliases, dependencies, assets, fonts, or icon libraries. UX4 complete. UX4B followed and is now complete. GW9 remains paused.
+Prompt UX4 adds `docs/ui/SANDBOX_VISUAL_LANGUAGE_FOUNDATION.md` as the sandbox visual-language foundation. It retunes semantic workbench/instrument/caveat surfaces without faking records or samples. UX4 changed visual language only; UX4B audited it. GW9 still remained paused at that historical stage.
 
 Prompt UX4B adds `docs/ui/SANDBOX_VISUAL_LANGUAGE_FOUNDATION_AUDIT.md` as the sandbox visual-language audit. It found no bounded production CSS/component defect and was ready for UX5. UX5 has now followed. Actual browser zoom at 125%, 150%, and 200% was not verified; screen-reader behavior, assistive-technology behavior, forced-colors behavior, full WCAG conformance, and user-comprehension evidence remain unverified.
 
-Prompt RH1 adds `docs/RH1_REMOTE_STATE_AND_MISSION_ALIGNMENT_HYGIENE.md` as the repo-hygiene and source-of-truth checkpoint. RH1 clarifies that existing local World comparison storage may preserve bounded run summaries, but it is not persistent Lab evidence, Atlas discovery storage, saved behavioral landscapes, saved probe plans, or real-world validation. Existing Experiment Runner sweeps are bounded local model-comparison tooling, not Atlas landscape sampling, landscape probe execution, saved sampled regions, run queues, or regime detection. Package-name drift remains documentation-only: `package.json` is still `abm-simulation-engine`. Lint remains intentionally unavailable until a dedicated tooling prompt adds it. RH1 is complete and UX5 has now followed. GW9 remains paused.
+Prompt RH1 adds `docs/RH1_REMOTE_STATE_AND_MISSION_ALIGNMENT_HYGIENE.md` as the repo-hygiene and source-of-truth checkpoint. RH1 clarifies that existing World comparison storage is not Lab/Atlas persistence and that Experiment Runner sweeps are not Atlas sampling. Package-name drift remains documentation-only: `package.json` is still `abm-simulation-engine`. Lint remains intentionally unavailable. GW9 still remained paused at that checkpoint.
 
-Prompt UX5 adds `docs/ui/PROGRESSIVE_DISCLOSURE_AND_BEGINNER_ADVANCED_INFORMATION_ARCHITECTURE.md`, `src/lib/routeOrientation.ts`, a shared route-orientation component, and component-local disclosure. World, Workshop, Lab, and Atlas now lead with plain-language purpose/current-start/boundary copy and keep exact technical language one control away. Capability guidance shows its route boundary, available capability, and first do-not-assume boundary before its complete source-backed detail. World keeps real controls before capability inventory. Workshop remains the Advanced Builder and now renders its active expert workspace before capability guidance. Lab and Atlas expose concise conceptual defaults while retaining complete existing vocabularies behind explicit technical disclosures. The rendered gate fixed a Workshop short-height focus/layout defect and duplicate named Lab/Atlas landmarks. Final focused Playwright passed `34` tests; full UI Playwright passed `49` tests; all 20 route/viewport combinations passed; and disclosure reload/storage, reduced-motion, Axe, and browser-diagnostic checks passed. Actual browser zoom at 125%, 150%, and 200% was not verified. UX5 adds no storage key, saved mode, personalization, recommendation, onboarding, progression, Guided Builder, runtime/template/Builder execution, Lab/Atlas records, landscape sampling, or probe execution. UX5 complete; UX5B followed and is now complete. GW9 remains paused.
+Prompt UX5 adds `docs/ui/PROGRESSIVE_DISCLOSURE_AND_BEGINNER_ADVANCED_INFORMATION_ARCHITECTURE.md`, source-backed route orientation, and component-local disclosure. Its rendered gate passed `34` focused and `49` full UI tests at that time. Actual browser zoom was not verified. UX5 added no storage, personalization, execution, or Atlas sampling; GW9 still remained paused at that historical stage.
 
-Prompt UX5B adds `docs/ui/PROGRESSIVE_DISCLOSURE_AND_BEGINNER_ADVANCED_INFORMATION_ARCHITECTURE_AUDIT.md`. It audits the UX5 commit, source hierarchy, language, local disclosure state, storage boundaries, expert reachability, landmarks, and rendered behavior on all four routes at all five established viewports. Focused Playwright remains `34 passed`; full UI remains `49 passed`; direct expanded-state Axe scans report zero violations across 20 route/viewport combinations; and browser diagnostics remain clean. No UX5 production defect was found, so UX5B changes audit records and roadmap contracts only. Headless keyboard zoom attempts did not change browser metrics; actual browser zoom remains unverified. UX5B adds no UX6, Guided Builder, GW9, persistence, personalization, progression, runtime/template/Builder execution, Lab/Atlas behavior, sampling, probe execution, dependency, asset, font, icon, or route. UX5B complete; UX6 later followed and is now complete. GW9 remains paused.
+Prompt UX5B audits the UX5 hierarchy, disclosure state, storage boundaries, expert reachability, and five-viewport rendered behavior. It found no UX5 production defect and did not add GW9 behavior. UX6/UX6B later followed before GW9 was authorized.
 
 Prompt UX6 adds `docs/ui/GUIDED_BUILDER_AND_STEP_BY_STEP_CONFIGURATION_FLOW_FOUNDATION.md`. Workshop now defaults to a real six-step Guided Builder while the complete Advanced Builder remains immediately available and mounted. Guided uses typed component-local state, deterministic normalized ids and collision suffixes, static non-executable defaults, existing model-schema validation, exact review JSON, confirmation-protected Start over/removals, destination-link and browser-Back data-loss decisions, and an explicit overwrite-protected handoff to Advanced Author Schema. Reload resets Guided draft, step, and selected view. The UX6 rendered gate passed `41` focused and `56` full UI tests. UX6 adds no schema/rule/graph execution, runtime template, scenario, RunConfig, World mutation, persistence, personalization, onboarding, progression, Lab/Atlas records, sampling, probes, dependencies, assets, fonts, icons, or routes. UX6 complete.
 
-Prompt UX6B adds `docs/ui/GUIDED_BUILDER_AND_STEP_BY_STEP_CONFIGURATION_FLOW_FOUNDATION_AUDIT.md`. The audit started from clean aligned `bf80137`, rechecked the UX6 commit and support matrix, and found eight bounded defects: generated note-id bounds, direct Advanced focus loss, stale canceled-handoff status, responsive capability-guidance overlap, responsive Advanced import visibility, repeated fit-report landmark names, nested scenario-list scrolling, and non-focusable Graph sidebar scrolling. All are fixed without changing the Guided subset, runtime, storage, World, routes, or dependencies. Final gates are `43` focused Playwright, `58` full UI Playwright, and `69` unit files / `565` tests plus typecheck, build, performance, and diff checks. Actual browser zoom remains unverified because keyboard zoom commands did not change headless Chromium metrics. UX6B complete. GW9 is next. GW9 remains paused until UX6B is committed and remotely aligned.
+Prompt UX6B adds `docs/ui/GUIDED_BUILDER_AND_STEP_BY_STEP_CONFIGURATION_FLOW_FOUNDATION_AUDIT.md`, fixes eight bounded focus/status/layout/landmark/scroll defects, and closes with `43` focused Playwright, `58` full UI Playwright, and `69` unit files / `565` tests. It cleared the historical gate for GW9; GW9 has now followed.
 
 UI-REMEDIATION-1 replaced the monolithic simulation left drawer with a task-oriented workspace shell. The simulation workspace modes are Setup, Understand, Observe, Intervene, Experiment, Compare, and Debug. The World Stage remains mounted while switching modes, workspace mode state is local React state in `AppShell`, and persistent Run/Pause, Step, Reset, tick/time, and speed controls live in a shell-level dock outside scrollable workspace content. Model/seed/parameter editing lives in Setup; scenario/snapshot exchange lives in Compare; assumptions and notes live in Understand; metrics and legend live in Observe; interventions live in Intervene; sweeps live in Experiment; debug diagnostics live in Debug.
 
@@ -141,19 +153,19 @@ Built-in production templates currently include Epidemic Spread, Opinion Dynamic
 
 ## Completed Prompt State
 
-Durable docs and source indicate completed roadmap work through Prompt 39B plus the documented side tracks and Research World/UI work through Prompt UX6B. Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 39B: Scenario Planning From Schema Audit are complete. Prompt UX6 is complete as a bounded, deterministic, non-persistent Guided Builder foundation, and Prompt UX6B has audited and hardened that foundation.
+Durable docs and source indicate completed roadmap work through Prompt 39B plus the documented side tracks and Research World/UI work through Prompt GW9. Prompt 31 through Prompt 39B are complete. UX6/UX6B established and audited the bounded Guided Builder; GW9 now establishes the bounded Atlas ephemeral preview.
 
 The post-30B repository hygiene, dependency stabilization, durable context, and performance/scalability pass has also been completed. Recent commits include `dd6c256` for repo context/generated-artifact hygiene, `4949b72` for dependency and performance script stabilization, and `a80d5b7` for simulation performance instrumentation and spatial indexing foundations.
 
 UX6 complete.
 UX6B complete.
-GW9 is next.
-GW9 remains paused until UX6B is committed and remotely aligned.
-Next recommended prompt: GW9 only after commit and remote alignment.
+GW9 complete.
+GW9B required next.
+Next recommended prompt: GW9B Ephemeral Landscape Sampling Preview Audit and Hardening.
 
-Recommended sequence: commit and remotely align UX6B; then GW9: Ephemeral Landscape Sampling Preview V1 through an explicit prompt.
+Completed sequence: UX6B -> GW9. Required next gate: GW9B.
 
-Do not start GW9 or further Research World implementation, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any further Research World/fractal/multiscale implementation without explicit approval. UX2B through UX6B add rendered Playwright/Axe or rendered route-inventory evidence where documented, but actual browser zoom, screen-reader, assistive-technology, forced-colors, full WCAG, clipboard, focus-return beyond covered smoke paths, mobile-workflow, and user-comprehension claims remain unverified.
+Do not start GW9B or further Research World implementation, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or further Research World/fractal/multiscale implementation without explicit approval. Rendered Playwright/Axe evidence does not establish actual browser zoom, screen-reader, assistive-technology, forced-colors, full WCAG, mobile-workflow, or user-comprehension readiness.
 
 Implemented runtime foundations include scenarios, snapshots, template-defined behavior modes, agent composition, interventions, experiments, run summaries/comparison, seeded randomness, metrics, spaces, template metadata, and a narrow Opinion Dynamics `socialLearning` behavior mode audited in Prompt 33D.
 
@@ -264,9 +276,9 @@ Prompt 35 and Prompt 35B were committed together in `7696381 feat: Implement Mod
 - npm reports two moderate audit findings; no force fix was run.
 - Actual browser zoom at 125%, 150%, and 200%, screen-reader behavior, assistive-technology behavior, forced-colors behavior, complete WCAG conformance, and user comprehension remain unverified.
 
-## Next Recommended Prompt After Stabilization
+## Next Recommended Prompt
 
-Next Research World prompt: GW9 only with explicit approval. Do not start GW9 or further Research World implementation, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any further Research World/fractal/multiscale implementation without explicit approval.
+Next Research World prompt: GW9B only with explicit approval. Do not start GW9B or further Research World implementation, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or further Research World/fractal/multiscale implementation without explicit approval.
 
 Next recommended UI/design-system prompt after UX2B: `UI-DESIGN-SYSTEM-1: Rendered Responsive, Typography + Visualization Accessibility Audit`.
 
@@ -325,4 +337,4 @@ Next recommended UI/design-system prompt after UX2B: `UI-DESIGN-SYSTEM-1: Render
 - GW3 intervention readiness is live World Intervene context only. It is not a saved intervention plan, experiment record, Lab intervention record, Atlas discovery, notebook, reusable asset, behavioral landscape, empirical observation, validation result, or causal/evidence proof.
 - Do not add GW3 storage, timestamps, random ids, UUIDs, fingerprints, route state, hidden readiness stores, runtime behavior, template behavior, Builder execution, Lab intervention records, Atlas records, sampled regions, behavioral landscapes, progression state, policy-effectiveness claims, or real-world causal claims without a dedicated audited prompt.
 - UX6B is complete. Keep Guided-generated ids within each authoritative target-schema bound, keep focus on visible selected tabs when switching authoring views, clear canceled handoff staging status, and keep Workshop guidance in normal responsive flow.
-- GW9 is next but remains paused until UX6B is committed and remotely aligned and the user provides an explicit GW9 prompt.
+- GW9 is complete. Keep its capability allowlisted, bounded, deterministic, sequential, isolated, exact-coordinate only, and component-memory-only. GW9B is required next.

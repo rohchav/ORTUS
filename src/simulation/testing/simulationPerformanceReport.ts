@@ -5,6 +5,7 @@ import { flockingTemplate } from "../templates/flocking.template";
 import { forestFireTemplate } from "../templates/forestFire.template";
 import { predatorPreyTemplate } from "../templates/predatorPrey.template";
 import { renderAgents, renderGrid } from "../../lib/templateVisuals";
+import { createEphemeralLandscapePreviewRequest, executeEphemeralLandscapePreview } from "../atlasPreview";
 
 interface PerformanceScenario {
   label: string;
@@ -89,6 +90,38 @@ console.info(
       snapshotMs: Number(result.snapshotMs.toFixed(3)),
       renderModelMs: Number(result.renderModelMs.toFixed(3))
     })),
+    null,
+    2
+  )
+);
+
+const previewSmokeRequest = createEphemeralLandscapePreviewRequest({
+  templateId: "flocking-boids",
+  scenarioId: "atlas-preview-flocking-random-headings-v1",
+  xAxis: { parameterId: "alignmentWeight", minimum: 0.2, maximum: 0.8, pointCount: 2 },
+  seeds: [101],
+  tickHorizon: 5,
+  metricId: "alignmentScore"
+});
+const previewSmokeStarted = performance.now();
+const previewSmokeResult = await executeEphemeralLandscapePreview(previewSmokeRequest);
+const previewSmokeElapsedMs = performance.now() - previewSmokeStarted;
+if (previewSmokeResult.status !== "completed" || previewSmokeResult.completedRunCount !== 2) {
+  throw new Error(`Ephemeral landscape preview performance smoke failed with status ${previewSmokeResult.status}`);
+}
+console.info(
+  "Ephemeral landscape preview performance smoke:",
+  JSON.stringify(
+    {
+      templateId: previewSmokeRequest.templateId,
+      samplePoints: previewSmokeRequest.workEstimate.gridPointCount,
+      sampleRuns: previewSmokeRequest.workEstimate.sampleRunCount,
+      tickHorizon: previewSmokeRequest.tickHorizon,
+      workUnits: previewSmokeRequest.workEstimate.workUnits,
+      elapsedMs: Number(previewSmokeElapsedMs.toFixed(2)),
+      status: previewSmokeResult.status,
+      notes: "Small bounded executor smoke only; this is not a scalability estimate."
+    },
     null,
     2
   )

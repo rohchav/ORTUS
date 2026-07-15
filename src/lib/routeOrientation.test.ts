@@ -23,12 +23,12 @@ describe("UX5 route orientation and disclosure contracts", () => {
     }
   });
 
-  it("keeps the Lab and Atlas non-persistence and non-execution boundaries exact", () => {
+  it("keeps the Lab and Atlas persistence and epistemic boundaries exact", () => {
     expect(getRouteOrientation("lab").boundary).toBe(
       "Nothing on this route is a saved experiment, evidence record, notebook, or run history."
     );
     expect(getRouteOrientation("atlas").boundary).toBe(
-      "No sampled landscape, saved map, probe execution, regime detection, or discovery record exists here yet."
+      "A sparse ephemeral preview is not a complete landscape, detected regime, saved discovery, or real-world claim."
     );
     expect(getRouteOrientation("world").boundary).toBe(
       "Model output describes this simulation, not automatically the real world."
@@ -49,7 +49,7 @@ describe("UX5 route orientation and disclosure contracts", () => {
     expect(technicalCopy).toContain("Structural compatibility summary, not conversion");
     expect(technicalCopy).toContain("Non-runnable scenario-planning artifact");
     expect(technicalCopy).toContain("Model-behavior evidence state");
-    expect(technicalCopy).toContain("Behavioral landscape");
+    expect(technicalCopy).toContain("One- or two-axis exact parameter grid");
     expect(technicalCopy).toContain("Non-executable landscape probe plan");
   });
 

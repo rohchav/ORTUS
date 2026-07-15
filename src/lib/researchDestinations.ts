@@ -46,15 +46,9 @@ export const researchDestinations: readonly ResearchDestinationDefinition[] = Ob
     id: "atlas",
     label: "Atlas",
     route: "/atlas",
-    purpose: "Orient evidence about investigated model behavior without certifying real-world discovery.",
-    availability: "foundation",
-    navigationOrder: 3,
-    status: {
-      label: "Foundation",
-      category: "capability",
-      state: "planning-only",
-      description: "GW4 adds non-persistent Atlas information architecture; Discovery Atlas records are not implemented."
-    }
+    purpose: "Run bounded ephemeral model-space previews without certifying real-world discovery.",
+    availability: "available",
+    navigationOrder: 3
   },
   {
     id: "workshop",

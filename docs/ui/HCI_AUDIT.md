@@ -2,7 +2,7 @@
 
 Date: 2026-06-11  
 Updated: 2026-07-07 during Prompt RH1 Remote State and Mission-Alignment Hygiene Check
-Prompt: UI-BRAND-1, UI-REMEDIATION-1, Prompt 34B, Prompt 35, Prompt 35B, Prompt 36, Prompt 36B, Prompt 37, Prompt 37B, Prompt 38, Prompt 38B, Prompt 39, Prompt 39B, Prompt F0, Prompt P0, Prompt UX0, Prompt UX1, Prompt UX3, Prompt UX4, Prompt UX4B, Prompt RH1, Prompt GW0, Prompt UX2, Prompt UX2B, Prompt GW1, Prompt GW1B, Prompt GW2, Prompt GW2B, Prompt GW3, Prompt GW3B, Prompt GW4, Prompt GW4B, Prompt GW5, Prompt GW5B, Prompt GW6, Prompt GW6B, Prompt GW7, Prompt GW7B, Prompt GW8, Prompt GW8B, Prompt N1, Prompt N1B, Prompt NUX1, Prompt NUX1B, Prompt N2, Prompt N2B, Prompt MR0
+Prompt: UI-BRAND-1, UI-REMEDIATION-1, Prompt 34B, Prompt 35, Prompt 35B, Prompt 36, Prompt 36B, Prompt 37, Prompt 37B, Prompt 38, Prompt 38B, Prompt 39, Prompt 39B, Prompt F0, Prompt P0, Prompt UX0, Prompt UX1, Prompt UX3, Prompt UX4, Prompt UX4B, Prompt RH1, Prompt GW0, Prompt UX2, Prompt UX2B, Prompt GW1, Prompt GW1B, Prompt GW2, Prompt GW2B, Prompt GW3, Prompt GW3B, Prompt GW4, Prompt GW4B, Prompt GW5, Prompt GW5B, Prompt GW6, Prompt GW6B, Prompt GW7, Prompt GW7B, Prompt GW8, Prompt GW8B, Prompt GW9, Prompt N1, Prompt N1B, Prompt NUX1, Prompt NUX1B, Prompt N2, Prompt N2B, Prompt MR0
 Status: source-based and rendered-smoke-informed audit, not a formal WCAG audit
 
 ## 1. Executive Verdict
@@ -1546,3 +1546,9 @@ Rendered coverage includes all five established viewports, short-height focus, B
 UX6B expands the rendered audit to every Guided step, error and destructive-dialog states, explicit handoff/overwrite paths, all Advanced modes, and all five established viewports. It fixes overlong generated note ids, direct-switch focus loss, stale canceled-handoff status, capability-guidance overlap, responsive Advanced import clipping, repeated fit-report landmark names, nested scenario-plan scrolling, and Graph sidebar keyboard scrolling. No runtime, persistence, personalization, progression, World mutation, Lab/Atlas behavior, or GW9 implementation was added.
 
 UX6B complete. GW9 is next. GW9 remains paused until UX6B is committed and remotely aligned.
+
+## GW9 Ephemeral-Preview Update
+
+GW9 converts one carefully bounded Atlas path from conceptual-only orientation into real local execution. The configuration has no automatic axis or metric selection, exposes exact work cost before execution, keeps probe planning separate, announces completed-run counts, labels cancellation between samples honestly, and preserves original provenance when controls make a result stale. One- and two-axis outputs use semantic numeric tables rather than interpolated graphics.
+
+Rendered coverage includes invalid/running/cancelling/completed/completed-with-errors/stale states, replacement and clear focus, provenance, reload/storage reset, World/Experiment isolation, five viewport sizes, short height, reduced motion, diagnostics, and Axe. This is automated and expert-review evidence, not actual browser-zoom, screen-reader, assistive-technology, forced-colors, mobile-workflow, beginner-comprehension, or WCAG verification. GW9 complete. GW9B required next.

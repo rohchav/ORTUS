@@ -133,3 +133,7 @@ Post-hardening verification: `npm test -- behavioralLandscapeFoundation roadmap`
 Residual risk is honest but bounded: users may still overread conceptual terms if future prompts add visual maps too quickly. GW8 is ready to proceed only if it treats GW7B as an audited vocabulary/scaffold foundation, not as sampling, persistence, runtime support, validation, empirical evidence, or progression.
 
 GW8 proceeded as non-persistent planning vocabulary only. It does not change this audit decision: GW7/GW7B remains a vocabulary/scaffold foundation, not sampled landscape data or runtime support.
+
+## Prompt GW9 Follow-Up
+
+GW9 adds a separate bounded preview executor and exact-coordinate result surface. This does not retroactively make the GW7 scaffold executable, persistent, complete, interpolated, regime-aware, empirically validated, or source-backed as a Discovery Atlas record. GW9B is required to audit the new runtime slice.

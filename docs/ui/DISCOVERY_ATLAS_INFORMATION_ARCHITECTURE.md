@@ -1,6 +1,6 @@
 # Discovery Atlas Information Architecture
 
-Status: Prompt GW4 implementation source of truth, audited and hardened by Prompt GW4B, updated through Prompt GW8B. GW4 creates a non-persistent Atlas information architecture and evidence-state vocabulary on `/atlas`. GW4B keeps sampled evidence unresolved until source-backed Atlas records exist. GW5 adds non-persistent Lab evidence-record information architecture, not Lab-to-Atlas publication. GW6 adds static capability guidance. GW7 adds non-persistent behavioral-landscape vocabulary and a conceptual scaffold, not saved or sampled landscapes. GW7B audits and hardens that vocabulary/scaffold boundary without adding persistence or runtime behavior. GW8 adds non-persistent landscape probe planning vocabulary and a conceptual probe-plan scaffold, not executable probes or saved plans. GW8B audits and hardens that probe-planning foundation without adding Atlas records or execution. This Atlas foundation does not create saved discoveries, saved evidence records, saved behavioral landscape maps, saved probe plans, sampled-region maps backed by run data, persistent Lab records, run history, storage, progression, validation, calibration, real-world discovery certification, runtime behavior, template behavior, Builder execution behavior, dependencies, assets, or fonts.
+Status: Prompt GW4 implementation source of truth, audited by GW4B and updated through GW9. GW4/GW4B define non-persistent Atlas evidence semantics and keep persistent sampled evidence unresolved until source-backed Atlas records exist. GW7/GW7B add behavioral-landscape vocabulary; GW8/GW8B add non-executable probe-planning vocabulary. GW9 separately adds one bounded ephemeral exact-coordinate preview. It does not create saved discoveries, evidence records, saved landscapes or probe plans, persistent sampled-region maps, Lab records/publication, run history, storage, progression, validation, calibration, real-world discovery certification, Builder execution, dependencies, assets, or fonts.
 
 ## 1. Purpose
 
@@ -199,3 +199,7 @@ GW8 adds `docs/ui/LANDSCAPE_PROBE_PLANNING_FOUNDATION.md`, `src/lib/landscapePro
 ## Prompt GW8B Update
 
 GW8B adds `docs/ui/LANDSCAPE_PROBE_PLANNING_FOUNDATION_AUDIT.md` and hardens the planned-comparison distinction plus source/rendered boundary checks. It does not create executable probes, saved plans, sampled results, run queues, sweeps, regime detection, Lab records, Atlas discoveries, persistence, progression, runtime behavior, template behavior, Builder execution, validation, calibration, or real-world discovery certification.
+
+## Prompt GW9 Update
+
+GW9 adds one bounded, deterministic, isolated, component-memory-only sampling preview. Exact executed coordinates may now be labeled sampled within that request, with final-tick numeric values and in-memory provenance. This does not create a saved Atlas evidence record, persistent sampled-region map, complete landscape, regime, Lab publication, validation result, or real-world discovery. The GW4/GW4B record semantics remain future work.

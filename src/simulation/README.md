@@ -499,3 +499,11 @@ Scenario Builder previews instantiate a separate tick-0 engine after a short UI 
 - Run comparison stores bounded summaries for local comparison only. It does not restore saved runs, replay histories, import external comparison files, or infer causality from deltas.
 - Templates are educational model structures and should not be treated as predictive scientific tools.
 - Rendering, interaction, dashboards, storage, and external model runtimes are intentionally outside this prompt.
+
+## Atlas Ephemeral Preview
+
+`src/simulation/atlasPreview` is a headless bounded executor for GW9. Its explicit capability descriptor currently allows only `flocking-boids`, one bundled validated random-headings scenario, five numeric parameters, and three implemented numeric metrics. Requests use one or two deterministic inclusive axes, one to three explicit signed integer seeds, a 1-250 tick horizon, at most 25 points, and at most 5,000 work units.
+
+Each sample builds a complete validated RunConfig and creates a fresh engine through `runs/engineFromRunConfig.ts`. The uncertainty runner shares that authoritative factory, but Atlas does not share Experiment Runner UI state. Runs execute sequentially; the cancellation signal is checked between runs; the executor retains only plain request/result/provenance records and no engine or snapshot references.
+
+The preview is not a generic sweep service, probe-plan interpreter, saved landscape, complete response surface, interpolator, regime detector, confidence analysis, validation service, empirical observation, or real-world prediction. It accesses no React, Zustand, DOM, Canvas, World store, Experiment Runner store, comparison storage, or browser storage. The current conceptual probe plan cannot map safely and is rejected rather than partially executed.

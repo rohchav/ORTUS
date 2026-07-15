@@ -177,3 +177,7 @@ UX5B complete. UX6 and UX6B followed and are now complete. GW9 is next. GW9 rema
 UX6 builds on this information architecture with a real Guided/Advanced Workshop mode selector. Guided is the reload-reset default; Advanced remains one action away and independently usable. The Guided flow is local, deterministic, bounded to supported model-schema fields, explicit about non-runnability, and protected at Start over, route leave, and Advanced overwrite boundaries. UX6 adds no persistence, personalization, progression, runtime/template/schema execution, Lab/Atlas behavior, sampling, or probes.
 
 UX6B audits this extension and fixes bounded focus, status, responsive-flow, landmark, and scroll-region defects without changing the UX5 disclosure model or adding product capability. UX6B complete. GW9 is next. GW9 remains paused until UX6B is committed and remotely aligned.
+
+## Prompt GW9 Progressive-Disclosure Result
+
+GW9 uses the existing hierarchy rather than hiding execution behind conceptual copy: Atlas orientation states the narrow available capability, the preview form exposes exact inputs and budget, capability guidance separates available/planning-only/unimplemented behavior, results keep provenance and epistemic warnings nearby, and the full technical Atlas foundations remain explicitly disclosed. Preview state is local and resets on reload. GW9 adds no stored mode, personalization, recommendation, progression, saved record, or generic probe-plan execution. GW9 complete. GW9B required next.

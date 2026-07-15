@@ -38,7 +38,7 @@ describe("Research World destination registry", () => {
     expect(existsSync(join(repoRoot, "src", "app", "workshop"))).toBe(false);
   });
 
-  it("distinguishes available routes from non-persistent foundation destinations", () => {
+  it("distinguishes available runtime routes from the remaining non-persistent Lab foundation", () => {
     const byId = Object.fromEntries(researchDestinations.map((destination) => [destination.id, destination]));
     expect(byId.world?.availability).toBe("available");
     expect(byId.workshop?.availability).toBe("available");
@@ -46,10 +46,8 @@ describe("Research World destination registry", () => {
       availability: "foundation",
       status: { category: "capability", state: "planning-only" }
     });
-    expect(byId.atlas).toMatchObject({
-      availability: "foundation",
-      status: { category: "capability", state: "planning-only" }
-    });
+    expect(byId.atlas).toMatchObject({ availability: "available" });
+    expect(byId.atlas?.status).toBeUndefined();
     expect(JSON.stringify(researchDestinations)).not.toMatch(/\b(locked|disabled|unlock|xp|level|achievement|progress)\b/i);
   });
 

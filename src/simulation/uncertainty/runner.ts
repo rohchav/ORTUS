@@ -1,6 +1,6 @@
-import { SimulationEngine } from "../kernel/SimulationEngine";
 import { SimulationValidationError } from "../kernel/Errors";
-import type { InitializationConfig, SimulationRunConfig } from "../kernel/types";
+import type { SimulationRunConfig } from "../kernel/types";
+import { createEngineFromRunConfig } from "../runs/engineFromRunConfig";
 import { validateRunConfig } from "../runs/runConfig";
 import { getProductionTemplate } from "../templates/registry";
 import { generateUncertaintyRunConfigs } from "./sampling";
@@ -94,32 +94,6 @@ export function runUncertaintyEnsemble(
     warnings: [...validation.warnings, ...summaries.warnings],
     status: runs.some((run) => run.status === "failed") ? "failed" : "success"
   };
-}
-
-function createEngineFromRunConfig(runConfig: SimulationRunConfig): SimulationEngine {
-  const validated = validateRunConfig(runConfig);
-  const template = getProductionTemplate(validated.templateId);
-  if (!template) {
-    throw new Error(`Unknown run config template: ${validated.templateId}`);
-  }
-  const initialization: InitializationConfig | undefined = validated.initializationPreset
-    ? {
-        presetId: validated.initializationPreset,
-        options: validated.initializationOptions ?? {}
-      }
-    : undefined;
-  return new SimulationEngine(template, {
-    seed: validated.seed,
-    parameters: validated.parameters,
-    ...(initialization ? { initialization } : {}),
-    scenario: {
-      behaviorMode: validated.behaviorMode ?? "default",
-      agentComposition: validated.agentComposition ?? {},
-      environmentOptions: validated.environmentOptions ?? {},
-      ...(initialization ? { initialization } : {})
-    },
-    metadata: validated.metadata ?? {}
-  });
 }
 
 function selectMetrics(values: Record<string, number>, requested: readonly string[]): Record<string, number> {

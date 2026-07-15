@@ -1,6 +1,6 @@
 # Behavioral Landscape Exploration Foundation
 
-Status: Prompt GW7 implementation source of truth, audited by Prompt GW7B in `docs/ui/BEHAVIORAL_LANDSCAPE_EXPLORATION_FOUNDATION_AUDIT.md` and updated after Prompt GW8B. GW7 adds source-backed behavioral-landscape vocabulary and a non-persistent conceptual scaffold on `/atlas`. GW7B hardens the vocabulary, status semantics, rendered copy, and zero-Tab-stop scaffold contract. GW8 adds non-persistent landscape probe planning vocabulary near this section, and GW8B audits that probe-planning boundary, but neither prompt makes GW7 sampled, executable, saved, or validated. These prompts do not create saved landscapes, sampled-region maps, evidence records, Atlas discoveries, Lab experiments, regime detection, parameter sweeps, batch execution, persistence, progression, runtime behavior, template behavior, Builder execution behavior, validation, calibration, dependencies, assets, fonts, or real-world discovery certification.
+Status: Prompt GW7 implementation source of truth, audited by GW7B and updated through GW9. GW7/GW7B define behavioral-landscape vocabulary and a conceptual zero-Tab-stop scaffold; GW8/GW8B add separate non-executable probe planning. GW9 adds a separate bounded ephemeral exact-coordinate preview but does not make the GW7 scaffold executable, complete, interpolated, saved, regime-aware, validated, or a Discovery Atlas record.
 
 ## 1. Purpose
 
@@ -151,3 +151,7 @@ GW8 adds `docs/ui/LANDSCAPE_PROBE_PLANNING_FOUNDATION.md`, `src/lib/landscapePro
 GW8 does not turn GW7 behavioral landscape vocabulary into sampled data, executable probes, saved probe plans, Atlas discoveries, Lab records, run sweeps, regime detection, validation, calibration, or real-world claims.
 
 GW8B is complete in `docs/ui/LANDSCAPE_PROBE_PLANNING_FOUNDATION_AUDIT.md`. It found no defect that changes the GW7 boundary: behavioral landscapes remain conceptual vocabulary until a future explicitly scoped and audited implementation creates source-backed sampling or persistence.
+
+## Prompt GW9 Relationship
+
+GW9 now provides one explicitly scoped ephemeral Flocking preview over exact selected coordinates. It is a sparse sample of one supported model configuration, not a complete behavioral landscape. It does not interpolate between cells, detect regimes or transitions, persist a map, validate a model, or generalize GW7 vocabulary into a landscape-analysis runtime.

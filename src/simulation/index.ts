@@ -52,6 +52,7 @@ export * from "./interventions";
 export * from "./runs";
 export * from "./scenarios";
 export * from "./uncertainty";
+export * from "./atlasPreview";
 export * from "./assumptions";
 export * from "./networks";
 export * from "./resources";

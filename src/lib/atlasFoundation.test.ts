@@ -65,13 +65,18 @@ describe("Atlas foundation semantics", () => {
     expect(atlasEvidenceStates.map((state) => state.state)).not.toContain("observed");
   });
 
-  it("keeps sampled as a future model-space concept rather than current observed data", () => {
+  it("keeps sampled scoped to executed preview coordinates rather than real-world evidence", () => {
     expect(getAtlasEvidenceStateById("sampled")).toMatchObject({
       category: "evidence",
       state: "unresolved"
     });
-    expect(getAtlasEvidenceStateById("sampled").summary).toContain("would need source-backed model-run evidence");
-    expect(getAtlasEvidenceStateById("sampled").interpretation).toContain("not current data");
+    expect(getAtlasEvidenceStateById("sampled").summary).toContain("only after its isolated model runs");
+    expect(getAtlasEvidenceStateById("sampled").interpretation).toContain("not persistent or real-world validation");
+    expect(atlasMapRegionStates.find((state) => state.id === "ephemeral-sampled-slice")).toMatchObject({
+      label: "Ephemeral sampled slice",
+      category: "capability",
+      state: "supported"
+    });
   });
 
   it("keeps supported, contradicted, and unsupported as evidence states rather than operational states", () => {
@@ -88,7 +93,7 @@ describe("Atlas foundation semantics", () => {
       /^(storageKey|localStorageKey|database|recordId|discoveryId|evidenceId|runHistoryId|savedCount|recentItems|timestamp|createdAt|updatedAt|fingerprint|uuid)$/i;
 
     expect(allKeys.filter((key) => forbiddenKeyPattern.test(key))).toEqual([]);
-    expect(atlasFoundationSummary.currentBoundary).toContain("Atlas is a non-persistent foundation in GW4.");
+    expect(atlasFoundationSummary.currentBoundary).toContain("one bounded, deterministic, non-persistent sampling preview");
     expect(atlasFoundationSummary.nonPersistenceBoundary).toContain("Nothing on this Atlas route is a saved discovery");
   });
 
@@ -102,8 +107,7 @@ describe("Atlas foundation semantics", () => {
   it("keeps route contracts unchanged while distinguishing Lab and Atlas as separate non-persistent foundations", () => {
     const destinationSource = source("src/lib/researchDestinations.ts");
     expect(destinationSource).toContain('id: "atlas"');
-    expect(destinationSource).toContain('availability: "foundation"');
-    expect(destinationSource).toContain('state: "planning-only"');
+    expect(destinationSource).toContain('availability: "available"');
     expect(destinationSource).toContain('id: "lab"');
     expect(destinationSource).toContain("GW5 adds non-persistent Lab information architecture");
     expect(destinationSource).not.toContain('route: "/world"');

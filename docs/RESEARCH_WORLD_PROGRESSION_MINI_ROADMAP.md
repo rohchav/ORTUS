@@ -378,13 +378,13 @@ The required sequence is:
 GW0 -> UX2 -> GW1 -> GW1B -> GW2 -> GW2B -> GW3 -> GW3B -> GW4 -> GW4B -> GW5 -> GW5B -> GW6 -> GW6B -> GW7 -> GW7B -> GW8 -> GW8B -> UX3 -> UX4 -> UX4B -> RH1 -> UX5 -> UX5B -> UX6 -> UX6B -> GW9
 ```
 
-UX2, GW1, GW1B, GW2, GW2B, GW3, GW3B, GW4, GW4B, GW5, GW5B, GW6, GW6B, GW7, GW7B, GW8, GW8B, UX3, UX4, UX4B, RH1, UX5, UX5B, UX6, and UX6B are complete.
+UX2, GW1, GW1B, GW2, GW2B, GW3, GW3B, GW4, GW4B, GW5, GW5B, GW6, GW6B, GW7, GW7B, GW8, GW8B, UX3, UX4, UX4B, RH1, UX5, UX5B, UX6, UX6B, and GW9 are complete.
 
 UX6 complete.
 UX6B complete.
-GW9 is next.
-GW9 remains paused until UX6B is committed and remotely aligned.
-Next recommended prompt: GW9 only after commit and remote alignment.
+GW9 complete.
+GW9B required next.
+Next recommended prompt: GW9B.
 
 ## 22. GW Roadmap Branch
 
@@ -640,3 +640,13 @@ UX6B complete.
 GW9 is next.
 
 GW9 remains paused until UX6B is committed and remotely aligned.
+
+## 31. GW9 Implementation Status
+
+GW9 follows the cleared UX6B gate and adds one narrowly declared Atlas capability: a bounded ephemeral preview for the production Flocking runtime and one bundled scenario. Users choose one or two supported numeric axes, one supported final-tick metric, one to three declared deterministic seeds, and a bounded tick horizon. Every sample uses a fresh engine; execution is sequential, cancellation occurs between samples, results remain in component memory, and reload restores the unsampled state.
+
+This is a real but deliberately narrow model-sampling slice. It is not generic landscape-probe execution, a saved landscape, a Discovery Atlas record, a Lab record, interpolation, regime detection, confidence analysis, scientific validation, or progression. The existing probe-planning scaffold remains non-executable because it lacks stable runtime identifiers and exact values.
+
+GW9 complete.
+
+GW9B required next.

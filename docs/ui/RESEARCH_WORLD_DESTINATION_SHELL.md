@@ -1,6 +1,6 @@
 # ORTUS Research World Destination Shell
 
-Status: Prompt GW1 implementation source of truth, audited and hardened by Prompt GW1B, updated after Prompt GW8B. GW1 introduces a persistent World / Lab / Atlas / Workshop destination shell across routes. GW1B hardens the shell evidence without expanding product behavior. GW2 adds live active-run provenance inside World only. GW3 adds live intervention readiness inside World only, GW3B audits/hardens that readiness layer, GW4 adds non-persistent Atlas information architecture, GW4B audits/hardens that Atlas foundation, GW5 adds non-persistent Lab evidence-record information architecture, GW6 adds route-local capability guidance, GW7 adds non-persistent behavioral-landscape vocabulary on Atlas, GW8 adds non-persistent landscape probe planning vocabulary on Atlas, and GW8B audits that probe-planning foundation. This destination shell does not implement persistent research data, saved intervention plans, persistent Lab evidence records, saved Discovery Atlas records, saved behavioral landscape maps, saved probe plans, executable probes, progression systems, runtime behavior, template behavior, Builder execution behavior, dependencies, assets, fonts, or storage.
+Status: Prompt GW1 implementation source of truth, audited by GW1B and updated through GW9. The canonical routes remain World `/`, Lab `/lab`, Atlas `/atlas`, and Workshop `/builder`. GW9 changes only Atlas content/capability: one bounded ephemeral Flocking preview is now available. The shell still adds no persistent research data, saved Lab/Atlas records, saved landscapes or probe plans, generic probe execution, progression, Builder execution, dependency, asset, font, or storage path.
 
 ## 1. Purpose And Scope
 
@@ -108,18 +108,18 @@ The page renders evidence-record lifecycle semantics and a conceptual scaffold l
 
 ## 11. Atlas Non-Persistent Foundation
 
-`/atlas` is a non-persistent GW4 foundation route. It documents Atlas responsibility, evidence-state vocabulary, sampled/unsampled boundaries, and model-vs-world limits without simulating saved discovery infrastructure.
+`/atlas` remains non-persistent. GW4/GW4B provide evidence semantics, GW7/GW7B provide behavioral-landscape vocabulary, GW8/GW8B provide non-executable probe planning, and GW9 provides one bounded ephemeral exact-coordinate preview without saved discovery infrastructure.
 
 Required boundary:
 
 ```text
-Atlas is a non-persistent foundation in GW4.
+Atlas is a non-persistent route with one GW9 in-memory preview capability.
 Discovery records, saved behavioral landscape maps, sampled-region maps, and evidence-linked model regimes are not implemented yet.
 Atlas will organize evidence about model behavior. It will not certify discoveries about the real world.
 Nothing on this Atlas route is a saved discovery, saved evidence record, or persistent map.
 ```
 
-The page renders a compact evidence-state legend and a text-only conceptual scaffold labeled as not run data. It renders no fake maps, fake discoveries, fake sampled regions from run data, fake evidence scores, fake regime labels, achievements, locked regions, recent activity, or progress percentages.
+The page renders evidence semantics and conceptual scaffolds separately from the real GW9 preview form/results. Preview values come only from executed isolated runs and disappear on reload. The route renders no saved map, discovery, inferred sampled region, evidence score, regime label, achievement, locked region, recent activity, or fake progress percentage.
 
 ## 12. Status Semantics
 

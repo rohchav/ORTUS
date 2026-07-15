@@ -1,6 +1,6 @@
 # Landscape Probe Planning Foundation
 
-Status: Prompt GW8 implementation source of truth, audited by Prompt GW8B in `docs/ui/LANDSCAPE_PROBE_PLANNING_FOUNDATION_AUDIT.md`. GW8 adds source-backed landscape probe planning vocabulary and a non-persistent conceptual planning scaffold on `/atlas`. GW8B hardens the planned-comparison distinction, verifies source/rendered boundaries, and finds the foundation ready for GW9 only as a process decision. These prompts do not execute probes, run parameter sweeps, generate samples, save plans, create Lab records, create Atlas discoveries, detect regimes, validate real-world claims, add progression, change runtime behavior, change template behavior, change Builder execution behavior, add dependencies, add assets, or add fonts.
+Status: Prompt GW8 implementation source of truth, audited by GW8B and updated after GW9. GW8/GW8B define non-persistent conceptual probe planning and do not execute probes. GW9 uses a separate explicit preview request because the planning scaffold cannot map safely to runtime IDs and exact values. Probe plans remain non-executable and unsaved; no generic probe execution, regime detection, validation, Builder execution, persistence, dependency, asset, or font support was added.
 
 ## 1. Purpose
 
@@ -172,3 +172,7 @@ GW8B is complete in `docs/ui/LANDSCAPE_PROBE_PLANNING_FOUNDATION_AUDIT.md`.
 GW8B found no production runtime, persistence, route-contract, or fake-result defect. It hardened the planned-comparison vocabulary to state that planned comparison is not a comparison result, verified source and rendered boundaries, and documents that actual browser zoom at 125%, 150%, and 200% remains unverified.
 
 Decision: ready for GW9. GW9 must still arrive only through an explicit future prompt and must not inherit executable probes, saved plans, sampled results, sweeps, regime detection, Lab records, Atlas discoveries, progression, runtime behavior, template behavior, Builder execution behavior, validation, calibration, or real-world discovery claims from GW8/GW8B.
+
+## Prompt GW9 Result
+
+GW9 followed through a separate explicit preview form and request model. The current probe-plan foundation has no stable template, scenario, parameter, metric, seed, or tick values, so a handoff would invent or silently discard execution fields. No `Run probe plan` action exists; the original plan remains unchanged and non-executable. GW9 complete. GW9B required next.

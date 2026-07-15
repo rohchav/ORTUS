@@ -1,10 +1,10 @@
 # ORTUS Full Prompt Roadmap
 
-*Last updated after Prompt UX6B Guided Builder and Step-by-Step Configuration Flow Audit and Hardening.*
+*Last updated after Prompt GW9 Ephemeral Landscape Sampling Preview V1.*
 
 ## Current Status
 
-ORTUS has completed the core runtime/template and modeling-workbench foundations through Prompt 39B, the neural/runtime-lab side track, the Research World sequence through GW8B, the UX3 through UX6B comprehension, visual-language, progressive-disclosure, Guided Builder, and audit track, and RH1 source-of-truth hygiene.
+ORTUS has completed the core runtime/template and modeling-workbench foundations through Prompt 39B, the neural/runtime-lab side track, the Research World sequence through GW9, the UX3 through UX6B track, and RH1 source-of-truth hygiene.
 
 Current project status:
 
@@ -48,15 +48,16 @@ Completed implementation prompt: Prompt UX5 — Progressive Disclosure and Begin
 Completed audit prompt: Prompt UX5B — Progressive Disclosure and Beginner/Advanced Information Architecture Audit and Hardening; audits source and rendered hierarchy, expert reachability, expanded-state accessibility, reload defaults, non-persistence, and scope boundaries, finds no production defect, and adds no UX6, GW9, runtime, persistence, or product behavior
 Completed implementation prompt: Prompt UX6 — Guided Builder and Step-by-Step Configuration Flow Foundation; adds a deterministic, non-persistent, six-step `ortus.modelSchema` drafting flow, real existing-validator review, explicit overwrite-protected handoff to Advanced Author Schema, and rendered accessibility/World-isolation coverage without schema execution, runtime/template/scenario/RunConfig behavior, persistence, personalization, progression, onboarding, Lab/Atlas behavior, dependencies, assets, fonts, or icons
 Completed audit prompt: Prompt UX6B — Guided Builder and Step-by-Step Configuration Flow Audit and Hardening; audits deterministic mapping, local state, validation, handoff/overwrite safety, World isolation, capability honesty, accessibility, and responsive behavior; fixes bounded identifier, focus, stale-status, layout, landmark, and scroll-region defects without adding runtime, persistence, personalization, GW9 behavior, dependencies, assets, fonts, icons, or routes
+Completed implementation prompt: Prompt GW9 — Ephemeral Landscape Sampling Preview V1; adds one explicit bounded Flocking preview with canonical one/two-axis requests, deterministic fresh-engine samples, final-tick numeric metrics, exact in-memory provenance, cancellation between samples, no persistence, no generic probe-plan execution, no interpolation, and no regime or scientific-validity claims
 Post-30B stabilization completed: repo hygiene, durable Codex context, dependency repair, generated-artifact cleanup, and runtime performance/scalability baseline
 UX6 complete.
 UX6B complete.
-GW9 is next.
-GW9 remains paused until UX6B is committed and remotely aligned.
-Next recommended prompt: GW9, only through an explicit implementation prompt after commit and remote alignment.
-Next Research World implementation prompt: GW9 only after UX6B is committed and remotely aligned; do not start GW9 or further Research World implementation, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any further Research World/fractal/multiscale implementation without explicit approval
+GW9 complete.
+GW9B required next.
+Next recommended prompt: GW9B Ephemeral Landscape Sampling Preview Audit and Hardening.
+Do not start GW9B or further Research World implementation, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or further Research World/fractal/multiscale implementation without explicit approval.
 
-Recommended sandbox-theme sequence: UX6B complete -> commit/remote alignment -> GW9.
+Completed sequence: UX6B -> GW9. Required next gate: GW9B.
 ```
 
 Critical global boundary:
@@ -3745,7 +3746,8 @@ Prompt UX6 Guided Builder and Step-by-Step Configuration Flow Foundation is comp
 UX6 complete.
 Prompt UX6B Guided Builder and Step-by-Step Configuration Flow Audit and Hardening is complete.
 UX6B complete.
-GW9 is next.
-GW9 remains paused until UX6B is committed and remotely aligned.
-Next recommended prompt: GW9 only after commit and remote alignment.
+Prompt GW9 Ephemeral Landscape Sampling Preview V1 is complete.
+GW9 complete.
+GW9B required next.
+Next recommended prompt: GW9B Ephemeral Landscape Sampling Preview Audit and Hardening.
 ```

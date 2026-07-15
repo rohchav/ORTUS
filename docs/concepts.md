@@ -544,3 +544,11 @@ Event records include event id, tick, type, source, order, optional target/label
 ORTUS simulations are exploratory models. Scenarios define initial conditions and supported model variants; snapshots restore exact run state; run summaries compare outcomes. None of these should be treated as real-world prediction without validation, uncertainty analysis, and clear assumptions.
 
 Scenarios define initial conditions and supported model variants. They do not guarantee outcomes; complex systems can behave differently across seeds, parameters, behavior modes, agent compositions, and future uncertainty settings.
+
+## Ephemeral Atlas Preview
+
+A landscape probe plan is a non-executable planning artifact. The GW9 preview request is a separate canonical runtime request assembled only from an explicit capability descriptor and direct user input; the current conceptual probe-plan scaffold cannot be converted safely because it has no stable template, scenario, parameter, metric, seed, or tick values.
+
+A sample run is one fresh deterministic engine execution at one exact coordinate and one explicit seed. A sample point aggregates the successful and failed seed runs at that coordinate. An ephemeral landscape preview is the bounded in-memory collection of those attempted points. Only executed coordinates are sampled; no value between coordinates is inferred.
+
+The GW9 preview is not a complete behavioral landscape, regime or transition map, confidence analysis, empirical evidence, validation result, saved Atlas discovery, Lab record, World comparison, or real-world prediction. Multiple seeds show variation across the selected deterministic model runs only.

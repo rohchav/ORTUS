@@ -1,5 +1,49 @@
 # ORTUS Codex Session Log
 
+## 2026-07-15 - Prompt GW9 Ephemeral Landscape Sampling Preview V1
+
+Goal: add the first real bounded Atlas sampling capability without turning conceptual probe plans into generic execution or adding persistence, interpolation, regime detection, World mutation, Experiment Runner mutation, Builder execution, or scientific claims.
+
+Starting state:
+
+- Clean `main` at `aea6e01`, aligned with `origin/main` after UX6B.
+- Focused Playwright baseline: 43 passed.
+- Full UI Playwright baseline: 58 passed.
+- Unit baseline: 69 files / 565 tests.
+- Typecheck, production build, simulation performance smoke, and `git diff --check` passed.
+- `npm run lint: unavailable, package.json has no lint script.`
+
+Implemented:
+
+- Explicit GW9 capability for `flocking-boids`, one bundled validated scenario, five bounded numeric parameters, and three existing final-tick numeric metrics.
+- Strict canonical request/result/run/point models, inclusive deterministic axis generation, integer-axis duplicate rejection, explicit ordered seeds, full generated RunConfig validation, 25-point/250-tick/5,000-work-unit limits, and deterministic data-only identity.
+- Shared authoritative RunConfig-to-engine factory used by uncertainty execution and Atlas without sharing UI/store state.
+- Sequential fresh-engine executor with exact progress, cooperative yields between runs, honest cancellation between samples, typed fatal/sample/metric errors, deterministic Kahan aggregation, partial/failed points, and no retained engines.
+- Explicit probe-plan mapping audit and rejection: the existing conceptual artifact has no stable runtime IDs or exact values, so no fields are invented or silently discarded and no handoff action is exposed.
+- Atlas component-local configuration, validation/error focus, work estimate, lifecycle states, replacement dialog, stale/clear semantics, exact one-axis table/two-axis matrix, per-seed runs, in-memory provenance, result warnings, reload reset, and capability guidance.
+- Focused headless and rendered tests covering deterministic execution, isolation, cancellation, partial errors, accessibility, responsive/short-height behavior, reduced motion, diagnostics, and no new storage.
+- A small executor smoke was added to `npm run perf:simulation`; it is not a scalability estimate.
+
+Boundaries:
+
+- Only displayed coordinates are sampled; no values between them are inferred.
+- No saved landscape, Atlas history, Lab record, comparison record, publication, interpolation, smoothing, contour, regime/transition detection, confidence estimate, validation, empirical claim, recommendation, personalization, server execution, queue, worker pool, or dependency was added.
+- Actual browser zoom at 125%, 150%, and 200% was not verified.
+- Screen-reader, assistive-technology, forced-colors, mobile-workflow, user-comprehension, and WCAG conformance remain unverified.
+
+Final verification:
+
+- Focused Playwright: 50 passed.
+- Full UI Playwright: 65 passed.
+- Typecheck: passed.
+- Unit tests: 70 files / 581 tests passed.
+- Production build: passed.
+- Simulation performance smoke: passed; GW9 preview smoke completed 2 runs / 10 work units in 26.53 ms on this machine.
+- `git diff --check`: passed.
+- `npm run lint: unavailable, package.json has no lint script.`
+
+Decision: Ready for GW9B. GW9 complete. GW9B required next. The final response records the resulting local commit hash.
+
 ## 2026-06-04 - R2 Repo Hygiene, Durable Context, Performance Pass Audit
 
 Goal: stabilize the repository after a lost Codex chat so the current uncommitted performance/instrumentation pass can be reviewed, tested, and committed safely.

@@ -12,7 +12,7 @@ export type AtlasEvidenceStateId =
 export type AtlasMapRegionStateId =
   | "model-question-space"
   | "unsampled-model-space"
-  | "future-source-backed-sample"
+  | "ephemeral-sampled-slice"
   | "interpretation-boundary";
 
 export interface AtlasEvidenceState {
@@ -28,15 +28,15 @@ export interface AtlasMapRegionState {
   id: AtlasMapRegionStateId;
   label: string;
   category: Extract<StatusPillCategory, "evidence" | "capability">;
-  state: Extract<StatusPillState, "unresolved" | "unverified" | "planning-only" | "future-only">;
+  state: Extract<StatusPillState, "supported" | "unresolved" | "unverified" | "planning-only" | "future-only">;
   summary: string;
 }
 
 export interface AtlasFoundationSummary {
   routeLabel: "Atlas";
-  statusLabel: "GW4 foundation";
+  statusLabel: "GW9 preview available";
   category: Extract<StatusPillCategory, "capability">;
-  state: Extract<StatusPillState, "planning-only">;
+  state: Extract<StatusPillState, "supported">;
   purpose: string;
   currentBoundary: string;
   epistemicBoundary: string;
@@ -53,14 +53,14 @@ export interface AtlasBoundarySummary {
 
 export const atlasFoundationSummary: AtlasFoundationSummary = {
   routeLabel: "Atlas",
-  statusLabel: "GW4 foundation",
+  statusLabel: "GW9 preview available",
   category: "capability",
-  state: "planning-only",
-  purpose: "Orient future evidence about investigated model behavior without creating saved Atlas records.",
+  state: "supported",
+  purpose: "Run a bounded ephemeral model-space preview while preserving the Atlas evidence and non-persistence boundaries.",
   currentBoundary:
-    "Atlas is a non-persistent foundation in GW4. Discovery records, saved behavioral landscape maps, sampled-region maps, and evidence-linked model regimes are not implemented yet.",
+    "Atlas now provides one bounded, deterministic, non-persistent sampling preview. Discovery records, saved behavioral landscape maps, sampled-region maps, and evidence-linked model regimes remain unimplemented.",
   epistemicBoundary:
-    "Atlas will organize evidence about model behavior. It will not certify discoveries about the real world.",
+    "Atlas previews exact model outputs at executed coordinates. They do not certify discoveries about the real world.",
   nonPersistenceBoundary: "Nothing on this Atlas route is a saved discovery, saved evidence record, or persistent map."
 } as const;
 
@@ -78,8 +78,8 @@ export const atlasEvidenceStates = [
     label: "Sampled",
     category: "evidence",
     state: "unresolved",
-    summary: "A future Atlas item would need source-backed model-run evidence before it could be treated as sampled.",
-    interpretation: "Sampled is a future model-space evidence concept in GW4, not current data or real-world validation."
+    summary: "A GW9 preview coordinate is sampled only after its isolated model runs reach a terminal state.",
+    interpretation: "Sampled means executed inside the exact model request; it is not persistent or real-world validation."
   },
   {
     id: "unresolved",
@@ -145,14 +145,14 @@ export const atlasMapRegionStates = [
     label: "Unsampled model space",
     category: "evidence",
     state: "unresolved",
-    summary: "No source-backed model samples are attached to this route in GW4."
+    summary: "Model space remains unsampled until the user explicitly runs a supported preview request."
   },
   {
-    id: "future-source-backed-sample",
-    label: "Future sampled slice",
+    id: "ephemeral-sampled-slice",
+    label: "Ephemeral sampled slice",
     category: "capability",
-    state: "future-only",
-    summary: "A future Atlas slice would need run provenance before it could be shown as sampled."
+    state: "supported",
+    summary: "GW9 can display exact executed coordinates with in-memory provenance; it does not save a sampled map."
   },
   {
     id: "interpretation-boundary",
@@ -176,7 +176,7 @@ export const atlasBoundarySummaries = [
     title: "Non-Persistence Boundary",
     category: "capability",
     state: "planning-only",
-    summary: "GW4 creates Atlas information architecture and evidence semantics, not saved discoveries or persistent maps."
+    summary: "GW9 adds an in-memory preview, not saved discoveries, persistent maps, or cross-session history."
   },
   {
     id: "world-relationship",
@@ -184,7 +184,7 @@ export const atlasBoundarySummaries = [
     category: "evidence",
     state: "unresolved",
     summary:
-      "World currently exposes live provenance, observation, and intervention readiness. GW4 Atlas does not save those runs or convert them into discoveries."
+      "GW9 Atlas creates fresh isolated engines and does not reuse, save, or convert the active World run into a discovery."
   },
   {
     id: "lab-relationship",
