@@ -462,8 +462,10 @@ export function ModelSchemaAuthoringShell({
   }
 
   function cancelPendingAction() {
-    const focusId = pendingAction?.triggerId;
-    if (pendingAction?.type === "guidedHandoff" && guidedHandoffRequest) {
+    const action = pendingAction;
+    const focusId = action?.triggerId;
+    if (action?.type === "guidedHandoff" && guidedHandoffRequest) {
+      setStatusMessage("Guided handoff canceled. The current Advanced Author Schema draft was preserved.");
       onGuidedHandoffResolution?.(guidedHandoffRequest.requestId, "canceled");
     }
     setPendingAction(null);

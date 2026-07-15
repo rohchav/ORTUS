@@ -1539,4 +1539,10 @@ This does not erase the research questions above. Actual beginner comprehension,
 
 UX6 makes Guided Builder the reload-reset Workshop default while preserving Advanced Builder one action away. The HCI gain is a six-step structural path with plain/technical language pairing, immediate field checks, accessible error summaries, reversible navigation, protected Start over, exact review, and explicit overwrite-protected handoff. The epistemic boundary remains visible: a structurally valid draft is neither runnable nor scientifically valid.
 
-Rendered coverage includes all five established viewports, short-height focus, Back retention, validation focus, destructive-dialog keyboard behavior, route-leave and browser-Back decisions, handoff overwrite protection, World/storage isolation, reduced motion, diagnostics, and Axe. This remains automated smoke plus expert review, not observed beginner comprehension, actual browser zoom verification, screen-reader/assistive-technology validation, forced-colors validation, mobile-workflow validation, or WCAG conformance. UX6 complete. UX6B required next. GW9 remains paused.
+Rendered coverage includes all five established viewports, short-height focus, Back retention, validation focus, destructive-dialog keyboard behavior, route-leave and browser-Back decisions, handoff overwrite protection, World/storage isolation, reduced motion, diagnostics, and Axe. This remains automated smoke plus expert review, not observed beginner comprehension, actual browser zoom verification, screen-reader/assistive-technology validation, forced-colors validation, mobile-workflow validation, or WCAG conformance. UX6 complete.
+
+## UX6B Guided-Builder Audit Update
+
+UX6B expands the rendered audit to every Guided step, error and destructive-dialog states, explicit handoff/overwrite paths, all Advanced modes, and all five established viewports. It fixes overlong generated note ids, direct-switch focus loss, stale canceled-handoff status, capability-guidance overlap, responsive Advanced import clipping, repeated fit-report landmark names, nested scenario-plan scrolling, and Graph sidebar keyboard scrolling. No runtime, persistence, personalization, progression, World mutation, Lab/Atlas behavior, or GW9 implementation was added.
+
+UX6B complete. GW9 is next. GW9 remains paused until UX6B is committed and remotely aligned.

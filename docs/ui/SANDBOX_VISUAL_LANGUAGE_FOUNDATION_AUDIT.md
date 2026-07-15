@@ -221,4 +221,4 @@ UX5B then audited that layer in source and rendered browsers, found no productio
 
 ## 37. Post-UX6 Status
 
-UX6 now adds the bounded, non-persistent Guided Builder over existing structural schema services while preserving Advanced Builder. It does not broaden the UX4 visual-language claim into runtime support, persistence, progression, or scientific validation. UX6 complete. UX6B required next. GW9 remains paused.
+UX6 now adds the bounded, non-persistent Guided Builder over existing structural schema services while preserving Advanced Builder. UX6B audits and hardens that flow without broadening the UX4 visual-language claim into runtime support, persistence, progression, or scientific validation. UX6 complete. UX6B complete. GW9 is next. GW9 remains paused until UX6B is committed and remotely aligned.

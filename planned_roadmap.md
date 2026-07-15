@@ -1,10 +1,10 @@
 # ORTUS Full Prompt Roadmap
 
-*Last updated after Prompt UX6 Guided Builder and Step-by-Step Configuration Flow Foundation.*
+*Last updated after Prompt UX6B Guided Builder and Step-by-Step Configuration Flow Audit and Hardening.*
 
 ## Current Status
 
-ORTUS has completed the core runtime/template and modeling-workbench foundations through Prompt 39B, the neural/runtime-lab side track, the Research World sequence through GW8B, the UX3 through UX6 comprehension, visual-language, progressive-disclosure, and Guided Builder track, and RH1 source-of-truth hygiene.
+ORTUS has completed the core runtime/template and modeling-workbench foundations through Prompt 39B, the neural/runtime-lab side track, the Research World sequence through GW8B, the UX3 through UX6B comprehension, visual-language, progressive-disclosure, Guided Builder, and audit track, and RH1 source-of-truth hygiene.
 
 Current project status:
 
@@ -47,14 +47,16 @@ Completed hygiene prompt: Prompt RH1 — Remote State and Mission-Alignment Hygi
 Completed implementation prompt: Prompt UX5 — Progressive Disclosure and Beginner/Advanced Information Architecture; adds source-backed route orientation, component-local non-persistent disclosure, layered capability guidance, concise Lab/Atlas defaults, and exact technical-detail access without Guided Builder, persistence, personalization, progression, runtime/template/Builder execution, Lab/Atlas records, landscape sampling, or probe execution
 Completed audit prompt: Prompt UX5B — Progressive Disclosure and Beginner/Advanced Information Architecture Audit and Hardening; audits source and rendered hierarchy, expert reachability, expanded-state accessibility, reload defaults, non-persistence, and scope boundaries, finds no production defect, and adds no UX6, GW9, runtime, persistence, or product behavior
 Completed implementation prompt: Prompt UX6 — Guided Builder and Step-by-Step Configuration Flow Foundation; adds a deterministic, non-persistent, six-step `ortus.modelSchema` drafting flow, real existing-validator review, explicit overwrite-protected handoff to Advanced Author Schema, and rendered accessibility/World-isolation coverage without schema execution, runtime/template/scenario/RunConfig behavior, persistence, personalization, progression, onboarding, Lab/Atlas behavior, dependencies, assets, fonts, or icons
+Completed audit prompt: Prompt UX6B — Guided Builder and Step-by-Step Configuration Flow Audit and Hardening; audits deterministic mapping, local state, validation, handoff/overwrite safety, World isolation, capability honesty, accessibility, and responsive behavior; fixes bounded identifier, focus, stale-status, layout, landmark, and scroll-region defects without adding runtime, persistence, personalization, GW9 behavior, dependencies, assets, fonts, icons, or routes
 Post-30B stabilization completed: repo hygiene, durable Codex context, dependency repair, generated-artifact cleanup, and runtime performance/scalability baseline
 UX6 complete.
-UX6B required next.
-GW9 remains paused.
-Next recommended prompt: UX6B.
-Next Research World implementation prompt: GW9 only after the UX6/UX6B track is addressed or explicitly waived; do not start GW9 or further Research World implementation, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any further Research World/fractal/multiscale implementation without explicit approval
+UX6B complete.
+GW9 is next.
+GW9 remains paused until UX6B is committed and remotely aligned.
+Next recommended prompt: GW9, only through an explicit implementation prompt after commit and remote alignment.
+Next Research World implementation prompt: GW9 only after UX6B is committed and remotely aligned; do not start GW9 or further Research World implementation, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any further Research World/fractal/multiscale implementation without explicit approval
 
-Recommended sandbox-theme sequence: UX6B -> GW9.
+Recommended sandbox-theme sequence: UX6B complete -> commit/remote alignment -> GW9.
 ```
 
 Critical global boundary:
@@ -163,7 +165,7 @@ missing from this full roadmap. Prompt 31C and Prompt 31D are now corrected belo
 after Prompt 31B and before Prompt 32, with a later narrow Opinion Dynamics
 social-learning runtime slice placed after template/schema compatibility mapping.
 The social/cognitive semantics insertion was corrected after manual review, and
-Prompt 31C, Prompt 31D, Prompt 32, Prompt 32B, Prompt 33, Prompt 33B, Prompt 33C, Prompt 33D, Prompt 34, Prompt 34B, Prompt 35, Prompt 35B, Prompt 36, Prompt 36B, Prompt 37, Prompt 37B, Prompt 38, Prompt 38B, Prompt 39, and Prompt 39B are now marked complete. Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, MR0, F0, P0, UX0, UX1, UX3, UX4, UX4B, GW0, UX2, UX2B, GW1, GW1B, GW2, GW2B, GW3, GW3B, GW4, GW4B, GW5, GW5B, GW6, GW6B, GW7, GW7B, GW8, and GW8B are complete. GW9 remains future Research World work and must not start until the UX5/UX6 sandbox-theme and guided-comprehension track is addressed or explicitly waived.
+Prompt 31C, Prompt 31D, Prompt 32, Prompt 32B, Prompt 33, Prompt 33B, Prompt 33C, Prompt 33D, Prompt 34, Prompt 34B, Prompt 35, Prompt 35B, Prompt 36, Prompt 36B, Prompt 37, Prompt 37B, Prompt 38, Prompt 38B, Prompt 39, and Prompt 39B are now marked complete. Non-roadmap Prompts N1, N1B, NUX1, NUX1B, N2, N2B, MR0, F0, P0, UX0, UX1, UX3, UX4, UX4B, UX5, UX5B, UX6, UX6B, GW0, UX2, UX2B, GW1, GW1B, GW2, GW2B, GW3, GW3B, GW4, GW4B, GW5, GW5B, GW6, GW6B, GW7, GW7B, GW8, and GW8B are complete. GW9 remains future Research World work and must not start until UX6B is committed and remotely aligned and an explicit GW9 prompt is provided.
 
 Safe Builder UI Shell V1 displays structural workspace artifacts; it does not execute workspace nodes or edges. The builder shell is not a compiler, interpreter, visual programming environment, or custom simulation runtime. A structurally valid workspace is still not a runnable model. Importing a workspace artifact does not activate model schemas, compatibility mappings, or social-learning semantics.
 
@@ -3741,7 +3743,9 @@ Prompt UX5 Progressive Disclosure and Beginner/Advanced Information Architecture
 Prompt UX5B Progressive Disclosure and Beginner/Advanced Information Architecture Audit and Hardening is complete.
 Prompt UX6 Guided Builder and Step-by-Step Configuration Flow Foundation is complete.
 UX6 complete.
-UX6B required next.
-GW9 remains paused.
-Next recommended prompt: UX6B.
+Prompt UX6B Guided Builder and Step-by-Step Configuration Flow Audit and Hardening is complete.
+UX6B complete.
+GW9 is next.
+GW9 remains paused until UX6B is committed and remotely aligned.
+Next recommended prompt: GW9 only after commit and remote alignment.
 ```

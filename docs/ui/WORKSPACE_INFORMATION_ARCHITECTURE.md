@@ -249,4 +249,8 @@ Actual browser zoom, screen-reader/assistive-technology behavior, forced-colors 
 
 Workshop now has two real outer authoring views. Guided is the local default and provides six bounded structural steps; Advanced remains immediately available and retains Workspace Inspector, Author Schema, Graph View, exact import/export, validation assistance, fit reports, scenario planning, and the accessible graph outline. Switching views preserves mounted local work. Explicit handoff replaces only Advanced Author Schema after any required confirmation and never mutates World.
 
-Guided state is typed, local, deterministic, and reset on reload. Start over, destination links, client-side browser Back, and Advanced overwrite are protected where meaningful data could be lost. UX6 adds no stored mode, saved draft, progression, recommendation, runtime/schema/graph execution, template/scenario/RunConfig generation, or Lab/Atlas behavior. UX6 complete. UX6B required next. GW9 remains paused.
+Guided state is typed, local, deterministic, and reset on reload. Start over, destination links, client-side browser Back, and Advanced overwrite are protected where meaningful data could be lost. UX6 adds no stored mode, saved draft, progression, recommendation, runtime/schema/graph execution, template/scenario/RunConfig generation, or Lab/Atlas behavior. UX6 complete.
+
+## UX6B Guided-Builder Audit Update
+
+UX6B preserves the two-view Workshop architecture while hardening generated note-id bounds, visible-tab focus, canceled-handoff status, responsive content flow and import visibility, unique Advanced fit-report landmarks, intentional parent scrolling for scenario plans, and a keyboard-focusable Graph sidebar. The Guided subset, Advanced ownership boundaries, active World state, storage, routes, and runtime behavior are unchanged. UX6B complete. GW9 is next. GW9 remains paused until UX6B is committed and remotely aligned.

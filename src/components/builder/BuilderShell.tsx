@@ -68,6 +68,7 @@ export function BuilderShell({ initialWorkspace }: BuilderShellProps) {
 
   const openAdvancedBuilder = useCallback(() => {
     setActiveExperience("advanced");
+    window.requestAnimationFrame(() => document.getElementById("builder-experience-tab-advanced")?.focus());
   }, []);
 
   const requestGuidedHandoff = useCallback((artifact: ModelSchemaDefinition) => {

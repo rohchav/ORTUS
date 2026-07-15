@@ -3381,3 +3381,47 @@ Roadmap result:
 - UX6 complete.
 - UX6B required next.
 - GW9 remains paused.
+
+### Prompt UX6B: Guided Builder and Step-by-Step Configuration Flow Audit and Hardening
+
+Date: 2026-07-15
+
+Goal: independently audit and harden the UX6 Guided Builder foundation, preserve Advanced Builder and World, reject execution/persistence/personalization/GW9 creep, and issue a GW9 readiness decision.
+
+Starting state:
+
+- Branch `main` at clean, aligned `bf80137 feat: add guided builder configuration flow foundation`.
+- Baseline focused Playwright `41 passed`; full UI `56 passed`; typecheck passed; unit tests `69 files / 564 tests`; build passed; performance smoke passed; `git diff --check` passed.
+- The UX6 commit changed only Workshop Guided/Advanced authoring, validation, handoff, CSS, tests, and documentation. It added no dependency, route, engine runtime, template runtime, storage, Lab/Atlas behavior, or GW9 behavior.
+- `npm run lint: unavailable, package.json has no lint script.`
+
+Findings and hardening:
+
+- Fixed generated assumption/limitation ids that could exceed the authoritative 80-character note-id bound when the valid model name approached 180 characters. Note ids now use fixed deterministic semantic bases.
+- Fixed the Guided header's direct Advanced action losing focus to `BODY`; focus now lands on the visible selected Advanced tab, and the mounted Guided draft remains intact.
+- Fixed canceled Advanced overwrite leaving stale `Guided handoff staged` status; the status now truthfully reports cancellation and preservation.
+- Found rendered responsive guidance overlay/interception at `1024x768`; responsive Workshop grid rows now size to content so guidance follows authoring in the shell scroll flow.
+- The final focused gate then exposed a partially clipped Workspace Inspector import textarea at `1024x768`; the existing bounded short-height textarea sizing now applies across the responsive Workshop breakpoint.
+- Fixed duplicate Advanced fit-report landmark names, removed nested scenario-plan scroll regions in favor of the intentional parent scroll, and made the Graph controls/outline scroll region keyboard-focusable.
+- Added a maximum-name deterministic model regression and expanded rendered coverage to every Guided step, validation, destructive dialogs, handoff/overwrite states, all Advanced modes, all five required viewports, Axe, and diagnostics.
+
+Evidence and boundaries:
+
+- Storage, nondeterminism, execution, and broad scope-creep searches found no unexpected Guided path. Existing World/UI storage, runtime execution, timing/UI event ids, future guardrails, and negative tests were classified separately.
+- Guided Builder and Advanced handoff do not mutate World. Reload resets Guided draft, step, and mode and adds no storage key.
+- The five-viewport matrix passes with no document horizontal overflow or clipped/unreachable audited controls. Representative-state Axe scans report zero unexpected violations after hardening.
+- Headless Chromium keyboard commands aimed at 125%, 150%, and 200% left all measured zoom signals unchanged. Actual browser zoom at 125%, 150%, and 200% was not verified.
+- No schema/rule/graph execution, template/scenario/RunConfig generation, persistence, personalization, progression, Lab/Atlas behavior, landscape sampling, probe execution, dependency, asset, font, icon, route, or GW9 implementation was added.
+
+Final verification:
+
+- Focused Playwright `43 passed`; full UI Playwright `58 passed`.
+- Typecheck passed; full unit tests passed `69 files / 565 tests`; production build passed; simulation performance smoke passed; and `git diff --check` passed.
+- `npm run lint: unavailable, package.json has no lint script.`
+
+Roadmap result:
+
+- Decision: Ready to resume GW9 after commit and remote alignment.
+- UX6B complete.
+- GW9 is next.
+- GW9 remains paused until UX6B is committed and remotely aligned.

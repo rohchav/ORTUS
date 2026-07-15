@@ -191,7 +191,7 @@ export function BuilderGraphView({ workspace }: BuilderGraphViewProps) {
       </header>
 
       <div className="builder-graph-mode__layout">
-        <aside className="builder-graph-sidebar" aria-label="Graph controls and outline">
+        <aside className="builder-graph-sidebar" aria-label="Graph controls and outline" tabIndex={0}>
           <GraphControls
             viewModel={viewModel}
             filters={filters}

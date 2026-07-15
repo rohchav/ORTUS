@@ -233,4 +233,4 @@ GW9 remains paused.
 UX4B complete.
 UX5 followed and is now complete.
 UX5B followed, found no production defect in the covered progressive-disclosure paths, and is now complete.
-UX6 followed and is now complete. UX6B is required next. GW9 remains paused.
+UX6 and its UX6B audit followed and are now complete. UX6B preserves the sandbox/workbench and capability-honesty boundaries while hardening bounded Guided/Advanced focus, responsive flow, and accessibility defects. GW9 is next. GW9 remains paused until UX6B is committed and remotely aligned.

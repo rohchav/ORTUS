@@ -248,7 +248,7 @@ function ConceptGroup({
   }
   const titleId = `schema-fit-${slugify(labelPrefix)}-${slugify(title)}-title`;
   return (
-    <section className="schema-fit-concept-group" aria-labelledby={titleId}>
+    <section className="schema-fit-concept-group" aria-label={`${title} for ${labelPrefix}`}>
       <h4 id={titleId}>{title}</h4>
       <div className="schema-fit-concept-list">
         {concepts.map((concept) => (

@@ -359,7 +359,7 @@ export function assembleGuidedModelSchemaCandidate(draft: GuidedBuilderDraft): M
     assumptionNotes: hasText(draft.startingConditionAssumption)
       ? [
           {
-            id: createDeterministicStructuralIds("assumption", [draft.modelName])[0]!,
+            id: createDeterministicStructuralIds("assumption", ["guided starting condition"])[0]!,
             label: "Guided starting-condition assumption",
             description: draft.startingConditionAssumption,
             severity: "caution",
@@ -371,7 +371,7 @@ export function assembleGuidedModelSchemaCandidate(draft: GuidedBuilderDraft): M
     limitationNotes: hasText(draft.limitation)
       ? [
           {
-            id: createDeterministicStructuralIds("limitation", [draft.modelName])[0]!,
+            id: createDeterministicStructuralIds("limitation", ["guided model scope"])[0]!,
             label: "Guided model limitation",
             description: draft.limitation,
             severity: "caution",

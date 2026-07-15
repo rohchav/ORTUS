@@ -181,6 +181,23 @@ describe("Guided Builder draft model", () => {
     expect(JSON.stringify(second)).toBe(JSON.stringify(first));
   });
 
+  it("keeps generated note ids within authoritative bounds for a maximum-length model name", () => {
+    const draft = {
+      ...validGuidedDraft(),
+      modelName: "M".repeat(180)
+    };
+    const first = createGuidedBuilderHandoff(draft);
+    const second = createGuidedBuilderHandoff(structuredClone(draft));
+
+    expect(first.review.serviceView.structurallyValid).toBe(true);
+    expect(first.artifact).not.toBeNull();
+    expect(first.artifact?.assumptionNotes?.[0]?.id).toBe("assumption-guided-starting-condition");
+    expect(first.artifact?.limitationNotes?.[0]?.id).toBe("limitation-guided-model-scope");
+    expect(first.artifact?.assumptionNotes?.[0]?.id.length).toBeLessThanOrEqual(80);
+    expect(first.artifact?.limitationNotes?.[0]?.id.length).toBeLessThanOrEqual(80);
+    expect(second.artifact).toEqual(first.artifact);
+  });
+
   it("applies collision suffixes globally across entity and attribute declarations", () => {
     const draft = validGuidedDraft();
     const collisionDraft: GuidedBuilderDraft = {

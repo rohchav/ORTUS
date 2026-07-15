@@ -170,8 +170,10 @@ UX5B audits this implementation in source and rendered browsers. The canonical a
 
 UX5B changes audit records and roadmap contracts only. It does not add Guided Builder, persistence, personalization, progression, runtime/template/Builder execution, Lab/Atlas behavior, sampling, probe execution, or GW9 behavior. User-comprehension, actual browser zoom, screen-reader, assistive-technology, forced-colors, mobile-workflow, and WCAG claims remain unverified.
 
-UX5B complete. UX6 followed and is now complete. UX6B required next. GW9 remains paused.
+UX5B complete. UX6 and UX6B followed and are now complete. GW9 is next. GW9 remains paused until UX6B is committed and remotely aligned.
 
 ## 38. UX6 Guided Builder Result
 
 UX6 builds on this information architecture with a real Guided/Advanced Workshop mode selector. Guided is the reload-reset default; Advanced remains one action away and independently usable. The Guided flow is local, deterministic, bounded to supported model-schema fields, explicit about non-runnability, and protected at Start over, route leave, and Advanced overwrite boundaries. UX6 adds no persistence, personalization, progression, runtime/template/schema execution, Lab/Atlas behavior, sampling, or probes.
+
+UX6B audits this extension and fixes bounded focus, status, responsive-flow, landmark, and scroll-region defects without changing the UX5 disclosure model or adding product capability. UX6B complete. GW9 is next. GW9 remains paused until UX6B is committed and remotely aligned.

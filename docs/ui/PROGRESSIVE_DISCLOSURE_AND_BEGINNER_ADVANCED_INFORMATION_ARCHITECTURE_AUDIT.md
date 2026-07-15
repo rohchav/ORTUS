@@ -254,4 +254,4 @@ GW9 remains paused.
 
 ## 41. Post-UX6 Status
 
-UX6 followed this audit and implements the bounded Guided Builder foundation without weakening direct Advanced access. Its deterministic local draft, existing-validator review, explicit overwrite-protected handoff, reload reset, route-leave protection, World isolation, and non-execution boundaries have rendered coverage. UX6 complete. UX6B required next. GW9 remains paused.
+UX6 followed this audit and implements the bounded Guided Builder foundation without weakening direct Advanced access. UX6B then audited deterministic local mapping, existing-validator authority, overwrite protection, reload reset, route-leave protection, World isolation, non-execution, all required viewports, and representative-state Axe behavior. UX6B fixed bounded defects without changing the UX5 disclosure contract. UX6 complete. UX6B complete. GW9 is next. GW9 remains paused until UX6B is committed and remotely aligned.

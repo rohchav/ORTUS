@@ -6614,18 +6614,14 @@ textarea[aria-invalid="true"] {
 }
 
 .schema-scenario-plan__list {
-  max-height: 26rem;
   display: grid;
   gap: 8px;
   margin: 0;
   padding: 0;
-  overflow-y: auto;
-  overscroll-behavior: contain;
   list-style: none;
 }
 
 .schema-scenario-plan__list--compact {
-  max-height: 18rem;
   padding-left: 18px;
   list-style: disc;
 }
@@ -7788,8 +7784,10 @@ textarea[aria-invalid="true"] {
     grid-template-columns: 1fr;
   }
 
-  .builder-shell {
+  .builder-shell,
+  .builder-shell:has(.disclosure[data-disclosure-state="expanded"]) {
     overflow-y: auto;
+    grid-template-rows: auto auto auto auto;
   }
 
   .builder-experience-panel--advanced,
@@ -7825,6 +7823,11 @@ textarea[aria-invalid="true"] {
   .builder-nav,
   .builder-side {
     overflow: visible;
+  }
+
+  .builder-nav .json-box {
+    min-height: 96px;
+    max-height: 96px;
   }
 
   .builder-viewport__surface {

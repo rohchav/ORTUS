@@ -169,7 +169,7 @@ The Guided review and both Builder views remain operable under `prefers-reduced-
 
 ## 38. Axe results
 
-The Guided review Axe scan and route-level Workshop Axe scan report zero violations in the covered rendered states. The full suite also checks Advanced Workspace Inspector and Author Schema states. Axe cannot establish user comprehension, assistive-technology quality, or WCAG conformance.
+The Guided review Axe scan and route-level Workshop Axe scan report zero violations in the covered UX6 states. UX6B expands this to every Guided step, validation errors, Review, leave/Start-over/overwrite dialogs, successful handoff, and all Advanced modes. It found and fixed repeated fit-report landmark names, nested non-focusable scenario-plan scrolling, and a non-focusable Graph sidebar scroll region. Axe cannot establish user comprehension, assistive-technology quality, or WCAG conformance.
 
 ## 39. Console/page/asset/hydration results
 
@@ -205,26 +205,30 @@ Baseline: focused Playwright `34 passed`; full UI `49 passed`; typecheck passed;
 
 Post-change gates: focused Playwright `41 passed`; full UI Playwright `56 passed`; typecheck passed; full unit tests passed `69 files / 564 tests`; production build passed; simulation performance smoke passed; and `git diff --check` passed.
 
+UX6B final gates: focused Playwright `43 passed`; full UI Playwright `58 passed`; typecheck passed; full unit tests passed `69 files / 565 tests`; production build passed; simulation performance smoke passed; and `git diff --check` passed.
+
 `npm run lint: unavailable, package.json has no lint script.`
 
 ## 47. Remaining limitations
 
-No beginner user study, mobile workflow validation, screen-reader walkthrough, assistive-technology audit, forced-colors audit, actual browser-zoom verification, or WCAG conformance assessment was performed. Guided covers only a small schema subset, does not author initial entity counts, and cannot establish model correctness.
+No beginner user study, mobile workflow validation, screen-reader walkthrough, assistive-technology audit, forced-colors audit, actual browser-zoom verification, or WCAG conformance assessment was performed. Guided covers only a small schema subset, does not author initial entity counts, and cannot establish model correctness. UX6B source-audited imported/equal-content overwrite variants but did not add a separate rendered case for each provenance/equality combination.
 
 ## 48. UX6B requirement
 
-UX6B is required next. It must independently audit deterministic mapping, loss/overwrite paths, route-leave behavior, accessibility/focus, short layouts, capability honesty, Advanced preservation, and absence of runtime or persistence leakage. Passing UX6 tests does not waive that audit.
+UX6B is complete in `GUIDED_BUILDER_AND_STEP_BY_STEP_CONFIGURATION_FLOW_FOUNDATION_AUDIT.md`. It independently audited deterministic mapping, loss/overwrite paths, route-leave behavior, accessibility/focus, short layouts, capability honesty, Advanced preservation, and absence of runtime or persistence leakage. It found and fixed eight bounded defects without broadening capability.
 
 ## 49. GW9 pause decision
 
-GW9 remains paused. UX6 adds no sampling, probes, queues, regimes, saved landscapes, Lab records, Atlas discoveries, or Research World persistence.
+GW9 remains paused until UX6B is committed and remotely aligned. UX6/UX6B add no sampling, probes, queues, regimes, saved landscapes, Lab records, Atlas discoveries, or Research World persistence.
 
 ## 50. Final decision
 
-UX6 is ready for UX6B in the covered source and rendered paths, subject to the explicitly documented verification limits. Structural support has been earned only for drafting and validation; no runtime support has been added or implied.
+UX6B finds the Guided foundation ready for GW9 after commit and remote alignment, subject to the explicitly documented verification limits. Structural support has been earned only for drafting and validation; no runtime support has been added or implied.
 
 UX6 complete.
 
-UX6B required next.
+UX6B complete.
 
-GW9 remains paused.
+GW9 is next.
+
+GW9 remains paused until UX6B is committed and remotely aligned.

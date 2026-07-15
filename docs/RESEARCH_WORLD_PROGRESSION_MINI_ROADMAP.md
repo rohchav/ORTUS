@@ -378,12 +378,13 @@ The required sequence is:
 GW0 -> UX2 -> GW1 -> GW1B -> GW2 -> GW2B -> GW3 -> GW3B -> GW4 -> GW4B -> GW5 -> GW5B -> GW6 -> GW6B -> GW7 -> GW7B -> GW8 -> GW8B -> UX3 -> UX4 -> UX4B -> RH1 -> UX5 -> UX5B -> UX6 -> UX6B -> GW9
 ```
 
-UX2, GW1, GW1B, GW2, GW2B, GW3, GW3B, GW4, GW4B, GW5, GW5B, GW6, GW6B, GW7, GW7B, GW8, GW8B, UX3, UX4, UX4B, RH1, UX5, UX5B, and UX6 are complete.
+UX2, GW1, GW1B, GW2, GW2B, GW3, GW3B, GW4, GW4B, GW5, GW5B, GW6, GW6B, GW7, GW7B, GW8, GW8B, UX3, UX4, UX4B, RH1, UX5, UX5B, UX6, and UX6B are complete.
 
 UX6 complete.
-UX6B required next.
-GW9 remains paused.
-Next recommended prompt: UX6B.
+UX6B complete.
+GW9 is next.
+GW9 remains paused until UX6B is committed and remotely aligned.
+Next recommended prompt: GW9 only after commit and remote alignment.
 
 ## 22. GW Roadmap Branch
 
@@ -510,7 +511,13 @@ Completed bounded Workshop implementation. Guided Builder is the local default, 
 
 UX6 adds no schema execution, runtime template, scenario, RunConfig, active World mutation, persistence, personalization, onboarding, progression, Lab/Atlas record, landscape sampling, probe execution, dependency, asset, font, icon, or route. Structural validity remains distinct from runnability and real-world validity.
 
-UX6 complete. UX6B required next. GW9 remains paused.
+UX6 complete. UX6B followed and is now complete. GW9 remains paused until UX6B is committed and remotely aligned.
+
+### UX6B: Guided Builder and Step-by-Step Configuration Flow Audit and Hardening
+
+Completed source, deterministic-model, rendered, responsive, accessibility, World-isolation, storage, and no-execution audit of UX6. UX6B fixes bounded note-id, focus, stale-status, responsive-flow, landmark, and scroll-region defects without broadening the Guided artifact subset or changing runtime capability.
+
+UX6B adds no GW9 sampling, probe execution, persistence, personalization, progression, runtime/template/schema execution, Lab/Atlas records, dependency, asset, font, icon, or route. GW9 remains paused until this audit is committed and remotely aligned.
 
 ## 23. Implementation Dependencies
 
@@ -612,7 +619,7 @@ This is not stored beginner mode, personalization, recommendation, onboarding st
 
 UX5B audits that implementation in source and rendered browsers. It finds the hierarchy clear in the covered paths, retains direct expert access, verifies local reload-reset disclosure state and expanded-state Axe results, and finds no production defect. This remains expert and automated evidence, not a beginner user study, browser-zoom verification, screen-reader/assistive-technology verification, mobile-workflow validation, or WCAG conformance claim.
 
-UX5B complete. UX6 followed and is now complete. UX6B required next. GW9 remains paused.
+UX5B complete. UX6 and UX6B followed and are now complete. GW9 remains paused until UX6B is committed and remotely aligned.
 
 ## 29. UX6 Implementation Status
 
@@ -620,4 +627,16 @@ UX6 implements a deterministic, typed, page-session-only Guided Builder over the
 
 This is automated and expert evidence, not proof of beginner comprehension, mobile workflow readiness, actual browser zoom, screen-reader or assistive-technology quality, forced-colors behavior, WCAG conformance, model correctness, or scientific validity.
 
-UX6 complete. UX6B required next. GW9 remains paused.
+UX6 complete. UX6B complete. GW9 is next. GW9 remains paused until UX6B is committed and remotely aligned.
+
+## 30. UX6B Audit Status
+
+UX6B audits deterministic artifact mapping, authoritative validation, local non-persistent state, loss/overwrite protection, explicit Advanced handoff, Advanced preservation, World isolation, non-execution, capability honesty, keyboard/focus behavior, all required viewports, reduced motion, diagnostics, and representative-state Axe results. The canonical record is `ui/GUIDED_BUILDER_AND_STEP_BY_STEP_CONFIGURATION_FLOW_FOUNDATION_AUDIT.md`.
+
+The audit is ready for GW9 after commit and remote alignment. It does not make Guided schemas runnable or scientifically valid, and it does not implement any GW9 behavior. Actual browser zoom, screen-reader/assistive-technology use, forced colors, mobile-workflow readiness, WCAG conformance, and beginner user comprehension remain unverified.
+
+UX6B complete.
+
+GW9 is next.
+
+GW9 remains paused until UX6B is committed and remotely aligned.

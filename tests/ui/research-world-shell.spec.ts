@@ -1,5 +1,5 @@
 import AxeBuilder from "@axe-core/playwright";
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test, type Locator, type Page } from "@playwright/test";
 
 test.describe.configure({ mode: "serial" });
 
@@ -337,6 +337,21 @@ async function expectFocusedElementVisible(page: Page) {
   expect(focusState?.right ?? Number.POSITIVE_INFINITY).toBeLessThanOrEqual((await page.viewportSize())!.width + 2);
   expect(focusState?.bottom ?? Number.POSITIVE_INFINITY).toBeLessThanOrEqual((await page.viewportSize())!.height + 2);
   expect(focusState?.outlineStyle !== "none" || focusState?.outlineWidth !== "0px" || focusState?.boxShadow !== "none").toBe(true);
+}
+
+async function expectElementWithinViewport(page: Page, locator: Locator) {
+  await expect(locator).toBeVisible();
+  const bounds = await locator.evaluate((element) => {
+    const rect = element.getBoundingClientRect();
+    return { left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom };
+  });
+  const viewport = page.viewportSize();
+
+  expect(viewport).not.toBeNull();
+  expect(bounds.left).toBeGreaterThanOrEqual(-2);
+  expect(bounds.top).toBeGreaterThanOrEqual(-2);
+  expect(bounds.right).toBeLessThanOrEqual(viewport!.width + 2);
+  expect(bounds.bottom).toBeLessThanOrEqual(viewport!.height + 2);
 }
 
 async function expectWorldPreserved(page: Page) {
@@ -990,6 +1005,23 @@ test("Guided Builder is the default semantic authoring view and Advanced remains
   await page.keyboard.press("ArrowLeft");
   await expect(guidedTab).toBeFocused();
   await expect(guidedTab).toHaveAttribute("aria-selected", "true");
+  await page.keyboard.press("End");
+  await expect(advancedTab).toBeFocused();
+  await expect(advancedTab).toHaveAttribute("aria-selected", "true");
+  await page.keyboard.press("Home");
+  await expect(guidedTab).toBeFocused();
+  await expect(guidedTab).toHaveAttribute("aria-selected", "true");
+
+  const modelName = page.getByRole("textbox", { name: /Model name/i });
+  await modelName.fill("Direct switch retention draft");
+  const openAdvanced = page.getByRole("button", { name: "Open Advanced Builder", exact: true });
+  await openAdvanced.focus();
+  await page.keyboard.press("Enter");
+  await expect(advancedTab).toHaveAttribute("aria-selected", "true");
+  await expect(advancedTab).toBeFocused();
+  await page.keyboard.press("ArrowLeft");
+  await expect(guidedTab).toBeFocused();
+  await expect(modelName).toHaveValue("Direct switch retention draft");
   await expectNoDocumentHorizontalOverflow(page);
   await expectNoDiagnostics(diagnostics);
 });
@@ -1113,10 +1145,160 @@ test("explicit handoff opens the exact Advanced draft and protects an existing A
   await expect(page.getByText("Second Guided Draft", { exact: true }).first()).toBeVisible();
   await expect(page.getByRole("button", { name: "Open draft in Advanced Builder" })).toBeFocused();
 
+  await page.getByRole("tab", { name: /Advanced Builder/i }).click();
+  await expect(advancedName).toHaveValue("First Guided Draft");
+  await expect(page.getByText("Guided handoff canceled. The current Advanced Author Schema draft was preserved.")).toBeVisible();
+  await expect(page.getByText("Guided handoff staged. Confirm before replacing the current Advanced Author Schema draft.")).toHaveCount(0);
+  await page.getByRole("tab", { name: /Guided Builder/i }).click();
+
   await page.getByRole("button", { name: "Open draft in Advanced Builder" }).click();
   await overwriteDialog.getByRole("button", { name: "Confirm" }).click();
   await expect(page.getByRole("tab", { name: /Advanced Builder/i })).toHaveAttribute("aria-selected", "true");
   await expect(advancedName).toHaveValue("Second Guided Draft");
+  await expectNoDiagnostics(diagnostics);
+});
+
+test("Guided and Advanced authoring states remain reachable across the required viewport matrix", async ({ page }) => {
+  test.setTimeout(180_000);
+  const diagnostics = observePageDiagnostics(page);
+  page.on("dialog", (dialog) => void dialog.accept());
+  const steps = [
+    "Model purpose",
+    "Entities and state",
+    "Environment and space",
+    "Rules and interactions",
+    "Starting conditions",
+    "Review"
+  ];
+
+  for (const viewport of viewports) {
+    await page.setViewportSize({ width: viewport.width, height: viewport.height });
+    await openDestination(page, destinations[3]);
+    const stepNavigation = page.getByRole("navigation", { name: "Guided structural authoring steps" });
+
+    for (const step of steps) {
+      await stepNavigation.getByRole("button", { name: new RegExp(step, "i") }).click();
+      await expect(page.getByRole("heading", { name: step, level: 3 })).toBeFocused();
+      await expectFocusedElementVisible(page);
+      await expectNoDocumentHorizontalOverflow(page);
+    }
+
+    await stepNavigation.getByRole("button", { name: /Model purpose/i }).click();
+    await page.getByRole("button", { name: "Continue", exact: true }).click();
+    await expect(page.locator("#guided-error-summary-purpose")).toBeFocused();
+    await expectFocusedElementVisible(page);
+    await expectNoDocumentHorizontalOverflow(page);
+
+    await page.getByRole("textbox", { name: /Model name/i }).fill(`${viewport.label} local draft`);
+    const worldLink = page.getByRole("navigation", { name: "Research World destinations" }).getByRole("link", { name: "World" });
+    await worldLink.click();
+    const leaveDialog = page.getByRole("alertdialog", { name: "Leave Workshop and discard the local Guided draft?" });
+    await expectElementWithinViewport(page, leaveDialog);
+    await leaveDialog.getByRole("button", { name: "Cancel" }).click();
+    await expect(worldLink).toBeFocused();
+
+    const startOver = page.getByRole("button", { name: "Start over", exact: true });
+    await startOver.click();
+    const startOverDialog = page.getByRole("alertdialog", { name: "Start over with an empty Guided Builder draft?" });
+    await expectElementWithinViewport(page, startOverDialog);
+    await startOverDialog.getByRole("button", { name: "Start over", exact: true }).click();
+    await expect(page.getByRole("heading", { name: "Model purpose", level: 3 })).toBeFocused();
+
+    await fillMinimalGuidedDraft(page, `${viewport.label} handoff draft`);
+    await expectNoDocumentHorizontalOverflow(page);
+    await page.getByRole("button", { name: "Open draft in Advanced Builder" }).click();
+    await expect(page.getByRole("tabpanel", { name: /Author Schema/i })).toBeVisible();
+    const advancedImport = page.getByLabel("Import JSON text");
+    await advancedImport.focus();
+    await expectElementWithinViewport(page, advancedImport);
+    await expectFocusedElementVisible(page);
+    await expectNoDocumentHorizontalOverflow(page);
+
+    await page.getByRole("tab", { name: /Workspace Inspector/i }).click();
+    const workspaceImport = page.getByRole("textbox", { name: "Visual builder workspace JSON to import" });
+    await workspaceImport.focus();
+    await expectElementWithinViewport(page, workspaceImport);
+    await expectFocusedElementVisible(page);
+    await expectNoDocumentHorizontalOverflow(page);
+
+    await page.getByRole("tab", { name: /Graph View/i }).click();
+    await expect(page.getByRole("tabpanel", { name: /Graph View/i })).toBeVisible();
+    await expectNoDocumentHorizontalOverflow(page);
+
+    await page.getByRole("tab", { name: /Guided Builder/i }).click();
+    await stepNavigation.getByRole("button", { name: /Model purpose/i }).click();
+    await page.getByRole("textbox", { name: /Model name/i }).fill(`${viewport.label} replacement draft`);
+    await page.getByRole("button", { name: "Review", exact: true }).click();
+    await page.getByRole("button", { name: "Open draft in Advanced Builder" }).click();
+    const overwriteDialog = page.getByRole("alertdialog", { name: "Replace the current Advanced Author Schema draft?" });
+    await expectElementWithinViewport(page, overwriteDialog);
+    await overwriteDialog.getByRole("button", { name: "Cancel" }).click();
+    await expect(page.getByRole("button", { name: "Open draft in Advanced Builder" })).toBeFocused();
+    await expectNoDocumentHorizontalOverflow(page);
+  }
+
+  await expectNoDiagnostics(diagnostics);
+});
+
+test("Guided steps, dialogs, handoff, and Advanced modes are Axe-clean with quiet diagnostics", async ({ page }) => {
+  test.setTimeout(90_000);
+  const diagnostics = observePageDiagnostics(page);
+  await page.setViewportSize({ width: 1280, height: 720 });
+  await openDestination(page, destinations[3]);
+  const stepNavigation = page.getByRole("navigation", { name: "Guided structural authoring steps" });
+  const steps = [
+    "Model purpose",
+    "Entities and state",
+    "Environment and space",
+    "Rules and interactions",
+    "Starting conditions",
+    "Review"
+  ];
+
+  for (const step of steps) {
+    await stepNavigation.getByRole("button", { name: new RegExp(step, "i") }).click();
+    await expectAxeClean(page);
+  }
+
+  await stepNavigation.getByRole("button", { name: /Model purpose/i }).click();
+  await page.getByRole("button", { name: "Continue", exact: true }).click();
+  await expect(page.locator("#guided-error-summary-purpose")).toBeVisible();
+  await expectAxeClean(page);
+
+  await page.getByRole("textbox", { name: /Model name/i }).fill("Axe dialog draft");
+  const worldLink = page.getByRole("navigation", { name: "Research World destinations" }).getByRole("link", { name: "World" });
+  await worldLink.click();
+  const leaveDialog = page.getByRole("alertdialog", { name: "Leave Workshop and discard the local Guided draft?" });
+  await expectAxeClean(page);
+  await leaveDialog.getByRole("button", { name: "Cancel" }).click();
+
+  const startOver = page.getByRole("button", { name: "Start over", exact: true });
+  await startOver.click();
+  const startOverDialog = page.getByRole("alertdialog", { name: "Start over with an empty Guided Builder draft?" });
+  await expectAxeClean(page);
+  await startOverDialog.getByRole("button", { name: "Start over", exact: true }).click();
+
+  await fillMinimalGuidedDraft(page, "Axe handoff draft");
+  await expectAxeClean(page);
+  await page.getByRole("button", { name: "Open draft in Advanced Builder" }).click();
+  await expect(page.getByRole("tabpanel", { name: /Author Schema/i })).toBeVisible();
+  await expectAxeClean(page);
+
+  await page.getByRole("tab", { name: /Workspace Inspector/i }).click();
+  await expectAxeClean(page);
+  await page.getByRole("tab", { name: /Graph View/i }).click();
+  await expectAxeClean(page);
+
+  await page.getByRole("tab", { name: /Guided Builder/i }).click();
+  await stepNavigation.getByRole("button", { name: /Model purpose/i }).click();
+  await page.getByRole("textbox", { name: /Model name/i }).fill("Axe replacement draft");
+  await page.getByRole("button", { name: "Review", exact: true }).click();
+  await page.getByRole("button", { name: "Open draft in Advanced Builder" }).click();
+  const overwriteDialog = page.getByRole("alertdialog", { name: "Replace the current Advanced Author Schema draft?" });
+  await expectAxeClean(page);
+  await overwriteDialog.getByRole("button", { name: "Cancel" }).click();
+
+  await expectNoDocumentHorizontalOverflow(page);
   await expectNoDiagnostics(diagnostics);
 });
 
