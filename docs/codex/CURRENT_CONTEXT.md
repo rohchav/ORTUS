@@ -1,18 +1,20 @@
 # ORTUS Current Context
 
-Last updated: 2026-07-15 after Prompt GW9 Ephemeral Landscape Sampling Preview V1
+Last updated: 2026-07-15 after Prompt GW9B Ephemeral Landscape Sampling Preview V1 Audit and Hardening
 
 ## Current Prompt Status
 
-Prompt GW9 adds the first real Atlas sampling slice. `/atlas` can explicitly run one bounded `flocking-boids` preview over one bundled validated scenario, one or two supported numeric axes, one supported final-tick metric, one to three explicit deterministic seeds, and no more than 5,000 work units. Each sample uses a fresh engine through the shared validated RunConfig factory. Execution is sequential, cancellation is checked between samples, exact provenance stays in component memory, stale results remain tied to their original request, and reload returns Atlas to unsampled state.
+Prompt GW9 adds the first real Atlas sampling slice. Prompt GW9B audits and hardens it without widening support. `/atlas` can explicitly run one bounded `flocking-boids` preview over one bundled validated scenario, one or two supported numeric axes, one supported final-tick metric, one to three canonical explicit deterministic seeds, and no more than 5,000 work units. Each sample uses a fresh engine through the shared validated RunConfig factory. Execution is sequential, cancellation is checked between samples and on unmount, exact provenance stays in component memory, stale results remain tied to their original request, and reload returns Atlas to unsampled state.
 
 The current GW8 probe-planning scaffold remains non-executable and cannot map safely because it lacks stable runtime IDs and exact values. GW9 does not mutate World or Experiment Runner, write storage, create Atlas/Lab/comparison records, interpolate, detect regimes or transitions, establish confidence, validate science, execute Builder artifacts, or generalize preview support beyond its explicit capability descriptor.
 
 GW9 complete.
 
-GW9B required next.
+GW9B complete.
 
-Final GW9 gates: focused Playwright `50 passed`; full UI Playwright `65 passed`; typecheck passed; unit tests `70 files / 581 tests` passed; production build passed; simulation/per-preview performance smoke passed; and `git diff --check` passed. `npm run lint: unavailable, package.json has no lint script.` Actual browser zoom, screen-reader, assistive-technology, forced-colors, mobile-workflow, user-comprehension, and WCAG conformance remain unverified.
+The next documented roadmap milestone is F1: Fractal Metrics V1, ready after commit publication and not started here.
+
+Final GW9B gates: focused Playwright `53 passed`; full UI Playwright `68 passed`; typecheck passed; unit tests `70 files / 590 tests` passed; production build passed; simulation performance and the 2-run/10-work-unit preview smoke passed, with the preview smoke at 28.07 ms on this machine; and `git diff --check` passed. `npm run lint: unavailable, package.json has no lint script.` Actual browser zoom, screen-reader, assistive-technology, forced-colors, mobile-workflow, user-comprehension, and WCAG conformance remain unverified.
 
 ## Project Identity
 
@@ -160,12 +162,12 @@ The post-30B repository hygiene, dependency stabilization, durable context, and 
 UX6 complete.
 UX6B complete.
 GW9 complete.
-GW9B required next.
-Next recommended prompt: GW9B Ephemeral Landscape Sampling Preview Audit and Hardening.
+GW9B complete.
+The next documented roadmap milestone is F1: Fractal Metrics V1, ready after commit publication.
 
-Completed sequence: UX6B -> GW9. Required next gate: GW9B.
+Completed sequence: UX6B -> GW9 -> GW9B. F1 is not started.
 
-Do not start GW9B or further Research World implementation, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or further Research World/fractal/multiscale implementation without explicit approval. Rendered Playwright/Axe evidence does not establish actual browser zoom, screen-reader, assistive-technology, forced-colors, full WCAG, mobile-workflow, or user-comprehension readiness.
+Do not start F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or further Research World/fractal/multiscale implementation without explicit approval. Rendered Playwright/Axe evidence does not establish actual browser zoom, screen-reader, assistive-technology, forced-colors, full WCAG, mobile-workflow, or user-comprehension readiness.
 
 Implemented runtime foundations include scenarios, snapshots, template-defined behavior modes, agent composition, interventions, experiments, run summaries/comparison, seeded randomness, metrics, spaces, template metadata, and a narrow Opinion Dynamics `socialLearning` behavior mode audited in Prompt 33D.
 
@@ -278,7 +280,7 @@ Prompt 35 and Prompt 35B were committed together in `7696381 feat: Implement Mod
 
 ## Next Recommended Prompt
 
-Next Research World prompt: GW9B only with explicit approval. Do not start GW9B or further Research World implementation, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or further Research World/fractal/multiscale implementation without explicit approval.
+The Research World sequence is complete through GW9B. The next documented roadmap milestone is F1: Fractal Metrics V1, not started. Do not start F1 or further Research World/fractal/multiscale implementation without explicit approval.
 
 Next recommended UI/design-system prompt after UX2B: `UI-DESIGN-SYSTEM-1: Rendered Responsive, Typography + Visualization Accessibility Audit`.
 
@@ -337,4 +339,4 @@ Next recommended UI/design-system prompt after UX2B: `UI-DESIGN-SYSTEM-1: Render
 - GW3 intervention readiness is live World Intervene context only. It is not a saved intervention plan, experiment record, Lab intervention record, Atlas discovery, notebook, reusable asset, behavioral landscape, empirical observation, validation result, or causal/evidence proof.
 - Do not add GW3 storage, timestamps, random ids, UUIDs, fingerprints, route state, hidden readiness stores, runtime behavior, template behavior, Builder execution, Lab intervention records, Atlas records, sampled regions, behavioral landscapes, progression state, policy-effectiveness claims, or real-world causal claims without a dedicated audited prompt.
 - UX6B is complete. Keep Guided-generated ids within each authoritative target-schema bound, keep focus on visible selected tabs when switching authoring views, clear canceled handoff staging status, and keep Workshop guidance in normal responsive flow.
-- GW9 is complete. Keep its capability allowlisted, bounded, deterministic, sequential, isolated, exact-coordinate only, and component-memory-only. GW9B is required next.
+- GW9/GW9B are complete. Keep the capability allowlisted, bounded, deterministic, sequential, isolated, exact-coordinate only, and component-memory-only. Do not infer a complete landscape, persistence, regime detection, statistical confidence, validation, or broader template support.

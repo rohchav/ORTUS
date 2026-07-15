@@ -136,4 +136,4 @@ GW8 proceeded as non-persistent planning vocabulary only. It does not change thi
 
 ## Prompt GW9 Follow-Up
 
-GW9 adds a separate bounded preview executor and exact-coordinate result surface. This does not retroactively make the GW7 scaffold executable, persistent, complete, interpolated, regime-aware, empirically validated, or source-backed as a Discovery Atlas record. GW9B is required to audit the new runtime slice.
+GW9 adds a separate bounded preview executor and exact-coordinate result surface. This does not retroactively make the GW7 scaffold executable, persistent, complete, interpolated, regime-aware, empirically validated, or source-backed as a Discovery Atlas record. GW9B has now audited and hardened that runtime slice without changing this conclusion.

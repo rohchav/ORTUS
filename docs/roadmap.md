@@ -4,7 +4,7 @@ This roadmap reserves the major complex-systems pillars that ORTUS must support 
 
 ## Current Foundation
 
-ORTUS has completed through Prompt 39B, the documented neural/runtime-lab side track, the Research World sequence through GW9, UX3 through UX6B, and RH1. Prompts 1-39B established the modeling foundation; GW9 adds the first bounded Atlas sampling slice:
+ORTUS has completed through Prompt 39B, the documented neural/runtime-lab side track, the Research World sequence through GW9B, UX3 through UX6B, and RH1. Prompts 1-39B established the modeling foundation; GW9 adds and GW9B audits the first bounded Atlas sampling slice:
 
 - Engine/runtime/UI foundation.
 - Scenario Builder.
@@ -70,13 +70,13 @@ ORTUS has completed through Prompt 39B, the documented neural/runtime-lab side t
 - Prompt UX5B adds `docs/ui/PROGRESSIVE_DISCLOSURE_AND_BEGINNER_ADVANCED_INFORMATION_ARCHITECTURE_AUDIT.md`. It audits source and rendered hierarchy, first-read entry, two-tier language, expert reachability, expanded-state accessibility, reload defaults, non-persistence, and scope boundaries. It finds no production defect and adds no UX6, Guided Builder, GW9, runtime/template/Builder execution, persistence, personalization, progression, Lab/Atlas behavior, dependency, asset, font, icon, or route.
 - Prompt UX6 adds `docs/ui/GUIDED_BUILDER_AND_STEP_BY_STEP_CONFIGURATION_FLOW_FOUNDATION.md`, a default six-step Guided Builder, deterministic local-only `ortus.modelSchema` assembly, existing-validator review, explicit overwrite-protected Advanced Author Schema handoff, route-leave protection, and rendered accessibility/World-isolation coverage. Advanced remains immediately available. UX6 adds no schema execution, runtime template, scenario, RunConfig, World mutation, persistence, personalization, progression, Lab/Atlas behavior, dependency, asset, font, icon, or route.
 - Prompt UX6B adds `docs/ui/GUIDED_BUILDER_AND_STEP_BY_STEP_CONFIGURATION_FLOW_FOUNDATION_AUDIT.md`. It audits and hardens deterministic mapping, note-id bounds, mode focus, canceled-handoff truthfulness, responsive Workshop flow, Advanced landmark/scroll semantics, World isolation, non-persistence, non-execution, and rendered five-viewport/Axe contracts. It adds no GW9 behavior, runtime, persistence, personalization, dependency, asset, font, icon, or route.
-- Prompt GW9 adds `docs/ui/EPHEMERAL_LANDSCAPE_SAMPLING_PREVIEW_V1.md` and one explicit Atlas preview capability for `flocking-boids`. It validates canonical one/two-axis requests, runs fresh deterministic engines sequentially, observes one final-tick metric, retains exact in-memory provenance, supports cancellation between samples, and resets on reload. It does not execute the conceptual probe plan, persist results, mutate World or Experiment Runner, interpolate, detect regimes, validate science, or generalize sampling to other templates.
+- Prompt GW9 adds `docs/ui/EPHEMERAL_LANDSCAPE_SAMPLING_PREVIEW_V1.md` and one explicit Atlas preview capability for `flocking-boids`. Prompt GW9B audits and hardens it in `docs/ui/EPHEMERAL_LANDSCAPE_SAMPLING_PREVIEW_V1_AUDIT.md`, including canonical seed/fixed ordering, complete available provenance, unmount cancellation, replacement/error semantics, exact epistemic copy, and adversarial/rendered tests. It does not execute the conceptual probe plan, persist results, mutate World or Experiment Runner, interpolate, detect regimes, validate science, or generalize sampling to other templates.
 
 These foundations are deliberately service-first or metadata-first unless documented otherwise. Networks, resources, feedback primitives, boundary/environment models, spatial fields, observability models, causal assumptions, quantity semantics, emergence descriptors, robustness/resilience descriptors, and strategy/control descriptors are headless structural services until a template explicitly uses them at runtime. A template must not claim support for a primitive merely because a service exists.
 
 After Prompt 30B, ORTUS completed a repository hygiene, durable context, dependency stabilization, and performance/scalability pass. That pass added and validated performance instrumentation and spatial-indexing foundations, but it does not turn reserved structural primitives into runtime support and is not evidence for high-scale readiness by itself.
 
-Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 39B: Scenario Planning From Schema Audit are complete. The documented side-track and Research World/UI prompts through GW9 are complete. GW9 complete. GW9B required next. Do not start GW9B, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or further Research World/fractal/multiscale implementation without explicit approval.
+Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 39B: Scenario Planning From Schema Audit are complete. The documented side-track and Research World/UI prompts through GW9B are complete. GW9B complete. The next documented roadmap milestone is F1: Fractal Metrics V1, ready after commit publication and not started. Do not start F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or further Research World/fractal/multiscale implementation without explicit approval.
 
 ## Revised Prompt Sequence
 
@@ -212,7 +212,8 @@ Completed Guided Builder foundation:
 
 1. UX6 - Guided Builder and Step-by-Step Configuration Flow Foundation. UX6 complete.
 2. UX6B - Guided Builder and Step-by-Step Configuration Flow Audit and Hardening. UX6B complete.
-3. GW9 - Ephemeral Landscape Sampling Preview V1. GW9 complete. GW9B required next.
+3. GW9 - Ephemeral Landscape Sampling Preview V1. GW9 complete.
+4. GW9B - Ephemeral Landscape Sampling Preview V1 Audit and Hardening. GW9B complete.
 
 Prompt 38 boundary:
 

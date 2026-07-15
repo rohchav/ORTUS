@@ -1,6 +1,6 @@
 # Ephemeral Landscape Sampling Preview V1
 
-Status: Prompt GW9 implementation record. GW9 is complete when the final gate recorded below passes. GW9B is required next.
+Status: Prompt GW9 implementation record. GW9 is complete and Prompt GW9B has audited and hardened this bounded slice.
 
 ## 1. Scope
 
@@ -81,7 +81,7 @@ One-axis requests generate two to five inclusive X values. Result rows retain th
 
 ## 17. Two-axis sampling
 
-Two-axis requests generate the Cartesian product of distinct X and Y parameters. Ordering is deterministic with Y outermost, X inside each row, and seed order inside each coordinate.
+Two-axis requests generate the Cartesian product of distinct X and Y parameters. Ordering is deterministic with Y outermost, X inside each row, and canonical ascending seed order inside each coordinate.
 
 ## 18. Axis-generation rules
 
@@ -89,7 +89,7 @@ Minimum and maximum must be finite and ordered, point count must be 2 through 5,
 
 ## 19. Seed rules
 
-The documented static default is `[101]`. Users provide one to three unique signed 32-bit integer seeds in explicit order. Duplicate, empty, non-integer, random, UUID, crypto, and time-derived seeds are rejected or absent.
+The documented static default is `[101]`. Users provide one to three unique signed 32-bit integer seeds; GW9B canonicalizes them into ascending numeric order so reordered equivalent sets have identical requests. Duplicate, empty, non-integer, random, UUID, crypto, and time-derived seeds are rejected or absent.
 
 ## 20. Tick-horizon rules
 
@@ -101,7 +101,7 @@ Work units equal `grid points x seeds x tick horizon`. Requests are rejected bef
 
 ## 22. Preview-request model
 
-`EphemeralLandscapePreviewRequest` contains schema/artifact/capability versions, stable template and scenario IDs, canonical axes and exact values, ordered seeds, tick horizon, metric ID, `finalTick` observation semantics, fixed scenario parameters, and the recomputed work estimate. Full canonical validation rejects forged derived fields.
+`EphemeralLandscapePreviewRequest` contains schema/artifact/capability versions, stable template and scenario IDs, canonical axes and exact values, canonical ascending seeds, tick horizon, metric ID, `finalTick` observation semantics, sorted fixed scenario parameters, and the recomputed work estimate. Full canonical validation rejects forged derived fields.
 
 ## 23. Sample-run model
 
@@ -165,7 +165,7 @@ Only attempted coordinates appear in a result. Every displayed successful value 
 
 ## 38. Provenance
 
-An explicit disclosure shows template/scenario IDs and names, capability/template version, axis IDs and exact values, fixed parameters, seeds, tick horizon, metric ID/name/unit, final-tick semantics, work units, counts, cancellation, and status. Provenance remains bound to the original request when controls change.
+An explicit disclosure shows request artifact/schema version, template/scenario IDs and names, capability/template version, axis IDs and exact values, fixed parameters, seeds, tick horizon, metric ID/name/unit, final-tick semantics, work units, planned points/runs, attempted/successful/failed counts, cancellation, and status. Provenance remains bound to the original request when controls change.
 
 ## 39. Stale-result behavior
 
@@ -177,7 +177,7 @@ Changing completed-preview configuration keeps the old result visible but marks 
 
 ## 41. Non-persistence boundary
 
-GW9 adds no Atlas preview storage, cookie, IndexedDB, server, saved record, autosave, history, or publication path. Existing bounded World/UI storage is untouched and remains semantically separate.
+GW9 adds no Atlas preview storage, cookie, IndexedDB, server, saved record, autosave, history, or publication path. Existing bounded World/UI storage is untouched and remains semantically separate. GW9B also cancels remaining cooperative work when the Atlas component unmounts and suppresses post-unmount state updates.
 
 ## 42. Reload behavior
 
@@ -251,14 +251,14 @@ Final verification passed: focused Playwright `50 passed`; full UI Playwright `6
 
 Only one template and one bundled scenario are supported. Sampling is sequential on the main browser thread, cancellation occurs only between samples, the work cap is a safety limit rather than benchmark proof, probe plans cannot map safely, results are temporary, and actual browser zoom, screen readers, assistive technology, forced colors, mobile workflow, user comprehension, and WCAG conformance remain unverified.
 
-## 60. GW9B requirement
+## 60. GW9B audit
 
-GW9B must audit and harden this implementation before further Atlas expansion. It must not infer persistence, broader template support, plan execution, interpolation, regime detection, validation, or scientific readiness from GW9.
+GW9B audits and hardens this implementation in `EPHEMERAL_LANDSCAPE_SAMPLING_PREVIEW_V1_AUDIT.md`. It fixes canonical seed/fixed ordering, unmount cancellation, provenance completeness, replacement/error semantics, and exact epistemic copy without inferring persistence, broader template support, plan execution, interpolation, regime detection, validation, or scientific readiness.
 
 ## 61. Final decision
 
-Ready for GW9B. The final verification gate is green, and the bounded implementation is deterministic, isolated, non-persistent, exact-coordinate only, and explicit about its epistemic limits. Actual browser zoom and assistive-technology gaps remain documented nonblocking audit work.
+GW9B finds the bounded implementation ready for the next documented roadmap milestone after commit publication. It remains deterministic, isolated, non-persistent, exact-coordinate only, and explicit about its epistemic limits. Actual browser zoom and assistive-technology gaps remain documented limitations.
 
 GW9 complete.
 
-GW9B required next.
+GW9B complete. The next documented roadmap milestone is F1: Fractal Metrics V1, not started here.

@@ -1,6 +1,6 @@
 # Behavioral Landscape Exploration Foundation
 
-Status: Prompt GW7 implementation source of truth, audited by GW7B and updated through GW9. GW7/GW7B define behavioral-landscape vocabulary and a conceptual zero-Tab-stop scaffold; GW8/GW8B add separate non-executable probe planning. GW9 adds a separate bounded ephemeral exact-coordinate preview but does not make the GW7 scaffold executable, complete, interpolated, saved, regime-aware, validated, or a Discovery Atlas record.
+Status: Prompt GW7 implementation source of truth, audited by GW7B and updated through GW9B. GW7/GW7B define behavioral-landscape vocabulary and a conceptual zero-Tab-stop scaffold; GW8/GW8B add separate non-executable probe planning. GW9/GW9B add and audit a separate bounded ephemeral exact-coordinate preview but do not make the GW7 scaffold executable, complete, interpolated, saved, regime-aware, validated, or a Discovery Atlas record.
 
 ## 1. Purpose
 
@@ -155,3 +155,7 @@ GW8B is complete in `docs/ui/LANDSCAPE_PROBE_PLANNING_FOUNDATION_AUDIT.md`. It f
 ## Prompt GW9 Relationship
 
 GW9 now provides one explicitly scoped ephemeral Flocking preview over exact selected coordinates. It is a sparse sample of one supported model configuration, not a complete behavioral landscape. It does not interpolate between cells, detect regimes or transitions, persist a map, validate a model, or generalize GW7 vocabulary into a landscape-analysis runtime.
+
+## Prompt GW9B Relationship
+
+GW9B confirms and tests that boundary. Its hardening improves canonical requests, provenance, cancellation, and presentation only; it does not make the GW7 conceptual scaffold executable, complete, interpolated, persistent, regime-aware, or scientifically validated.

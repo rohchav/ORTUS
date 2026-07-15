@@ -232,4 +232,4 @@ This means the existing GW8 foundation is ready to be followed by a future GW9 p
 
 ## Prompt GW9 Follow-Up
 
-GW9 is now complete, but it does not execute this probe-plan artifact. A headless mapping audit rejects conversion because the plan contains conceptual vocabulary rather than exact runtime IDs and values. The separately configured preview remains bounded, deterministic, isolated, and non-persistent. GW9B is required next.
+GW9 is complete, but it does not execute this probe-plan artifact. A headless mapping audit rejects conversion because the plan contains conceptual vocabulary rather than exact runtime IDs and values. GW9B confirms that the separately configured preview remains bounded, deterministic, isolated, non-persistent, and unable to convert or execute this plan.

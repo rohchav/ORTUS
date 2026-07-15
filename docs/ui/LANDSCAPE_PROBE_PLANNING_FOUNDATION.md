@@ -175,4 +175,4 @@ Decision: ready for GW9. GW9 must still arrive only through an explicit future p
 
 ## Prompt GW9 Result
 
-GW9 followed through a separate explicit preview form and request model. The current probe-plan foundation has no stable template, scenario, parameter, metric, seed, or tick values, so a handoff would invent or silently discard execution fields. No `Run probe plan` action exists; the original plan remains unchanged and non-executable. GW9 complete. GW9B required next.
+GW9 followed through a separate explicit preview form and request model. The current probe-plan foundation has no stable template, scenario, parameter, metric, seed, or tick values, so a handoff would invent or silently discard execution fields. No `Run probe plan` action exists; the original plan remains unchanged and non-executable. GW9B has audited this separation and adds no probe-plan execution or persistence.

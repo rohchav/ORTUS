@@ -1,10 +1,10 @@
 # ORTUS Full Prompt Roadmap
 
-*Last updated after Prompt GW9 Ephemeral Landscape Sampling Preview V1.*
+*Last updated after Prompt GW9B Ephemeral Landscape Sampling Preview V1 Audit and Hardening.*
 
 ## Current Status
 
-ORTUS has completed the core runtime/template and modeling-workbench foundations through Prompt 39B, the neural/runtime-lab side track, the Research World sequence through GW9, the UX3 through UX6B track, and RH1 source-of-truth hygiene.
+ORTUS has completed the core runtime/template and modeling-workbench foundations through Prompt 39B, the neural/runtime-lab side track, the Research World sequence through GW9B, the UX3 through UX6B track, and RH1 source-of-truth hygiene.
 
 Current project status:
 
@@ -49,15 +49,16 @@ Completed audit prompt: Prompt UX5B — Progressive Disclosure and Beginner/Adva
 Completed implementation prompt: Prompt UX6 — Guided Builder and Step-by-Step Configuration Flow Foundation; adds a deterministic, non-persistent, six-step `ortus.modelSchema` drafting flow, real existing-validator review, explicit overwrite-protected handoff to Advanced Author Schema, and rendered accessibility/World-isolation coverage without schema execution, runtime/template/scenario/RunConfig behavior, persistence, personalization, progression, onboarding, Lab/Atlas behavior, dependencies, assets, fonts, or icons
 Completed audit prompt: Prompt UX6B — Guided Builder and Step-by-Step Configuration Flow Audit and Hardening; audits deterministic mapping, local state, validation, handoff/overwrite safety, World isolation, capability honesty, accessibility, and responsive behavior; fixes bounded identifier, focus, stale-status, layout, landmark, and scroll-region defects without adding runtime, persistence, personalization, GW9 behavior, dependencies, assets, fonts, icons, or routes
 Completed implementation prompt: Prompt GW9 — Ephemeral Landscape Sampling Preview V1; adds one explicit bounded Flocking preview with canonical one/two-axis requests, deterministic fresh-engine samples, final-tick numeric metrics, exact in-memory provenance, cancellation between samples, no persistence, no generic probe-plan execution, no interpolation, and no regime or scientific-validity claims
+Completed audit prompt: Prompt GW9B — Ephemeral Landscape Sampling Preview V1 Audit and Hardening; hardens canonical seed/fixed ordering, provenance, unmount cancellation, replacement/error semantics, exact epistemic copy, and adversarial/rendered coverage without widening support or adding persistence
 Post-30B stabilization completed: repo hygiene, durable Codex context, dependency repair, generated-artifact cleanup, and runtime performance/scalability baseline
 UX6 complete.
 UX6B complete.
 GW9 complete.
-GW9B required next.
-Next recommended prompt: GW9B Ephemeral Landscape Sampling Preview Audit and Hardening.
-Do not start GW9B or further Research World implementation, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or further Research World/fractal/multiscale implementation without explicit approval.
+GW9B complete.
+The next documented roadmap milestone is F1: Fractal Metrics V1, ready after commit publication.
+Do not start F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or further Research World/fractal/multiscale implementation without explicit approval.
 
-Completed sequence: UX6B -> GW9. Required next gate: GW9B.
+Completed sequence: UX6B -> GW9 -> GW9B. Next documented milestone: F1, not started.
 ```
 
 Critical global boundary:
@@ -3748,6 +3749,7 @@ Prompt UX6B Guided Builder and Step-by-Step Configuration Flow Audit and Hardeni
 UX6B complete.
 Prompt GW9 Ephemeral Landscape Sampling Preview V1 is complete.
 GW9 complete.
-GW9B required next.
-Next recommended prompt: GW9B Ephemeral Landscape Sampling Preview Audit and Hardening.
+Prompt GW9B Ephemeral Landscape Sampling Preview V1 Audit and Hardening is complete.
+GW9B complete.
+The next documented roadmap milestone is F1: Fractal Metrics V1, ready after commit publication.
 ```

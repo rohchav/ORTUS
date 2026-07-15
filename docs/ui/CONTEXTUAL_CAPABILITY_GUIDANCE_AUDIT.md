@@ -223,4 +223,4 @@ GW8 later adds non-persistent landscape probe planning vocabulary on Atlas. That
 
 ## GW9 Follow-Up
 
-GW9 updates Atlas guidance to describe the narrow preview that now exists while preserving planning-only probe fields and still-unimplemented persistence, analysis, publication, and validation. Guidance does not execute or persist the preview and remains static/source-backed. GW9B must audit the new implementation and these updated claims next.
+GW9 updates Atlas guidance to describe the narrow preview that now exists while preserving planning-only probe fields and still-unimplemented persistence, analysis, publication, and validation. Guidance does not execute or persist the preview and remains static/source-backed. GW9B has now audited those claims and found no guidance-created capability or support overclaim.

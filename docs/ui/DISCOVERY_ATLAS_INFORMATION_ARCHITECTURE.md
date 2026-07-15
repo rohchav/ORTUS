@@ -1,6 +1,6 @@
 # Discovery Atlas Information Architecture
 
-Status: Prompt GW4 implementation source of truth, audited by GW4B and updated through GW9. GW4/GW4B define non-persistent Atlas evidence semantics and keep persistent sampled evidence unresolved until source-backed Atlas records exist. GW7/GW7B add behavioral-landscape vocabulary; GW8/GW8B add non-executable probe-planning vocabulary. GW9 separately adds one bounded ephemeral exact-coordinate preview. It does not create saved discoveries, evidence records, saved landscapes or probe plans, persistent sampled-region maps, Lab records/publication, run history, storage, progression, validation, calibration, real-world discovery certification, Builder execution, dependencies, assets, or fonts.
+Status: Prompt GW4 implementation source of truth, audited by GW4B and updated through GW9B. GW4/GW4B define non-persistent Atlas evidence semantics and keep persistent sampled evidence unresolved until source-backed Atlas records exist. GW7/GW7B add behavioral-landscape vocabulary; GW8/GW8B add non-executable probe-planning vocabulary. GW9/GW9B separately add and audit one bounded ephemeral exact-coordinate preview. They do not create saved discoveries, evidence records, saved landscapes or probe plans, persistent sampled-region maps, Lab records/publication, run history, storage, progression, validation, calibration, real-world discovery certification, Builder execution, dependencies, assets, or fonts.
 
 ## 1. Purpose
 
@@ -203,3 +203,7 @@ GW8B adds `docs/ui/LANDSCAPE_PROBE_PLANNING_FOUNDATION_AUDIT.md` and hardens the
 ## Prompt GW9 Update
 
 GW9 adds one bounded, deterministic, isolated, component-memory-only sampling preview. Exact executed coordinates may now be labeled sampled within that request, with final-tick numeric values and in-memory provenance. This does not create a saved Atlas evidence record, persistent sampled-region map, complete landscape, regime, Lab publication, validation result, or real-world discovery. The GW4/GW4B record semantics remain future work.
+
+## Prompt GW9B Audit
+
+GW9B audits and hardens the ephemeral preview without changing the Discovery Atlas record boundary. Canonical seeds, provenance, unmount cancellation, replacement/error semantics, and rendered evidence are stronger; no saved evidence record, persistent map, Lab publication, regime, validation result, or broader Atlas runtime is added.

@@ -292,10 +292,15 @@ function buildRequest(input: EphemeralLandscapePreviewConfigurationInput): Ephem
 
   const axisIds = new Set([xAxis.parameterId, ...(yAxis ? [yAxis.parameterId] : [])]);
   const fixedParameters = Object.fromEntries(
-    Object.entries(scenario.parameters).filter(([parameterId]) => !axisIds.has(parameterId))
+    Object.entries(scenario.parameters)
+      .filter(([parameterId]) => !axisIds.has(parameterId))
+      .sort(([left], [right]) => left.localeCompare(right))
   ) as ParameterValues;
+  const canonicalSeeds = input.seeds
+    .map((seed) => (Object.is(seed, -0) ? 0 : seed))
+    .sort((left, right) => left - right);
   const gridPointCount = xAxis.values.length * (yAxis?.values.length ?? 1);
-  const sampleRunCount = gridPointCount * input.seeds.length;
+  const sampleRunCount = gridPointCount * canonicalSeeds.length;
   const workUnits = sampleRunCount * input.tickHorizon;
   if (gridPointCount > maxEphemeralPreviewGridPoints) {
     issues.push({ path: "workEstimate.gridPointCount", message: `Preview grid must not exceed ${maxEphemeralPreviewGridPoints} points.` });
@@ -318,7 +323,7 @@ function buildRequest(input: EphemeralLandscapePreviewConfigurationInput): Ephem
     scenarioId: scenario.scenarioId,
     xAxis,
     ...(yAxis ? { yAxis } : {}),
-    seeds: [...input.seeds],
+    seeds: canonicalSeeds,
     tickHorizon: input.tickHorizon,
     metricId: metric.id,
     observation: "finalTick",

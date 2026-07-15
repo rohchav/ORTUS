@@ -1,6 +1,6 @@
 # Contextual Capability Guidance
 
-Status: Prompt GW6 implementation source of truth, audited by GW6B and updated through GW9. Guidance describes the newly available bounded Atlas preview separately from planning-only probe artifacts and unimplemented persistence/analysis. Guidance itself still creates no runtime, record, persistence, validation, personalization, progression, or Builder behavior.
+Status: Prompt GW6 implementation source of truth, audited by GW6B and updated through GW9B. Guidance describes the bounded Atlas preview separately from planning-only probe artifacts and unimplemented persistence/analysis. Guidance itself still creates no runtime, record, persistence, validation, personalization, progression, or Builder behavior.
 
 ## 1. Boundary
 
@@ -80,3 +80,7 @@ GW6 rendered verification is smoke evidence only. It does not prove actual brows
 ## 7. GW6B Gate
 
 Prompt GW6B audited this layer before future Research World expansion. The audit re-checked non-persistence, route placement, status semantics, no user-derived guidance behavior, no fake progression, no fake records/actions, accessibility smoke coverage, viewport behavior, and copy that might imply capability creation.
+
+## 8. GW9B Status
+
+GW9/GW9B update Atlas guidance only to describe the explicit Flocking preview that actually exists. Guidance still does not create support, execute probe plans, save output, infer regimes, recommend parameters, validate science, or generalize the preview to other templates.

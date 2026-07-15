@@ -1,5 +1,47 @@
 # ORTUS Codex Session Log
 
+## 2026-07-15 - Prompt GW9B Ephemeral Landscape Sampling Preview V1 Audit and Hardening
+
+Goal: audit GW9 as a real but narrow Flocking-only runtime slice, fix only demonstrated defects, and block any inference of generic landscape execution, persistence, regime detection, confidence, validation, or broader template support.
+
+Starting state:
+
+- Clean aligned `main` and `origin/main` at `67e2692` (`feat: add ephemeral landscape sampling preview`).
+- Baseline focused Playwright: 50 passed; full UI Playwright: 65 passed.
+- Baseline typecheck, 70 files / 581 unit tests, production build, simulation/per-preview performance, and `git diff --check` passed.
+- `npm run lint: unavailable, package.json has no lint script.`
+
+Audit findings and hardening:
+
+- Canonical seed lists were order-sensitive. Requests now normalize negative zero and sort unique seeds numerically; fixed scenario keys are also sorted.
+- Route unmount did not explicitly stop remaining cooperative execution. Cleanup now cancels the active signal and suppresses post-unmount progress/result state updates.
+- Provenance omitted request artifact/schema version and planned/attempted/successful counts. Those available fields are now visible; no separate engine version is invented.
+- Replacement copy did not identify whether output was current or stale, invalid controls lacked an explicit ARIA error-summary association, and two required epistemic sentences were only paraphrased. All three boundaries are now explicit.
+- Adversarial tests now cover forged identity/derived fields, prototype-like keys, exact 5,000/5,001 handling, decimal/integer axes, canonical seeds, exact tick N and N-1/N+1 rejection, factory freshness, failure stages, non-finite metrics, progress, zero versus absence, engine non-retention, registry/source isolation, and roadmap status.
+- Rendered tests add integer-axis and matrix-orientation proof, complete provenance, replacement confirmation, zero versus no-value, accessible failed/retry, route-unmount cancellation, literal in-flight reload reset, no-storage checks, and required epistemic copy.
+- The required repository-wide scope search classified matches as pre-existing implementation, guardrails/future boundaries, GW9 negative language, or negative tests. No unexpected GW9 persistence, queue, worker, interpolation, regime, confidence, personalization, Builder execution, World mutation, random identity, or publication path was found.
+
+Rendered audit notes:
+
+- A stale Next.js process from before the audit occupied port 3000 and twice left World in its initialization placeholder. Terminating only that stale local process restored clean current-tree runs; no product timeout was changed.
+- Completed two-axis output was visually inspected at `900x700` with no document horizontal overflow and correct X-column/Y-row orientation.
+- Headless Ctrl-plus attempts did not change browser metrics. Actual browser zoom at 125%, 150%, and 200% was not verified.
+- Screen-reader, assistive-technology, forced-colors, mobile-workflow, user-comprehension, and WCAG conformance remain unverified.
+
+Final verification:
+
+- Focused Playwright: 53 passed.
+- Full UI Playwright: 68 passed.
+- Typecheck: passed.
+- Unit tests: 70 files / 590 tests passed.
+- Production build: passed; `/atlas` remained a static route.
+- Simulation performance: passed.
+- Preview smoke: completed 2 runs / 10 work units at tick 5 in 28.07 ms on this machine; this is not a scalability estimate.
+- `git diff --check`: passed.
+- `npm run lint: unavailable, package.json has no lint script.`
+
+Decision: GW9B complete. The next documented roadmap milestone is `F1: Fractal Metrics V1`, ready after commit publication and not started here. Commit locally with `test: audit ephemeral landscape sampling preview`; do not push.
+
 ## 2026-07-15 - Prompt GW9 Ephemeral Landscape Sampling Preview V1
 
 Goal: add the first real bounded Atlas sampling capability without turning conceptual probe plans into generic execution or adding persistence, interpolation, regime detection, World mutation, Experiment Runner mutation, Builder execution, or scientific claims.

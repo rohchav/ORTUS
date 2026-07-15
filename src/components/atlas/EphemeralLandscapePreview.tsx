@@ -82,6 +82,7 @@ export function EphemeralLandscapePreview() {
   const [pendingReplacement, setPendingReplacement] = useState<EphemeralLandscapePreviewRequest | null>(null);
   const [liveMessage, setLiveMessage] = useState("No preview has been run.");
   const cancellationRef = useRef({ cancelled: false });
+  const mountedRef = useRef(true);
   const errorSummaryRef = useRef<HTMLDivElement>(null);
   const runButtonRef = useRef<HTMLButtonElement>(null);
   const cancelRunButtonRef = useRef<HTMLButtonElement>(null);
@@ -107,6 +108,14 @@ export function EphemeralLandscapePreview() {
       replaceButtonRef.current?.focus();
     }
   }, [pendingReplacement]);
+
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+      cancellationRef.current.cancelled = true;
+    };
+  }, []);
 
   function updateDraft(patch: Partial<PreviewDraft>) {
     setDraft((current) => ({ ...current, ...patch }));
@@ -170,16 +179,25 @@ export function EphemeralLandscapePreview() {
       const nextResult = await executeEphemeralLandscapePreview(request, {
         signal: cancellationRef.current,
         onProgress(nextProgress) {
+          if (!mountedRef.current) {
+            return;
+          }
           setProgress(nextProgress);
           if (nextProgress.status === "running") {
             setLiveMessage(`${nextProgress.completedRunCount} of ${nextProgress.totalRunCount} sample runs complete.`);
           }
         }
       });
+      if (!mountedRef.current) {
+        return;
+      }
       setResult(nextResult);
       setUiStatus(nextResult.status);
       setLiveMessage(completionMessage(nextResult));
     } catch (error) {
+      if (!mountedRef.current) {
+        return;
+      }
       setUiStatus("failed");
       setLiveMessage(`Preview executor failed before a result could be constructed: ${userMessage(error)}`);
     }
@@ -262,7 +280,7 @@ export function EphemeralLandscapePreview() {
         </p>
         <p>
           Preview V1 samples one or two numeric parameters on a small explicit grid and observes one implemented numeric metric at
-          the final configured tick.
+          the final configured tick. This preview describes model behavior, not automatically the real world.
         </p>
       </div>
 
@@ -286,6 +304,7 @@ export function EphemeralLandscapePreview() {
                   value={draft.templateId}
                   disabled={busy}
                   aria-invalid={issueFor("templateId") || undefined}
+                  aria-errormessage={issueFor("templateId") ? "ephemeral-preview-error-summary" : undefined}
                   onChange={(event) => updateDraft({ templateId: event.target.value })}
                 >
                   {ephemeralLandscapePreviewCapabilities.map((item) => (
@@ -302,6 +321,7 @@ export function EphemeralLandscapePreview() {
                   value={draft.scenarioId}
                   disabled={busy}
                   aria-invalid={issueFor("scenarioId") || undefined}
+                  aria-errormessage={issueFor("scenarioId") ? "ephemeral-preview-error-summary" : undefined}
                   onChange={(event) => updateDraft({ scenarioId: event.target.value })}
                 >
                   <option value={currentCapability.scenario.id}>{currentCapability.scenario.name}</option>
@@ -353,13 +373,15 @@ export function EphemeralLandscapePreview() {
                   value={draft.seeds}
                   inputMode="numeric"
                   aria-invalid={issueFor("seeds") || undefined}
+                  aria-errormessage={issueFor("seeds") ? "ephemeral-preview-error-summary" : undefined}
                   aria-describedby="ephemeral-preview-seed-help"
                   onChange={(event) => updateDraft({ seeds: event.target.value })}
                 />
               </label>
               <p id="ephemeral-preview-seed-help">
                 Enter one to three comma-separated integers. Seed variation shows how this model preview changes across the selected
-                deterministic runs. It is not a confidence interval or estimate of real-world uncertainty.
+                deterministic runs. Multiple deterministic seeds do not establish statistical confidence. This is not a confidence
+                interval or estimate of real-world uncertainty.
               </p>
             </fieldset>
 
@@ -375,6 +397,7 @@ export function EphemeralLandscapePreview() {
                   value={draft.tickHorizon}
                   disabled={busy}
                   aria-invalid={issueFor("tickHorizon") || undefined}
+                  aria-errormessage={issueFor("tickHorizon") ? "ephemeral-preview-error-summary" : undefined}
                   onChange={(event) => updateDraft({ tickHorizon: event.target.value })}
                 />
               </label>
@@ -386,6 +409,7 @@ export function EphemeralLandscapePreview() {
                   disabled={busy}
                   aria-required="true"
                   aria-invalid={issueFor("metricId") || undefined}
+                  aria-errormessage={issueFor("metricId") ? "ephemeral-preview-error-summary" : undefined}
                   aria-describedby="ephemeral-preview-metric-help"
                   onChange={(event) => updateDraft({ metricId: event.target.value })}
                 >
@@ -428,7 +452,12 @@ export function EphemeralLandscapePreview() {
 
         <aside className="ephemeral-preview__side" aria-label="Preview execution boundary and status">
           <CornerFramePanel title="Execution Status" eyebrow="Exact sample progress" variant="compact">
-            <p className="ephemeral-preview__live-status" role="status" aria-live="polite" aria-atomic="true">
+            <p
+              className="ephemeral-preview__live-status"
+              role={uiStatus === "failed" ? "alert" : "status"}
+              aria-live={uiStatus === "failed" ? "assertive" : "polite"}
+              aria-atomic="true"
+            >
               {liveMessage}
             </p>
             {progress ? (
@@ -472,8 +501,8 @@ export function EphemeralLandscapePreview() {
           >
             <h2 id="ephemeral-preview-replace-title">Replace the current ephemeral preview?</h2>
             <p id="ephemeral-preview-replace-description">
-              Starting this request discards only the current in-memory Atlas preview. It does not clear World, Experiment Runner,
-              probe-plan, comparison, or storage state.
+              Starting this request discards only the {stale ? "stale" : "current"} in-memory Atlas preview. It does not clear
+              World, Experiment Runner, probe-plan, comparison, or storage state.
             </p>
             <div>
               <button ref={replaceButtonRef} type="button" onClick={confirmReplacement}>
@@ -528,6 +557,7 @@ function AxisFields({ axis, draft, parameters, disabled, issueFor, onSelect, onU
           disabled={disabled}
           aria-required="true"
           aria-invalid={issueFor(`${prefix}Axis.parameterId`) || undefined}
+          aria-errormessage={issueFor(`${prefix}Axis.parameterId`) ? "ephemeral-preview-error-summary" : undefined}
           aria-describedby={`ephemeral-preview-${prefix}-parameter-help`}
           onChange={(event) => onSelect(event.target.value)}
         >
@@ -556,6 +586,9 @@ function AxisFields({ axis, draft, parameters, disabled, issueFor, onSelect, onU
             step={selected?.step ?? "any"}
             disabled={disabled}
             aria-invalid={issueFor(`${prefix}Axis.minimum`) || issueFor(`${prefix}Axis`) || undefined}
+            aria-errormessage={
+              issueFor(`${prefix}Axis.minimum`) || issueFor(`${prefix}Axis`) ? "ephemeral-preview-error-summary" : undefined
+            }
             onChange={(event) => onUpdate(axis === "x" ? { xMinimum: event.target.value } : { yMinimum: event.target.value })}
           />
         </label>
@@ -570,6 +603,9 @@ function AxisFields({ axis, draft, parameters, disabled, issueFor, onSelect, onU
             step={selected?.step ?? "any"}
             disabled={disabled}
             aria-invalid={issueFor(`${prefix}Axis.maximum`) || issueFor(`${prefix}Axis`) || undefined}
+            aria-errormessage={
+              issueFor(`${prefix}Axis.maximum`) || issueFor(`${prefix}Axis`) ? "ephemeral-preview-error-summary" : undefined
+            }
             onChange={(event) => onUpdate(axis === "x" ? { xMaximum: event.target.value } : { yMaximum: event.target.value })}
           />
         </label>
@@ -584,6 +620,9 @@ function AxisFields({ axis, draft, parameters, disabled, issueFor, onSelect, onU
             step="1"
             disabled={disabled}
             aria-invalid={issueFor(`${prefix}Axis.pointCount`) || issueFor(`${prefix}Axis`) || undefined}
+            aria-errormessage={
+              issueFor(`${prefix}Axis.pointCount`) || issueFor(`${prefix}Axis`) ? "ephemeral-preview-error-summary" : undefined
+            }
             onChange={(event) => onUpdate(axis === "x" ? { xPointCount: event.target.value } : { yPointCount: event.target.value })}
           />
         </label>
@@ -906,9 +945,11 @@ function PreviewProvenance({ result }: { result: EphemeralLandscapePreviewResult
         <h3 id="ephemeral-preview-provenance-title">In-memory Preview Provenance</h3>
         <dl className="ephemeral-preview-result__provenance">
           <ProvenanceFact term="Template" value={`${capability.templateName} / ${capability.templateId}`} />
-          <ProvenanceFact term="Template version" value={capability.templateVersion} />
+          <ProvenanceFact term="Runtime template version" value={capability.templateVersion} />
           <ProvenanceFact term="Scenario" value={`${capability.scenario.name} / ${capability.scenario.id}`} />
-          <ProvenanceFact term="Capability version" value={result.capabilityVersion} />
+          <ProvenanceFact term="Request artifact" value={result.request.artifactType} />
+          <ProvenanceFact term="Request schema version" value={result.request.schemaVersion} />
+          <ProvenanceFact term="Preview capability version" value={result.capabilityVersion} />
           <ProvenanceFact
             term="X axis"
             value={`${result.request.xAxis.parameterId}: ${result.request.xAxis.values.map((value) => formatEphemeralPreviewNumber(value)).join(", ")}`}
@@ -926,7 +967,10 @@ function PreviewProvenance({ result }: { result: EphemeralLandscapePreviewResult
           <ProvenanceFact term="Metric unit" value={metric.unit ?? "Dimensionless model value"} />
           <ProvenanceFact term="Observation" value="After the final configured simulation tick" />
           <ProvenanceFact term="Work units" value={String(result.request.workEstimate.workUnits)} />
-          <ProvenanceFact term="Completed runs" value={`${result.completedRunCount} of ${result.plannedRunCount}`} />
+          <ProvenanceFact term="Planned sample points" value={String(result.request.workEstimate.gridPointCount)} />
+          <ProvenanceFact term="Planned runs" value={String(result.plannedRunCount)} />
+          <ProvenanceFact term="Attempted runs" value={String(result.completedRunCount)} />
+          <ProvenanceFact term="Successful runs" value={String(result.successfulRunCount)} />
           <ProvenanceFact term="Failed runs" value={String(result.failedRunCount)} />
           <ProvenanceFact
             term="Cancellation"

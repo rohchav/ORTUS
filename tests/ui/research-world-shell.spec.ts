@@ -1017,6 +1017,8 @@ test("Atlas preview defaults, capability options, validation, duplicate axes, an
   await preview.scrollIntoViewIfNeeded();
   await expect(preview).toHaveAttribute("data-preview-lifecycle", "idle");
   await expect(preview.getByText("This is a bounded, ephemeral sample of model behavior.", { exact: false })).toBeVisible();
+  await expect(preview.getByText("This preview describes model behavior, not automatically the real world.", { exact: false })).toBeVisible();
+  await expect(preview.getByText("Multiple deterministic seeds do not establish statistical confidence.", { exact: false })).toBeVisible();
   await expect(preview.getByText("No parameter is selected automatically.")).toBeVisible();
   await expect(page.locator("#ephemeral-preview-template option")).toHaveCount(1);
   await expect(page.locator("#ephemeral-preview-scenario option")).toHaveCount(1);
@@ -1041,7 +1043,15 @@ test("Atlas preview defaults, capability options, validation, duplicate axes, an
   const errorSummary = page.locator("#ephemeral-preview-error-summary");
   await expect(errorSummary).toBeFocused();
   await expect(page.locator("#ephemeral-preview-x-parameter")).toHaveAttribute("aria-invalid", "true");
+  await expect(page.locator("#ephemeral-preview-x-parameter")).toHaveAttribute(
+    "aria-errormessage",
+    "ephemeral-preview-error-summary"
+  );
   await expect(page.locator("#ephemeral-preview-metric")).toHaveAttribute("aria-invalid", "true");
+  await expect(page.locator("#ephemeral-preview-metric")).toHaveAttribute(
+    "aria-errormessage",
+    "ephemeral-preview-error-summary"
+  );
   await expect(preview).toHaveAttribute("data-preview-lifecycle", "invalid");
   await expectAxeClean(page);
 
@@ -1099,6 +1109,13 @@ test("Atlas one-axis preview preserves provenance, stale semantics, replacement 
   await expect(provenance).toContainText("flocking-boids");
   await expect(provenance).toContainText("atlas-preview-flocking-random-headings-v1");
   await expect(provenance).toContainText("101, 202");
+  await expect(provenance).toContainText("ortus.ephemeralLandscapePreviewRequest");
+  await expect(provenance).toContainText("Request schema version1");
+  await expect(provenance).toContainText("Planned sample points3");
+  await expect(provenance).toContainText("Planned runs6");
+  await expect(provenance).toContainText("Attempted runs6");
+  await expect(provenance).toContainText("Successful runs6");
+  await expect(provenance).toContainText("Failed runs0");
   await expect(provenance).toContainText("After the final configured simulation tick");
   await expectAxeClean(page);
 
@@ -1111,6 +1128,7 @@ test("Atlas one-axis preview preserves provenance, stale semantics, replacement 
   const runButton = page.getByRole("button", { name: "Run ephemeral preview" });
   await runButton.click();
   const replaceDialog = page.getByRole("alertdialog", { name: "Replace the current ephemeral preview?" });
+  await expect(replaceDialog).toContainText("discards only the stale in-memory Atlas preview");
   await expect(replaceDialog.getByRole("button", { name: "Replace and run" })).toBeFocused();
   await expectAxeClean(page);
   await page.keyboard.press("Shift+Tab");
@@ -1120,6 +1138,13 @@ test("Atlas one-axis preview preserves provenance, stale semantics, replacement 
   await page.keyboard.press("Escape");
   await expect(replaceDialog).toHaveCount(0);
   await expect(runButton).toBeFocused();
+
+  await runButton.click();
+  await page.getByRole("alertdialog", { name: "Replace the current ephemeral preview?" }).getByRole("button", { name: "Replace and run" }).click();
+  await expect(page.locator('[data-preview-result-status="completed"]')).toBeVisible({ timeout: 30_000 });
+  await expect(preview.getByText("6 of 6 sample runs complete. Sampled preview ready.")).toBeVisible();
+  await page.locator('[data-preview-result-status="completed"]').getByRole("button", { name: "Show preview provenance" }).click();
+  await expect(page.locator("#ephemeral-preview-provenance")).toContainText("Tick horizon3");
 
   await page.locator("[data-preview-result-status]").getByRole("button", { name: "Clear preview" }).click();
   await expect(page.locator("[data-preview-result-status]")).toHaveCount(0);
@@ -1158,6 +1183,13 @@ test("Atlas two-axis preview renders a sparse semantic matrix across required re
   await expect(matrix).toBeVisible();
   await expect(matrix.getByRole("row")).toHaveCount(3);
   await expect(matrix.getByRole("columnheader")).toHaveCount(4);
+  await expect(matrix.getByRole("columnheader").allTextContents()).resolves.toEqual([
+    "Cohesion weight / Alignment weight",
+    "0.2",
+    "0.5",
+    "0.8"
+  ]);
+  await expect(matrix.getByRole("rowheader").allTextContents()).resolves.toEqual(["0.1", "0.7"]);
   await expect(matrix.getByText("Sampled exact coordinate")).toHaveCount(6);
   await expect(matrix.locator("td strong")).toHaveCount(6);
   await expect(matrix.locator('[data-sample-point-status="sampled"]')).toHaveCount(6);
@@ -1171,6 +1203,35 @@ test("Atlas two-axis preview renders a sparse semantic matrix across required re
     await expectNoDocumentHorizontalOverflow(page);
     await expectFocusedElementVisible(page);
   }
+  await expectAxeClean(page);
+  await expectNoDiagnostics(diagnostics);
+});
+
+test("Atlas integer-axis preview uses explicit rounding, canonical seed order, and exact sampled coordinates", async ({ page }) => {
+  test.setTimeout(90_000);
+  const diagnostics = observePageDiagnostics(page);
+  await page.setViewportSize({ width: 1024, height: 768 });
+  await openDestination(page, destinations[2]);
+  const preview = await configureAtlasPreview(page, {
+    xParameter: "agentCount",
+    xMinimum: "20",
+    xMaximum: "23",
+    xPoints: "3",
+    seeds: "8, -4",
+    ticks: "1"
+  });
+  await expect(preview.getByText("6 / 5000")).toBeVisible();
+  await page.getByRole("button", { name: "Run ephemeral preview" }).click();
+  const result = page.locator('[data-preview-result-status="completed"]');
+  await expect(result).toBeVisible({ timeout: 30_000 });
+  const table = result.getByRole("region", { name: "One-axis sampled preview values" });
+  await expect(table.getByRole("rowheader").allTextContents()).resolves.toEqual(["20", "22", "23"]);
+  await result.getByRole("button", { name: "Show per-seed sample runs" }).click();
+  const seedCells = result.getByRole("region", { name: "Per-seed sample run results" }).locator("tbody tr td:nth-child(3)");
+  await expect(seedCells.allTextContents()).resolves.toEqual(["-4", "8", "-4", "8", "-4", "8"]);
+  await result.getByRole("button", { name: "Show preview provenance" }).click();
+  await expect(page.locator("#ephemeral-preview-provenance")).toContainText("Explicit seeds-4, 8");
+  await expectNoDocumentHorizontalOverflow(page);
   await expectAxeClean(page);
   await expectNoDiagnostics(diagnostics);
 });
@@ -1238,6 +1299,15 @@ test("Atlas renders completed-with-errors when final metric observation is genui
       const first = this[0] as Record<string, unknown> | undefined;
       if (index === -1 && first && typeof first === "object" && "tick" in first && "values" in first) {
         metricHistoryReads += 1;
+        if (metricHistoryReads === 1) {
+          const record = originalAt.call(this, index) as Record<string, unknown> | undefined;
+          if (record && record.values && typeof record.values === "object") {
+            return {
+              ...record,
+              values: { ...(record.values as Record<string, unknown>), alignmentScore: 0 }
+            } as T;
+          }
+        }
         if (metricHistoryReads > 1) {
           return undefined;
         }
@@ -1260,11 +1330,154 @@ test("Atlas renders completed-with-errors when final metric observation is genui
   const table = result.getByRole("region", { name: "One-axis sampled preview values" });
   await expect(table.locator('[data-sample-point-status="sampled"]')).toHaveCount(1);
   await expect(table.locator('[data-sample-point-status="failed"]')).toHaveCount(2);
+  const rows = table.locator("tbody tr");
+  await expect(rows.nth(0).locator("td").nth(0)).toHaveText("0");
+  await expect(rows.nth(0).locator("td").nth(1)).toHaveText("0");
+  await expect(rows.nth(0).locator("td").nth(2)).toHaveText("0");
+  await expect(rows.nth(1).locator("td").nth(0)).toHaveText("No value");
   await expect(table.getByText("No value")).toHaveCount(6);
   await result.getByRole("button", { name: "Show technical sample errors" }).click();
   await expect(page.locator("#ephemeral-preview-errors")).toContainText("metric_observation");
   await expect(page.locator("#ephemeral-preview-errors")).toContainText("Metric record for final tick 2 is unavailable.");
   await expectAxeClean(page);
+  await expectNoDiagnostics(diagnostics);
+});
+
+test("Atlas renders an accessible failed state and permits an explicit retry after pre-result executor failure", async ({ page }) => {
+  test.setTimeout(90_000);
+  const diagnostics = observePageDiagnostics(page);
+  await page.setViewportSize({ width: 900, height: 700 });
+  await openDestination(page, destinations[2]);
+  const preview = await configureAtlasPreview(page, { xPoints: "2", seeds: "101", ticks: "1" });
+  await page.evaluate(() => {
+    const originalMap = Array.prototype.map;
+    (window as Window & { __ortusPreviewOriginalMap?: typeof Array.prototype.map }).__ortusPreviewOriginalMap = originalMap;
+    Array.prototype.map = function patchedMap<T, U>(
+      this: T[],
+      callback: (value: T, index: number, array: T[]) => U,
+      thisArg?: unknown
+    ): U[] {
+      if (this.length === 1 && this[0] === (101 as T)) {
+        throw new Error("bounded request reconstruction failure");
+      }
+      return originalMap.call(this, callback, thisArg) as U[];
+    } as typeof Array.prototype.map;
+  });
+
+  await page.getByRole("button", { name: "Run ephemeral preview" }).click();
+  await expect(preview).toHaveAttribute("data-preview-lifecycle", "failed");
+  await expect(preview.getByRole("alert")).toContainText(
+    "Preview executor failed before a result could be constructed: bounded request reconstruction failure"
+  );
+  await expect(preview.locator("[data-preview-result-status]")).toHaveCount(0);
+  await page.evaluate(() => {
+    const state = window as Window & { __ortusPreviewOriginalMap?: typeof Array.prototype.map };
+    if (state.__ortusPreviewOriginalMap) {
+      Array.prototype.map = state.__ortusPreviewOriginalMap;
+      delete state.__ortusPreviewOriginalMap;
+    }
+  });
+  await expectAxeClean(page);
+
+  await page.getByRole("button", { name: "Run ephemeral preview" }).click();
+  await expect(page.locator('[data-preview-result-status="completed"]')).toBeVisible({ timeout: 30_000 });
+  await expectNoDocumentHorizontalOverflow(page);
+  await expectAxeClean(page);
+  await expectNoDiagnostics(diagnostics);
+});
+
+test("Atlas navigation and reload during execution release work and remount unsampled without storage", async ({ page }) => {
+  test.setTimeout(120_000);
+  const diagnostics = observePageDiagnostics(page);
+  await page.setViewportSize({ width: 1280, height: 600 });
+  await openDestination(page, destinations[2]);
+  const storageBefore = await readStorageEntries(page);
+  await configureAtlasPreview(page, {
+    xParameter: "agentCount",
+    xMinimum: "80",
+    xMaximum: "100",
+    xPoints: "5",
+    seeds: "1, 2, 3",
+    ticks: "100"
+  });
+  await page.evaluate(() => {
+    const originalAt = Array.prototype.at;
+    const originalSetTimeout = window.setTimeout;
+    const state = window as Window & {
+      __ortusPreviewOriginalAt?: typeof Array.prototype.at;
+      __ortusPreviewOriginalSetTimeout?: typeof window.setTimeout;
+      __ortusPreviewMetricReads?: number;
+    };
+    state.__ortusPreviewOriginalAt = originalAt;
+    state.__ortusPreviewOriginalSetTimeout = originalSetTimeout;
+    state.__ortusPreviewMetricReads = 0;
+    Array.prototype.at = function patchedAt<T>(this: T[], index: number): T | undefined {
+      const first = this[0] as Record<string, unknown> | undefined;
+      if (index === -1 && first && typeof first === "object" && "tick" in first && "values" in first) {
+        state.__ortusPreviewMetricReads = (state.__ortusPreviewMetricReads ?? 0) + 1;
+      }
+      return originalAt.call(this, index) as T | undefined;
+    } as typeof Array.prototype.at;
+    window.setTimeout = ((handler: TimerHandler, timeout?: number, ...args: unknown[]) =>
+      originalSetTimeout(handler, timeout === 0 ? 200 : timeout, ...args)) as typeof window.setTimeout;
+  });
+
+  await page.getByRole("button", { name: "Run ephemeral preview" }).click();
+  await page.waitForFunction(() => (window as Window & { __ortusPreviewMetricReads?: number }).__ortusPreviewMetricReads === 1);
+  await page.getByRole("navigation", { name: "Research World destinations" }).getByRole("link", { name: "World" }).click();
+  await expect(page.getByRole("region", { name: "Simulation workspace" })).toBeVisible();
+  const readsAfterUnmount = await page.evaluate(
+    () => (window as Window & { __ortusPreviewMetricReads?: number }).__ortusPreviewMetricReads ?? 0
+  );
+  expect(readsAfterUnmount).toBeGreaterThanOrEqual(1);
+  expect(readsAfterUnmount).toBeLessThan(15);
+  await page.waitForTimeout(600);
+  await expect(
+    page.evaluate(() => (window as Window & { __ortusPreviewMetricReads?: number }).__ortusPreviewMetricReads)
+  ).resolves.toBe(readsAfterUnmount);
+  await page.evaluate(() => {
+    const state = window as Window & {
+      __ortusPreviewOriginalAt?: typeof Array.prototype.at;
+      __ortusPreviewOriginalSetTimeout?: typeof window.setTimeout;
+      __ortusPreviewMetricReads?: number;
+    };
+    if (state.__ortusPreviewOriginalAt) Array.prototype.at = state.__ortusPreviewOriginalAt;
+    if (state.__ortusPreviewOriginalSetTimeout) window.setTimeout = state.__ortusPreviewOriginalSetTimeout;
+    delete state.__ortusPreviewOriginalAt;
+    delete state.__ortusPreviewOriginalSetTimeout;
+    delete state.__ortusPreviewMetricReads;
+  });
+  expect(await readStorageEntries(page)).toEqual(storageBefore);
+
+  await page.getByRole("navigation", { name: "Research World destinations" }).getByRole("link", { name: "Atlas" }).click();
+  const remounted = page.locator("[data-ephemeral-landscape-preview]");
+  await expect(remounted).toHaveAttribute("data-preview-lifecycle", "idle");
+  await expect(remounted.locator("[data-preview-result-status]")).toHaveCount(0);
+  await expect(remounted.getByText("No preview has been run.")).toBeVisible();
+  expect(await readStorageEntries(page)).toEqual(storageBefore);
+
+  await configureAtlasPreview(page, {
+    xParameter: "agentCount",
+    xMinimum: "80",
+    xMaximum: "100",
+    xPoints: "5",
+    seeds: "1, 2, 3",
+    ticks: "100"
+  });
+  await page.evaluate(() => {
+    const originalSetTimeout = window.setTimeout;
+    window.setTimeout = ((handler: TimerHandler, timeout?: number, ...args: unknown[]) =>
+      originalSetTimeout(handler, timeout === 0 ? 5_000 : timeout, ...args)) as typeof window.setTimeout;
+  });
+  await page.getByRole("button", { name: "Run ephemeral preview" }).click();
+  await expect(page.getByRole("button", { name: "Cancel after current sample" })).toBeVisible();
+  await page.reload({ waitUntil: "domcontentloaded" });
+  await page.waitForLoadState("networkidle", { timeout: 5_000 }).catch(() => undefined);
+  const reloaded = page.locator("[data-ephemeral-landscape-preview]");
+  await expect(reloaded).toHaveAttribute("data-preview-lifecycle", "idle");
+  await expect(reloaded.locator("[data-preview-result-status]")).toHaveCount(0);
+  await expect(reloaded.getByText("No preview has been run.")).toBeVisible();
+  expect(await readStorageEntries(page)).toEqual(storageBefore);
   await expectNoDiagnostics(diagnostics);
 });
 

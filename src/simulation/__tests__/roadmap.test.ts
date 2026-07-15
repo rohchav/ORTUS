@@ -197,6 +197,12 @@ describe("roadmap alignment and missing pillar reservations", () => {
     const landscapeProbePlanningFoundationPath = join(repoRoot, "docs", "ui", "LANDSCAPE_PROBE_PLANNING_FOUNDATION.md");
     const landscapeProbePlanningFoundationAuditPath = join(repoRoot, "docs", "ui", "LANDSCAPE_PROBE_PLANNING_FOUNDATION_AUDIT.md");
     const ephemeralLandscapePreviewPath = join(repoRoot, "docs", "ui", "EPHEMERAL_LANDSCAPE_SAMPLING_PREVIEW_V1.md");
+    const ephemeralLandscapePreviewAuditPath = join(
+      repoRoot,
+      "docs",
+      "ui",
+      "EPHEMERAL_LANDSCAPE_SAMPLING_PREVIEW_V1_AUDIT.md"
+    );
     const fullUiUxAuditPath = join(repoRoot, "docs", "ui", "FULL_UI_UX_COMPREHENSION_AND_SANDBOX_THEME_AUDIT.md");
     const sandboxVisualLanguageFoundationPath = join(repoRoot, "docs", "ui", "SANDBOX_VISUAL_LANGUAGE_FOUNDATION.md");
     const sandboxVisualLanguageFoundationAuditPath = join(repoRoot, "docs", "ui", "SANDBOX_VISUAL_LANGUAGE_FOUNDATION_AUDIT.md");
@@ -237,6 +243,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(existsSync(landscapeProbePlanningFoundationPath)).toBe(true);
     expect(existsSync(landscapeProbePlanningFoundationAuditPath)).toBe(true);
     expect(existsSync(ephemeralLandscapePreviewPath)).toBe(true);
+    expect(existsSync(ephemeralLandscapePreviewAuditPath)).toBe(true);
     expect(existsSync(fullUiUxAuditPath)).toBe(true);
     expect(existsSync(sandboxVisualLanguageFoundationPath)).toBe(true);
     expect(existsSync(sandboxVisualLanguageFoundationAuditPath)).toBe(true);
@@ -257,6 +264,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
     const landscapeProbePlanningFoundation = readFileSync(landscapeProbePlanningFoundationPath, "utf8");
     const landscapeProbePlanningFoundationAudit = readFileSync(landscapeProbePlanningFoundationAuditPath, "utf8");
     const ephemeralLandscapePreview = readFileSync(ephemeralLandscapePreviewPath, "utf8");
+    const ephemeralLandscapePreviewAudit = readFileSync(ephemeralLandscapePreviewAuditPath, "utf8");
     const fullUiUxAudit = readFileSync(fullUiUxAuditPath, "utf8");
     const sandboxVisualLanguageFoundation = readFileSync(sandboxVisualLanguageFoundationPath, "utf8");
     const sandboxVisualLanguageFoundationAudit = readFileSync(sandboxVisualLanguageFoundationAuditPath, "utf8");
@@ -281,13 +289,14 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(roadmap).toContain("Completed Prompt 39 scenario-planning foundation");
     expect(roadmap).toContain("Completed Prompt 39 scenario-planning audit");
     expect(roadmap).toContain("Prompt 35 adds a separate `Author Schema` Builder mode");
-    expect(roadmap).toContain("The documented side-track and Research World/UI prompts through GW9 are complete.");
+    expect(roadmap).toContain("The documented side-track and Research World/UI prompts through GW9B are complete.");
     expect(roadmap).toContain("UX5 complete.");
     expect(roadmap).toContain("UX5B complete.");
     expect(roadmap).toContain("UX6 complete.");
     expect(roadmap).toContain("UX6B complete.");
     expect(roadmap).toContain("GW9 complete.");
-    expect(roadmap).toContain("GW9B required next.");
+    expect(roadmap).toContain("GW9B complete.");
+    expect(roadmap).toContain("The next documented roadmap milestone is F1: Fractal Metrics V1");
     expect(roadmap).toContain("Prompt GW9 adds `docs/ui/EPHEMERAL_LANDSCAPE_SAMPLING_PREVIEW_V1.md`");
     expect(roadmap).toContain("Prompt GW7 adds non-persistent Behavioral Landscape Exploration Foundation");
     expect(roadmap).toContain("Prompt GW7B audits and hardens the Behavioral Landscape Exploration Foundation");
@@ -321,8 +330,12 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(ephemeralLandscapePreview).toContain("Only the displayed coordinates were sampled. No values between them were inferred.");
     expect(ephemeralLandscapePreview).toContain("Actual browser zoom at 125%, 150%, and 200% was not verified.");
     expect(ephemeralLandscapePreview).toContain("GW9 complete.");
-    expect(ephemeralLandscapePreview).toContain("GW9B required next.");
+    expect(ephemeralLandscapePreview).toContain("GW9B complete.");
     expect(ephemeralLandscapePreview.match(/^## \d+\. /gm)).toHaveLength(61);
+    expect(ephemeralLandscapePreviewAudit).toContain("GW9B complete.");
+    expect(ephemeralLandscapePreviewAudit).toContain("Actual browser zoom at 125%, 150%, and 200% was not verified.");
+    expect(ephemeralLandscapePreviewAudit).toContain("F1: Fractal Metrics V1");
+    expect(ephemeralLandscapePreviewAudit.match(/^## \d+\. /gm)).toHaveLength(63);
     expect(fullUiUxAudit).toContain("## 37. Final Decision Before GW9");
     expect(fullUiUxAudit).toContain("UX3 complete.");
     expect(fullUiUxAudit).toContain("GW9 paused until the sandbox-theme and guided-comprehension track is addressed or explicitly waived.");
