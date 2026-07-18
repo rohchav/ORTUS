@@ -1,8 +1,8 @@
 # ORTUS HCI / UX / Visual-Direction Audit
 
 Date: 2026-06-11  
-Updated: 2026-07-07 during Prompt RH1 Remote State and Mission-Alignment Hygiene Check
-Prompt: UI-BRAND-1, UI-REMEDIATION-1, Prompt 34B, Prompt 35, Prompt 35B, Prompt 36, Prompt 36B, Prompt 37, Prompt 37B, Prompt 38, Prompt 38B, Prompt 39, Prompt 39B, Prompt F0, Prompt P0, Prompt UX0, Prompt UX1, Prompt UX3, Prompt UX4, Prompt UX4B, Prompt RH1, Prompt GW0, Prompt UX2, Prompt UX2B, Prompt GW1, Prompt GW1B, Prompt GW2, Prompt GW2B, Prompt GW3, Prompt GW3B, Prompt GW4, Prompt GW4B, Prompt GW5, Prompt GW5B, Prompt GW6, Prompt GW6B, Prompt GW7, Prompt GW7B, Prompt GW8, Prompt GW8B, Prompt GW9, Prompt N1, Prompt N1B, Prompt NUX1, Prompt NUX1B, Prompt N2, Prompt N2B, Prompt MR0
+Updated: 2026-07-17 during Prompt R1 Start Hub and World-First Product Reset
+Prompt: historical UI/GW/UX work through GW9B, reset by Prompt R1
 Status: source-based and rendered-smoke-informed audit, not a formal WCAG audit
 
 ## 1. Executive Verdict
@@ -17,6 +17,9 @@ Recommended direction: a disciplined hybrid of Technical Systems Workbench and S
 
 UI-REMEDIATION-1 update:
 The shell now uses task-oriented workspace modes instead of one permanent scrolling drawer. The confirmed clipping causes were not cosmetic: the header used fixed `50px` height plus `overflow-y: hidden`, and the timeline lived as a sticky control inside the left drawer scroll container. Both were removed. The remaining risk is interpretation and safety, not basic reachability.
+
+Prompt R1 update:
+The pre-R1 interface remained a pretty pseudo-sandbox risk: it exposed honest internal architecture more successfully than it exposed a useful first action. R1 makes `/` a Start Hub, moves the actual simulation to `/world`, features an existing Flocking runtime, and makes the live model the dominant World object. It replaces equal destination buttons and seven equal task cards with a product hierarchy based on user intent. This is a substantive improvement, but it is not evidence that first-time users understand the models. R1B must challenge the cold-start path, explanation quality, and interpretation boundaries rather than simply repeat implementation tests.
 
 Prompt 34B update:
 The audit hardened the highest-confidence defects that could be fixed without a redesign: destructive Reset now uses press-and-confirm when meaningful run state exists, workspace tabs have arrow/Home/End keyboard behavior, Setup copy states that model/seed/parameter changes rebuild fresh tick-0 runs, Metric Trace carries local model-output provenance language, and Builder viewport buttons now say they select structural nodes/edges for read-only inspection. Browser screenshot, zoom, and assistive-technology verification still did not happen in this environment.
@@ -1552,3 +1555,22 @@ UX6B complete. GW9 is next. GW9 remains paused until UX6B is committed and remot
 GW9 converts one carefully bounded Atlas path from conceptual-only orientation into real local execution. The configuration has no automatic axis or metric selection, exposes exact work cost before execution, keeps probe planning separate, announces completed-run counts, labels cancellation between samples honestly, and preserves original provenance when controls make a result stale. One- and two-axis outputs use semantic numeric tables rather than interpolated graphics.
 
 Rendered coverage includes invalid/running/cancelling/completed/completed-with-errors/stale states, replacement and clear focus, provenance, reload/storage reset, World/Experiment isolation, five viewport sizes, short height, reduced motion, diagnostics, and Axe. GW9B extends this to integer axes, canonical seed display, failed-state retry, zero versus no-value, matrix orientation, route-unmount cancellation, and reload during execution. This is automated and expert-review evidence, not actual browser-zoom, screen-reader, assistive-technology, forced-colors, mobile-workflow, beginner-comprehension, or WCAG verification. GW9B complete.
+
+## R1 Product-Reset Update
+
+The old entry hierarchy failed recognition-before-recall: new users had to infer whether World, Lab, Atlas, or Workshop contained the first meaningful action. The old World hierarchy then gave configuration, caveats, and the model similar visual weight. Default-visible capability guidance was accurate but badly placed; truthfulness became a wall rather than a guardrail at inference time.
+
+R1's strongest decisions are structural:
+
+- Start leads with one real system and one action, then exposes four intent paths and seven source-backed systems.
+- World is model-first in DOM and visual order, with persistent controls and one compact task workspace.
+- Setup exposes four exact parameters and preserves complete configuration through disclosure.
+- Understand is selected-model documentation, not a dump of global product prohibitions.
+- Atlas's executable preview precedes conceptual orientation; Lab leads with the useful actions it actually supports; Workshop leads with Guided/Advanced choices.
+- Capability detail remains available but no longer receives equal weight with the primary task.
+
+Rendered expert review covered the established five workbench viewports plus mobile Start. The implementation fixed a real 900-pixel World stacking overlap and two short-height Workshop focus-visibility defects. Axe, reduced motion, menu keyboard behavior, focus return, local disclosure state, storage stability, and horizontal-overflow contracts are covered by browser tests.
+
+The blunt remaining finding: R1 makes ORTUS easier to enter, but the project still lacks user evidence. The featured starter is one Flocking path, not a mature starter framework. Lab remains mostly conceptual. Guided Builder is still schema-first beneath its shell. Canvas comprehension, actual browser zoom, screen-reader use, assistive-technology use, forced colors, mobile workflow, and real beginner task success remain unverified.
+
+R1B First-Run and Shell Audit is the next UI prompt. The older `UI-DESIGN-SYSTEM-1` recommendation and immediate-F1 sequencing are superseded by the active reset roadmap; they remain historical recommendations, not current next work.

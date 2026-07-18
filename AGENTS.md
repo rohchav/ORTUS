@@ -556,7 +556,18 @@
 - Do not use progression, unlocks, achievements, badges, gamified steps, missions, quests, streaks, XP, levels, ranks, or smart-recommendation language in capability guidance.
 - Preserve the World / Workshop / Lab / Atlas route shell contracts when adding or auditing guidance.
 - Future-only is capability status, not evidence support; do not use operational statuses for epistemic support.
-- Preserve the route contract: `/` is World, `/lab` is Lab, `/atlas` is Atlas, `/builder` is Workshop, and `/world` or `/workshop` aliases remain absent.
+- Preserve the R1 route contract: `/` is Start, `/world` is World, `/lab` is Lab, `/atlas` is Atlas, `/builder` is Workshop, and `/workshop` remains absent.
+- Keep Start task-centered. Do not restore equal-weight destination architecture, capability matrices, artifact taxonomy, or a disclaimer wall above the featured starter.
+- Derive Start system availability from authoritative production template/runtime metadata. Presentation metadata must not invent runnable support or mutate registries.
+- Keep the featured starter on an existing tested runtime. Starter content must not create hidden parameter defaults, new mechanics, analytics, personalization, persistence, progression, or forced onboarding.
+- Keep the World model surface visually and structurally dominant. Persistent playback controls must remain reachable outside task-panel scrolling.
+- Present direct World tasks as Setup, Observe, Change, and Compare, with specialist tasks reachable through More. UI labels do not change the underlying workspace-mode or runtime semantics.
+- Compact Setup controls must reference the same authoritative parameter definitions and executed values as All parameters; do not create alternate defaults or shadow configuration.
+- Keep Understand model-specific and concise by default. Unrelated global product limitations do not belong in selected-model explanation.
+- Keep complete model notes, capability references, technical foundations, exact parameters, scenarios, experiments, comparisons, diagnostics, Atlas, Lab, and Advanced Workshop reachable through explicit disclosure or navigation.
+- Capability guidance should lead with one relevant contextual note and keep the complete source-backed matrix subordinate. Do not remove a limitation at the point where it affects interpretation.
+- The Flocking starter nudge is page-session-only and dismissible. Do not add storage, completion tracking, XP, achievements, profiling, recommendation inference, or step locks.
+- R1B First-Run and Shell Audit is next. Do not start R2 or later C/S/E milestones from R1 alone.
 - Complete and commit GW1 before starting GW1B.
 - Treat UX0 as documentation and design planning only.
 - Do not implement World/Lab/Atlas/Workshop without a dedicated prompt.
@@ -637,4 +648,4 @@
 - Atlas preview results are component-memory-only exact sampled coordinates. Do not add storage, saved records, history, publication, interpolation, smoothing, contours, inferred unsampled values, regime/transition/tipping-point detection, confidence/coverage/evidence scores, or scientific-validation claims.
 - Keep cancellation language honest: `Cancel after current sample` means the current synchronous sample finishes before cancellation is effective. Unstarted runs remain unsampled and partial results remain visibly partial. Route unmount must cancel remaining cooperative work and suppress post-unmount UI updates.
 - Multiple preview seeds show selected deterministic model variation only; they are not confidence intervals, calibrated probabilities, or real-world uncertainty estimates.
-- GW9/GW9B do not generalize Atlas sampling, make the conceptual behavioral-landscape scaffold runtime-backed, make probe plans executable, or create Discovery Atlas/Lab persistence. GW9B is complete; F1 is the next documented milestone and is not started by this audit.
+- GW9/GW9B do not generalize Atlas sampling, make the conceptual behavioral-landscape scaffold runtime-backed, make probe plans executable, or create Discovery Atlas/Lab persistence. GW9B is complete; R1 is complete; R1B is next. F1 is paused under E3 Analytical Lenses.

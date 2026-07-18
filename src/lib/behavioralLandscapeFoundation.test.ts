@@ -156,11 +156,10 @@ describe("Behavioral landscape foundation semantics", () => {
   });
 
   it("keeps route contracts and production surfaces bounded to Atlas route integration", () => {
-    expect(getCanonicalResearchDestinationRoutes()).toEqual(["/", "/lab", "/atlas", "/builder"]);
-    expect(getCanonicalResearchDestinationRoutes()).not.toContain("/world");
+    expect(getCanonicalResearchDestinationRoutes()).toEqual(["/world", "/lab", "/atlas", "/builder"]);
     expect(getCanonicalResearchDestinationRoutes()).not.toContain("/workshop");
 
-    const worldAndBuilderSources = ["src/app/page.tsx", "src/app/builder/page.tsx"].map(source).join("\n");
+    const worldAndBuilderSources = ["src/app/page.tsx", "src/app/world/page.tsx", "src/app/builder/page.tsx"].map(source).join("\n");
     expect(worldAndBuilderSources).not.toMatch(/behavioralLandscapeFoundation|landscapeRegionStates|landscapeAxes/i);
   });
 

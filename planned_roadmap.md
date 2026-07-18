@@ -1,10 +1,10 @@
 # ORTUS Full Prompt Roadmap
 
-*Last updated after Prompt GW9B Ephemeral Landscape Sampling Preview V1 Audit and Hardening.*
+*Last updated during Prompt R1 Start Hub and World-First Product Reset.*
 
 ## Current Status
 
-ORTUS has completed the core runtime/template and modeling-workbench foundations through Prompt 39B, the neural/runtime-lab side track, the Research World sequence through GW9B, the UX3 through UX6B track, and RH1 source-of-truth hygiene.
+ORTUS has completed the core runtime/template and modeling-workbench foundations through Prompt 39B, the neural/runtime-lab side track, the Research World sequence through GW9B, the UX3 through UX6B track, RH1 source-of-truth hygiene, and the R1 product reset.
 
 Current project status:
 
@@ -50,15 +50,16 @@ Completed implementation prompt: Prompt UX6 — Guided Builder and Step-by-Step 
 Completed audit prompt: Prompt UX6B — Guided Builder and Step-by-Step Configuration Flow Audit and Hardening; audits deterministic mapping, local state, validation, handoff/overwrite safety, World isolation, capability honesty, accessibility, and responsive behavior; fixes bounded identifier, focus, stale-status, layout, landmark, and scroll-region defects without adding runtime, persistence, personalization, GW9 behavior, dependencies, assets, fonts, icons, or routes
 Completed implementation prompt: Prompt GW9 — Ephemeral Landscape Sampling Preview V1; adds one explicit bounded Flocking preview with canonical one/two-axis requests, deterministic fresh-engine samples, final-tick numeric metrics, exact in-memory provenance, cancellation between samples, no persistence, no generic probe-plan execution, no interpolation, and no regime or scientific-validity claims
 Completed audit prompt: Prompt GW9B — Ephemeral Landscape Sampling Preview V1 Audit and Hardening; hardens canonical seed/fixed ordering, provenance, unmount cancellation, replacement/error semantics, exact epistemic copy, and adversarial/rendered coverage without widening support or adding persistence
+Completed implementation prompt: Prompt R1 — Start Hub and World-First Product Reset; moves World to `/world`, makes `/` a task-centered Start Hub, reclaims the live model surface, demotes capability walls, and preserves runtime and persistence behavior
 Post-30B stabilization completed: repo hygiene, durable Codex context, dependency repair, generated-artifact cleanup, and runtime performance/scalability baseline
 UX6 complete.
 UX6B complete.
 GW9 complete.
 GW9B complete.
-The next documented roadmap milestone is F1: Fractal Metrics V1, ready after commit publication.
-Do not start F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or further Research World/fractal/multiscale implementation without explicit approval.
+The next documented roadmap milestone is R1B: First-Run and Shell Audit.
+F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, and trajectory motif analytics are paused under E3 Analytical Lenses.
 
-Completed sequence: UX6B -> GW9 -> GW9B. Next documented milestone: F1, not started.
+Completed sequence: UX6B -> GW9 -> GW9B -> R1. Next documented milestone: R1B, not started.
 ```
 
 Critical global boundary:
@@ -69,6 +70,29 @@ They do not become runtime template behavior unless explicitly wired and tested.
 Valid artifacts are not automatically runnable artifacts.
 Template support must never be inferred from global service availability.
 ```
+
+## Active Product Experience Reset Roadmap
+
+The canonical reset roadmap is `docs/product/ORTUS_PRODUCT_EXPERIENCE_RESET_ROADMAP.md`.
+
+```text
+R1 Start Hub and World-First Product Reset -> R1B First-Run and Shell Audit
+R2 World Layout and Interaction Reclaim -> R2B World Layout Audit
+C1 Starter World Content Framework -> C1B Starter Framework Audit
+C2 Flagship Starter Pack One -> C2B Starter Pack One Audit
+C3 Guided Investigation / Tutorial World -> C3B Guided Investigation Audit
+C4 Flagship Starter Pack Two -> C4B Starter Pack Two Audit
+S1 Starter Remix and Builder Handoff -> S1B Remix Audit
+S2 Recipe-First Builder Reboot -> S2B Builder Reboot Audit
+S3 Core Composition Primitives -> S3B Composition Primitive Audit
+S4 Multiscale Entity and Environment Support -> S4B Multiscale Support Audit
+S5 Adaptive Controllers and Readouts -> S5B Adaptive Systems Audit
+E1 Lab as Evidence Workspace -> E1B Lab Evidence Audit
+E2 Atlas as Question Map -> E2B Atlas Question-Map Audit
+E3 Analytical Lenses -> E3B Analytical-Lens Audit
+```
+
+R1 is complete. R1B is next. The prior post-GW9B sequence that named F1 next is superseded; F0 remains historical documentation and F1 is paused under E3. This sequencing change does not implement any R2/C/S/E/F capability.
 
 Current production templates:
 
@@ -177,7 +201,7 @@ Safe Builder UI Shell V1 displays structural workspace artifacts; it does not ex
 
 These are non-roadmap stabilization prompts used after the laptop/context reset.
 
-## Prompt R1 — Repository Re-Orientation + Runtime Performance Triage
+## Historical Prompt R1 — Repository Re-Orientation + Runtime Performance Triage
 
 Purpose:
 
@@ -3751,5 +3775,5 @@ Prompt GW9 Ephemeral Landscape Sampling Preview V1 is complete.
 GW9 complete.
 Prompt GW9B Ephemeral Landscape Sampling Preview V1 Audit and Hardening is complete.
 GW9B complete.
-The next documented roadmap milestone is F1: Fractal Metrics V1, ready after commit publication.
+The active next milestone is R1B: First-Run and Shell Audit. F1 is paused under E3 Analytical Lenses.
 ```

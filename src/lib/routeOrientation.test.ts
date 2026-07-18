@@ -64,11 +64,13 @@ describe("UX5 route orientation and disclosure contracts", () => {
     expect(disclosure).toContain("aria-controls={resolvedContentId}");
     expect(disclosure).toContain("hidden={!expanded}");
     expect(orientationPanel).toContain('expandLabel="Technical details"');
-    expect(capabilityPanel).toContain('expandLabel="Show all capabilities"');
+    expect(capabilityPanel).toContain('expandLabel="Capability reference"');
     expect(productionSource).not.toMatch(
       /localStorage|sessionStorage|indexedDB|document\.cookie|createJSONStorage|storageKey|persist\(|Date\.now|Math\.random|crypto\.randomUUID/i
     );
-    expect(productionSource).not.toMatch(/simulationStore|createEngine|runFrameSteps|templateRegistry|compile|executeSchema|executeGraph/i);
+    expect(productionSource).not.toMatch(
+      /simulationStore|createEngine|runFrameSteps|templateRegistry|\bcompile\s*\(|\bexecuteSchema\s*\(|\bexecuteGraph\s*\(/i
+    );
   });
 
   it("does not turn orientation into guidance personalization, progression, or fake actions", () => {

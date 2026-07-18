@@ -92,13 +92,13 @@ describe("Lab foundation semantics", () => {
     expect(labSources).not.toMatch(/export\s+interface\s+.*Record\b|type\s+.*Record\s*=/);
   });
 
-  it("keeps route contracts unchanged while distinguishing Lab foundation from Atlas foundation", () => {
+  it("keeps the R1 route contract while distinguishing Lab foundation from Atlas foundation", () => {
     const destinationSource = source("src/lib/researchDestinations.ts");
     expect(destinationSource).toContain('id: "lab"');
     expect(destinationSource).toContain('availability: "foundation"');
     expect(destinationSource).toContain('state: "planning-only"');
     expect(destinationSource).toContain('id: "atlas"');
-    expect(destinationSource).not.toContain('route: "/world"');
+    expect(destinationSource).toContain('route: "/world"');
     expect(destinationSource).not.toContain('route: "/workshop"');
   });
 

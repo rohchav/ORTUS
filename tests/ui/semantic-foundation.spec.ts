@@ -13,8 +13,8 @@ const viewports = [
 
 const routes = [
   {
-    label: "simulate",
-    path: "/",
+    label: "world",
+    path: "/world",
     readySelector: ".ortus-shell:not(.ortus-shell--hydrating)",
     routeRegionName: "Simulation workspace"
   },
@@ -73,7 +73,7 @@ async function openRoute(page: Page, route: Route) {
   await page.waitForLoadState("networkidle", { timeout: 5_000 }).catch(() => undefined);
   await expect(page.locator(route.readySelector), `${route.path} should render its route shell`).toBeVisible();
   await expect(page.getByRole("main"), `${route.path} should expose exactly one shared main landmark`).toHaveCount(1);
-  if (route.path === "/") {
+  if (route.path === "/world") {
     await expect(page.getByRole("region", { name: route.routeRegionName }), `${route.path} should expose its workspace landmark`).toBeVisible();
   } else {
     await expect(page.getByRole("region", { name: route.routeRegionName }), `${route.path} should expose its route landmark`).toBeVisible();
@@ -145,8 +145,8 @@ async function expectSharedPrimitiveCoverage(page: Page, route: Route) {
   await expect(page.locator("button").first(), `${route.path} should render button controls`).toBeVisible();
   await expect(page.locator("input, select, textarea").first(), `${route.path} should render form controls`).toBeAttached();
 
-  if (route.path === "/") {
-    await expect(page.locator(".status-pill").first(), "simulate route should render StatusPill").toBeVisible();
+  if (route.path === "/world") {
+    await expect(page.locator(".status-pill").first(), "World route should render StatusPill").toBeVisible();
     await expect(page.locator(".timeline-strip__button span[aria-hidden='true']").first(), "run controls should include icon-bearing controls").toBeVisible();
   } else {
     await page.getByRole("tab", { name: /Advanced Builder/i }).click();
@@ -208,18 +208,23 @@ async function expectFocusedElementVisible(page: Page) {
 }
 
 async function runKeyboardSmoke(page: Page, route: Route) {
-  if (route.path === "/") {
-    await page.getByRole("tab", { name: /Setup/i }).focus();
-    await page.keyboard.press("ArrowRight");
-    await expect(page.getByRole("tab", { name: /Understand/i })).toHaveAttribute("aria-selected", "true");
-    await page.keyboard.press("Home");
-    await expect(page.getByRole("tab", { name: /Setup/i })).toHaveAttribute("aria-selected", "true");
-    await page.getByRole("tab", { name: /Understand/i }).focus();
+  if (route.path === "/world") {
+    const tasks = page.getByRole("navigation", { name: "World tasks" });
+    const setup = tasks.getByRole("button", { name: "Setup", exact: true });
+    const observe = tasks.getByRole("button", { name: "Observe", exact: true });
+    await setup.focus();
     await page.keyboard.press("Enter");
-    await expect(page.getByRole("tab", { name: /Understand/i })).toHaveAttribute("aria-selected", "true");
-    await page.getByRole("tab", { name: /Setup/i }).focus();
-    await page.keyboard.press(" ");
-    await expect(page.getByRole("tab", { name: /Setup/i })).toHaveAttribute("aria-selected", "true");
+    await expect(setup).toHaveAttribute("aria-pressed", "true");
+    await page.keyboard.press("Tab");
+    await expect(observe).toBeFocused();
+    await page.keyboard.press("Space");
+    await expect(observe).toHaveAttribute("aria-pressed", "true");
+    const more = tasks.getByRole("button", { name: "More", exact: true });
+    await more.focus();
+    await page.keyboard.press("ArrowDown");
+    await expect(page.getByRole("menuitem", { name: /Understand model/i })).toBeFocused();
+    await page.keyboard.press("Enter");
+    await expect(page.getByRole("heading", { name: "Understand", level: 2 })).toBeVisible();
   } else {
     await page.getByRole("tab", { name: /Workspace Inspector/i }).focus();
     await page.keyboard.press("ArrowRight");
@@ -409,7 +414,7 @@ for (const route of routes) {
       await expectNoDocumentHorizontalOverflow(page);
       await runKeyboardSmoke(page, route);
 
-      if (route.path === "/") {
+      if (route.path === "/world") {
         await expectSimulationRunStatusSemantics(page);
       } else {
         await expectBuilderBadgeSemantics(page);
@@ -448,7 +453,7 @@ test.describe("reduced motion", () => {
 });
 
 test.describe("axe accessibility scans", () => {
-  test("simulate route has no Axe violations in default rendered state", async ({ page }) => {
+  test("World route has no Axe violations in default rendered state", async ({ page }) => {
     const diagnostics = observePageDiagnostics(page);
     await page.setViewportSize({ width: 1280, height: 720 });
     await openRoute(page, routes[0]);

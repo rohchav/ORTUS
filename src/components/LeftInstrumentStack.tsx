@@ -1,9 +1,7 @@
 "use client";
 
-import type { KeyboardEvent, ReactNode } from "react";
-import { AssumptionsPanel } from "./AssumptionsPanel";
+import { useEffect, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
 import { DebugPanel } from "./DebugPanel";
-import { FieldNotesPanel } from "./FieldNotesPanel";
 import { FileActions } from "./FileActions";
 import { ExperimentPanel } from "./ExperimentPanel";
 import { InterventionPanel } from "./InterventionPanel";
@@ -11,16 +9,17 @@ import { Legend } from "./Legend";
 import { MacroPanel } from "./MacroPanel";
 import { MetricGraphPanel } from "./MetricGraphPanel";
 import { MicroPanel } from "./MicroPanel";
+import { ModelExplanationPanel } from "./ModelExplanationPanel";
 import { NeuralRuntimeLabPanel } from "./NeuralRuntimeLabPanel";
 import { RunProvenanceObservationPanel } from "./RunProvenanceObservationPanel";
 import { RunSettingsPanel } from "./RunSettingsPanel";
 import { RunComparisonPanel } from "./RunComparisonPanel";
 import { ScenarioBuilderPanel } from "./ScenarioBuilderPanel";
 import { CapabilityGuidancePanel } from "./researchWorld/CapabilityGuidancePanel";
-import { RouteOrientationPanel } from "./researchWorld/RouteOrientationPanel";
 import { CornerFramePanel } from "./ui/CornerFramePanel";
+import { Disclosure } from "./ui/Disclosure";
 import { getWorkspacePanelDefinition } from "../lib/workspacePanels";
-import { getSimulationWorkspaceMode, simulationWorkspaceModes, type SimulationWorkspaceModeId } from "../lib/workspaceModes";
+import { getSimulationWorkspaceMode, type SimulationWorkspaceModeId } from "../lib/workspaceModes";
 
 interface LeftInstrumentStackProps {
   activeMode: SimulationWorkspaceModeId;
@@ -29,107 +28,168 @@ interface LeftInstrumentStackProps {
 
 export function LeftInstrumentStack({ activeMode, onModeChange }: LeftInstrumentStackProps) {
   const mode = getSimulationWorkspaceMode(activeMode);
+  const [moreOpen, setMoreOpen] = useState(false);
+  const moreRef = useRef<HTMLDivElement>(null);
+  const moreTriggerRef = useRef<HTMLButtonElement>(null);
+  const moreItemRefs = useRef<Array<HTMLButtonElement | null>>([]);
+  const moreCurrent = moreModes.some((candidate) => candidate.id === activeMode);
 
-  function handleModeKeyDown(event: KeyboardEvent<HTMLButtonElement>, modeId: SimulationWorkspaceModeId) {
-    const currentIndex = simulationWorkspaceModes.findIndex((candidate) => candidate.id === modeId);
-    const lastIndex = simulationWorkspaceModes.length - 1;
+  useEffect(() => {
+    if (!moreOpen) {
+      return;
+    }
+    const handlePointerDown = (event: PointerEvent) => {
+      if (!moreRef.current?.contains(event.target as Node)) {
+        setMoreOpen(false);
+      }
+    };
+    document.addEventListener("pointerdown", handlePointerDown);
+    return () => document.removeEventListener("pointerdown", handlePointerDown);
+  }, [moreOpen]);
+
+  function chooseMode(modeId: SimulationWorkspaceModeId) {
+    onModeChange(modeId);
+    setMoreOpen(false);
+  }
+
+  function handleMoreKeyDown(event: KeyboardEvent<HTMLButtonElement>, index: number) {
     const nextIndex =
-      event.key === "ArrowRight" || event.key === "ArrowDown"
-        ? (currentIndex + 1) % simulationWorkspaceModes.length
-        : event.key === "ArrowLeft" || event.key === "ArrowUp"
-          ? (currentIndex - 1 + simulationWorkspaceModes.length) % simulationWorkspaceModes.length
+      event.key === "ArrowDown"
+        ? (index + 1) % moreModes.length
+        : event.key === "ArrowUp"
+          ? (index - 1 + moreModes.length) % moreModes.length
           : event.key === "Home"
             ? 0
             : event.key === "End"
-              ? lastIndex
+              ? moreModes.length - 1
               : null;
 
-    if (nextIndex === null) {
-      return;
+    if (nextIndex !== null) {
+      event.preventDefault();
+      moreItemRefs.current[nextIndex]?.focus();
+    } else if (event.key === "Escape") {
+      event.preventDefault();
+      setMoreOpen(false);
+      moreTriggerRef.current?.focus();
     }
-    event.preventDefault();
-    const nextMode = simulationWorkspaceModes[nextIndex]!;
-    onModeChange(nextMode.id);
-    focusModeTab(nextMode.id);
   }
 
   return (
     <aside className="left-instruments" aria-label="Simulation workspace tools">
-      <nav className="workspace-navigator" aria-label="Simulation workspace modes" role="tablist">
-        {simulationWorkspaceModes.map((candidate) => (
+      <nav className="workspace-navigator" aria-label="World tasks">
+        {directModes.map((candidate) => (
           <button
             key={candidate.id}
-            id={`workspace-mode-tab-${candidate.id}`}
+            id={`workspace-mode-control-${candidate.id}`}
             type="button"
-            role="tab"
-            aria-selected={candidate.id === activeMode}
-            aria-controls={`workspace-mode-panel-${candidate.id}`}
+            aria-pressed={candidate.id === activeMode}
+            aria-controls="workspace-task-panel"
             className={candidate.id === activeMode ? "is-active" : ""}
-            onClick={() => onModeChange(candidate.id)}
-            onKeyDown={(event) => handleModeKeyDown(event, candidate.id)}
+            onClick={() => chooseMode(candidate.id)}
             suppressHydrationWarning
           >
-            <span>{candidate.label}</span>
-            <em>{candidate.eyebrow}</em>
+            {candidate.label}
           </button>
         ))}
+        <div className="workspace-more-menu" ref={moreRef}>
+          <button
+            ref={moreTriggerRef}
+            type="button"
+            aria-expanded={moreOpen}
+            aria-haspopup="menu"
+            className={moreCurrent ? "is-active" : ""}
+            data-current={moreCurrent ? "true" : "false"}
+            onClick={() => setMoreOpen((open) => !open)}
+            onKeyDown={(event) => {
+              if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+                event.preventDefault();
+                setMoreOpen(true);
+                const index = event.key === "ArrowDown" ? 0 : moreModes.length - 1;
+                window.requestAnimationFrame(() => moreItemRefs.current[index]?.focus());
+              }
+            }}
+          >
+            More
+          </button>
+          {moreOpen ? (
+            <ul className="workspace-more-menu__popover" role="menu" aria-label="More World tasks">
+              {moreModes.map((candidate, index) => (
+                <li key={candidate.id} role="none">
+                  <button
+                    ref={(element) => {
+                      moreItemRefs.current[index] = element;
+                    }}
+                    type="button"
+                    role="menuitem"
+                    aria-current={candidate.id === activeMode ? "page" : undefined}
+                    onClick={() => chooseMode(candidate.id)}
+                    onKeyDown={(event) => handleMoreKeyDown(event, index)}
+                  >
+                    <strong>{candidate.label}</strong>
+                    <span>{candidate.description}</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+        </div>
       </nav>
       <section
-        id={`workspace-mode-panel-${activeMode}`}
+        id="workspace-task-panel"
         className="workspace-context-panel"
-        role="tabpanel"
-        aria-labelledby={`workspace-mode-tab-${activeMode}`}
+        aria-labelledby={moreCurrent ? undefined : `workspace-mode-control-${activeMode}`}
+        aria-label={moreCurrent ? `${mode.label} task` : undefined}
       >
         <header className="workspace-context-panel__head">
           <span>{mode.eyebrow}</span>
-          <h2>{mode.label}</h2>
+          <h2>{activeMode === "intervene" ? "Change" : mode.label}</h2>
           <p>{mode.description}</p>
         </header>
         <div className="workspace-context-panel__scroll" data-intentional-scroll-region="workspace-context">
-          <RouteOrientationPanel destinationId="world" className="route-orientation--world-rail" />
           {renderWorkspaceMode(activeMode)}
-          <CapabilityGuidancePanel destinationId="world" className="capability-guidance--world" maxItemsPerGroup={1} />
         </div>
       </section>
     </aside>
   );
 }
 
-function focusModeTab(modeId: SimulationWorkspaceModeId): void {
-  if (typeof document === "undefined") {
-    return;
-  }
-  window.requestAnimationFrame(() => {
-    document.getElementById(`workspace-mode-tab-${modeId}`)?.focus();
-  });
-}
+const directModes: ReadonlyArray<{ id: SimulationWorkspaceModeId; label: string }> = [
+  { id: "setup", label: "Setup" },
+  { id: "observe", label: "Observe" },
+  { id: "intervene", label: "Change" },
+  { id: "compare", label: "Compare" }
+];
+
+const moreModes: ReadonlyArray<{ id: SimulationWorkspaceModeId; label: string; description: string }> = [
+  { id: "understand", label: "Understand model", description: "Question, mechanism, assumptions, and limits" },
+  { id: "experiment", label: "Experiments", description: "Bounded local parameter sweeps" },
+  { id: "debug", label: "Diagnostics", description: "Runtime counters and instrumentation" }
+];
 
 function renderWorkspaceMode(mode: SimulationWorkspaceModeId): ReactNode {
   switch (mode) {
     case "setup":
       return (
         <>
-          <RailPanelSlot panelId="neuralLab">
-            <NeuralRuntimeLabPanel />
-          </RailPanelSlot>
           <RailPanelSlot panelId="runSettings">
             <RunSettingsPanel />
           </RailPanelSlot>
-          <RailPanelSlot panelId="scenarios">
-            <ScenarioBuilderPanel />
+          <RailPanelSlot panelId="neuralLab">
+            <NeuralRuntimeLabPanel />
           </RailPanelSlot>
+          <Disclosure expandLabel="Scenarios and starting recipes" collapseLabel="Hide scenarios and starting recipes" className="world-secondary-disclosure">
+            <RailPanelSlot panelId="scenarios">
+              <ScenarioBuilderPanel />
+            </RailPanelSlot>
+          </Disclosure>
+          <CapabilityGuidancePanel destinationId="world" className="capability-guidance--world" maxItemsPerGroup={1} />
         </>
       );
     case "understand":
       return (
-        <>
-          <RailPanelSlot panelId="assumptions">
-            <AssumptionsPanel />
-          </RailPanelSlot>
-          <RailPanelSlot panelId="notes">
-            <FieldNotesPanel />
-          </RailPanelSlot>
-        </>
+        <RailPanelSlot panelId="assumptions">
+          <ModelExplanationPanel />
+        </RailPanelSlot>
       );
     case "observe":
       return (

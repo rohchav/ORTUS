@@ -1,12 +1,12 @@
 # ORTUS Workspace Information Architecture
 
-Date: 2026-07-07
-Prompt: UI-REMEDIATION-1, audited and hardened by Prompt 34B, extended by Prompt 35, audited by Prompt 35B, extended by Prompt 36, audited by Prompt 36B, extended by Prompt 37, audited by Prompt 37B, extended by Prompt 38, audited by Prompt 38B, extended by Prompt 39, audited by Prompt 39B, extended by Prompt NUX1, audited by Prompt NUX1B, extended by Prompt N2, audited by Prompt N2B, documented by Prompt MR0, documented by Prompt F0, documented by Prompt P0, documented by Prompt UX0, audited by Prompt UX1, audited/planned by Prompt UX3, visually refined by Prompt UX4, audited/hardened by Prompt UX4B, source-of-truth checked by Prompt RH1, documented by Prompt GW0, visually founded by Prompt UX2, rendered-audited by Prompt UX2B, structurally extended by Prompt GW1, audited/hardened by Prompt GW1B, extended by Prompt GW2, audited/hardened by Prompt GW2B, extended by Prompt GW3, audited/hardened by Prompt GW3B, extended by Prompt GW4, audited/hardened by Prompt GW4B, extended by Prompt GW5, audited by Prompt GW5B, extended by Prompt GW6, audited by Prompt GW6B, extended by Prompt GW7, audited by Prompt GW7B, extended by Prompt GW8, audited by Prompt GW8B, and extended by Prompt GW9
+Date: 2026-07-17
+Prompt: UI-REMEDIATION-1 through GW9B, reset by Prompt R1
 Status: implemented, source-audited, rendered-smoke-tested by the GW1/GW1B Playwright shell suite, rendered-comprehension-audited by UX3, visually refined by UX4, visually audited by UX4B, and source-of-truth checked by RH1; broader mobile-readiness, actual browser-zoom, screen-reader, assistive-technology, forced-colors, and WCAG claims remain unverified
 
 ## Problem
 
-The previous simulation shell put nearly every tool into one long left drawer: Micro Field, Macro Field, Metric Trace, Scenario Builder, Assumptions, Interventions, Experiment Runner, Run Comparison, Timeline, Field Notes, and File Exchange. That was not a workspace architecture. It forced users to scan unrelated tasks, made lower content vulnerable to clipping, and mixed setup, execution, observation, analysis, export, and debug controls.
+The first remediation replaced one long drawer with task modes, but the resulting product still opened directly into an expert workbench. Four equal-weight destinations, seven equal task cards, broad guidance, and a wide configuration rail competed with the live model. R1 treats that as an information-architecture defect, not a copy problem.
 
 Two concrete layout defects were confirmed from source:
 
@@ -17,17 +17,19 @@ The attachment directory for this prompt did not include a screenshot file, and 
 
 ## New Hierarchy
 
-ORTUS now uses three levels:
+ORTUS now uses four levels:
 
-- Global destinations: World, Lab, Atlas, and Workshop.
-- Simulation workspace modes: Setup, Understand, Observe, Intervene, Experiment, Compare, and Debug.
+- Product entry: Start Hub at `/`.
+- Primary destinations: World and Workshop, with Atlas, Lab, Experiments, and Compare runs grouped under Research tools.
+- World task navigation: direct Setup, Observe, Change, and Compare controls plus a More menu for Understand model, Experiments, and Diagnostics.
 - Builder modes: Workspace Inspector, Author Schema, and Graph View.
 - Panels inside the selected mode.
 
-GW1 route contract:
+Current R1 route contract:
 
 ```text
-/         -> World
+/         -> Start Hub
+/world    -> World
 /lab      -> Lab informational foundation
 /atlas    -> Atlas non-persistent evidence foundations plus bounded ephemeral preview
 /builder  -> Workshop
@@ -43,11 +45,11 @@ The World Stage remains mounted while the user changes simulation workspace mode
 
 ## Feature Mapping
 
-- Setup: Neural Runtime Lab when Neural Excitation Network is selected, Run Settings, model template selection, seed controls, parameter controls, Scenario Builder.
-- Understand: Assumptions + Limits, Field Notes.
+- Setup: selected template, active scenario/starting recipe, seed, four model-specific quick controls, all-parameter disclosure, Scenario Builder disclosure, and Neural Runtime Lab when Neural Excitation Network is selected.
+- Understand model: concise question, mechanism, watch target, suggested change, key assumptions, main limitation, and full model notes disclosure.
 - Observe: Active Run Context, Macro Field, Micro Field, Metric Trace, Legend.
-- Intervene: Interventions plus live intervention readiness and model-response boundaries.
-- Experiment: Experiment Runner.
+- Change (`intervene` internally): Interventions plus live intervention readiness and model-response boundaries.
+- Experiments (`experiment` internally): Experiment Runner.
 - Compare: Run Comparison, Scenario/Snapshot Exchange.
 - Debug: Debug diagnostics and performance counters.
 - Persistent dock: Run/Pause, Step, Reset, tick, model time, speed.
@@ -148,7 +150,7 @@ Regenerate Seed is separate from Reset. It creates a new seed and rebuilds a fre
 
 - The app shell owns viewport height.
 - The main workspace row uses `min-height: 0`.
-- The left workspace column does not vertically scroll as a whole.
+- The desktop task rail does not vertically scroll as a whole.
 - The workspace context body is the one intentional vertical scroll container.
 - Persistent controls live outside scrollable configuration content.
 - The header no longer uses fixed `50px` height or `overflow-y: hidden`.
@@ -159,16 +161,16 @@ Do not reintroduce sticky run controls inside scrollable configuration panels.
 
 Wide desktop:
 
-- Workspace navigator and context panel remain visible on the left.
-- World Stage remains dominant.
+- World Stage and persistent run controls occupy the dominant left area.
+- Compact task navigation and one context panel remain visible on the right.
 - Right inspector overlays only when a selection exists.
 - Run-control dock remains visible below the main workspace row.
 
 Medium and narrow viewports:
 
 - The layout stacks world-first.
-- The workspace navigator becomes horizontally scrollable.
-- The selected workspace context becomes a sheet below the world.
+- The World Stage and run controls precede task navigation and task content.
+- The workspace navigator becomes horizontally scrollable only at the smallest widths.
 - The run dock stacks its controls into rows.
 - Builder mode tabs become horizontally scrollable.
 - Schema authoring stacks outline/import, form editor, and validation regions without hiding errors.
@@ -177,13 +179,12 @@ Medium and narrow viewports:
 - Graph View uses controls/outline, graph, and inspector columns on wide screens and stacks them at `1120px`.
 - Narrow users retain the node outline, text edge list, warnings, and inspector even when the visual relationship plane is constrained.
 
-This is a source/CSS implementation. Browser zoom at 125% and 200% still needs a real rendered audit.
+R1 rendered this hierarchy at `1440x900`, `1280x720`, `1024x768`, `900x700`, and `1280x600`; Start also passed at `390x844`. Browser zoom at 125% and 200% still needs a real rendered audit.
 
 ## Accessibility Behavior
 
-- Workspace modes use semantic tab controls with `role="tablist"`, `role="tab"`, `aria-selected`, `aria-controls`, and a `role="tabpanel"` context panel.
-- Current mode is communicated by text and ARIA state.
-- Workspace tabs support Arrow Left/Right/Up/Down plus Home/End navigation and move focus to the selected tab.
+- Direct World tasks use native buttons with `aria-pressed` and `aria-controls`; the secondary More tasks use a native-button menu with Arrow Up/Down, Home, End, Escape, and focus return.
+- Current task is communicated by visible text, `aria-pressed`, or `aria-current`, never color alone.
 - Builder mode tabs and schema section tabs use roving tab stops and support Arrow Left/Right/Up/Down plus Home/End navigation.
 - Graph nodes support Arrow Left/Right/Up/Down plus Home/End navigation; all nodes also appear in a grouped button outline.
 - Graph edges are available as keyboard-reachable text buttons rather than relying on SVG line focus.
@@ -258,3 +259,15 @@ UX6B preserves the two-view Workshop architecture while hardening generated note
 ## GW9 Atlas Preview Update
 
 Atlas now owns one route-local, component-memory preview form and result surface. The form produces a validated request for an explicit `flocking-boids` capability; the headless executor creates fresh engines without accessing World or Experiment Runner stores. Probe-planning scaffolds remain separate and non-executable. The result is temporary, exact-coordinate only, numeric, provenance-bearing, cancellable between samples and on route unmount, and stale-aware. It creates no new route, workspace mode, store, storage key, Lab record, Atlas history, comparison entry, interpolation, or regime analysis. GW9B has audited and hardened this boundary.
+
+## R1 Start And World-First Reset
+
+R1 adds a product-entry layer without adding onboarding state. The Start Hub uses one featured implemented world, four intent paths, and a source-backed seven-system catalog. The shortest path is Start -> Flocking World -> Run; users do not need to understand destination taxonomy or artifact families first.
+
+Within World, the DOM and visual hierarchy are model surface, persistent playback controls, then the selected task workspace. At `1440x900`, the model workspace is approximately 74% of the application layout width. Setup exposes four exact existing parameters and keeps all other parameters and Scenario Builder one disclosure away. No compact control has a second default or alternate execution path.
+
+The former Understand panel composition is replaced by a model-specific explanation. Full assumptions, limitations, appropriate/inappropriate use, ethics, validation record, and provenance remain available, but unrelated global capability boundaries do not occupy that panel. Capability guidance itself is a concise route note plus an explicit full-reference disclosure; Workshop hides the complete guidance surface behind an outer disclosure.
+
+Atlas puts the real GW9 preview before conceptual orientation. Lab puts useful World/Compare/Atlas links before its technical foundation. Workshop keeps Guided and Advanced direct while withholding required-field error counts until an attempted progression and hiding the support matrix by default.
+
+R1 preserves local workspace-mode state, hidden-panel rendering behavior, active World state, Atlas isolation, Builder non-execution, and existing storage semantics. The starter nudge is page-session-only and dismissible. R1B is required next; recipe-first Builder, starter packs, persistent evidence, broader Atlas mapping, composition, multiscale runtime, adaptive-system generalization, and analytical lenses remain future milestones.

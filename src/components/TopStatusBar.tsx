@@ -23,11 +23,6 @@ export function TopStatusBar({ activeWorkspaceMode }: TopStatusBarProps) {
 
   return (
     <header className="top-status">
-      <div className="top-status__runtime" aria-label="World runtime scope">
-        <span>World runtime</span>
-        <strong>Active modeled system</strong>
-        <p>Model output is exploratory, not empirical truth.</p>
-      </div>
       <div className="top-status__context" aria-label="Current simulation context">
         <div>
           <span>Model</span>
@@ -38,8 +33,8 @@ export function TopStatusBar({ activeWorkspaceMode }: TopStatusBarProps) {
           <strong>{scenarioName}</strong>
         </div>
         <div>
-          <span>Workspace</span>
-          <strong>{mode.label}</strong>
+          <span>Task</span>
+          <strong>{activeWorkspaceMode === "intervene" ? "Change" : mode.label}</strong>
         </div>
       </div>
       <div className="top-status__run" aria-label="Current run status">

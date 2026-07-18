@@ -292,22 +292,28 @@ describe("assumptions, limits, and ethics metadata", () => {
     expect(() => deserializeAssumptionProfileArtifact("x".repeat(maxAssumptionProfileJsonLength + 1))).toThrow(/characters or less/);
   });
 
-  it("registers and renders the assumptions panel without blocking the simulation workspace", () => {
+  it("registers assumptions and renders a concise source-backed explanation without blocking the simulation workspace", () => {
     const panelRegistry = readFileSync(new URL("../../lib/workspacePanels.ts", import.meta.url), "utf8");
     const leftStack = readFileSync(new URL("../../components/LeftInstrumentStack.tsx", import.meta.url), "utf8");
-    const panelSource = readFileSync(new URL("../../components/AssumptionsPanel.tsx", import.meta.url), "utf8");
+    const panelSource = readFileSync(new URL("../../components/ModelExplanationPanel.tsx", import.meta.url), "utf8");
 
     expect(panelRegistry).toContain('id: "assumptions"');
     expect(panelRegistry).toContain('"modePanel"');
     expect(panelRegistry).toContain('"workspace"');
-    expect(leftStack).toContain("<AssumptionsPanel");
-    expect(panelSource).toContain("Assumptions");
-    expect(panelSource).toContain("Limitations");
-    expect(panelSource).toContain("Not Represented");
-    expect(panelSource).toContain("Appropriate Use");
-    expect(panelSource).toContain("Inappropriate Use");
-    expect(panelSource).toContain("Ethics Notes");
-    expect(panelSource).toContain("Validation status describes evidence");
+    expect(leftStack).toContain("<ModelExplanationPanel");
+    expect(panelSource).toContain("templateAssumptionProfile(descriptor.template)");
+    expect(panelSource).toContain('title="Question"');
+    expect(panelSource).toContain('title="How the model works"');
+    expect(panelSource).toContain('title="What to watch"');
+    expect(panelSource).toContain('title="Try changing"');
+    expect(panelSource).toContain("Key assumptions");
+    expect(panelSource).toContain('title="Main limitation"');
+    expect(panelSource).toContain('expandLabel="Full model notes"');
+    expect(panelSource).toContain("Not represented");
+    expect(panelSource).toContain("Appropriate use");
+    expect(panelSource).toContain("Inappropriate use");
+    expect(panelSource).toContain("Ethics notes");
+    expect(panelSource).toContain("does not mean the model is calibrated or externally validated");
     expect(panelSource).not.toMatch(/alert\(|confirm\(/);
     expect(panelSource).not.toMatch(/safe|certified|prediction/i);
   });

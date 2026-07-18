@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CapabilityGuidancePanel } from "../../components/researchWorld/CapabilityGuidancePanel";
-import { RouteOrientationPanel } from "../../components/researchWorld/RouteOrientationPanel";
 import { CornerFramePanel } from "../../components/ui/CornerFramePanel";
 import { Disclosure } from "../../components/ui/Disclosure";
 import { StatusPill } from "../../components/ui/StatusPill";
@@ -20,9 +19,37 @@ export const metadata: Metadata = {
 export default function LabPage() {
   return (
     <section className="lab-foundation" data-destination-surface="lab">
-      <RouteOrientationPanel destinationId="lab" headingLevel={1} />
+      <header className="destination-intro destination-intro--lab">
+        <div>
+          <p>Research record foundation</p>
+          <h1>Lab</h1>
+        </div>
+        <p>Persistent Lab evidence records are not implemented. Use World for active runs and bounded local comparisons today.</p>
+      </header>
 
-      <section className="lab-foundation__overview" aria-labelledby="lab-overview-title">
+      <section className="lab-now" aria-labelledby="lab-now-title">
+        <div>
+          <p>Useful now</p>
+          <h2 id="lab-now-title">Run and compare before recording</h2>
+          <span>World can run implemented templates, capture bounded local summaries, and compare model outputs. Those summaries are not persistent Lab evidence.</span>
+        </div>
+        <nav aria-label="Available research actions">
+          <Link href="/world">Open World</Link>
+          <Link href="/world?task=compare">Compare runs</Link>
+          <Link href="/atlas">Sample in Atlas</Link>
+        </nav>
+      </section>
+
+      <CapabilityGuidancePanel destinationId="lab" className="capability-guidance--route" />
+
+      <Disclosure
+        expandLabel="Lab technical foundation"
+        collapseLabel="Hide Lab technical foundation"
+        contentId="lab-technical-details"
+        className="route-technical-disclosure"
+      >
+        <div className="lab-foundation__technical">
+          <section className="lab-foundation__overview" aria-labelledby="lab-overview-title">
         <div className="lab-foundation__section-heading">
           <span>Start with the model boundary</span>
           <h2 id="lab-overview-title">What Lab Means Right Now</h2>
@@ -52,17 +79,7 @@ export default function LabPage() {
             </ol>
           </CornerFramePanel>
         </div>
-      </section>
-
-      <CapabilityGuidancePanel destinationId="lab" className="capability-guidance--route" />
-
-      <Disclosure
-        expandLabel="Show Lab technical details"
-        collapseLabel="Hide Lab technical details"
-        contentId="lab-technical-details"
-        className="route-technical-disclosure"
-      >
-        <div className="lab-foundation__technical">
+          </section>
           <div className="lab-foundation__grid">
             <CornerFramePanel title="Current Boundary" eyebrow="GW5 scope" variant="standard" className="lab-foundation__panel">
               <h2 className="sr-only">Current Boundary</h2>
@@ -148,12 +165,6 @@ export default function LabPage() {
           </section>
         </div>
       </Disclosure>
-
-      <nav className="lab-foundation__links" aria-label="Lab destination links">
-        <Link href="/">Return to World</Link>
-        <Link href="/builder">Open Workshop</Link>
-        <Link href="/atlas">Open Atlas</Link>
-      </nav>
     </section>
   );
 }

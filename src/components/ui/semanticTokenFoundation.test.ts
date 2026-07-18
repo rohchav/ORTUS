@@ -89,7 +89,7 @@ describe("Living Systems Atlas semantic token foundation", () => {
     expect(css).not.toContain("--accent-primary: #d8ff3e;");
   });
 
-  it("keeps UX2 bounded to existing routes, CSS, dependencies, and offline-safe typography", () => {
+  it("keeps the semantic foundation bounded to product routes, CSS, dependencies, and offline-safe typography", () => {
     const packageJson = JSON.parse(source("package.json")) as {
       dependencies?: Record<string, string>;
       devDependencies?: Record<string, string>;
@@ -114,7 +114,8 @@ describe("Living Systems Atlas semantic token foundation", () => {
     expect(existsSync(join(repoRoot, "src", "app", "builder", "page.tsx"))).toBe(true);
     expect(existsSync(join(repoRoot, "src", "app", "lab", "page.tsx"))).toBe(true);
     expect(existsSync(join(repoRoot, "src", "app", "atlas", "page.tsx"))).toBe(true);
-    for (const forbiddenAlias of ["world", "workshop"]) {
+    expect(existsSync(join(repoRoot, "src", "app", "world", "page.tsx"))).toBe(true);
+    for (const forbiddenAlias of ["workshop"]) {
       expect(existsSync(join(repoRoot, "src", "app", forbiddenAlias))).toBe(false);
     }
     for (const forbiddenPath of ["src/persistence", "src/discovery", "src/researchWorld", "src/progression"]) {
@@ -131,7 +132,7 @@ describe("Living Systems Atlas semantic token foundation", () => {
 
   it("keeps a level-one World route heading available inside the shared destination shell", () => {
     expect(source("src/components/AppShell.tsx")).toContain('<h1 className="sr-only">World</h1>');
-    expect(source("src/components/builder/BuilderShell.tsx")).toContain('<h1 className="sr-only">Workshop</h1>');
+    expect(source("src/components/builder/BuilderShell.tsx")).toContain("<h1>Workshop</h1>");
     expect(source("src/app/globals.css")).toContain(".sr-only");
     expect(source("src/app/globals.css")).toContain("clip: rect(0, 0, 0, 0);");
   });

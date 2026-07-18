@@ -1,6 +1,5 @@
-import type { ReactNode } from "react";
+import { Suspense, type ReactNode } from "react";
 import { OrtusBrand } from "../branding";
-import { ResearchDestinationContext } from "./ResearchDestinationContext";
 import { ResearchDestinationNavigation } from "./ResearchDestinationNavigation";
 
 interface ResearchWorldShellProps {
@@ -17,8 +16,9 @@ export function ResearchWorldShell({ children }: ResearchWorldShellProps) {
         <div className="research-shell__identity">
           <OrtusBrand href="/" showDescriptor className="research-shell__brand" />
         </div>
-        <ResearchDestinationNavigation />
-        <ResearchDestinationContext />
+        <Suspense fallback={<div className="research-destination-nav" aria-hidden="true" />}>
+          <ResearchDestinationNavigation />
+        </Suspense>
       </header>
       <main id="research-world-main" className="research-shell__main" tabIndex={-1}>
         {children}

@@ -42,7 +42,7 @@ describe("ORTUS brand integration", () => {
     expect(combined).toContain("showDescriptor = false");
     expect(combined).toContain("/branding/ortus-mark-sharp.png");
     expect(combined).toContain("/branding/ortus-mark-soft.png");
-    expect(combined).toContain("Complex Systems Workbench");
+    expect(combined).toContain("Systems Sandbox");
     expect(combined).toContain("alt={decorative ? \"\" : label}");
     expect(combined).toContain('data-brand-lockup={showWordmark ? "canonical" : "compact"}');
     expect(combined).not.toContain("sharp_edge_logo.png");

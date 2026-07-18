@@ -28,7 +28,7 @@ export function OrtusBrand({
       {showWordmark ? (
         <span className="ortus-brand__text">
           <span className="ortus-brand__wordmark">ORTUS</span>
-          {showDescriptor ? <span className="ortus-brand__descriptor">Complex Systems Workbench</span> : null}
+          {showDescriptor ? <span className="ortus-brand__descriptor">Systems Sandbox</span> : null}
         </span>
       ) : null}
     </>

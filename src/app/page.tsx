@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { AppShell } from "../components/AppShell";
+import { StartHub } from "../components/start/StartHub";
 
 export const metadata: Metadata = {
-  title: "World | ORTUS",
-  description: "Observe and perturb an active modeled system."
+  title: "Start | ORTUS",
+  description: "Choose a runnable system, start with a prepared exploration, or open ORTUS research tools."
 };
 
 export default function Home() {
-  return <AppShell />;
+  return <StartHub />;
 }

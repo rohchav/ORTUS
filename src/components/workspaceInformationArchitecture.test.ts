@@ -50,19 +50,20 @@ describe("simulation workspace information architecture", () => {
     );
   });
 
-  it("uses semantic workspace tabs and renders only the selected mode group", () => {
+  it("uses direct task controls plus a keyboard-operable More menu and renders only the selected mode group", () => {
     const leftStack = source("src/components/LeftInstrumentStack.tsx");
 
-    expect(leftStack).toContain('role="tablist"');
-    expect(leftStack).toContain('role="tab"');
-    expect(leftStack).toContain("aria-selected={candidate.id === activeMode}");
-    expect(leftStack).toContain('role="tabpanel"');
-    expect(leftStack).toContain("onKeyDown={(event) => handleModeKeyDown(event, candidate.id)}");
-    expect(leftStack).toContain('event.key === "ArrowRight"');
-    expect(leftStack).toContain('event.key === "ArrowLeft"');
+    expect(leftStack).toContain('aria-label="World tasks"');
+    expect(leftStack).toContain("aria-pressed={candidate.id === activeMode}");
+    expect(leftStack).toContain('aria-haspopup="menu"');
+    expect(leftStack).toContain('role="menu"');
+    expect(leftStack).toContain('role="menuitem"');
+    expect(leftStack).toContain('event.key === "ArrowDown"');
+    expect(leftStack).toContain('event.key === "ArrowUp"');
     expect(leftStack).toContain('event.key === "Home"');
     expect(leftStack).toContain('event.key === "End"');
-    expect(leftStack).toContain("focusModeTab(nextMode.id)");
+    expect(leftStack).toContain('event.key === "Escape"');
+    expect(leftStack).toContain("moreTriggerRef.current?.focus()");
     expect(leftStack).toContain("renderWorkspaceMode(activeMode)");
     expect(leftStack).toContain('case "setup"');
     expect(leftStack).toContain('case "understand"');
@@ -80,11 +81,14 @@ describe("simulation workspace information architecture", () => {
   it("keeps navigation state local and preserves the world while switching modes", () => {
     const appShell = source("src/components/AppShell.tsx");
 
-    expect(appShell).toContain("useState<SimulationWorkspaceModeId>(defaultSimulationWorkspaceModeId)");
+    expect(appShell).toContain("useState<SimulationWorkspaceModeId>(");
+    expect(appShell).toContain("initialWorkspaceMode ?? defaultSimulationWorkspaceModeId");
     expect(appShell).toContain("<LeftInstrumentStack activeMode={activeWorkspaceMode} onModeChange={setActiveWorkspaceMode} />");
     expect(appShell).toContain("<WorldStage />");
     expect(appShell).toContain("<RightContextDrawer />");
     expect(appShell).toContain("<TimelineControlStrip />");
+    expect(appShell.indexOf("<WorldStage />")).toBeLessThan(appShell.indexOf("<LeftInstrumentStack"));
+    expect(appShell.indexOf("<TimelineControlStrip />")).toBeLessThan(appShell.indexOf("<LeftInstrumentStack"));
     expect(appShell).not.toContain("setActiveWorkspaceMode: useSimulationStore");
   });
 
@@ -94,9 +98,11 @@ describe("simulation workspace information architecture", () => {
     const runSettings = source("src/components/RunSettingsPanel.tsx");
     const leftStack = source("src/components/LeftInstrumentStack.tsx");
 
-    expect(destinationNav).toContain('aria-label="Research World destinations"');
+    expect(destinationNav).toContain('aria-label="Primary navigation"');
+    expect(destinationNav).toContain("primaryDestinations.map");
+    expect(destinationNav).toContain("researchTools.map");
     expect(destinationNav).toContain("aria-current={current ? \"page\" : undefined}");
-    expect(topStatus).toContain("World runtime");
+    expect(topStatus).toContain("Current simulation context");
     expect(topStatus).not.toContain("OrtusBrand");
     expect(topStatus).not.toContain('href="/builder"');
     expect(topStatus).toContain("descriptor.template.name");
@@ -110,7 +116,9 @@ describe("simulation workspace information architecture", () => {
     expect(runSettings).toContain("selectTemplate");
     expect(runSettings).toContain("setSeed");
     expect(runSettings).toContain("regenerateSeed");
-    expect(runSettings).toContain("<ParameterPanel />");
+    expect(runSettings).toContain("<ParameterPanel");
+    expect(runSettings).toContain("includeKeys={system.quickParameterKeys}");
+    expect(runSettings).toContain("excludeKeys={system.quickParameterKeys}");
     expect(leftStack).toContain("<NeuralRuntimeLabPanel />");
     expect(leftStack).toContain("<FileActions />");
   });
@@ -144,9 +152,10 @@ describe("simulation workspace information architecture", () => {
     expect(topStatus).toContain("overflow: visible;");
     expect(topStatus).not.toContain("height: 50px;");
     expect(topStatus).not.toContain("overflow-y: hidden;");
-    expect(destinationNavSource).toContain("researchDestinations.map");
-    expect(destinationNavSource).toContain('aria-label="Research World destinations"');
-    expect(topStatusSource).toContain("World runtime");
+    expect(destinationNavSource).toContain("primaryDestinations.map");
+    expect(destinationNavSource).toContain('aria-label="Primary navigation"');
+    expect(topStatusSource).toContain("Current simulation context");
+    expect(topStatusSource).toContain("Current run status");
     expect(topStatusSource).not.toContain("Simulate");
     expect(topStatusSource).not.toContain('href="/builder"');
     expect(topStatusSource).not.toContain(">Run Model<");
@@ -159,12 +168,11 @@ describe("simulation workspace information architecture", () => {
     const parameterPanel = source("src/components/ParameterPanel.tsx");
     const metricGraph = source("src/components/MetricGraphPanel.tsx");
 
-    expect(runSettings).toContain("Apply Seed rebuilds with the typed seed");
     expect(runSettings).toContain("Regenerate Seed");
-    expect(runSettings).toContain("creates a new seed and fresh run");
     expect(runSettings).toContain("aria-label=\"Apply typed seed and rebuild a fresh run\"");
     expect(runSettings).toContain("aria-label=\"Generate a new seed and rebuild a fresh run\"");
-    expect(parameterPanel).toContain("Parameter changes rebuild a fresh tick-0 run immediately");
+    expect(parameterPanel).toContain("Parameter changes rebuild a fresh tick-0 run through template parameter checks");
+    expect(parameterPanel).toContain("Unsupported combinations are rejected before the engine is replaced");
     expect(metricGraph).toContain("Current aggregate values live in Macro Field");
     expect(metricGraph).toContain("bounded model-output history over simulated ticks");
     expect(metricGraph).toContain("not empirical measurement");

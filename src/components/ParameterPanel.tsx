@@ -1,29 +1,31 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import type { JsonValue, ParameterDefinition } from "../simulation";
 import { formatNumber } from "../lib/format";
 import { getTemplateDescriptor } from "../lib/templateVisuals";
 import { useSimulationStore } from "../state/simulationStore";
 
-export function ParameterPanel() {
+interface ParameterPanelProps {
+  includeKeys?: readonly string[];
+  excludeKeys?: readonly string[];
+  highlightedKey?: string;
+  showNote?: boolean;
+  ariaLabel?: string;
+}
+
+export function ParameterPanel({
+  includeKeys,
+  excludeKeys = [],
+  highlightedKey,
+  showNote = false,
+  ariaLabel = "Model parameters"
+}: ParameterPanelProps = {}) {
   const selectedTemplateId = useSimulationStore((state) => state.selectedTemplateId);
   const parameterValues = useSimulationStore((state) => state.parameterValues);
   const setParameter = useSimulationStore((state) => state.setParameter);
-  const definitions = getTemplateDescriptor(selectedTemplateId).template.parameterDefinitions;
-  const [neuralAdvancedOpen, setNeuralAdvancedOpen] = useState(false);
-  const isNeural = selectedTemplateId === "neural-excitation-network";
-
-  useEffect(() => {
-    if (!isNeural) {
-      return;
-    }
-    function openAdvancedConfig() {
-      setNeuralAdvancedOpen(true);
-    }
-    window.addEventListener("ortus:open-neural-advanced-config", openAdvancedConfig);
-    return () => window.removeEventListener("ortus:open-neural-advanced-config", openAdvancedConfig);
-  }, [isNeural]);
+  const definitions = getTemplateDescriptor(selectedTemplateId).template.parameterDefinitions.filter(
+    (definition) => (!includeKeys || includeKeys.includes(definition.key)) && !excludeKeys.includes(definition.key)
+  );
 
   const controls = definitions.map((definition) => (
     <ParameterControl
@@ -31,42 +33,17 @@ export function ParameterPanel() {
       definition={definition}
       value={parameterValues[definition.key] ?? definition.defaultValue}
       onChange={(value) => setParameter(definition.key, value)}
+      highlighted={definition.key === highlightedKey}
     />
   ));
 
-  if (isNeural) {
-    return (
-      <section className="parameter-panel parameter-panel--advanced" aria-label="Neural advanced configuration">
-        <button
-          id="neural-advanced-config-toggle"
-          type="button"
-          className="parameter-panel__advanced-toggle"
-          aria-expanded={neuralAdvancedOpen}
-          aria-controls="neural-advanced-config-panel"
-          onClick={() => setNeuralAdvancedOpen((current) => !current)}
-          suppressHydrationWarning
-        >
-          <span>Advanced config</span>
-          <strong>{neuralAdvancedOpen ? "Hide exact parameters" : "Show exact parameters"}</strong>
-        </button>
-        <p className="parameter-panel__note">
-          Parameter changes rebuild a fresh tick-0 run immediately through template validation. Invalid combinations are rejected before the engine is replaced.
-          Neural Runtime Lab controls are shortcuts; this drawer keeps every exact parameter available.
-        </p>
-        {neuralAdvancedOpen ? (
-          <div id="neural-advanced-config-panel" className="parameter-panel__advanced-body">
-            {controls}
-          </div>
-        ) : null}
-      </section>
-    );
-  }
-
   return (
-    <div className="parameter-panel">
-      <p className="parameter-panel__note">
-        Parameter changes rebuild a fresh tick-0 run immediately through template validation. Invalid combinations are rejected before the engine is replaced.
-      </p>
+    <div className="parameter-panel" aria-label={ariaLabel}>
+      {showNote ? (
+        <p className="parameter-panel__note">
+          Parameter changes rebuild a fresh tick-0 run through template parameter checks. Unsupported combinations are rejected before the engine is replaced.
+        </p>
+      ) : null}
       {controls}
     </div>
   );
@@ -75,15 +52,17 @@ export function ParameterPanel() {
 function ParameterControl({
   definition,
   value,
-  onChange
+  onChange,
+  highlighted
 }: {
   definition: ParameterDefinition;
   value: JsonValue;
   onChange: (value: JsonValue) => void;
+  highlighted: boolean;
 }) {
   if (definition.type === "boolean") {
     return (
-      <label className="parameter-control parameter-control--boolean">
+      <label className={`parameter-control parameter-control--boolean${highlighted ? " is-highlighted" : ""}`}>
         <span>
           <strong>{definition.label}</strong>
           <em>{definition.description}</em>
@@ -95,7 +74,7 @@ function ParameterControl({
 
   if (definition.type === "select") {
     return (
-      <label className="parameter-control">
+      <label className={`parameter-control${highlighted ? " is-highlighted" : ""}`}>
         <span className="parameter-control__head">
           <strong>{definition.label}</strong>
           <em>{definition.description}</em>
@@ -119,7 +98,7 @@ function ParameterControl({
   const isUnitInterval = min === 0 && max === 1;
 
   return (
-    <label className="parameter-control">
+    <label className={`parameter-control${highlighted ? " is-highlighted" : ""}`}>
       <span className="parameter-control__head">
         <strong>{definition.label}</strong>
         <b>{formatParameterValue(numericValue, isUnitInterval)}</b>

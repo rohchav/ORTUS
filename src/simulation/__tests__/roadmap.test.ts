@@ -231,6 +231,13 @@ describe("roadmap alignment and missing pillar reservations", () => {
       "GUIDED_BUILDER_AND_STEP_BY_STEP_CONFIGURATION_FLOW_FOUNDATION_AUDIT.md"
     );
     const remoteStateMissionHygienePath = join(repoRoot, "docs", "RH1_REMOTE_STATE_AND_MISSION_ALIGNMENT_HYGIENE.md");
+    const startHubResetPath = join(repoRoot, "docs", "ui", "START_HUB_AND_WORLD_FIRST_PRODUCT_RESET.md");
+    const productExperienceResetRoadmapPath = join(
+      repoRoot,
+      "docs",
+      "product",
+      "ORTUS_PRODUCT_EXPERIENCE_RESET_ROADMAP.md"
+    );
     expect(existsSync(roadmapPath)).toBe(true);
     expect(existsSync(missingPillarsPath)).toBe(true);
     expect(existsSync(productPhilosophyPath)).toBe(true);
@@ -252,6 +259,8 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(existsSync(guidedBuilderFoundationPath)).toBe(true);
     expect(existsSync(guidedBuilderFoundationAuditPath)).toBe(true);
     expect(existsSync(remoteStateMissionHygienePath)).toBe(true);
+    expect(existsSync(startHubResetPath)).toBe(true);
+    expect(existsSync(productExperienceResetRoadmapPath)).toBe(true);
 
     const roadmap = readFileSync(roadmapPath, "utf8");
     const productPhilosophy = readFileSync(productPhilosophyPath, "utf8");
@@ -273,6 +282,8 @@ describe("roadmap alignment and missing pillar reservations", () => {
     const guidedBuilderFoundation = readFileSync(guidedBuilderFoundationPath, "utf8");
     const guidedBuilderFoundationAudit = readFileSync(guidedBuilderFoundationAuditPath, "utf8");
     const remoteStateMissionHygiene = readFileSync(remoteStateMissionHygienePath, "utf8");
+    const startHubReset = readFileSync(startHubResetPath, "utf8");
+    const productExperienceResetRoadmap = readFileSync(productExperienceResetRoadmapPath, "utf8");
     expect(roadmap).toContain("completed through Prompt 39B");
     expect(roadmap).toContain("Post-30B stabilization");
     expect(roadmap).toContain(
@@ -296,7 +307,21 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(roadmap).toContain("UX6B complete.");
     expect(roadmap).toContain("GW9 complete.");
     expect(roadmap).toContain("GW9B complete.");
-    expect(roadmap).toContain("The next documented roadmap milestone is F1: Fractal Metrics V1");
+    expect(roadmap).toContain("The next documented roadmap milestone is R1B: First-Run and Shell Audit.");
+    expect(roadmap).toContain("F1 and the fractal branch remain documented but are paused under E3 Analytical Lenses.");
+    expect(startHubReset).toContain("/         -> Start Hub");
+    expect(startHubReset).toContain("/world    -> live World workbench");
+    expect(startHubReset).toContain("R1 does not change simulation scheduling, engine state, template rules");
+    expect(startHubReset).toContain("R1B First-Run and Shell Audit is next.");
+    expect(productExperienceResetRoadmap).toContain("Status: active product sequence; R1 implemented and R1B next");
+    expect(productExperienceResetRoadmap).toContain("Every implementation milestone is followed by an audit milestone.");
+    expect(productExperienceResetRoadmap).toContain("F1 and the rest of the F branch are paused beneath E3 Analytical Lenses.");
+    expect(productExperienceResetRoadmap).toContain(
+      "R1 -> R1B -> R2 -> R2B -> C1 -> C1B -> C2 -> C2B -> C3 -> C3B"
+    );
+    expect(productExperienceResetRoadmap).toContain(
+      "-> S5 -> S5B -> E1 -> E1B -> E2 -> E2B -> E3 -> E3B"
+    );
     expect(roadmap).toContain("Prompt GW9 adds `docs/ui/EPHEMERAL_LANDSCAPE_SAMPLING_PREVIEW_V1.md`");
     expect(roadmap).toContain("Prompt GW7 adds non-persistent Behavioral Landscape Exploration Foundation");
     expect(roadmap).toContain("Prompt GW7B audits and hardens the Behavioral Landscape Exploration Foundation");
@@ -414,7 +439,8 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(remoteStateMissionHygiene).toContain("UX5 remains next.");
     expect(remoteStateMissionHygiene).toContain("GW9 remains paused.");
     expect(roadmap).not.toContain("Prompt GW5 Behavioral Landscape Exploration");
-    expect(roadmap).toContain("Prompt GW1 implements the shared Research World destination shell.");
+    expect(roadmap).toContain("Prompt GW1 historically implemented the first shared Research World destination shell");
+    expect(roadmap).toContain("R1 supersedes that route hierarchy with `/` as Start and `/world` as World");
     expect(roadmap).toContain("Prompt GW1B audits and hardens the destination shell without expanding product behavior.");
     expect(roadmap).toContain("Prompt GW2 adds Active Run Provenance and Observation in World Observe only.");
     expect(roadmap).toContain("Prompt UX2B adds a rendered browser audit harness with Playwright and Axe, and executes it.");
@@ -585,7 +611,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
       "Lab is where runnable model work happens.",
       "Atlas is the evidence-oriented record of investigated model behavior.",
       "Workshop is where reusable artifacts and modeling capabilities are prepared",
-      "Current implemented workflows include `/`, `/builder`, template selection/runtime, Builder modes, schema authoring, graph inspection, validation/repair suggestions, structural fit reporting, scenario planning, Neural Runtime Lab, and current run controls/metrics.",
+      "Current implemented workflows include the Start Hub at `/`, the live World at `/world`, Workshop at `/builder`, Atlas at `/atlas`, Lab at `/lab`, template selection/runtime, Builder modes, schema authoring, graph inspection, validation/repair suggestions, structural fit reporting, scenario planning, Neural Runtime Lab, and current run controls/metrics.",
       "The Research World architecture must wrap and reorganize validated workflows before attempting to replace them.",
       "progress = reusable understanding + modeling capability + investigative depth",
       "progress = clicks + time + completed tasks",
@@ -621,7 +647,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
       "Progression must not rely only on color, maps, animation, drag/drop, hover, or decorative metaphor.",
       "GW0 defines what the product must communicate. UX2 defines how shared design foundations communicate it. GW1 implements the first structural shell using both.",
       "GW0 -> UX2 -> GW1 -> GW1B -> GW2 -> GW2B -> GW3 -> GW3B -> GW4 -> GW4B -> GW5 -> GW5B -> GW6 -> GW6B -> GW7 -> GW7B -> GW8 -> GW8B -> UX3 -> UX4 -> UX4B -> RH1 -> UX5 -> UX5B -> UX6 -> UX6B -> GW9",
-      "Prompt GW1 implements the route contract:",
+      "Prompt GW1 historically implemented this route contract:",
       "Lab and Atlas are reachable destinations, not locked destinations.",
       "no production UI, CSS, runtime, persistence, route, asset, dependency, or package file is changed by GW0"
     ]) {

@@ -296,6 +296,7 @@ describe("Neural Runtime Lab UX view model", () => {
   it("renders source-level boundaries, accessibility hooks, bounded histories, and no cognition-training controls", () => {
     const component = source("src/components/NeuralRuntimeLabPanel.tsx");
     const parameterPanel = source("src/components/ParameterPanel.tsx");
+    const runSettings = source("src/components/RunSettingsPanel.tsx");
     const leftStack = source("src/components/LeftInstrumentStack.tsx");
     const helper = source("src/components/neuralRuntimeLab.ts");
 
@@ -324,9 +325,11 @@ describe("Neural Runtime Lab UX view model", () => {
       "Apply setup rebuilds a fresh tick-0 Neural run and discards the current tick, metric trace, selection, intervention target, and intervention history."
     );
     expect(leftStack).toContain("<NeuralRuntimeLabPanel />");
-    expect(parameterPanel).toContain("aria-expanded={neuralAdvancedOpen}");
-    expect(parameterPanel).toContain('aria-controls="neural-advanced-config-panel"');
-    expect(parameterPanel).toContain("ortus:open-neural-advanced-config");
+    expect(runSettings).toContain("aria-expanded={allParametersOpen}");
+    expect(runSettings).toContain('aria-controls="all-model-parameters"');
+    expect(runSettings).toContain('id="neural-advanced-config-toggle"');
+    expect(runSettings).toContain("ortus:open-neural-advanced-config");
+    expect(parameterPanel).toContain("getTemplateDescriptor(selectedTemplateId).template.parameterDefinitions.filter");
     expect(component).toContain('aria-label="Neural lab scenarios"');
     expect(component).toContain('aria-label="Live neural explanation"');
     expect(component).toContain('aria-label="Neural lab timeline"');

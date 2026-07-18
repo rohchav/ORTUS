@@ -1,20 +1,20 @@
 # ORTUS Current Context
 
-Last updated: 2026-07-15 after Prompt GW9B Ephemeral Landscape Sampling Preview V1 Audit and Hardening
+Last updated: 2026-07-17 during Prompt R1 Start Hub and World-First Product Reset
 
 ## Current Prompt Status
 
-Prompt GW9 adds the first real Atlas sampling slice. Prompt GW9B audits and hardens it without widening support. `/atlas` can explicitly run one bounded `flocking-boids` preview over one bundled validated scenario, one or two supported numeric axes, one supported final-tick metric, one to three canonical explicit deterministic seeds, and no more than 5,000 work units. Each sample uses a fresh engine through the shared validated RunConfig factory. Execution is sequential, cancellation is checked between samples and on unmount, exact provenance stays in component memory, stale results remain tied to their original request, and reload returns Atlas to unsampled state.
+Prompt R1 resets product entry and hierarchy without changing runtime semantics. `/` is now a task-centered Start Hub. The existing live workbench is at `/world`; `/builder`, `/atlas`, and `/lab` retain their established behavior. Primary navigation is Start, World, Workshop, and a keyboard-operated Research tools menu for Atlas, Lab, Experiments, and Compare runs.
 
-The current GW8 probe-planning scaffold remains non-executable and cannot map safely because it lacks stable runtime IDs and exact values. GW9 does not mutate World or Experiment Runner, write storage, create Atlas/Lab/comparison records, interpolate, detect regimes or transitions, establish confidence, validate science, execute Builder artifacts, or generalize preview support beyond its explicit capability descriptor.
+The Start Hub features the existing Flocking runtime, uses an actual runtime capture, provides four intent pathways, and derives its seven-system catalog from authoritative production template descriptors. Its Flocking action opens a prepared World URL and shows a dismissible page-session-only four-step nudge. No onboarding storage, analytics, personalization, progression, or new runtime support exists.
 
-GW9 complete.
+World is model-first. At desktop, the model workspace is approximately 74% of the application layout width. Persistent playback controls remain outside the task scroll region. Direct task controls are Setup, Observe, Change, and Compare; More contains Understand model, Experiments, and Diagnostics. Setup exposes four source-backed parameters plus all-parameter and Scenario Builder disclosures. Understand is concise and model-specific, with full notes available and unrelated global guardrails excluded.
 
-GW9B complete.
+Atlas puts the unchanged GW9/GW9B preview before conceptual orientation. Lab leads with useful World/Compare/Atlas actions and keeps technical foundations disclosed. Workshop retains Guided and Advanced behavior, suppresses premature required-field error counts, and hides capability/support matrices by default. Capability guidance is now one contextual note plus disclosed full reference.
 
-The next documented roadmap milestone is F1: Fractal Metrics V1, ready after commit publication and not started here.
+R1 changes no simulation scheduling, template behavior, scenarios, metrics, interventions, Experiment Runner behavior, comparisons, Atlas execution, Builder structural behavior, or persistence. R1B First-Run and Shell Audit is next. The F1 fractal branch is paused under E3 Analytical Lenses.
 
-Final GW9B gates: focused Playwright `53 passed`; full UI Playwright `68 passed`; typecheck passed; unit tests `70 files / 590 tests` passed; production build passed; simulation performance and the 2-run/10-work-unit preview smoke passed, with the preview smoke at 28.07 ms on this machine; and `git diff --check` passed. `npm run lint: unavailable, package.json has no lint script.` Actual browser zoom, screen-reader, assistive-technology, forced-colors, mobile-workflow, user-comprehension, and WCAG conformance remain unverified.
+Final R1 verification passes `53` focused Playwright tests, `80` full UI Playwright tests, `72` unit files / `599` unit tests, typecheck, production build, simulation performance smoke, and `git diff --check`. Lint remains intentionally unavailable. Rendered review found and fixed a Guided Builder title/step CSS-selector collision. The build gate found and fixed a missing Suspense boundary around the query-aware shared navigation. These are R1 shell fixes only; they add no engine or persistence behavior.
 
 ## Project Identity
 
@@ -40,7 +40,7 @@ Prompt UX6 adds `docs/ui/GUIDED_BUILDER_AND_STEP_BY_STEP_CONFIGURATION_FLOW_FOUN
 
 Prompt UX6B adds `docs/ui/GUIDED_BUILDER_AND_STEP_BY_STEP_CONFIGURATION_FLOW_FOUNDATION_AUDIT.md`, fixes eight bounded focus/status/layout/landmark/scroll defects, and closes with `43` focused Playwright, `58` full UI Playwright, and `69` unit files / `565` tests. It cleared the historical gate for GW9; GW9 has now followed.
 
-UI-REMEDIATION-1 replaced the monolithic simulation left drawer with a task-oriented workspace shell. The simulation workspace modes are Setup, Understand, Observe, Intervene, Experiment, Compare, and Debug. The World Stage remains mounted while switching modes, workspace mode state is local React state in `AppShell`, and persistent Run/Pause, Step, Reset, tick/time, and speed controls live in a shell-level dock outside scrollable workspace content. Model/seed/parameter editing lives in Setup; scenario/snapshot exchange lives in Compare; assumptions and notes live in Understand; metrics and legend live in Observe; interventions live in Intervene; sweeps live in Experiment; debug diagnostics live in Debug.
+UI-REMEDIATION-1 replaced the monolithic simulation drawer with task modes. R1 keeps those internal modes but presents Setup, Observe, Change, Compare, and More in a compact right-side task rail while placing the World Stage and persistent controls first. Workspace state remains local React state in `AppShell`; no task selection enters engine state.
 
 Prompt 34B audited and hardened the safe Builder shell plus workspace information architecture. Reset now requires press-and-confirm when current run state would be discarded. Workspace tabs support arrow/Home/End keyboard behavior. Setup copy states that model, parameter, Apply Seed, and Regenerate Seed actions rebuild fresh tick-0 runs. Metric Trace states near the chart that traces are bounded model-output history over simulated ticks, not empirical measurements, calibrated probabilities, or validation evidence. Builder viewport node and edge buttons select structural items for read-only inspection only.
 
@@ -155,7 +155,7 @@ Built-in production templates currently include Epidemic Spread, Opinion Dynamic
 
 ## Completed Prompt State
 
-Durable docs and source indicate completed roadmap work through Prompt 39B plus the documented side tracks and Research World/UI work through Prompt GW9. Prompt 31 through Prompt 39B are complete. UX6/UX6B established and audited the bounded Guided Builder; GW9 now establishes the bounded Atlas ephemeral preview.
+Durable docs and source indicate completed roadmap work through Prompt 39B plus the documented side tracks, Research World/UI work through Prompt GW9B, and R1. Prompt 31 through Prompt 39B are complete. UX6/UX6B established and audited the bounded Guided Builder; GW9/GW9B established and audited the bounded Atlas preview; R1 resets product entry and the World shell.
 
 The post-30B repository hygiene, dependency stabilization, durable context, and performance/scalability pass has also been completed. Recent commits include `dd6c256` for repo context/generated-artifact hygiene, `4949b72` for dependency and performance script stabilization, and `a80d5b7` for simulation performance instrumentation and spatial indexing foundations.
 
@@ -163,11 +163,12 @@ UX6 complete.
 UX6B complete.
 GW9 complete.
 GW9B complete.
-The next documented roadmap milestone is F1: Fractal Metrics V1, ready after commit publication.
+R1 complete.
+The next documented roadmap milestone is R1B: First-Run and Shell Audit.
 
-Completed sequence: UX6B -> GW9 -> GW9B. F1 is not started.
+Completed sequence: UX6B -> GW9 -> GW9B -> R1. R1B is not started.
 
-Do not start F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or further Research World/fractal/multiscale implementation without explicit approval. Rendered Playwright/Axe evidence does not establish actual browser zoom, screen-reader, assistive-technology, forced-colors, full WCAG, mobile-workflow, or user-comprehension readiness.
+Do not start R2, starter packs, recipe-first Builder, composition, multiscale runtime, adaptive-controller generalization, Lab/Atlas persistence, E3, F1, or other reset-roadmap capability without its dedicated prompt. Rendered Playwright/Axe evidence does not establish actual browser zoom, screen-reader, assistive-technology, forced-colors, full WCAG, mobile-workflow, or user-comprehension readiness.
 
 Implemented runtime foundations include scenarios, snapshots, template-defined behavior modes, agent composition, interventions, experiments, run summaries/comparison, seeded randomness, metrics, spaces, template metadata, and a narrow Opinion Dynamics `socialLearning` behavior mode audited in Prompt 33D.
 
@@ -280,7 +281,7 @@ Prompt 35 and Prompt 35B were committed together in `7696381 feat: Implement Mod
 
 ## Next Recommended Prompt
 
-The Research World sequence is complete through GW9B. The next documented roadmap milestone is F1: Fractal Metrics V1, not started. Do not start F1 or further Research World/fractal/multiscale implementation without explicit approval.
+R1B: First-Run and Shell Audit. It must audit the R1 entry path, route hierarchy, World dominance, contextual guidance, keyboard/focus behavior, responsive behavior, and scientific-honesty placement without adding R2 or later roadmap capability. F1 is paused under E3 Analytical Lenses.
 
 Next recommended UI/design-system prompt after UX2B: `UI-DESIGN-SYSTEM-1: Rendered Responsive, Typography + Visualization Accessibility Audit`.
 

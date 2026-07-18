@@ -3,23 +3,32 @@
 import { useEffect, useRef, useState } from "react";
 import { LeftInstrumentStack } from "./LeftInstrumentStack";
 import { RightContextDrawer } from "./RightContextDrawer";
+import { StarterActionNudge } from "./StarterActionNudge";
 import { TimelineControlStrip } from "./TimelineControlStrip";
 import { TopStatusBar } from "./TopStatusBar";
 import { WorldStage } from "./WorldStage";
 import { OrtusBrand } from "./branding";
 import { defaultSimulationWorkspaceModeId, type SimulationWorkspaceModeId } from "../lib/workspaceModes";
+import type { TemplateId } from "../lib/templateVisuals";
 import { useSimulationStore } from "../state/simulationStore";
 
 const baseTicksPerSecond = 24;
 
-export function AppShell() {
+interface AppShellProps {
+  initialTemplateId?: TemplateId;
+  initialWorkspaceMode?: SimulationWorkspaceModeId;
+  showStarterGuide?: boolean;
+}
+
+export function AppShell({ initialTemplateId, initialWorkspaceMode, showStarterGuide = false }: AppShellProps) {
   const hydratePreferences = useSimulationStore((state) => state.hydratePreferences);
-  const initialize = useSimulationStore((state) => state.initialize);
   const isRunning = useSimulationStore((state) => state.isRunning);
   const speedMultiplier = useSimulationStore((state) => state.speedMultiplier);
   const engine = useSimulationStore((state) => state.engine);
   const [mounted, setMounted] = useState(false);
-  const [activeWorkspaceMode, setActiveWorkspaceMode] = useState<SimulationWorkspaceModeId>(defaultSimulationWorkspaceModeId);
+  const [activeWorkspaceMode, setActiveWorkspaceMode] = useState<SimulationWorkspaceModeId>(
+    initialWorkspaceMode ?? defaultSimulationWorkspaceModeId
+  );
   const frameRef = useRef<number | null>(null);
   const lastTimeRef = useRef<number | null>(null);
   const accumulatedRef = useRef(0);
@@ -27,8 +36,17 @@ export function AppShell() {
   useEffect(() => {
     setMounted(true);
     hydratePreferences();
-    initialize();
-  }, [hydratePreferences, initialize]);
+    const state = useSimulationStore.getState();
+    if (initialTemplateId && state.selectedTemplateId !== initialTemplateId) {
+      state.selectTemplate(initialTemplateId);
+    } else {
+      state.initialize();
+    }
+  }, [hydratePreferences, initialTemplateId]);
+
+  useEffect(() => {
+    setActiveWorkspaceMode(initialWorkspaceMode ?? defaultSimulationWorkspaceModeId);
+  }, [initialWorkspaceMode]);
 
   useEffect(() => {
     if (!isRunning) {
@@ -88,15 +106,16 @@ export function AppShell() {
       <h1 className="sr-only">World</h1>
       <TopStatusBar activeWorkspaceMode={activeWorkspaceMode} />
       <div className="ortus-layout">
-        <LeftInstrumentStack activeMode={activeWorkspaceMode} onModeChange={setActiveWorkspaceMode} />
         <section className="workspace-center" aria-label="Simulation workspace" data-workspace-region="center">
           <div className="world-workspace">
+            {showStarterGuide ? <StarterActionNudge /> : null}
             <WorldStage />
           </div>
+          <TimelineControlStrip />
           <RightContextDrawer />
         </section>
+        <LeftInstrumentStack activeMode={activeWorkspaceMode} onModeChange={setActiveWorkspaceMode} />
       </div>
-      <TimelineControlStrip />
     </section>
   );
 }

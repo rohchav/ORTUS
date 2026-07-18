@@ -6,7 +6,6 @@ import {
   type CapabilityGuidanceItem
 } from "../../lib/capabilityGuidance";
 import type { ResearchDestinationId } from "../../lib/researchDestinations";
-import { CornerFramePanel } from "../ui/CornerFramePanel";
 import { Disclosure } from "../ui/Disclosure";
 import { StatusPill } from "../ui/StatusPill";
 
@@ -31,23 +30,23 @@ export function CapabilityGuidancePanel({ destinationId, className = "", maxItem
       data-capability-guidance-destination={destinationId}
       data-capability-guidance-route={guidance.route}
     >
-      <CornerFramePanel title="Capability Guidance" eyebrow={guidance.roleLabel} variant="compact" className="capability-guidance__panel">
-        <h2 id={titleId} className="sr-only">
-          Capability Guidance
-        </h2>
-        <p className="capability-guidance__principle">{guidance.visibleBoundary}</p>
-        <p className="capability-guidance__scope">{guidance.principle}</p>
-
-        <GuidanceGroup title="Available here" items={availableHere} />
-        <BoundaryGroup boundaries={primaryBoundary} />
-
-        <Disclosure
-          expandLabel="Show all capabilities"
-          collapseLabel="Hide capability details"
-          contentId={`capability-guidance-${destinationId}-details`}
-          className="capability-guidance__disclosure"
-        >
+      <h2 id={titleId} className="sr-only">
+        Capability reference
+      </h2>
+      <p className="capability-guidance__principle">
+        <strong>Capability note:</strong> {contextualBoundary[destinationId]}
+      </p>
+      <Disclosure
+        expandLabel="Capability reference"
+        collapseLabel="Hide capability reference"
+        contentId={`capability-guidance-${destinationId}-details`}
+        className="capability-guidance__disclosure"
+      >
+        <div className="capability-guidance__reference">
+          <p className="capability-guidance__scope">{guidance.principle}</p>
           <div className="capability-guidance__details-grid">
+            <GuidanceGroup title="Available here" items={availableHere} />
+            <BoundaryGroup boundaries={primaryBoundary} />
             {additionalAvailable.length > 0 ? <GuidanceGroup title="More available here" items={additionalAvailable} /> : null}
             <GuidanceGroup title="Planning-only" items={guidance.planningOnly} />
             <GuidanceGroup title="Not implemented" items={guidance.notImplemented} />
@@ -56,11 +55,18 @@ export function CapabilityGuidancePanel({ destinationId, className = "", maxItem
             ) : null}
             <RelatedDestinations destinationId={destinationId} destinations={guidance.relatedDestinations} />
           </div>
-        </Disclosure>
-      </CornerFramePanel>
+        </div>
+      </Disclosure>
     </section>
   );
 }
+
+const contextualBoundary: Record<ResearchDestinationId, string> = {
+  world: "World output is simulated model state. A runnable model is not automatically calibrated or validated against the real world.",
+  workshop: "Workshop artifacts describe model structure. They do not compile or execute a custom model.",
+  lab: "Lab currently provides a non-persistent evidence-record foundation; it does not save research records.",
+  atlas: "Atlas preview results stay page-local and describe model output, not certified real-world discoveries."
+};
 
 function limitItems<T>(items: readonly T[], maxItems: number | undefined): readonly T[] {
   if (maxItems === undefined) {

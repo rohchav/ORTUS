@@ -12,7 +12,7 @@ export interface ResearchDestinationStatus {
 export interface ResearchDestinationDefinition {
   id: ResearchDestinationId;
   label: string;
-  route: "/" | "/lab" | "/atlas" | "/builder";
+  route: "/world" | "/lab" | "/atlas" | "/builder";
   purpose: string;
   availability: ResearchDestinationAvailability;
   navigationOrder: number;
@@ -23,7 +23,7 @@ export const researchDestinations: readonly ResearchDestinationDefinition[] = Ob
   {
     id: "world",
     label: "World",
-    route: "/",
+    route: "/world",
     purpose: "Observe and perturb an active modeled system.",
     availability: "available",
     navigationOrder: 1
@@ -72,9 +72,6 @@ export function getResearchDestinationByPathname(pathname: string): ResearchDest
   const normalized = normalizePathname(pathname);
   return (
     researchDestinations.find((destination) => {
-      if (destination.route === "/") {
-        return normalized === "/";
-      }
       return normalized === destination.route || normalized.startsWith(`${destination.route}/`);
     }) ?? null
   );

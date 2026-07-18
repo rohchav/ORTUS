@@ -3511,3 +3511,58 @@ Roadmap result:
 - UX6B complete.
 - GW9 is next.
 - GW9 remains paused until UX6B is committed and remotely aligned.
+
+### Prompt R1: Start Hub and World-First Product Reset
+
+Date: 2026-07-17
+
+Goal: replace the equal-destination research-console entry with a task-centered Start Hub, move the existing workbench to `/world`, reclaim World for the live system, demote broad capability walls, and preserve every established runtime, Builder, Atlas, Experiment, comparison, and persistence boundary.
+
+Starting state:
+
+- Branch `main` at clean, aligned `98e6bb4 test: audit ephemeral landscape sampling preview`; `HEAD` matched `origin/main`.
+- Baseline focused Playwright passed `53` tests; full UI passed `68`; typecheck passed; unit tests passed `70 files / 590 tests`; build, performance smoke, and `git diff --check` passed.
+- `npm run lint: unavailable, package.json has no lint script.`
+
+Implementation:
+
+- Made `/` a real Start Hub and moved the unchanged live workbench to `/world`. Added Start, World, Workshop, and a keyboard-operated Research tools menu for Atlas, Lab, Experiments, and Compare runs.
+- Featured the implemented Flocking runtime with an actual ORTUS runtime capture, explicit question/mechanism/change/scope copy, four plain-language pathways, and a dismissible page-session-only action nudge.
+- Derived the seven-system Start catalog from authoritative production template descriptors. Added presentation-only question, change, output, watch, and compact-control metadata without registering or inferring runtime support.
+- Made World model-first with the canvas and persistent controls before one compact task rail. Setup, Observe, Change, and Compare are direct; Understand model, Experiments, and Diagnostics are under More.
+- Reduced Setup to the selected template, starting recipe, seed, intervention count, and four source-backed controls while retaining all exact parameters and Scenario Builder behind disclosures.
+- Replaced the default Understand dump with six model-specific sections and expandable full notes. Normalized rendered de-duplication removes punctuation-only repeats; unrelated global Builder, schema, LLM, and cross-template boundaries stay out.
+- Put the real Atlas sampler first, made Lab concise and action-oriented, and kept Workshop Guided/Advanced access direct while disclosing capability matrices and technical foundations.
+- Added the active R/RB, C/CB, S/SB, and E/EB product-reset roadmap. R1B is next; F1 remains documented but is paused under E3 Analytical Lenses.
+
+Rendered findings and hardening:
+
+- Fixed a genuine 900-pixel World stacking overlap and two genuine 1280x600 Workshop focus-visibility defects in the Workspace Inspector and Author Schema import textareas.
+- Final screenshot review found a broad `.guided-builder__steps button` selector styling the panel title button as a numbered step, visibly colliding `Step 1 of 6` with `Draft Steps`. Rules are now scoped to `nav button`, and a rendered bounding-box assertion rejects recurrence.
+- The first production build compiled but every static route failed page generation. The new shared navigation's `useSearchParams` lacked a Suspense boundary. `ResearchWorldShell` now owns the boundary; a normal build prerenders Start, Atlas, Lab, and Workshop and keeps query-driven World dynamic.
+- Direct screenshot inspection covered Start and World at the required viewport matrix, Start at `390x844`, and Atlas, Lab, and Workshop first viewports. No incoherent overlap or document horizontal overflow remains in the covered states.
+- Axe, reduced motion, menu keyboard behavior, Escape focus return, current location, reload-reset disclosure state, focus visibility, short-height reachability, console/page/request/asset/hydration diagnostics, and one-main/one-H1 contracts pass in covered states.
+
+Integrity result:
+
+- Simulation scheduling, engine semantics, template behavior, scenario behavior, metrics, interventions, Experiment Runner, comparisons, Atlas execution, Builder structural behavior, and persistence are unchanged.
+- No new template, primitive, backend, account, analytics, remote asset, AI guidance, personalization, saved tutorial, Lab record, Atlas record, generic sampler, schema execution, arbitrary code/formula execution, or generated RunConfig was added.
+- The starter nudge and disclosures are component-local. Reload resets them and no storage key is added.
+- Runtime support remains derived from existing production templates. Structural validity, runnability, scientific validation, and empirical truth remain separate claims.
+
+Final verification:
+
+- Focused Playwright: `53 passed`.
+- Full UI Playwright: `80 passed`.
+- Typecheck: passed.
+- Unit tests: `72 files / 599 tests` passed.
+- Production build: passed after the shared-navigation Suspense fix.
+- Simulation performance smoke: passed.
+- `git diff --check`: passed.
+- `npm run lint: unavailable, package.json has no lint script.`
+
+Roadmap result:
+
+- R1 complete.
+- R1B First-Run and Shell Audit is next.
+- F1 remains paused under E3 Analytical Lenses.

@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState, type FormEvent, type KeyboardEvent, type ReactNode } from "react";
 import type { ModelSchemaDefinition } from "../../../simulation/modelSchema";
 import { CornerFramePanel } from "../../ui/CornerFramePanel";
+import { Disclosure } from "../../ui/Disclosure";
 import {
   createGuidedBuilderDraft,
   createGuidedBuilderHandoff,
@@ -343,6 +344,7 @@ export function GuidedBuilder({ handoffResolution, onMeaningfulChange, onOpenAdv
               <ol>
                 {guidedBuilderSteps.map((step, index) => {
                   const stepErrors = getGuidedBuilderStepIssues(review.errors, step.id, "error").length;
+                  const showStepErrors = attemptedSteps.has(step.id);
                   return (
                     <li key={step.id}>
                       <button
@@ -354,7 +356,7 @@ export function GuidedBuilder({ handoffResolution, onMeaningfulChange, onOpenAdv
                       >
                         <span>{index + 1}</span>
                         <strong>{step.label}</strong>
-                        <em>{stepErrors > 0 ? `${stepErrors} ${stepErrors === 1 ? "error" : "errors"}` : "Open"}</em>
+                        <em>{showStepErrors && stepErrors > 0 ? `${stepErrors} ${stepErrors === 1 ? "error" : "errors"}` : "Open"}</em>
                       </button>
                     </li>
                   );
@@ -461,31 +463,32 @@ export function GuidedBuilder({ handoffResolution, onMeaningfulChange, onOpenAdv
             </div>
           </CornerFramePanel>
         </form>
-
-        <aside className="guided-builder__boundaries" aria-label="Guided Builder support boundary">
-          <CornerFramePanel title="Bounded Support" eyebrow="Guided / Advanced" variant="compact">
-            <p>Guided Builder supports a bounded subset of the structural artifact.</p>
-            <p>Advanced Builder remains available for complete and exact editing.</p>
-            <dl>
-              <div>
-                <dt>Guided</dt>
-                <dd>Identity, entities, state attributes, one space, descriptive rules, parameters, assumptions, and limitations.</dd>
-              </div>
-              <div>
-                <dt>Advanced-only</dt>
-                <dd>Components, metrics, artifact references, exact metadata, scope references, fit reports, and scenario planning.</dd>
-              </div>
-              <div>
-                <dt>Unavailable</dt>
-                <dd>Compilation, execution, simulation preview, runtime-template creation, active World mutation, and scientific validation.</dd>
-              </div>
-            </dl>
-            <p className="guided-builder__boundary-note">
-              The Guided Builder creates a model-structure draft. It does not compile, simulate, run, preview, calibrate, validate against reality, or install the draft as a runtime template.
-            </p>
-          </CornerFramePanel>
-        </aside>
       </div>
+        <aside className="guided-builder__boundaries" aria-label="Guided Builder support boundary">
+          <Disclosure expandLabel="Guided and Advanced support" collapseLabel="Hide Guided and Advanced support">
+            <CornerFramePanel title="Bounded Support" eyebrow="Guided / Advanced" variant="compact">
+              <p>Guided Builder supports a bounded subset of the structural artifact.</p>
+              <p>Advanced Builder remains available for complete and exact editing.</p>
+              <dl>
+                <div>
+                  <dt>Guided</dt>
+                  <dd>Identity, entities, state attributes, one space, descriptive rules, parameters, assumptions, and limitations.</dd>
+                </div>
+                <div>
+                  <dt>Advanced-only</dt>
+                  <dd>Components, metrics, artifact references, exact metadata, scope references, fit reports, and scenario planning.</dd>
+                </div>
+                <div>
+                  <dt>Unavailable</dt>
+                  <dd>Compilation, execution, simulation preview, runtime-template creation, active World mutation, and scientific validation.</dd>
+                </div>
+              </dl>
+              <p className="guided-builder__boundary-note">
+                The Guided Builder creates a model-structure draft. It does not compile, simulate, run, preview, calibrate, validate against reality, or install the draft as a runtime template.
+              </p>
+            </CornerFramePanel>
+          </Disclosure>
+        </aside>
 
       {pendingAction ? (
         <div className="schema-confirmation-backdrop">
@@ -541,6 +544,7 @@ function PurposeStep({
           label="Model name"
           description="Maps to ModelSchemaDefinition.name; a deterministic structural id is derived from this name."
           value={draft.modelName}
+          placeholder="For example, Neighborhood resource exchange"
           maxLength={180}
           issue={issueFor("guided-model-name")}
           showIssue={showFieldIssue(issueFor("guided-model-name"))}
@@ -552,6 +556,7 @@ function PurposeStep({
           label="Short description"
           description="Maps directly to ModelSchemaDefinition.description. It is not parsed into behavior."
           value={draft.modelDescription}
+          placeholder="What system does this draft represent, and what question is it meant to explore?"
           maxLength={2_000}
           rows={4}
           issue={issueFor("guided-model-description")}
@@ -564,6 +569,7 @@ function PurposeStep({
           label="Explicit limitation"
           description="Maps to one limitationNotes item. Describe what the model omits or must not be inferred from it."
           value={draft.limitation}
+          placeholder="What does this simplified structure omit or make unsafe to infer?"
           maxLength={900}
           rows={3}
           required={false}
@@ -1222,6 +1228,7 @@ function GuidedTextField({
   description,
   value,
   maxLength,
+  placeholder,
   rows,
   required = true,
   issue,
@@ -1234,6 +1241,7 @@ function GuidedTextField({
   description: string;
   value: string;
   maxLength: number;
+  placeholder?: string;
   rows?: number;
   required?: boolean;
   issue?: GuidedBuilderIssue;
@@ -1257,6 +1265,7 @@ function GuidedTextField({
           value={value}
           rows={rows}
           maxLength={maxLength}
+          placeholder={placeholder}
           required={required}
           aria-describedby={describedBy}
           aria-invalid={showIssue ? true : undefined}
@@ -1269,6 +1278,7 @@ function GuidedTextField({
           type="text"
           value={value}
           maxLength={maxLength}
+          placeholder={placeholder}
           required={required}
           aria-describedby={describedBy}
           aria-invalid={showIssue ? true : undefined}

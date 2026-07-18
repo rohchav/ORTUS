@@ -18,16 +18,16 @@ const repoRoot = process.cwd();
 describe("capability guidance source model", () => {
   it("defines one source-backed guidance summary per canonical destination route", () => {
     expect(capabilityGuidanceSummaries.map((guidance) => guidance.destinationId)).toEqual(["world", "workshop", "lab", "atlas"]);
-    expect(capabilityGuidanceSummaries.map((guidance) => guidance.route)).toEqual(["/", "/builder", "/lab", "/atlas"]);
-    expect(getCapabilityGuidanceCanonicalRoutes()).toEqual(["/", "/builder", "/lab", "/atlas"]);
+    expect(capabilityGuidanceSummaries.map((guidance) => guidance.route)).toEqual(["/world", "/builder", "/lab", "/atlas"]);
+    expect(getCapabilityGuidanceCanonicalRoutes()).toEqual(["/world", "/builder", "/lab", "/atlas"]);
     expect(new Set(getCapabilityGuidanceCanonicalRoutes())).toEqual(new Set(getCanonicalResearchDestinationRoutes()));
     expect(capabilityGuidanceRouteContract).toEqual([
-      { destinationId: "world", route: "/", label: "World" },
+      { destinationId: "world", route: "/world", label: "World" },
       { destinationId: "workshop", route: "/builder", label: "Workshop" },
       { destinationId: "lab", route: "/lab", label: "Lab" },
       { destinationId: "atlas", route: "/atlas", label: "Atlas" }
     ]);
-    expect(capabilityGuidanceRouteContract.map((contract) => contract.route)).not.toContain("/world");
+    expect(capabilityGuidanceRouteContract.map((contract) => contract.route)).not.toContain("/");
     expect(capabilityGuidanceRouteContract.map((contract) => contract.route)).not.toContain("/workshop");
 
     for (const destination of researchDestinations) {

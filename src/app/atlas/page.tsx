@@ -10,7 +10,6 @@ import {
   atlasMapRegionStates
 } from "../../lib/atlasFoundation";
 import { CapabilityGuidancePanel } from "../../components/researchWorld/CapabilityGuidancePanel";
-import { RouteOrientationPanel } from "../../components/researchWorld/RouteOrientationPanel";
 import { CornerFramePanel } from "../../components/ui/CornerFramePanel";
 import { Disclosure } from "../../components/ui/Disclosure";
 import { StatusPill } from "../../components/ui/StatusPill";
@@ -24,9 +23,23 @@ export const metadata: Metadata = {
 export default function AtlasPage() {
   return (
     <section className="atlas-foundation" data-destination-surface="atlas">
-      <RouteOrientationPanel destinationId="atlas" headingLevel={1} />
+      <header className="destination-intro destination-intro--atlas">
+        <div>
+          <p>Research tool</p>
+          <h1>Atlas</h1>
+        </div>
+        <p>Sample a small, explicit region of an implemented model and inspect how one model-output metric changes.</p>
+      </header>
 
-      <section className="atlas-foundation__overview" aria-labelledby="atlas-overview-title">
+      <EphemeralLandscapePreview />
+
+      <Disclosure
+        expandLabel="How to read Atlas"
+        collapseLabel="Hide Atlas orientation"
+        contentId="atlas-reading-orientation"
+        className="route-orientation-disclosure"
+      >
+        <section className="atlas-foundation__overview" aria-labelledby="atlas-overview-title">
         <div className="atlas-foundation__section-heading">
           <span>Orient before sampling</span>
           <h2 id="atlas-overview-title">Model Space At A Glance</h2>
@@ -79,9 +92,8 @@ export default function AtlasPage() {
             </ol>
           </CornerFramePanel>
         </div>
-      </section>
-
-      <EphemeralLandscapePreview />
+        </section>
+      </Disclosure>
 
       <CapabilityGuidancePanel destinationId="atlas" className="capability-guidance--route" />
 
@@ -501,7 +513,7 @@ export default function AtlasPage() {
       </Disclosure>
 
       <nav className="atlas-foundation__links" aria-label="Atlas destination links">
-        <Link href="/">Return to World</Link>
+        <Link href="/world">Return to World</Link>
         <Link href="/builder">Open Workshop</Link>
       </nav>
     </section>

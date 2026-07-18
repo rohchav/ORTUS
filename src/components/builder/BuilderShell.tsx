@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react";
 import { validateVisualBuilderWorkspaceDefinition, type VisualBuilderWorkspaceDefinition } from "../../simulation/visualBuilderWorkspace";
 import { CapabilityGuidancePanel } from "../researchWorld/CapabilityGuidancePanel";
-import { RouteOrientationPanel } from "../researchWorld/RouteOrientationPanel";
+import { Disclosure } from "../ui/Disclosure";
 import { BuilderHeader } from "./BuilderHeader";
 import { BuilderExperienceTabs, type BuilderExperienceId } from "./BuilderExperienceTabs";
 import { BuilderInspector } from "./BuilderInspector";
@@ -216,8 +216,13 @@ export function BuilderShell({ initialWorkspace }: BuilderShellProps) {
 
   return (
     <section className="builder-shell" aria-label="Builder structural shell" data-product-context="ORTUS structural Builder">
-      <h1 className="sr-only">Workshop</h1>
-      <RouteOrientationPanel destinationId="workshop" className="route-orientation--workshop-shell" />
+      <header className="destination-intro destination-intro--workshop">
+        <div>
+          <p>Structural authoring</p>
+          <h1>Workshop</h1>
+        </div>
+        <p>Describe a model step by step or inspect exact structural artifacts. Workshop drafts do not execute.</p>
+      </header>
       <BuilderExperienceTabs activeExperience={activeExperience} onExperienceChange={setActiveExperience} />
       <section
         id="builder-experience-panel-guided"
@@ -312,7 +317,9 @@ export function BuilderShell({ initialWorkspace }: BuilderShellProps) {
         />
         {activeMode === "graph" ? <BuilderGraphView workspace={workspace} /> : null}
       </section>
-      <CapabilityGuidancePanel destinationId="workshop" className="capability-guidance--workshop" maxItemsPerGroup={1} />
+      <Disclosure expandLabel="Workshop capability reference" collapseLabel="Hide Workshop capability reference" className="workshop-capability-disclosure">
+        <CapabilityGuidancePanel destinationId="workshop" className="capability-guidance--workshop" maxItemsPerGroup={1} />
+      </Disclosure>
       {pendingNavigationHref || pendingHistoryBack ? (
         <div className="schema-confirmation-backdrop">
           <div

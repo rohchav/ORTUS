@@ -1,6 +1,6 @@
 # ORTUS Research World Progression Mini-Roadmap
 
-Status: Prompt GW0 documentation source of truth, updated after Prompt RH1.
+Status: historical GW0 source of truth, updated after R1 to record the active route and sequencing reset.
 
 GW0 is documentation, product architecture, information architecture, and roadmap planning only.
 
@@ -95,7 +95,7 @@ Workshop must preserve the valid-versus-runnable distinction. Stored or attached
 
 ## 4. Current Workflow Preservation
 
-Current implemented workflows include `/`, `/builder`, template selection/runtime, Builder modes, schema authoring, graph inspection, validation/repair suggestions, structural fit reporting, scenario planning, Neural Runtime Lab, and current run controls/metrics.
+Current implemented workflows include the Start Hub at `/`, the live World at `/world`, Workshop at `/builder`, Atlas at `/atlas`, Lab at `/lab`, template selection/runtime, Builder modes, schema authoring, graph inspection, validation/repair suggestions, structural fit reporting, scenario planning, Neural Runtime Lab, and current run controls/metrics.
 
 The Research World architecture must wrap and reorganize validated workflows before attempting to replace them.
 
@@ -103,7 +103,7 @@ GW0 does not authorize a flag-day rewrite. GW1 preserves direct access to the ex
 
 Prompt UX2 prepares the visual language for this future shell by distinguishing operational, interaction, evidence, uncertainty, and capability states. UX2 does not create destination routes, destination navigation, persistence, notebooks, Discovery Atlas, behavioral landscapes, contextual guidance, or progression state.
 
-Prompt GW1 implements the route contract:
+Prompt GW1 historically implemented this route contract:
 
 ```text
 /         -> World
@@ -384,7 +384,7 @@ UX6 complete.
 UX6B complete.
 GW9 complete.
 GW9B complete.
-The next documented roadmap milestone is F1: Fractal Metrics V1, ready after commit publication and not started here.
+R1 later superseded the route hierarchy and forward sequence. R1B First-Run and Shell Audit is next; F1 is paused under E3 Analytical Lenses.
 
 ## 22. GW Roadmap Branch
 
@@ -647,4 +647,14 @@ This is a real but deliberately narrow model-sampling slice. It is not generic l
 
 GW9 complete.
 
-GW9B complete. The next documented roadmap milestone is F1: Fractal Metrics V1, not started here.
+GW9B complete.
+
+## 32. R1 Product Reset Status
+
+R1 makes `/` a task-centered Start Hub and moves the unchanged live World workbench to `/world`. Primary navigation is now Start, World, Workshop, and a keyboard-operated Research tools menu for Atlas, Lab, Experiments, and Compare runs. This supersedes the first GW1 equal-destination hierarchy; it does not erase the historical GW records or change their runtime and persistence boundaries.
+
+The Start Hub leads with an implemented Flocking world and derives all seven runnable system entries from authoritative production template metadata. World presents the canvas model first, persistent run controls second, and one task workspace third. Setup, Observe, Change, and Compare are direct; Understand model, Experiments, and Diagnostics remain under More. Capability matrices and historical technical foundations remain available through disclosures instead of leading the routes.
+
+R1 does not implement the persistent Research World imagined by GW0. Lab still saves nothing; Atlas still supports only the explicit bounded ephemeral Flocking preview; Workshop artifacts remain structural and non-executable; existing local comparisons and Experiment Runner sweeps keep their previous semantics.
+
+The active product sequence is now `docs/product/ORTUS_PRODUCT_EXPERIENCE_RESET_ROADMAP.md`. Earlier statements in this historical mini-roadmap that name GW9 or F1 as next record the sequencing at that time and are superseded. R1B First-Run and Shell Audit is next. F1 is paused under E3 Analytical Lenses.

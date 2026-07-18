@@ -267,7 +267,7 @@ export function EphemeralLandscapePreview() {
     >
       <div className="ephemeral-preview__heading">
         <div>
-          <span>GW9 bounded runtime slice</span>
+          <span>Bounded model-space sampler</span>
           <h2 id="ephemeral-preview-title">Ephemeral Landscape Preview</h2>
         </div>
         <PreviewLifecycleStatus status={lifecycle} />
@@ -278,10 +278,12 @@ export function EphemeralLandscapePreview() {
           This is a bounded, ephemeral sample of model behavior. It is not a complete behavioral landscape, detected regime map,
           saved discovery, validated result, or claim about the real world.
         </p>
-        <p>
-          Preview V1 samples one or two numeric parameters on a small explicit grid and observes one implemented numeric metric at
-          the final configured tick. This preview describes model behavior, not automatically the real world.
-        </p>
+        <Disclosure expandLabel="Preview method and limits" collapseLabel="Hide preview method and limits">
+          <p>
+            Preview V1 samples one or two numeric parameters on a small explicit grid and observes one implemented numeric metric at
+            the final configured tick. This preview describes model behavior, not automatically the real world.
+          </p>
+        </Disclosure>
       </div>
 
       <div className="ephemeral-preview__layout">

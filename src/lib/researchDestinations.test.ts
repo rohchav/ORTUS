@@ -10,17 +10,19 @@ import {
 const repoRoot = process.cwd();
 
 describe("Research World destination registry", () => {
-  it("defines exactly the GW1 destinations in canonical order with canonical routes", () => {
+  it("defines the four research destinations with World on its canonical R1 route", () => {
     expect(researchDestinations.map((destination) => destination.id)).toEqual(["world", "lab", "atlas", "workshop"]);
     expect(researchDestinations.map((destination) => destination.label)).toEqual(["World", "Lab", "Atlas", "Workshop"]);
     expect(researchDestinations.map((destination) => destination.navigationOrder)).toEqual([1, 2, 3, 4]);
-    expect(getCanonicalResearchDestinationRoutes()).toEqual(["/", "/lab", "/atlas", "/builder"]);
+    expect(getCanonicalResearchDestinationRoutes()).toEqual(["/world", "/lab", "/atlas", "/builder"]);
     expect(new Set(researchDestinations.map((destination) => destination.id)).size).toBe(researchDestinations.length);
     expect(new Set(researchDestinations.map((destination) => destination.route)).size).toBe(researchDestinations.length);
   });
 
-  it("keeps route mapping route-derived without world/workshop aliases", () => {
-    expect(getResearchDestinationByPathname("/")?.id).toBe("world");
+  it("keeps route mapping route-derived with Start separate from World and no workshop alias", () => {
+    expect(getResearchDestinationByPathname("/")).toBeNull();
+    expect(getResearchDestinationByPathname("/world")?.id).toBe("world");
+    expect(getResearchDestinationByPathname("/world?task=compare")?.id).toBe("world");
     expect(getResearchDestinationByPathname("/lab")?.id).toBe("lab");
     expect(getResearchDestinationByPathname("/atlas")?.id).toBe("atlas");
     expect(getResearchDestinationByPathname("/builder")?.id).toBe("workshop");
@@ -30,11 +32,9 @@ describe("Research World destination registry", () => {
     expect(getResearchDestinationByPathname("/atlas#regimes")?.id).toBe("atlas");
     expect(getResearchDestinationByPathname("/builder/?mode=graph#node-a")?.id).toBe("workshop");
     expect(getResearchDestinationByPathname("lab/notes")?.id).toBe("lab");
-    expect(getResearchDestinationByPathname("/world")).toBeNull();
     expect(getResearchDestinationByPathname("/workshop")).toBeNull();
-    expect(getResearchDestinationByPathname("/world?alias=true")).toBeNull();
     expect(getResearchDestinationByPathname("/workshop#builder")).toBeNull();
-    expect(existsSync(join(repoRoot, "src", "app", "world"))).toBe(false);
+    expect(existsSync(join(repoRoot, "src", "app", "world"))).toBe(true);
     expect(existsSync(join(repoRoot, "src", "app", "workshop"))).toBe(false);
   });
 
