@@ -1,8 +1,8 @@
 # ORTUS Workspace Information Architecture
 
-Date: 2026-07-17
-Prompt: UI-REMEDIATION-1 through GW9B, reset by Prompt R1
-Status: implemented, source-audited, rendered-smoke-tested by the GW1/GW1B Playwright shell suite, rendered-comprehension-audited by UX3, visually refined by UX4, visually audited by UX4B, and source-of-truth checked by RH1; broader mobile-readiness, actual browser-zoom, screen-reader, assistive-technology, forced-colors, and WCAG claims remain unverified
+Date: 2026-07-19
+Prompt: UI-REMEDIATION-1 through GW9B, reset by Prompt R1 and audited by Prompt R1B
+Status: implemented and rendered-audited; broader mobile-readiness, actual browser-zoom, screen-reader, assistive-technology, forced-colors, user-comprehension, and WCAG claims remain unverified
 
 ## Problem
 
@@ -270,4 +270,12 @@ The former Understand panel composition is replaced by a model-specific explanat
 
 Atlas puts the real GW9 preview before conceptual orientation. Lab puts useful World/Compare/Atlas links before its technical foundation. Workshop keeps Guided and Advanced direct while withholding required-field error counts until an attempted progression and hiding the support matrix by default.
 
-R1 preserves local workspace-mode state, hidden-panel rendering behavior, active World state, Atlas isolation, Builder non-execution, and existing storage semantics. The starter nudge is page-session-only and dismissible. R1B is required next; recipe-first Builder, starter packs, persistent evidence, broader Atlas mapping, composition, multiscale runtime, adaptive-system generalization, and analytical lenses remain future milestones.
+R1 preserves local workspace-mode state, hidden-panel rendering behavior, active World state, Atlas isolation, Builder non-execution, and existing storage semantics. The starter nudge is page-session-only and dismissible.
+
+## R1B First-Run And Shell Audit
+
+R1B confirms the user-facing hierarchy and hardens state recovery. A featured starter page mount creates a fresh prepared Flocking run instead of resuming prior in-memory state. Parameter controls state their immediate paused tick-0 rebuild. World task selection keeps visible task, query, current-navigation semantics, and active run state coherent. Direct task controls retain focus; More selections focus the new panel heading; each task begins at scroll origin.
+
+The rendered desktop hierarchy remains model surface, persistent controls, then one task rail. The rail owns one intentional scroll. At responsive stack widths, `main` owns the single route scroll and model/run controls precede task content. Atlas keeps configuration first but places Run in its visible Execution Status panel. Default Understand prioritizes model-specific meaning; cross-tool boundaries remain in full notes.
+
+R1B is complete and conditionally ready for R2. Recipe-first Builder, starter packs, persistent evidence, broader Atlas mapping, composition, multiscale runtime, adaptive-system generalization, and analytical lenses remain future milestones.

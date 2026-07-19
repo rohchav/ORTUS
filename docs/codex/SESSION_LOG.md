@@ -3566,3 +3566,72 @@ Roadmap result:
 - R1 complete.
 - R1B First-Run and Shell Audit is next.
 - F1 remains paused under E3 Analytical Lenses.
+
+### Prompt R1B: First-Run and World-First Shell Audit + Hardening
+
+Date: 2026-07-19
+
+Goal: audit the R1 reset as a rendered first-time product flow, fix every evidenced R1-attributable P0/P1 and bounded P2 defect, preserve runtime and persistence semantics, and issue an R2 readiness decision.
+
+Starting state:
+
+- Branch `main` at clean, aligned `d2af908 feat: reset ORTUS start and world-first experience`; `HEAD` matched `origin/main` after fetch.
+- Untouched focused Playwright failed once after `43` passes in the rapid Research tools Arrow Down flow; `9` tests did not run. Three isolated repetitions yielded two passes and one failure, confirming a timing-sensitive focus defect.
+- Untouched full UI Playwright passed `80` tests. Typecheck passed; unit tests passed `72 files / 599 tests`; build, performance smoke, and `git diff --check` passed.
+- `npm run lint: unavailable, package.json has no lint script.`
+
+Rendered audit:
+
+- Task A passed: one decision and two activations reach a running featured Flocking world without scrolling or route-taxonomy knowledge.
+- Task B initially had serious friction because parameter changes silently rebuilt a paused tick-0 run. The final Setup explains that behavior beside four source-backed key controls.
+- Task C remains minor friction because the six-section default Understand summary needs modest panel scrolling; every production template is model-specific and full notes remain disclosed.
+- Task D passed: Workshop, Atlas, Lab, Experiments, comparisons, and Diagnostics remain directly reachable.
+- Task E passed after hardening focus return, More-to-panel focus, panel scroll reset, Back/current-state coherence, and wrong-path recovery.
+- Before/after screenshots covered Start, World Setup, World Understand, World running, Workshop, Atlas, Lab, and mobile Start/World. Screenshots remain uncommitted in `/tmp`.
+
+Defects and hardening:
+
+- No P0 defect was found.
+- Fixed four P1 defects: repeated featured launch resumed a modified running trajectory; key controls omitted rebuild semantics; World task UI diverged from query/current-navigation state; rapid keyboard menu input had a reproduced focus race.
+- Fixed five P2 defects: More selection focused `BODY`; task scroll offset leaked between modes; Neural default Understand duplicated a boundary and promoted a Builder limitation; Atlas Run was below the initial short viewport; mobile primary branding hid the ORTUS wordmark.
+- Fixed one bounded P3 Start copy defect by replacing implementation-status language with user intent.
+- Featured starter launch now invokes the existing template-selection rebuild once per starter page mount. Parameter, tick, and paused state reset; no template, seed algorithm, scenario, or persistence contract changes.
+- Task selection synchronizes the `task` query and current-navigation semantics while preserving engine tick/parameters. More selection focuses the panel heading and each task starts at scroll origin.
+- Research tools and More use render-coupled focus requests. The stress regression passes five repeated browser runs after waiting for hydration.
+- Atlas exposes the existing form-owned submit action in Execution Status. Existing validation, execution, cancellation, replacement, result, storage-isolation, and unmount contracts remain unchanged.
+
+Measured evidence:
+
+- At `1440x900`, World workspace is `1040x780`, stage is `1040x718`, and task rail is `370x780`; stage area is about `2.59x` rail area.
+- At `1280x720`, World workspace is `880x600`, stage is `880x538`, and rail is `370x600`; stage area is about `2.13x` rail area.
+- At `1280x600`, stage remains `880x434` and run controls remain fully visible.
+- Atlas Run is visible at `x=884-1050`, `y=447-483` in `1280x720` and remains visible at `1280x600`.
+- Desktop World has one task-panel scroll; responsive World has one main scroll. Start, Workshop, and Atlas each have one intentional primary scroll in covered defaults; Lab needs none at `1280x720`.
+- Post-change captures produced no console/page diagnostics or horizontal overflow.
+
+Integrity and limits:
+
+- No production simulation implementation file changed; the only `src/simulation` change is a roadmap-status test. Simulation scheduling, template/scenario behavior, seeds, metrics, interventions, snapshots, experiments, comparisons, Atlas execution, and Builder structural semantics remain unchanged.
+- R1/R1B add no new persistence. Existing bounded World comparison and UI storage remain unchanged.
+- Actual browser zoom at 125%, 150%, and 200% was not verified.
+- Screen-reader use, assistive-technology use, forced colors, complete mobile workflow, participant comprehension, and WCAG conformance remain unverified.
+
+Final verification:
+
+- Focused destination-shell Playwright: `53 passed`.
+- First-run/reset Playwright: `18 passed`.
+- Full UI Playwright: `86 passed`.
+- Typecheck: passed.
+- Unit tests: `72 files / 599 tests` passed.
+- Production build: passed.
+- Simulation performance smoke: passed.
+- `git diff --check`: passed.
+- `npm run lint: unavailable, package.json has no lint script.`
+
+Roadmap result:
+
+- R1 complete.
+- R1B complete.
+- Decision: conditionally ready for R2.
+- R2 World Layout and Interaction Reclaim is next.
+- F1 remains paused under E3 Analytical Lenses.

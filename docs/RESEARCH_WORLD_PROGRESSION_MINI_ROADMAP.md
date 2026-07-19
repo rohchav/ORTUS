@@ -384,7 +384,7 @@ UX6 complete.
 UX6B complete.
 GW9 complete.
 GW9B complete.
-R1 later superseded the route hierarchy and forward sequence. R1B First-Run and Shell Audit is next; F1 is paused under E3 Analytical Lenses.
+R1 later superseded the route hierarchy and forward sequence. R1 and R1B are complete; R2 World Layout and Interaction Reclaim is next. F1 is paused under E3 Analytical Lenses.
 
 ## 22. GW Roadmap Branch
 
@@ -657,4 +657,10 @@ The Start Hub leads with an implemented Flocking world and derives all seven run
 
 R1 does not implement the persistent Research World imagined by GW0. Lab still saves nothing; Atlas still supports only the explicit bounded ephemeral Flocking preview; Workshop artifacts remain structural and non-executable; existing local comparisons and Experiment Runner sweeps keep their previous semantics.
 
-The active product sequence is now `docs/product/ORTUS_PRODUCT_EXPERIENCE_RESET_ROADMAP.md`. Earlier statements in this historical mini-roadmap that name GW9 or F1 as next record the sequencing at that time and are superseded. R1B First-Run and Shell Audit is next. F1 is paused under E3 Analytical Lenses.
+The active product sequence is now `docs/product/ORTUS_PRODUCT_EXPERIENCE_RESET_ROADMAP.md`. Earlier statements in this historical mini-roadmap that name GW9 or F1 as next record the sequencing at that time and are superseded. R1 and R1B are complete; R2 World Layout and Interaction Reclaim is next. F1 is paused under E3 Analytical Lenses.
+
+## 33. R1B First-Run Audit Status
+
+R1B audits the reset through rendered first-run, first-change, explanation, advanced-tool, and recovery tasks. It fixes fresh featured-starter launch, parameter-rebuild explanation, task/query/current-state coherence, keyboard focus, task-panel scroll recovery, model-specific Understand content, Atlas action visibility, and the mobile ORTUS lockup without changing Research World runtime or persistence semantics.
+
+R1B complete. Decision: conditionally ready for R2. Actual user testing, browser zoom, screen-reader/assistive-technology use, forced colors, complete mobile workflow, and WCAG conformance remain unverified.

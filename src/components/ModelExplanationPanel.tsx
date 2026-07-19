@@ -19,11 +19,14 @@ export function ModelExplanationPanel() {
   const process = uniqueLine(documentation.processOverview, seen);
   const watchFor = uniqueLine(system.watchFor, seen);
   const suggestedChange = uniqueLine(system.suggestedChange, seen);
-  const keyAssumptions = uniqueLines(documentation.assumptions.slice(0, 2), seen);
-  const mainLimitation = uniqueLine(documentation.limitations[0] ?? "No model limitation is documented.", seen);
+  const deduplicatedAssumptions = uniqueLines(documentation.assumptions, seen);
+  const keyAssumptions = deduplicatedAssumptions.slice(0, 2);
+  const prioritizedLimitations = prioritizeModelLimitations(documentation.limitations);
+  const deduplicatedLimitations = uniqueLines(prioritizedLimitations, seen);
+  const mainLimitation = deduplicatedLimitations[0] ?? "No model limitation is documented.";
 
-  const additionalAssumptions = uniqueLines(documentation.assumptions.slice(2), seen);
-  const additionalLimitations = uniqueLines(documentation.limitations.slice(1), seen);
+  const additionalAssumptions = deduplicatedAssumptions.slice(2);
+  const additionalLimitations = deduplicatedLimitations.slice(1);
   const notRepresented = uniqueLines(documentation.notRepresented ?? [], seen);
   const appropriateUse = uniqueLines(documentation.appropriateUse ?? [], seen);
   const inappropriateUse = uniqueLines(documentation.inappropriateUse ?? [], seen);
@@ -123,23 +126,41 @@ function TextList({ items }: { items: readonly string[] }) {
 }
 
 function uniqueLine(value: string, seen: Set<string>): string {
-  const normalized = normalizeText(value);
-  if (!normalized || seen.has(normalized)) {
+  const keys = normalizationKeys(value);
+  if (keys.length === 0 || keys.some((key) => seen.has(key))) {
     return "See the complete model notes for this item.";
   }
-  seen.add(normalized);
+  keys.forEach((key) => seen.add(key));
   return value;
 }
 
 function uniqueLines(values: readonly string[], seen: Set<string>): string[] {
   return values.filter((value) => {
-    const normalized = normalizeText(value);
-    if (!normalized || seen.has(normalized)) {
+    const keys = normalizationKeys(value);
+    if (keys.length === 0 || keys.some((key) => seen.has(key))) {
       return false;
     }
-    seen.add(normalized);
+    keys.forEach((key) => seen.add(key));
     return true;
   });
+}
+
+function prioritizeModelLimitations(values: readonly string[]): string[] {
+  const productBoundary = /builder|model[- ]schema|visual programming|netlogo|mesa|mason|llm/i;
+  return [...values.filter((value) => !productBoundary.test(value)), ...values.filter((value) => productBoundary.test(value))];
+}
+
+function normalizationKeys(value: string): string[] {
+  const normalized = normalizeText(value);
+  if (!normalized) {
+    return [];
+  }
+  const keys = [`exact:${normalized}`];
+  const contrast = normalized.match(/\bnot (.+)$/)?.[1];
+  if (contrast && contrast.split(" ").length >= 3) {
+    keys.push(`contrast:not ${contrast}`);
+  }
+  return keys;
 }
 
 function normalizeText(value: string): string {

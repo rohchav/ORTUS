@@ -29,9 +29,14 @@ interface LeftInstrumentStackProps {
 export function LeftInstrumentStack({ activeMode, onModeChange }: LeftInstrumentStackProps) {
   const mode = getSimulationWorkspaceMode(activeMode);
   const [moreOpen, setMoreOpen] = useState(false);
+  const [moreFocusRequest, setMoreFocusRequest] = useState(0);
   const moreRef = useRef<HTMLDivElement>(null);
   const moreTriggerRef = useRef<HTMLButtonElement>(null);
   const moreItemRefs = useRef<Array<HTMLButtonElement | null>>([]);
+  const pendingMoreFocusIndexRef = useRef<number | null>(null);
+  const panelHeadingRef = useRef<HTMLHeadingElement>(null);
+  const panelScrollRef = useRef<HTMLDivElement>(null);
+  const focusPanelAfterChangeRef = useRef(false);
   const moreCurrent = moreModes.some((candidate) => candidate.id === activeMode);
 
   useEffect(() => {
@@ -40,6 +45,7 @@ export function LeftInstrumentStack({ activeMode, onModeChange }: LeftInstrument
     }
     const handlePointerDown = (event: PointerEvent) => {
       if (!moreRef.current?.contains(event.target as Node)) {
+        pendingMoreFocusIndexRef.current = null;
         setMoreOpen(false);
       }
     };
@@ -47,9 +53,49 @@ export function LeftInstrumentStack({ activeMode, onModeChange }: LeftInstrument
     return () => document.removeEventListener("pointerdown", handlePointerDown);
   }, [moreOpen]);
 
-  function chooseMode(modeId: SimulationWorkspaceModeId) {
-    onModeChange(modeId);
+  useEffect(() => {
+    if (panelScrollRef.current) {
+      panelScrollRef.current.scrollTop = 0;
+    }
+    if (!focusPanelAfterChangeRef.current) {
+      return;
+    }
+    focusPanelAfterChangeRef.current = false;
+    window.requestAnimationFrame(() => panelHeadingRef.current?.focus());
+  }, [activeMode]);
+
+  useEffect(() => {
+    if (!moreOpen) {
+      return;
+    }
+    const pendingIndex = pendingMoreFocusIndexRef.current;
+    if (pendingIndex !== null) {
+      moreItemRefs.current[pendingIndex]?.focus();
+    }
+  }, [moreFocusRequest, moreOpen]);
+
+  function closeMoreMenu() {
+    pendingMoreFocusIndexRef.current = null;
     setMoreOpen(false);
+  }
+
+  function focusMoreItem(index: number) {
+    pendingMoreFocusIndexRef.current = index;
+    setMoreOpen(true);
+    setMoreFocusRequest((request) => request + 1);
+  }
+
+  function chooseMode(modeId: SimulationWorkspaceModeId, focusPanel = false) {
+    focusPanelAfterChangeRef.current = focusPanel;
+    onModeChange(modeId);
+    closeMoreMenu();
+    if (focusPanel && modeId === activeMode) {
+      if (panelScrollRef.current) {
+        panelScrollRef.current.scrollTop = 0;
+      }
+      focusPanelAfterChangeRef.current = false;
+      window.requestAnimationFrame(() => panelHeadingRef.current?.focus());
+    }
   }
 
   function handleMoreKeyDown(event: KeyboardEvent<HTMLButtonElement>, index: number) {
@@ -66,10 +112,11 @@ export function LeftInstrumentStack({ activeMode, onModeChange }: LeftInstrument
 
     if (nextIndex !== null) {
       event.preventDefault();
+      pendingMoreFocusIndexRef.current = nextIndex;
       moreItemRefs.current[nextIndex]?.focus();
     } else if (event.key === "Escape") {
       event.preventDefault();
-      setMoreOpen(false);
+      closeMoreMenu();
       moreTriggerRef.current?.focus();
     }
   }
@@ -99,13 +146,29 @@ export function LeftInstrumentStack({ activeMode, onModeChange }: LeftInstrument
             aria-haspopup="menu"
             className={moreCurrent ? "is-active" : ""}
             data-current={moreCurrent ? "true" : "false"}
-            onClick={() => setMoreOpen((open) => !open)}
+            onClick={() => {
+              if (moreOpen) {
+                closeMoreMenu();
+              } else {
+                setMoreOpen(true);
+              }
+            }}
             onKeyDown={(event) => {
               if (event.key === "ArrowDown" || event.key === "ArrowUp") {
                 event.preventDefault();
-                setMoreOpen(true);
-                const index = event.key === "ArrowDown" ? 0 : moreModes.length - 1;
-                window.requestAnimationFrame(() => moreItemRefs.current[index]?.focus());
+                const pendingIndex = pendingMoreFocusIndexRef.current;
+                const index =
+                  pendingIndex === null
+                    ? event.key === "ArrowDown"
+                      ? 0
+                      : moreModes.length - 1
+                    : event.key === "ArrowDown"
+                      ? (pendingIndex + 1) % moreModes.length
+                      : (pendingIndex - 1 + moreModes.length) % moreModes.length;
+                focusMoreItem(index);
+              } else if (event.key === "Escape" && moreOpen) {
+                event.preventDefault();
+                closeMoreMenu();
               }
             }}
           >
@@ -122,7 +185,7 @@ export function LeftInstrumentStack({ activeMode, onModeChange }: LeftInstrument
                     type="button"
                     role="menuitem"
                     aria-current={candidate.id === activeMode ? "page" : undefined}
-                    onClick={() => chooseMode(candidate.id)}
+                    onClick={() => chooseMode(candidate.id, true)}
                     onKeyDown={(event) => handleMoreKeyDown(event, index)}
                   >
                     <strong>{candidate.label}</strong>
@@ -142,10 +205,10 @@ export function LeftInstrumentStack({ activeMode, onModeChange }: LeftInstrument
       >
         <header className="workspace-context-panel__head">
           <span>{mode.eyebrow}</span>
-          <h2>{activeMode === "intervene" ? "Change" : mode.label}</h2>
+          <h2 ref={panelHeadingRef} tabIndex={-1}>{activeMode === "intervene" ? "Change" : mode.label}</h2>
           <p>{mode.description}</p>
         </header>
-        <div className="workspace-context-panel__scroll" data-intentional-scroll-region="workspace-context">
+        <div ref={panelScrollRef} className="workspace-context-panel__scroll" data-intentional-scroll-region="workspace-context">
           {renderWorkspaceMode(activeMode)}
         </div>
       </section>

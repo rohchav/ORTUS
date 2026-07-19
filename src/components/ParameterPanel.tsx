@@ -119,7 +119,7 @@ function ParameterControl({
           suppressHydrationWarning
         />
       </span>
-      <span className="parameter-control__mode">{definition.liveUpdate ? "Rule parameter" : "Initial setup"}</span>
+      <span className="parameter-control__mode">Fresh-run rebuild</span>
     </label>
   );
 }

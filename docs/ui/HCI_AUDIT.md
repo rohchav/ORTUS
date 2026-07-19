@@ -1,8 +1,8 @@
 # ORTUS HCI / UX / Visual-Direction Audit
 
 Date: 2026-06-11  
-Updated: 2026-07-17 during Prompt R1 Start Hub and World-First Product Reset
-Prompt: historical UI/GW/UX work through GW9B, reset by Prompt R1
+Updated: 2026-07-19 during Prompt R1B First-Run and World-First Shell Audit + Hardening
+Prompt: historical UI/GW/UX work through GW9B, reset by Prompt R1 and audited by Prompt R1B
 Status: source-based and rendered-smoke-informed audit, not a formal WCAG audit
 
 ## 1. Executive Verdict
@@ -20,6 +20,9 @@ The shell now uses task-oriented workspace modes instead of one permanent scroll
 
 Prompt R1 update:
 The pre-R1 interface remained a pretty pseudo-sandbox risk: it exposed honest internal architecture more successfully than it exposed a useful first action. R1 makes `/` a Start Hub, moves the actual simulation to `/world`, features an existing Flocking runtime, and makes the live model the dominant World object. It replaces equal destination buttons and seven equal task cards with a product hierarchy based on user intent. This is a substantive improvement, but it is not evidence that first-time users understand the models. R1B must challenge the cold-start path, explanation quality, and interpretation boundaries rather than simply repeat implementation tests.
+
+Prompt R1B update:
+The rendered audit found that the broad R1 hierarchy works, but it also found four material workflow defects: repeat starter launch resumed old running state, parameter rebuild semantics were unexplained, task UI could diverge from query/current-navigation state, and rapid keyboard menu input was timing-sensitive. R1B fixes those defects plus bounded panel-focus, scroll, Neural-summary, Atlas-action, and mobile-brand issues. The result is conditionally ready for R2, not validated usability.
 
 Prompt 34B update:
 The audit hardened the highest-confidence defects that could be fixed without a redesign: destructive Reset now uses press-and-confirm when meaningful run state exists, workspace tabs have arrow/Home/End keyboard behavior, Setup copy states that model/seed/parameter changes rebuild fresh tick-0 runs, Metric Trace carries local model-output provenance language, and Builder viewport buttons now say they select structural nodes/edges for read-only inspection. Browser screenshot, zoom, and assistive-technology verification still did not happen in this environment.
@@ -1573,4 +1576,10 @@ Rendered expert review covered the established five workbench viewports plus mob
 
 The blunt remaining finding: R1 makes ORTUS easier to enter, but the project still lacks user evidence. The featured starter is one Flocking path, not a mature starter framework. Lab remains mostly conceptual. Guided Builder is still schema-first beneath its shell. Canvas comprehension, actual browser zoom, screen-reader use, assistive-technology use, forced colors, mobile workflow, and real beginner task success remain unverified.
 
-R1B First-Run and Shell Audit is the next UI prompt. The older `UI-DESIGN-SYSTEM-1` recommendation and immediate-F1 sequencing are superseded by the active reset roadmap; they remain historical recommendations, not current next work.
+## R1B First-Run Audit Update
+
+R1B exercised five rendered user tasks and a 16-point heuristic review. Task A reaches a running starter with one decision and two activations without scrolling. Task B now explains and demonstrates the paused tick-0 rebuild. Task C reaches six model-specific sections with modest panel scrolling and no need to open technical notes for the main limitation. Task D keeps every deeper tool reachable. Task E restores coherent focus, task scroll, Back, and wrong-path recovery in the covered browser flows.
+
+No P0 defect was found. Four P1 and five bounded P2 defects were fixed. World remains the largest desktop region; Atlas Run is in the first short desktop viewport; mobile retains the ORTUS lockup; focused and full rendered suites cover keyboard, Axe, reduced motion, storage, and diagnostics. This is automated and expert-review evidence, not a user study, actual zoom audit, screen-reader audit, assistive-technology audit, forced-colors audit, complete mobile workflow, or WCAG certification.
+
+Decision: conditionally ready for `R2: World Layout and Interaction Reclaim`. The older `UI-DESIGN-SYSTEM-1` recommendation and immediate-F1 sequencing remain historical recommendations, not current next work.

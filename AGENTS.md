@@ -567,7 +567,7 @@
 - Keep complete model notes, capability references, technical foundations, exact parameters, scenarios, experiments, comparisons, diagnostics, Atlas, Lab, and Advanced Workshop reachable through explicit disclosure or navigation.
 - Capability guidance should lead with one relevant contextual note and keep the complete source-backed matrix subordinate. Do not remove a limitation at the point where it affects interpretation.
 - The Flocking starter nudge is page-session-only and dismissible. Do not add storage, completion tracking, XP, achievements, profiling, recommendation inference, or step locks.
-- R1B First-Run and Shell Audit is next. Do not start R2 or later C/S/E milestones from R1 alone.
+- R1 and R1B are complete. R2 World Layout and Interaction Reclaim is next; do not start R2B or later C/S/E milestones without their dedicated prompt.
 - Complete and commit GW1 before starting GW1B.
 - Treat UX0 as documentation and design planning only.
 - Do not implement World/Lab/Atlas/Workshop without a dedicated prompt.
@@ -648,4 +648,12 @@
 - Atlas preview results are component-memory-only exact sampled coordinates. Do not add storage, saved records, history, publication, interpolation, smoothing, contours, inferred unsampled values, regime/transition/tipping-point detection, confidence/coverage/evidence scores, or scientific-validation claims.
 - Keep cancellation language honest: `Cancel after current sample` means the current synchronous sample finishes before cancellation is effective. Unstarted runs remain unsampled and partial results remain visibly partial. Route unmount must cancel remaining cooperative work and suppress post-unmount UI updates.
 - Multiple preview seeds show selected deterministic model variation only; they are not confidence intervals, calibrated probabilities, or real-world uncertainty estimates.
-- GW9/GW9B do not generalize Atlas sampling, make the conceptual behavioral-landscape scaffold runtime-backed, make probe plans executable, or create Discovery Atlas/Lab persistence. GW9B is complete; R1 is complete; R1B is next. F1 is paused under E3 Analytical Lenses.
+- GW9/GW9B do not generalize Atlas sampling, make the conceptual behavioral-landscape scaffold runtime-backed, make probe plans executable, or create Discovery Atlas/Lab persistence. GW9B, R1, and R1B are complete; R2 is next. F1 is paused under E3 Analytical Lenses.
+- A featured starter launch must create the documented fresh prepared run once per starter page mount. It must not silently resume modified parameters, an advanced tick, or a running state beneath baseline instructions.
+- Parameter controls that rebuild the run must state that they produce a fresh paused tick-0 run; do not imply live mutation.
+- World visible task, `task` query, top-navigation current state, and task heading must remain coherent without resetting active runtime state.
+- Reset the shared World task-panel scroll when its task changes. Direct task controls retain focus; selecting a More task moves focus to the selected panel heading.
+- Keep Research tools and World More keyboard focus deterministic under rapid Arrow input and Escape/reopen sequences; do not focus unmounted menu content.
+- Default Understand content must prioritize selected-model questions, mechanisms, assumptions, and limitations. Keep unrelated Builder/schema/external-framework implementation boundaries in full notes.
+- Keep the real Atlas preview action visible in the first short desktop viewport without changing GW9/GW9B request or executor semantics.
+- Preserve the sharp ORTUS mark and visible ORTUS wordmark in the primary mobile navigation lockup.

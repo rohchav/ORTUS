@@ -1,7 +1,7 @@
 # ORTUS Product Experience Reset Roadmap
 
-Date: 2026-07-17
-Status: active product sequence; R1 implemented and R1B next
+Date: 2026-07-19
+Status: active product sequence; R1 and R1B complete, R2 next
 
 ## Why This Sequence Exists
 
@@ -46,7 +46,7 @@ Every implementation milestone is followed by an audit milestone. Audit prompts 
 
 ## Current Position
 
-R1 is implemented. R1B is the next prompt after publication. R2, C1-C4, S1-S5, and E1-E3 have not started under this roadmap.
+R1 and its required R1B audit are complete. R1B found and fixed bounded first-run, focus, route-state, explanation, Atlas-action, and responsive-brand defects without changing runtime or persistence semantics. R2 is the next prompt. R2, C1-C4, S1-S5, and E1-E3 have not started under this roadmap.
 
 The active route hierarchy after R1 is Start `/`, World `/world`, Workshop `/builder`, Atlas `/atlas`, and Lab `/lab`. That route state is an R1 implementation fact, not evidence that later starter, composition, Lab, Atlas, or analysis milestones exist.
 
@@ -74,7 +74,10 @@ Explicit user direction may revise this roadmap, but documentation-only mileston
 - Runtime support must be derived from authoritative template and registry behavior.
 - Structural validity, runnability, scientific validation, and empirical truth are separate claims.
 - Starter content must not create hidden parameter defaults or mechanics.
+- A featured starter launch must create its documented fresh prepared run; it must not silently resume a prior in-memory trajectory.
 - The live system remains the primary World visual object.
+- World task labels, query state, current navigation, and visible task must agree without resetting the active run.
+- Default model explanation must prioritize model-specific assumptions and limitations; cross-tool implementation boundaries belong in full notes.
 - Guardrails belong near the inference or action they constrain, not as a permanent wall.
 - Expert access must remain direct; beginner guidance must not become a forced gate.
 - No LLM-per-agent runtime, arbitrary code/formula execution, profiling, protected-class inference, persuasion optimization, or real-person prediction.

@@ -1,8 +1,8 @@
 # Start Hub And World-First Product Reset
 
-Date: 2026-07-17
+Date: 2026-07-19
 Prompt: R1
-Status: implemented; R1B is the required next audit
+Status: implemented and audited by R1B; R2 is next
 
 ## Purpose
 
@@ -127,13 +127,19 @@ The Start catalog and quick-control mapping are presentation metadata only. A ca
 
 ## Known Limits
 
-- R1 does not prove that first-time users understand ORTUS; R1B must audit the first-run path bluntly.
+- R1/R1B do not prove that first-time users understand ORTUS; the R1B evidence is expert review and automated browser testing, not a participant study.
 - World remains a dense desktop workbench below the low-floor starter path.
 - Lab is still mostly a technical foundation, not an evidence workspace.
 - Guided Builder remains schema-oriented; recipe-first construction belongs to S2.
 - Atlas supports only the explicit bounded Flocking preview contract.
 - Canvas interpretation, actual browser zoom, forced colors, screen-reader use, and assistive-technology use require later audits.
 
+## R1B Audit Outcome
+
+The evidence record is `FIRST_RUN_AND_WORLD_FIRST_SHELL_AUDIT.md`. R1B found no P0 defect, fixed all four R1-attributable P1 defects, and fixed five bounded P2 defects. Featured starter relaunch now creates a fresh paused tick-0 Flocking run, parameter-rebuild semantics are explicit, World task/query/current state stays aligned, keyboard menu focus is deterministic after hydration, More selections focus the new panel and reset its scroll, Neural Understand prioritizes a model limitation, Atlas Run is visible at short desktop height, and the mobile ORTUS wordmark remains visible.
+
+R1/R1B add no new persistence. Existing bounded World comparison and UI storage remain unchanged. Simulation, template, scenario, metric, intervention, experiment, comparison, Atlas execution, and Builder structural semantics remain unchanged.
+
 ## Next Gate
 
-R1B First-Run and Shell Audit is next. It must test the reset as a product, not merely confirm that selectors still exist. F1 and the fractal branch are paused under the future E3 Analytical Lenses milestone.
+R1 complete. R1B complete. `R2: World Layout and Interaction Reclaim` is next. F1 and the fractal branch remain paused under the future E3 Analytical Lenses milestone.

@@ -83,7 +83,11 @@ describe("simulation workspace information architecture", () => {
 
     expect(appShell).toContain("useState<SimulationWorkspaceModeId>(");
     expect(appShell).toContain("initialWorkspaceMode ?? defaultSimulationWorkspaceModeId");
-    expect(appShell).toContain("<LeftInstrumentStack activeMode={activeWorkspaceMode} onModeChange={setActiveWorkspaceMode} />");
+    expect(appShell).toContain("<LeftInstrumentStack activeMode={activeWorkspaceMode} onModeChange={changeWorkspaceMode} />");
+    expect(appShell).toContain("function changeWorkspaceMode(mode: SimulationWorkspaceModeId)");
+    expect(appShell).toContain('query.set("task", task)');
+    expect(appShell).toContain('query.delete("task")');
+    expect(appShell).toContain("router.replace(nextHref, { scroll: false })");
     expect(appShell).toContain("<WorldStage />");
     expect(appShell).toContain("<RightContextDrawer />");
     expect(appShell).toContain("<TimelineControlStrip />");

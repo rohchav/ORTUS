@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { LeftInstrumentStack } from "./LeftInstrumentStack";
 import { RightContextDrawer } from "./RightContextDrawer";
@@ -21,6 +22,7 @@ interface AppShellProps {
 }
 
 export function AppShell({ initialTemplateId, initialWorkspaceMode, showStarterGuide = false }: AppShellProps) {
+  const router = useRouter();
   const hydratePreferences = useSimulationStore((state) => state.hydratePreferences);
   const isRunning = useSimulationStore((state) => state.isRunning);
   const speedMultiplier = useSimulationStore((state) => state.speedMultiplier);
@@ -32,21 +34,42 @@ export function AppShell({ initialTemplateId, initialWorkspaceMode, showStarterG
   const frameRef = useRef<number | null>(null);
   const lastTimeRef = useRef<number | null>(null);
   const accumulatedRef = useRef(0);
+  const starterInitializedRef = useRef(false);
 
   useEffect(() => {
     setMounted(true);
     hydratePreferences();
     const state = useSimulationStore.getState();
-    if (initialTemplateId && state.selectedTemplateId !== initialTemplateId) {
+    if (initialTemplateId && showStarterGuide && !starterInitializedRef.current) {
+      starterInitializedRef.current = true;
+      state.selectTemplate(initialTemplateId);
+    } else if (initialTemplateId && state.selectedTemplateId !== initialTemplateId) {
       state.selectTemplate(initialTemplateId);
     } else {
       state.initialize();
     }
-  }, [hydratePreferences, initialTemplateId]);
+  }, [hydratePreferences, initialTemplateId, showStarterGuide]);
 
   useEffect(() => {
     setActiveWorkspaceMode(initialWorkspaceMode ?? defaultSimulationWorkspaceModeId);
   }, [initialWorkspaceMode]);
+
+  function changeWorkspaceMode(mode: SimulationWorkspaceModeId) {
+    setActiveWorkspaceMode(mode);
+
+    const query = new URLSearchParams(window.location.search);
+    const task = workspaceModeQueryValue(mode);
+    if (task) {
+      query.set("task", task);
+    } else {
+      query.delete("task");
+    }
+    const nextHref = `/world${query.size > 0 ? `?${query.toString()}` : ""}${window.location.hash}`;
+    const currentHref = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+    if (nextHref !== currentHref) {
+      router.replace(nextHref, { scroll: false });
+    }
+  }
 
   useEffect(() => {
     if (!isRunning) {
@@ -114,8 +137,15 @@ export function AppShell({ initialTemplateId, initialWorkspaceMode, showStarterG
           <TimelineControlStrip />
           <RightContextDrawer />
         </section>
-        <LeftInstrumentStack activeMode={activeWorkspaceMode} onModeChange={setActiveWorkspaceMode} />
+        <LeftInstrumentStack activeMode={activeWorkspaceMode} onModeChange={changeWorkspaceMode} />
       </div>
     </section>
   );
+}
+
+function workspaceModeQueryValue(mode: SimulationWorkspaceModeId): string | null {
+  if (mode === "setup") {
+    return null;
+  }
+  return mode === "intervene" ? "change" : mode;
 }

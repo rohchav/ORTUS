@@ -293,7 +293,7 @@ export function EphemeralLandscapePreview() {
           variant="standard"
           className="ephemeral-preview__configuration"
         >
-          <form noValidate onSubmit={submitPreview} aria-describedby="ephemeral-preview-local-boundary">
+          <form id="ephemeral-preview-form" noValidate onSubmit={submitPreview} aria-describedby="ephemeral-preview-local-boundary">
             {showValidation && validation.issues.length > 0 ? (
               <PreviewErrorSummary ref={errorSummaryRef} issues={validation.issues} />
             ) : null}
@@ -434,21 +434,6 @@ export function EphemeralLandscapePreview() {
               Runs occur locally in isolated simulation instances. Results are temporary and disappear on reload.
             </p>
 
-            <div className="ephemeral-preview__actions">
-              <button ref={runButtonRef} type="submit" disabled={busy} className="ephemeral-preview__run-action">
-                Run ephemeral preview
-              </button>
-              {busy ? (
-                <button
-                  ref={cancelRunButtonRef}
-                  type="button"
-                  disabled={uiStatus === "cancelling"}
-                  onClick={requestCancellation}
-                >
-                  Cancel after current sample
-                </button>
-              ) : null}
-            </div>
           </form>
         </CornerFramePanel>
 
@@ -480,6 +465,27 @@ export function EphemeralLandscapePreview() {
                 </div>
               </dl>
             ) : null}
+            <div className="ephemeral-preview__actions ephemeral-preview__actions--status">
+              <button
+                ref={runButtonRef}
+                type="submit"
+                form="ephemeral-preview-form"
+                disabled={busy}
+                className="ephemeral-preview__run-action"
+              >
+                Run ephemeral preview
+              </button>
+              {busy ? (
+                <button
+                  ref={cancelRunButtonRef}
+                  type="button"
+                  disabled={uiStatus === "cancelling"}
+                  onClick={requestCancellation}
+                >
+                  Cancel after current sample
+                </button>
+              ) : null}
+            </div>
           </CornerFramePanel>
 
           <CornerFramePanel title="Probe Plan Boundary" eyebrow="Separate planning artifact" variant="compact">

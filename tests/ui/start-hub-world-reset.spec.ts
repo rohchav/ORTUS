@@ -39,6 +39,9 @@ for (const viewport of viewports) {
 
     const visibleText = await page.getByRole("main").innerText();
     expect(visibleText).not.toMatch(/epidemic-spread|opinion-dynamics|flocking-boids|neural-excitation-network/);
+    if (viewport.label === "mobile") {
+      await expect(page.locator(".research-shell__brand .ortus-brand__wordmark")).toBeVisible();
+    }
     await expectNoHorizontalOverflow(page);
   });
 }
@@ -65,6 +68,164 @@ test("featured Flocking handoff opens the real World with a local starter nudge 
   await page.getByRole("button", { name: "Dismiss Flocking starter steps" }).click();
   await expect(page.locator("[data-starter-nudge]")).toHaveCount(0);
   expect(await readStorage(page)).toEqual(storageBefore);
+});
+
+test("repeated featured-starter launch rebuilds the prepared run without writing storage", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 720 });
+  await page.goto("/", { waitUntil: "networkidle" });
+  const storageBefore = await readStorage(page);
+
+  await page.getByRole("link", { name: "Open the Flocking starter" }).click();
+  const alignment = page.getByRole("spinbutton", { name: "Alignment weight numeric value" });
+  const tick = page.locator(".timeline-strip__readout strong").first();
+  await expect(alignment).toHaveValue("0.55");
+  await alignment.fill("0.31");
+  await page.getByRole("button", { name: "Run simulation" }).click();
+  await expect(page.getByRole("button", { name: "Pause simulation" })).toBeVisible();
+  await expect.poll(() => numericText(tick)).toBeGreaterThan(0);
+
+  await page.getByRole("navigation", { name: "Primary navigation" }).getByRole("link", { name: "Start", exact: true }).click();
+  await expect(page).toHaveURL(/\/$/);
+  await page.getByRole("link", { name: "Open the Flocking starter" }).click();
+
+  await expect(page.getByLabel("Model template")).toHaveValue("flocking-boids");
+  await expect(alignment).toHaveValue("0.55");
+  await expect(tick).toHaveText("0");
+  await expect(page.getByRole("button", { name: "Run simulation" })).toBeVisible();
+  await expect(page.locator(".timeline-strip__label strong")).toHaveText("Paused");
+  await expect(page.locator("[data-starter-nudge]")).toContainText("Run the baseline");
+  expect(await readStorage(page)).toEqual(storageBefore);
+});
+
+test("a key parameter change explains and performs a fresh paused tick-0 rebuild", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 720 });
+  await page.goto("/world?template=flocking-boids&starter=flocking", { waitUntil: "domcontentloaded" });
+  await expect(
+    page.getByText("Changing a key control rebuilds a paused tick-0 run immediately. Choose Run to start the new configuration.")
+  ).toBeVisible();
+  await expect(page.locator(".run-settings-quick .parameter-control__mode")).toHaveCount(4);
+
+  const tick = page.locator(".timeline-strip__readout strong").first();
+  await page.getByRole("button", { name: "Run simulation" }).click();
+  await expect.poll(() => numericText(tick)).toBeGreaterThan(0);
+  await page.getByRole("spinbutton", { name: "Alignment weight numeric value" }).fill("0.51");
+
+  await expect(page.getByRole("button", { name: "Run simulation" })).toBeVisible();
+  await expect(page.locator(".timeline-strip__label strong")).toHaveText("Paused");
+  await expect(tick).toHaveText("0");
+  await page.getByRole("button", { name: "Run simulation" }).click();
+  await expect.poll(() => numericText(tick)).toBeGreaterThan(0);
+});
+
+test("World task changes reset panel scroll, focus selected More content, and synchronize route state", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 720 });
+  await page.goto("/world?template=flocking-boids&starter=flocking", { waitUntil: "domcontentloaded" });
+  await page.getByRole("button", { name: "Step exactly one tick" }).click();
+
+  const taskNav = page.getByRole("navigation", { name: "World tasks" });
+  const panelScroll = page.locator(".workspace-context-panel__scroll");
+  expect(await scrollToEnd(panelScroll)).toBeGreaterThan(0);
+  await taskNav.getByRole("button", { name: "Observe", exact: true }).click();
+  await expect(page).toHaveURL(/task=observe/);
+  await expect.poll(() => panelScroll.evaluate((element) => element.scrollTop)).toBe(0);
+  await expect(taskNav.getByRole("button", { name: "Observe", exact: true })).toBeFocused();
+  await expect(page.locator(".timeline-strip__readout strong").first()).toHaveText("1");
+
+  expect(await scrollToEnd(panelScroll)).toBeGreaterThan(0);
+  await taskNav.getByRole("button", { name: "More", exact: true }).click();
+  await page.getByRole("menuitem", { name: /Understand model/i }).click();
+  await expect(page).toHaveURL(/task=understand/);
+  await expect(page.getByRole("heading", { level: 2, name: "Understand" })).toBeFocused();
+  await expect.poll(() => panelScroll.evaluate((element) => element.scrollTop)).toBe(0);
+  await expect(page.locator(".timeline-strip__readout strong").first()).toHaveText("1");
+
+  await taskNav.getByRole("button", { name: "Setup", exact: true }).click();
+  await expect.poll(() => new URL(page.url()).searchParams.get("task")).toBeNull();
+  await expect(page.getByRole("navigation", { name: "Primary navigation" }).getByRole("link", { name: "World", exact: true })).toHaveAttribute(
+    "aria-current",
+    "page"
+  );
+  await expect(page.getByRole("button", { name: "Research tools" })).toHaveAttribute("data-current", "false");
+  await expect(page.getByLabel("Current simulation context")).toContainText("Setup");
+  await expect(page.locator(".timeline-strip__readout strong").first()).toHaveText("1");
+});
+
+test("rapid keyboard navigation remains deterministic in both compact menus", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 720 });
+  await page.goto("/", { waitUntil: "networkidle" });
+  const researchTrigger = page.getByRole("navigation", { name: "Primary navigation" }).getByRole("button", { name: "Research tools" });
+
+  for (let attempt = 0; attempt < 8; attempt += 1) {
+    await researchTrigger.focus();
+    await page.keyboard.press("ArrowDown");
+    await page.keyboard.press("ArrowDown");
+    await expect(page.getByRole("menuitem", { name: "Lab" })).toBeFocused();
+    await page.keyboard.press("Escape");
+    await expect(researchTrigger).toBeFocused();
+    await expect(page.getByRole("menu", { name: "Research tools" })).toHaveCount(0);
+  }
+
+  await page.goto("/world", { waitUntil: "networkidle" });
+  const moreTrigger = page.getByRole("navigation", { name: "World tasks" }).getByRole("button", { name: "More", exact: true });
+  for (let attempt = 0; attempt < 8; attempt += 1) {
+    await moreTrigger.focus();
+    await page.keyboard.press("ArrowDown");
+    await page.keyboard.press("ArrowDown");
+    await expect(page.getByRole("menuitem", { name: /Experiments/i })).toBeFocused();
+    await page.keyboard.press("Escape");
+    await expect(moreTrigger).toBeFocused();
+    await expect(page.getByRole("menu", { name: "More World tasks" })).toHaveCount(0);
+  }
+});
+
+test("every production Understand summary stays concise and Neural prioritizes a model limitation", async ({ page }) => {
+  test.setTimeout(90_000);
+  const templateIds = [
+    "epidemic-spread",
+    "opinion-dynamics",
+    "predator-prey",
+    "schelling-segregation",
+    "flocking-boids",
+    "forest-fire",
+    "neural-excitation-network"
+  ];
+
+  for (const templateId of templateIds) {
+    await page.goto(`/world?template=${templateId}&task=understand`, { waitUntil: "domcontentloaded" });
+    const explanation = page.locator("[data-model-explanation]");
+    await expect(explanation).toBeVisible();
+    await expect(explanation.locator(":scope > section")).toHaveCount(6);
+    const defaultText = await explanation.locator(":scope > section").allInnerTexts();
+    const summary = defaultText.join("\n");
+    expect(summary).not.toContain("See the complete model notes for this item.");
+    expect(summary).not.toMatch(/Builder graphs|model-schema|visual programming|NetLogo|Mesa|MASON|LLM/i);
+
+    if (templateId === "neural-excitation-network") {
+      expect(summary.match(/biological brain simulation/gi) ?? []).toHaveLength(1);
+      expect(summary).toMatch(/does not include learning or plasticity/i);
+      await explanation.getByRole("button", { name: "Full model notes" }).click();
+      await expect(explanation.getByText(/does not make Builder graphs executable/i)).toBeVisible();
+    }
+  }
+});
+
+test("Atlas keeps its real preview action in the first short desktop viewport", async ({ page }) => {
+  for (const viewport of [
+    { width: 1280, height: 720 },
+    { width: 1280, height: 600 }
+  ]) {
+    await page.setViewportSize(viewport);
+    await page.goto("/atlas", { waitUntil: "domcontentloaded" });
+    const runButton = page.getByRole("button", { name: "Run ephemeral preview" });
+    await expect(
+      runButton.locator("xpath=ancestor::*[contains(concat(' ', normalize-space(@class), ' '), ' corner-panel ')][1]")
+    ).toContainText("Execution Status");
+    await expectWithinViewport(page, runButton);
+    await expectNoHorizontalOverflow(page);
+  }
+
+  await page.getByRole("button", { name: "Run ephemeral preview" }).click();
+  await expect(page.locator("#ephemeral-preview-error-summary")).toBeFocused();
 });
 
 test("World Setup exposes four key controls while preserving every exact parameter and scenario tool", async ({ page }) => {
@@ -155,6 +316,27 @@ async function expectNoHorizontalOverflow(page: Page) {
     bodyWidth: page.viewportSize()!.width,
     viewportWidth: page.viewportSize()!.width
   });
+}
+
+async function numericText(locator: ReturnType<Page["locator"]>): Promise<number> {
+  return Number((await locator.textContent())?.replace(/,/g, "") ?? Number.NaN);
+}
+
+async function scrollToEnd(locator: ReturnType<Page["locator"]>): Promise<number> {
+  return locator.evaluate((element) => {
+    element.scrollTop = element.scrollHeight;
+    return element.scrollTop;
+  });
+}
+
+async function expectWithinViewport(page: Page, locator: ReturnType<Page["locator"]>) {
+  await expect(locator).toBeVisible();
+  const bounds = await locator.boundingBox();
+  expect(bounds).not.toBeNull();
+  expect(bounds!.x).toBeGreaterThanOrEqual(-2);
+  expect(bounds!.y).toBeGreaterThanOrEqual(-2);
+  expect(bounds!.x + bounds!.width).toBeLessThanOrEqual(page.viewportSize()!.width + 2);
+  expect(bounds!.y + bounds!.height).toBeLessThanOrEqual(page.viewportSize()!.height + 2);
 }
 
 async function readStorage(page: Page) {

@@ -86,6 +86,7 @@ describe("R1 Start Hub and World-first product reset contracts", () => {
 
   it("keeps Understand concise, model-specific, deduplicated, and expandable", () => {
     const explanation = source("src/components/ModelExplanationPanel.tsx");
+    const renderedSurface = explanation.slice(explanation.indexOf("return ("), explanation.indexOf("function ExplanationSection"));
 
     for (const heading of ["Question", "How the model works", "What to watch", "Try changing", "Key assumptions", "Main limitation"]) {
       expect(explanation).toContain(heading);
@@ -93,12 +94,12 @@ describe("R1 Start Hub and World-first product reset contracts", () => {
     expect(explanation).toContain('expandLabel="Full model notes"');
     expect(explanation).toContain("const seen = new Set<string>()");
     expect(explanation).toContain("normalizeText");
-    expect(explanation).not.toMatch(
+    expect(renderedSurface).not.toMatch(
       /LLM agents|schema execution|visual builder|NetLogo|Mesa|MASON|template generation|social-learning artifacts/i
     );
   });
 
-  it("locks R1B as next and preserves every implementation-audit pair", () => {
+  it("locks R2 as next after R1B and preserves every implementation-audit pair", () => {
     const roadmap = source("docs/product/ORTUS_PRODUCT_EXPERIENCE_RESET_ROADMAP.md");
     const milestones = [
       "R1", "R1B", "R2", "R2B",
@@ -110,7 +111,8 @@ describe("R1 Start Hub and World-first product reset contracts", () => {
 
     expect(positions.every((position) => position >= 0)).toBe(true);
     expect(positions).toEqual([...positions].sort((left, right) => left - right));
-    expect(roadmap).toContain("R1B is the next prompt after publication.");
+    expect(roadmap).toContain("Status: active product sequence; R1 and R1B complete, R2 next");
+    expect(roadmap).toContain("R2 is the next prompt.");
     expect(roadmap).toContain("F1 and the rest of the F branch are paused beneath E3 Analytical Lenses.");
   });
 });

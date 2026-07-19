@@ -61,7 +61,7 @@ export function RunSettingsPanel({ collapsed = false, onToggle }: RunSettingsPan
         </label>
         <div className="run-settings-summary">
           <span>Starting recipe: {scenarioName}</span>
-          <span>{interventionCount} available changes</span>
+          <span>{interventionCount} mid-run changes</span>
         </div>
         <form
           className="run-settings-seed"
@@ -93,6 +93,7 @@ export function RunSettingsPanel({ collapsed = false, onToggle }: RunSettingsPan
           <div className="run-settings-quick__head">
             <h3 id="quick-controls-title">Key controls</h3>
             <span>{system.suggestedChange}</span>
+            <p>Changing a key control rebuilds a paused tick-0 run immediately. Choose Run to start the new configuration.</p>
           </div>
           <ParameterPanel
             includeKeys={system.quickParameterKeys}

@@ -16,12 +16,12 @@ const pathways = [
   },
   {
     label: "Build a system",
-    description: "Describe and inspect model structure in the non-executing Workshop.",
+    description: "Describe a model step by step or inspect its exact structure in Workshop.",
     href: "/builder"
   },
   {
     label: "Open advanced tools",
-    description: "Sample bounded model spaces in Atlas or inspect the non-persistent Lab foundation.",
+    description: "Sample a bounded model space in Atlas or see what Lab can record today.",
     href: "/atlas"
   }
 ] as const;
@@ -109,7 +109,7 @@ export function StartHub() {
           <Link href="/world?task=experiment">Experiments</Link>
           <Link href="/world?task=compare">Compare runs</Link>
           <Link href="/atlas">Atlas sampling</Link>
-          <Link href="/lab">Lab foundation</Link>
+          <Link href="/lab">Lab overview</Link>
         </div>
       </section>
     </div>

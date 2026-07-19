@@ -307,13 +307,13 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(roadmap).toContain("UX6B complete.");
     expect(roadmap).toContain("GW9 complete.");
     expect(roadmap).toContain("GW9B complete.");
-    expect(roadmap).toContain("The next documented roadmap milestone is R1B: First-Run and Shell Audit.");
+    expect(roadmap).toContain("The next documented roadmap milestone is R2: World Layout and Interaction Reclaim.");
     expect(roadmap).toContain("F1 and the fractal branch remain documented but are paused under E3 Analytical Lenses.");
     expect(startHubReset).toContain("/         -> Start Hub");
     expect(startHubReset).toContain("/world    -> live World workbench");
     expect(startHubReset).toContain("R1 does not change simulation scheduling, engine state, template rules");
-    expect(startHubReset).toContain("R1B First-Run and Shell Audit is next.");
-    expect(productExperienceResetRoadmap).toContain("Status: active product sequence; R1 implemented and R1B next");
+    expect(startHubReset).toContain("R1 complete. R1B complete. `R2: World Layout and Interaction Reclaim` is next.");
+    expect(productExperienceResetRoadmap).toContain("Status: active product sequence; R1 and R1B complete, R2 next");
     expect(productExperienceResetRoadmap).toContain("Every implementation milestone is followed by an audit milestone.");
     expect(productExperienceResetRoadmap).toContain("F1 and the rest of the F branch are paused beneath E3 Analytical Lenses.");
     expect(productExperienceResetRoadmap).toContain(

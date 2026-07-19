@@ -52,7 +52,7 @@ describe("viewport layout containment", () => {
 
   it("keeps persistent run controls outside the workspace scroll region", () => {
     expect(appShellSource).toContain("<TopStatusBar activeWorkspaceMode={activeWorkspaceMode} />");
-    expect(appShellSource).toContain("<LeftInstrumentStack activeMode={activeWorkspaceMode} onModeChange={setActiveWorkspaceMode} />");
+    expect(appShellSource).toContain("<LeftInstrumentStack activeMode={activeWorkspaceMode} onModeChange={changeWorkspaceMode} />");
     expect(appShellSource).toContain("<WorldStage />");
     expect(appShellSource).toContain("<RightContextDrawer />");
     expect(appShellSource).toContain("<TimelineControlStrip />");

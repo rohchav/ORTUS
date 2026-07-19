@@ -9427,6 +9427,15 @@ textarea[aria-invalid="true"] {
   line-height: 1.35;
 }
 
+.run-settings-quick__head p {
+  margin: 3px 0 0;
+  padding-left: 8px;
+  color: var(--text-secondary);
+  border-left: 2px solid var(--palette-amber-320);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
 .parameter-control.is-highlighted {
   padding-left: 9px;
   border-left: 3px solid var(--palette-amber-320);
@@ -9697,12 +9706,25 @@ textarea[aria-invalid="true"] {
 
 @media (max-width: 760px) {
   .research-shell__header {
-    grid-template-columns: 34px minmax(0, 1fr);
+    grid-template-columns: minmax(76px, auto) minmax(0, 1fr);
     padding-inline: 10px;
   }
 
+  .research-shell__brand {
+    gap: 5px;
+  }
+
+  .research-shell__brand .ortus-logo--header {
+    --ortus-logo-size: 24px;
+  }
+
   .research-shell__brand .ortus-brand__text {
-    display: none;
+    display: grid;
+  }
+
+  .research-shell__brand .ortus-brand__wordmark {
+    display: block;
+    font-size: 14px;
   }
 
   .research-destination-nav__link {

@@ -22,9 +22,11 @@ export function ResearchDestinationNavigation() {
   const searchParams = useSearchParams();
   const currentTask = searchParams.get("task");
   const [menuOpen, setMenuOpen] = useState(false);
+  const [focusRequest, setFocusRequest] = useState(0);
   const menuRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const itemRefs = useRef<Array<HTMLAnchorElement | null>>([]);
+  const pendingFocusIndexRef = useRef<number | null>(null);
   const researchToolCurrent = researchTools.some((tool) => isToolCurrent(tool, pathname, currentTask));
 
   useEffect(() => {
@@ -33,6 +35,7 @@ export function ResearchDestinationNavigation() {
     }
     const handlePointerDown = (event: PointerEvent) => {
       if (!menuRef.current?.contains(event.target as Node)) {
+        pendingFocusIndexRef.current = null;
         setMenuOpen(false);
       }
     };
@@ -40,20 +43,41 @@ export function ResearchDestinationNavigation() {
     return () => document.removeEventListener("pointerdown", handlePointerDown);
   }, [menuOpen]);
 
+  useEffect(() => {
+    if (!menuOpen) {
+      return;
+    }
+    const pendingIndex = pendingFocusIndexRef.current;
+    if (pendingIndex !== null) {
+      itemRefs.current[pendingIndex]?.focus();
+    }
+  }, [focusRequest, menuOpen]);
+
+  function closeMenu() {
+    pendingFocusIndexRef.current = null;
+    setMenuOpen(false);
+  }
+
   function openMenu(focusIndex?: number) {
     setMenuOpen(true);
     if (focusIndex !== undefined) {
-      window.requestAnimationFrame(() => itemRefs.current[focusIndex]?.focus());
+      pendingFocusIndexRef.current = focusIndex;
+      setFocusRequest((request) => request + 1);
     }
   }
 
   function handleTriggerKeyDown(event: KeyboardEvent<HTMLButtonElement>) {
     if (event.key === "ArrowDown") {
       event.preventDefault();
-      openMenu(0);
+      const pendingIndex = pendingFocusIndexRef.current;
+      openMenu(pendingIndex === null ? 0 : (pendingIndex + 1) % researchTools.length);
     } else if (event.key === "ArrowUp") {
       event.preventDefault();
-      openMenu(researchTools.length - 1);
+      const pendingIndex = pendingFocusIndexRef.current;
+      openMenu(pendingIndex === null ? researchTools.length - 1 : (pendingIndex - 1 + researchTools.length) % researchTools.length);
+    } else if (event.key === "Escape" && menuOpen) {
+      event.preventDefault();
+      closeMenu();
     }
   }
 
@@ -71,10 +95,11 @@ export function ResearchDestinationNavigation() {
 
     if (nextIndex !== null) {
       event.preventDefault();
+      pendingFocusIndexRef.current = nextIndex;
       itemRefs.current[nextIndex]?.focus();
     } else if (event.key === "Escape") {
       event.preventDefault();
-      setMenuOpen(false);
+      closeMenu();
       triggerRef.current?.focus();
     }
   }
@@ -106,7 +131,13 @@ export function ResearchDestinationNavigation() {
               aria-expanded={menuOpen}
               aria-haspopup="menu"
               data-current={researchToolCurrent ? "true" : "false"}
-              onClick={() => setMenuOpen((open) => !open)}
+              onClick={() => {
+                if (menuOpen) {
+                  closeMenu();
+                } else {
+                  setMenuOpen(true);
+                }
+              }}
               onKeyDown={handleTriggerKeyDown}
             >
               Research tools
@@ -124,7 +155,7 @@ export function ResearchDestinationNavigation() {
                         role="menuitem"
                         href={tool.href}
                         aria-current={current ? "page" : undefined}
-                        onClick={() => setMenuOpen(false)}
+                        onClick={closeMenu}
                         onKeyDown={(event) => handleMenuKeyDown(event, index)}
                       >
                         {tool.label}
