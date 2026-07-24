@@ -9,22 +9,23 @@ function source(path: string): string {
   return readFileSync(join(repoRoot, path), "utf8");
 }
 
-function cssBlock(selector: string): string {
+function cssBlocks(selector: string): string {
   const css = source("src/app/globals.css");
   const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/\s+/g, "\\s*");
-  const match = css.match(new RegExp(`${escaped}\\s*\\{(?<body>[^}]*)\\}`, "m"));
-  return match?.groups?.body ?? "";
+  return [...css.matchAll(new RegExp(`${escaped}\\s*\\{(?<body>[^}]*)\\}`, "gm"))]
+    .map((match) => match.groups?.body ?? "")
+    .join("\n");
 }
 
 describe("simulation workspace information architecture", () => {
-  it("defines the required workflow modes and maps every former drawer feature to a reachable mode", () => {
+  it("defines the required workflow modes and assigns each retained tool surface to one mode", () => {
     expect(simulationWorkspaceModes.map((mode) => mode.id)).toEqual([
       "setup",
-      "understand",
       "observe",
       "intervene",
-      "experiment",
       "compare",
+      "understand",
+      "experiment",
       "debug"
     ]);
 
@@ -36,9 +37,6 @@ describe("simulation workspace information architecture", () => {
         "scenarios",
         "assumptions",
         "notes",
-        "runProvenance",
-        "macro",
-        "micro",
         "metrics",
         "legend",
         "interventions",
@@ -60,11 +58,16 @@ describe("simulation workspace information architecture", () => {
     expect(leftStack).toContain('role="menuitem"');
     expect(leftStack).toContain('event.key === "ArrowDown"');
     expect(leftStack).toContain('event.key === "ArrowUp"');
+    expect(leftStack).toContain('event.key === "ArrowLeft"');
+    expect(leftStack).toContain('event.key === "ArrowRight"');
     expect(leftStack).toContain('event.key === "Home"');
     expect(leftStack).toContain('event.key === "End"');
     expect(leftStack).toContain('event.key === "Escape"');
     expect(leftStack).toContain("moreTriggerRef.current?.focus()");
-    expect(leftStack).toContain("renderWorkspaceMode(activeMode)");
+    expect(leftStack).toContain("renderWorkspaceMode(activeMode, chooseMode, !toolsHidden)");
+    expect(leftStack).toContain('{ id: "understand", label: "Explain" }');
+    expect(leftStack).toContain('group: "Investigate"');
+    expect(leftStack).toContain('group: "Inspect"');
     expect(leftStack).toContain('case "setup"');
     expect(leftStack).toContain('case "understand"');
     expect(leftStack).toContain('case "observe"');
@@ -83,14 +86,21 @@ describe("simulation workspace information architecture", () => {
 
     expect(appShell).toContain("useState<SimulationWorkspaceModeId>(");
     expect(appShell).toContain("initialWorkspaceMode ?? defaultSimulationWorkspaceModeId");
-    expect(appShell).toContain("<LeftInstrumentStack activeMode={activeWorkspaceMode} onModeChange={changeWorkspaceMode} />");
+    expect(appShell).toContain("activeMode={activeWorkspaceMode}");
+    expect(appShell).toContain("onModeChange={changeWorkspaceMode}");
+    expect(appShell).toContain("toolsHidden={toolsHidden}");
     expect(appShell).toContain("function changeWorkspaceMode(mode: SimulationWorkspaceModeId)");
+    expect(appShell).toContain("simulationWorkspaceModeQueryValue(mode)");
     expect(appShell).toContain('query.set("task", task)');
     expect(appShell).toContain('query.delete("task")');
-    expect(appShell).toContain("router.replace(nextHref, { scroll: false })");
+    expect(appShell).toContain('window.history.replaceState(window.history.state, "", nextHref)');
+    expect(appShell).not.toContain("router.replace(");
     expect(appShell).toContain("<WorldStage />");
     expect(appShell).toContain("<RightContextDrawer />");
     expect(appShell).toContain("<TimelineControlStrip />");
+    expect(appShell).toContain('data-tools-state={toolsHidden ? "hidden" : "visible"}');
+    expect(appShell).toContain("<ModalSurface");
+    expect(appShell).toContain("<RunProvenanceObservationPanel embedded />");
     expect(appShell.indexOf("<WorldStage />")).toBeLessThan(appShell.indexOf("<LeftInstrumentStack"));
     expect(appShell.indexOf("<TimelineControlStrip />")).toBeLessThan(appShell.indexOf("<LeftInstrumentStack"));
     expect(appShell).not.toContain("setActiveWorkspaceMode: useSimulationStore");
@@ -100,7 +110,7 @@ describe("simulation workspace information architecture", () => {
     const topStatus = source("src/components/TopStatusBar.tsx");
     const destinationNav = source("src/components/researchWorld/ResearchDestinationNavigation.tsx");
     const runSettings = source("src/components/RunSettingsPanel.tsx");
-    const leftStack = source("src/components/LeftInstrumentStack.tsx");
+    const compare = source("src/components/WorldComparePanel.tsx");
 
     expect(destinationNav).toContain('aria-label="Primary navigation"');
     expect(destinationNav).toContain("primaryDestinations.map");
@@ -112,6 +122,7 @@ describe("simulation workspace information architecture", () => {
     expect(topStatus).toContain("descriptor.template.name");
     expect(topStatus).toContain("scenarioName");
     expect(topStatus).toContain("StatusPill");
+    expect(topStatus).toContain("Run details");
     expect(topStatus).not.toContain("FileActions");
     expect(topStatus).not.toContain("seedDraft");
     expect(topStatus).not.toContain("regenerateSeed");
@@ -121,10 +132,11 @@ describe("simulation workspace information architecture", () => {
     expect(runSettings).toContain("setSeed");
     expect(runSettings).toContain("regenerateSeed");
     expect(runSettings).toContain("<ParameterPanel");
-    expect(runSettings).toContain("includeKeys={system.quickParameterKeys}");
-    expect(runSettings).toContain("excludeKeys={system.quickParameterKeys}");
-    expect(leftStack).toContain("<NeuralRuntimeLabPanel />");
-    expect(leftStack).toContain("<FileActions />");
+    expect(runSettings).toContain("includeKeys={quickParameterKeys}");
+    expect(runSettings).toContain("excludeKeys={quickParameterKeys}");
+    expect(runSettings).toContain("<NeuralRuntimeLabPanel active={active && view === \"neural\"} />");
+    expect(runSettings).toContain("<ScenarioBuilderPanel />");
+    expect(compare).toContain("<FileActions />");
   });
 
   it("keeps persistent run controls accessible, visible, and outside scrollable workspace content", () => {
@@ -141,18 +153,18 @@ describe("simulation workspace information architecture", () => {
     expect(timeline).toContain("Confirm reset and discard current run state");
     expect(timeline).toContain("Confirm Reset to rebuild a fresh tick-0 run");
     expect(timeline).toContain("ariaLabel");
-    expect(cssBlock(".timeline-strip")).toContain("position: relative;");
-    expect(cssBlock(".timeline-strip")).not.toContain("position: sticky;");
-    expect(cssBlock(".timeline-strip__warning")).toContain("grid-column: 1 / -1;");
+    expect(cssBlocks(".timeline-strip")).toContain("position: relative;");
+    expect(cssBlocks(".timeline-strip")).not.toContain("position: sticky;");
+    expect(cssBlocks(".timeline-strip__warning")).toContain("grid-column: 1 / -1;");
     expect(css).not.toMatch(/\.left-instruments\s*\{[^}]*overflow-y:\s*auto;/m);
   });
 
   it("removes fixed-height header clipping sources and preserves visible global navigation", () => {
-    const topStatus = cssBlock(".top-status");
+    const topStatus = cssBlocks(".top-status");
     const topStatusSource = source("src/components/TopStatusBar.tsx");
     const destinationNavSource = source("src/components/researchWorld/ResearchDestinationNavigation.tsx");
 
-    expect(topStatus).toContain("min-height: 58px;");
+    expect(topStatus).toContain("min-height: 44px;");
     expect(topStatus).toContain("overflow: visible;");
     expect(topStatus).not.toContain("height: 50px;");
     expect(topStatus).not.toContain("overflow-y: hidden;");
@@ -172,12 +184,11 @@ describe("simulation workspace information architecture", () => {
     const parameterPanel = source("src/components/ParameterPanel.tsx");
     const metricGraph = source("src/components/MetricGraphPanel.tsx");
 
-    expect(runSettings).toContain("Regenerate Seed");
-    expect(runSettings).toContain("aria-label=\"Apply typed seed and rebuild a fresh run\"");
-    expect(runSettings).toContain("aria-label=\"Generate a new seed and rebuild a fresh run\"");
+    expect(runSettings).toContain("New Seed");
+    expect(runSettings).toContain("aria-label=\"Apply Seed and rebuild a fresh run\"");
+    expect(runSettings).toContain("aria-label=\"New Seed: generate and rebuild a fresh run\"");
     expect(parameterPanel).toContain("Parameter changes rebuild a fresh tick-0 run through template parameter checks");
     expect(parameterPanel).toContain("Unsupported combinations are rejected before the engine is replaced");
-    expect(metricGraph).toContain("Current aggregate values live in Macro Field");
     expect(metricGraph).toContain("bounded model-output history over simulated ticks");
     expect(metricGraph).toContain("not empirical measurement");
     expect(metricGraph).toContain("Metric history line chart of model-output values over simulated ticks");

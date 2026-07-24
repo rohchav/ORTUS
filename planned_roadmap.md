@@ -1,10 +1,10 @@
 # ORTUS Full Prompt Roadmap
 
-*Last updated during Prompt R1B First-Run and World-First Shell Audit + Hardening.*
+*Last updated during Prompt R2 World Layout and Interaction Reclaim.*
 
 ## Current Status
 
-ORTUS has completed the core runtime/template and modeling-workbench foundations through Prompt 39B, the neural/runtime-lab side track, the Research World sequence through GW9B, the UX3 through UX6B track, RH1 source-of-truth hygiene, and the R1/R1B product reset and rendered audit.
+ORTUS has completed the core runtime/template and modeling-workbench foundations through Prompt 39B, the neural/runtime-lab side track, the Research World sequence through GW9B, the UX3 through UX6B track, RH1 source-of-truth hygiene, and the product reset through R2.
 
 Current project status:
 
@@ -52,15 +52,19 @@ Completed implementation prompt: Prompt GW9 — Ephemeral Landscape Sampling Pre
 Completed audit prompt: Prompt GW9B — Ephemeral Landscape Sampling Preview V1 Audit and Hardening; hardens canonical seed/fixed ordering, provenance, unmount cancellation, replacement/error semantics, exact epistemic copy, and adversarial/rendered coverage without widening support or adding persistence
 Completed implementation prompt: Prompt R1 — Start Hub and World-First Product Reset; moves World to `/world`, makes `/` a task-centered Start Hub, reclaims the live model surface, demotes capability walls, and preserves runtime and persistence behavior
 Completed audit prompt: Prompt R1B — First-Run and World-First Shell Audit + Hardening; audits first-run tasks and rendered hierarchy, fixes fresh-starter, rebuild-copy, route-state, keyboard-focus, panel-scroll, model-summary, Atlas-action, and mobile-brand defects, and preserves runtime and persistence behavior
+Completed implementation prompt: Prompt R2 — World Layout and Interaction Reclaim; establishes a stable dominant stage, compact context, direct task architecture, one bounded active-tool surface, layered Setup/Observe/Change/Compare/Explain workflows, focus-managed references, and responsive mobile containment without changing runtime or persistence behavior
 Post-30B stabilization completed: repo hygiene, durable Codex context, dependency repair, generated-artifact cleanup, and runtime performance/scalability baseline
 UX6 complete.
 UX6B complete.
 GW9 complete.
 GW9B complete.
-The next documented roadmap milestone is R2: World Layout and Interaction Reclaim.
+R1 complete.
+R1B complete.
+R2 complete.
+The next documented roadmap milestone is R2B: World Layout and Interaction Audit.
 F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, and trajectory motif analytics are paused under E3 Analytical Lenses.
 
-Completed sequence: UX6B -> GW9 -> GW9B -> R1 -> R1B. Next documented milestone: R2, not started.
+Completed sequence: UX6B -> GW9 -> GW9B -> R1 -> R1B -> R2. R2B is next and not started.
 ```
 
 Critical global boundary:
@@ -93,7 +97,7 @@ E2 Atlas as Question Map -> E2B Atlas Question-Map Audit
 E3 Analytical Lenses -> E3B Analytical-Lens Audit
 ```
 
-R1 and R1B are complete. R2 is next. The prior post-GW9B sequence that named F1 next is superseded; F0 remains historical documentation and F1 is paused under E3. R1B does not implement any R2/C/S/E/F capability.
+R1, R1B, and R2 are complete. R2B is next and has not started. The prior post-GW9B sequence that named F1 next is superseded; F0 remains historical documentation and F1 is paused under E3. R2 does not implement any R2B/C/S/E/F capability.
 
 Current production templates:
 
@@ -3713,8 +3717,8 @@ No global service availability treated as template runtime support.
 Recommended immediate next steps:
 
 ```text
-1. Run Prompt R2: World Layout and Interaction Reclaim next.
-2. Follow R2 with its required R2B World Layout Audit.
+1. Run Prompt R2B: World Layout and Interaction Audit next.
+2. Audit R2 independently; do not treat its implementation tests as the audit gate.
 3. Do not start C1, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or later reset-roadmap capability without its dedicated prompt.
 4. Do not make mobile-readiness, WCAG, actual browser-zoom, screen-reader, assistive-technology, forced-colors, or user-comprehension claims without direct evidence.
 ```
@@ -3778,5 +3782,9 @@ Prompt GW9B Ephemeral Landscape Sampling Preview V1 Audit and Hardening is compl
 GW9B complete.
 Prompt R1 Start Hub and World-First Product Reset is complete.
 Prompt R1B First-Run and World-First Shell Audit + Hardening is complete.
-The active next milestone is R2: World Layout and Interaction Reclaim. F1 is paused under E3 Analytical Lenses.
+Prompt R2 World Layout and Interaction Reclaim is complete.
+R1 complete.
+R1B complete.
+R2 complete.
+The active next milestone is R2B: World Layout and Interaction Audit. It is not started. F1 is paused under E3 Analytical Lenses.
 ```

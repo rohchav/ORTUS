@@ -1,4 +1,4 @@
-export const simulationWorkspaceModeIds = ["setup", "understand", "observe", "intervene", "experiment", "compare", "debug"] as const;
+export const simulationWorkspaceModeIds = ["setup", "observe", "intervene", "compare", "understand", "experiment", "debug"] as const;
 
 export type SimulationWorkspaceModeId = (typeof simulationWorkspaceModeIds)[number];
 
@@ -16,50 +16,50 @@ export const simulationWorkspaceModes: readonly SimulationWorkspaceModeDefinitio
   {
     id: "setup",
     label: "Setup",
-    eyebrow: "Model + scenario",
-    description: "Choose the template, seed, parameters, and initial-condition recipe for a fresh run.",
+    eyebrow: "Prepare the world",
+    description: "Choose the world, starting recipe, seed, and high-value controls for a fresh run.",
     panelIds: ["neuralLab", "runSettings", "scenarios"]
-  },
-  {
-    id: "understand",
-    label: "Understand",
-    eyebrow: "Assumptions",
-    description: "Read model boundaries, limitations, validation status, ethics notes, and explanatory field notes.",
-    panelIds: ["assumptions", "notes"]
   },
   {
     id: "observe",
     label: "Observe",
-    eyebrow: "Runtime output",
-    description: "Inspect live run provenance, current outputs, metric traces, local rules, and the visual legend.",
-    panelIds: ["runProvenance", "macro", "micro", "metrics", "legend"]
+    eyebrow: "Read the run",
+    description: "Follow the most useful current outputs, bounded traces, and visual signals.",
+    panelIds: ["metrics", "legend"]
   },
   {
     id: "intervene",
-    label: "Intervene",
-    eyebrow: "Perturb",
-    description: "Apply template-defined perturbations through engine-checked paths.",
+    label: "Change",
+    eyebrow: "Perturb the run",
+    description: "Apply supported current-run changes and distinguish them from fresh-run setup.",
     panelIds: ["interventions"]
-  },
-  {
-    id: "experiment",
-    label: "Experiment",
-    eyebrow: "Sweeps",
-    description: "Run bounded local parameter sweeps with fresh engines and final-metric results.",
-    panelIds: ["experiments"]
   },
   {
     id: "compare",
     label: "Compare",
-    eyebrow: "Results + export",
-    description: "Capture run summaries, compare saved outcomes, and exchange scenario or snapshot artifacts.",
+    eyebrow: "Inspect differences",
+    description: "Capture bounded run summaries, compare outcomes, and reach scenario or snapshot exchange.",
     panelIds: ["comparisons", "file"]
   },
   {
+    id: "understand",
+    label: "Explain",
+    eyebrow: "Model reference",
+    description: "Read the question, mechanism, signals, assumptions, and primary limitation.",
+    panelIds: ["assumptions", "notes"]
+  },
+  {
+    id: "experiment",
+    label: "Experiments",
+    eyebrow: "Investigate",
+    description: "Run bounded local parameter sweeps with fresh engines and final-metric results.",
+    panelIds: ["experiments"]
+  },
+  {
     id: "debug",
-    label: "Debug",
-    eyebrow: "Diagnostics",
-    description: "Inspect runtime diagnostics and performance counters without covering the world viewport.",
+    label: "Diagnostics",
+    eyebrow: "Inspect",
+    description: "Inspect exact runtime counters and instrumentation without changing the model.",
     panelIds: ["debug"]
   }
 ] as const;
@@ -70,4 +70,18 @@ export function getSimulationWorkspaceMode(id: SimulationWorkspaceModeId): Simul
 
 export function isSimulationWorkspaceModeId(value: unknown): value is SimulationWorkspaceModeId {
   return typeof value === "string" && (simulationWorkspaceModeIds as readonly string[]).includes(value);
+}
+
+export function simulationWorkspaceModeFromQuery(value: string | undefined): SimulationWorkspaceModeId | undefined {
+  if (value === "change") {
+    return "intervene";
+  }
+  return isSimulationWorkspaceModeId(value) ? value : undefined;
+}
+
+export function simulationWorkspaceModeQueryValue(mode: SimulationWorkspaceModeId): string | null {
+  if (mode === "setup") {
+    return null;
+  }
+  return mode === "intervene" ? "change" : mode;
 }

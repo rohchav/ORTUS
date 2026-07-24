@@ -3635,3 +3635,83 @@ Roadmap result:
 - Decision: conditionally ready for R2.
 - R2 World Layout and Interaction Reclaim is next.
 - F1 remains paused under E3 Analytical Lenses.
+
+### Prompt R2: World Layout and Interaction Reclaim
+
+Date: 2026-07-24
+
+Goal: rebuild `/world` around a stable, dominant live stage; give each common task one predictable owner; keep playback and runtime state stable; preserve complete expert access; and change no simulation or persistence semantics.
+
+Starting state:
+
+- Branch `main` at aligned base `a7f9c29`; `HEAD` matched `origin/main`.
+- The continuation inherited an intentionally uncommitted R2 implementation. It was preserved and audited in place; no reset, restore, stash, or recreation was used.
+- Baseline evidence from R1B was `53` focused destination-shell tests, `86` full UI tests, `72 files / 599 tests`, typecheck, build, performance smoke, and `git diff --check`.
+- The user explicitly authorized Playwright outside the sandbox.
+
+Implemented World frame:
+
+- `WorldStage` and `TimelineControlStrip` stay mounted outside task rendering.
+- Desktop uses a `64px` or `56px` task rail, the flexible stage/playback region, and one `290-350px` active tool.
+- Direct tasks are Setup, Observe, Change, Compare, and Explain; More groups Experiment Runner under Investigate and Diagnostics under Inspect.
+- The compact context bar exposes world, recipe/context, run status, tick, seed, and one focus-managed Run-details action.
+- The active tool owns one bounded scroll, resets scroll on task changes, and supports local collapse/restore without storage or state loss.
+- Setup exposes four authoritative quick parameters plus deeper All parameters, recipes/model variants, and Neural Runtime Lab views.
+- Observe prioritizes two to four existing model-output metrics, a bounded trace, and selected-model guidance.
+- Change distinguishes current-run engine-checked commands from fresh paused tick-0 Setup rebuilds.
+- Compare preserves existing bounded summary storage and keeps scenario/snapshot exchange subordinate.
+- Explain uses six concise model-specific sections and a focus-managed full-reference dialog.
+
+Measured rendered evidence:
+
+- `1440x900`: stage `994x730`, playback `994x50`, tasks `64x786`, tools `350x786`.
+- `1280x720`: stage `834x550`, playback `834x50`, tasks `64x606`, tools `350x606`.
+- `1024x768`: stage `624x598`, playback `624x50`, tasks `56x654`, tools `312x654`.
+- `900x700`: stage `500x530`, playback `500x50`, tasks `56x586`, tools `312x586`.
+- `1280x600`: stage `834x444`, playback `834x46`, tasks `64x496`, tools `350x496`.
+- `390x844`: stage `374x335`, playback `374x89`, horizontal tasks `374x50`, tools `374x211`; the document fits the viewport and the tool scroll reaches All parameters.
+- Collapse at `1280x720` expands stage width from `834px` to `1192px`; restore returns to `834px` and preserves the edited `0.75` parameter value.
+- All seven production-template stages rendered nonblank and legible in the audited Chromium session.
+
+Defects found and fixed:
+
+- Seed-action accessible names omitted their visible labels.
+- Neural concise explanation leaked an unrelated Builder boundary.
+- Modal scroll content was not keyboard-focusable for Axe.
+- framework route replacement could transiently remove the document title under load.
+- Mobile active-tool height clipped deeper Setup content.
+- `Setup change` label and copy collapsed into one inline run.
+- Collapsed-tool restore sat where the development overlay could obstruct it.
+- The compact Change rewrite dropped the prior `engine-checked commands` software-path wording.
+- Several old/new tests used hidden-modal global counts, a removed World `CornerFramePanel`, obsolete explanation labels/APIs, noncanonical template/action assumptions, implicit reduced-motion state, and stale comparison-storage expectations.
+- Production fixes added label-in-name semantics, bounded explanation filtering, focusable/labeled modal content, same-document history synchronization, mobile tool containment, deliberate Setup-change geometry, reachable restore placement, and restored engine-checked Change copy.
+- Tests now assert visible behavioral surfaces, scope hidden modal content correctly, and preserve the stronger runtime/persistence contracts.
+
+Integrity:
+
+- No simulation implementation changed. The `src/simulation` changes are source/roadmap contract tests only.
+- Simulation scheduling, deterministic RNG, tick semantics, template/scenario behavior, metrics, interventions, snapshots, Experiment Runner, comparisons, Atlas execution, Builder behavior, and registries are unchanged.
+- No dependency, route, template, scenario, metric, intervention, primitive, storage key, persistence system, analytics, personalization, AI guidance, starter content, C1 work, or R2B implementation was added.
+- Existing bounded World comparison storage is unchanged and remains neither Lab evidence nor Atlas discovery storage.
+
+Final verification:
+
+- Dedicated R2 rendered suite: `24 passed`.
+- Focused destination-shell Playwright: `53 passed` in `4.4m`.
+- Complete Playwright/Axe suite: `110 passed` in `7.6m`, with no retry or skipped test in the final invocation.
+- Manual six-viewport/seven-template rendered audit: `4` temporary harness cases passed; screenshots remained in `/tmp` and the temporary test was removed.
+- Browser diagnostics: no unexpected console error, page error, hydration failure, or failed critical request.
+- Typecheck: passed.
+- Unit tests: `75 files / 610 tests` passed.
+- Production build: passed.
+- Simulation performance smoke: Flocking-100 `226.53` tps, Flocking-500 `31.45` tps, Forest Fire `49.12` tps, Predator-Prey `149.49` tps; bounded Atlas smoke completed `2` runs / `10` work units in `26.23ms`. These are local smoke results, not scale certification.
+- `git diff --check`: passed before commit.
+- `npm run lint: unavailable, package.json has no lint script.`
+
+Roadmap result:
+
+- R1 complete.
+- R1B complete.
+- R2 complete.
+- R2B: World Layout and Interaction Audit is next and has not started.
+- C1 and F1 remain unstarted; F1 remains paused under E3 Analytical Lenses.

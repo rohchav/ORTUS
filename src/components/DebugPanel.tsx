@@ -8,28 +8,34 @@ interface DebugPanelProps {
   collapsed?: boolean;
   floating?: boolean;
   onToggle?: () => void;
+  embedded?: boolean;
+  active?: boolean;
 }
 
-export function DebugPanel({ collapsed, floating = false, onToggle }: DebugPanelProps) {
+export function DebugPanel({ collapsed, floating = false, onToggle, embedded = false, active = true }: DebugPanelProps) {
   const panelState = useSimulationStore((state) => state.panelState);
   const togglePanel = useSimulationStore((state) => state.togglePanel);
   const isControlled = collapsed !== undefined || onToggle !== undefined;
   const isCollapsed = collapsed ?? !panelState.debug;
   const toggle = onToggle ?? (isControlled ? undefined : () => togglePanel("debug"));
 
+  if (embedded) {
+    return <div className="debug-panel-embedded"><DebugPanelBody active={active} /></div>;
+  }
+
   return (
     <div className={floating ? "debug-floating" : ""}>
       <CornerFramePanel title="Debug" eyebrow="Runtime" variant={floating ? "floating" : "compact"} collapsed={isCollapsed} onToggle={toggle}>
-        <DebugPanelBody />
+        <DebugPanelBody active={active} />
       </CornerFramePanel>
     </div>
   );
 }
 
-function DebugPanelBody() {
+function DebugPanelBody({ active }: { active: boolean }) {
   const engine = useSimulationStore((state) => state.engine);
-  const snapshot = useSimulationStore((state) => state.latestSnapshot);
-  const isRunning = useSimulationStore((state) => state.isRunning);
+  const snapshot = useSimulationStore((state) => active ? state.latestSnapshot : null);
+  const isRunning = useSimulationStore((state) => active && state.isRunning);
   const lastError = useSimulationStore((state) => state.lastError);
   const debug = engine?.debugData();
   const performance = engine?.performanceData();

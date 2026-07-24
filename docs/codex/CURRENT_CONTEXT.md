@@ -1,20 +1,20 @@
 # ORTUS Current Context
 
-Last updated: 2026-07-19 during Prompt R1B First-Run and World-First Shell Audit + Hardening
+Last updated: 2026-07-24 during Prompt R2 World Layout and Interaction Reclaim
 
 ## Current Prompt Status
 
-R1 and R1B are complete. `/` is the task-centered Start Hub; `/world` is the live workbench; `/builder`, `/atlas`, and `/lab` retain their established behavior. Primary navigation is Start, World, Workshop, and a keyboard-operated Research tools menu for Atlas, Lab, Experiments, and Compare runs. `R2: World Layout and Interaction Reclaim` is next. F1 remains paused under E3 Analytical Lenses.
+R1, R1B, and R2 are complete. `/` is the task-centered Start Hub; `/world` is the live workbench; `/builder`, `/atlas`, and `/lab` retain their established behavior. Primary navigation is Start, World, Workshop, and a keyboard-operated Research tools menu for Atlas, Lab, Experiments, and Compare runs. `R2B: World Layout and Interaction Audit` is next and has not started. F1 remains paused under E3 Analytical Lenses.
 
-R1B's evidence record is `docs/ui/FIRST_RUN_AND_WORLD_FIRST_SHELL_AUDIT.md`. Expert rendered review found no P0 defect, four P1 defects, five bounded P2 defects, and one P3 copy defect. Every P1 and bounded P2 was fixed. The decision is conditionally ready for R2 because no blocking first-run or shell defect remains, while actual user testing, browser zoom, screen-reader/assistive-technology use, forced colors, complete mobile workflow, and WCAG conformance remain unverified.
+R2's implementation and evidence record is `docs/ui/WORLD_LAYOUT_AND_INTERACTION_RECLAIM.md`. World now uses a stable `tasks + stage/playback + active tool` frame. Setup, Observe, Change, Compare, and Explain are direct tasks; More groups Experiment Runner and Diagnostics. The selected tool owns one bounded scroll, full model notes and technical run details use focus-managed modal surfaces, and desktop collapse/restore preserves local tool state.
 
-Featured Flocking launch now creates a fresh prepared run once per starter page mount: authoritative default parameters, tick 0, and Paused. It no longer resumes modified running state beneath baseline instructions. Key parameter controls state that they rebuild a paused tick-0 run immediately. This uses the existing template selection and validated engine-replacement paths; no runtime, seed algorithm, scenario, or persistence contract changed.
+At `1440x900`, the stage is `994x730`; at `1280x720`, it is `834x550`; at `1280x600`, playback remains visible beneath an `834x444` stage. The `390x844` layout fits the document with a `374x335` stage and a bounded `374x211` active tool whose internal scroll reaches All parameters. All seven production-template stages were visually inspected along with running, paused, rebuild, intervention, comparison, reference, collapse, restore, short-height, and mobile-smoke states.
 
-World task controls now synchronize local task state with the `task` query and shared-navigation current state while preserving engine tick and parameters. Each task begins at task-panel scroll origin. Direct tasks keep button focus; selecting a More item focuses the new panel heading. Research tools and More use render-coupled focus requests, eliminating the reproduced rapid-key timing defect.
+Rendered iteration fixed seed-control accessible names, an unrelated Neural explanation boundary, modal-scroll focusability, task URL/title flicker, mobile tool clipping, Setup-change copy geometry, and collapsed-tool reachability. New tests also corrected strict locator, canonical label, reduced-motion setup, action-selection, and existing comparison-storage assumptions. Task changes preserve runtime tick and parameters and reset only active-tool scroll.
 
-Every production Understand summary renders six model-specific sections. Neural no longer duplicates the biological-brain boundary in its default summary and now promotes no-learning/plasticity as its main limitation; the Builder-graph boundary remains in full notes. Atlas keeps its existing form and executor but exposes the same submit action in the first-viewport Execution Status panel. The mobile shell retains the sharp mark plus visible ORTUS wordmark.
+R2 changes no simulation scheduling, seeded RNG, engine state, template behavior, scenario behavior, metric, intervention execution, snapshot, Experiment Runner, comparison persistence, Atlas execution, Builder behavior, route, dependency, or storage key. Presentation metadata only chooses which authoritative parameter/metric appears first. Model outputs remain exploratory model outputs, not empirical truth.
 
-Post-hardening rendered evidence includes `53` focused destination-shell tests and `18` first-run/reset tests. The complete UI suite contains `86` tests. Unit coverage remains `72 files / 599 tests`. Typecheck, production build, simulation performance smoke, and `git diff --check` pass. Lint remains intentionally unavailable. R1/R1B add no new persistence; existing bounded World comparison and UI storage remain unchanged.
+R2 verification includes `53` focused destination-shell tests, `24` dedicated R2 rendered tests, and `110` complete UI tests, plus a six-viewport/seven-template visual audit, Axe, reduced motion, keyboard/focus, storage, and browser-diagnostic coverage. Unit coverage is `75 files / 610 tests`; typecheck, production build, simulation performance smoke, and `git diff --check` pass. Lint remains intentionally unavailable. Actual user testing, browser zoom, screen-reader/assistive-technology use, forced colors, complete mobile workflow, and WCAG conformance remain unverified.
 
 ## Project Identity
 
@@ -155,7 +155,7 @@ Built-in production templates currently include Epidemic Spread, Opinion Dynamic
 
 ## Completed Prompt State
 
-Durable docs and source indicate completed roadmap work through Prompt 39B plus the documented side tracks, Research World/UI work through Prompt GW9B, and R1/R1B. Prompt 31 through Prompt 39B are complete. UX6/UX6B established and audited the bounded Guided Builder; GW9/GW9B established and audited the bounded Atlas preview; R1 resets product entry and the World shell; R1B audits and hardens that reset.
+Durable docs and source indicate completed roadmap work through Prompt 39B plus the documented side tracks, Research World/UI work through Prompt GW9B, and R1/R1B/R2. Prompt 31 through Prompt 39B are complete. UX6/UX6B established and audited the bounded Guided Builder; GW9/GW9B established and audited the bounded Atlas preview; R1 resets product entry and the World shell; R1B audits and hardens that reset; R2 reclaims the World layout and interaction hierarchy without changing runtime semantics.
 
 The post-30B repository hygiene, dependency stabilization, durable context, and performance/scalability pass has also been completed. Recent commits include `dd6c256` for repo context/generated-artifact hygiene, `4949b72` for dependency and performance script stabilization, and `a80d5b7` for simulation performance instrumentation and spatial indexing foundations.
 
@@ -165,11 +165,12 @@ GW9 complete.
 GW9B complete.
 R1 complete.
 R1B complete.
-The next documented roadmap milestone is R2: World Layout and Interaction Reclaim.
+R2 complete.
+The next documented roadmap milestone is R2B: World Layout and Interaction Audit.
 
-Completed sequence: UX6B -> GW9 -> GW9B -> R1 -> R1B. R2 is not started.
+Completed sequence: UX6B -> GW9 -> GW9B -> R1 -> R1B -> R2. R2B is not started.
 
-Do not start R2, starter packs, recipe-first Builder, composition, multiscale runtime, adaptive-controller generalization, Lab/Atlas persistence, E3, F1, or other reset-roadmap capability without its dedicated prompt. Rendered Playwright/Axe evidence does not establish actual browser zoom, screen-reader, assistive-technology, forced-colors, full WCAG, mobile-workflow, or user-comprehension readiness.
+Do not start R2B, starter packs, recipe-first Builder, composition, multiscale runtime, adaptive-controller generalization, Lab/Atlas persistence, E3, F1, or other reset-roadmap capability without its dedicated prompt. Rendered Playwright/Axe evidence does not establish actual browser zoom, screen-reader, assistive-technology, forced-colors, full WCAG, mobile-workflow, or user-comprehension readiness.
 
 Implemented runtime foundations include scenarios, snapshots, template-defined behavior modes, agent composition, interventions, experiments, run summaries/comparison, seeded randomness, metrics, spaces, template metadata, and a narrow Opinion Dynamics `socialLearning` behavior mode audited in Prompt 33D.
 
@@ -282,7 +283,7 @@ Prompt 35 and Prompt 35B were committed together in `7696381 feat: Implement Mod
 
 ## Next Recommended Prompt
 
-R2: World Layout and Interaction Reclaim. It may deepen World ergonomics only through its dedicated prompt and must preserve the R1B fresh-starter, task/query/current-state, focus, scroll, model-specific explanation, runtime-integrity, and persistence boundaries. F1 is paused under E3 Analytical Lenses.
+R2B: World Layout and Interaction Audit. It must independently audit R2 model dominance, task ownership, URL/runtime-state coherence, active-tool scrolling, collapse preservation, focus, responsive reachability, stage legibility, interpretation boundaries, and runtime/persistence integrity. It must not start C1 or F1. F1 remains paused under E3 Analytical Lenses.
 
 Next recommended UI/design-system prompt after UX2B: `UI-DESIGN-SYSTEM-1: Rendered Responsive, Typography + Visualization Accessibility Audit`.
 

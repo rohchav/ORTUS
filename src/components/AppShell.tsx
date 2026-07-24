@@ -1,15 +1,21 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { LeftInstrumentStack } from "./LeftInstrumentStack";
 import { RightContextDrawer } from "./RightContextDrawer";
+import { RunProvenanceObservationPanel } from "./RunProvenanceObservationPanel";
 import { StarterActionNudge } from "./StarterActionNudge";
 import { TimelineControlStrip } from "./TimelineControlStrip";
 import { TopStatusBar } from "./TopStatusBar";
 import { WorldStage } from "./WorldStage";
 import { OrtusBrand } from "./branding";
-import { defaultSimulationWorkspaceModeId, type SimulationWorkspaceModeId } from "../lib/workspaceModes";
+import { CapabilityGuidancePanel } from "./researchWorld/CapabilityGuidancePanel";
+import { ModalSurface } from "./ui/ModalSurface";
+import {
+  defaultSimulationWorkspaceModeId,
+  simulationWorkspaceModeQueryValue,
+  type SimulationWorkspaceModeId
+} from "../lib/workspaceModes";
 import type { TemplateId } from "../lib/templateVisuals";
 import { useSimulationStore } from "../state/simulationStore";
 
@@ -22,7 +28,6 @@ interface AppShellProps {
 }
 
 export function AppShell({ initialTemplateId, initialWorkspaceMode, showStarterGuide = false }: AppShellProps) {
-  const router = useRouter();
   const hydratePreferences = useSimulationStore((state) => state.hydratePreferences);
   const isRunning = useSimulationStore((state) => state.isRunning);
   const speedMultiplier = useSimulationStore((state) => state.speedMultiplier);
@@ -31,10 +36,13 @@ export function AppShell({ initialTemplateId, initialWorkspaceMode, showStarterG
   const [activeWorkspaceMode, setActiveWorkspaceMode] = useState<SimulationWorkspaceModeId>(
     initialWorkspaceMode ?? defaultSimulationWorkspaceModeId
   );
+  const [toolsHidden, setToolsHidden] = useState(false);
+  const [runDetailsOpen, setRunDetailsOpen] = useState(false);
   const frameRef = useRef<number | null>(null);
   const lastTimeRef = useRef<number | null>(null);
   const accumulatedRef = useRef(0);
   const starterInitializedRef = useRef(false);
+  const runDetailsTriggerRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -58,7 +66,7 @@ export function AppShell({ initialTemplateId, initialWorkspaceMode, showStarterG
     setActiveWorkspaceMode(mode);
 
     const query = new URLSearchParams(window.location.search);
-    const task = workspaceModeQueryValue(mode);
+    const task = simulationWorkspaceModeQueryValue(mode);
     if (task) {
       query.set("task", task);
     } else {
@@ -67,7 +75,7 @@ export function AppShell({ initialTemplateId, initialWorkspaceMode, showStarterG
     const nextHref = `/world${query.size > 0 ? `?${query.toString()}` : ""}${window.location.hash}`;
     const currentHref = `${window.location.pathname}${window.location.search}${window.location.hash}`;
     if (nextHref !== currentHref) {
-      router.replace(nextHref, { scroll: false });
+      window.history.replaceState(window.history.state, "", nextHref);
     }
   }
 
@@ -127,8 +135,11 @@ export function AppShell({ initialTemplateId, initialWorkspaceMode, showStarterG
   return (
     <section className="ortus-shell" aria-label="World simulation workbench" data-destination-route="world">
       <h1 className="sr-only">World</h1>
-      <TopStatusBar activeWorkspaceMode={activeWorkspaceMode} />
-      <div className="ortus-layout">
+      <TopStatusBar
+        onOpenRunDetails={() => setRunDetailsOpen(true)}
+        runDetailsTriggerRef={runDetailsTriggerRef}
+      />
+      <div className="ortus-layout" data-tools-state={toolsHidden ? "hidden" : "visible"}>
         <section className="workspace-center" aria-label="Simulation workspace" data-workspace-region="center">
           <div className="world-workspace">
             {showStarterGuide ? <StarterActionNudge /> : null}
@@ -137,15 +148,27 @@ export function AppShell({ initialTemplateId, initialWorkspaceMode, showStarterG
           <TimelineControlStrip />
           <RightContextDrawer />
         </section>
-        <LeftInstrumentStack activeMode={activeWorkspaceMode} onModeChange={changeWorkspaceMode} />
+        <LeftInstrumentStack
+          activeMode={activeWorkspaceMode}
+          onModeChange={changeWorkspaceMode}
+          toolsHidden={toolsHidden}
+          onHideTools={() => setToolsHidden(true)}
+          onShowTools={() => setToolsHidden(false)}
+        />
       </div>
+      <ModalSurface
+        open={runDetailsOpen}
+        eyebrow="Inspect"
+        title="Technical run details"
+        closeLabel="Close run details"
+        onClose={() => setRunDetailsOpen(false)}
+        returnFocusRef={runDetailsTriggerRef}
+      >
+        <div className="world-run-details-stack">
+          <RunProvenanceObservationPanel embedded />
+          <CapabilityGuidancePanel destinationId="world" className="capability-guidance--world" maxItemsPerGroup={1} />
+        </div>
+      </ModalSurface>
     </section>
   );
-}
-
-function workspaceModeQueryValue(mode: SimulationWorkspaceModeId): string | null {
-  if (mode === "setup") {
-    return null;
-  }
-  return mode === "intervene" ? "change" : mode;
 }

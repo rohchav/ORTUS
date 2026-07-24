@@ -11,6 +11,7 @@ interface ParameterPanelProps {
   highlightedKey?: string;
   showNote?: boolean;
   ariaLabel?: string;
+  searchQuery?: string;
 }
 
 export function ParameterPanel({
@@ -18,14 +19,19 @@ export function ParameterPanel({
   excludeKeys = [],
   highlightedKey,
   showNote = false,
-  ariaLabel = "Model parameters"
+  ariaLabel = "Model parameters",
+  searchQuery = ""
 }: ParameterPanelProps = {}) {
   const selectedTemplateId = useSimulationStore((state) => state.selectedTemplateId);
   const parameterValues = useSimulationStore((state) => state.parameterValues);
   const setParameter = useSimulationStore((state) => state.setParameter);
-  const definitions = getTemplateDescriptor(selectedTemplateId).template.parameterDefinitions.filter(
-    (definition) => (!includeKeys || includeKeys.includes(definition.key)) && !excludeKeys.includes(definition.key)
-  );
+  const normalizedSearch = searchQuery.trim().toLowerCase();
+  const definitions = getTemplateDescriptor(selectedTemplateId).template.parameterDefinitions.filter((definition) => {
+    if ((includeKeys && !includeKeys.includes(definition.key)) || excludeKeys.includes(definition.key)) {
+      return false;
+    }
+    return !normalizedSearch || `${definition.label} ${definition.key} ${definition.description}`.toLowerCase().includes(normalizedSearch);
+  });
 
   const controls = definitions.map((definition) => (
     <ParameterControl
@@ -44,7 +50,7 @@ export function ParameterPanel({
           Parameter changes rebuild a fresh tick-0 run through template parameter checks. Unsupported combinations are rejected before the engine is replaced.
         </p>
       ) : null}
-      {controls}
+      {controls.length > 0 ? controls : <p className="parameter-panel__empty">No parameters match this search.</p>}
     </div>
   );
 }

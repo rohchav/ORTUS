@@ -4,18 +4,24 @@ import { useEffect, useMemo, useState } from "react";
 import { compareRunSummaries, maxSavedRunSummaries, type RunComparisonResult, type SavedRunSummary } from "../simulation";
 import { exportRunComparisonCsv, exportRunComparisonJson } from "../lib/runComparisonExport";
 import { formatNumber, formatTick } from "../lib/format";
-import { metricLabel } from "../lib/templateVisuals";
+import { getTemplateDescriptor, metricLabel } from "../lib/templateVisuals";
 import { useSimulationStore } from "../state/simulationStore";
 import { CornerFramePanel } from "./ui/CornerFramePanel";
 
 interface RunComparisonPanelProps {
   collapsed?: boolean;
   onToggle?: () => void;
+  embedded?: boolean;
+  active?: boolean;
 }
 
 const traceColors = ["#d8ff3e", "#ff4a2e", "#f3f1e8", "#6c72ff", "#c34dff", "#9a9b94"];
 
-export function RunComparisonPanel({ collapsed = false, onToggle }: RunComparisonPanelProps) {
+export function RunComparisonPanel({ collapsed = false, onToggle, embedded = false, active = true }: RunComparisonPanelProps) {
+  const selectedTemplateId = useSimulationStore((state) => state.selectedTemplateId);
+  const snapshot = useSimulationStore((state) => active ? state.latestSnapshot : null);
+  const seed = useSimulationStore((state) => state.seed);
+  const isRunning = useSimulationStore((state) => active && state.isRunning);
   const savedRuns = useSimulationStore((state) => state.savedRuns);
   const selectedRunIds = useSimulationStore((state) => state.selectedComparisonRunIds);
   const baselineRunId = useSimulationStore((state) => state.baselineRunId);
@@ -69,12 +75,24 @@ export function RunComparisonPanel({ collapsed = false, onToggle }: RunCompariso
     downloadText("ortus-run-comparison.csv", exportRunComparisonCsv(selectedRuns), "text/csv");
   }
 
-  return (
-    <CornerFramePanel title="Run Comparison" eyebrow="Workspace" variant="compact" collapsed={collapsed} onToggle={onToggle}>
-      <div className="run-comparison-panel">
+  const content = (
+      <div className="run-comparison-panel world-task-view">
+        <section className="world-tool-section" aria-labelledby="comparison-current-run-title">
+          <div className="world-tool-section__head">
+            <h3 id="comparison-current-run-title" tabIndex={-1}>Current run</h3>
+            <span>{isRunning ? "Running" : "Paused"}</span>
+          </div>
+          <dl className="world-current-run-summary">
+            <div><dt>World</dt><dd>{getTemplateDescriptor(selectedTemplateId).template.name}</dd></div>
+            <div><dt>Tick</dt><dd>{formatTick(snapshot?.tick ?? 0)}</dd></div>
+            <div><dt>Seed</dt><dd>{seed}</dd></div>
+            <div><dt>Metric records</dt><dd>{snapshot?.metricsHistory.length ?? 0}</dd></div>
+          </dl>
+        </section>
         <p className="run-comparison-note">
-          Capture bounded run summaries for exploratory comparison. Summaries store parameters, seed, metrics, and intervention records, not full snapshots.
+          Capture this run as a bounded local summary, then select saved summaries to inspect differences.
         </p>
+        <h3 className="world-section-heading">Capture current run</h3>
         <div className="run-capture-grid">
           <label>
             <span>Run label</span>
@@ -103,6 +121,7 @@ export function RunComparisonPanel({ collapsed = false, onToggle }: RunCompariso
             Export Comparison CSV
           </button>
         </div>
+        <h3 className="world-section-heading">Saved comparison runs</h3>
         <RunLibrary
           runs={savedRuns}
           selectedRunIds={selectedRunIds}
@@ -113,12 +132,17 @@ export function RunComparisonPanel({ collapsed = false, onToggle }: RunCompariso
           onDelete={deleteSavedRun}
           onClear={clearSavedRuns}
         />
+        <h3 className="world-section-heading">Differences</h3>
         <RunDeltaSummary comparison={comparison} selectedRuns={selectedRuns} />
         <RunMetricTraceCompare runs={selectedRuns} metricKey={traceMetricKey} metricKeys={metricKeys} onMetricChange={setTraceMetricKey} />
         <p className="run-comparison-note">
-          Run comparisons can suggest patterns, but they do not prove causal relationships without careful experimental design.
+          Saved World comparisons are local run summaries. They are not Lab evidence records or Atlas discoveries, and differences do not prove causation.
         </p>
       </div>
+  );
+  return embedded ? content : (
+    <CornerFramePanel title="Run Comparison" eyebrow="Workspace" variant="compact" collapsed={collapsed} onToggle={onToggle}>
+      {content}
     </CornerFramePanel>
   );
 }

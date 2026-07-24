@@ -1,11 +1,12 @@
 "use client";
 
+import { useRef, useState } from "react";
 import { getSystemCatalogEntry } from "../lib/systemCatalog";
 import { getTemplateDescriptor } from "../lib/templateVisuals";
+import { isModelSpecificWorldGuidance, normalizeWorldGuidance, uniqueWorldGuidance } from "../lib/worldExplanation";
 import { templateAssumptionProfile } from "../simulation";
 import { useSimulationStore } from "../state/simulationStore";
-import { CornerFramePanel } from "./ui/CornerFramePanel";
-import { Disclosure } from "./ui/Disclosure";
+import { ModalSurface } from "./ui/ModalSurface";
 
 export function ModelExplanationPanel() {
   const selectedTemplateId = useSimulationStore((state) => state.selectedTemplateId);
@@ -21,22 +22,24 @@ export function ModelExplanationPanel() {
   const suggestedChange = uniqueLine(system.suggestedChange, seen);
   const deduplicatedAssumptions = uniqueLines(documentation.assumptions, seen);
   const keyAssumptions = deduplicatedAssumptions.slice(0, 2);
-  const prioritizedLimitations = prioritizeModelLimitations(documentation.limitations);
+  const prioritizedLimitations = documentation.limitations.filter(isModelSpecificWorldGuidance);
   const deduplicatedLimitations = uniqueLines(prioritizedLimitations, seen);
   const mainLimitation = deduplicatedLimitations[0] ?? "No model limitation is documented.";
 
-  const additionalAssumptions = deduplicatedAssumptions.slice(2);
-  const additionalLimitations = deduplicatedLimitations.slice(1);
-  const notRepresented = uniqueLines(documentation.notRepresented ?? [], seen);
-  const appropriateUse = uniqueLines(documentation.appropriateUse ?? [], seen);
-  const inappropriateUse = uniqueLines(documentation.inappropriateUse ?? [], seen);
-  const ethicsNotes = uniqueLines(profile.ethicsNotes.map((item) => item.description), seen);
+  const fullAssumptions = uniqueWorldGuidance(documentation.assumptions.filter(isModelSpecificWorldGuidance));
+  const fullLimitations = uniqueWorldGuidance(documentation.limitations.filter(isModelSpecificWorldGuidance));
+  const notRepresented = uniqueWorldGuidance(documentation.notRepresented ?? []);
+  const appropriateUse = uniqueWorldGuidance(documentation.appropriateUse ?? []);
+  const inappropriateUse = uniqueWorldGuidance(documentation.inappropriateUse ?? []);
+  const ethicsNotes = uniqueWorldGuidance(profile.ethicsNotes.map((item) => item.description));
+  const [referenceOpen, setReferenceOpen] = useState(false);
+  const referenceTriggerRef = useRef<HTMLButtonElement>(null);
 
   return (
-    <CornerFramePanel title={descriptor.template.name} eyebrow="Understand the model" variant="compact">
-      <div className="model-explanation" data-model-explanation={selectedTemplateId}>
+    <div className="model-explanation" data-model-explanation={selectedTemplateId}>
+      <div className="model-explanation__summary">
         <ExplanationSection title="Question" text={question} />
-        <ExplanationSection title="How the model works" text={process} />
+        <ExplanationSection title="How it works" text={process} />
         <ExplanationSection title="What to watch" text={watchFor} />
         <ExplanationSection title="Try changing" text={suggestedChange} />
         <section>
@@ -44,29 +47,42 @@ export function ModelExplanationPanel() {
           <TextList items={keyAssumptions} />
         </section>
         <ExplanationSection title="Main limitation" text={mainLimitation} />
-
-        <Disclosure expandLabel="Full model notes" collapseLabel="Hide full model notes" className="model-explanation__details">
+      </div>
+      <button ref={referenceTriggerRef} type="button" className="model-explanation__reference-action" onClick={() => setReferenceOpen(true)}>
+        Full model notes
+      </button>
+      <ModalSurface
+        open={referenceOpen}
+        eyebrow="Full model reference"
+        title={descriptor.template.name}
+        closeLabel="Close model reference"
+        onClose={() => setReferenceOpen(false)}
+        returnFocusRef={referenceTriggerRef}
+        className="world-model-reference"
+      >
           <div className="model-explanation__full">
+            <ExplanationSection title="Purpose" text={documentation.purpose} />
+            <ExplanationSection title="Process" text={documentation.processOverview} />
             <ExplanationSection title="Entities" text={documentation.entities.join(" ")} />
             <ExplanationSection title="State represented" text={documentation.stateVariables.join(", ")} />
             <ExplanationSection title="Scheduling" text={documentation.scheduling} />
             <ExplanationSection title="Initialization" text={documentation.initialization} />
             <section>
+              <h3>Design concepts</h3>
+              <TextList items={Object.values(documentation.designConcepts).filter((item): item is string => Boolean(item))} />
+            </section>
+            <section>
               <h3>Submodels</h3>
               <TextList items={documentation.submodels} />
             </section>
-            {additionalAssumptions.length > 0 ? (
-              <section>
-                <h3>Additional assumptions</h3>
-                <TextList items={additionalAssumptions} />
-              </section>
-            ) : null}
-            {additionalLimitations.length > 0 ? (
-              <section>
-                <h3>Additional limitations</h3>
-                <TextList items={additionalLimitations} />
-              </section>
-            ) : null}
+            <section>
+              <h3>Complete assumptions</h3>
+              <TextList items={fullAssumptions} />
+            </section>
+            <section>
+              <h3>Complete limitations</h3>
+              <TextList items={fullLimitations} />
+            </section>
             <section>
               <h3>Not represented</h3>
               <TextList items={notRepresented} />
@@ -97,9 +113,8 @@ export function ModelExplanationPanel() {
               </p>
             </section>
           </div>
-        </Disclosure>
-      </div>
-    </CornerFramePanel>
+      </ModalSurface>
+    </div>
   );
 }
 
@@ -145,13 +160,8 @@ function uniqueLines(values: readonly string[], seen: Set<string>): string[] {
   });
 }
 
-function prioritizeModelLimitations(values: readonly string[]): string[] {
-  const productBoundary = /builder|model[- ]schema|visual programming|netlogo|mesa|mason|llm/i;
-  return [...values.filter((value) => !productBoundary.test(value)), ...values.filter((value) => productBoundary.test(value))];
-}
-
 function normalizationKeys(value: string): string[] {
-  const normalized = normalizeText(value);
+  const normalized = normalizeWorldGuidance(value);
   if (!normalized) {
     return [];
   }
@@ -164,5 +174,5 @@ function normalizationKeys(value: string): string[] {
 }
 
 function normalizeText(value: string): string {
-  return value.trim().toLowerCase().replace(/[\s.!?,;:]+/g, " ").trim();
+  return normalizeWorldGuidance(value);
 }

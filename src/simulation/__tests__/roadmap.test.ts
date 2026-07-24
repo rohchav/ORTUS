@@ -232,6 +232,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
     );
     const remoteStateMissionHygienePath = join(repoRoot, "docs", "RH1_REMOTE_STATE_AND_MISSION_ALIGNMENT_HYGIENE.md");
     const startHubResetPath = join(repoRoot, "docs", "ui", "START_HUB_AND_WORLD_FIRST_PRODUCT_RESET.md");
+    const worldLayoutReclaimPath = join(repoRoot, "docs", "ui", "WORLD_LAYOUT_AND_INTERACTION_RECLAIM.md");
     const productExperienceResetRoadmapPath = join(
       repoRoot,
       "docs",
@@ -260,6 +261,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(existsSync(guidedBuilderFoundationAuditPath)).toBe(true);
     expect(existsSync(remoteStateMissionHygienePath)).toBe(true);
     expect(existsSync(startHubResetPath)).toBe(true);
+    expect(existsSync(worldLayoutReclaimPath)).toBe(true);
     expect(existsSync(productExperienceResetRoadmapPath)).toBe(true);
 
     const roadmap = readFileSync(roadmapPath, "utf8");
@@ -283,6 +285,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
     const guidedBuilderFoundationAudit = readFileSync(guidedBuilderFoundationAuditPath, "utf8");
     const remoteStateMissionHygiene = readFileSync(remoteStateMissionHygienePath, "utf8");
     const startHubReset = readFileSync(startHubResetPath, "utf8");
+    const worldLayoutReclaim = readFileSync(worldLayoutReclaimPath, "utf8");
     const productExperienceResetRoadmap = readFileSync(productExperienceResetRoadmapPath, "utf8");
     expect(roadmap).toContain("completed through Prompt 39B");
     expect(roadmap).toContain("Post-30B stabilization");
@@ -307,13 +310,20 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(roadmap).toContain("UX6B complete.");
     expect(roadmap).toContain("GW9 complete.");
     expect(roadmap).toContain("GW9B complete.");
-    expect(roadmap).toContain("The next documented roadmap milestone is R2: World Layout and Interaction Reclaim.");
+    expect(roadmap).toContain("R1, R1B, and R2 are complete.");
+    expect(roadmap).toContain("The next documented roadmap milestone is R2B: World Layout and Interaction Audit.");
     expect(roadmap).toContain("F1 and the fractal branch remain documented but are paused under E3 Analytical Lenses.");
     expect(startHubReset).toContain("/         -> Start Hub");
     expect(startHubReset).toContain("/world    -> live World workbench");
     expect(startHubReset).toContain("R1 does not change simulation scheduling, engine state, template rules");
-    expect(startHubReset).toContain("R1 complete. R1B complete. `R2: World Layout and Interaction Reclaim` is next.");
-    expect(productExperienceResetRoadmap).toContain("Status: active product sequence; R1 and R1B complete, R2 next");
+    expect(startHubReset).toContain(
+      "R1 complete. R1B complete. R2 complete. `R2B: World Layout and Interaction Audit` is next"
+    );
+    expect(worldLayoutReclaim).toContain("R2 complete.");
+    expect(worldLayoutReclaim).toContain("`R2B: World Layout and Interaction Audit` is next and has not started.");
+    expect(productExperienceResetRoadmap).toContain(
+      "Status: active product sequence; R1, R1B, and R2 complete, R2B next"
+    );
     expect(productExperienceResetRoadmap).toContain("Every implementation milestone is followed by an audit milestone.");
     expect(productExperienceResetRoadmap).toContain("F1 and the rest of the F branch are paused beneath E3 Analytical Lenses.");
     expect(productExperienceResetRoadmap).toContain(

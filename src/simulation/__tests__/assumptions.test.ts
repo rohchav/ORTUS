@@ -303,12 +303,14 @@ describe("assumptions, limits, and ethics metadata", () => {
     expect(leftStack).toContain("<ModelExplanationPanel");
     expect(panelSource).toContain("templateAssumptionProfile(descriptor.template)");
     expect(panelSource).toContain('title="Question"');
-    expect(panelSource).toContain('title="How the model works"');
+    expect(panelSource).toContain('title="How it works"');
     expect(panelSource).toContain('title="What to watch"');
     expect(panelSource).toContain('title="Try changing"');
     expect(panelSource).toContain("Key assumptions");
     expect(panelSource).toContain('title="Main limitation"');
-    expect(panelSource).toContain('expandLabel="Full model notes"');
+    expect(panelSource).toContain("Full model notes");
+    expect(panelSource).toContain("<ModalSurface");
+    expect(panelSource).toContain('eyebrow="Full model reference"');
     expect(panelSource).toContain("Not represented");
     expect(panelSource).toContain("Appropriate use");
     expect(panelSource).toContain("Inappropriate use");

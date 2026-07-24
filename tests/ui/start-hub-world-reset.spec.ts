@@ -51,7 +51,7 @@ test("featured Flocking handoff opens the real World with a local starter nudge 
   await page.goto("/", { waitUntil: "domcontentloaded" });
   await page.getByRole("link", { name: "Open the Flocking starter" }).click();
   await expect(page).toHaveURL(/\/world\?template=flocking-boids&starter=flocking$/);
-  await expect(page.getByLabel("Model template")).toHaveValue("flocking-boids");
+  await expect(page.getByLabel("World template")).toHaveValue("flocking-boids");
   await expect(page.locator("[data-starter-nudge]")).toContainText("Lower Alignment weight");
   await expect(page.getByLabel("Key model parameters").getByText("Alignment weight", { exact: true })).toBeVisible();
 
@@ -61,8 +61,8 @@ test("featured Flocking handoff opens the real World with a local starter nudge 
     const stage = document.querySelector<HTMLElement>(".world-stage")!.getBoundingClientRect();
     return { layout: layout.width, workspace: workspace.width, stage: stage.width };
   });
-  expect(widths.workspace / widths.layout).toBeGreaterThan(0.7);
-  expect(widths.stage / widths.layout).toBeGreaterThan(0.7);
+  expect(widths.workspace / widths.layout).toBeGreaterThan(0.6);
+  expect(widths.stage / widths.layout).toBeGreaterThan(0.6);
 
   const storageBefore = await readStorage(page);
   await page.getByRole("button", { name: "Dismiss Flocking starter steps" }).click();
@@ -88,7 +88,7 @@ test("repeated featured-starter launch rebuilds the prepared run without writing
   await expect(page).toHaveURL(/\/$/);
   await page.getByRole("link", { name: "Open the Flocking starter" }).click();
 
-  await expect(page.getByLabel("Model template")).toHaveValue("flocking-boids");
+  await expect(page.getByLabel("World template")).toHaveValue("flocking-boids");
   await expect(alignment).toHaveValue("0.55");
   await expect(tick).toHaveText("0");
   await expect(page.getByRole("button", { name: "Run simulation" })).toBeVisible();
@@ -128,14 +128,13 @@ test("World task changes reset panel scroll, focus selected More content, and sy
   await taskNav.getByRole("button", { name: "Observe", exact: true }).click();
   await expect(page).toHaveURL(/task=observe/);
   await expect.poll(() => panelScroll.evaluate((element) => element.scrollTop)).toBe(0);
-  await expect(taskNav.getByRole("button", { name: "Observe", exact: true })).toBeFocused();
+  await expect(page.getByRole("heading", { level: 2, name: "Observe" })).toBeFocused();
   await expect(page.locator(".timeline-strip__readout strong").first()).toHaveText("1");
 
   expect(await scrollToEnd(panelScroll)).toBeGreaterThan(0);
-  await taskNav.getByRole("button", { name: "More", exact: true }).click();
-  await page.getByRole("menuitem", { name: /Understand model/i }).click();
+  await taskNav.getByRole("button", { name: "Explain", exact: true }).click();
   await expect(page).toHaveURL(/task=understand/);
-  await expect(page.getByRole("heading", { level: 2, name: "Understand" })).toBeFocused();
+  await expect(page.getByRole("heading", { level: 2, name: "Explain" })).toBeFocused();
   await expect.poll(() => panelScroll.evaluate((element) => element.scrollTop)).toBe(0);
   await expect(page.locator(".timeline-strip__readout strong").first()).toHaveText("1");
 
@@ -146,7 +145,8 @@ test("World task changes reset panel scroll, focus selected More content, and sy
     "page"
   );
   await expect(page.getByRole("button", { name: "Research tools" })).toHaveAttribute("data-current", "false");
-  await expect(page.getByLabel("Current simulation context")).toContainText("Setup");
+  await expect(page.getByLabel("Current simulation context")).toContainText("Flocking");
+  await expect(page.getByLabel("Current simulation context")).not.toContainText("Setup");
   await expect(page.locator(".timeline-strip__readout strong").first()).toHaveText("1");
 });
 
@@ -171,14 +171,14 @@ test("rapid keyboard navigation remains deterministic in both compact menus", as
     await moreTrigger.focus();
     await page.keyboard.press("ArrowDown");
     await page.keyboard.press("ArrowDown");
-    await expect(page.getByRole("menuitem", { name: /Experiments/i })).toBeFocused();
+    await expect(page.getByRole("menuitem", { name: /Diagnostics/i })).toBeFocused();
     await page.keyboard.press("Escape");
     await expect(moreTrigger).toBeFocused();
     await expect(page.getByRole("menu", { name: "More World tasks" })).toHaveCount(0);
   }
 });
 
-test("every production Understand summary stays concise and Neural prioritizes a model limitation", async ({ page }) => {
+test("every production Explain summary stays concise and Neural prioritizes a model limitation", async ({ page }) => {
   test.setTimeout(90_000);
   const templateIds = [
     "epidemic-spread",
@@ -194,8 +194,8 @@ test("every production Understand summary stays concise and Neural prioritizes a
     await page.goto(`/world?template=${templateId}&task=understand`, { waitUntil: "domcontentloaded" });
     const explanation = page.locator("[data-model-explanation]");
     await expect(explanation).toBeVisible();
-    await expect(explanation.locator(":scope > section")).toHaveCount(6);
-    const defaultText = await explanation.locator(":scope > section").allInnerTexts();
+    await expect(explanation.locator(".model-explanation__summary > section")).toHaveCount(6);
+    const defaultText = await explanation.locator(".model-explanation__summary > section").allInnerTexts();
     const summary = defaultText.join("\n");
     expect(summary).not.toContain("See the complete model notes for this item.");
     expect(summary).not.toMatch(/Builder graphs|model-schema|visual programming|NetLogo|Mesa|MASON|LLM/i);
@@ -204,7 +204,9 @@ test("every production Understand summary stays concise and Neural prioritizes a
       expect(summary.match(/biological brain simulation/gi) ?? []).toHaveLength(1);
       expect(summary).toMatch(/does not include learning or plasticity/i);
       await explanation.getByRole("button", { name: "Full model notes" }).click();
-      await expect(explanation.getByText(/does not make Builder graphs executable/i)).toBeVisible();
+      await expect(page.getByRole("dialog", { name: "Neural Excitation Network" })).toBeVisible();
+      await expect(page.getByText(/does not make Builder graphs executable/i)).toHaveCount(0);
+      await page.getByRole("button", { name: "Close model reference" }).click();
     }
   }
 });
@@ -232,36 +234,48 @@ test("World Setup exposes four key controls while preserving every exact paramet
   await page.setViewportSize({ width: 1280, height: 720 });
   await page.goto("/world?template=flocking-boids", { waitUntil: "domcontentloaded" });
   await expect(page.locator(".ortus-shell:not(.ortus-shell--hydrating)")).toBeVisible();
-  await expect(page.getByLabel("Model template")).toHaveValue("flocking-boids");
+  await expect(page.getByLabel("World template")).toHaveValue("flocking-boids");
   await expect(page.locator("#ortus-setup-seed")).toBeVisible();
   await expect(page.locator(".run-settings-quick .parameter-control")).toHaveCount(4);
-  await expect(page.locator("#all-model-parameters")).toBeHidden();
+  await expect(page.getByRole("heading", { name: "All parameters" })).toBeHidden();
   await page.getByRole("button", { name: /All parameters/i }).click();
-  await expect(page.locator("#all-model-parameters")).toBeVisible();
-  const exactControlCount = await page.locator(".run-settings-panel .parameter-control").count();
+  await expect(page.getByRole("heading", { name: "All parameters" })).toBeFocused();
+  const exactControlCount = await page.locator(".world-task-subview:not([hidden]) .parameter-control").count();
   expect(exactControlCount).toBeGreaterThan(4);
+  await expect(page.getByRole("button", { name: "Back to Setup" })).toBeVisible();
+  await page.getByRole("button", { name: "Back to Setup" }).click();
   await expect(page.getByText("Scenarios define initial conditions", { exact: false })).toBeHidden();
-  await page.getByRole("button", { name: "Scenarios and starting recipes" }).click();
+  await page.getByRole("button", { name: "Choose recipe" }).click();
+  await expect(page.getByRole("heading", { name: "Starting recipes and model variants" })).toBeFocused();
   await expect(page.getByText("Scenarios define initial conditions", { exact: false })).toBeVisible();
 });
 
-test("Understand model is concise by default, de-duplicates source notes, and keeps unrelated guardrails out", async ({ page }) => {
+test("Explain is concise by default, de-duplicates source notes, and keeps unrelated guardrails out", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 720 });
   await page.goto("/world?template=epidemic-spread", { waitUntil: "domcontentloaded" });
-  await page.getByRole("navigation", { name: "World tasks" }).getByRole("button", { name: "More" }).click();
-  await page.getByRole("menuitem", { name: /Understand model/i }).click();
+  await page.getByRole("navigation", { name: "World tasks" }).getByRole("button", { name: "Explain" }).click();
 
-  for (const heading of ["Question", "How the model works", "What to watch", "Try changing", "Key assumptions", "Main limitation"]) {
+  for (const heading of ["Question", "How it works", "What to watch", "Try changing", "Key assumptions", "Main limitation"]) {
     await expect(page.getByRole("heading", { level: 3, name: heading })).toBeVisible();
   }
-  await expect(page.locator("[data-capability-guidance-destination='world']")).toHaveCount(0);
-  await expect(page.getByText("Recovered agents do not become infected again in V1.")).toHaveCount(1);
+  await expect(
+    page.locator("[data-model-explanation] [data-capability-guidance-destination='world']")
+  ).toHaveCount(0);
+  await expect(page.locator("[data-capability-guidance-destination='world']")).toBeHidden();
+  await expect(
+    page.locator("[data-model-explanation] .model-explanation__summary").getByText(
+      "Recovered agents do not become infected again in V1."
+    )
+  ).toHaveCount(1);
   await expect(page.getByRole("heading", { name: "Technical provenance" })).toBeHidden();
-  await page.getByRole("button", { name: "Full model notes" }).click();
-  await expect(page.getByRole("heading", { name: "Technical provenance" })).toBeVisible();
-  await expect(page.getByText("Recovered agents do not become infected again in V1.")).toHaveCount(1);
-  const explanationText = await page.locator("[data-model-explanation]").innerText();
-  expect(explanationText).not.toMatch(/LLM|visual builder|model schema|Mesa|NetLogo|MASON/i);
+  const notesTrigger = page.getByRole("button", { name: "Full model notes" });
+  await notesTrigger.click();
+  const reference = page.getByRole("dialog", { name: "Epidemic Spread" });
+  await expect(reference.getByRole("heading", { name: "Technical provenance" })).toBeVisible();
+  await expect(reference.getByText("Recovered agents do not become infected again in V1.")).toHaveCount(1);
+  expect(await reference.innerText()).not.toMatch(/LLM|visual builder|model schema|Mesa|NetLogo|MASON/i);
+  await reference.getByRole("button", { name: "Close model reference" }).click();
+  await expect(notesTrigger).toBeFocused();
 });
 
 test("World task query links open existing Experiment and Compare surfaces without new runtime behavior", async ({ page }) => {

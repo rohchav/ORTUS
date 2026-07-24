@@ -43,10 +43,10 @@ import {
 } from "./neuralRuntimeLab";
 import { CornerFramePanel } from "./ui/CornerFramePanel";
 
-export function NeuralRuntimeLabPanel() {
+export function NeuralRuntimeLabPanel({ active = true }: { active?: boolean } = {}) {
   const selectedTemplateId = useSimulationStore((state) => state.selectedTemplateId);
-  const latestSnapshot = useSimulationStore((state) => state.latestSnapshot);
-  const isRunning = useSimulationStore((state) => state.isRunning);
+  const latestSnapshot = useSimulationStore((state) => active ? state.latestSnapshot : null);
+  const isRunning = useSimulationStore((state) => active && state.isRunning);
   const seed = useSimulationStore((state) => state.seed);
   const selectedEntityId = useSimulationStore((state) => state.selectedEntityId);
   const applyIntervention = useSimulationStore((state) => state.applyIntervention);
@@ -94,6 +94,9 @@ export function NeuralRuntimeLabPanel() {
   }, [rpsRounds]);
 
   useEffect(() => {
+    if (!active) {
+      return;
+    }
     if (!isNeural) {
       previousSnapshotRef.current = latestSnapshot;
       return;
@@ -103,9 +106,12 @@ export function NeuralRuntimeLabPanel() {
     if (derived.length > 0) {
       setEvents((current) => mergeTimelineEvents(current, derived));
     }
-  }, [isNeural, latestSnapshot]);
+  }, [active, isNeural, latestSnapshot]);
 
   useEffect(() => {
+    if (!active) {
+      return;
+    }
     if (!isNeural || previousRunningRef.current === isRunning) {
       previousRunningRef.current = isRunning;
       return;
@@ -118,10 +124,10 @@ export function NeuralRuntimeLabPanel() {
       label: isRunning ? "Run started" : "Run paused",
       detail: isRunning ? "Neural run is stepping from current state." : "Run paused; state and bounded history remain local."
     });
-  }, [isNeural, isRunning, latestSnapshot?.tick]);
+  }, [active, isNeural, isRunning, latestSnapshot?.tick]);
 
   useEffect(() => {
-    if (!latestSnapshot || !isNeural) {
+    if (!active || !latestSnapshot || !isNeural) {
       return;
     }
     const pending = pendingRpsChoiceRef.current;
@@ -143,7 +149,7 @@ export function NeuralRuntimeLabPanel() {
       appendAdaptationEvents(adaptationStateRef.current, nextAdaptation, round);
       return nextRounds;
     });
-  }, [adaptationConfig, isNeural, latestSnapshot]);
+  }, [active, adaptationConfig, isNeural, latestSnapshot]);
 
   if (!isNeural) {
     return null;

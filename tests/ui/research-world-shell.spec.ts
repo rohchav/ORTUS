@@ -194,6 +194,7 @@ async function expectRouteOrientation(page: Page, destination: (typeof destinati
     await expect(tasks.getByRole("button", { name: "Observe", exact: true })).toBeVisible();
     await expect(tasks.getByRole("button", { name: "Change", exact: true })).toBeVisible();
     await expect(tasks.getByRole("button", { name: "Compare", exact: true })).toBeVisible();
+    await expect(tasks.getByRole("button", { name: "Explain", exact: true })).toBeVisible();
     await expect(tasks.getByRole("button", { name: "More", exact: true })).toBeVisible();
   } else if (destination.path === "/atlas") {
     const intro = page.locator(".destination-intro--atlas");
@@ -225,7 +226,11 @@ async function expectCapabilityGuidance(page: Page, destination: (typeof destina
           : "atlas";
   const guidance = page.locator(`[data-capability-guidance-destination="${destinationId}"]`);
   await expect(guidance).toHaveCount(1);
-  if (destinationId === "workshop") {
+  if (destinationId === "world") {
+    await expect(guidance).toBeHidden();
+    await page.getByRole("button", { name: "Run details" }).click();
+    await expect(page.getByRole("dialog", { name: "Technical run details" })).toBeVisible();
+  } else if (destinationId === "workshop") {
     await expect(guidance).toBeHidden();
     await page.getByRole("button", { name: "Workshop capability reference" }).click();
   }
@@ -305,6 +310,10 @@ async function expectCapabilityGuidance(page: Page, destination: (typeof destina
   await capabilityControl.focus();
   await page.keyboard.press("Space");
   await expect(capabilityControl).toHaveAttribute("aria-expanded", "false");
+  if (destinationId === "world") {
+    await page.getByRole("button", { name: "Close run details" }).click();
+    await expect(page.getByRole("button", { name: "Run details" })).toBeFocused();
+  }
 }
 
 async function expectNoDocumentHorizontalOverflow(page: Page) {
@@ -412,11 +421,10 @@ async function expectWorldPreserved(page: Page) {
   await expect(page.getByRole("region", { name: "Simulation workspace" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Run simulation" })).toBeVisible();
   const taskNav = page.getByRole("navigation", { name: "World tasks" });
-  for (const mode of ["Setup", "Observe", "Change", "Compare", "More"]) {
+  for (const mode of ["Setup", "Observe", "Change", "Compare", "Explain", "More"]) {
     await expect(taskNav.getByRole("button", { name: mode, exact: true })).toHaveCount(1);
   }
   await taskNav.getByRole("button", { name: "More", exact: true }).click();
-  await expect(page.getByRole("menuitem", { name: /Understand model/i })).toBeVisible();
   await expect(page.getByRole("menuitem", { name: /Experiments/i })).toBeVisible();
   await expect(page.getByRole("menuitem", { name: /Diagnostics/i })).toBeVisible();
   await page.keyboard.press("Escape");
@@ -431,10 +439,12 @@ async function expectWorldPreserved(page: Page) {
 }
 
 async function expectWorldProvenanceLayer(page: Page) {
-  const observeTab = page.getByRole("navigation", { name: "World tasks" }).getByRole("button", { name: "Observe", exact: true });
-  await observeTab.click();
+  const detailsTrigger = page.getByRole("button", { name: "Run details" });
+  await detailsTrigger.click();
 
-  const panel = page.locator(".active-run-context");
+  const dialog = page.getByRole("dialog", { name: "Technical run details" });
+  const panel = dialog.locator(".active-run-context");
+  await expect(dialog).toBeVisible();
   await expect(panel).toBeVisible();
   await expect(panel).not.toHaveAttribute("tabindex", "0");
   await expect(panel).not.toHaveAttribute("role", /button|link|tab/);
@@ -456,23 +466,15 @@ async function expectWorldProvenanceLayer(page: Page) {
   await expect(evidenceStatus).toHaveAttribute("data-status-category", "evidence");
   await expect(evidenceStatus).toHaveAttribute("data-state", "unresolved");
 
-  await expect(page.getByRole("region", { name: "Simulation workspace" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Run simulation" })).toBeVisible();
-
-  await observeTab.focus();
-  await expect(observeTab).toBeFocused();
-  await expectFocusedElementVisible(page);
-  await page.keyboard.press("Tab");
-  await expect(page.getByRole("navigation", { name: "World tasks" }).getByRole("button", { name: "Change", exact: true })).toBeFocused();
-  await expectFocusedElementVisible(page);
-  await page.keyboard.press("Shift+Tab");
-  await expect(observeTab).toBeFocused();
-  await expectFocusedElementVisible(page);
+  await dialog.getByRole("button", { name: "Close run details" }).click();
+  await expect(dialog).toBeHidden();
+  await expect(detailsTrigger).toBeFocused();
 }
 
 async function expectWorldInterventionReadinessLayer(page: Page) {
   const interveneTab = page.getByRole("navigation", { name: "World tasks" }).getByRole("button", { name: "Change", exact: true });
   await interveneTab.click();
+  await page.getByRole("button", { name: "Intervention details" }).click();
 
   const interventionRegion = page.getByRole("region", { name: "Intervention Readiness" });
   const readinessSection = page.locator(".intervention-readiness");
@@ -528,7 +530,7 @@ async function expectWorldInterventionReadinessLayer(page: Page) {
   await expectFocusedElementVisible(page);
 }
 
-async function selectWorldTask(page: Page, task: "Understand model" | "Experiments" | "Diagnostics") {
+async function selectWorldTask(page: Page, task: "Experiments" | "Diagnostics") {
   const taskNav = page.getByRole("navigation", { name: "World tasks" });
   await taskNav.getByRole("button", { name: "More", exact: true }).click();
   await page.getByRole("menuitem", { name: new RegExp(task, "i") }).click();
@@ -950,7 +952,7 @@ async function expectSandboxVisualLanguageFoundation(page: Page, destination: (t
   if (destination.path === "/world") {
     expect(visualContract.worldStage?.borderRadius, "World remains the primary rounded model surface").not.toBe("0px");
     expect(visualContract.worldStage?.clipPath, "World surface should not use a tactical clipped viewport shape").toBe("none");
-    expect(visualContract.worldStageLabel?.content, "World surface label should identify the active model surface").toContain("ACTIVE MODEL");
+    expect(visualContract.worldStageLabel?.content, "World surface label should identify the live model surface").toContain("LIVE WORLD");
     expect(visualContract.timeline?.borderRadius, "persistent run controls should read as instruments").not.toBe("0px");
   }
 
@@ -1026,12 +1028,16 @@ for (const destination of destinations) {
     const storageBefore = await readStorageKeys(page);
     const disclosureLabels =
       destination.path === "/world"
-        ? ["Scenarios and starting recipes", "Capability reference"]
+        ? ["Capability reference"]
         : destination.path === "/lab"
           ? ["Capability reference", "Lab technical foundation"]
           : destination.path === "/atlas"
             ? ["Preview method and limits", "How to read Atlas", "Capability reference", "Show Atlas technical details"]
             : ["Guided and Advanced support", "Workshop capability reference"];
+
+    if (destination.path === "/world") {
+      await page.getByRole("button", { name: "Run details" }).click();
+    }
 
     for (const label of disclosureLabels) {
       const control = page.getByRole("button", { name: label, exact: true });
@@ -1050,6 +1056,9 @@ for (const destination of destinations) {
     await page.reload({ waitUntil: "domcontentloaded" });
     await page.waitForLoadState("networkidle", { timeout: 5_000 }).catch(() => undefined);
     await expect(page.locator(destination.readySelector)).toBeVisible();
+    if (destination.path === "/world") {
+      await page.getByRole("button", { name: "Run details" }).click();
+    }
     for (const label of disclosureLabels) {
       await expect(page.getByRole("button", { name: label, exact: true })).toHaveAttribute("aria-expanded", "false");
     }
@@ -1539,7 +1548,7 @@ test("Atlas preview execution leaves World, Experiment Runner, and browser stora
   const diagnostics = observePageDiagnostics(page);
   await page.setViewportSize({ width: 1280, height: 720 });
   await openDestination(page, destinations[0]);
-  const templateBefore = await page.getByLabel("Model template").inputValue();
+  const templateBefore = await page.getByLabel("World template").inputValue();
   const seedBefore = await page.locator("#ortus-setup-seed").inputValue();
   const contextBefore = await page.getByLabel("Current simulation context").textContent();
   const statusBefore = await page.getByLabel("Current run status").textContent();
@@ -1561,7 +1570,7 @@ test("Atlas preview execution leaves World, Experiment Runner, and browser stora
 
   await page.getByRole("navigation", { name: "Primary navigation" }).getByRole("link", { name: "World" }).click();
   await expect(page.getByRole("region", { name: "Simulation workspace" })).toBeVisible();
-  await expect(page.getByLabel("Model template")).toHaveValue(templateBefore);
+  await expect(page.getByLabel("World template")).toHaveValue(templateBefore);
   await expect(page.locator("#ortus-setup-seed")).toHaveValue(seedBefore);
   expect(await page.getByLabel("Current simulation context").textContent()).toBe(contextBefore);
   expect(await page.getByLabel("Current run status").textContent()).toBe(statusBefore);
@@ -1944,7 +1953,7 @@ test("Guided authoring and Advanced handoff leave the active World context and s
   await page.setViewportSize({ width: 1280, height: 720 });
   await openDestination(page, destinations[0]);
 
-  const templateBefore = await page.getByLabel("Model template").inputValue();
+  const templateBefore = await page.getByLabel("World template").inputValue();
   const seedBefore = await page.locator("#ortus-setup-seed").inputValue();
   const contextBefore = await page.getByLabel("Current simulation context").textContent();
   const runStatusBefore = await page.getByLabel("Current run status").textContent();
@@ -1980,7 +1989,7 @@ test("Guided authoring and Advanced handoff leave the active World context and s
   await expect(page).toHaveURL(/\/world$/);
   await expect(page.getByRole("region", { name: "Simulation workspace" })).toBeVisible();
 
-  await expect(page.getByLabel("Model template")).toHaveValue(templateBefore);
+  await expect(page.getByLabel("World template")).toHaveValue(templateBefore);
   await expect(page.locator("#ortus-setup-seed")).toHaveValue(seedBefore);
   expect(await page.getByLabel("Current simulation context").textContent()).toBe(contextBefore);
   expect(await page.getByLabel("Current run status").textContent()).toBe(runStatusBefore);

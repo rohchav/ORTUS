@@ -21,6 +21,7 @@ import { CornerFramePanel } from "./ui/CornerFramePanel";
 interface ExperimentPanelProps {
   collapsed?: boolean;
   onToggle?: () => void;
+  embedded?: boolean;
 }
 
 type SweepInputMode = "range" | "list";
@@ -33,7 +34,7 @@ const presets: Record<string, { parameterKey: string; metricKey: string; min: nu
   "flocking-boids": { parameterKey: "alignmentWeight", metricKey: "alignmentScore", min: 0.1, max: 1.3, steps: 5 }
 };
 
-export function ExperimentPanel({ collapsed = false, onToggle }: ExperimentPanelProps) {
+export function ExperimentPanel({ collapsed = false, onToggle, embedded = false }: ExperimentPanelProps) {
   const selectedTemplateId = useSimulationStore((state) => state.selectedTemplateId);
   const parameterValues = useSimulationStore((state) => state.parameterValues);
   const seed = useSimulationStore((state) => state.seed);
@@ -182,9 +183,8 @@ export function ExperimentPanel({ collapsed = false, onToggle }: ExperimentPanel
     downloadText(`ortus-experiment-${selectedTemplateId}.csv`, exportExperimentCsv(resultSet), "text/csv");
   }
 
-  return (
-    <CornerFramePanel title="Experiment Runner" eyebrow="Sweeps" variant="compact" collapsed={collapsed} onToggle={onToggle}>
-      <div className="experiment-panel">
+  const content = (
+      <div className="experiment-panel world-task-view">
         <p className="experiment-panel__note">
           Run fresh engine instances across parameter values and seeds. Results record final metrics only, not per-run snapshots.
         </p>
@@ -299,6 +299,10 @@ export function ExperimentPanel({ collapsed = false, onToggle }: ExperimentPanel
         <ExperimentChart aggregates={aggregates} metricKey={selectedAggregateMetric} templateId={selectedTemplateId} />
         <ExperimentResultsTable aggregates={aggregates} metricKey={selectedAggregateMetric} templateId={selectedTemplateId} />
       </div>
+  );
+  return embedded ? content : (
+    <CornerFramePanel title="Experiment Runner" eyebrow="Sweeps" variant="compact" collapsed={collapsed} onToggle={onToggle}>
+      {content}
     </CornerFramePanel>
   );
 }

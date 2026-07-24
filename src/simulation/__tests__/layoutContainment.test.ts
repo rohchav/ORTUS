@@ -7,10 +7,11 @@ const appShellSource = readFileSync(new URL("../../components/AppShell.tsx", imp
 const worldStageSource = readFileSync(new URL("../../components/WorldStage.tsx", import.meta.url), "utf8");
 const leftStackSource = readFileSync(new URL("../../components/LeftInstrumentStack.tsx", import.meta.url), "utf8");
 
-function cssBlock(selector: string): string {
+function cssBlocks(selector: string): string {
   const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/\s+/g, "\\s*");
-  const match = css.match(new RegExp(`${escaped}\\s*\\{(?<body>[^}]*)\\}`, "m"));
-  return match?.groups?.body ?? "";
+  return [...css.matchAll(new RegExp(`${escaped}\\s*\\{(?<body>[^}]*)\\}`, "gm"))]
+    .map((match) => match.groups?.body ?? "")
+    .join("\n");
 }
 
 function expectDeclarations(block: string, declarations: string[]): void {
@@ -21,27 +22,32 @@ function expectDeclarations(block: string, declarations: string[]): void {
 
 describe("viewport layout containment", () => {
   it("locks the research shell to the viewport and keeps the world shell contained", () => {
-    expectDeclarations(cssBlock("html,\nbody"), ["height: 100%;", "overflow: hidden;"]);
-    expectDeclarations(cssBlock(".research-shell"), [
+    expectDeclarations(cssBlocks("html,\nbody"), ["height: 100%;", "overflow: hidden;"]);
+    expectDeclarations(cssBlocks(".research-shell"), [
       "height: 100dvh;",
       "overflow: hidden;",
       "display: grid;",
       "grid-template-rows: auto minmax(0, 1fr);"
     ]);
-    expectDeclarations(cssBlock(".ortus-shell"), [
+    expectDeclarations(cssBlocks(".ortus-shell"), [
       "height: 100%;",
       "min-height: 0;",
       "overflow: hidden;",
       "display: grid;",
-      "grid-template-rows: auto minmax(0, 1fr) auto;"
+      "grid-template-rows: auto minmax(0, 1fr);"
     ]);
   });
 
   it("keeps workspace context scrolling inside one intentional panel body", () => {
-    expectDeclarations(cssBlock(".ortus-layout"), ["min-height: 0;", "overflow: hidden;", "display: grid;"]);
-    expectDeclarations(cssBlock(".left-instruments"), ["min-height: 0;", "height: 100%;", "overflow: hidden;", "display: grid;"]);
-    expectDeclarations(cssBlock(".workspace-context-panel"), ["min-height: 0;", "overflow: hidden;", "display: grid;"]);
-    expectDeclarations(cssBlock(".workspace-context-panel__scroll"), [
+    expectDeclarations(cssBlocks(".ortus-layout"), [
+      "min-height: 0;",
+      "overflow: hidden;",
+      "display: grid;",
+      'grid-template-areas: "tasks stage tools";'
+    ]);
+    expectDeclarations(cssBlocks(".left-instruments"), ["min-height: 0;", "height: 100%;", "overflow: hidden;", "display: grid;"]);
+    expectDeclarations(cssBlocks(".workspace-context-panel"), ["min-height: 0;", "overflow: hidden;", "display: grid;"]);
+    expectDeclarations(cssBlocks(".workspace-context-panel__scroll"), [
       "min-height: 0;",
       "overflow-x: hidden;",
       "overflow-y: auto;",
@@ -51,27 +57,29 @@ describe("viewport layout containment", () => {
   });
 
   it("keeps persistent run controls outside the workspace scroll region", () => {
-    expect(appShellSource).toContain("<TopStatusBar activeWorkspaceMode={activeWorkspaceMode} />");
-    expect(appShellSource).toContain("<LeftInstrumentStack activeMode={activeWorkspaceMode} onModeChange={changeWorkspaceMode} />");
+    expect(appShellSource).toContain("<TopStatusBar");
+    expect(appShellSource).toContain("onOpenRunDetails={() => setRunDetailsOpen(true)}");
+    expect(appShellSource).toContain("activeMode={activeWorkspaceMode}");
+    expect(appShellSource).toContain("onModeChange={changeWorkspaceMode}");
     expect(appShellSource).toContain("<WorldStage />");
     expect(appShellSource).toContain("<RightContextDrawer />");
     expect(appShellSource).toContain("<TimelineControlStrip />");
     expect(leftStackSource).not.toContain("<TimelineControlStrip");
 
-    expectDeclarations(cssBlock(".workspace-center"), ["min-height: 0;", "overflow: hidden;", "display: grid;"]);
-    expectDeclarations(cssBlock(".world-workspace"), ["min-height: 0;", "overflow: hidden;", "display: grid;"]);
-    expectDeclarations(cssBlock(".right-context-drawer"), ["position: absolute;", "overflow-y: auto;", "pointer-events: none;"]);
-    expectDeclarations(cssBlock(".timeline-strip"), ["position: relative;", "display: grid;", "margin: 0 14px 14px;"]);
-    expect(cssBlock(".timeline-strip")).not.toContain("position: sticky;");
+    expectDeclarations(cssBlocks(".workspace-center"), ["min-height: 0;", "overflow: hidden;", "display: grid;", "grid-area: stage;"]);
+    expectDeclarations(cssBlocks(".world-workspace"), ["min-height: 0;", "overflow: hidden;", "display: grid;"]);
+    expectDeclarations(cssBlocks(".right-context-drawer"), ["position: absolute;", "overflow-y: auto;", "pointer-events: none;"]);
+    expectDeclarations(cssBlocks(".timeline-strip"), ["position: relative;", "display: grid;", "margin: 0;"]);
+    expect(cssBlocks(".timeline-strip")).not.toContain("position: sticky;");
   });
 
   it("keeps the world stage and simulation canvas sized by their container", () => {
-    const worldStage = cssBlock(".world-stage");
+    const worldStage = cssBlocks(".world-stage");
     expectDeclarations(worldStage, ["min-height: 0;", "height: 100%;", "overflow: hidden;"]);
     expect(worldStage).not.toContain("calc(100vh");
 
-    expectDeclarations(cssBlock(".world-stage__frame"), ["min-height: 0;", "overflow: hidden;"]);
-    expectDeclarations(cssBlock(".canvas-shell,\n.simulation-canvas"), ["width: 100%;", "height: 100%;"]);
+    expectDeclarations(cssBlocks(".world-stage__frame"), ["min-height: 0;", "overflow: hidden;"]);
+    expectDeclarations(cssBlocks(".canvas-shell,\n.simulation-canvas"), ["width: 100%;", "height: 100%;"]);
   });
 
   it("keeps floating overlays absolute inside the world stage", () => {
@@ -79,7 +87,7 @@ describe("viewport layout containment", () => {
     expect(worldStageSource).not.toContain("<Legend");
     expect(worldStageSource).not.toContain("<DebugPanel");
     expect(worldStageSource).not.toContain("<AgentInspector");
-    expectDeclarations(cssBlock(".floating-overlay-layer"), ["position: absolute;", "inset: 0;", "pointer-events: none;"]);
+    expectDeclarations(cssBlocks(".floating-overlay-layer"), ["position: absolute;", "inset: 0;", "pointer-events: none;"]);
   });
 });
 

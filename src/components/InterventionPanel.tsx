@@ -12,15 +12,16 @@ import {
   isInterventionTargetReady,
   type ActiveInterventionReadiness
 } from "./activeInterventionReadiness";
-import { CornerFramePanel } from "./ui/CornerFramePanel";
+import { Disclosure } from "./ui/Disclosure";
 import { StatusPill } from "./ui/StatusPill";
 
 interface InterventionPanelProps {
   collapsed?: boolean;
   onToggle?: () => void;
+  onOpenSetup?: () => void;
 }
 
-export function InterventionPanel({ collapsed = false, onToggle }: InterventionPanelProps) {
+export function InterventionPanel({ onOpenSetup }: InterventionPanelProps) {
   const selectedTemplateId = useSimulationStore((state) => state.selectedTemplateId);
   const engine = useSimulationStore((state) => state.engine);
   const selectedEntityId = useSimulationStore((state) => state.selectedEntityId);
@@ -64,14 +65,26 @@ export function InterventionPanel({ collapsed = false, onToggle }: InterventionP
   const targetStatus = readiness.selectedTarget?.targetStatusLabel ?? describeInterventionTarget(selectedDefinition?.targetType, selectedEntityId, targetPoint, targetCell);
   const targetReady = readiness.selectedTarget?.targetReady ?? isInterventionTargetReady(selectedDefinition?.targetType, selectedEntityId, targetPoint, targetCell);
   const parameterError = selectedDefinition ? interventionParameterError(selectedDefinition.parameterDefinitions, parameters) : null;
+  const latestEntry = history.at(-1);
 
   return (
-    <CornerFramePanel title="Interventions" eyebrow="Perturb" variant="compact" collapsed={collapsed} onToggle={onToggle}>
-      <div className="intervention-panel">
-        <InterventionReadinessView context={readiness} />
-        <p className="intervention-panel__note">
-          Interventions apply immediately through engine-checked commands. They do not advance time; the next normal step continues from the perturbed state.
-        </p>
+    <div className="intervention-panel world-task-view">
+      <div className="world-change-kind" data-change-kind="live">
+        <strong>Live change</strong>
+        <span>Applies to the current run through engine-checked commands without advancing time.</span>
+      </div>
+      <section className="world-tool-section" aria-labelledby="available-live-changes-title">
+        <div className="world-tool-section__head">
+          <h3 id="available-live-changes-title">Available live changes</h3>
+          <StatusPill
+            label={readiness.readiness.availabilityStatus.label}
+            tone={readiness.readiness.availabilityStatus.tone}
+            category={readiness.readiness.availabilityStatus.category}
+            state={readiness.readiness.availabilityStatus.state}
+            description={readiness.readiness.availabilityStatus.description}
+            size="compact"
+          />
+        </div>
         {definitions.length > 0 && selectedDefinition ? (
           <>
             <label className="intervention-field">
@@ -110,13 +123,36 @@ export function InterventionPanel({ collapsed = false, onToggle }: InterventionP
             </button>
             {!targetReady ? <p className="microcopy">Select the required target in the World Stage before applying.</p> : null}
             {parameterError ? <p className="microcopy intervention-error">{parameterError}</p> : null}
+            <p className="world-interpretation-note">
+              This action changes model state in this run. It does not establish real-world effectiveness or causal proof.
+            </p>
           </>
         ) : (
-          <p className="microcopy">No interventions are registered for this template.</p>
+          <div className="world-empty-state">
+            <p>This world has no current-run change for the present template.</p>
+            {onOpenSetup ? <button type="button" onClick={onOpenSetup}>Open Setup changes</button> : null}
+          </div>
         )}
-        <InterventionHistory history={history} onClear={clearInterventions} />
-      </div>
-    </CornerFramePanel>
+      </section>
+      {latestEntry ? (
+        <p className={`world-action-feedback ${latestEntry.status === "failed" ? "is-failed" : ""}`} role="status">
+          {latestEntry.status === "failed" ? "Change failed" : "Change applied"}: {latestEntry.label} at tick {latestEntry.tickApplied}.
+        </p>
+      ) : null}
+      {definitions.length > 0 && onOpenSetup ? (
+        <div className="world-setup-change-link">
+          <div>
+            <strong>Setup change</strong>
+            <span>Parameter and seed changes rebuild a fresh run at tick 0.</span>
+          </div>
+          <button type="button" onClick={onOpenSetup}>Open Setup</button>
+        </div>
+      ) : null}
+      <Disclosure expandLabel="Intervention details" collapseLabel="Hide intervention details" className="world-technical-disclosure">
+        <InterventionReadinessView context={readiness} />
+      </Disclosure>
+      <InterventionHistory history={history} onClear={clearInterventions} />
+    </div>
   );
 }
 

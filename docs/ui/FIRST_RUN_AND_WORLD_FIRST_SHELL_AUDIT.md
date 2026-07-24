@@ -2,7 +2,8 @@
 
 Date: 2026-07-19
 Prompt: R1B
-Decision: Conditionally ready for R2: World Layout and Interaction Reclaim
+Historical decision: Conditionally ready for R2: World Layout and Interaction Reclaim
+Current handoff: R2 is complete; R2B World Layout and Interaction Audit is next
 
 ## 1. Scope
 
@@ -321,6 +322,10 @@ No blocking first-run or shell defect remains in the covered states. The remaini
 
 R1B complete.
 
-R2: World Layout and Interaction Reclaim is next.
+R2 subsequently completed its dedicated World Layout and Interaction Reclaim scope. Its implementation record is `WORLD_LAYOUT_AND_INTERACTION_RECLAIM.md`.
+
+R2 complete.
+
+R2B: World Layout and Interaction Audit is next and has not started.
 
 F1 remains paused under E3 Analytical Lenses.

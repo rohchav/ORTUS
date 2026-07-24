@@ -1,7 +1,7 @@
 # ORTUS Product Experience Reset Roadmap
 
-Date: 2026-07-19
-Status: active product sequence; R1 and R1B complete, R2 next
+Date: 2026-07-24
+Status: active product sequence; R1, R1B, and R2 complete, R2B next
 
 ## Why This Sequence Exists
 
@@ -46,7 +46,9 @@ Every implementation milestone is followed by an audit milestone. Audit prompts 
 
 ## Current Position
 
-R1 and its required R1B audit are complete. R1B found and fixed bounded first-run, focus, route-state, explanation, Atlas-action, and responsive-brand defects without changing runtime or persistence semantics. R2 is the next prompt. R2, C1-C4, S1-S5, and E1-E3 have not started under this roadmap.
+R1 and its required R1B audit are complete. R2 is also complete: World now keeps a stable dominant stage and playback outside one bounded active-tool surface, with direct Setup, Observe, Change, Compare, and Explain tasks plus purpose-grouped More tools. R2 changes presentation and UI state coordination only; runtime and persistence semantics remain unchanged.
+
+`R2B: World Layout and Interaction Audit` is the next prompt and has not started. C1-C4, S1-S5, and E1-E3 have not started under this roadmap.
 
 The active route hierarchy after R1 is Start `/`, World `/world`, Workshop `/builder`, Atlas `/atlas`, and Lab `/lab`. That route state is an R1 implementation fact, not evidence that later starter, composition, Lab, Atlas, or analysis milestones exist.
 
@@ -77,6 +79,11 @@ Explicit user direction may revise this roadmap, but documentation-only mileston
 - A featured starter launch must create its documented fresh prepared run; it must not silently resume a prior in-memory trajectory.
 - The live system remains the primary World visual object.
 - World task labels, query state, current navigation, and visible task must agree without resetting the active run.
+- Keep World Stage and persistent playback mounted outside task rendering; task switching must not recreate or reset the active run.
+- Keep one bounded active-tool scroll region. Desktop collapse/restore must preserve local tool state, and mobile layouts must not clip deeper controls or create document overflow.
+- Compact Setup controls must use the authoritative parameter definitions and executed values; they must not create shadow defaults.
+- Current-run Change actions and fresh-run Setup rebuilds must remain visibly distinct.
+- Complete model references must use a dedicated focus-managed surface rather than shrinking the live stage.
 - Default model explanation must prioritize model-specific assumptions and limitations; cross-tool implementation boundaries belong in full notes.
 - Guardrails belong near the inference or action they constrain, not as a permanent wall.
 - Expert access must remain direct; beginner guidance must not become a forced gate.

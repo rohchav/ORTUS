@@ -1,38 +1,38 @@
 "use client";
 
-import { useEffect, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
+import { Fragment, useEffect, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
 import { DebugPanel } from "./DebugPanel";
-import { FileActions } from "./FileActions";
 import { ExperimentPanel } from "./ExperimentPanel";
 import { InterventionPanel } from "./InterventionPanel";
-import { Legend } from "./Legend";
-import { MacroPanel } from "./MacroPanel";
-import { MetricGraphPanel } from "./MetricGraphPanel";
-import { MicroPanel } from "./MicroPanel";
 import { ModelExplanationPanel } from "./ModelExplanationPanel";
-import { NeuralRuntimeLabPanel } from "./NeuralRuntimeLabPanel";
-import { RunProvenanceObservationPanel } from "./RunProvenanceObservationPanel";
 import { RunSettingsPanel } from "./RunSettingsPanel";
-import { RunComparisonPanel } from "./RunComparisonPanel";
-import { ScenarioBuilderPanel } from "./ScenarioBuilderPanel";
-import { CapabilityGuidancePanel } from "./researchWorld/CapabilityGuidancePanel";
-import { CornerFramePanel } from "./ui/CornerFramePanel";
-import { Disclosure } from "./ui/Disclosure";
+import { WorldComparePanel } from "./WorldComparePanel";
+import { WorldObservePanel } from "./WorldObservePanel";
 import { getWorkspacePanelDefinition } from "../lib/workspacePanels";
 import { getSimulationWorkspaceMode, type SimulationWorkspaceModeId } from "../lib/workspaceModes";
 
 interface LeftInstrumentStackProps {
   activeMode: SimulationWorkspaceModeId;
   onModeChange: (mode: SimulationWorkspaceModeId) => void;
+  toolsHidden: boolean;
+  onHideTools: () => void;
+  onShowTools: () => void;
 }
 
-export function LeftInstrumentStack({ activeMode, onModeChange }: LeftInstrumentStackProps) {
+export function LeftInstrumentStack({
+  activeMode,
+  onModeChange,
+  toolsHidden,
+  onHideTools,
+  onShowTools
+}: LeftInstrumentStackProps) {
   const mode = getSimulationWorkspaceMode(activeMode);
   const [moreOpen, setMoreOpen] = useState(false);
   const [moreFocusRequest, setMoreFocusRequest] = useState(0);
   const moreRef = useRef<HTMLDivElement>(null);
   const moreTriggerRef = useRef<HTMLButtonElement>(null);
   const moreItemRefs = useRef<Array<HTMLButtonElement | null>>([]);
+  const directItemRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const pendingMoreFocusIndexRef = useRef<number | null>(null);
   const panelHeadingRef = useRef<HTMLHeadingElement>(null);
   const panelScrollRef = useRef<HTMLDivElement>(null);
@@ -57,12 +57,12 @@ export function LeftInstrumentStack({ activeMode, onModeChange }: LeftInstrument
     if (panelScrollRef.current) {
       panelScrollRef.current.scrollTop = 0;
     }
-    if (!focusPanelAfterChangeRef.current) {
+    if (!focusPanelAfterChangeRef.current || toolsHidden) {
       return;
     }
     focusPanelAfterChangeRef.current = false;
     window.requestAnimationFrame(() => panelHeadingRef.current?.focus());
-  }, [activeMode]);
+  }, [activeMode, toolsHidden]);
 
   useEffect(() => {
     if (!moreOpen) {
@@ -85,17 +85,43 @@ export function LeftInstrumentStack({ activeMode, onModeChange }: LeftInstrument
     setMoreFocusRequest((request) => request + 1);
   }
 
-  function chooseMode(modeId: SimulationWorkspaceModeId, focusPanel = false) {
-    focusPanelAfterChangeRef.current = focusPanel;
+  function chooseMode(modeId: SimulationWorkspaceModeId) {
+    focusPanelAfterChangeRef.current = true;
     onModeChange(modeId);
     closeMoreMenu();
-    if (focusPanel && modeId === activeMode) {
+    if (modeId === activeMode && !toolsHidden) {
       if (panelScrollRef.current) {
         panelScrollRef.current.scrollTop = 0;
       }
       focusPanelAfterChangeRef.current = false;
       window.requestAnimationFrame(() => panelHeadingRef.current?.focus());
     }
+  }
+
+  function handleDirectKeyDown(event: KeyboardEvent<HTMLButtonElement>, index: number) {
+    const taskControlCount = directModes.length + 1;
+    const nextIndex =
+      event.key === "ArrowDown" || event.key === "ArrowRight"
+        ? (index + 1) % taskControlCount
+        : event.key === "ArrowUp" || event.key === "ArrowLeft"
+          ? (index - 1 + taskControlCount) % taskControlCount
+          : event.key === "Home"
+            ? 0
+            : event.key === "End"
+              ? taskControlCount - 1
+              : null;
+    if (nextIndex !== null) {
+      event.preventDefault();
+      focusTaskControl(nextIndex);
+    }
+  }
+
+  function focusTaskControl(index: number) {
+    if (index === directModes.length) {
+      moreTriggerRef.current?.focus();
+      return;
+    }
+    directItemRefs.current[index]?.focus();
   }
 
   function handleMoreKeyDown(event: KeyboardEvent<HTMLButtonElement>, index: number) {
@@ -122,17 +148,22 @@ export function LeftInstrumentStack({ activeMode, onModeChange }: LeftInstrument
   }
 
   return (
-    <aside className="left-instruments" aria-label="Simulation workspace tools">
+    <>
       <nav className="workspace-navigator" aria-label="World tasks">
-        {directModes.map((candidate) => (
+        {directModes.map((candidate, index) => (
           <button
             key={candidate.id}
+            ref={(element) => {
+              directItemRefs.current[index] = element;
+            }}
             id={`workspace-mode-control-${candidate.id}`}
             type="button"
             aria-pressed={candidate.id === activeMode}
+            aria-current={candidate.id === activeMode ? "page" : undefined}
             aria-controls="workspace-task-panel"
             className={candidate.id === activeMode ? "is-active" : ""}
             onClick={() => chooseMode(candidate.id)}
+            onKeyDown={(event) => handleDirectKeyDown(event, index)}
             suppressHydrationWarning
           >
             {candidate.label}
@@ -166,6 +197,12 @@ export function LeftInstrumentStack({ activeMode, onModeChange }: LeftInstrument
                       ? (pendingIndex + 1) % moreModes.length
                       : (pendingIndex - 1 + moreModes.length) % moreModes.length;
                 focusMoreItem(index);
+              } else if (event.key === "ArrowLeft") {
+                event.preventDefault();
+                directItemRefs.current.at(-1)?.focus();
+              } else if (event.key === "ArrowRight" || event.key === "Home") {
+                event.preventDefault();
+                directItemRefs.current[0]?.focus();
               } else if (event.key === "Escape" && moreOpen) {
                 event.preventDefault();
                 closeMoreMenu();
@@ -177,42 +214,76 @@ export function LeftInstrumentStack({ activeMode, onModeChange }: LeftInstrument
           {moreOpen ? (
             <ul className="workspace-more-menu__popover" role="menu" aria-label="More World tasks">
               {moreModes.map((candidate, index) => (
-                <li key={candidate.id} role="none">
-                  <button
-                    ref={(element) => {
-                      moreItemRefs.current[index] = element;
-                    }}
-                    type="button"
-                    role="menuitem"
-                    aria-current={candidate.id === activeMode ? "page" : undefined}
-                    onClick={() => chooseMode(candidate.id, true)}
-                    onKeyDown={(event) => handleMoreKeyDown(event, index)}
-                  >
-                    <strong>{candidate.label}</strong>
-                    <span>{candidate.description}</span>
-                  </button>
-                </li>
+                <Fragment key={candidate.id}>
+                  {index === 0 || moreModes[index - 1]?.group !== candidate.group ? (
+                    <li className="workspace-more-menu__group" role="presentation">
+                      {candidate.group}
+                    </li>
+                  ) : null}
+                  <li role="none">
+                    <button
+                      ref={(element) => {
+                        moreItemRefs.current[index] = element;
+                      }}
+                      type="button"
+                      role="menuitem"
+                      aria-current={candidate.id === activeMode ? "page" : undefined}
+                      onClick={() => chooseMode(candidate.id)}
+                      onKeyDown={(event) => handleMoreKeyDown(event, index)}
+                    >
+                      <strong>{candidate.label}</strong>
+                      <span>{candidate.description}</span>
+                    </button>
+                  </li>
+                </Fragment>
               ))}
             </ul>
           ) : null}
         </div>
+        {toolsHidden ? (
+          <button
+            id="world-show-tools"
+            type="button"
+            className="workspace-tools-toggle"
+            onClick={() => {
+              onShowTools();
+              window.requestAnimationFrame(() => panelHeadingRef.current?.focus());
+            }}
+          >
+            Show tools
+          </button>
+        ) : null}
       </nav>
-      <section
-        id="workspace-task-panel"
-        className="workspace-context-panel"
-        aria-labelledby={moreCurrent ? undefined : `workspace-mode-control-${activeMode}`}
-        aria-label={moreCurrent ? `${mode.label} task` : undefined}
-      >
-        <header className="workspace-context-panel__head">
-          <span>{mode.eyebrow}</span>
-          <h2 ref={panelHeadingRef} tabIndex={-1}>{activeMode === "intervene" ? "Change" : mode.label}</h2>
-          <p>{mode.description}</p>
-        </header>
-        <div ref={panelScrollRef} className="workspace-context-panel__scroll" data-intentional-scroll-region="workspace-context">
-          {renderWorkspaceMode(activeMode)}
-        </div>
-      </section>
-    </aside>
+      <aside className="left-instruments" aria-label="Active World tool surface" hidden={toolsHidden}>
+        <section
+          id="workspace-task-panel"
+          className="workspace-context-panel"
+          aria-labelledby={moreCurrent ? undefined : `workspace-mode-control-${activeMode}`}
+          aria-label={moreCurrent ? `${mode.label} task` : undefined}
+        >
+          <header className="workspace-context-panel__head">
+            <div>
+              <span>{mode.eyebrow}</span>
+              <h2 ref={panelHeadingRef} tabIndex={-1}>{mode.label}</h2>
+              <p>{mode.description}</p>
+            </div>
+            <button
+              type="button"
+              className="workspace-focus-world"
+              onClick={() => {
+                onHideTools();
+                window.requestAnimationFrame(() => document.getElementById("world-show-tools")?.focus());
+              }}
+            >
+              Focus world
+            </button>
+          </header>
+          <div ref={panelScrollRef} className="workspace-context-panel__scroll" data-intentional-scroll-region="workspace-context">
+            {renderWorkspaceMode(activeMode, chooseMode, !toolsHidden)}
+          </div>
+        </section>
+      </aside>
+    </>
   );
 }
 
@@ -220,33 +291,31 @@ const directModes: ReadonlyArray<{ id: SimulationWorkspaceModeId; label: string 
   { id: "setup", label: "Setup" },
   { id: "observe", label: "Observe" },
   { id: "intervene", label: "Change" },
-  { id: "compare", label: "Compare" }
+  { id: "compare", label: "Compare" },
+  { id: "understand", label: "Explain" }
 ];
 
-const moreModes: ReadonlyArray<{ id: SimulationWorkspaceModeId; label: string; description: string }> = [
-  { id: "understand", label: "Understand model", description: "Question, mechanism, assumptions, and limits" },
-  { id: "experiment", label: "Experiments", description: "Bounded local parameter sweeps" },
-  { id: "debug", label: "Diagnostics", description: "Runtime counters and instrumentation" }
+const moreModes: ReadonlyArray<{
+  id: SimulationWorkspaceModeId;
+  label: string;
+  description: string;
+  group: "Investigate" | "Inspect";
+}> = [
+  { id: "experiment", label: "Experiments", description: "Bounded local parameter sweeps", group: "Investigate" },
+  { id: "debug", label: "Diagnostics", description: "Runtime counters and instrumentation", group: "Inspect" }
 ];
 
-function renderWorkspaceMode(mode: SimulationWorkspaceModeId): ReactNode {
+function renderWorkspaceMode(
+  mode: SimulationWorkspaceModeId,
+  onModeChange: (mode: SimulationWorkspaceModeId) => void,
+  toolsVisible: boolean
+): ReactNode {
   switch (mode) {
     case "setup":
       return (
-        <>
-          <RailPanelSlot panelId="runSettings">
-            <RunSettingsPanel />
-          </RailPanelSlot>
-          <RailPanelSlot panelId="neuralLab">
-            <NeuralRuntimeLabPanel />
-          </RailPanelSlot>
-          <Disclosure expandLabel="Scenarios and starting recipes" collapseLabel="Hide scenarios and starting recipes" className="world-secondary-disclosure">
-            <RailPanelSlot panelId="scenarios">
-              <ScenarioBuilderPanel />
-            </RailPanelSlot>
-          </Disclosure>
-          <CapabilityGuidancePanel destinationId="world" className="capability-guidance--world" maxItemsPerGroup={1} />
-        </>
+        <RailPanelSlot panelId="runSettings">
+          <RunSettingsPanel active={toolsVisible} />
+        </RailPanelSlot>
       );
     case "understand":
       return (
@@ -256,53 +325,32 @@ function renderWorkspaceMode(mode: SimulationWorkspaceModeId): ReactNode {
       );
     case "observe":
       return (
-        <>
-          <RailPanelSlot panelId="runProvenance">
-            <RunProvenanceObservationPanel />
-          </RailPanelSlot>
-          <RailPanelSlot panelId="macro">
-            <MacroPanel />
-          </RailPanelSlot>
-          <RailPanelSlot panelId="micro">
-            <MicroPanel />
-          </RailPanelSlot>
-          <RailPanelSlot panelId="metrics">
-            <MetricGraphPanel />
-          </RailPanelSlot>
-          <RailPanelSlot panelId="legend">
-            <Legend floating={false} collapsed={false} />
-          </RailPanelSlot>
-        </>
+        <RailPanelSlot panelId="metrics">
+          <WorldObservePanel active={toolsVisible} />
+        </RailPanelSlot>
       );
     case "intervene":
       return (
         <RailPanelSlot panelId="interventions">
-          <InterventionPanel />
+          <InterventionPanel onOpenSetup={() => onModeChange("setup")} />
         </RailPanelSlot>
       );
     case "experiment":
       return (
         <RailPanelSlot panelId="experiments">
-          <ExperimentPanel />
+          <ExperimentPanel embedded />
         </RailPanelSlot>
       );
     case "compare":
       return (
-        <>
-          <RailPanelSlot panelId="comparisons">
-            <RunComparisonPanel />
-          </RailPanelSlot>
-          <RailPanelSlot panelId="file">
-            <CornerFramePanel title="Scenario/Snapshot Exchange" eyebrow="JSON artifacts" variant="compact">
-              <FileActions />
-            </CornerFramePanel>
-          </RailPanelSlot>
-        </>
+        <RailPanelSlot panelId="comparisons">
+          <WorldComparePanel active={toolsVisible} />
+        </RailPanelSlot>
       );
     case "debug":
       return (
         <RailPanelSlot panelId="debug">
-          <DebugPanel collapsed={false} />
+          <DebugPanel embedded active={toolsVisible} />
         </RailPanelSlot>
       );
   }
@@ -310,7 +358,6 @@ function renderWorkspaceMode(mode: SimulationWorkspaceModeId): ReactNode {
 
 function RailPanelSlot({ panelId, children }: { panelId: string; children: ReactNode }) {
   const definition = getWorkspacePanelDefinition(panelId);
-
   return (
     <div
       className="rail-panel-slot"

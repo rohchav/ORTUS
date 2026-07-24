@@ -2,7 +2,7 @@
 
 Date: 2026-07-19
 Prompt: R1
-Status: implemented and audited by R1B; R2 is next
+Status: implemented and audited by R1B; R2 complete; R2B is next
 
 ## Purpose
 
@@ -128,7 +128,7 @@ The Start catalog and quick-control mapping are presentation metadata only. A ca
 ## Known Limits
 
 - R1/R1B do not prove that first-time users understand ORTUS; the R1B evidence is expert review and automated browser testing, not a participant study.
-- World remains a dense desktop workbench below the low-floor starter path.
+- R2 subsequently reclaimed the World frame, but deeper expert tools remain technically dense and require bounded internal scrolling.
 - Lab is still mostly a technical foundation, not an evidence workspace.
 - Guided Builder remains schema-oriented; recipe-first construction belongs to S2.
 - Atlas supports only the explicit bounded Flocking preview contract.
@@ -140,6 +140,8 @@ The evidence record is `FIRST_RUN_AND_WORLD_FIRST_SHELL_AUDIT.md`. R1B found no 
 
 R1/R1B add no new persistence. Existing bounded World comparison and UI storage remain unchanged. Simulation, template, scenario, metric, intervention, experiment, comparison, Atlas execution, and Builder structural semantics remain unchanged.
 
-## Next Gate
+## Subsequent R2 Handoff
 
-R1 complete. R1B complete. `R2: World Layout and Interaction Reclaim` is next. F1 and the fractal branch remain paused under the future E3 Analytical Lenses milestone.
+R2 preserves the R1/R1B fresh-starter and runtime boundaries while replacing the compressed World task column with a stable stage, persistent playback, direct task navigation, and one bounded active tool. Its implementation record is `WORLD_LAYOUT_AND_INTERACTION_RECLAIM.md`.
+
+R1 complete. R1B complete. R2 complete. `R2B: World Layout and Interaction Audit` is next and has not started. F1 and the fractal branch remain paused under the future E3 Analytical Lenses milestone.

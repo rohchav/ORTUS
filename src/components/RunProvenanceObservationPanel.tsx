@@ -11,7 +11,7 @@ import {
 import { CornerFramePanel } from "./ui/CornerFramePanel";
 import { StatusPill } from "./ui/StatusPill";
 
-export function RunProvenanceObservationPanel() {
+export function RunProvenanceObservationPanel({ embedded = false }: { embedded?: boolean } = {}) {
   const selectedTemplateId = useSimulationStore((state) => state.selectedTemplateId);
   const engine = useSimulationStore((state) => state.engine);
   const snapshot = useSimulationStore((state) => state.latestSnapshot);
@@ -45,7 +45,8 @@ export function RunProvenanceObservationPanel() {
     [descriptor.template, engine, interventionCount, isRunning, lastError, parameters, seed, selectedTemplateId, snapshot, speedMultiplier]
   );
 
-  return <RunProvenanceObservationView context={context} />;
+  const content = <RunProvenanceObservationView context={context} />;
+  return embedded ? content : <CornerFramePanel title="Active Run Context" eyebrow="Live provenance" variant="compact">{content}</CornerFramePanel>;
 }
 
 function RunProvenanceObservationView({ context }: { context: ActiveRunProvenanceObservation }) {
@@ -54,7 +55,6 @@ function RunProvenanceObservationView({ context }: { context: ActiveRunProvenanc
   const hiddenParameterCount = Math.max(0, provenance.parameterKeys.length - 6);
 
   return (
-    <CornerFramePanel title="Active Run Context" eyebrow="Live provenance" variant="compact">
       <section className="active-run-context" aria-labelledby="active-run-context-heading">
         <div className="active-run-context__heading">
           <h3 id="active-run-context-heading">Active Run Provenance</h3>
@@ -151,7 +151,6 @@ function RunProvenanceObservationView({ context }: { context: ActiveRunProvenanc
           </ul>
         </div>
       </section>
-    </CornerFramePanel>
   );
 }
 

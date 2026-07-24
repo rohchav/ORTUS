@@ -1,7 +1,7 @@
 # ORTUS Workspace Information Architecture
 
-Date: 2026-07-19
-Prompt: UI-REMEDIATION-1 through GW9B, reset by Prompt R1 and audited by Prompt R1B
+Date: 2026-07-24
+Prompt: UI-REMEDIATION-1 through GW9B, reset by R1/R1B and reclaimed by R2
 Status: implemented and rendered-audited; broader mobile-readiness, actual browser-zoom, screen-reader, assistive-technology, forced-colors, user-comprehension, and WCAG claims remain unverified
 
 ## Problem
@@ -278,4 +278,14 @@ R1B confirms the user-facing hierarchy and hardens state recovery. A featured st
 
 The rendered desktop hierarchy remains model surface, persistent controls, then one task rail. The rail owns one intentional scroll. At responsive stack widths, `main` owns the single route scroll and model/run controls precede task content. Atlas keeps configuration first but places Run in its visible Execution Status panel. Default Understand prioritizes model-specific meaning; cross-tool boundaries remain in full notes.
 
-R1B is complete and conditionally ready for R2. Recipe-first Builder, starter packs, persistent evidence, broader Atlas mapping, composition, multiscale runtime, adaptive-system generalization, and analytical lenses remain future milestones.
+R1B is complete and passed its R2 handoff. Recipe-first Builder, starter packs, persistent evidence, broader Atlas mapping, composition, multiscale runtime, adaptive-system generalization, and analytical lenses remain future milestones.
+
+## R2 World Layout And Interaction Reclaim
+
+R2 replaces the compressed desktop task column with three explicit owners: a `64px` or `56px` task rail, a flexible stage with attached playback, and one `290-350px` active tool. The stage and playback remain mounted outside task rendering. Changing tasks therefore preserves the active engine, stage geometry, and playback reachability.
+
+The direct sequence is Setup, Observe, Change, Compare, Explain, and More. Setup layers four authoritative quick parameters over complete configuration; Observe leads with a bounded model-output summary; Change separates current-run commands from fresh-run rebuilds; Compare preserves existing bounded summaries and exchange; Explain puts six selected-model sections before a focus-managed full reference; More groups Experiment Runner under Investigate and Diagnostics under Inspect.
+
+The active tool owns one intentional vertical scroll. Desktop collapse/restore hides that surface without unmounting local state. At `390x844`, World stacks stage, playback, horizontal tasks, and a bounded tool row inside the viewport; the tool, not the document, scrolls to deeper controls. This R2 behavior supersedes the earlier R1B responsive-scroll description.
+
+R2 changes UI presentation and state coordination only. It adds no runtime, template, scenario, metric, intervention, comparison, Experiment Runner, Atlas, Builder, persistence, route, or dependency behavior. R2 is complete. `R2B: World Layout and Interaction Audit` is next and has not started.

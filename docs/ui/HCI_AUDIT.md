@@ -1,8 +1,8 @@
 # ORTUS HCI / UX / Visual-Direction Audit
 
 Date: 2026-06-11  
-Updated: 2026-07-19 during Prompt R1B First-Run and World-First Shell Audit + Hardening
-Prompt: historical UI/GW/UX work through GW9B, reset by Prompt R1 and audited by Prompt R1B
+Updated: 2026-07-24 during Prompt R2 World Layout and Interaction Reclaim
+Prompt: historical UI/GW/UX work through GW9B, reset by R1/R1B, reclaimed by R2
 Status: source-based and rendered-smoke-informed audit, not a formal WCAG audit
 
 ## 1. Executive Verdict
@@ -23,6 +23,9 @@ The pre-R1 interface remained a pretty pseudo-sandbox risk: it exposed honest in
 
 Prompt R1B update:
 The rendered audit found that the broad R1 hierarchy works, but it also found four material workflow defects: repeat starter launch resumed old running state, parameter rebuild semantics were unexplained, task UI could diverge from query/current-navigation state, and rapid keyboard menu input was timing-sensitive. R1B fixes those defects plus bounded panel-focus, scroll, Neural-summary, Atlas-action, and mobile-brand issues. The result is conditionally ready for R2, not validated usability.
+
+Prompt R2 update:
+R2 removes the remaining World-console composition defect without pretending to add model capability. The stage and playback remain mounted and dominant; Setup, Observe, Change, Compare, and Explain become direct user tasks; More groups Experiments and Diagnostics; one bounded tool surface owns scrolling; complete references use a modal instead of consuming stage width; and mobile reserves a usable tool row. Rendered iteration found and fixed real accessible-name, focusability, route-state, mobile-clipping, and copy-geometry defects. This is stronger workbench ergonomics, not user validation, scientific validation, or runtime expansion.
 
 Prompt 34B update:
 The audit hardened the highest-confidence defects that could be fixed without a redesign: destructive Reset now uses press-and-confirm when meaningful run state exists, workspace tabs have arrow/Home/End keyboard behavior, Setup copy states that model/seed/parameter changes rebuild fresh tick-0 runs, Metric Trace carries local model-output provenance language, and Builder viewport buttons now say they select structural nodes/edges for read-only inspection. Browser screenshot, zoom, and assistive-technology verification still did not happen in this environment.
@@ -1583,3 +1586,11 @@ R1B exercised five rendered user tasks and a 16-point heuristic review. Task A r
 No P0 defect was found. Four P1 and five bounded P2 defects were fixed. World remains the largest desktop region; Atlas Run is in the first short desktop viewport; mobile retains the ORTUS lockup; focused and full rendered suites cover keyboard, Axe, reduced motion, storage, and diagnostics. This is automated and expert-review evidence, not a user study, actual zoom audit, screen-reader audit, assistive-technology audit, forced-colors audit, complete mobile workflow, or WCAG certification.
 
 Decision: conditionally ready for `R2: World Layout and Interaction Reclaim`. The older `UI-DESIGN-SYSTEM-1` recommendation and immediate-F1 sequencing remain historical recommendations, not current next work.
+
+## R2 World Layout And Interaction Update
+
+R2's desktop frame is `task rail + stable stage/playback + one active tool`. Measured stage sizes remain dominant from `994x730` at `1440x900` through `500x530` at `900x700`; playback remains visible at `1280x600`. The `390x844` smoke layout fits the document and gives the active tool a bounded internal scroll, so deeper Setup controls remain reachable without compressing a desktop rail into a narrow strip.
+
+The task hierarchy now reflects user intent instead of internal panel taxonomy. Setup distinguishes fresh-run rebuilds, Observe leads with selected-model outputs, Change distinguishes current-run commands from rebuilds, Compare preserves bounded summary storage, Explain leads with six model-specific sections, and More groups investigations separately from diagnostics. Task switching preserves runtime tick and parameters. Collapse/restore preserves local tool state.
+
+The blunt limit remains evidence. R2 was inspected across six viewports, seven production-template stages, key run/intervention/comparison/reference states, keyboard focus, reduced motion, diagnostics, and Axe automation. It is not participant research, a full touch workflow, actual browser-zoom verification, screen-reader or assistive-technology testing, forced-colors testing, WCAG conformance, or empirical validation. R2 is complete; `R2B: World Layout and Interaction Audit` is next and has not started.

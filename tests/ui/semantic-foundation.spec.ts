@@ -141,7 +141,17 @@ async function expectNoDocumentHorizontalOverflow(page: Page) {
 }
 
 async function expectSharedPrimitiveCoverage(page: Page, route: Route) {
-  await expect(page.locator(".corner-panel").first(), `${route.path} should render CornerFramePanel`).toBeVisible();
+  if (route.path === "/world") {
+    await expect(
+      page.locator(".workspace-context-panel:visible"),
+      "World should render its visible R2 active-tool surface"
+    ).toBeVisible();
+  } else {
+    await expect(
+      page.locator(".corner-panel:visible").first(),
+      `${route.path} should render a visible CornerFramePanel`
+    ).toBeVisible();
+  }
   await expect(page.locator("button").first(), `${route.path} should render button controls`).toBeVisible();
   await expect(page.locator("input, select, textarea").first(), `${route.path} should render form controls`).toBeAttached();
 
@@ -215,16 +225,21 @@ async function runKeyboardSmoke(page: Page, route: Route) {
     await setup.focus();
     await page.keyboard.press("Enter");
     await expect(setup).toHaveAttribute("aria-pressed", "true");
-    await page.keyboard.press("Tab");
+    await setup.focus();
+    await page.keyboard.press("ArrowDown");
     await expect(observe).toBeFocused();
     await page.keyboard.press("Space");
     await expect(observe).toHaveAttribute("aria-pressed", "true");
+    await expect(page.getByRole("heading", { name: "Observe", level: 2 })).toBeFocused();
     const more = tasks.getByRole("button", { name: "More", exact: true });
     await more.focus();
     await page.keyboard.press("ArrowDown");
-    await expect(page.getByRole("menuitem", { name: /Understand model/i })).toBeFocused();
+    await expect(page.getByRole("menuitem", { name: /Experiments/i })).toBeFocused();
+    await page.keyboard.press("Escape");
+    const explain = tasks.getByRole("button", { name: "Explain", exact: true });
+    await explain.focus();
     await page.keyboard.press("Enter");
-    await expect(page.getByRole("heading", { name: "Understand", level: 2 })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Explain", level: 2 })).toBeFocused();
   } else {
     await page.getByRole("tab", { name: /Workspace Inspector/i }).focus();
     await page.keyboard.press("ArrowRight");

@@ -324,9 +324,11 @@ describe("Neural Runtime Lab UX view model", () => {
     expect(component).toContain(
       "Apply setup rebuilds a fresh tick-0 Neural run and discards the current tick, metric trace, selection, intervention target, and intervention history."
     );
-    expect(leftStack).toContain("<NeuralRuntimeLabPanel />");
-    expect(runSettings).toContain("aria-expanded={allParametersOpen}");
-    expect(runSettings).toContain('aria-controls="all-model-parameters"');
+    expect(leftStack).not.toContain("<NeuralRuntimeLabPanel />");
+    expect(runSettings).toContain("<NeuralRuntimeLabPanel active={active && view === \"neural\"} />");
+    expect(runSettings).toContain('data-setup-view={view}');
+    expect(runSettings).toContain('hidden={view !== "neural"}');
+    expect(runSettings).toContain('hidden={view !== "parameters"}');
     expect(runSettings).toContain('id="neural-advanced-config-toggle"');
     expect(runSettings).toContain("ortus:open-neural-advanced-config");
     expect(parameterPanel).toContain("getTemplateDescriptor(selectedTemplateId).template.parameterDefinitions.filter");

@@ -7,22 +7,25 @@ import { useSimulationStore } from "../state/simulationStore";
 interface PanelProps {
   collapsed?: boolean;
   onToggle?: () => void;
+  embedded?: boolean;
+  metricKeys?: readonly string[];
+  active?: boolean;
 }
 
 const colors = ["#d8ff3e", "#ff4a2e", "#f3f1e8", "#6c72ff", "#c34dff"];
 
-export function MetricGraphPanel({ collapsed = false, onToggle }: PanelProps) {
+export function MetricGraphPanel({ collapsed = false, onToggle, embedded = false, metricKeys, active = true }: PanelProps) {
   const selectedTemplateId = useSimulationStore((state) => state.selectedTemplateId);
-  const snapshot = useSimulationStore((state) => state.latestSnapshot);
+  const snapshot = useSimulationStore((state) => active ? state.latestSnapshot : null);
   const history = snapshot?.metricsHistory ?? EMPTY_HISTORY;
   const sample = history.slice(-120);
-  const keys = Object.keys(sample.at(-1)?.values ?? {}).slice(0, 4);
+  const availableKeys = Object.keys(sample.at(-1)?.values ?? {});
+  const keys = (metricKeys ? metricKeys.filter((key) => availableKeys.includes(key)) : availableKeys).slice(0, 4);
 
-  return (
-    <CornerFramePanel title="Metric Trace" eyebrow="History" variant="compact" collapsed={collapsed} onToggle={onToggle}>
+  const content = (
+    <>
       <p className="microcopy">
-        Current aggregate values live in Macro Field. This chart is bounded model-output history over simulated ticks, not empirical measurement,
-        calibrated probability, or validation evidence.
+        This chart is bounded model-output history over simulated ticks, not empirical measurement, calibrated probability, or validation evidence.
       </p>
       {sample.length > 1 && keys.length > 0 ? (
         <svg className="metric-chart" viewBox="0 0 320 128" role="img" aria-label="Metric history line chart of model-output values over simulated ticks">
@@ -51,6 +54,11 @@ export function MetricGraphPanel({ collapsed = false, onToggle }: PanelProps) {
           </span>
         ))}
       </div>
+    </>
+  );
+  return embedded ? <div className="metric-trace-embedded">{content}</div> : (
+    <CornerFramePanel title="Metric Trace" eyebrow="History" variant="compact" collapsed={collapsed} onToggle={onToggle}>
+      {content}
     </CornerFramePanel>
   );
 }
