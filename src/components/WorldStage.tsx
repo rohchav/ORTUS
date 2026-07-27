@@ -11,7 +11,7 @@ export function WorldStage() {
   const dismissError = useSimulationStore((state) => state.dismissError);
 
   return (
-    <section className="world-stage" aria-label="Simulation world stage">
+    <section className="world-stage" aria-label="Simulation world stage" tabIndex={-1}>
       <TemplateBackgroundLayer stage />
       <div className="world-stage__frame">
         {snapshot ? <SimulationCanvas /> : <EmptyState title="No world loaded" message="Select a model or reset the run to create a snapshot." />}

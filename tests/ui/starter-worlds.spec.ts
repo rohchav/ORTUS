@@ -1,0 +1,386 @@
+import AxeBuilder from "@axe-core/playwright";
+import { expect, test, type Page } from "@playwright/test";
+
+test.describe.configure({ mode: "serial" });
+
+const worlds = [
+  {
+    id: "flocking",
+    slug: "collective-motion",
+    title: "Collective Motion",
+    templateId: "flocking-boids",
+    scenarioId: "random-headings",
+    scenarioLabel: "Random Headings",
+    scenarioName: "Flocking baseline",
+    firstChange: "Alignment weight"
+  },
+  {
+    id: "epidemic",
+    slug: "local-contact-outbreaks",
+    title: "Local Contact Outbreaks",
+    templateId: "epidemic-spread",
+    scenarioId: "random-outbreak",
+    scenarioLabel: "Random Outbreak",
+    scenarioName: "Epidemic Spread baseline",
+    firstChange: "Infection probability"
+  },
+  {
+    id: "opinion-dynamics",
+    slug: "opinion-formation",
+    title: "Opinion Formation",
+    templateId: "opinion-dynamics",
+    scenarioId: "random-opinions",
+    scenarioLabel: "Random Opinions",
+    scenarioName: "Opinion Dynamics baseline",
+    firstChange: "Influence strength"
+  },
+  {
+    id: "predator-prey",
+    slug: "predator-prey-cycles",
+    title: "Predator-Prey Cycles",
+    templateId: "predator-prey",
+    scenarioId: "random-ecology",
+    scenarioLabel: "Random Ecology",
+    scenarioName: "Predator-Prey baseline",
+    firstChange: "Predator energy loss"
+  },
+  {
+    id: "schelling",
+    slug: "neighborhood-patterns",
+    title: "Neighborhood Patterns",
+    templateId: "schelling-segregation",
+    scenarioId: "random-neighborhood",
+    scenarioLabel: "Random Neighborhood",
+    scenarioName: "Schelling Segregation baseline",
+    firstChange: "Similarity threshold"
+  },
+  {
+    id: "forest-spread",
+    slug: "landscape-spread",
+    title: "Landscape Spread",
+    templateId: "forest-fire",
+    scenarioId: "random-forest",
+    scenarioLabel: "Random Forest",
+    scenarioName: "Forest Fire baseline",
+    firstChange: "Spread probability"
+  },
+  {
+    id: "neural-excitation",
+    slug: "signal-cascades",
+    title: "Signal Cascades",
+    templateId: "neural-excitation-network",
+    scenarioId: "inhibition-stabilized-cascade",
+    scenarioLabel: "Inhibition-Stabilized Cascade",
+    scenarioName: "Neural Excitation Network baseline",
+    firstChange: "Global threshold"
+  }
+] as const;
+
+const viewports = [
+  { label: "desktop", width: 1440, height: 900 },
+  { label: "wide-short", width: 1280, height: 720 },
+  { label: "tablet", width: 1024, height: 768 },
+  { label: "narrow", width: 900, height: 700 },
+  { label: "short", width: 1280, height: 600 },
+  { label: "mobile", width: 390, height: 844 }
+] as const;
+
+for (const viewport of viewports) {
+  test(`Explore Worlds preserves its hierarchy at ${viewport.label} ${viewport.width}x${viewport.height}`, async ({ page }) => {
+    const diagnostics = observePageDiagnostics(page);
+    await page.setViewportSize({ width: viewport.width, height: viewport.height });
+    await page.goto("/worlds", { waitUntil: "domcontentloaded" });
+    await expect(page.locator("[data-worlds-catalog]")).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1, name: "Explore Worlds" })).toHaveCount(1);
+    await expect(page.getByRole("heading", { level: 2, name: "How can coordinated movement emerge without a leader?" })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Explore featured world" })).toHaveAttribute("href", "/worlds/collective-motion");
+    await expect(page.locator("[data-starter-card]")).toHaveCount(7);
+    await expect(page.getByLabel("Explore Worlds filters")).toBeVisible();
+    await expect(page.getByLabel("Search worlds")).toBeVisible();
+    await expect(page.getByText("Active filters:")).toBeVisible();
+    await expectNoHorizontalOverflow(page);
+
+    const firstCard = page.locator("[data-starter-card]").first();
+    const firstCardBounds = await firstCard.boundingBox();
+    expect(firstCardBounds).not.toBeNull();
+    expect(firstCardBounds!.y).toBeLessThan(viewport.height);
+    await expectNoDiagnostics(diagnostics);
+  });
+}
+
+test("catalog filters, combined filters, search, empty state, reset, keyboard input, and session-only state are deterministic", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 720 });
+  await page.goto("/worlds", { waitUntil: "domcontentloaded" });
+  await page.waitForLoadState("networkidle");
+  const storageBefore = await readStorage(page);
+
+  await page.getByLabel("Domain", { exact: true }).selectOption("networks-and-signals");
+  await expect(page.locator("[data-starter-card]")).toHaveCount(1);
+  await expect(page.locator("[data-starter-card='neural-excitation']")).toBeVisible();
+  await expect(page.getByText("Domain: Networks and signals")).toBeVisible();
+  await page.getByRole("button", { name: "Reset", exact: true }).click();
+
+  await page.getByLabel("Mechanism", { exact: true }).selectOption("threshold");
+  await expect(page.locator("[data-starter-card]")).toHaveCount(2);
+  await expect(page.locator("[data-starter-card='schelling']")).toBeVisible();
+  await expect(page.locator("[data-starter-card='neural-excitation']")).toBeVisible();
+  await page.getByRole("button", { name: "Reset", exact: true }).click();
+
+  await page.getByLabel("System form", { exact: true }).selectOption("grid");
+  await expect(page.locator("[data-starter-card]")).toHaveCount(2);
+  await page.getByRole("button", { name: "Reset", exact: true }).click();
+
+  await page.getByLabel("Complexity", { exact: true }).selectOption("quick-start");
+  await expect(page.locator("[data-starter-card]")).toHaveCount(2);
+  await page.getByRole("button", { name: "Reset", exact: true }).click();
+
+  await page.getByLabel("Domain", { exact: true }).selectOption("living-systems");
+  await page.getByLabel("System form", { exact: true }).selectOption("grid");
+  await page.getByLabel("Complexity", { exact: true }).selectOption("layered");
+  await expect(page.locator("[data-starter-card]")).toHaveCount(1);
+  await expect(page.locator("[data-starter-card='forest-spread']")).toBeVisible();
+  await page.getByRole("button", { name: "Reset", exact: true }).click();
+
+  const search = page.getByLabel("Search worlds");
+  await search.focus();
+  await expect(search).toBeFocused();
+  await search.fill("delayed excitation");
+  await expect(page.locator("[data-starter-card]")).toHaveCount(1);
+  await expect(page.locator("[data-starter-card='neural-excitation']")).toBeVisible();
+  await search.fill("future unicorn economy");
+  await expect(page.locator("[data-starter-card]")).toHaveCount(0);
+  await expect(page.getByRole("heading", { name: "No runnable worlds match this combination" })).toBeVisible();
+  await expect(page.getByText(/does not add planned or imaginary results/i)).toBeVisible();
+  await page.getByRole("button", { name: "Reset browse controls" }).press("Enter");
+  await expect(page.locator("[data-starter-card]")).toHaveCount(7);
+  await expect(page.getByText("Active filters: None")).toBeVisible();
+  expect(await readStorage(page)).toEqual(storageBefore);
+});
+
+test("every detail route exposes the required invitation, anatomy, investigation, evidence boundary, remix path, and launch", async ({ page }) => {
+  test.setTimeout(90_000);
+  for (const world of worlds) {
+    const diagnostics = observePageDiagnostics(page);
+    await page.goto(`/worlds/${world.slug}`, { waitUntil: "networkidle" });
+    const detail = page.locator(`[data-world-detail='${world.id}']`);
+    await expect(detail).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1, name: world.title })).toHaveCount(1);
+    for (const heading of [
+      "Inside this world",
+      "How the system works",
+      "Start here",
+      "Things to investigate",
+      "Research connection",
+      "What this world leaves out",
+      "Remix directions"
+    ]) {
+      await expect(page.getByRole("heading", { level: 2, name: heading })).toBeVisible();
+    }
+    await expect(detail.getByText(world.firstChange, { exact: false }).first()).toBeVisible();
+    await expect(detail.locator(".world-detail__anatomy > section")).not.toHaveCount(0);
+    await expect(detail.locator(".world-detail__prompts > li")).toHaveCount(world.id === "neural-excitation" ? 4 : 3);
+    await expect(detail.locator(".world-detail__research li")).not.toHaveCount(0);
+    await expect(detail.getByText(/do not validate or calibrate this implementation/i)).toBeVisible();
+    await expect(detail.locator(".world-detail__boundary > div > p")).toBeVisible();
+    await expect(detail.locator(".world-detail__remix-list > section")).not.toHaveCount(0);
+    const launch = detail.getByRole("link", { name: "Launch this world" });
+    await expect(launch).toHaveAttribute(
+      "href",
+      `/world?starter=${world.id}&template=${world.templateId}&scenario=${world.scenarioId}`
+    );
+    await expectNoHorizontalOverflow(page);
+    await expectNoDiagnostics(diagnostics);
+  }
+});
+
+test("research links are visibly external and use safe new-tab attributes", async ({ page }) => {
+  await page.goto("/worlds/collective-motion", { waitUntil: "domcontentloaded" });
+  const sources = page.locator(".world-detail__research a");
+  await expect(sources).toHaveCount(2);
+  for (const source of await sources.all()) {
+    await expect(source).toContainText("external source");
+    await expect(source).toHaveAttribute("target", "_blank");
+    await expect(source).toHaveAttribute("rel", /noreferrer/);
+    await expect(source).toHaveAttribute("rel", /noopener/);
+    await expect(source).toHaveAttribute("href", /^https:\/\//);
+  }
+});
+
+test("mobile detail keeps the launch ahead of research and avoids nested scroll traps", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/worlds/signal-cascades", { waitUntil: "domcontentloaded" });
+  const launch = page.getByRole("link", { name: "Launch this world" });
+  await expect(launch).toBeVisible();
+  const launchBounds = await launch.boundingBox();
+  const researchBounds = await page.getByRole("heading", { level: 2, name: "Research connection" }).boundingBox();
+  expect(launchBounds).not.toBeNull();
+  expect(researchBounds).not.toBeNull();
+  expect(launchBounds!.y).toBeLessThan(researchBounds!.y);
+  expect(launchBounds!.y).toBeLessThan(844);
+  await expectNoHorizontalOverflow(page);
+  expect(
+    await page.evaluate(() =>
+      [...document.querySelectorAll<HTMLElement>(".world-detail *")].filter((element) => {
+        const style = getComputedStyle(element);
+        return style.overflowY === "auto" || style.overflowY === "scroll";
+      }).length
+    )
+  ).toBe(0);
+});
+
+test("all seven strict handoffs prepare the intended scenario as a fresh paused tick-0 run", async ({ page }) => {
+  test.setTimeout(120_000);
+  await page.setViewportSize({ width: 1280, height: 720 });
+
+  for (const world of worlds) {
+    const diagnostics = observePageDiagnostics(page);
+    await page.goto(
+      `/world?starter=${world.id}&template=${world.templateId}&scenario=${world.scenarioId}`,
+      { waitUntil: "domcontentloaded" }
+    );
+    await expect(page.locator(".ortus-shell:not(.ortus-shell--hydrating)")).toBeVisible();
+    await expect(page.getByLabel("World template")).toHaveValue(world.templateId);
+    await expect(page.locator("[data-starter-nudge]")).toHaveAttribute("data-starter-world-id", world.id);
+    await expect(page.locator("[data-starter-nudge]")).toContainText(world.title);
+    await expect(page.locator("[data-starter-nudge]")).toContainText(world.firstChange);
+    await expect(page.locator(".timeline-strip__readout strong").first()).toHaveText("0");
+    await expect(page.locator(".timeline-strip__label strong")).toHaveText("Paused");
+    await expect(page.getByRole("heading", { name: world.scenarioName })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Setup", exact: true })).toHaveAttribute("aria-current", "page");
+
+    await page.getByRole("button", { name: "Run details" }).click();
+    const dialog = page.getByRole("dialog");
+    await expect(dialog).toContainText(world.scenarioName);
+    await expect(dialog).toContainText(world.scenarioLabel);
+    await dialog.getByRole("button", { name: "Close run details" }).click();
+    await expectNoDiagnostics(diagnostics);
+  }
+});
+
+test("starter nudge dismissal, direct reload, Back, and normal task navigation preserve their explicit boundaries", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 720 });
+  await page.goto("/worlds/collective-motion", { waitUntil: "domcontentloaded" });
+  const detailUrl = page.url();
+  await page.getByRole("link", { name: "Launch this world" }).click();
+  await expect(page).toHaveURL(/starter=flocking/);
+  const storageBefore = await readStorage(page);
+  const nudge = page.locator("[data-starter-nudge]");
+  await expect(nudge).toBeVisible();
+
+  await page.reload({ waitUntil: "domcontentloaded" });
+  await expect(nudge).toBeVisible();
+  await expect(page.locator(".timeline-strip__readout strong").first()).toHaveText("0");
+  await page.getByRole("button", { name: "Dismiss Collective Motion starter steps" }).click();
+  await expect(nudge).toHaveCount(0);
+  await expect(page.getByLabel("Simulation world stage")).toBeFocused();
+  expect(await readStorage(page)).toEqual(storageBefore);
+
+  await page.goBack({ waitUntil: "domcontentloaded" });
+  await expect(page.url()).toBe(detailUrl);
+  await expect(page.locator("[data-world-detail='flocking']")).toBeVisible();
+
+  await page.getByRole("link", { name: "Launch this world" }).click();
+  await page.getByRole("button", { name: "Step exactly one tick" }).click();
+  await expect(page.locator(".timeline-strip__readout strong").first()).toHaveText("1");
+  await page.getByRole("navigation", { name: "World tasks" }).getByRole("button", { name: "Observe" }).click();
+  await expect(page).toHaveURL(/task=observe/);
+  await expect(page.locator(".timeline-strip__readout strong").first()).toHaveText("1");
+  await page.reload({ waitUntil: "domcontentloaded" });
+  await expect(page.getByRole("heading", { level: 2, name: "Observe" })).toBeVisible();
+  await expect(page.locator(".timeline-strip__readout strong").first()).toHaveText("0");
+});
+
+test("invalid, empty, duplicate, and runtime-mismatched launches stop before constructing a World", async ({ page }) => {
+  for (const path of [
+    "/world?starter=missing",
+    "/world?starter=",
+    "/world?starter=flocking&starter=epidemic",
+    "/world?starter=flocking&template=epidemic-spread",
+    "/world?starter=flocking&template=flocking-boids&scenario=missing"
+  ]) {
+    await page.goto(path, { waitUntil: "domcontentloaded" });
+    await expect(page.locator("[data-starter-launch-error]")).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1, name: "This world could not be prepared safely" })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Back to Explore Worlds" })).toHaveAttribute("href", "/worlds");
+    await expect(page.locator(".ortus-shell")).toHaveCount(0);
+    await expect(page.locator(".world-stage")).toHaveCount(0);
+  }
+});
+
+test("catalog, representative details, and launch are Axe-clean with quiet diagnostics under reduced motion", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  for (const path of [
+    "/worlds",
+    "/worlds/collective-motion",
+    "/worlds/signal-cascades",
+    "/world?starter=flocking&template=flocking-boids&scenario=random-headings"
+  ]) {
+    const diagnostics = observePageDiagnostics(page);
+    await page.goto(path, { waitUntil: "domcontentloaded" });
+    if (path.startsWith("/world?")) {
+      await expect(page.locator(".ortus-shell:not(.ortus-shell--hydrating)")).toBeVisible();
+    }
+    const results = await new AxeBuilder({ page }).analyze();
+    expect(results.violations.map((violation) => violation.id), `${path} Axe violations`).toEqual([]);
+    await expectNoDiagnostics(diagnostics);
+  }
+});
+
+interface PageDiagnostics {
+  consoleErrors: string[];
+  pageErrors: string[];
+  badResponses: string[];
+  failedRequests: string[];
+}
+
+function observePageDiagnostics(page: Page): PageDiagnostics {
+  const diagnostics: PageDiagnostics = { consoleErrors: [], pageErrors: [], badResponses: [], failedRequests: [] };
+  const criticalTypes = new Set(["document", "script", "stylesheet", "font", "image"]);
+  page.on("console", (message) => {
+    const text = message.text();
+    if (message.type() === "error" || /hydration|did not match|server html|client html/i.test(text)) {
+      diagnostics.consoleErrors.push(`${message.type()}: ${text}`);
+    }
+  });
+  page.on("pageerror", (error) => diagnostics.pageErrors.push(error.stack ?? error.message));
+  page.on("response", (response) => {
+    const request = response.request();
+    if (response.status() >= 400 && criticalTypes.has(request.resourceType())) {
+      diagnostics.badResponses.push(`${response.status()} ${request.resourceType()} ${response.url()}`);
+    }
+  });
+  page.on("requestfailed", (request) => {
+    if (criticalTypes.has(request.resourceType())) {
+      diagnostics.failedRequests.push(`${request.resourceType()} ${request.url()} ${request.failure()?.errorText ?? "failed"}`);
+    }
+  });
+  return diagnostics;
+}
+
+async function expectNoDiagnostics(diagnostics: PageDiagnostics) {
+  expect(diagnostics.consoleErrors).toEqual([]);
+  expect(diagnostics.pageErrors).toEqual([]);
+  expect(diagnostics.badResponses).toEqual([]);
+  expect(diagnostics.failedRequests).toEqual([]);
+}
+
+async function expectNoHorizontalOverflow(page: Page) {
+  expect(
+    await page.evaluate(() => ({
+      documentWidth: document.documentElement.scrollWidth,
+      bodyWidth: document.body.scrollWidth,
+      viewportWidth: window.innerWidth
+    }))
+  ).toEqual({
+    documentWidth: page.viewportSize()!.width,
+    bodyWidth: page.viewportSize()!.width,
+    viewportWidth: page.viewportSize()!.width
+  });
+}
+
+async function readStorage(page: Page) {
+  return page.evaluate(() => ({
+    local: Object.keys(localStorage).sort().map((key) => [key, localStorage.getItem(key)]),
+    session: Object.keys(sessionStorage).sort().map((key) => [key, sessionStorage.getItem(key)])
+  }));
+}

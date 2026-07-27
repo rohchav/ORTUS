@@ -560,9 +560,9 @@
 - Do not use progression, unlocks, achievements, badges, gamified steps, missions, quests, streaks, XP, levels, ranks, or smart-recommendation language in capability guidance.
 - Preserve the World / Workshop / Lab / Atlas route shell contracts when adding or auditing guidance.
 - Future-only is capability status, not evidence support; do not use operational statuses for epistemic support.
-- Preserve the R1 route contract: `/` is Start, `/world` is World, `/lab` is Lab, `/atlas` is Atlas, `/builder` is Workshop, and `/workshop` remains absent.
+- Preserve the R1/C1 route contract: `/` is Start, `/worlds` is its runnable-world catalog, `/worlds/[slug]` is Starter World detail, `/world` is World, `/lab` is Lab, `/atlas` is Atlas, `/builder` is Workshop, and `/workshop` remains absent.
 - Keep Start task-centered. Do not restore equal-weight destination architecture, capability matrices, artifact taxonomy, or a disclaimer wall above the featured starter.
-- Derive Start system availability from authoritative production template/runtime metadata. Presentation metadata must not invent runnable support or mutate registries.
+- Derive Start and Explore Worlds availability from validated Starter World definitions that revalidate authoritative production template/runtime metadata. Presentation metadata must not invent runnable support or mutate registries.
 - Keep the featured starter on an existing tested runtime. Starter content must not create hidden parameter defaults, new mechanics, analytics, personalization, persistence, progression, or forced onboarding.
 - Keep the World model surface visually and structurally dominant. Persistent playback controls must remain reachable outside task-panel scrolling.
 - Present direct World tasks as Setup, Observe, Change, Compare, and Explain. Keep Experiment Runner and Diagnostics purpose-grouped under More. UI labels do not change the underlying workspace-mode or runtime semantics.
@@ -574,8 +574,16 @@
 - Full model references and technical run details must use focus-managed modal surfaces rather than shrinking the live stage.
 - Keep current-run Change actions visibly distinct from Setup actions that rebuild a fresh paused tick-0 run.
 - Capability guidance should lead with one relevant contextual note and keep the complete source-backed matrix subordinate. Do not remove a limitation at the point where it affects interpretation.
-- The Flocking starter nudge is page-session-only and dismissible. Do not add storage, completion tracking, XP, achievements, profiling, recommendation inference, or step locks.
-- R1, R1B, R2, and R2B are complete. C1 Starter World Content Framework is next; do not start C1 or later C/S/E milestones without their dedicated prompt.
+- Starter World definitions are strict versioned data-only content. They are not templates, scenarios, RunConfigs, schemas, Builder workspaces, executable rules, or evidence of new runtime support.
+- Only `runnable` Starter Worlds may launch. Revalidate template, initialization-preset, metric, parameter, and intervention references against authoritative registries before launch.
+- Starter World launch context must remain strict and ID-only. Do not accept arbitrary parameter objects, RunConfigs, code, formulas, or hidden defaults in URLs or content.
+- Starter World launches must use existing scenario services to create the documented fresh paused tick-0 run. Unknown, stale, or mismatched references must fail visibly without fallback.
+- Keep `/worlds` limited to currently runnable definitions. Planned and concept-only portfolio candidates belong in documentation, not disabled or misleading product cards.
+- Starter World research sources provide conceptual connections; they do not validate, calibrate, predict, or prove an implementation.
+- Keep Starter World browsing, filters, search, nudge dismissal, and launch context non-persistent. Do not add storage, progress, completion, XP, achievements, profiling, recommendations, or step locks.
+- Keep remix status explicit: runtime-now, current Advanced structural tools, or future capability. Do not expose fake Builder, generate, compile, apply, or run actions.
+- C1 portfolio candidates are documentation only. Tier A is not implemented content; Tier B and C do not become runtime support until dedicated implementation and audit prompts.
+- R1, R1B, R2, R2B, and C1 are complete. C1B Starter World Content Framework Audit is next; do not skip it or start C2/later C/S/E milestones without their dedicated prompt.
 - Complete and commit GW1 before starting GW1B.
 - Treat UX0 as documentation and design planning only.
 - Do not implement World/Lab/Atlas/Workshop without a dedicated prompt.
@@ -656,7 +664,7 @@
 - Atlas preview results are component-memory-only exact sampled coordinates. Do not add storage, saved records, history, publication, interpolation, smoothing, contours, inferred unsampled values, regime/transition/tipping-point detection, confidence/coverage/evidence scores, or scientific-validation claims.
 - Keep cancellation language honest: `Cancel after current sample` means the current synchronous sample finishes before cancellation is effective. Unstarted runs remain unsampled and partial results remain visibly partial. Route unmount must cancel remaining cooperative work and suppress post-unmount UI updates.
 - Multiple preview seeds show selected deterministic model variation only; they are not confidence intervals, calibrated probabilities, or real-world uncertainty estimates.
-- GW9/GW9B do not generalize Atlas sampling, make the conceptual behavioral-landscape scaffold runtime-backed, make probe plans executable, or create Discovery Atlas/Lab persistence. GW9B, R1, R1B, R2, and R2B are complete; C1 is next. F1 is paused under E3 Analytical Lenses.
+- GW9/GW9B do not generalize Atlas sampling, make the conceptual behavioral-landscape scaffold runtime-backed, make probe plans executable, or create Discovery Atlas/Lab persistence. GW9B, R1, R1B, R2, R2B, and C1 are complete; C1B is next. F1 is paused under E3 Analytical Lenses.
 - A featured starter launch must create the documented fresh prepared run once per starter page mount. It must not silently resume modified parameters, an advanced tick, or a running state beneath baseline instructions.
 - Parameter controls that rebuild the run must remain drafts until explicit apply and state that apply produces a fresh paused tick-0 run; do not imply live mutation.
 - World visible task, `task` query, top-navigation current state, and task heading must remain coherent without resetting active runtime state.

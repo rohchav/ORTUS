@@ -1,5 +1,59 @@
 # ORTUS Codex Session Log
 
+## 2026-07-27 - Prompt C1 Starter World Content Framework + Explore-Worlds Catalog
+
+Goal: turn the seven current production templates into a strict, source-backed, explorable Starter World library without changing simulation behavior, adding persistence, or implying unsupported runtime capability.
+
+Starting state:
+
+- Clean aligned `main` and `origin/main` at `434a214` (`test: audit world layout and interaction`).
+- R1, R1B, R2, and R2B complete.
+- Baseline rendered Start and World-entry captures recorded before implementation.
+- Required R2B baseline had passed 115 UI tests, 75 files / 610 unit tests, typecheck, build, simulation/Atlas performance smoke, and `git diff --check`.
+
+Implemented:
+
+- Strict Zod `StarterWorldDefinition` version `"1"` with bounded identity, runtime status, taxonomy, anatomy, investigation, provenance, remix, and future-expansion data.
+- Validated deterministic registry for Collective Motion, Local Contact Outbreaks, Opinion Formation, Predator-Prey Cycles, Neighborhood Patterns, Landscape Spread, and Signal Cascades.
+- Runtime-reference checks against production templates, initialization presets, metrics, parameters, and interventions, including authoritative labels and suggested-value bounds.
+- Deterministic non-LLM content lint for duplicate/generic content, unsupported claims, raw runtime IDs, unnamed changes, excessive boundaries, and future-as-current language.
+- `/worlds` with one featured invitation, seven differentiated deterministic system illustrations, Domain/Mechanism/System form/Complexity filters, normalized AND search, active-filter text, and honest empty/reset state.
+- `/worlds/[slug]` with question, premise, represented anatomy, mechanisms, baseline, specific first change, outputs, investigations, verified research connection, one model boundary, full-reference link, and explicit remix readiness.
+- Strict ID-only launch adapter and World route validation. Every canonical launch uses the existing scenario path and creates a fresh deterministic paused tick-0 run. Invalid IDs or mismatches stop before constructing World.
+- Definition-driven dismissible World nudge with detail back link and focus return to the stage.
+- A researched 24-candidate portfolio split exactly into eight Tier A, eight Tier B, and eight Tier C candidates, with explicit engine fit, gaps, risk, multiscale needs, and original fictional-system rules.
+- Focused headless and rendered coverage for schema, unsafe data, quality lint, source structure, deterministic query behavior, all seven detail routes and handoffs, six viewports, mobile order, focus, Back/reload semantics, failure boundaries, diagnostics, reduced motion, Axe, and no new storage.
+
+Research process:
+
+- Current-world references were verified at ACM/DOI, APS, Royal Society, Taylor and Francis/DOI, Nature, EPFL, and journal metadata.
+- Portfolio-only anchors were checked at INFORMS, APS, Institution of Civil Engineers/Crossref metadata, Cambridge University Press, University of Chicago Press, Oxford University Press, Nature/PubMed, Cell/Elsevier metadata, MIT Press, IPCC, and USGS.
+- References are labeled as canonical model, mechanism inspiration, research context, educational context, or historical context. They do not validate or calibrate ORTUS.
+
+Boundaries:
+
+- No simulation implementation, template logic, scenario logic, default, bound, metric, intervention, Experiment Runner, comparison persistence, Atlas execution, Builder execution, backend, dependency, or storage key was added or changed.
+- Starter World `defaultScenarioId` identifies an existing authoritative initialization preset; C1 does not create a parallel scenario registry.
+- Portfolio items are documentation only. Tier A is an implementation-readiness judgment, not a runtime claim.
+- Actual participant comprehension, browser zoom, screen-reader/assistive-technology use, forced colors, complete touch workflow, educational outcomes, and WCAG conformance remain unverified.
+
+Final verification:
+
+- Focused C1 Playwright: 14 passed.
+- Required Research World shell Playwright: 53 passed.
+- Full UI Playwright against the optimized production build: 129 passed.
+- Required catalog, seven detail, and desktop/mobile World-launch screenshots were captured and inspected.
+- Typecheck: passed.
+- Unit tests: 76 files / 621 tests passed.
+- Production build: passed; `/worlds` is static, all seven `/worlds/[slug]` routes are generated, and `/world` remains dynamic.
+- Simulation performance: passed.
+- Atlas smoke: completed 2 runs / 10 work units at tick 5 in 51.68 ms on this machine; this is not a scalability estimate.
+- `git diff --check`: passed.
+- `npm run lint: unavailable, package.json has no lint script.`
+- Actual browser zoom, screen-reader/assistive-technology use, forced colors, complete touch workflow, participant comprehension, educational outcomes, and WCAG conformance remain unverified.
+
+Decision: C1 complete and ready for the required independent C1B audit. C1B is next; C2 and F1 remain unstarted.
+
 ## 2026-07-15 - Prompt GW9B Ephemeral Landscape Sampling Preview V1 Audit and Hardening
 
 Goal: audit GW9 as a real but narrow Flocking-only runtime slice, fix only demonstrated defects, and block any inference of generic landscape execution, persistence, regime detection, confidence, validation, or broader template support.

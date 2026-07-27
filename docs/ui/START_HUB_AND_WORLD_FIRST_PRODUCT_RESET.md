@@ -2,7 +2,7 @@
 
 Date: 2026-07-19
 Prompt: R1
-Status: implemented and audited by R1B; R2 and R2B complete; C1 is next
+Status: implemented and audited by R1B; R2, R2B, and C1 complete; C1B next
 
 ## Purpose
 
@@ -20,6 +20,7 @@ The current route contract is:
 
 ```text
 /         -> Start Hub
+/worlds   -> Explore Worlds runnable catalog
 /world    -> live World workbench
 /builder  -> Workshop
 /atlas    -> bounded Atlas preview and technical foundations
@@ -39,14 +40,13 @@ The root route now answers what a user can do immediately. Its first viewport co
 
 Flocking is featured because the registered production runtime already produces legible motion quickly, exposes meaningful local-interaction parameters, and visibly connects neighbor-level rules with aggregate movement. The hero uses an actual ORTUS Flocking runtime capture, not a conceptual mockup or remote asset.
 
-The current seven-system catalog is derived from `templateDescriptors`. `src/lib/systemCatalog.ts` adds presentation-only questions, manipulation summaries, visible-output summaries, and compact-control choices. It does not register templates, infer runtime support, or change engine behavior. Internal template ids are kept out of visible card copy.
+R1 initially derived its seven-system index from `templateDescriptors` and `src/lib/systemCatalog.ts`. C1 supersedes that presentation source with the validated `src/lib/starterWorlds` registry. Start now shows a compact seven-world question index and links to `/worlds` and `/worlds/[slug]`; internal template IDs remain out of visible headings.
 
-The featured handoff opens `/world?template=flocking-boids&starter=flocking`. It selects the existing Flocking template and displays a dismissible page-session nudge:
+The featured Start action now opens `/worlds/collective-motion`. Its detail Launch action uses `/world?starter=flocking&template=flocking-boids&scenario=random-headings`. The strict handoff revalidates existing runtime references and displays a definition-driven dismissible page-session nudge:
 
-1. Run the baseline.
-2. Lower Alignment weight.
-3. Run again.
-4. Watch flock shape and Alignment score.
+1. Run the random-headings baseline.
+2. Set Alignment weight to `0.20`, rebuild, and rerun the same seeded world.
+3. Watch Alignment score and Dispersion.
 
 The nudge has no completion state, storage, analytics, personalization, lock, XP, or achievement behavior.
 
@@ -144,4 +144,4 @@ R1/R1B add no new persistence. Existing bounded World comparison and UI storage 
 
 R2 preserves the R1/R1B fresh-starter and runtime boundaries while replacing the compressed World task column with a stable stage, persistent playback, direct task navigation, and one bounded active tool. Its implementation record is `WORLD_LAYOUT_AND_INTERACTION_RECLAIM.md`.
 
-R1 complete. R1B complete. R2 complete. R2B complete. `C1: Starter World Content Framework` is next and has not started. F1 and the fractal branch remain paused under the future E3 Analytical Lenses milestone.
+R1 complete. R1B complete. R2 complete. R2B complete. C1 complete. `C1B: Starter World Content Framework Audit` is next and has not started. F1 and the fractal branch remain paused under the future E3 Analytical Lenses milestone.

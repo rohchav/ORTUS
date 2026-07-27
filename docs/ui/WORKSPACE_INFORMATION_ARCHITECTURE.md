@@ -1,7 +1,7 @@
 # ORTUS Workspace Information Architecture
 
-Date: 2026-07-24
-Prompt: UI-REMEDIATION-1 through GW9B, reset by R1/R1B and reclaimed by R2
+Date: 2026-07-27
+Prompt: UI-REMEDIATION-1 through C1
 Status: implemented and rendered-audited; broader mobile-readiness, actual browser-zoom, screen-reader, assistive-technology, forced-colors, user-comprehension, and WCAG claims remain unverified
 
 ## Problem
@@ -19,7 +19,7 @@ The attachment directory for this prompt did not include a screenshot file, and 
 
 ORTUS now uses four levels:
 
-- Product entry: Start Hub at `/`.
+- Product entry: Start Hub at `/`, with its runnable-world catalog at `/worlds`.
 - Primary destinations: World and Workshop, with Atlas, Lab, Experiments, and Compare runs grouped under Research tools.
 - World task navigation: direct Setup, Observe, Change, and Compare controls plus a More menu for Understand model, Experiments, and Diagnostics.
 - Builder modes: Workspace Inspector, Author Schema, and Graph View.
@@ -262,7 +262,7 @@ Atlas now owns one route-local, component-memory preview form and result surface
 
 ## R1 Start And World-First Reset
 
-R1 adds a product-entry layer without adding onboarding state. The Start Hub uses one featured implemented world, four intent paths, and a source-backed seven-system catalog. The shortest path is Start -> Flocking World -> Run; users do not need to understand destination taxonomy or artifact families first.
+R1 adds a product-entry layer without adding onboarding state. C1 deepens that layer with one featured implemented world, four intent paths, a compact seven-world index, `/worlds`, and seven directly linkable detail pages. The shortest path is Start -> Starter World detail -> strict World launch -> Run; users do not need to understand destination taxonomy or artifact families first.
 
 Within World, the DOM and visual hierarchy are model surface, persistent playback controls, then the selected task workspace. At `1440x900`, the model workspace is approximately 74% of the application layout width. Setup exposes four exact existing parameters and keeps all other parameters and Scenario Builder one disclosure away. No compact control has a second default or alternate execution path.
 
@@ -288,4 +288,12 @@ The direct sequence is Setup, Observe, Change, Compare, Explain, and More. Setup
 
 The active tool owns one intentional vertical scroll. Desktop collapse/restore hides that surface without unmounting local state. At `390x844`, World stacks stage, playback, horizontal tasks, and a bounded tool row inside the viewport; the tool, not the document, scrolls to deeper controls. This R2 behavior supersedes the earlier R1B responsive-scroll description.
 
-R2 changes UI presentation and state coordination only. R2B audits and hardens that frame: Setup values remain drafts until explicit apply/rebuild, task clicks create same-document history entries while Back/Forward preserve the mounted stage and run, closed dialogs do not retain live children, and hidden or abandoned experiment work requests cooperative cancellation. R2B adds no simulation capability, template support, scenario, metric, intervention, comparison format, Atlas behavior, Builder behavior, route, dependency, or storage key. R2 and R2B are complete. `C1: Starter World Content Framework` is next and has not started.
+R2 changes UI presentation and state coordination only. R2B audits and hardens that frame: Setup values remain drafts until explicit apply/rebuild, task clicks create same-document history entries while Back/Forward preserve the mounted stage and run, closed dialogs do not retain live children, and hidden or abandoned experiment work requests cooperative cancellation. R2B adds no simulation capability, template support, scenario, metric, intervention, comparison format, Atlas behavior, Builder behavior, route, dependency, or storage key.
+
+## C1 Starter World Content Layer
+
+C1 owns content discovery before World, not a new permanent World drawer. `/worlds` provides deterministic search and bounded filters over only seven validated runnable definitions. `/worlds/[slug]` introduces question, premise, represented anatomy, baseline, specific first change, outputs, research connection, one main boundary, and non-executable remix directions before launching.
+
+The launch URL contains stable IDs only. World revalidates those IDs, uses existing scenario services, and creates a fresh paused tick-0 run. The existing compact context remains authoritative; a dismissible nudge supplies local Starter World context without progress, locks, storage, or task replacement.
+
+R1 complete. R1B complete. R2 complete. R2B complete. C1 complete. `C1B: Starter World Content Framework Audit` is next and has not started.

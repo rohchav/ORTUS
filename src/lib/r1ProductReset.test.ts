@@ -26,12 +26,14 @@ describe("R1 Start Hub and World-first product reset contracts", () => {
     const startSource = [
       source("src/components/start/StartHub.tsx"),
       source("src/components/StarterActionNudge.tsx"),
-      source("src/lib/systemCatalog.ts")
+      source("src/components/starterWorlds/ExploreWorldsCatalog.tsx"),
+      source("src/components/starterWorlds/StarterWorldDetail.tsx")
     ].join("\n");
 
-    expect(startSource).toContain("How does local coordination create a flock?");
-    expect(startSource).toContain("Run, change alignment, compare motion.");
-    expect(startSource).toContain("templateDescriptors.map");
+    expect(startSource).toContain("featured.hookQuestion");
+    expect(startSource).toContain("runnableStarterWorlds.map");
+    expect(startSource).toContain("world.investigationPrompts.map");
+    expect(startSource).toContain("world.sources.map");
     expect(startSource).not.toMatch(
       /localStorage|sessionStorage|indexedDB|document\.cookie|createJSONStorage|persist\(|Date\.now|Math\.random|crypto\.randomUUID/i
     );
@@ -100,7 +102,7 @@ describe("R1 Start Hub and World-first product reset contracts", () => {
     );
   });
 
-  it("locks C1 as next after completed R2B and preserves every implementation-audit pair", () => {
+  it("locks C1B as next after completed C1 and preserves every implementation-audit pair", () => {
     const roadmap = source("docs/product/ORTUS_PRODUCT_EXPERIENCE_RESET_ROADMAP.md");
     const milestones = [
       "R1", "R1B", "R2", "R2B",
@@ -112,8 +114,8 @@ describe("R1 Start Hub and World-first product reset contracts", () => {
 
     expect(positions.every((position) => position >= 0)).toBe(true);
     expect(positions).toEqual([...positions].sort((left, right) => left - right));
-    expect(roadmap).toContain("Status: active product sequence; R1, R1B, R2, and R2B complete, C1 next");
-    expect(roadmap).toContain("`C1: Starter World Content Framework` is the next prompt and has not started.");
+    expect(roadmap).toContain("Status: active product sequence; R1, R1B, R2, R2B, and C1 complete; C1B next");
+    expect(roadmap).toContain("`C1B: Starter World Content Framework Audit` is next and has not started.");
     expect(roadmap).toContain("F1 and the rest of the F branch are paused beneath E3 Analytical Lenses.");
   });
 });

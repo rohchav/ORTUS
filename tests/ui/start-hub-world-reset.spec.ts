@@ -20,11 +20,11 @@ for (const viewport of viewports) {
     await expect(page.getByRole("heading", { level: 1, name: "Start with a living system" })).toHaveCount(1);
     await expect(page.getByRole("main")).toHaveCount(1);
     await expect(page.getByRole("link", { name: "Start", exact: true })).toHaveAttribute("aria-current", "page");
-    await expect(page.getByRole("link", { name: "Open the Flocking starter" })).toHaveAttribute(
+    await expect(page.getByRole("link", { name: "Explore Collective Motion" })).toHaveAttribute(
       "href",
-      "/world?template=flocking-boids&starter=flocking"
+      "/worlds/collective-motion"
     );
-    await expect(page.locator(".system-card")).toHaveCount(7);
+    await expect(page.locator(".start-world-index > a")).toHaveCount(7);
     await expect(page.locator("[data-capability-guidance-destination]")).toHaveCount(0);
     await expect(page.getByText("Pick a system. Run it. Change something. See what happens. Then go deeper.")).toBeVisible();
 
@@ -49,10 +49,14 @@ for (const viewport of viewports) {
 test("featured Flocking handoff opens the real World with a local starter nudge and dominant model surface", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/", { waitUntil: "domcontentloaded" });
-  await page.getByRole("link", { name: "Open the Flocking starter" }).click();
-  await expect(page).toHaveURL(/\/world\?template=flocking-boids&starter=flocking$/);
+  await page.getByRole("link", { name: "Explore Collective Motion" }).click();
+  await expect(page).toHaveURL(/\/worlds\/collective-motion$/);
+  await page.getByRole("link", { name: "Launch this world" }).click();
+  await expect(page).toHaveURL(
+    /\/world\?starter=flocking&template=flocking-boids&scenario=random-headings$/
+  );
   await expect(page.getByLabel("World template")).toHaveValue("flocking-boids");
-  await expect(page.locator("[data-starter-nudge]")).toContainText("Lower Alignment weight");
+  await expect(page.locator("[data-starter-nudge]")).toContainText("Set Alignment weight to 0.20");
   await expect(page.getByLabel("Key model parameters").getByText("Alignment weight", { exact: true })).toBeVisible();
 
   const widths = await page.evaluate(() => {
@@ -65,7 +69,7 @@ test("featured Flocking handoff opens the real World with a local starter nudge 
   expect(widths.stage / widths.layout).toBeGreaterThan(0.6);
 
   const storageBefore = await readStorage(page);
-  await page.getByRole("button", { name: "Dismiss Flocking starter steps" }).click();
+  await page.getByRole("button", { name: "Dismiss Collective Motion starter steps" }).click();
   await expect(page.locator("[data-starter-nudge]")).toHaveCount(0);
   expect(await readStorage(page)).toEqual(storageBefore);
 });
@@ -75,7 +79,8 @@ test("repeated featured-starter launch rebuilds the prepared run without writing
   await page.goto("/", { waitUntil: "networkidle" });
   const storageBefore = await readStorage(page);
 
-  await page.getByRole("link", { name: "Open the Flocking starter" }).click();
+  await page.getByRole("link", { name: "Explore Collective Motion" }).click();
+  await page.getByRole("link", { name: "Launch this world" }).click();
   const alignment = page.getByRole("spinbutton", { name: "Alignment weight numeric value" });
   const tick = page.locator(".timeline-strip__readout strong").first();
   await expect(alignment).toHaveValue("0.55");
@@ -87,14 +92,15 @@ test("repeated featured-starter launch rebuilds the prepared run without writing
 
   await page.getByRole("navigation", { name: "Primary navigation" }).getByRole("link", { name: "Start", exact: true }).click();
   await expect(page).toHaveURL(/\/$/);
-  await page.getByRole("link", { name: "Open the Flocking starter" }).click();
+  await page.getByRole("link", { name: "Explore Collective Motion" }).click();
+  await page.getByRole("link", { name: "Launch this world" }).click();
 
   await expect(page.getByLabel("World template")).toHaveValue("flocking-boids");
   await expect(alignment).toHaveValue("0.55");
   await expect(tick).toHaveText("0");
   await expect(page.getByRole("button", { name: "Run simulation" })).toBeVisible();
   await expect(page.locator(".timeline-strip__label strong")).toHaveText("Paused");
-  await expect(page.locator("[data-starter-nudge]")).toContainText("Run the baseline");
+  await expect(page.locator("[data-starter-nudge]")).toContainText("Run the random-headings baseline");
   expect(await readStorage(page)).toEqual(storageBefore);
 });
 

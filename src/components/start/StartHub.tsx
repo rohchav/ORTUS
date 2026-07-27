@@ -1,13 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
-import type { CSSProperties } from "react";
-import { systemCatalog } from "../../lib/systemCatalog";
+import { featuredStarterWorld, runnableStarterWorlds } from "../../lib/starterWorlds";
 
 const pathways = [
   {
     label: "Explore a starter world",
     description: "Open a prepared model, run it, change one control, and compare what happens.",
-    href: "/world?template=flocking-boids&starter=flocking"
+    href: "/worlds"
   },
   {
     label: "Change a working system",
@@ -27,6 +26,8 @@ const pathways = [
 ] as const;
 
 export function StartHub() {
+  const featured = featuredStarterWorld;
+
   return (
     <div className="start-hub" data-start-hub>
       <header className="start-hub__intro">
@@ -46,12 +47,12 @@ export function StartHub() {
         />
         <div className="start-feature__content">
           <p>Featured starter</p>
-          <h2 id="start-feature-title">How does local coordination create a flock?</h2>
-          <span>Run a group whose members respond only to nearby neighbors.</span>
-          <span>Then lower Alignment weight and watch the flock shape and model-output score change.</span>
+          <h2 id="start-feature-title">{featured.hookQuestion}</h2>
+          <span>{featured.oneSentencePremise}</span>
+          <span>{featured.firstChange.action}</span>
           <small>Run, change alignment, compare motion.</small>
-          <Link className="start-feature__action" href="/world?template=flocking-boids&starter=flocking">
-            Open the Flocking starter
+          <Link className="start-feature__action" href={`/worlds/${featured.slug}`}>
+            Explore {featured.title}
           </Link>
         </div>
       </section>
@@ -71,31 +72,19 @@ export function StartHub() {
       <section className="start-catalog" aria-labelledby="start-catalog-title">
         <header className="start-section-heading">
           <div>
-            <p>Runnable now</p>
-            <h2 id="start-catalog-title">Choose a system by the question</h2>
+            <p>{runnableStarterWorlds.length} runnable worlds</p>
+            <h2 id="start-catalog-title">Choose the question that pulls you in</h2>
           </div>
-          <Link href="/world">Open World</Link>
+          <Link href="/worlds">Explore all worlds</Link>
         </header>
-        <div className="start-catalog__grid">
-          {systemCatalog.map((entry) => (
-            <article key={entry.descriptor.id} className="system-card" style={{ "--system-accent": entry.descriptor.accent } as CSSProperties}>
-              <div className="system-card__head">
-                <span className="system-card__swatch" aria-hidden="true" />
-                <h3>{entry.descriptor.template.name}</h3>
-              </div>
-              <p className="system-card__question">{entry.question}</p>
-              <dl>
-                <div>
-                  <dt>Change</dt>
-                  <dd>{entry.manipulation}</dd>
-                </div>
-                <div>
-                  <dt>See</dt>
-                  <dd>{entry.visibleOutput}</dd>
-                </div>
-              </dl>
-              <Link href={`/world?template=${entry.descriptor.id}`}>Open in World</Link>
-            </article>
+        <div className="start-world-index">
+          {runnableStarterWorlds.map((world, index) => (
+            <Link key={world.id} href={`/worlds/${world.slug}`}>
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <strong>{world.title}</strong>
+              <p>{world.hookQuestion}</p>
+              <small>{world.estimatedFirstActivity}</small>
+            </Link>
           ))}
         </div>
       </section>

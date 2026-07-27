@@ -243,3 +243,9 @@ No blocking shell defect remains for source-backed starter-content architecture.
 Conditionally ready for `C1: Starter World Content Framework`. The conditions are the explicitly unverified external accessibility/zoom/comprehension areas above, not an unresolved World P0/P1 defect.
 
 Final verification passed `29` dedicated R2/R2B browser tests in `2.8m`, `53` focused destination-shell tests in `6.3m`, and the complete `115`-test UI suite in `12.1m`, without retries or skips. Typecheck passed in `2.12s`; unit tests passed `75` files / `610` tests in `75.46s`; the production build passed in `30.59s`; performance smoke passed in `12.86s`; and `git diff --check` passed. `npm run lint: unavailable, package.json has no lint script.`
+
+## Post-Audit C1 Follow-Through
+
+C1 is now complete. It uses the audited R2B World shell as a destination and does not reopen its layout architecture. Every Starter World launch resolves authoritative IDs, uses existing scenario construction, and enters World as a fresh paused tick-0 run. The only World presentation addition is a compact dismissible definition-driven nudge with a detail-page back link.
+
+R1 complete. R1B complete. R2 complete. R2B complete. C1 complete. `C1B: Starter World Content Framework Audit` is next and has not started.

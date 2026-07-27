@@ -17,6 +17,7 @@ import {
   simulationWorkspaceModeQueryValue,
   type SimulationWorkspaceModeId
 } from "../lib/workspaceModes";
+import { createStarterWorldScenario, type StarterWorldLaunch } from "../lib/starterWorlds";
 import type { TemplateId } from "../lib/templateVisuals";
 import { useSimulationStore } from "../state/simulationStore";
 
@@ -25,10 +26,10 @@ const baseTicksPerSecond = 24;
 interface AppShellProps {
   initialTemplateId?: TemplateId;
   initialWorkspaceMode?: SimulationWorkspaceModeId;
-  showStarterGuide?: boolean;
+  starterLaunch?: StarterWorldLaunch;
 }
 
-export function AppShell({ initialTemplateId, initialWorkspaceMode, showStarterGuide = false }: AppShellProps) {
+export function AppShell({ initialTemplateId, initialWorkspaceMode, starterLaunch }: AppShellProps) {
   const hydratePreferences = useSimulationStore((state) => state.hydratePreferences);
   const isRunning = useSimulationStore((state) => state.isRunning);
   const speedMultiplier = useSimulationStore((state) => state.speedMultiplier);
@@ -49,15 +50,15 @@ export function AppShell({ initialTemplateId, initialWorkspaceMode, showStarterG
     setMounted(true);
     hydratePreferences();
     const state = useSimulationStore.getState();
-    if (initialTemplateId && showStarterGuide && !starterInitializedRef.current) {
+    if (starterLaunch && !starterInitializedRef.current) {
       starterInitializedRef.current = true;
-      state.selectTemplate(initialTemplateId);
+      state.applyScenario(createStarterWorldScenario(starterLaunch));
     } else if (initialTemplateId && state.selectedTemplateId !== initialTemplateId) {
       state.selectTemplate(initialTemplateId);
     } else {
       state.initialize();
     }
-  }, [hydratePreferences, initialTemplateId, showStarterGuide]);
+  }, [hydratePreferences, initialTemplateId, starterLaunch]);
 
   useEffect(() => {
     const mode = workspaceModeFromLocation();
@@ -146,7 +147,7 @@ export function AppShell({ initialTemplateId, initialWorkspaceMode, showStarterG
       <div className="ortus-layout" data-tools-state={toolsHidden ? "hidden" : "visible"}>
         <section className="workspace-center" aria-label="Simulation workspace" data-workspace-region="center">
           <div className="world-workspace">
-            {showStarterGuide ? <StarterActionNudge /> : null}
+            {starterLaunch ? <StarterActionNudge starterWorldId={starterLaunch.starterWorldId} /> : null}
             <WorldStage />
           </div>
           <TimelineControlStrip />

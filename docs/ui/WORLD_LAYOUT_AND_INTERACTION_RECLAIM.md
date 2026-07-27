@@ -2,7 +2,7 @@
 
 Date: 2026-07-24
 Prompt: R2
-Status: implementation complete; R2B audit and hardening complete; C1 next
+Status: implementation complete; R2B audit and hardening complete; C1 complete; C1B next
 
 ## 1. Scope
 
@@ -228,7 +228,7 @@ Final pre-commit R2 verification:
 - Dense expert controls still require internal scrolling on short and mobile viewports.
 - Model output remains exploratory model output, not empirical truth, validated prediction, causal proof, robustness proof, or policy guidance.
 
-## 27. R2B result and C1 handoff
+## 27. R2B result and C1/C1B handoff
 
 R1 complete.
 
@@ -240,4 +240,6 @@ R2B complete.
 
 R2B independently challenged model dominance, task ownership, URL/state coherence, collapse preservation, active-tool scroll, short-height and mobile reachability, focus return, all seven stage renderings, interpretation boundaries, and runtime/persistence integrity. It fixed explicit draft/rebuild semantics, browser task history, modal focus containment, hidden-work lifecycle, quick-control order, comparison recovery visibility, and full-reference metric inventory. The evidence record is `WORLD_LAYOUT_AND_INTERACTION_RECLAIM_AUDIT.md`.
 
-`C1: Starter World Content Framework` is next and has not started. R2/R2B tests are not proof of user comprehension, accessibility conformance, scientific validation, or new runtime support.
+C1 is complete. Its strict Starter World handoff reuses R2/R2B's existing scenario apply path to create fresh paused tick-0 runs and adds only a compact dismissible definition-driven nudge over the stage. It does not redesign World, change template runtime, or add persistence.
+
+`C1B: Starter World Content Framework Audit` is next and has not started. R2/R2B/C1 tests are not proof of user comprehension, accessibility conformance, scientific validation, or new runtime support.

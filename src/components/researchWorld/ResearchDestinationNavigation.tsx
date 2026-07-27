@@ -110,9 +110,9 @@ export function ResearchDestinationNavigation() {
         {primaryDestinations.map((destination) => {
           const current =
             destination.pathname === "/"
-              ? pathname === "/"
+              ? pathname === "/" || pathname.startsWith("/worlds")
               : destination.pathname === "/world"
-                ? pathname.startsWith(destination.pathname) && currentTask !== "experiment" && currentTask !== "compare"
+                ? (pathname === "/world" || pathname.startsWith("/world/")) && currentTask !== "experiment" && currentTask !== "compare"
                 : pathname.startsWith(destination.pathname);
           return (
             <li key={destination.label}>

@@ -239,6 +239,24 @@ describe("roadmap alignment and missing pillar reservations", () => {
       "product",
       "ORTUS_PRODUCT_EXPERIENCE_RESET_ROADMAP.md"
     );
+    const starterWorldFrameworkPath = join(
+      repoRoot,
+      "docs",
+      "product",
+      "STARTER_WORLD_CONTENT_FRAMEWORK.md"
+    );
+    const starterWorldPortfolioPath = join(
+      repoRoot,
+      "docs",
+      "product",
+      "STARTER_WORLD_PORTFOLIO.md"
+    );
+    const exploreWorldsCatalogPath = join(
+      repoRoot,
+      "docs",
+      "ui",
+      "EXPLORE_WORLDS_CATALOG.md"
+    );
     expect(existsSync(roadmapPath)).toBe(true);
     expect(existsSync(missingPillarsPath)).toBe(true);
     expect(existsSync(productPhilosophyPath)).toBe(true);
@@ -263,6 +281,9 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(existsSync(startHubResetPath)).toBe(true);
     expect(existsSync(worldLayoutReclaimPath)).toBe(true);
     expect(existsSync(productExperienceResetRoadmapPath)).toBe(true);
+    expect(existsSync(starterWorldFrameworkPath)).toBe(true);
+    expect(existsSync(starterWorldPortfolioPath)).toBe(true);
+    expect(existsSync(exploreWorldsCatalogPath)).toBe(true);
 
     const roadmap = readFileSync(roadmapPath, "utf8");
     const productPhilosophy = readFileSync(productPhilosophyPath, "utf8");
@@ -287,6 +308,9 @@ describe("roadmap alignment and missing pillar reservations", () => {
     const startHubReset = readFileSync(startHubResetPath, "utf8");
     const worldLayoutReclaim = readFileSync(worldLayoutReclaimPath, "utf8");
     const productExperienceResetRoadmap = readFileSync(productExperienceResetRoadmapPath, "utf8");
+    const starterWorldFramework = readFileSync(starterWorldFrameworkPath, "utf8");
+    const starterWorldPortfolio = readFileSync(starterWorldPortfolioPath, "utf8");
+    const exploreWorldsCatalog = readFileSync(exploreWorldsCatalogPath, "utf8");
     expect(roadmap).toContain("completed through Prompt 39B");
     expect(roadmap).toContain("Post-30B stabilization");
     expect(roadmap).toContain(
@@ -310,8 +334,8 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(roadmap).toContain("UX6B complete.");
     expect(roadmap).toContain("GW9 complete.");
     expect(roadmap).toContain("GW9B complete.");
-    expect(roadmap).toContain("R1, R1B, R2, and R2B are complete.");
-    expect(roadmap).toContain("The next documented roadmap milestone is C1: Starter World Content Framework.");
+    expect(roadmap).toContain("R1, R1B, R2, R2B, and C1 are complete.");
+    expect(roadmap).toContain("The next documented roadmap milestone is C1B: Starter World Content Framework Audit.");
     expect(roadmap).toContain("F1 and the fractal branch remain documented but are paused under E3 Analytical Lenses.");
     expect(startHubReset).toContain("/         -> Start Hub");
     expect(startHubReset).toContain("/world    -> live World workbench");
@@ -321,9 +345,10 @@ describe("roadmap alignment and missing pillar reservations", () => {
     );
     expect(worldLayoutReclaim).toContain("R2 complete.");
     expect(worldLayoutReclaim).toContain("R2B complete.");
-    expect(worldLayoutReclaim).toContain("`C1: Starter World Content Framework` is next and has not started.");
+    expect(worldLayoutReclaim).toContain("C1 is complete.");
+    expect(worldLayoutReclaim).toContain("`C1B: Starter World Content Framework Audit` is next and has not started.");
     expect(productExperienceResetRoadmap).toContain(
-      "Status: active product sequence; R1, R1B, R2, and R2B complete, C1 next"
+      "Status: active product sequence; R1, R1B, R2, R2B, and C1 complete; C1B next"
     );
     expect(productExperienceResetRoadmap).toContain("Every implementation milestone is followed by an audit milestone.");
     expect(productExperienceResetRoadmap).toContain("F1 and the rest of the F branch are paused beneath E3 Analytical Lenses.");
@@ -333,6 +358,36 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(productExperienceResetRoadmap).toContain(
       "-> S5 -> S5B -> E1 -> E1B -> E2 -> E2B -> E3 -> E3B"
     );
+    expect(starterWorldFramework).toContain("C1B: Starter World Content Framework Audit is next.");
+    expect(starterWorldFramework.match(/^## \d+\. /gm)).toHaveLength(17);
+    expect(exploreWorldsCatalog.match(/^## \d+\. /gm)).toHaveLength(13);
+    expect(starterWorldPortfolio.match(/^### [ABC]\d+\. /gm)).toHaveLength(24);
+    expect(starterWorldPortfolio.match(/^### A\d+\. /gm)).toHaveLength(8);
+    expect(starterWorldPortfolio.match(/^### B\d+\. /gm)).toHaveLength(8);
+    expect(starterWorldPortfolio.match(/^### C\d+\. /gm)).toHaveLength(8);
+    for (const field of [
+      "workingTitle",
+      "hookQuestion",
+      "domain",
+      "fictionalOrResearchContext",
+      "entities",
+      "environment",
+      "resources",
+      "networks",
+      "fields",
+      "scales",
+      "feedbacks",
+      "adaptation",
+      "observableOutputs",
+      "researchAnchors",
+      "currentEngineFit",
+      "capabilityGaps",
+      "estimatedImplementationTier",
+      "contentRisk",
+      "whyItIsCompelling"
+    ]) {
+      expect(starterWorldPortfolio.match(new RegExp(`- \`${field}\`:`, "g"))).toHaveLength(24);
+    }
     expect(roadmap).toContain("Prompt GW9 adds `docs/ui/EPHEMERAL_LANDSCAPE_SAMPLING_PREVIEW_V1.md`");
     expect(roadmap).toContain("Prompt GW7 adds non-persistent Behavioral Landscape Exploration Foundation");
     expect(roadmap).toContain("Prompt GW7B audits and hardens the Behavioral Landscape Exploration Foundation");

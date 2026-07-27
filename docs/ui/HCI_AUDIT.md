@@ -1,8 +1,8 @@
 # ORTUS HCI / UX / Visual-Direction Audit
 
 Date: 2026-06-11  
-Updated: 2026-07-27 during Prompt R2B World Layout and Interaction Audit + Hardening
-Prompt: historical UI/GW/UX work through GW9B, reset by R1/R1B, reclaimed by R2
+Updated: 2026-07-27 during Prompt C1 Starter World Content Framework
+Prompt: historical UI/GW/UX work through GW9B, reset by R1/R1B, reclaimed by R2/R2B, extended by C1
 Status: source-based and rendered-smoke-informed audit, not a formal WCAG audit
 
 ## 1. Executive Verdict
@@ -1608,3 +1608,13 @@ R2 complete.
 R2B complete.
 
 Conditionally ready for `C1: Starter World Content Framework`, with only the explicitly unverified external accessibility/zoom/comprehension areas remaining.
+
+## C1 Starter World Content Update
+
+C1 materially improves the entry experience instead of renaming template cards. `/worlds` leads with an explorable question and differentiated system illustration, then exposes bounded filters and seven runnable entries. Each detail page places premise, represented anatomy, baseline, specific first change, named observations, and Launch before research and one main model boundary.
+
+The HCI strength is a coherent invitation-to-action chain: Start -> Explore Worlds -> system question -> strict World handoff. The main risk remains interpretive authority. C1 mitigates that with structured source relationships, one compact research boundary, model-specific limitations, and explicit current-versus-future remix status. This is source and automated rendered evidence, not a participant study or proof that users learn the intended concepts.
+
+Catalog and detail states were exercised at the six required viewports, with keyboard controls, focus behavior, reduced motion, no horizontal overflow, browser diagnostics, and representative Axe checks. Actual browser zoom, screen readers, assistive technology, forced colors, complete touch workflow, participant comprehension, educational outcomes, and WCAG conformance remain unverified.
+
+R1 complete. R1B complete. R2 complete. R2B complete. C1 complete. `C1B: Starter World Content Framework Audit` is next and has not started.

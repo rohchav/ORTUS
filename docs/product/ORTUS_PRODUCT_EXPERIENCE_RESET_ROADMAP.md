@@ -1,7 +1,7 @@
 # ORTUS Product Experience Reset Roadmap
 
 Date: 2026-07-27
-Status: active product sequence; R1, R1B, R2, and R2B complete, C1 next
+Status: active product sequence; R1, R1B, R2, R2B, and C1 complete; C1B next
 
 ## Why This Sequence Exists
 
@@ -48,9 +48,11 @@ Every implementation milestone is followed by an audit milestone. Audit prompts 
 
 R1 and its required R1B audit are complete. R2 and its required R2B audit are also complete: World keeps a stable dominant stage and playback outside one bounded active-tool surface, with direct Setup, Observe, Change, Compare, and Explain tasks plus purpose-grouped More tools. R2B hardens explicit Setup drafts, same-document task history, modal focus containment, hidden experiment lifecycle, comparison recovery, metadata ordering, and full-reference output inventory without changing engine or persistence scope.
 
-`C1: Starter World Content Framework` is the next prompt and has not started. C2-C4, S1-S5, and E1-E3 have not started under this roadmap.
+C1 is complete. It adds the strict source-backed Starter World registry, `/worlds`, seven detail routes, deterministic catalog browsing, strict existing-scenario launch handoffs, quality lint, and a researched future portfolio. It does not add runtime behavior or persistence.
 
-The active route hierarchy after R1 is Start `/`, World `/world`, Workshop `/builder`, Atlas `/atlas`, and Lab `/lab`. That route state is an R1 implementation fact, not evidence that later starter, composition, Lab, Atlas, or analysis milestones exist.
+`C1B: Starter World Content Framework Audit` is next and has not started. C2-C4, S1-S5, and E1-E3 have not started under this roadmap.
+
+The active route hierarchy is Start `/`, Start-adjacent Explore Worlds `/worlds`, World `/world`, Workshop `/builder`, Atlas `/atlas`, and Lab `/lab`. `/worlds` contains only seven validated runnable definitions; its existence is not evidence that later starter packs, composition, Lab, Atlas, or analysis milestones exist.
 
 ## Paused Fractal Branch
 

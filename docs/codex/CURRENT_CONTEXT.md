@@ -1,10 +1,23 @@
 # ORTUS Current Context
 
-Last updated: 2026-07-27 during Prompt R2B World Layout and Interaction Audit + Hardening
+Last updated: 2026-07-27 during Prompt C1 Starter World Content Framework + Explore-Worlds Catalog
 
 ## Current Prompt Status
 
-R1, R1B, R2, and R2B are complete. `/` is the task-centered Start Hub; `/world` is the live workbench; `/builder`, `/atlas`, and `/lab` retain their established behavior. Primary navigation is Start, World, Workshop, and a keyboard-operated Research tools menu for Atlas, Lab, Experiments, and Compare runs. `C1: Starter World Content Framework` is next and has not started. F1 remains paused under E3 Analytical Lenses.
+- R1 complete.
+- R1B complete.
+- R2 complete.
+- R2B complete.
+- C1 complete.
+C1B: Starter World Content Framework Audit is next.
+
+`/` is the task-centered Start Hub; `/worlds` is its seven-entry runnable Starter World catalog; `/worlds/[slug]` is the source-backed detail experience; `/world` is the live workbench; `/builder`, `/atlas`, and `/lab` retain their established behavior. Primary navigation remains Start, World, Workshop, and a keyboard-operated Research tools menu. Explore Worlds is Start-adjacent rather than an equal global destination. F1 remains paused under E3 Analytical Lenses.
+
+C1's implementation records are `docs/product/STARTER_WORLD_CONTENT_FRAMEWORK.md`, `docs/product/STARTER_WORLD_PORTFOLIO.md`, and `docs/ui/EXPLORE_WORLDS_CATALOG.md`. The strict version `"1"` data model and validated registry are in `src/lib/starterWorlds`. All seven current production templates have rich runnable definitions with represented anatomy, bounded taxonomy, one existing first-change control, existing observations, two to four investigations, one to three verified sources, a compact model boundary, and current-versus-future remix status.
+
+Runnable definitions revalidate production template, initialization preset, metric, parameter, and optional intervention references. `defaultScenarioId` refers to the authoritative template initialization preset used through existing scenario services; C1 does not create a parallel scenario registry. Launch requests accept IDs only, reject unknown fields and mismatches, and create a fresh deterministic paused tick-0 run through `createDefaultScenario`, `updateScenarioPreset`, and `validateScenario`. Malformed launches render an error before the World shell is constructed.
+
+Starter World content is metadata and presentation, not runtime capability. The seven definitions do not change template logic, defaults, bounds, metrics, interventions, scheduling, RNG, snapshots, experiments, comparisons, Atlas, Builder, or persistence. Portfolio candidates are documentation only. Sources provide a research connection; they do not validate or calibrate ORTUS models. C1 adds no storage key.
 
 R2's implementation record is `docs/ui/WORLD_LAYOUT_AND_INTERACTION_RECLAIM.md`; R2B's audit record is `docs/ui/WORLD_LAYOUT_AND_INTERACTION_RECLAIM_AUDIT.md`. World uses a stable `tasks + stage/playback + active tool` frame. Setup, Observe, Change, Compare, and Explain are direct tasks; More groups Experiment Runner and Diagnostics. The selected tool owns one bounded scroll, full model notes and technical run details use focus-contained modal surfaces, and desktop collapse/restore preserves local tool state.
 
@@ -155,7 +168,7 @@ Built-in production templates currently include Epidemic Spread, Opinion Dynamic
 
 ## Completed Prompt State
 
-Durable docs and source indicate completed roadmap work through Prompt 39B plus the documented side tracks, Research World/UI work through Prompt GW9B, and R1/R1B/R2/R2B. Prompt 31 through Prompt 39B are complete. UX6/UX6B established and audited the bounded Guided Builder; GW9/GW9B established and audited the bounded Atlas preview; R1 resets product entry and the World shell; R1B audits and hardens that reset; R2 reclaims the World layout and interaction hierarchy; R2B audits and hardens it without changing engine semantics or persistence scope.
+Durable docs and source indicate completed roadmap work through Prompt 39B plus the documented side tracks, Research World/UI work through Prompt GW9B, and R1/R1B/R2/R2B/C1. Prompt 31 through Prompt 39B are complete. UX6/UX6B established and audited the bounded Guided Builder; GW9/GW9B established and audited the bounded Atlas preview; R1 resets product entry and the World shell; R1B audits and hardens that reset; R2 reclaims the World layout and interaction hierarchy; R2B audits and hardens it; C1 adds the Starter World content/catalog layer without changing engine semantics or persistence scope.
 
 The post-30B repository hygiene, dependency stabilization, durable context, and performance/scalability pass has also been completed. Recent commits include `dd6c256` for repo context/generated-artifact hygiene, `4949b72` for dependency and performance script stabilization, and `a80d5b7` for simulation performance instrumentation and spatial indexing foundations.
 
@@ -167,11 +180,12 @@ R1 complete.
 R1B complete.
 R2 complete.
 R2B complete.
-The next documented roadmap milestone is C1: Starter World Content Framework.
+C1 complete.
+The next documented roadmap milestone is C1B: Starter World Content Framework Audit.
 
-Completed sequence: UX6B -> GW9 -> GW9B -> R1 -> R1B -> R2 -> R2B. C1 is not started.
+Completed sequence: UX6B -> GW9 -> GW9B -> R1 -> R1B -> R2 -> R2B -> C1. C1B is not started.
 
-Do not start C1 without its dedicated prompt, and do not start C2, recipe-first Builder, composition, multiscale runtime, adaptive-controller generalization, Lab/Atlas persistence, E3, F1, or other reset-roadmap capability early. Rendered Playwright/Axe evidence does not establish actual browser zoom, screen-reader, assistive-technology, forced-colors, full WCAG, mobile-workflow, or user-comprehension readiness.
+Do not skip C1B, and do not start C2, recipe-first Builder, composition, multiscale runtime, adaptive-controller generalization, Lab/Atlas persistence, E3, F1, or other reset-roadmap capability early. Rendered Playwright/Axe evidence does not establish actual browser zoom, screen-reader, assistive-technology, forced-colors, full WCAG, mobile-workflow, or user-comprehension readiness.
 
 Implemented runtime foundations include scenarios, snapshots, template-defined behavior modes, agent composition, interventions, experiments, run summaries/comparison, seeded randomness, metrics, spaces, template metadata, and a narrow Opinion Dynamics `socialLearning` behavior mode audited in Prompt 33D.
 
