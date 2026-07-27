@@ -279,7 +279,12 @@ export function LeftInstrumentStack({
             </button>
           </header>
           <div ref={panelScrollRef} className="workspace-context-panel__scroll" data-intentional-scroll-region="workspace-context">
-            {renderWorkspaceMode(activeMode, chooseMode, !toolsHidden)}
+            <div hidden={activeMode !== "setup"}>
+              <RailPanelSlot panelId="runSettings">
+                <RunSettingsPanel active={activeMode === "setup" && !toolsHidden} />
+              </RailPanelSlot>
+            </div>
+            {activeMode === "setup" ? null : renderWorkspaceMode(activeMode, chooseMode, !toolsHidden)}
           </div>
         </section>
       </aside>
@@ -312,11 +317,7 @@ function renderWorkspaceMode(
 ): ReactNode {
   switch (mode) {
     case "setup":
-      return (
-        <RailPanelSlot panelId="runSettings">
-          <RunSettingsPanel active={toolsVisible} />
-        </RailPanelSlot>
-      );
+      return null;
     case "understand":
       return (
         <RailPanelSlot panelId="assumptions">
@@ -338,7 +339,7 @@ function renderWorkspaceMode(
     case "experiment":
       return (
         <RailPanelSlot panelId="experiments">
-          <ExperimentPanel embedded />
+          <ExperimentPanel embedded active={toolsVisible} />
         </RailPanelSlot>
       );
     case "compare":

@@ -4,7 +4,7 @@ This roadmap reserves the major complex-systems pillars that ORTUS must support 
 
 ## Current Foundation
 
-ORTUS has completed through Prompt 39B, the documented neural/runtime-lab side track, the Research World sequence through GW9B, UX3 through UX6B, RH1, R1, R1B, and R2. Prompts 1-39B established the modeling foundation; GW9/GW9B established the first bounded Atlas sampling slice; R1 repackages existing product capability around a Start Hub and world-first shell; R1B audits and hardens that reset; R2 reclaims World layout and task ownership without changing runtime semantics:
+ORTUS has completed through Prompt 39B, the documented neural/runtime-lab side track, the Research World sequence through GW9B, UX3 through UX6B, RH1, R1, R1B, R2, and R2B. Prompts 1-39B established the modeling foundation; GW9/GW9B established the first bounded Atlas sampling slice; R1 repackages existing product capability around a Start Hub and world-first shell; R1B audits and hardens that reset; R2 reclaims World layout and task ownership; R2B audits and hardens it without changing runtime semantics:
 
 - Engine/runtime/UI foundation.
 - Scenario Builder.
@@ -74,12 +74,13 @@ ORTUS has completed through Prompt 39B, the documented neural/runtime-lab side t
 - Prompt R1 adds `docs/ui/START_HUB_AND_WORLD_FIRST_PRODUCT_RESET.md`, makes `/` the Start Hub, moves the unchanged live workbench to `/world`, derives a seven-system catalog from production template metadata, makes the World Stage dominant, and demotes broad capability walls. It changes product hierarchy and presentation only; it does not change engine, template, scenario, metric, intervention, Experiment Runner, comparison, Atlas execution, Builder execution, or persistence semantics.
 - Prompt R1B adds `docs/ui/FIRST_RUN_AND_WORLD_FIRST_SHELL_AUDIT.md`, audits first-run tasks and rendered hierarchy, and hardens fresh starter launch, parameter-rebuild explanation, task/query/current-state coherence, keyboard focus, panel scroll recovery, model-specific Understand content, Atlas action visibility, and the mobile brand lockup. It adds no R2 behavior, runtime behavior, persistence, analytics, or dependency.
 - Prompt R2 adds `docs/ui/WORLD_LAYOUT_AND_INTERACTION_RECLAIM.md`, keeps the live stage and playback mounted outside task rendering, adds compact World context, direct Setup/Observe/Change/Compare/Explain tasks, purpose-grouped More tools, bounded active-tool scrolling, focus-managed full references, collapse/restore, and responsive mobile containment. It changes presentation and UI coordination only; it adds no simulation, template, scenario, intervention, metric, experiment, comparison, Atlas, Builder, persistence, dependency, or route behavior.
+- Prompt R2B adds `docs/ui/WORLD_LAYOUT_AND_INTERACTION_RECLAIM_AUDIT.md`, hardens explicit Setup drafts/rebuilds, task browser history, modal focus containment, hidden experiment lifecycle, quick-control ordering, comparison recovery, and full-reference metric inventory. It adds no simulation capability, template support, persistence key, route, dependency, Atlas behavior, or Builder behavior.
 
 These foundations are deliberately service-first or metadata-first unless documented otherwise. Networks, resources, feedback primitives, boundary/environment models, spatial fields, observability models, causal assumptions, quantity semantics, emergence descriptors, robustness/resilience descriptors, and strategy/control descriptors are headless structural services until a template explicitly uses them at runtime. A template must not claim support for a primitive merely because a service exists.
 
 After Prompt 30B, ORTUS completed a repository hygiene, durable context, dependency stabilization, and performance/scalability pass. That pass added and validated performance instrumentation and spatial-indexing foundations, but it does not turn reserved structural primitives into runtime support and is not evidence for high-scale readiness by itself.
 
-Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 39B: Scenario Planning From Schema Audit are complete. The documented side-track and Research World/UI prompts through GW9B are complete. R1, R1B, and R2 are complete. The next documented roadmap milestone is R2B: World Layout and Interaction Audit. F1 and the fractal branch remain documented but are paused under E3 Analytical Lenses.
+Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 39B: Scenario Planning From Schema Audit are complete. The documented side-track and Research World/UI prompts through GW9B are complete. R1, R1B, R2, and R2B are complete. The next documented roadmap milestone is C1: Starter World Content Framework. F1 and the fractal branch remain documented but are paused under E3 Analytical Lenses.
 
 ## Active Product Experience Reset
 
@@ -92,7 +93,7 @@ S1 / S1B -> S2 / S2B -> S3 / S3B -> S4 / S4B -> S5 / S5B
 E1 / E1B -> E2 / E2B -> E3 / E3B
 ```
 
-R1 is Start Hub and World-First Product Reset. R1B is its completed First-Run and World-First Shell Audit + Hardening gate. R2 World Layout and Interaction Reclaim is complete. R2B World Layout and Interaction Audit is next and has not started. The R/C/S/E labels describe planned milestones, not implemented capabilities. F0 remains a historical documentation branch; F1 is paused beneath E3 and must not start as the former immediate next milestone.
+R1 is Start Hub and World-First Product Reset. R1B is its completed First-Run and World-First Shell Audit + Hardening gate. R2 World Layout and Interaction Reclaim and R2B World Layout and Interaction Audit + Hardening are complete. C1 Starter World Content Framework is next and has not started. The R/C/S/E labels describe planned milestones, not implemented capabilities. F0 remains a historical documentation branch; F1 is paused beneath E3 and must not start as the former immediate next milestone.
 
 ## Revised Prompt Sequence
 

@@ -3715,3 +3715,71 @@ Roadmap result:
 - R2 complete.
 - R2B: World Layout and Interaction Audit is next and has not started.
 - C1 and F1 remain unstarted; F1 remains paused under E3 Analytical Lenses.
+
+### Prompt R2B: World Layout and Interaction Audit + Hardening
+
+Date: 2026-07-27
+
+Goal: independently audit the completed R2 World shell, fix every evidenced P0/P1 and bounded P2 defect without broadening runtime or persistence, and decide whether the product shell is stable enough for C1 starter-content architecture.
+
+Starting state:
+
+- Branch `main` was clean and aligned at `7f5c51d feat: reclaim world layout and interaction`; `HEAD` matched `origin/main` after fetch.
+- Untouched focused destination-shell Playwright passed `53` tests in `6.6m`.
+- Untouched full UI Playwright passed `110` tests in `11.3m`.
+- Untouched unit verification passed `75` files / `610` tests in `87.95s`; typecheck, production build, simulation/Atlas performance smoke, and `git diff --check` passed.
+- `npm run lint: unavailable, package.json has no lint script.`
+
+Defects and hardening:
+
+- No P0 or P3 defect was found.
+- Three P1 defect families were fixed. Setup's active-versus-draft boundary rebuilt parameter/seed edits before explicit apply and initially omitted exact active values or composable draft preservation; task clicks replaced one history entry so browser Back could leave World; and modal Tab navigation could escape to `body`.
+- Five P2 defect families were fixed. Quick controls ignored presentation-metadata order; closed run-details content retained live tick-subscribing children; abandoned experiments lacked irreversible task/collapse/unmount lifecycle cancellation; full model references omitted explicit model-output inventory; and malformed comparison-storage warnings were hidden from Compare.
+- Setup parameter and seed inputs are now local drafts. Every parameter row exposes the exact active-run value, parameter drafts survive task/collapse and seed-only rebuilds, blur does not rebuild, and explicit apply/rebuild uses the existing validator and fresh paused tick-0 engine path.
+- World task clicks create same-document history entries. Back/Forward restores the task/query without remounting the stage or resetting tick, run status, template, seed, applied parameters, or Setup drafts.
+- Modal surfaces explicitly contain forward/reverse Tab, support Escape/focus return, and unmount live children while closed.
+- Experiment task exit, collapse, or unmount requests cooperative cancellation, suppresses hidden progress, and permanently marks that invocation abandoned so immediate restore cannot publish it. Cancellation still occurs between bounded synchronous runs.
+- Compare exposes corrupt-library recovery without treating invalid records as evidence or changing the existing storage key, schema, cap, or persistence scope.
+- Every production template's full reference now lists registered model-output metrics and states that they are not empirical observations, calibrated estimates, or validation evidence.
+
+Rendered evidence:
+
+- Audited `1440x900`, `1280x720`, `1024x768`, `900x700`, `1280x600`, and `390x844`.
+- Measured stage sizes were `994x730`, `834x550`, `624x598`, `500x530`, `834x444.453`, and `374x335.453`; the stage remained dominant/stable and playback remained reachable.
+- All seven production-template stages rendered nonblank and legible. Task transitions, More, collapse/restore, dialogs, and browser history preserved the mounted stage and active run.
+- Automated coverage exercised exact active/draft values, explicit rebuilds, metric/intervention hierarchy, comparison recovery, model reference, modal focus, abandoned sweeps, reduced motion, Axe, diagnostics, storage, and seven-template rendering.
+- Actual browser zoom at 125%, 150%, and 200% was not verified.
+- Screen-reader use, assistive-technology use, forced colors, complete touch workflow, participant comprehension, and WCAG conformance remain unverified.
+
+Integrity:
+
+- No production simulation implementation file changed. Simulation scheduling, deterministic RNG, engine stepping, template/scenario behavior, metrics, interventions, snapshots, comparison calculations, registry support, Atlas execution, and Builder non-execution boundaries are unchanged.
+- No route, dependency, template, scenario, metric, intervention, primitive, storage key, persistence destination, backend, analytics, personalization, or C1 content was added.
+- Existing World comparisons remain bounded local summaries, not Lab evidence or Atlas discoveries. Setup drafts and warning state remain in memory only.
+- Simulation output remains model output, not empirical truth.
+
+Final verification:
+
+- Dedicated R2/R2B Playwright: `29 passed (2.8m)`.
+- Focused destination-shell Playwright: `53 passed (6.3m)`, `376.10s` wall-clock.
+- Complete Playwright/Axe suite: `115 passed (12.1m)`, with no retries or skips.
+- Typecheck: passed in `2.12s`.
+- Unit tests: `75 files / 610 tests` passed in `75.46s` (`76.01s` wall-clock).
+- Production build: passed in `30.59s`; Next compiled in `7.4s`, and `/world` remains dynamic.
+- Simulation performance smoke: Flocking-100 `161.10` ticks/sec, Flocking-500 `19.22`, Forest Fire `28.81`, and Predator-Prey `89.63`.
+- Bounded Atlas smoke: `2` runs / `10` work units in `42.47ms`.
+- Performance command elapsed: `12.86s`.
+- `git diff --check`: passed.
+- `npm run lint: unavailable, package.json has no lint script.`
+- Long browser commands were rerun in a persistent process host after the ordinary command wrapper sent SIGTERM to otherwise passing partial runs. Only terminally completed invocations are reported above.
+- One stale source-format unit assertion was strengthened to check authoritative definitions, filtering, exact active values, and draft status; the final complete unit invocation passed.
+
+Roadmap result:
+
+- R1 complete.
+- R1B complete.
+- R2 complete.
+- R2B complete.
+- Decision: conditionally ready for C1 because only external zoom/accessibility/comprehension verification remains.
+- C1: Starter World Content Framework is next and has not started.
+- F1 remains paused under E3 Analytical Lenses.

@@ -1,6 +1,6 @@
 "use client";
 
-import type { JsonValue, ParameterDefinition } from "../simulation";
+import type { JsonValue, ParameterDefinition, ParameterValues } from "../simulation";
 import { formatNumber } from "../lib/format";
 import { getTemplateDescriptor } from "../lib/templateVisuals";
 import { useSimulationStore } from "../state/simulationStore";
@@ -12,6 +12,9 @@ interface ParameterPanelProps {
   showNote?: boolean;
   ariaLabel?: string;
   searchQuery?: string;
+  values: ParameterValues;
+  activeValues: ParameterValues;
+  onDraftChange: (key: string, value: JsonValue) => void;
 }
 
 export function ParameterPanel({
@@ -20,25 +23,35 @@ export function ParameterPanel({
   highlightedKey,
   showNote = false,
   ariaLabel = "Model parameters",
-  searchQuery = ""
-}: ParameterPanelProps = {}) {
+  searchQuery = "",
+  values,
+  activeValues,
+  onDraftChange
+}: ParameterPanelProps) {
   const selectedTemplateId = useSimulationStore((state) => state.selectedTemplateId);
-  const parameterValues = useSimulationStore((state) => state.parameterValues);
-  const setParameter = useSimulationStore((state) => state.setParameter);
   const normalizedSearch = searchQuery.trim().toLowerCase();
-  const definitions = getTemplateDescriptor(selectedTemplateId).template.parameterDefinitions.filter((definition) => {
-    if ((includeKeys && !includeKeys.includes(definition.key)) || excludeKeys.includes(definition.key)) {
-      return false;
-    }
-    return !normalizedSearch || `${definition.label} ${definition.key} ${definition.description}`.toLowerCase().includes(normalizedSearch);
-  });
+  const includeOrder = new Map(includeKeys?.map((key, index) => [key, index]));
+  const definitions = getTemplateDescriptor(selectedTemplateId).template.parameterDefinitions
+    .filter((definition) => {
+      if ((includeKeys && !includeKeys.includes(definition.key)) || excludeKeys.includes(definition.key)) {
+        return false;
+      }
+      return !normalizedSearch || `${definition.label} ${definition.key} ${definition.description}`.toLowerCase().includes(normalizedSearch);
+    })
+    .sort((left, right) => {
+      if (!includeOrder) {
+        return 0;
+      }
+      return (includeOrder.get(left.key) ?? Number.MAX_SAFE_INTEGER) - (includeOrder.get(right.key) ?? Number.MAX_SAFE_INTEGER);
+    });
 
   const controls = definitions.map((definition) => (
     <ParameterControl
       key={definition.key}
       definition={definition}
-      value={parameterValues[definition.key] ?? definition.defaultValue}
-      onChange={(value) => setParameter(definition.key, value)}
+      value={values[definition.key] ?? definition.defaultValue}
+      activeValue={activeValues[definition.key] ?? definition.defaultValue}
+      onChange={(value) => onDraftChange(definition.key, value)}
       highlighted={definition.key === highlightedKey}
     />
   ));
@@ -47,7 +60,7 @@ export function ParameterPanel({
     <div className="parameter-panel" aria-label={ariaLabel}>
       {showNote ? (
         <p className="parameter-panel__note">
-          Parameter changes rebuild a fresh tick-0 run through template parameter checks. Unsupported combinations are rejected before the engine is replaced.
+          Parameter edits remain drafts until you explicitly rebuild. Rebuild uses template parameter checks, and unsupported combinations are rejected before the engine is replaced.
         </p>
       ) : null}
       {controls.length > 0 ? controls : <p className="parameter-panel__empty">No parameters match this search.</p>}
@@ -58,14 +71,18 @@ export function ParameterPanel({
 function ParameterControl({
   definition,
   value,
+  activeValue,
   onChange,
   highlighted
 }: {
   definition: ParameterDefinition;
   value: JsonValue;
+  activeValue: JsonValue;
   onChange: (value: JsonValue) => void;
   highlighted: boolean;
 }) {
+  const activeStatus = formatActiveStatus(definition, value, activeValue);
+
   if (definition.type === "boolean") {
     return (
       <label className={`parameter-control parameter-control--boolean${highlighted ? " is-highlighted" : ""}`}>
@@ -74,6 +91,7 @@ function ParameterControl({
           <em>{definition.description}</em>
         </span>
         <input type="checkbox" checked={Boolean(value)} onChange={(event) => onChange(event.target.checked)} suppressHydrationWarning />
+        <span className="parameter-control__mode">{activeStatus}</span>
       </label>
     );
   }
@@ -92,6 +110,7 @@ function ParameterControl({
             </option>
           ))}
         </select>
+        <span className="parameter-control__mode">{activeStatus}</span>
       </label>
     );
   }
@@ -125,9 +144,19 @@ function ParameterControl({
           suppressHydrationWarning
         />
       </span>
-      <span className="parameter-control__mode">Fresh-run rebuild</span>
+      <span className="parameter-control__mode">{activeStatus}</span>
     </label>
   );
+}
+
+function formatActiveStatus(definition: ParameterDefinition, draftValue: JsonValue, activeValue: JsonValue): string {
+  const displayValue =
+    definition.type === "number" || definition.type === "integer"
+      ? formatParameterValue(Number(activeValue), definition.min === 0 && definition.max === 1)
+      : String(activeValue);
+  return Object.is(draftValue, activeValue)
+    ? `Active run: ${displayValue}. Draft matches.`
+    : `Active run: ${displayValue}. Draft pending.`;
 }
 
 function formatParameterValue(value: number, asPercent: boolean): string {

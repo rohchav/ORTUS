@@ -80,6 +80,7 @@ test("repeated featured-starter launch rebuilds the prepared run without writing
   const tick = page.locator(".timeline-strip__readout strong").first();
   await expect(alignment).toHaveValue("0.55");
   await alignment.fill("0.31");
+  await page.getByRole("button", { name: "Rebuild run with parameter drafts" }).click();
   await page.getByRole("button", { name: "Run simulation" }).click();
   await expect(page.getByRole("button", { name: "Pause simulation" })).toBeVisible();
   await expect.poll(() => numericText(tick)).toBeGreaterThan(0);
@@ -97,22 +98,27 @@ test("repeated featured-starter launch rebuilds the prepared run without writing
   expect(await readStorage(page)).toEqual(storageBefore);
 });
 
-test("a key parameter change explains and performs a fresh paused tick-0 rebuild", async ({ page }) => {
+test("a key parameter edit remains a draft until an explicit paused tick-0 rebuild", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 720 });
   await page.goto("/world?template=flocking-boids&starter=flocking", { waitUntil: "domcontentloaded" });
   await expect(
-    page.getByText("Changing a key control rebuilds a paused tick-0 run immediately. Choose Run to start the new configuration.")
+    page.getByText(/Parameter and seed edits stay as Setup drafts/)
   ).toBeVisible();
   await expect(page.locator(".run-settings-quick .parameter-control__mode")).toHaveCount(4);
 
   const tick = page.locator(".timeline-strip__readout strong").first();
   await page.getByRole("button", { name: "Run simulation" }).click();
   await expect.poll(() => numericText(tick)).toBeGreaterThan(0);
+  await page.getByRole("button", { name: "Pause simulation" }).click();
+  const tickBeforeDraft = await numericText(tick);
   await page.getByRole("spinbutton", { name: "Alignment weight numeric value" }).fill("0.51");
 
-  await expect(page.getByRole("button", { name: "Run simulation" })).toBeVisible();
+  await expect(page.locator(".run-settings-quick").getByText("1 parameter draft differs from the active run. Rebuild required.")).toBeVisible();
   await expect(page.locator(".timeline-strip__label strong")).toHaveText("Paused");
+  expect(await numericText(tick)).toBe(tickBeforeDraft);
+  await page.getByRole("button", { name: "Rebuild run with parameter drafts" }).click();
   await expect(tick).toHaveText("0");
+  await expect(page.locator(".run-settings-quick").getByText("Parameter drafts match the active run.")).toBeVisible();
   await page.getByRole("button", { name: "Run simulation" }).click();
   await expect.poll(() => numericText(tick)).toBeGreaterThan(0);
 });
@@ -200,14 +206,18 @@ test("every production Explain summary stays concise and Neural prioritizes a mo
     expect(summary).not.toContain("See the complete model notes for this item.");
     expect(summary).not.toMatch(/Builder graphs|model-schema|visual programming|NetLogo|Mesa|MASON|LLM/i);
 
+    await explanation.getByRole("button", { name: "Full model notes" }).click();
+    const reference = page.getByRole("dialog");
+    await expect(reference.getByRole("heading", { name: "Model-output metrics" })).toBeVisible();
+    await expect(reference.getByText(/not empirical observations, calibrated estimates, or validation evidence/)).toBeVisible();
+
     if (templateId === "neural-excitation-network") {
       expect(summary.match(/biological brain simulation/gi) ?? []).toHaveLength(1);
       expect(summary).toMatch(/does not include learning or plasticity/i);
-      await explanation.getByRole("button", { name: "Full model notes" }).click();
-      await expect(page.getByRole("dialog", { name: "Neural Excitation Network" })).toBeVisible();
-      await expect(page.getByText(/does not make Builder graphs executable/i)).toHaveCount(0);
-      await page.getByRole("button", { name: "Close model reference" }).click();
+      await expect(reference).toHaveAccessibleName("Neural Excitation Network");
+      await expect(reference.getByText(/does not make Builder graphs executable/i)).toHaveCount(0);
     }
+    await reference.getByRole("button", { name: "Close model reference" }).click();
   }
 });
 

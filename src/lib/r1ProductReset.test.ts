@@ -100,7 +100,7 @@ describe("R1 Start Hub and World-first product reset contracts", () => {
     );
   });
 
-  it("locks R2B as next after completed R2 and preserves every implementation-audit pair", () => {
+  it("locks C1 as next after completed R2B and preserves every implementation-audit pair", () => {
     const roadmap = source("docs/product/ORTUS_PRODUCT_EXPERIENCE_RESET_ROADMAP.md");
     const milestones = [
       "R1", "R1B", "R2", "R2B",
@@ -112,8 +112,8 @@ describe("R1 Start Hub and World-first product reset contracts", () => {
 
     expect(positions.every((position) => position >= 0)).toBe(true);
     expect(positions).toEqual([...positions].sort((left, right) => left - right));
-    expect(roadmap).toContain("Status: active product sequence; R1, R1B, and R2 complete, R2B next");
-    expect(roadmap).toContain("`R2B: World Layout and Interaction Audit` is the next prompt and has not started.");
+    expect(roadmap).toContain("Status: active product sequence; R1, R1B, R2, and R2B complete, C1 next");
+    expect(roadmap).toContain("`C1: Starter World Content Framework` is the next prompt and has not started.");
     expect(roadmap).toContain("F1 and the rest of the F branch are paused beneath E3 Analytical Lenses.");
   });
 });

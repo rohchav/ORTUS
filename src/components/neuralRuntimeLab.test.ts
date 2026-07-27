@@ -331,7 +331,11 @@ describe("Neural Runtime Lab UX view model", () => {
     expect(runSettings).toContain('hidden={view !== "parameters"}');
     expect(runSettings).toContain('id="neural-advanced-config-toggle"');
     expect(runSettings).toContain("ortus:open-neural-advanced-config");
-    expect(parameterPanel).toContain("getTemplateDescriptor(selectedTemplateId).template.parameterDefinitions.filter");
+    expect(parameterPanel).toContain("getTemplateDescriptor(selectedTemplateId).template.parameterDefinitions");
+    expect(parameterPanel).toContain(".filter((definition) =>");
+    expect(parameterPanel).toContain("activeValue={activeValues[definition.key] ?? definition.defaultValue}");
+    expect(parameterPanel).toContain("Active run:");
+    expect(parameterPanel).toContain("Draft pending.");
     expect(component).toContain('aria-label="Neural lab scenarios"');
     expect(component).toContain('aria-label="Live neural explanation"');
     expect(component).toContain('aria-label="Neural lab timeline"');

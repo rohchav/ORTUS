@@ -3,7 +3,7 @@
 Date: 2026-07-19
 Prompt: R1B
 Historical decision: Conditionally ready for R2: World Layout and Interaction Reclaim
-Current handoff: R2 is complete; R2B World Layout and Interaction Audit is next
+Current handoff: R2 and R2B are complete; C1 Starter World Content Framework is next
 
 ## 1. Scope
 
@@ -326,6 +326,10 @@ R2 subsequently completed its dedicated World Layout and Interaction Reclaim sco
 
 R2 complete.
 
-R2B: World Layout and Interaction Audit is next and has not started.
+R2B subsequently completed its dedicated World Layout and Interaction Audit + Hardening scope. Its evidence record is `WORLD_LAYOUT_AND_INTERACTION_RECLAIM_AUDIT.md`.
+
+R2B complete.
+
+C1: Starter World Content Framework is next and has not started.
 
 F1 remains paused under E3 Analytical Lenses.

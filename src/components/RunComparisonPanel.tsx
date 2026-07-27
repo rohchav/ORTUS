@@ -23,6 +23,7 @@ export function RunComparisonPanel({ collapsed = false, onToggle, embedded = fal
   const seed = useSimulationStore((state) => state.seed);
   const isRunning = useSimulationStore((state) => active && state.isRunning);
   const savedRuns = useSimulationStore((state) => state.savedRuns);
+  const runLibraryWarning = useSimulationStore((state) => state.runLibraryWarning);
   const selectedRunIds = useSimulationStore((state) => state.selectedComparisonRunIds);
   const baselineRunId = useSimulationStore((state) => state.baselineRunId);
   const latestExperimentResultSet = useSimulationStore((state) => state.latestExperimentResultSet);
@@ -92,6 +93,13 @@ export function RunComparisonPanel({ collapsed = false, onToggle, embedded = fal
         <p className="run-comparison-note">
           Capture this run as a bounded local summary, then select saved summaries to inspect differences.
         </p>
+        {runLibraryWarning ? (
+          <div className="run-library-warning" role="alert">
+            <strong>Saved-run recovery warning</strong>
+            <p>{runLibraryWarning} No invalid records were loaded or treated as comparison evidence.</p>
+            <button type="button" onClick={clearSavedRuns}>Discard stored run library</button>
+          </div>
+        ) : null}
         <h3 className="world-section-heading">Capture current run</h3>
         <div className="run-capture-grid">
           <label>

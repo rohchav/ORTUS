@@ -13,6 +13,7 @@ import { CapabilityGuidancePanel } from "./researchWorld/CapabilityGuidancePanel
 import { ModalSurface } from "./ui/ModalSurface";
 import {
   defaultSimulationWorkspaceModeId,
+  simulationWorkspaceModeFromQuery,
   simulationWorkspaceModeQueryValue,
   type SimulationWorkspaceModeId
 } from "../lib/workspaceModes";
@@ -59,23 +60,26 @@ export function AppShell({ initialTemplateId, initialWorkspaceMode, showStarterG
   }, [hydratePreferences, initialTemplateId, showStarterGuide]);
 
   useEffect(() => {
-    setActiveWorkspaceMode(initialWorkspaceMode ?? defaultSimulationWorkspaceModeId);
+    const mode = workspaceModeFromLocation();
+    setActiveWorkspaceMode(mode);
+    replaceNonCanonicalWorkspaceHref(mode);
   }, [initialWorkspaceMode]);
+
+  useEffect(() => {
+    function syncWorkspaceModeFromHistory() {
+      setActiveWorkspaceMode(workspaceModeFromLocation());
+    }
+    window.addEventListener("popstate", syncWorkspaceModeFromHistory);
+    return () => window.removeEventListener("popstate", syncWorkspaceModeFromHistory);
+  }, []);
 
   function changeWorkspaceMode(mode: SimulationWorkspaceModeId) {
     setActiveWorkspaceMode(mode);
 
-    const query = new URLSearchParams(window.location.search);
-    const task = simulationWorkspaceModeQueryValue(mode);
-    if (task) {
-      query.set("task", task);
-    } else {
-      query.delete("task");
-    }
-    const nextHref = `/world${query.size > 0 ? `?${query.toString()}` : ""}${window.location.hash}`;
+    const nextHref = workspaceHref(mode);
     const currentHref = `${window.location.pathname}${window.location.search}${window.location.hash}`;
     if (nextHref !== currentHref) {
-      window.history.replaceState(window.history.state, "", nextHref);
+      window.history.pushState(window.history.state, "", nextHref);
     }
   }
 
@@ -171,4 +175,28 @@ export function AppShell({ initialTemplateId, initialWorkspaceMode, showStarterG
       </ModalSurface>
     </section>
   );
+}
+
+function workspaceModeFromLocation(): SimulationWorkspaceModeId {
+  const query = new URLSearchParams(window.location.search);
+  return simulationWorkspaceModeFromQuery(query.get("task") ?? undefined) ?? defaultSimulationWorkspaceModeId;
+}
+
+function workspaceHref(mode: SimulationWorkspaceModeId): string {
+  const query = new URLSearchParams(window.location.search);
+  const task = simulationWorkspaceModeQueryValue(mode);
+  if (task) {
+    query.set("task", task);
+  } else {
+    query.delete("task");
+  }
+  return `/world${query.size > 0 ? `?${query.toString()}` : ""}${window.location.hash}`;
+}
+
+function replaceNonCanonicalWorkspaceHref(mode: SimulationWorkspaceModeId): void {
+  const canonicalHref = workspaceHref(mode);
+  const currentHref = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+  if (canonicalHref !== currentHref) {
+    window.history.replaceState(window.history.state, "", canonicalHref);
+  }
 }

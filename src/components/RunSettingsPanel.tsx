@@ -1,13 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { NeuralRuntimeLabPanel } from "./NeuralRuntimeLabPanel";
 import { ParameterPanel } from "./ParameterPanel";
 import { ScenarioBuilderPanel } from "./ScenarioBuilderPanel";
 import { getSystemCatalogEntry } from "../lib/systemCatalog";
 import { getTemplateDescriptor, templateDescriptors, type TemplateId } from "../lib/templateVisuals";
+import { generateUiSeed } from "../lib/uiSeed";
 import { parameterPresentationForTemplate } from "../lib/worldPresentation";
-import { getInterventionDefinitions } from "../simulation";
+import { getInterventionDefinitions, validateTemplateParameters, type JsonValue, type ParameterValues } from "../simulation";
 import { useSimulationStore } from "../state/simulationStore";
 
 type SetupView = "quick" | "parameters" | "recipes" | "neural";
@@ -17,7 +18,8 @@ export function RunSettingsPanel({ active = true }: { active?: boolean } = {}) {
   const selectTemplate = useSimulationStore((state) => state.selectTemplate);
   const seed = useSimulationStore((state) => state.seed);
   const setSeed = useSimulationStore((state) => state.setSeed);
-  const regenerateSeed = useSimulationStore((state) => state.regenerateSeed);
+  const parameterValues = useSimulationStore((state) => state.parameterValues);
+  const setParameters = useSimulationStore((state) => state.setParameters);
   const engine = useSimulationStore((state) => state.engine);
   const descriptor = getTemplateDescriptor(selectedTemplateId);
   const system = getSystemCatalogEntry(selectedTemplateId);
@@ -28,12 +30,31 @@ export function RunSettingsPanel({ active = true }: { active?: boolean } = {}) {
     ? engine.metadata.scenarioName
     : "Default run";
   const [seedDraft, setSeedDraft] = useState(seed);
+  const [parameterDraft, setParameterDraft] = useState<ParameterValues>(parameterValues);
+  const [parameterError, setParameterError] = useState<string | null>(null);
+  const previousActiveParametersRef = useRef(parameterValues);
+  const parameterDraftTemplateRef = useRef(selectedTemplateId);
   const [view, setView] = useState<SetupView>("quick");
   const [parameterSearch, setParameterSearch] = useState("");
+  const pendingParameterKeys = descriptor.template.parameterDefinitions
+    .filter((definition) => !Object.is(parameterDraft[definition.key], parameterValues[definition.key]))
+    .map((definition) => definition.key);
+  const seedDraftDiffers = seedDraft.trim() !== seed;
 
   useEffect(() => {
     setSeedDraft(seed);
   }, [seed]);
+
+  useEffect(() => {
+    const previousActive = previousActiveParametersRef.current;
+    const templateChanged = parameterDraftTemplateRef.current !== selectedTemplateId;
+    setParameterDraft((currentDraft) =>
+      templateChanged ? parameterValues : preservePendingParameterDrafts(currentDraft, previousActive, parameterValues)
+    );
+    previousActiveParametersRef.current = parameterValues;
+    parameterDraftTemplateRef.current = selectedTemplateId;
+    setParameterError(null);
+  }, [parameterValues, selectedTemplateId]);
 
   useEffect(() => {
     setView("quick");
@@ -52,6 +73,27 @@ export function RunSettingsPanel({ active = true }: { active?: boolean } = {}) {
   function openView(next: SetupView) {
     setView(next);
     focusSetupView(next);
+  }
+
+  function updateParameterDraft(key: string, value: JsonValue) {
+    setParameterDraft((current) => ({ ...current, [key]: value }));
+    setParameterError(null);
+  }
+
+  function applyParameterDraft() {
+    try {
+      const validated = validateTemplateParameters(descriptor.template, parameterDraft);
+      setParameters(validated, "Setup parameter drafts");
+      setParameterDraft(validated);
+      setParameterError(null);
+    } catch (error) {
+      setParameterError(error instanceof Error ? error.message : "Parameter drafts could not be checked.");
+    }
+  }
+
+  function discardParameterDraft() {
+    setParameterDraft(parameterValues);
+    setParameterError(null);
   }
 
   return (
@@ -76,6 +118,7 @@ export function RunSettingsPanel({ active = true }: { active?: boolean } = {}) {
               ))}
             </select>
           </label>
+          <p>Choosing another template immediately discards the current trajectory and prepares that template paused at tick 0.</p>
         </section>
 
         <section className="run-settings-quick world-tool-section" aria-labelledby="quick-controls-title">
@@ -85,8 +128,14 @@ export function RunSettingsPanel({ active = true }: { active?: boolean } = {}) {
               <span>{quickParameterKeys.length} key controls</span>
             </div>
             <span>{system.suggestedChange}</span>
-            <p>Changing a key control rebuilds a paused tick-0 run immediately. Choose Run to start the new configuration.</p>
+            <p>Parameter and seed edits stay as Setup drafts. Use a rebuild action to replace the active run with a fresh paused tick-0 configuration.</p>
           </div>
+          <ParameterDraftActions
+            pendingCount={pendingParameterKeys.length}
+            error={parameterError}
+            onApply={applyParameterDraft}
+            onDiscard={discardParameterDraft}
+          />
           <form
             className="run-settings-seed"
             onSubmit={(event) => {
@@ -100,7 +149,6 @@ export function RunSettingsPanel({ active = true }: { active?: boolean } = {}) {
                 id="ortus-setup-seed"
                 value={seedDraft}
                 onChange={(event) => setSeedDraft(event.target.value)}
-                onBlur={() => setSeed(seedDraft)}
                 suppressHydrationWarning
               />
             </label>
@@ -108,15 +156,21 @@ export function RunSettingsPanel({ active = true }: { active?: boolean } = {}) {
               <button type="submit" aria-label="Apply Seed and rebuild a fresh run" suppressHydrationWarning>
                 Apply Seed
               </button>
-              <button type="button" onClick={regenerateSeed} aria-label="New Seed: generate and rebuild a fresh run" suppressHydrationWarning>
+              <button type="button" onClick={() => setSeedDraft(generateUiSeed())} aria-label="New Seed: generate a seed draft" suppressHydrationWarning>
                 New Seed
               </button>
             </div>
+            <p className="run-settings-draft-status" aria-live="polite">
+              {seedDraftDiffers ? "Seed draft differs from the active run. Apply Seed rebuilds the run." : "Seed draft matches the active run."}
+            </p>
           </form>
           <ParameterPanel
             includeKeys={quickParameterKeys}
             highlightedKey={system.highlightedParameterKey}
             ariaLabel="Key model parameters"
+            values={parameterDraft}
+            activeValues={parameterValues}
+            onDraftChange={updateParameterDraft}
           />
         </section>
 
@@ -149,7 +203,13 @@ export function RunSettingsPanel({ active = true }: { active?: boolean } = {}) {
       <div className="world-task-subview" hidden={view !== "parameters"}>
         <TaskViewBack onClick={() => openView("quick")} />
         <h3 id="setup-parameters-title" tabIndex={-1}>All parameters</h3>
-        <p className="world-task-view__intro">Every executed parameter remains visible. Changes rebuild a fresh paused run at tick 0.</p>
+        <p className="world-task-view__intro">Every active parameter remains visible. Edits remain drafts until an explicit rebuild creates a fresh paused run at tick 0.</p>
+        <ParameterDraftActions
+          pendingCount={pendingParameterKeys.length}
+          error={parameterError}
+          onApply={applyParameterDraft}
+          onDiscard={discardParameterDraft}
+        />
         <label className="world-parameter-search">
           <span>Find a parameter</span>
           <input
@@ -161,7 +221,14 @@ export function RunSettingsPanel({ active = true }: { active?: boolean } = {}) {
         </label>
         <section className="world-parameter-group" aria-labelledby="primary-parameter-group-title">
           <h4 id="primary-parameter-group-title">Quick setup controls</h4>
-          <ParameterPanel includeKeys={quickParameterKeys} searchQuery={parameterSearch} ariaLabel="Quick setup parameters" />
+          <ParameterPanel
+            includeKeys={quickParameterKeys}
+            searchQuery={parameterSearch}
+            ariaLabel="Quick setup parameters"
+            values={parameterDraft}
+            activeValues={parameterValues}
+            onDraftChange={updateParameterDraft}
+          />
         </section>
         <section className="world-parameter-group" aria-labelledby="additional-parameter-group-title">
           <h4 id="additional-parameter-group-title">Additional controls</h4>
@@ -170,6 +237,9 @@ export function RunSettingsPanel({ active = true }: { active?: boolean } = {}) {
             searchQuery={parameterSearch}
             showNote
             ariaLabel="Additional model parameters"
+            values={parameterDraft}
+            activeValues={parameterValues}
+            onDraftChange={updateParameterDraft}
           />
         </section>
       </div>
@@ -185,6 +255,53 @@ export function RunSettingsPanel({ active = true }: { active?: boolean } = {}) {
         <h3 id="setup-neural-title" tabIndex={-1}>Neural Runtime Lab</h3>
         <NeuralRuntimeLabPanel active={active && view === "neural"} />
       </div>
+    </div>
+  );
+}
+
+function preservePendingParameterDrafts(
+  currentDraft: ParameterValues,
+  previousActive: ParameterValues,
+  nextActive: ParameterValues
+): ParameterValues {
+  const nextDraft = { ...nextActive };
+  for (const [key, draftValue] of Object.entries(currentDraft)) {
+    if (key in nextActive && !Object.is(draftValue, previousActive[key])) {
+      nextDraft[key] = draftValue;
+    }
+  }
+  return nextDraft;
+}
+
+function ParameterDraftActions({
+  pendingCount,
+  error,
+  onApply,
+  onDiscard
+}: {
+  pendingCount: number;
+  error: string | null;
+  onApply: () => void;
+  onDiscard: () => void;
+}) {
+  return (
+    <div className="run-settings-draft" data-parameter-draft-state={pendingCount > 0 ? "pending" : "active"}>
+      <p className="run-settings-draft-status" aria-live="polite">
+        {pendingCount > 0
+          ? `${pendingCount} parameter ${pendingCount === 1 ? "draft differs" : "drafts differ"} from the active run. Rebuild required.`
+          : "Parameter drafts match the active run."}
+      </p>
+      {error ? <p className="experiment-error">{error}</p> : null}
+      {pendingCount > 0 ? (
+        <div className="run-settings-actions">
+          <button type="button" onClick={onApply}>
+            Rebuild run with parameter drafts
+          </button>
+          <button type="button" onClick={onDiscard}>
+            Discard parameter drafts
+          </button>
+        </div>
+      ) : null}
     </div>
   );
 }

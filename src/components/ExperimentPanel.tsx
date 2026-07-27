@@ -22,6 +22,7 @@ interface ExperimentPanelProps {
   collapsed?: boolean;
   onToggle?: () => void;
   embedded?: boolean;
+  active?: boolean;
 }
 
 type SweepInputMode = "range" | "list";
@@ -34,7 +35,7 @@ const presets: Record<string, { parameterKey: string; metricKey: string; min: nu
   "flocking-boids": { parameterKey: "alignmentWeight", metricKey: "alignmentScore", min: 0.1, max: 1.3, steps: 5 }
 };
 
-export function ExperimentPanel({ collapsed = false, onToggle, embedded = false }: ExperimentPanelProps) {
+export function ExperimentPanel({ collapsed = false, onToggle, embedded = false, active = true }: ExperimentPanelProps) {
   const selectedTemplateId = useSimulationStore((state) => state.selectedTemplateId);
   const parameterValues = useSimulationStore((state) => state.parameterValues);
   const seed = useSimulationStore((state) => state.seed);
@@ -66,6 +67,28 @@ export function ExperimentPanel({ collapsed = false, onToggle, embedded = false 
   const [notice, setNotice] = useState<string | null>(null);
   const [isRunning, setIsRunning] = useState(false);
   const cancellationRef = useRef<ExperimentCancellationToken | null>(null);
+  const abandonedTokenRef = useRef<ExperimentCancellationToken | null>(null);
+  const mountedRef = useRef(true);
+  const activeRef = useRef(active);
+
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+      if (cancellationRef.current) {
+        abandonedTokenRef.current = cancellationRef.current;
+        cancellationRef.current.cancelled = true;
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    activeRef.current = active;
+    if (!active && cancellationRef.current) {
+      abandonedTokenRef.current = cancellationRef.current;
+      cancellationRef.current.cancelled = true;
+    }
+  }, [active]);
 
   useEffect(() => {
     const nextPreset = presets[selectedTemplateId];
@@ -140,6 +163,7 @@ export function ExperimentPanel({ collapsed = false, onToggle, embedded = false 
       return;
     }
     const token: ExperimentCancellationToken = { cancelled: false };
+    abandonedTokenRef.current = null;
     cancellationRef.current = token;
     setIsRunning(true);
     setError(null);
@@ -149,16 +173,29 @@ export function ExperimentPanel({ collapsed = false, onToggle, embedded = false 
       const result = await runExperiment(configPreview.config, {
         signal: token,
         yieldEvery: 1,
-        onProgress: setProgress
+        onProgress: (nextProgress) => {
+          if (mountedRef.current && activeRef.current) {
+            setProgress(nextProgress);
+          }
+        }
       });
+      if (!mountedRef.current || !activeRef.current || abandonedTokenRef.current === token) {
+        return;
+      }
       setResultSet(result);
       setLatestExperimentResultSet(result);
       setNotice(result.status === "cancelled" ? "Experiment cancelled. Completed runs are preserved for export." : "Experiment complete.");
     } catch (runError) {
-      setError(messageFor(runError));
+      if (mountedRef.current && activeRef.current) {
+        setError(messageFor(runError));
+      }
     } finally {
-      setIsRunning(false);
-      cancellationRef.current = null;
+      if (mountedRef.current) {
+        setIsRunning(false);
+      }
+      if (cancellationRef.current === token) {
+        cancellationRef.current = null;
+      }
     }
   }
 

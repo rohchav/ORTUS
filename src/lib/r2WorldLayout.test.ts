@@ -75,7 +75,9 @@ describe("R2 World layout and interaction reclaim contracts", () => {
     expect(shell.indexOf("<TimelineControlStrip />")).toBeLessThan(shell.indexOf("<LeftInstrumentStack"));
     expect(shell).toContain("const [toolsHidden, setToolsHidden] = useState(false)");
     expect(shell).toContain('data-tools-state={toolsHidden ? "hidden" : "visible"}');
-    expect(shell).toContain('window.history.replaceState(window.history.state, "", nextHref)');
+    expect(shell).toContain('window.history.pushState(window.history.state, "", nextHref)');
+    expect(shell).toContain('window.addEventListener("popstate", syncWorkspaceModeFromHistory)');
+    expect(shell).toContain('window.history.replaceState(window.history.state, "", canonicalHref)');
     expect(shell).not.toContain("router.replace(");
     expect(tasks).toContain("hidden={toolsHidden}");
     expect(tasks).toContain("Focus world");
@@ -115,15 +117,18 @@ describe("R2 World layout and interaction reclaim contracts", () => {
     expect(modal).toContain("dialog.showModal()");
     expect(modal).toContain("onCancel=");
     expect(modal).toContain("returnFocusRef?.current?.focus()");
+    expect(modal).toContain("onKeyDown={containKeyboardFocus}");
+    expect(modal).toContain("{open ? children : null}");
     expect(modal).toContain("tabIndex={0}");
     expect(modal).toContain('aria-label={`${title} content`}');
     expect(explanation).toContain('eyebrow="Full model reference"');
     expect(explanation).toContain("Complete assumptions");
     expect(explanation).toContain("Complete limitations");
+    expect(explanation).toContain("Model-output metrics");
     expect(shell).toContain('title="Technical run details"');
   });
 
-  it("records the completed R2 status and leaves R2B next", () => {
+  it("records the completed R2B audit and leaves C1 next", () => {
     const roadmap = source("planned_roadmap.md");
     const context = source("docs/codex/CURRENT_CONTEXT.md");
 
@@ -131,10 +136,10 @@ describe("R2 World layout and interaction reclaim contracts", () => {
       expect(record).toContain("R1 complete");
       expect(record).toContain("R1B complete");
       expect(record).toContain("R2 complete");
-      expect(record).toContain("R2B");
+      expect(record).toContain("R2B complete");
     }
-    expect(context).toContain("World Layout and Interaction Audit");
-    expect(context).not.toMatch(/C1 (?:is next|in progress)/i);
+    expect(context).toContain("WORLD_LAYOUT_AND_INTERACTION_RECLAIM_AUDIT.md");
+    expect(context).toContain("C1: Starter World Content Framework");
     expect(context).not.toMatch(/F1 (?:is next|resumed|in progress)/i);
   });
 });

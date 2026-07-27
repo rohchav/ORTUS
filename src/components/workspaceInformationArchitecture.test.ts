@@ -93,7 +93,8 @@ describe("simulation workspace information architecture", () => {
     expect(appShell).toContain("simulationWorkspaceModeQueryValue(mode)");
     expect(appShell).toContain('query.set("task", task)');
     expect(appShell).toContain('query.delete("task")');
-    expect(appShell).toContain('window.history.replaceState(window.history.state, "", nextHref)');
+    expect(appShell).toContain('window.history.pushState(window.history.state, "", nextHref)');
+    expect(appShell).toContain('window.addEventListener("popstate", syncWorkspaceModeFromHistory)');
     expect(appShell).not.toContain("router.replace(");
     expect(appShell).toContain("<WorldStage />");
     expect(appShell).toContain("<RightContextDrawer />");
@@ -130,7 +131,8 @@ describe("simulation workspace information architecture", () => {
 
     expect(runSettings).toContain("selectTemplate");
     expect(runSettings).toContain("setSeed");
-    expect(runSettings).toContain("regenerateSeed");
+    expect(runSettings).toContain("generateUiSeed");
+    expect(runSettings).toContain("Rebuild run with parameter drafts");
     expect(runSettings).toContain("<ParameterPanel");
     expect(runSettings).toContain("includeKeys={quickParameterKeys}");
     expect(runSettings).toContain("excludeKeys={quickParameterKeys}");
@@ -186,9 +188,9 @@ describe("simulation workspace information architecture", () => {
 
     expect(runSettings).toContain("New Seed");
     expect(runSettings).toContain("aria-label=\"Apply Seed and rebuild a fresh run\"");
-    expect(runSettings).toContain("aria-label=\"New Seed: generate and rebuild a fresh run\"");
-    expect(parameterPanel).toContain("Parameter changes rebuild a fresh tick-0 run through template parameter checks");
-    expect(parameterPanel).toContain("Unsupported combinations are rejected before the engine is replaced");
+    expect(runSettings).toContain("aria-label=\"New Seed: generate a seed draft\"");
+    expect(parameterPanel).toContain("Parameter edits remain drafts until you explicitly rebuild");
+    expect(parameterPanel).toContain("unsupported combinations are rejected before the engine is replaced");
     expect(metricGraph).toContain("bounded model-output history over simulated ticks");
     expect(metricGraph).toContain("not empirical measurement");
     expect(metricGraph).toContain("Metric history line chart of model-output values over simulated ticks");

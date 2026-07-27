@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import { getSystemCatalogEntry } from "../lib/systemCatalog";
 import { getTemplateDescriptor } from "../lib/templateVisuals";
 import { isModelSpecificWorldGuidance, normalizeWorldGuidance, uniqueWorldGuidance } from "../lib/worldExplanation";
-import { templateAssumptionProfile } from "../simulation";
+import { metricDefinitionsForTemplate, templateAssumptionProfile } from "../simulation";
 import { useSimulationStore } from "../state/simulationStore";
 import { ModalSurface } from "./ui/ModalSurface";
 
@@ -14,6 +14,8 @@ export function ModelExplanationPanel() {
   const system = getSystemCatalogEntry(selectedTemplateId);
   const documentation = descriptor.template.documentation;
   const profile = templateAssumptionProfile(descriptor.template);
+  const outputMetrics = metricDefinitionsForTemplate(descriptor.template)
+    .map((metric) => `${metric.label}: ${metric.description}`);
   const seen = new Set<string>();
 
   const question = uniqueLine(system.question, seen);
@@ -74,6 +76,11 @@ export function ModelExplanationPanel() {
             <section>
               <h3>Submodels</h3>
               <TextList items={documentation.submodels} />
+            </section>
+            <section>
+              <h3>Model-output metrics</h3>
+              <p>These are simulated runtime outputs. They are not empirical observations, calibrated estimates, or validation evidence.</p>
+              <TextList items={outputMetrics} />
             </section>
             <section>
               <h3>Complete assumptions</h3>

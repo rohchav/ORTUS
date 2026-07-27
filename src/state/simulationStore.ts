@@ -24,6 +24,7 @@ import {
 import { defaultParameters, getTemplateDescriptor, requireTemplateDescriptor, templateDescriptors, type TemplateId } from "../lib/templateVisuals";
 import { loadPanelState, savePanelState, type PanelState } from "../lib/panelPersistence";
 import { clearRunLibraryStorage, loadRunLibrary, saveRunLibrary } from "../lib/localRunStorage";
+import { generateUiSeed } from "../lib/uiSeed";
 
 export type AvatarMode = "glyph" | "arrow" | "initials" | "head";
 
@@ -61,6 +62,7 @@ interface SimulationUiState {
   interventionTargetCell: GridCell | null;
   interventionHistory: AppliedInterventionRecord[];
   savedRuns: SavedRunSummary[];
+  runLibraryWarning: string | null;
   selectedComparisonRunIds: string[];
   baselineRunId: string | null;
   latestExperimentResultSet: ExperimentResultSet | null;
@@ -129,6 +131,7 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
   interventionTargetCell: null,
   interventionHistory: [],
   savedRuns: [],
+  runLibraryWarning: null,
   selectedComparisonRunIds: [],
   baselineRunId: null,
   latestExperimentResultSet: null,
@@ -142,8 +145,9 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
       avatarMode,
       panelState,
       savedRuns: runLibrary.runs,
+      runLibraryWarning: runLibrary.warning ?? null,
       selectedComparisonRunIds: get().selectedComparisonRunIds.filter((runId) => runLibrary.runs.some((run) => run.runId === runId)),
-      lastNotice: runLibrary.warning ?? get().lastNotice
+      lastNotice: get().lastNotice
     });
   },
 
@@ -184,7 +188,7 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
   },
 
   regenerateSeed() {
-    get().setSeed(generateSeed());
+    get().setSeed(generateUiSeed());
   },
 
   setParameter(key, value) {
@@ -403,6 +407,7 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
       const selectedComparisonRunIds = nextSelectedRunIds(get().selectedComparisonRunIds, run.runId);
       set({
         savedRuns,
+        runLibraryWarning: null,
         selectedComparisonRunIds,
         baselineRunId: get().baselineRunId ?? selectedComparisonRunIds[0] ?? run.runId,
         lastNotice: `Captured "${run.label}" for comparison.`,
@@ -449,6 +454,7 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
       );
       set({
         savedRuns,
+        runLibraryWarning: null,
         selectedComparisonRunIds,
         baselineRunId: get().baselineRunId ?? selectedComparisonRunIds[0] ?? imported[0]?.runId ?? null,
         lastNotice: `Imported ${imported.length} experiment run summaries for comparison.`,
@@ -489,7 +495,7 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
         : run
     );
     saveRunLibrary(savedRuns);
-    set({ savedRuns });
+    set({ savedRuns, runLibraryWarning: null });
   },
 
   deleteSavedRun(runId) {
@@ -498,6 +504,7 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
     saveRunLibrary(savedRuns);
     set({
       savedRuns,
+      runLibraryWarning: null,
       selectedComparisonRunIds,
       baselineRunId: get().baselineRunId === runId ? (selectedComparisonRunIds[0] ?? null) : get().baselineRunId,
       lastNotice: "Run summary deleted.",
@@ -509,6 +516,7 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
     clearRunLibraryStorage();
     set({
       savedRuns: [],
+      runLibraryWarning: null,
       selectedComparisonRunIds: [],
       baselineRunId: null,
       lastNotice: "Run comparison library cleared.",
@@ -710,19 +718,6 @@ function persistPanel(current: PanelState, panelId: string, value: boolean): Pan
   const next = { ...current, [panelId]: value };
   savePanelState(next);
   return next;
-}
-
-function generateSeed(): string {
-  const webCrypto = typeof globalThis !== "undefined" ? globalThis.crypto : undefined;
-  if (webCrypto?.randomUUID) {
-    return `ortus-${webCrypto.randomUUID().slice(0, 13)}`;
-  }
-  if (webCrypto) {
-    const values = new Uint32Array(2);
-    webCrypto.getRandomValues(values);
-    return `ortus-${values[0]?.toString(16) ?? "seed"}-${values[1]?.toString(16) ?? "field"}`;
-  }
-  return `ortus-${Date.now().toString(36)}`;
 }
 
 function generateUiId(prefix: string): string {

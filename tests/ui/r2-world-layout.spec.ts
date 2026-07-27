@@ -175,6 +175,12 @@ test("task switching preserves the mounted stage and run state while collapse pr
   }
 
   await tasks.getByRole("button", { name: "Setup", exact: true }).click();
+  const alignmentDraft = page.getByRole("spinbutton", { name: "Alignment weight numeric value" });
+  await alignmentDraft.fill("0.51");
+  await tasks.getByRole("button", { name: "Observe", exact: true }).click();
+  await tasks.getByRole("button", { name: "Setup", exact: true }).click();
+  await expect(alignmentDraft).toHaveValue("0.51");
+  await expect(page.locator(".run-settings-quick").getByText("1 parameter draft differs from the active run. Rebuild required.")).toBeVisible();
   await page.getByRole("button", { name: /All parameters/i }).click();
   await page.getByRole("searchbox", { name: "Find a parameter" }).fill("alignment");
   const stageWidthBefore = (await bounds(stage)).width;
@@ -195,6 +201,7 @@ test("task keyboard order, URL aliases, focus entry, and scroll reset are determ
   const tasks = page.getByRole("navigation", { name: "World tasks" });
   const setup = tasks.getByRole("button", { name: "Setup", exact: true });
   await expect(setup).toHaveAttribute("aria-pressed", "true");
+  await expect.poll(() => new URL(page.url()).searchParams.get("task")).toBeNull();
 
   await setup.focus();
   await page.keyboard.press("End");
@@ -229,12 +236,47 @@ test("task keyboard order, URL aliases, focus entry, and scroll reset are determ
   await expect(more).toBeFocused();
 });
 
+test("browser Back and Forward restore World tasks without remounting the stage or resetting the run", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 720 });
+  await openWorld(page);
+  const tasks = page.getByRole("navigation", { name: "World tasks" });
+  const stage = page.locator(".world-stage");
+  const tick = page.locator(".timeline-strip__readout strong").first();
+  await stage.evaluate((element) => element.setAttribute("data-r2b-history-sentinel", "persistent"));
+  await page.getByRole("button", { name: "Step exactly one tick" }).click();
+
+  await tasks.getByRole("button", { name: "Observe", exact: true }).click();
+  await tasks.getByRole("button", { name: "Change", exact: true }).click();
+  await page.goBack();
+  await expect(tasks.getByRole("button", { name: "Observe", exact: true })).toHaveAttribute("aria-pressed", "true");
+  await expect(page).toHaveURL(/task=observe/);
+  await expect(stage).toHaveAttribute("data-r2b-history-sentinel", "persistent");
+  await expect(tick).toHaveText("1");
+
+  await page.goBack();
+  await expect(tasks.getByRole("button", { name: "Setup", exact: true })).toHaveAttribute("aria-pressed", "true");
+  await expect.poll(() => new URL(page.url()).searchParams.get("task")).toBeNull();
+  await expect(stage).toHaveAttribute("data-r2b-history-sentinel", "persistent");
+  await expect(tick).toHaveText("1");
+
+  await page.goForward();
+  await expect(tasks.getByRole("button", { name: "Observe", exact: true })).toHaveAttribute("aria-pressed", "true");
+  await expect(stage).toHaveAttribute("data-r2b-history-sentinel", "persistent");
+  await expect(tick).toHaveText("1");
+});
+
 test("Setup layers quick controls, exact parameters, and starting recipes without hiding executed values", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 720 });
   await openWorld(page);
   await expect(page.getByRole("heading", { name: "Quick setup" })).toBeVisible();
-  await expect(page.getByText(/Changing a key control rebuilds a paused tick-0 run immediately/)).toBeVisible();
+  await expect(page.getByText(/Parameter and seed edits stay as Setup drafts/)).toBeVisible();
   await expect(page.locator(".run-settings-quick .parameter-control")).toHaveCount(4);
+  await expect(page.locator(".run-settings-quick .parameter-control strong")).toHaveText([
+    "Alignment weight",
+    "Cohesion weight",
+    "Separation weight",
+    "Perception radius"
+  ]);
   const allParametersButton = page.getByRole("button", { name: /All parameters/ });
   const expectedCount = Number((await allParametersButton.innerText()).match(/(\d+) exact values/)?.[1]);
   expect(expectedCount).toBeGreaterThan(4);
@@ -253,6 +295,42 @@ test("Setup layers quick controls, exact parameters, and starting recipes withou
   await expect(page.getByText(/Scenarios define initial conditions/)).toBeVisible();
   await page.getByRole("button", { name: "Back to Setup" }).click();
   await expect(page.getByRole("heading", { level: 3, name: "Flocking / Boids" })).toBeFocused();
+});
+
+test("seed edits remain unapplied on blur and quick parameter metadata controls rendered order", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 720 });
+  await openWorld(page, "/world?template=neural-excitation-network");
+  const tick = page.locator(".timeline-strip__readout strong").first();
+  await page.getByRole("button", { name: "Step exactly one tick" }).click();
+  const thresholdDraft = page.getByRole("spinbutton", { name: "Global threshold numeric value" });
+  const activeThreshold = await thresholdDraft.inputValue();
+  const nextThreshold = activeThreshold === "0.5" ? "0.55" : "0.5";
+  await thresholdDraft.fill(nextThreshold);
+  const thresholdControl = thresholdDraft.locator("xpath=ancestor::label");
+  await expect(thresholdControl.locator(".parameter-control__mode")).toContainText(`Active run: ${activeThreshold}`);
+  await expect(thresholdControl.locator(".parameter-control__mode")).toContainText("Draft pending");
+
+  const seed = page.locator("#ortus-setup-seed");
+  await seed.fill("r2b-seed-draft");
+  await page.getByRole("heading", { name: "Quick setup" }).click();
+  await expect(tick).toHaveText("1");
+  await expect(page.getByText(/Seed draft differs from the active run/)).toBeVisible();
+  await expect(page.locator(".run-settings-quick .parameter-control strong")).toHaveText([
+    "Global threshold",
+    "Activation decay",
+    "External stimulus rate",
+    "Connection density"
+  ]);
+
+  await page.getByRole("button", { name: "Apply Seed" }).click();
+  await expect(tick).toHaveText("0");
+  await expect(page.getByLabel("Current run status")).toContainText("r2b-seed-draft");
+  await expect(thresholdDraft).toHaveValue(nextThreshold);
+  await expect(page.locator(".run-settings-quick").getByText("1 parameter draft differs from the active run. Rebuild required.")).toBeVisible();
+
+  await page.getByRole("button", { name: "Rebuild run with parameter drafts" }).click();
+  await expect(thresholdControl.locator(".parameter-control__mode")).toContainText(`Active run: ${nextThreshold}`);
+  await expect(thresholdControl.locator(".parameter-control__mode")).toContainText("Draft matches");
 });
 
 test("Observe prioritizes current metrics and keeps exact metrics and the visual key reachable", async ({ page }) => {
@@ -325,6 +403,19 @@ test("Compare leads with run purpose while preserving bounded local comparison s
   await expect(page.getByRole("heading", { name: "Current run", exact: true })).toBeFocused();
 });
 
+test("Compare exposes malformed saved-run recovery and provides an explicit discard path", async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem("ortus.runComparison.v1", "{broken"));
+  await page.setViewportSize({ width: 1280, height: 720 });
+  await openWorld(page, "/world?template=flocking-boids&task=compare");
+  const warning = page.locator(".run-library-warning");
+  await expect(warning).toContainText("Stored run library was invalid and has been ignored.");
+  await expect(warning).toContainText("No invalid records were loaded or treated as comparison evidence.");
+  await expect.poll(() => page.evaluate(() => localStorage.getItem("ortus.runComparison.v1"))).toBe("{broken");
+  await warning.getByRole("button", { name: "Discard stored run library" }).click();
+  await expect(warning).toHaveCount(0);
+  await expect.poll(() => page.evaluate(() => localStorage.getItem("ortus.runComparison.v1"))).toBeNull();
+});
+
 test("Explain uses six concise sections and a focus-managed complete model reference", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 720 });
   await openWorld(page, "/world?template=opinion-dynamics&task=understand");
@@ -332,15 +423,27 @@ test("Explain uses six concise sections and a focus-managed complete model refer
     await expect(page.getByRole("heading", { name: heading, level: 3 })).toBeVisible();
   }
   const trigger = page.getByRole("button", { name: "Full model notes" });
+  await expect(page.getByRole("heading", { name: "Model-output metrics" })).toHaveCount(0);
   await trigger.click();
   const dialog = page.getByRole("dialog", { name: "Opinion Dynamics" });
   await expect(dialog).toBeVisible();
+  await expect(dialog.getByRole("heading", { name: "Model-output metrics" })).toBeVisible();
+  await expect(dialog.getByText(/not empirical observations, calibrated estimates, or validation evidence/)).toBeVisible();
   await expect(dialog.getByRole("heading", { name: "Complete assumptions" })).toBeVisible();
   await expect(dialog.getByRole("heading", { name: "Complete limitations" })).toBeVisible();
   expect(await dialog.innerText()).not.toMatch(/Builder graphs|model-schema graphs|NetLogo|Mesa|MASON/i);
-  await dialog.getByRole("button", { name: "Close model reference" }).click();
+  for (let index = 0; index < 20; index += 1) {
+    await page.keyboard.press("Tab");
+    expect(await dialog.evaluate((element) => element.contains(document.activeElement))).toBe(true);
+  }
+  for (let index = 0; index < 5; index += 1) {
+    await page.keyboard.press("Shift+Tab");
+    expect(await dialog.evaluate((element) => element.contains(document.activeElement))).toBe(true);
+  }
+  await page.keyboard.press("Escape");
   await expect(trigger).toBeFocused();
 
+  await expect(page.getByRole("heading", { name: "Active Run Provenance" })).toHaveCount(0);
   await page.getByRole("button", { name: "Run details" }).click();
   const runDetails = page.getByRole("dialog", { name: "Technical run details" });
   await expect(runDetails.getByRole("heading", { name: "Active Run Provenance" })).toBeVisible();
@@ -363,6 +466,32 @@ test("More is a structured two-group menu and expert tools remain functional", a
   await menu.getByRole("menuitem", { name: /Diagnostics/ }).click();
   await expect(page.locator(".debug-panel-embedded")).toBeVisible();
   await expect(page.getByText("Template", { exact: true })).toBeVisible();
+});
+
+test("leaving Experiments cancels hidden sweep work without publishing a result", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 720 });
+  await openWorld(page, "/world?template=epidemic-spread&task=experiment");
+  await page.getByLabel("Trials").fill("20");
+  await page.getByLabel("Ticks/run").fill("20");
+  await page.getByRole("button", { name: "Start Sweep" }).click();
+  await page.getByRole("navigation", { name: "World tasks" }).getByRole("button", { name: "Setup", exact: true }).click();
+  await page.waitForTimeout(500);
+  await page.getByRole("navigation", { name: "World tasks" }).getByRole("button", { name: "Compare", exact: true }).click();
+  await expect(page.getByRole("button", { name: "Add Experiment Runs" })).toBeDisabled();
+});
+
+test("collapsing and immediately restoring Experiments cannot publish the abandoned sweep", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 720 });
+  await openWorld(page, "/world?template=epidemic-spread&task=experiment");
+  await page.getByLabel("Trials").fill("20");
+  await page.getByLabel("Ticks/run").fill("200");
+  await page.getByRole("button", { name: "Start Sweep" }).click();
+  await page.getByRole("button", { name: "Focus World" }).click();
+  await page.getByRole("button", { name: "Show tools" }).click();
+  await expect(page.getByRole("button", { name: "Start Sweep" })).toBeEnabled({ timeout: 20_000 });
+
+  await page.getByRole("navigation", { name: "World tasks" }).getByRole("button", { name: "Compare", exact: true }).click();
+  await expect(page.getByRole("button", { name: "Add Experiment Runs" })).toBeDisabled();
 });
 
 test("Flocking, Epidemic, and Neural keep one stable stage across every World task", async ({ page }) => {

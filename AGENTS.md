@@ -45,9 +45,13 @@
 - Do not let branding obscure current model, scenario, workspace, or runtime state.
 - Destructive run controls must state what is discarded and use staged confirmation when non-trivial run state exists.
 - Hidden panels must not perform expensive tick-based rendering.
+- World Setup parameter and seed edits are drafts until an explicit Apply/Rebuild action; show exact active values, preserve unrelated drafts across a rebuild, and do not let blur or task navigation replace the active engine.
+- World task query changes must create same-document history entries, and browser Back/Forward must preserve the mounted stage and active run.
+- Modal surfaces must contain keyboard focus, return focus on close, and avoid mounting live tick-subscribing children while closed.
 - Avoid unnecessary simulation-store subscriptions in navigation components.
 - Experiment runs must create fresh engine instances through the template registry and should store metrics/outcomes, not full per-run snapshots, unless explicitly requested.
 - Keep experiment execution chunked/cancellable in the UI so local sweeps do not create unbounded browser loops.
+- Leaving or hiding an active Experiment Runner must request cooperative cancellation and must not publish an abandoned result.
 - Existing Experiment Runner sweeps are bounded local World/Experiment model-comparison tooling; they are not Atlas landscape sampling, landscape probe execution, saved sampled regions, run queues, or regime detection.
 - Existing local World comparison storage may preserve bounded run summaries for comparison; it is not persistent Lab evidence, Atlas discovery storage, saved behavioral landscapes, saved probe plans, or real-world validation.
 - Lint is intentionally unavailable until a dedicated lint/tooling prompt adds it. Do not treat missing lint as a failing gate; report exactly `npm run lint: unavailable, package.json has no lint script.`
@@ -571,7 +575,7 @@
 - Keep current-run Change actions visibly distinct from Setup actions that rebuild a fresh paused tick-0 run.
 - Capability guidance should lead with one relevant contextual note and keep the complete source-backed matrix subordinate. Do not remove a limitation at the point where it affects interpretation.
 - The Flocking starter nudge is page-session-only and dismissible. Do not add storage, completion tracking, XP, achievements, profiling, recommendation inference, or step locks.
-- R1, R1B, and R2 are complete. R2B World Layout and Interaction Audit is next; do not start R2B or later C/S/E milestones without their dedicated prompt.
+- R1, R1B, R2, and R2B are complete. C1 Starter World Content Framework is next; do not start C1 or later C/S/E milestones without their dedicated prompt.
 - Complete and commit GW1 before starting GW1B.
 - Treat UX0 as documentation and design planning only.
 - Do not implement World/Lab/Atlas/Workshop without a dedicated prompt.
@@ -652,9 +656,9 @@
 - Atlas preview results are component-memory-only exact sampled coordinates. Do not add storage, saved records, history, publication, interpolation, smoothing, contours, inferred unsampled values, regime/transition/tipping-point detection, confidence/coverage/evidence scores, or scientific-validation claims.
 - Keep cancellation language honest: `Cancel after current sample` means the current synchronous sample finishes before cancellation is effective. Unstarted runs remain unsampled and partial results remain visibly partial. Route unmount must cancel remaining cooperative work and suppress post-unmount UI updates.
 - Multiple preview seeds show selected deterministic model variation only; they are not confidence intervals, calibrated probabilities, or real-world uncertainty estimates.
-- GW9/GW9B do not generalize Atlas sampling, make the conceptual behavioral-landscape scaffold runtime-backed, make probe plans executable, or create Discovery Atlas/Lab persistence. GW9B, R1, R1B, and R2 are complete; R2B is next. F1 is paused under E3 Analytical Lenses.
+- GW9/GW9B do not generalize Atlas sampling, make the conceptual behavioral-landscape scaffold runtime-backed, make probe plans executable, or create Discovery Atlas/Lab persistence. GW9B, R1, R1B, R2, and R2B are complete; C1 is next. F1 is paused under E3 Analytical Lenses.
 - A featured starter launch must create the documented fresh prepared run once per starter page mount. It must not silently resume modified parameters, an advanced tick, or a running state beneath baseline instructions.
-- Parameter controls that rebuild the run must state that they produce a fresh paused tick-0 run; do not imply live mutation.
+- Parameter controls that rebuild the run must remain drafts until explicit apply and state that apply produces a fresh paused tick-0 run; do not imply live mutation.
 - World visible task, `task` query, top-navigation current state, and task heading must remain coherent without resetting active runtime state.
 - Reset the shared World task-panel scroll when its task changes. Direct task controls retain focus; selecting a More task moves focus to the selected panel heading.
 - Keep Research tools and World More keyboard focus deterministic under rapid Arrow input and Escape/reopen sequences; do not focus unmounted menu content.

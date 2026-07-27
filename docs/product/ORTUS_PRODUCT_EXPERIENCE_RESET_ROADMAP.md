@@ -1,7 +1,7 @@
 # ORTUS Product Experience Reset Roadmap
 
-Date: 2026-07-24
-Status: active product sequence; R1, R1B, and R2 complete, R2B next
+Date: 2026-07-27
+Status: active product sequence; R1, R1B, R2, and R2B complete, C1 next
 
 ## Why This Sequence Exists
 
@@ -46,9 +46,9 @@ Every implementation milestone is followed by an audit milestone. Audit prompts 
 
 ## Current Position
 
-R1 and its required R1B audit are complete. R2 is also complete: World now keeps a stable dominant stage and playback outside one bounded active-tool surface, with direct Setup, Observe, Change, Compare, and Explain tasks plus purpose-grouped More tools. R2 changes presentation and UI state coordination only; runtime and persistence semantics remain unchanged.
+R1 and its required R1B audit are complete. R2 and its required R2B audit are also complete: World keeps a stable dominant stage and playback outside one bounded active-tool surface, with direct Setup, Observe, Change, Compare, and Explain tasks plus purpose-grouped More tools. R2B hardens explicit Setup drafts, same-document task history, modal focus containment, hidden experiment lifecycle, comparison recovery, metadata ordering, and full-reference output inventory without changing engine or persistence scope.
 
-`R2B: World Layout and Interaction Audit` is the next prompt and has not started. C1-C4, S1-S5, and E1-E3 have not started under this roadmap.
+`C1: Starter World Content Framework` is the next prompt and has not started. C2-C4, S1-S5, and E1-E3 have not started under this roadmap.
 
 The active route hierarchy after R1 is Start `/`, World `/world`, Workshop `/builder`, Atlas `/atlas`, and Lab `/lab`. That route state is an R1 implementation fact, not evidence that later starter, composition, Lab, Atlas, or analysis milestones exist.
 

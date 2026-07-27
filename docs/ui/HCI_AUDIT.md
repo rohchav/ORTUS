@@ -1,7 +1,7 @@
 # ORTUS HCI / UX / Visual-Direction Audit
 
 Date: 2026-06-11  
-Updated: 2026-07-24 during Prompt R2 World Layout and Interaction Reclaim
+Updated: 2026-07-27 during Prompt R2B World Layout and Interaction Audit + Hardening
 Prompt: historical UI/GW/UX work through GW9B, reset by R1/R1B, reclaimed by R2
 Status: source-based and rendered-smoke-informed audit, not a formal WCAG audit
 
@@ -1593,4 +1593,18 @@ R2's desktop frame is `task rail + stable stage/playback + one active tool`. Mea
 
 The task hierarchy now reflects user intent instead of internal panel taxonomy. Setup distinguishes fresh-run rebuilds, Observe leads with selected-model outputs, Change distinguishes current-run commands from rebuilds, Compare preserves bounded summary storage, Explain leads with six model-specific sections, and More groups investigations separately from diagnostics. Task switching preserves runtime tick and parameters. Collapse/restore preserves local tool state.
 
-The blunt limit remains evidence. R2 was inspected across six viewports, seven production-template stages, key run/intervention/comparison/reference states, keyboard focus, reduced motion, diagnostics, and Axe automation. It is not participant research, a full touch workflow, actual browser-zoom verification, screen-reader or assistive-technology testing, forced-colors testing, WCAG conformance, or empirical validation. R2 is complete; `R2B: World Layout and Interaction Audit` is next and has not started.
+The blunt limit remains evidence. R2 was inspected across six viewports, seven production-template stages, key run/intervention/comparison/reference states, keyboard focus, reduced motion, diagnostics, and Axe automation. It is not participant research, a full touch workflow, actual browser-zoom verification, screen-reader or assistive-technology testing, forced-colors testing, WCAG conformance, or empirical validation.
+
+## R2B World Layout And Interaction Audit Update
+
+R2B found three P1 defects: Setup's active-versus-draft boundary was incomplete, task query changes replaced one history entry so Back could leave World, and modal Tab focus could escape to `body`. Setup now requires explicit apply/rebuild, shows exact active values, and preserves unrelated parameter drafts across seed rebuilds. It found five P2 defect families: quick-control order ignored metadata, closed run details retained live children, abandoned sweeps lacked irreversible task/collapse lifecycle cancellation, full references omitted explicit model-output inventory, and malformed comparison-storage warnings were hidden.
+
+All were fixed. Setup now distinguishes drafts from active engine values and requires explicit parameter rebuild or seed apply; task Back/Forward preserves the mounted stage and tick; dialogs contain and return focus while closed content is unmounted; hidden sweeps cancel cooperatively between runs; comparison recovery is visible and user-controlled; and all seven references label registered metrics as simulated outputs rather than empirical or calibrated evidence.
+
+The six required viewports remain overflow-free with unchanged dominant stage dimensions. Axe, reduced motion, keyboard/focus, diagnostics, storage-key, and all-template renderer contracts are covered. Headless keyboard zoom attempts did not change reported zoom state, so actual browser zoom at 125%, 150%, and 200% was not verified. Screen-reader, assistive-technology, forced-colors, complete touch-workflow, WCAG-conformance, participant-comprehension, and scientific-validation claims remain out of scope.
+
+R2 complete.
+
+R2B complete.
+
+Conditionally ready for `C1: Starter World Content Framework`, with only the explicitly unverified external accessibility/zoom/comprehension areas remaining.

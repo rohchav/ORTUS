@@ -225,14 +225,16 @@ async function expectCapabilityGuidance(page: Page, destination: (typeof destina
           ? "lab"
           : "atlas";
   const guidance = page.locator(`[data-capability-guidance-destination="${destinationId}"]`);
-  await expect(guidance).toHaveCount(1);
   if (destinationId === "world") {
-    await expect(guidance).toBeHidden();
+    await expect(guidance).toHaveCount(0);
     await page.getByRole("button", { name: "Run details" }).click();
     await expect(page.getByRole("dialog", { name: "Technical run details" })).toBeVisible();
   } else if (destinationId === "workshop") {
+    await expect(guidance).toHaveCount(1);
     await expect(guidance).toBeHidden();
     await page.getByRole("button", { name: "Workshop capability reference" }).click();
+  } else {
+    await expect(guidance).toHaveCount(1);
   }
   await expect(guidance).toBeVisible();
   await expect(guidance).toHaveAttribute("data-capability-guidance-route", destination.path);

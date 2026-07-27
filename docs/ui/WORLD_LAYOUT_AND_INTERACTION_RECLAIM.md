@@ -2,7 +2,7 @@
 
 Date: 2026-07-24
 Prompt: R2
-Status: implementation complete; R2B World Layout and Interaction Audit is next
+Status: implementation complete; R2B audit and hardening complete; C1 next
 
 ## 1. Scope
 
@@ -228,7 +228,7 @@ Final pre-commit R2 verification:
 - Dense expert controls still require internal scrolling on short and mobile viewports.
 - Model output remains exploratory model output, not empirical truth, validated prediction, causal proof, robustness proof, or policy guidance.
 
-## 27. R2B handoff
+## 27. R2B result and C1 handoff
 
 R1 complete.
 
@@ -236,6 +236,8 @@ R1B complete.
 
 R2 complete.
 
-`R2B: World Layout and Interaction Audit` is next and has not started.
+R2B complete.
 
-R2B must independently challenge model dominance, task ownership, URL/state coherence, collapse preservation, active-tool scroll, short-height and mobile reachability, focus return, all seven stage renderings, interpretation boundaries, and runtime/persistence integrity. It must not treat R2's tests as proof of user comprehension, accessibility conformance, scientific validation, or new runtime support.
+R2B independently challenged model dominance, task ownership, URL/state coherence, collapse preservation, active-tool scroll, short-height and mobile reachability, focus return, all seven stage renderings, interpretation boundaries, and runtime/persistence integrity. It fixed explicit draft/rebuild semantics, browser task history, modal focus containment, hidden-work lifecycle, quick-control order, comparison recovery visibility, and full-reference metric inventory. The evidence record is `WORLD_LAYOUT_AND_INTERACTION_RECLAIM_AUDIT.md`.
+
+`C1: Starter World Content Framework` is next and has not started. R2/R2B tests are not proof of user comprehension, accessibility conformance, scientific validation, or new runtime support.
