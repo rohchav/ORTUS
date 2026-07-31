@@ -20,9 +20,11 @@ const opinionPoints = [
   [11, 31, "left"], [17, 58, "left"], [25, 40, "left"], [32, 69, "left"], [39, 27, "left"],
   [47, 49, "bridge"], [56, 34, "right"], [63, 67, "right"], [72, 42, "right"], [81, 25, "right"], [88, 60, "right"]
 ] as const;
-const populationBars = [
-  [35, 68], [44, 76], [57, 70], [73, 57], [86, 42], [78, 31], [61, 38], [43, 56],
-  [31, 73], [38, 82], [55, 74], [72, 53], [84, 36], [72, 29]
+const preyPoints = [
+  [12, 27], [21, 58], [31, 36], [38, 72], [49, 23], [58, 55], [69, 35], [79, 69], [88, 43]
+] as const;
+const predatorPoints = [
+  [28, 23], [52, 68], [75, 27]
 ] as const;
 const neighborhoodCells = [
   "a", "a", "empty", "b", "b", "b", "a", "a",
@@ -97,15 +99,22 @@ export function StarterWorldVisual({ kind, compact = false }: StarterWorldVisual
       ) : null}
 
       {kind === "population-cycle" ? (
-        <div className="starter-world-visual__cycles">
-          {populationBars.map(([prey, predator], index) => (
-            <span key={index} className="starter-world-visual__cycle-column">
-              <i className="starter-world-visual__cycle-bar starter-world-visual__cycle-bar--prey" style={{ "--height": `${prey}%` } as VisualStyle} />
-              <i
-                className="starter-world-visual__cycle-bar starter-world-visual__cycle-bar--predator"
-                style={{ "--height": `${predator}%` } as VisualStyle}
-              />
-            </span>
+        <div className="starter-world-visual__ecology">
+          <span className="starter-world-visual__encounter-ring starter-world-visual__encounter-ring--one" />
+          <span className="starter-world-visual__encounter-ring starter-world-visual__encounter-ring--two" />
+          {preyPoints.map(([x, y], index) => (
+            <span
+              key={`prey-${index}`}
+              className="starter-world-visual__prey"
+              style={{ "--x": `${x}%`, "--y": `${y}%` } as VisualStyle}
+            />
+          ))}
+          {predatorPoints.map(([x, y], index) => (
+            <span
+              key={`predator-${index}`}
+              className="starter-world-visual__predator"
+              style={{ "--x": `${x}%`, "--y": `${y}%` } as VisualStyle}
+            />
           ))}
         </div>
       ) : null}

@@ -148,8 +148,8 @@ const metricLabels: Record<string, Record<string, string>> = {
     polarizationScore: "Polarization score"
   },
   "predator-prey": {
-    preyCount: "Prey",
-    predatorCount: "Predators"
+    preyCount: "Prey count",
+    predatorCount: "Predator count"
   },
   "schelling-segregation": {
     satisfiedCount: "Satisfied",
@@ -260,8 +260,8 @@ const metricDescriptionSets: Record<string, Array<{ label: string; description: 
     { label: "Polarization score", description: "Mean absolute opinion magnitude; higher values indicate stronger separation from neutral." }
   ],
   "predator-prey": [
-    { label: "Prey", description: "Living prey agents." },
-    { label: "Predators", description: "Living predator agents with energy above zero." }
+    { label: "Prey count", description: "Living prey agents." },
+    { label: "Predator count", description: "Living predator agents with energy above zero." }
   ],
   "schelling-segregation": [
     { label: "Satisfied", description: "Agents whose local neighborhood meets the similarity threshold." },

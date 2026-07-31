@@ -32,6 +32,7 @@ export const starterWorldSystemForms = ["spatial-agents", "grid", "network", "po
 export const starterWorldComplexities = ["quick-start", "layered", "advanced"] as const;
 export const starterWorldSourceTypes = [
   "peer-reviewed-paper",
+  "conference-paper",
   "book",
   "official-institution",
   "research-project",
@@ -63,10 +64,20 @@ export type StarterWorldSystemForm = (typeof starterWorldSystemForms)[number];
 export type StarterWorldComplexity = (typeof starterWorldComplexities)[number];
 export type StarterWorldRemixStatus = (typeof starterWorldRemixStatuses)[number];
 export type StarterWorldVisualKind = (typeof starterWorldVisualKinds)[number];
+export type StarterWorldSourceType = (typeof starterWorldSourceTypes)[number];
+export type StarterWorldSourceRelationship = (typeof starterWorldSourceRelationships)[number];
 
 const boundedText = (min: number, max: number) => z.string().trim().min(min).max(max);
 const boundedTextList = (min: number, max: number, itemMax = 260) =>
   z.array(boundedText(2, itemMax)).min(min).max(max);
+const sourceUrlSchema = z
+  .string()
+  .trim()
+  .url()
+  .max(500)
+  .refine(isSafeSourceUrl, {
+    message: "Starter World sources must use a safe HTTPS URL or a well-formed HTTPS DOI URL."
+  });
 
 const runtimeReferenceSchema = z
   .object({
@@ -129,11 +140,32 @@ const firstChangeSchema = z
         message: "Starter parameter changes must use the existing fresh-world rebuild path."
       });
     }
+    if (change.targetType === "parameter" && change.suggestedValue === undefined) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["suggestedValue"],
+        message: "Starter parameter changes require a bounded suggested value."
+      });
+    }
+    if (change.targetType === "parameter" && change.direction === "apply") {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["direction"],
+        message: "Starter parameter changes cannot use intervention apply semantics."
+      });
+    }
     if (change.targetType === "intervention" && change.runSemantics !== "current-run") {
       context.addIssue({
         code: z.ZodIssueCode.custom,
         path: ["runSemantics"],
         message: "Starter interventions must use the existing current-run intervention path."
+      });
+    }
+    if (change.targetType === "intervention" && change.direction !== "apply") {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["direction"],
+        message: "Starter interventions must use apply semantics."
       });
     }
   });
@@ -148,14 +180,12 @@ const observationSchema = z
 
 const sourceSchema = z
   .object({
-    sourceId: boundedText(2, 120),
+    sourceId: boundedText(2, 120).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
     title: boundedText(4, 260),
     authorsOrOrganization: boundedText(2, 240),
     year: z.number().int().min(1600).max(2100),
     sourceType: z.enum(starterWorldSourceTypes),
-    urlOrDoi: z.string().trim().url().max(500).refine((value) => value.startsWith("https://"), {
-      message: "Starter World sources must use HTTPS URLs."
-    }),
+    urlOrDoi: sourceUrlSchema,
     relationship: z.enum(starterWorldSourceRelationships),
     note: boundedText(12, 420)
   })
@@ -308,3 +338,44 @@ export const starterWorldRemixStatusLabels: Record<StarterWorldRemixStatus, stri
   "advanced-tools": "Available through current Advanced tools",
   "future-capability": "Future engine capability required"
 };
+
+export const starterWorldSourceTypeLabels: Record<StarterWorldSourceType, string> = {
+  "peer-reviewed-paper": "Peer-reviewed paper",
+  "conference-paper": "Conference paper",
+  book: "Book",
+  "official-institution": "Official institution",
+  "research-project": "Research project",
+  "educational-reference": "Educational reference",
+  "historical-source": "Historical source"
+};
+
+export const starterWorldSourceRelationshipLabels: Record<StarterWorldSourceRelationship, string> = {
+  "canonical-model": "Canonical model",
+  "mechanism-inspiration": "Mechanism inspiration",
+  "research-context": "Research context",
+  "educational-context": "Educational context",
+  "historical-context": "Historical context"
+};
+
+function isSafeSourceUrl(value: string): boolean {
+  try {
+    const url = new URL(value);
+    if (
+      url.protocol !== "https:" ||
+      url.username !== "" ||
+      url.password !== ""
+    ) {
+      return false;
+    }
+    if (url.hostname.toLowerCase() !== "doi.org") {
+      return true;
+    }
+    return (
+      url.search === "" &&
+      url.hash === "" &&
+      /^\/10\.\d{4,9}\/\S+$/i.test(url.pathname)
+    );
+  } catch {
+    return false;
+  }
+}

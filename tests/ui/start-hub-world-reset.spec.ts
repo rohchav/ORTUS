@@ -52,11 +52,9 @@ test("featured Flocking handoff opens the real World with a local starter nudge 
   await page.getByRole("link", { name: "Explore Collective Motion" }).click();
   await expect(page).toHaveURL(/\/worlds\/collective-motion$/);
   await page.getByRole("link", { name: "Launch this world" }).click();
-  await expect(page).toHaveURL(
-    /\/world\?starter=flocking&template=flocking-boids&scenario=random-headings$/
-  );
+  await expect(page).toHaveURL(/\/world\?starter=flocking$/);
   await expect(page.getByLabel("World template")).toHaveValue("flocking-boids");
-  await expect(page.locator("[data-starter-nudge]")).toContainText("Set Alignment weight to 0.20");
+  await expect(page.locator("[data-starter-nudge]")).toContainText("Lower Alignment weight to 0.20");
   await expect(page.getByLabel("Key model parameters").getByText("Alignment weight", { exact: true })).toBeVisible();
 
   const widths = await page.evaluate(() => {
@@ -100,13 +98,13 @@ test("repeated featured-starter launch rebuilds the prepared run without writing
   await expect(tick).toHaveText("0");
   await expect(page.getByRole("button", { name: "Run simulation" })).toBeVisible();
   await expect(page.locator(".timeline-strip__label strong")).toHaveText("Paused");
-  await expect(page.locator("[data-starter-nudge]")).toContainText("Run the random-headings baseline");
+  await expect(page.locator("[data-starter-nudge]")).toContainText("Begin with Random Headings");
   expect(await readStorage(page)).toEqual(storageBefore);
 });
 
 test("a key parameter edit remains a draft until an explicit paused tick-0 rebuild", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 720 });
-  await page.goto("/world?template=flocking-boids&starter=flocking", { waitUntil: "domcontentloaded" });
+  await page.goto("/world?starter=flocking", { waitUntil: "domcontentloaded" });
   await expect(
     page.getByText(/Parameter and seed edits stay as Setup drafts/)
   ).toBeVisible();
@@ -131,7 +129,7 @@ test("a key parameter edit remains a draft until an explicit paused tick-0 rebui
 
 test("World task changes reset panel scroll, focus selected More content, and synchronize route state", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 720 });
-  await page.goto("/world?template=flocking-boids&starter=flocking", { waitUntil: "domcontentloaded" });
+  await page.goto("/world?starter=flocking", { waitUntil: "domcontentloaded" });
   await page.getByRole("button", { name: "Step exactly one tick" }).click();
 
   const taskNav = page.getByRole("navigation", { name: "World tasks" });

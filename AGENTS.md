@@ -583,7 +583,7 @@
 - Keep Starter World browsing, filters, search, nudge dismissal, and launch context non-persistent. Do not add storage, progress, completion, XP, achievements, profiling, recommendations, or step locks.
 - Keep remix status explicit: runtime-now, current Advanced structural tools, or future capability. Do not expose fake Builder, generate, compile, apply, or run actions.
 - C1 portfolio candidates are documentation only. Tier A is not implemented content; Tier B and C do not become runtime support until dedicated implementation and audit prompts.
-- R1, R1B, R2, R2B, and C1 are complete. C1B Starter World Content Framework Audit is next; do not skip it or start C2/later C/S/E milestones without their dedicated prompt.
+- R1, R1B, R2, R2B, C1, and C1B are complete. C2: Flagship Starter Pack One is next; do not start C2 or later C/S/E milestones without a dedicated prompt.
 - Complete and commit GW1 before starting GW1B.
 - Treat UX0 as documentation and design planning only.
 - Do not implement World/Lab/Atlas/Workshop without a dedicated prompt.
@@ -664,7 +664,7 @@
 - Atlas preview results are component-memory-only exact sampled coordinates. Do not add storage, saved records, history, publication, interpolation, smoothing, contours, inferred unsampled values, regime/transition/tipping-point detection, confidence/coverage/evidence scores, or scientific-validation claims.
 - Keep cancellation language honest: `Cancel after current sample` means the current synchronous sample finishes before cancellation is effective. Unstarted runs remain unsampled and partial results remain visibly partial. Route unmount must cancel remaining cooperative work and suppress post-unmount UI updates.
 - Multiple preview seeds show selected deterministic model variation only; they are not confidence intervals, calibrated probabilities, or real-world uncertainty estimates.
-- GW9/GW9B do not generalize Atlas sampling, make the conceptual behavioral-landscape scaffold runtime-backed, make probe plans executable, or create Discovery Atlas/Lab persistence. GW9B, R1, R1B, R2, R2B, and C1 are complete; C1B is next. F1 is paused under E3 Analytical Lenses.
+- GW9/GW9B do not generalize Atlas sampling, make the conceptual behavioral-landscape scaffold runtime-backed, make probe plans executable, or create Discovery Atlas/Lab persistence. GW9B, R1, R1B, R2, R2B, C1, and C1B are complete. C2 is next; F1 is paused under E3 Analytical Lenses.
 - A featured starter launch must create the documented fresh prepared run once per starter page mount. It must not silently resume modified parameters, an advanced tick, or a running state beneath baseline instructions.
 - Parameter controls that rebuild the run must remain drafts until explicit apply and state that apply produces a fresh paused tick-0 run; do not imply live mutation.
 - World visible task, `task` query, top-navigation current state, and task heading must remain coherent without resetting active runtime state.
@@ -673,3 +673,9 @@
 - Default Understand content must prioritize selected-model questions, mechanisms, assumptions, and limitations. Keep unrelated Builder/schema/external-framework implementation boundaries in full notes.
 - Keep the real Atlas preview action visible in the first short desktop viewport without changing GW9/GW9B request or executor semantics.
 - Preserve the sharp ORTUS mark and visible ORTUS wordmark in the primary mobile navigation lockup.
+- Starter World canonical launch links may carry only the Starter World ID. Derive and revalidate template and default preset from the frozen registry; reject template, scenario, RunConfig, and unknown public handoff overrides.
+- Keep validated Starter World definitions recursively immutable, including nested runtime references and content arrays.
+- User-facing Starter World content must use authoritative preset, parameter, intervention, and metric labels rather than internal IDs.
+- Verify Starter World source type, relationship, destination, and DOI metadata. Research connections are context, not validation or calibration.
+- A documented Starter World first activity needs a deterministic engine regression and a rendered control, rebuild, and output path before it is called supported.
+- Static Starter World visuals are illustrative. They must not resemble or claim quantitative runtime output unless backed by an actual labelled output.

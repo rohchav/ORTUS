@@ -2,7 +2,7 @@
 
 Date: 2026-07-19
 Prompt: R1
-Status: implemented and audited by R1B; R2, R2B, and C1 complete; C1B next
+Status: implemented and audited by R1B; R2, R2B, C1, and C1B complete; C2 next
 
 ## Purpose
 
@@ -144,4 +144,4 @@ R1/R1B add no new persistence. Existing bounded World comparison and UI storage 
 
 R2 preserves the R1/R1B fresh-starter and runtime boundaries while replacing the compressed World task column with a stable stage, persistent playback, direct task navigation, and one bounded active tool. Its implementation record is `WORLD_LAYOUT_AND_INTERACTION_RECLAIM.md`.
 
-R1 complete. R1B complete. R2 complete. R2B complete. C1 complete. `C1B: Starter World Content Framework Audit` is next and has not started. F1 and the fractal branch remain paused under the future E3 Analytical Lenses milestone.
+R1 complete. R1B complete. R2 complete. R2B complete. C1 complete. C1B complete. C2: Flagship Starter Pack One is next. F1 and the fractal branch remain paused under the future E3 Analytical Lenses milestone.

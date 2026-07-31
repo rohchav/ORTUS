@@ -77,6 +77,8 @@ export function validateStarterWorldDefinitions(input: unknown): readonly Starte
   const sourceIds = new Map<string, string>();
   const hooks = new Map<string, string>();
   const limitations = new Map<string, string>();
+  const firstRunOpenings = new Map<string, string>();
+  const firstChangeOpenings = new Map<string, string>();
   let featuredRunnableCount = 0;
 
   for (const [index, definition] of parsed.data.entries()) {
@@ -107,6 +109,25 @@ export function validateStarterWorldDefinitions(input: unknown): readonly Starte
     } else {
       limitations.set(normalizedLimitation, definition.id);
     }
+
+    collectSentenceOpeningIssue(
+      firstRunOpenings,
+      definition.firstRun.action,
+      definition.id,
+      `${path}.firstRun.action`,
+      "repeated-first-run-opening",
+      "First-run action",
+      issues
+    );
+    collectSentenceOpeningIssue(
+      firstChangeOpenings,
+      definition.firstChange.action,
+      definition.id,
+      `${path}.firstChange.action`,
+      "repeated-first-change-opening",
+      "First-change action",
+      issues
+    );
 
     for (const source of definition.sources) {
       const previousSource = sourceIds.get(source.sourceId);
@@ -157,24 +178,7 @@ export function evaluateStarterWorldQuality(definition: StarterWorldDefinition):
     add("thin-summary", "summary", "Summary needs enough model-specific detail to orient an investigation.");
   }
 
-  const userFacingText = [
-    definition.title,
-    definition.shortTitle,
-    definition.hookQuestion,
-    definition.oneSentencePremise,
-    definition.summary,
-    definition.interactionPattern,
-    definition.systemDynamics,
-    definition.firstRun.action,
-    definition.firstRun.demonstrates,
-    definition.firstChange.action,
-    definition.firstChange.differenceToLookFor,
-    definition.mainLimitation,
-    ...definition.investigationPrompts,
-    ...definition.whatToWatch.flatMap((item) => [item.label, item.description]),
-    ...definition.remixIdeas.flatMap((item) => [item.title, item.description]),
-    ...definition.futureExpansion.flatMap((item) => [item.title, item.description])
-  ].join("\n");
+  const userFacingText = starterWorldUserFacingText(definition);
 
   for (const pattern of prohibitedResearchClaims) {
     if (pattern.test(userFacingText)) {
@@ -213,6 +217,25 @@ export function evaluateStarterWorldQuality(definition: StarterWorldDefinition):
   }
   if (new Set(definition.catalogIndicators.map(normalizeText)).size !== definition.catalogIndicators.length) {
     add("duplicate-indicator", "catalogIndicators", "Catalog indicators must be distinct.");
+  }
+  for (const [path, values] of [
+    ["domain", definition.domain],
+    ["mechanisms", definition.mechanisms],
+    ["systemForms", definition.systemForms],
+    ["primaryMechanisms", definition.primaryMechanisms]
+  ] as const) {
+    if (new Set(values).size !== values.length) {
+      add("duplicate-taxonomy", path, `${path} values must be unique.`);
+    }
+  }
+  for (const mechanism of definition.primaryMechanisms) {
+    if (!definition.mechanisms.includes(mechanism)) {
+      add(
+        "primary-mechanism-not-cataloged",
+        "primaryMechanisms",
+        `Primary mechanism "${mechanism}" must also appear in mechanisms.`
+      );
+    }
   }
   if (new Set(definition.sources.map((source) => source.sourceId)).size !== definition.sources.length) {
     add("duplicate-source-id", "sources", "Source IDs must be distinct within a Starter World.");
@@ -268,6 +291,16 @@ export function validateRuntimeReferences(definition: StarterWorldDefinition): S
   const presets = initializationPresetsForTemplate(template);
   const presetIds = new Set(presets.map((preset) => preset.id));
   const defaultPreset = defaultInitializationPresetForTemplate(template);
+  const userFacingText = normalizeText(starterWorldUserFacingText(definition));
+  for (const preset of presets) {
+    if (userFacingText.includes(normalizeText(preset.id))) {
+      add(
+        "raw-preset-id",
+        "content",
+        `User-facing content must use the authoritative preset label "${preset.label}", not its internal ID.`
+      );
+    }
+  }
   if (!presetIds.has(runtime.defaultScenarioId)) {
     add("unknown-default-scenario", "runtime.defaultScenarioId", `Unknown initialization scenario "${runtime.defaultScenarioId}".`);
   }
@@ -281,6 +314,20 @@ export function validateRuntimeReferences(definition: StarterWorldDefinition): S
   if (!runtime.supportedScenarioIds.includes(runtime.defaultScenarioId)) {
     add("default-scenario-not-supported", "runtime.supportedScenarioIds", "The default scenario must appear in supportedScenarioIds.");
   }
+  if (normalizeText(definition.firstRun.action).includes(normalizeText(runtime.defaultScenarioId))) {
+    add(
+      "raw-preset-id",
+      "firstRun.action",
+      `First-run copy must use the authoritative preset label "${defaultPreset.label}", not its internal ID.`
+    );
+  }
+  if (!normalizeText(definition.firstRun.action).includes(normalizeText(defaultPreset.label))) {
+    add(
+      "missing-preset-label",
+      "firstRun.action",
+      `First-run copy must name the authoritative preset label "${defaultPreset.label}".`
+    );
+  }
   if (new Set(runtime.supportedScenarioIds).size !== runtime.supportedScenarioIds.length) {
     add("duplicate-scenario", "runtime.supportedScenarioIds", "Supported scenario IDs must be unique.");
   }
@@ -290,13 +337,23 @@ export function validateRuntimeReferences(definition: StarterWorldDefinition): S
     }
   }
 
-  const metricIds = new Set((template.metricDefinitions ?? []).map((metric) => metric.key));
+  const metrics = template.metricDefinitions ?? [];
+  const metricIds = new Set(metrics.map((metric) => metric.key));
   if (!metricIds.has(runtime.recommendedMetricId)) {
     add("unknown-metric", "runtime.recommendedMetricId", `Unknown metric "${runtime.recommendedMetricId}" for template "${template.id}".`);
   }
   for (const [index, observation] of definition.whatToWatch.entries()) {
     if (observation.metricId && !metricIds.has(observation.metricId)) {
       add("unknown-observation-metric", `whatToWatch[${index}].metricId`, `Unknown metric "${observation.metricId}".`);
+    } else if (observation.metricId) {
+      const metric = metrics.find((candidate) => candidate.key === observation.metricId)!;
+      if (!normalizeText(observation.label).includes(normalizeText(metric.label))) {
+        add(
+          "metric-label-mismatch",
+          `whatToWatch[${index}].label`,
+          `Observation label must include the authoritative metric label "${metric.label}".`
+        );
+      }
     }
   }
   if (!definition.whatToWatch.some((observation) => observation.metricId === runtime.recommendedMetricId)) {
@@ -327,8 +384,18 @@ export function validateRuntimeReferences(definition: StarterWorldDefinition): S
       if (definition.firstChange.targetLabel !== changeParameter.label) {
         add("parameter-label-mismatch", "firstChange.targetLabel", `Expected authoritative label "${changeParameter.label}".`);
       }
+      if (!normalizeText(definition.firstChange.action).includes(normalizeText(changeParameter.label))) {
+        add("missing-parameter-label", "firstChange.action", `First-change copy must name "${changeParameter.label}".`);
+      }
       if (definition.firstChange.suggestedValue !== undefined && !parameterAcceptsValue(changeParameter, definition.firstChange.suggestedValue)) {
         add("invalid-parameter-value", "firstChange.suggestedValue", "Suggested value is outside the authoritative parameter contract.");
+      } else if (definition.firstChange.suggestedValue !== undefined) {
+        validateChangeDirection(
+          definition.firstChange.direction,
+          baselineParameterValue(defaultPreset.parameterOverrides?.[changeParameter.key], changeParameter),
+          definition.firstChange.suggestedValue,
+          add
+        );
       }
     }
   } else {
@@ -337,6 +404,8 @@ export function validateRuntimeReferences(definition: StarterWorldDefinition): S
       add("unknown-intervention", "firstChange.targetId", `Unknown intervention "${definition.firstChange.targetId}".`);
     } else if (definition.firstChange.targetLabel !== intervention.label) {
       add("intervention-label-mismatch", "firstChange.targetLabel", `Expected authoritative label "${intervention.label}".`);
+    } else if (!normalizeText(definition.firstChange.action).includes(normalizeText(intervention.label))) {
+      add("missing-intervention-label", "firstChange.action", `First-change copy must name "${intervention.label}".`);
     }
   }
 
@@ -386,6 +455,28 @@ function collectUniqueIssue(
   }
 }
 
+function collectSentenceOpeningIssue(
+  values: Map<string, string>,
+  value: string,
+  id: string,
+  path: string,
+  code: string,
+  label: string,
+  issues: StarterWorldValidationIssue[]
+): void {
+  const opening = normalizeText(value).split(/\s+/).slice(0, 2).join(" ");
+  const previous = values.get(opening);
+  if (previous) {
+    issues.push({
+      code,
+      path,
+      message: `${label} repeats the opening "${opening}" from Starter World "${previous}".`
+    });
+  } else {
+    values.set(opening, id);
+  }
+}
+
 function parameterAcceptsValue(definition: ParameterDefinition, value: string | number | boolean): boolean {
   if (definition.type === "boolean") {
     return typeof value === "boolean";
@@ -402,8 +493,68 @@ function parameterAcceptsValue(definition: ParameterDefinition, value: string | 
   return (definition.min === undefined || value >= definition.min) && (definition.max === undefined || value <= definition.max);
 }
 
+function baselineParameterValue(
+  presetValue: unknown,
+  definition: ParameterDefinition
+): string | number | boolean {
+  if (
+    typeof presetValue === "string" ||
+    typeof presetValue === "number" ||
+    typeof presetValue === "boolean"
+  ) {
+    return presetValue;
+  }
+  return definition.defaultValue as string | number | boolean;
+}
+
+function validateChangeDirection(
+  direction: "increase" | "decrease" | "set" | "apply",
+  baseline: string | number | boolean,
+  suggested: string | number | boolean,
+  add: (code: string, path: string, message: string) => void
+): void {
+  if (direction === "set") {
+    return;
+  }
+  if (typeof baseline !== "number" || typeof suggested !== "number") {
+    add("invalid-change-direction", "firstChange.direction", "Non-numeric parameter changes must use set semantics.");
+    return;
+  }
+  if (
+    (direction === "increase" && suggested <= baseline) ||
+    (direction === "decrease" && suggested >= baseline)
+  ) {
+    add(
+      "invalid-change-direction",
+      "firstChange.direction",
+      `Suggested value ${suggested} does not ${direction} the authoritative baseline value ${baseline}.`
+    );
+  }
+}
+
 function normalizeText(value: string): string {
   return value.trim().toLowerCase().replace(/\s+/g, " ");
+}
+
+function starterWorldUserFacingText(definition: StarterWorldDefinition): string {
+  return [
+    definition.title,
+    definition.shortTitle,
+    definition.hookQuestion,
+    definition.oneSentencePremise,
+    definition.summary,
+    definition.interactionPattern,
+    definition.systemDynamics,
+    definition.firstRun.action,
+    definition.firstRun.demonstrates,
+    definition.firstChange.action,
+    definition.firstChange.differenceToLookFor,
+    definition.mainLimitation,
+    ...definition.investigationPrompts,
+    ...definition.whatToWatch.flatMap((item) => [item.label, item.description]),
+    ...definition.remixIdeas.flatMap((item) => [item.title, item.description]),
+    ...definition.futureExpansion.flatMap((item) => [item.title, item.description])
+  ].join("\n");
 }
 
 function zodIssues(error: z.ZodError): StarterWorldValidationIssue[] {

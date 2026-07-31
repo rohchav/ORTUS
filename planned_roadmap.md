@@ -1,10 +1,10 @@
 # ORTUS Full Prompt Roadmap
 
-*Last updated during Prompt C1 Starter World Content Framework + Explore-Worlds Catalog.*
+*Last updated after Prompt C1B Starter World Content Framework Audit + Hardening.*
 
 ## Current Status
 
-ORTUS has completed the core runtime/template and modeling-workbench foundations through Prompt 39B, the neural/runtime-lab side track, the Research World sequence through GW9B, the UX3 through UX6B track, RH1 source-of-truth hygiene, and the product reset through C1.
+ORTUS has completed the core runtime/template and modeling-workbench foundations through Prompt 39B, the neural/runtime-lab side track, the Research World sequence through GW9B, the UX3 through UX6B track, RH1 source-of-truth hygiene, and the product reset through C1B.
 
 Current project status:
 
@@ -55,6 +55,7 @@ Completed audit prompt: Prompt R1B — First-Run and World-First Shell Audit + H
 Completed implementation prompt: Prompt R2 — World Layout and Interaction Reclaim; establishes a stable dominant stage, compact context, direct task architecture, one bounded active-tool surface, layered Setup/Observe/Change/Compare/Explain workflows, focus-managed references, and responsive mobile containment without changing runtime or persistence behavior
 Completed audit prompt: Prompt R2B — World Layout and Interaction Audit + Hardening; fixes explicit Setup draft/rebuild semantics, same-document task history, modal focus containment, hidden-work lifecycle, quick-control ordering, comparison recovery visibility, and full-reference metric inventory without changing engine behavior or persistence scope
 Completed implementation prompt: Prompt C1 — Starter World Content Framework + Explore-Worlds Catalog; adds a strict source-backed content registry, `/worlds`, seven linkable detail pages, deterministic filtering/search, strict ID-only fresh-run handoffs, content quality lint, and a researched 24-world portfolio without changing template runtime or persistence
+Completed audit prompt: Prompt C1B — Starter World Content Framework Audit + Hardening; audits and hardens source accuracy, runtime references, registry immutability, content lint, seven first activities, strict ID-only handoffs, model boundaries, portfolio tiers, rendered accessibility, and responsive behavior without changing simulation runtime or persistence
 Post-30B stabilization completed: repo hygiene, durable Codex context, dependency repair, generated-artifact cleanup, and runtime performance/scalability baseline
 UX6 complete.
 UX6B complete.
@@ -65,10 +66,11 @@ R1B complete.
 R2 complete.
 R2B complete.
 C1 complete.
-C1B: Starter World Content Framework Audit is next.
+C1B complete.
+C2: Flagship Starter Pack One is next.
 F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, and trajectory motif analytics are paused under E3 Analytical Lenses.
 
-Completed sequence: UX6B -> GW9 -> GW9B -> R1 -> R1B -> R2 -> R2B -> C1. C1B is next and not started.
+Completed sequence: UX6B -> GW9 -> GW9B -> R1 -> R1B -> R2 -> R2B -> C1 -> C1B. C2 is next and has not started.
 ```
 
 Critical global boundary:
@@ -101,7 +103,7 @@ E2 Atlas as Question Map -> E2B Atlas Question-Map Audit
 E3 Analytical Lenses -> E3B Analytical-Lens Audit
 ```
 
-R1, R1B, R2, R2B, and C1 are complete. C1B is next and has not started. The prior post-GW9B sequence that named F1 next is superseded; F0 remains historical documentation and F1 is paused under E3. C1 adds content definitions and presentation over current runtime support; it does not implement C2 or any S/E/F capability.
+R1, R1B, R2, R2B, C1, and C1B are complete. C2: Flagship Starter Pack One is next and has not started. The prior post-GW9B sequence that named F1 next is superseded; F0 remains historical documentation and F1 is paused under E3. C1/C1B add and harden content definitions and presentation over current runtime support; they do not implement C2 or any S/E/F capability.
 
 Current production templates:
 
@@ -3721,10 +3723,9 @@ No global service availability treated as template runtime support.
 Recommended immediate next steps:
 
 ```text
-1. Run Prompt C1B: Starter World Content Framework Audit next.
-2. Independently challenge every Starter World source, runtime reference, content claim, launch handoff, and rendered state.
-3. Do not start C2, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or later reset-roadmap capability without its dedicated prompt.
-4. Do not make mobile-readiness, WCAG, actual browser-zoom, screen-reader, assistive-technology, forced-colors, or user-comprehension claims without direct evidence.
+1. Prompt C2: Flagship Starter Pack One is next and has not started.
+2. Do not start C2, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or later reset-roadmap capability without its dedicated prompt.
+3. Do not make mobile-readiness, WCAG, actual browser-zoom, screen-reader, assistive-technology, forced-colors, or user-comprehension claims without direct evidence.
 ```
 
 Do not start graph editing, visual programming, or runtime-mapping prompts until the repo status and roadmap docs clearly reflect:
@@ -3789,10 +3790,11 @@ Prompt R1B First-Run and World-First Shell Audit + Hardening is complete.
 Prompt R2 World Layout and Interaction Reclaim is complete.
 Prompt R2B World Layout and Interaction Audit + Hardening is complete.
 Prompt C1 Starter World Content Framework + Explore-Worlds Catalog is complete.
+Prompt C1B Starter World Content Framework Audit + Hardening is complete.
 R1 complete.
 R1B complete.
 R2 complete.
 R2B complete.
 C1 complete.
-C1B: Starter World Content Framework Audit is next. It is not started. F1 is paused under E3 Analytical Lenses.
+C1B complete. C2: Flagship Starter Pack One is next. F1 is paused under E3 Analytical Lenses.
 ```

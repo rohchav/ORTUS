@@ -1,7 +1,7 @@
 # ORTUS Product Experience Reset Roadmap
 
-Date: 2026-07-27
-Status: active product sequence; R1, R1B, R2, R2B, and C1 complete; C1B next
+Date: 2026-07-31
+Status: active product sequence; R1, R1B, R2, R2B, C1, and C1B complete; C2 next
 
 ## Why This Sequence Exists
 
@@ -50,7 +50,7 @@ R1 and its required R1B audit are complete. R2 and its required R2B audit are al
 
 C1 is complete. It adds the strict source-backed Starter World registry, `/worlds`, seven detail routes, deterministic catalog browsing, strict existing-scenario launch handoffs, quality lint, and a researched future portfolio. It does not add runtime behavior or persistence.
 
-`C1B: Starter World Content Framework Audit` is next and has not started. C2-C4, S1-S5, and E1-E3 have not started under this roadmap.
+`C1B: Starter World Content Framework Audit` is complete. It audited and hardened source, content, launch, portfolio, rendered accessibility, responsive behavior, and test contracts without changing simulation runtime or persistence. C2: Flagship Starter Pack One is next and has not started; C3-C4, S1-S5, and E1-E3 have not started under this roadmap.
 
 The active route hierarchy is Start `/`, Start-adjacent Explore Worlds `/worlds`, World `/world`, Workshop `/builder`, Atlas `/atlas`, and Lab `/lab`. `/worlds` contains only seven validated runnable definitions; its existence is not evidence that later starter packs, composition, Lab, Atlas, or analysis milestones exist.
 

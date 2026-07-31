@@ -2,7 +2,7 @@
 
 Date: 2026-07-24
 Prompt: R2
-Status: implementation complete; R2B audit and hardening complete; C1 complete; C1B next
+Status: implementation complete; R2B audit and hardening complete; C1 and C1B complete; C2 next
 
 ## 1. Scope
 
@@ -242,4 +242,4 @@ R2B independently challenged model dominance, task ownership, URL/state coherenc
 
 C1 is complete. Its strict Starter World handoff reuses R2/R2B's existing scenario apply path to create fresh paused tick-0 runs and adds only a compact dismissible definition-driven nudge over the stage. It does not redesign World, change template runtime, or add persistence.
 
-`C1B: Starter World Content Framework Audit` is next and has not started. R2/R2B/C1 tests are not proof of user comprehension, accessibility conformance, scientific validation, or new runtime support.
+C1B is complete after its required focused and complete browser verification passed. R2/R2B/C1/C1B tests are not proof of user comprehension, accessibility conformance, scientific validation, or new runtime support. C2 has not started.

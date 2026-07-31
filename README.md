@@ -51,7 +51,7 @@ npm run build
 
 ## Roadmap Status
 
-ORTUS has completed Prompt 39B plus the documented neural, Research World, and UI work through GW9B, followed by R1, R1B, R2, R2B, and `C1: Starter World Content Framework`. The active product sequence is documented in `docs/product/ORTUS_PRODUCT_EXPERIENCE_RESET_ROADMAP.md`. `C1B: Starter World Content Framework Audit` is next and has not started. The F0 fractal branch remains documented but F1 is paused under the future E3 Analytical Lenses milestone.
+ORTUS has completed Prompt 39B plus the documented neural, Research World, and UI work through GW9B, followed by R1, R1B, R2, R2B, C1, and `C1B: Starter World Content Framework Audit + Hardening`. C2: Flagship Starter Pack One is next and has not started. The active product sequence is documented in `docs/product/ORTUS_PRODUCT_EXPERIENCE_RESET_ROADMAP.md`. The F0 fractal branch remains documented but F1 is paused under the future E3 Analytical Lenses milestone.
 
 ## Product Philosophy
 

@@ -18,17 +18,17 @@ export default async function WorldPage({ searchParams }: WorldPageProps) {
   const query = await searchParams;
   const template = singleValue(query.template);
   const task = singleValue(query.task);
-  const scenario = singleValue(query.scenario);
 
   if (query.starter !== undefined) {
-    if ([query.starter, query.template, query.scenario, query.task].some(Array.isArray)) {
+    if ([query.starter, query.task].some(Array.isArray)) {
       return <StarterLaunchError message="The Starter World launch URL contains duplicate values." />;
+    }
+    if (Object.keys(query).some((key) => key !== "starter" && key !== "task")) {
+      return <StarterLaunchError message="The Starter World launch URL contains unsupported runtime overrides." />;
     }
 
     const result = resolveStarterWorldLaunch({
       starterId: query.starter,
-      ...(template ? { templateId: template } : {}),
-      ...(scenario ? { scenarioId: scenario } : {}),
       ...(task ? { task } : {})
     });
     if (!result.ok || !isTemplateId(result.launch.templateId)) {

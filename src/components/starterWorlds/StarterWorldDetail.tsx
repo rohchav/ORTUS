@@ -4,6 +4,8 @@ import {
   starterWorldAnatomyLabels,
   starterWorldMechanismLabels,
   starterWorldRemixStatusLabels,
+  starterWorldSourceRelationshipLabels,
+  starterWorldSourceTypeLabels,
   type StarterWorldAnatomy,
   type StarterWorldDefinition
 } from "../../lib/starterWorlds";
@@ -160,6 +162,9 @@ export function StarterWorldDetail({ world }: StarterWorldDetailProps) {
                     {source.title} (external source)
                   </a>
                   <span>{source.authorsOrOrganization}, {source.year}</span>
+                  <small>
+                    {starterWorldSourceTypeLabels[source.sourceType]}; {starterWorldSourceRelationshipLabels[source.relationship]}
+                  </small>
                   <p>{source.note}</p>
                 </li>
               ))}

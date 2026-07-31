@@ -10,19 +10,16 @@ import {
 import {
   isSimulationWorkspaceModeId,
   simulationWorkspaceModeFromQuery,
-  simulationWorkspaceModeQueryValue,
   type SimulationWorkspaceModeId
 } from "../workspaceModes";
 import { getStarterWorldById } from "./registry";
-import { assertSafeStarterWorldValue } from "./validation";
+import { assertSafeStarterWorldValue, validateRuntimeReferences } from "./validation";
 
 const launchTimestamp = "2026-07-27T00:00:00.000Z";
 
 const launchRequestSchema = z
   .object({
     starterId: z.string().trim().min(1).max(120),
-    templateId: z.string().trim().min(1).max(120).optional(),
-    scenarioId: z.string().trim().min(1).max(120).optional(),
     task: z.string().trim().min(1).max(40).optional()
   })
   .strict();
@@ -75,8 +72,8 @@ export function resolveStarterWorldLaunch(input: unknown): StarterWorldLaunchRes
   if (definition.runtimeStatus !== "runnable" || !definition.runtime) {
     return failure("not-runnable", "That Starter World does not have an approved runtime launch.");
   }
-  if (parsed.data.templateId && parsed.data.templateId !== definition.runtime.templateId) {
-    return failure("runtime-mismatch", "The requested template does not match this Starter World.");
+  if (validateRuntimeReferences(definition).length > 0) {
+    return failure("runtime-mismatch", "The Starter World runtime reference is no longer authoritative.");
   }
 
   const template = getProductionTemplate(definition.runtime.templateId);
@@ -84,7 +81,7 @@ export function resolveStarterWorldLaunch(input: unknown): StarterWorldLaunchRes
     return failure("runtime-mismatch", "The Starter World runtime template is unavailable.");
   }
 
-  const scenarioId = parsed.data.scenarioId ?? definition.runtime.defaultScenarioId;
+  const scenarioId = definition.runtime.defaultScenarioId;
   if (
     !definition.runtime.supportedScenarioIds.includes(scenarioId) ||
     !findInitializationPreset(template, scenarioId)
@@ -109,7 +106,7 @@ export function resolveStarterWorldLaunch(input: unknown): StarterWorldLaunchRes
   } as const;
   const launch = starterWorldLaunchSchema.parse({
     ...launchWithoutHref,
-    href: starterWorldLaunchHref(launchWithoutHref)
+    href: starterWorldLaunchHref(definition.id)
   });
   return { ok: true, launch };
 }
@@ -127,8 +124,6 @@ export function createStarterWorldScenario(input: unknown): AuthoredScenario {
   const launch = starterWorldLaunchSchema.parse(input);
   const resolved = resolveStarterWorldLaunch({
     starterId: launch.starterWorldId,
-    templateId: launch.templateId,
-    scenarioId: launch.scenarioId,
     task: launch.task
   });
   if (!resolved.ok || !sameLaunchIdentity(launch, resolved.launch)) {
@@ -159,20 +154,9 @@ export function createStarterWorldScenario(input: unknown): AuthoredScenario {
   }).scenario;
 }
 
-export function starterWorldLaunchHref(input: {
-  starterWorldId: string;
-  templateId: string;
-  scenarioId: string;
-  task: SimulationWorkspaceModeId;
-}): string {
+export function starterWorldLaunchHref(starterWorldId: string): string {
   const query = new URLSearchParams();
-  query.set("starter", input.starterWorldId);
-  query.set("template", input.templateId);
-  query.set("scenario", input.scenarioId);
-  const task = simulationWorkspaceModeQueryValue(input.task);
-  if (task) {
-    query.set("task", task);
-  }
+  query.set("starter", starterWorldId);
   return `/world?${query.toString()}`;
 }
 
@@ -183,7 +167,8 @@ function sameLaunchIdentity(left: StarterWorldLaunch, right: StarterWorldLaunch)
     left.slug === right.slug &&
     left.templateId === right.templateId &&
     left.scenarioId === right.scenarioId &&
-    left.task === right.task
+    left.task === right.task &&
+    left.href === right.href
   );
 }
 

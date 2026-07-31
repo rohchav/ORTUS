@@ -2,10 +2,10 @@ import { rawStarterWorldDefinitions } from "./definitions";
 import type { StarterWorldDefinition } from "./types";
 import { validateStarterWorldDefinitions } from "./validation";
 
-const validatedStarterWorlds = validateStarterWorldDefinitions(rawStarterWorldDefinitions);
+const validatedStarterWorlds = validateStarterWorldDefinitions(rawStarterWorldDefinitions).map(deepFreeze);
 
-export const starterWorlds: readonly StarterWorldDefinition[] = Object.freeze([...validatedStarterWorlds]);
-export const runnableStarterWorlds: readonly StarterWorldDefinition[] = Object.freeze(
+export const starterWorlds: readonly StarterWorldDefinition[] = deepFreeze([...validatedStarterWorlds]);
+export const runnableStarterWorlds: readonly StarterWorldDefinition[] = deepFreeze(
   starterWorlds.filter((definition) => definition.runtimeStatus === "runnable")
 );
 
@@ -35,3 +35,13 @@ export function requireStarterWorldBySlug(slug: string): StarterWorldDefinition 
 
 export const featuredStarterWorld =
   runnableStarterWorlds.find((definition) => definition.featured) ?? runnableStarterWorlds[0]!;
+
+function deepFreeze<T>(value: T): T {
+  if (value === null || typeof value !== "object") {
+    return value;
+  }
+  for (const child of Object.values(value as Record<string, unknown>)) {
+    deepFreeze(child);
+  }
+  return Object.isFrozen(value) ? value : Object.freeze(value);
+}

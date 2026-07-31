@@ -1,7 +1,7 @@
 # Starter World Portfolio
 
 Date: 2026-07-27
-Status: researched C1 planning artifact; no candidate below is a new runtime capability
+Status: C1 planning artifact; C1B audit complete; no candidate below is a new runtime capability
 
 ## Portfolio Boundary
 
@@ -19,6 +19,8 @@ Research anchors connect candidates to related concepts. They do not validate, c
 | Total | 24 | Planned candidates only. |
 
 Tier A is not shorthand for already implemented. It means repository evidence supports a narrow route to implementation without inventing a new general engine primitive. Tier B and C items must not appear in the runnable catalog until their gaps are implemented and audited.
+
+C1B rejected one Tier A bounded-confidence claim that the current Opinion runtime does not execute. It also required every Tier C entry to state aggregation, disaggregation, cross-scale feedback, quantity or measurement semantics, and synthetic-detail risk. These corrections improve planning accuracy; they do not authorize implementation.
 
 ## Tier A: Mainly Current Capabilities
 
@@ -66,10 +68,10 @@ Tier A is not shorthand for already implemented. It means repository evidence su
 - `contentRisk`: Not a public-health forecast, policy optimizer, or calibrated disease model.
 - `whyItIsCompelling`: Users can see how initial spatial structure changes a familiar aggregate curve.
 
-### A3. Bounded-Confidence Echoes
+### A3. Interaction Radius and Opinion Clusters
 
-- `workingTitle`: Bounded-Confidence Echoes
-- `hookQuestion`: When does limited willingness to interact preserve disagreement instead of creating consensus?
+- `workingTitle`: Interaction Radius and Opinion Clusters
+- `hookQuestion`: How does contact radius change whether local numeric opinions converge or remain separated?
 - `domain`: Information and society; collective behavior.
 - `fictionalOrResearchContext`: Research-grounded stylized numeric-opinion system.
 - `entities`: Existing agents with bounded numeric opinion state.
@@ -78,15 +80,15 @@ Tier A is not shorthand for already implemented. It means repository evidence su
 - `networks`: Current template interaction topology only.
 - `fields`: None represented.
 - `scales`: Agent opinion and aggregate polarization metric.
-- `feedbacks`: Similarity affects influence, and influence changes later similarity.
+- `feedbacks`: Local opinion updates change the spatial distribution that later neighborhoods sample.
 - `adaptation`: Bounded template-owned opinion updating; not human learning.
 - `observableOutputs`: Polarization score, opinion distribution, convergence, and persistent clusters.
 - `researchAnchors`: Deffuant et al., [Mixing Beliefs Among Interacting Agents](https://doi.org/10.1142/S0219525900000078); Castellano et al., [Statistical Physics of Social Dynamics](https://doi.org/10.1103/RevModPhys.81.591).
-- `currentEngineFit`: High. Existing bounded opinion, influence, confidence, and initialization modes support the investigation.
-- `capabilityGaps`: A focused content preset may be useful; no real identity or free-text belief state.
+- `currentEngineFit`: High. Existing influence radius, influence strength, bounded noise, spatial movement, initialization modes, and polarization output support the investigation. No confidence-threshold mechanism is claimed.
+- `capabilityGaps`: A focused content preset may be useful. Implementing bounded confidence would require a separate template-owned threshold mechanic and audit.
 - `estimatedImplementationTier`: A.
 - `contentRisk`: No real-belief prediction, protected-class inference, psychological profiling, persuasion, or population claim.
-- `whyItIsCompelling`: A simple interaction boundary produces visibly different consensus and fragmentation regimes.
+- `whyItIsCompelling`: Changing who can encounter whom produces visibly different convergence and clustering paths without pretending the agents screen others by confidence.
 
 ### A4. Competing Information Sources
 
@@ -390,6 +392,11 @@ Tier A is not shorthand for already implemented. It means repository evidence su
 - `networks`: Cell-cell signaling and vascular supply.
 - `fields`: Chemical, oxygen, and mechanical fields.
 - `scales`: Intracellular state, cell, tissue, and organism.
+- `aggregation`: Cell-state counts and local field values would aggregate into tissue closure, perfusion, and damage summaries, then into a bounded organism-burden indicator.
+- `disaggregation`: Tissue-level changes could initialize only explicitly synthetic cell distributions under declared rules; no coarse value may be presented as observed cell detail.
+- `crossScaleFeedback`: Cell migration and matrix remodeling alter tissue geometry, while tissue perfusion and organism constraints alter local cell resources and state transitions.
+- `quantityOrMeasurementSemantics`: Length, area, time, concentration, cell count, perfusion, and mechanical quantities need explicit units, conversion rules, and scale-specific observation definitions.
+- `syntheticDetailRisk`: Disaggregating closure or perfusion into cell histories can invent unsupported biology and must remain visibly synthetic.
 - `feedbacks`: Damage recruits response; response remodels tissue; tissue state changes transport and signaling.
 - `adaptation`: Cell-state transitions and tissue remodeling.
 - `observableOutputs`: Closure rate, cell-state composition, matrix integrity, perfusion, and organism-level burden.
@@ -412,6 +419,11 @@ Tier A is not shorthand for already implemented. It means repository evidence su
 - `networks`: Signaling and vascular transport networks.
 - `fields`: Oxygen, nutrient, and signal gradients.
 - `scales`: Intracellular phenotype, cell, local niche, tissue, and organism context.
+- `aggregation`: Cell phenotypes and local resource states would aggregate into niche composition, tissue burden, hypoxic fraction, and bounded organism-context summaries.
+- `disaggregation`: Tissue burden cannot reconstruct patient cells; any generated niche or cell composition would be synthetic initialization with explicit uncertainty.
+- `crossScaleFeedback`: Cell growth and signaling alter tissue perfusion and resource fields, while those tissue conditions feed back into local selection and phenotype transitions.
+- `quantityOrMeasurementSemantics`: Cell counts, distances, concentrations, fluxes, time scales, and burden proxies require explicit units and provenance distinct from clinical measurements.
+- `syntheticDetailRisk`: Coarse tumor summaries can conceal heterogeneity, and generated cellular detail could be mistaken for patient-specific evidence.
 - `feedbacks`: Growth changes perfusion; perfusion changes selection; signaling changes cell state and local competition.
 - `adaptation`: Bounded phenotype transitions and selection, not patient-specific learning.
 - `observableOutputs`: Cell composition, hypoxic fraction, spatial invasion, resource gradients, and burden.
@@ -434,6 +446,11 @@ Tier A is not shorthand for already implemented. It means repository evidence su
 - `networks`: Metabolic exchange and host-microbe interaction networks.
 - `fields`: Nutrient, metabolite, and pH-like gradients.
 - `scales`: Microbe, local community, body habitat, and host.
+- `aggregation`: Microbial abundances and exchanges would aggregate into community diversity, habitat metabolite balance, and bounded host-response summaries.
+- `disaggregation`: Host or habitat summaries cannot recover taxa, strains, or individual histories; generated communities would be declared synthetic.
+- `crossScaleFeedback`: Microbial metabolism changes habitat conditions and host response, while habitat and host states reshape local competition and exchange.
+- `quantityOrMeasurementSemantics`: Abundance, concentration, flux, diversity, pH-like state, volume, and biological time require explicit definitions and scale mappings.
+- `syntheticDetailRisk`: Synthetic taxa or strain detail may imply individual microbiome reconstruction or unsupported functional specificity.
 - `feedbacks`: Community metabolism changes habitat conditions; habitat conditions change community competition and host response.
 - `adaptation`: Community composition and optional bounded trait evolution.
 - `observableOutputs`: Diversity, abundance, metabolite flow, habitat state, and host-response proxy.
@@ -456,6 +473,11 @@ Tier A is not shorthand for already implemented. It means repository evidence su
 - `networks`: Transport, service, and bounded social-information layers.
 - `fields`: Accessibility, land value, hazard, and environmental-quality fields.
 - `scales`: Household, block, neighborhood, city, and region.
+- `aggregation`: Household choices and service access would aggregate into block, neighborhood, city, and regional load and accessibility summaries.
+- `disaggregation`: City or neighborhood totals cannot reconstruct households; synthetic households require declared generation rules and must not encode inferred protected attributes.
+- `crossScaleFeedback`: Household location choices alter neighborhood demand and city investment, while infrastructure and institutional changes reshape household constraints.
+- `quantityOrMeasurementSemantics`: Travel time, distance, capacity, housing stock, cost, service access, and population aggregates need explicit units, denominators, and temporal windows.
+- `syntheticDetailRisk`: Disaggregation can fabricate demographic profiles, erase unequal constraints, or invite real-person and protected-class inference.
 - `feedbacks`: Location choices change demand and value; infrastructure changes access; access changes later choices.
 - `adaptation`: Household and institutional rules with explicit ethical limits.
 - `observableOutputs`: Accessibility, travel burden, service load, displacement proxy, land-use composition, and inequality summaries.
@@ -478,6 +500,11 @@ Tier A is not shorthand for already implemented. It means repository evidence su
 - `networks`: Interdependent energy, water, transport, and communication layers.
 - `fields`: Heat, flood, drought, or storm exposure.
 - `scales`: Asset, neighborhood, city, region, and climate horizon.
+- `aggregation`: Asset failures and service flows would aggregate into neighborhood outages, city service levels, regional dependencies, and horizon-specific summaries.
+- `disaggregation`: Regional hazard or service summaries cannot reconstruct asset condition or household exposure; any fine-scale allocation would be synthetic.
+- `crossScaleFeedback`: Asset damage changes community service and response capacity, while regional recovery decisions and climate conditions alter later asset exposure.
+- `quantityOrMeasurementSemantics`: Hazard intensity, probability or scenario status, capacity, energy, water, travel time, outage duration, and population denominators need explicit provenance and units.
+- `syntheticDetailRisk`: Generated local exposure can look like a forecast or vulnerability profile despite lacking site data, calibration, and uncertainty validation.
 - `feedbacks`: Hazard damages service; service loss changes vulnerability and response; response changes later exposure.
 - `adaptation`: Bounded infrastructure and institutional adaptation scenarios.
 - `observableOutputs`: Service interruption, unmet demand, recovery time, exposed population aggregate, and cascading failures.
@@ -500,6 +527,11 @@ Tier A is not shorthand for already implemented. It means repository evidence su
 - `networks`: Directed stream and allocation networks.
 - `fields`: Rainfall, soil moisture, and land-cover fields.
 - `scales`: Patch, subwatershed, watershed, and basin.
+- `aggregation`: Patch runoff and material fluxes would aggregate conservatively through subwatersheds into watershed and basin balances.
+- `disaggregation`: Basin totals cannot determine local rainfall, soil, or stream conditions; downscaled fields would be synthetic and mass-balance constrained.
+- `crossScaleFeedback`: Local land state changes downstream flow and storage, while basin allocation and reservoir operations alter upstream and local availability.
+- `quantityOrMeasurementSemantics`: Area, precipitation depth, discharge, storage volume, mass flux, concentration, and temporal resolution require explicit units and conservation checks.
+- `syntheticDetailRisk`: Naive downscaling can invent local hydrology, violate conservation, and imply geographic or flood accuracy.
 - `feedbacks`: Runoff moves material downstream; storage changes flow; use and land state alter later availability.
 - `adaptation`: Bounded allocation or restoration rules.
 - `observableOutputs`: Flow, storage, sediment/nutrient load, ecological state, and upstream/downstream balance.
@@ -522,6 +554,11 @@ Tier A is not shorthand for already implemented. It means repository evidence su
 - `networks`: Trade, energy, communication, and migration links.
 - `fields`: Climate-like, land-cover, pollution, and productivity fields.
 - `scales`: Facility, settlement, region, planet, and generations.
+- `aggregation`: Facility stocks, flows, and impacts would aggregate into settlement, regional, planetary, and generational balances under explicit conservation rules.
+- `disaggregation`: Planetary or regional totals cannot recover facilities or communities; generated lower-scale allocations would remain fictional synthetic detail.
+- `crossScaleFeedback`: Production and settlement activity alter regional and planetary resource states, while those states constrain local productivity, institutions, and investment.
+- `quantityOrMeasurementSemantics`: Energy, water, material mass, land area, emissions, waste capacity, service levels, and generation length need fictional but internally consistent units.
+- `syntheticDetailRisk`: Model-defined thresholds or generated local consequences could be mistaken for Earth-system predictions or policy evidence.
 - `feedbacks`: Production changes resources and waste; environmental state changes productivity; institutions change allocation and investment.
 - `adaptation`: Bounded institutional and technology transitions.
 - `observableOutputs`: Resource balances, service levels, inequality summaries, ecosystem state, and boundary crossings as model-defined thresholds.
@@ -544,6 +581,11 @@ Tier A is not shorthand for already implemented. It means repository evidence su
 - `networks`: Trade, council communication, migration, and ecological dispersal.
 - `fields`: Local aether density, reef health, and storm exposure.
 - `scales`: Individual actor, island, archipelago, and generation.
+- `aggregation`: Actor harvest and use would aggregate into island stores, trade balances, archipelago conservation, and generational ecosystem summaries.
+- `disaggregation`: Archipelago totals cannot identify actor or island histories; generated local allocations would be explicitly fictional and synthetic.
+- `crossScaleFeedback`: Local harvest changes island reefs and archipelago supply, while archipelago scarcity and council rules constrain actor choices and island exchange.
+- `quantityOrMeasurementSemantics`: Aether amount, production and decay rates, distance, travel time, reef-health index, service level, and generation length need explicit fictional units and conservation equations.
+- `syntheticDetailRisk`: Generated cultural or community detail could reproduce stereotypes or appear to explain real commons behavior despite an original fictional rule system.
 - `feedbacks`: Harvest funds exchange but weakens reefs; reef decline lowers future production; scarcity changes trade and institutional rules.
 - `adaptation`: Bounded harvesting strategies, council rules, species movement, and craft substitution.
 - `observableOutputs`: Aether balance, reef health, island service level, migration, trade concentration, and rule compliance.

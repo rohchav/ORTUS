@@ -3837,3 +3837,61 @@ Roadmap result:
 - Decision: conditionally ready for C1 because only external zoom/accessibility/comprehension verification remains.
 - C1: Starter World Content Framework is next and has not started.
 - F1 remains paused under E3 Analytical Lenses.
+
+### Prompt C1B: Starter World Content Framework Audit + Hardening
+
+Date: 2026-07-27; final browser continuation completed 2026-07-31
+
+Goal: independently audit C1's seven Starter Worlds, source records, content/runtime contracts, rendered catalog and details, first activities, strict World handoffs, model boundaries, and 24-candidate portfolio without changing simulation behavior or persistence.
+
+Starting state:
+
+- Branch `main` was clean at `99cd33d feat: add starter world content framework`; `HEAD` matched `origin/main` after fetch.
+- Untouched C1 focused Playwright passed `14` tests in `1.2m`.
+- Untouched Research World shell passed `53` tests in `4.2m`.
+- Untouched Start/World reset passed `18` tests in `1.1m`.
+- Untouched full UI Playwright passed `129` tests in `8.7m`.
+- Untouched unit verification passed `76 files / 621 tests` in `49.81s`; typecheck, production build, simulation/Atlas performance smoke, and `git diff --check` passed.
+- `npm run lint: unavailable, package.json has no lint script.`
+
+Audit findings and hardening:
+
+- One P0 integrity defect was reproduced: registry arrays were shallow-frozen while nested validated definitions and runtime references remained mutable.
+- One P1 launch-authority family was reproduced: canonical links included template/scenario fields and the public resolver accepted those fields instead of deriving runtime identity solely from the Starter World definition.
+- Nine bounded P2 families covered Reynolds/Volterra source classification, weak DOI/source-ID validation and hidden source relationship metadata, raw preset IDs and repetitive activity openings, incomplete content/runtime cross-checks, generic catalog link names, a quantitative-looking Predator-Prey visual, an unsupported bounded-confidence Tier A claim, missing Tier C multiscale contracts, and a displayed Predator-Prey metric-label mismatch.
+- Definitions are now recursively frozen. Canonical links carry only `starter=<id>`, template/scenario/RunConfig/unknown overrides are rejected, and World derives and revalidates template/default preset from the authoritative definition.
+- Content validation now checks authoritative preset/control/metric labels, parameter suggestion/bounds/direction, run semantics, taxonomy uniqueness, primary-mechanism membership, repeated openings, slug-safe source IDs, and HTTPS DOI shape.
+- All eleven current-world sources were checked against original papers, publisher DOI records, canonical books/university material, or official institutions. Source type and relationship are now visible; research remains context rather than validation or calibration.
+- All seven first changes passed deterministic fixed-seed metric regressions and the rendered control/rebuild/Observe path. Each is classified `Works as written`.
+- The portfolio remains exactly eight Tier A, eight Tier B, and eight Tier C. A3 now matches implemented influence-radius behavior, and every Tier C candidate explicitly names aggregation, disaggregation, cross-scale feedback, quantity or measurement semantics, and synthetic-detail risk.
+- No simulation implementation, template, preset, default, bound, metric, intervention, scheduling, seeded RNG, snapshot, Experiment Runner, comparison persistence, Atlas execution, Builder execution, dependency, route, persistence path, or storage key was added or changed.
+
+Current verification:
+
+- Focused framework unit suite: `13 passed (15.13s)`.
+- Final combined framework and roadmap contracts: `4 files / 30 tests passed (14.58s)`.
+- Affected post-fix rendered checks: `4 passed (51.8s)`.
+- Post-fix Predator-Prey detail was visually inspected at `1280x720`; the replacement encounter scene is non-quantitative and the first action remains visible.
+- The prior session's platform-denied escalation was superseded by an explicitly authorized continuation. Final focused browser verification passed: Research World shell `53` tests in `4.4m`, Starter World C1/C1B `16` tests in `1.9m`, and Start/World reset `18` tests in `1.3m`.
+- The first continuation full-suite process was externally terminated after `33` passing tests and was not counted. A later PTY attempt inherited that run's unresponsive Playwright-owned Next server and failed at navigation; the orphan process group was terminated and port `3000` was confirmed free. These were runner-infrastructure events, not product failures.
+- A clean complete Playwright/Axe invocation passed `131` tests in `9.6m` with no retries or skipped tests. It covered the required catalog/detail viewports, all seven launches and first activities, invalid-launch rejection, reduced motion, Axe, and quiet browser diagnostics.
+- The complete suite exposed one stale R1B test expectation for the superseded runtime-bearing starter URL and old action copy. The regression now enforces `/world?starter=flocking` and current C1B-authored actions; the focused Start/World suite then passed `18` tests in `1.3m`.
+- Final typecheck passed in `2.11s`.
+- Final full unit verification passed `76 files / 623 tests` in `52.96s`.
+- Final production build passed with Next.js compilation in `2.7s` and `16` generated pages.
+- Final simulation performance smoke passed: Flocking-100 `237.21` ticks/sec, Flocking-500 `30.77`, Forest Fire `50.78`, and Predator-Prey `145.36`.
+- Final bounded Atlas smoke completed `2` runs / `10` work units / horizon `5` in `28.78ms`.
+- Final `git diff --check` passed.
+- `npm run lint: unavailable, package.json has no lint script.`
+- Commit gate satisfied for `test: audit starter world content framework`; no push is authorized by this prompt.
+
+Roadmap result:
+
+- R1 complete.
+- R1B complete.
+- R2 complete.
+- R2B complete.
+- C1 complete.
+- C1B complete.
+- C2: Flagship Starter Pack One is next.
+- F1 remains paused under E3 Analytical Lenses.

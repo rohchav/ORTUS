@@ -12,7 +12,9 @@ const worlds = [
     scenarioId: "random-headings",
     scenarioLabel: "Random Headings",
     scenarioName: "Flocking baseline",
-    firstChange: "Alignment weight"
+    firstChange: "Alignment weight",
+    suggestedValue: "0.2",
+    outputLabel: "Alignment score"
   },
   {
     id: "epidemic",
@@ -22,7 +24,9 @@ const worlds = [
     scenarioId: "random-outbreak",
     scenarioLabel: "Random Outbreak",
     scenarioName: "Epidemic Spread baseline",
-    firstChange: "Infection probability"
+    firstChange: "Infection probability",
+    suggestedValue: "0.1",
+    outputLabel: "Infected"
   },
   {
     id: "opinion-dynamics",
@@ -32,7 +36,9 @@ const worlds = [
     scenarioId: "random-opinions",
     scenarioLabel: "Random Opinions",
     scenarioName: "Opinion Dynamics baseline",
-    firstChange: "Influence strength"
+    firstChange: "Influence strength",
+    suggestedValue: "0.35",
+    outputLabel: "Polarization score"
   },
   {
     id: "predator-prey",
@@ -42,7 +48,9 @@ const worlds = [
     scenarioId: "random-ecology",
     scenarioLabel: "Random Ecology",
     scenarioName: "Predator-Prey baseline",
-    firstChange: "Predator energy loss"
+    firstChange: "Predator energy loss",
+    suggestedValue: "0.45",
+    outputLabel: "Prey count"
   },
   {
     id: "schelling",
@@ -52,7 +60,9 @@ const worlds = [
     scenarioId: "random-neighborhood",
     scenarioLabel: "Random Neighborhood",
     scenarioName: "Schelling Segregation baseline",
-    firstChange: "Similarity threshold"
+    firstChange: "Similarity threshold",
+    suggestedValue: "0.5",
+    outputLabel: "Satisfaction rate"
   },
   {
     id: "forest-spread",
@@ -62,7 +72,9 @@ const worlds = [
     scenarioId: "random-forest",
     scenarioLabel: "Random Forest",
     scenarioName: "Forest Fire baseline",
-    firstChange: "Spread probability"
+    firstChange: "Spread probability",
+    suggestedValue: "0.25",
+    outputLabel: "Active fires"
   },
   {
     id: "neural-excitation",
@@ -72,7 +84,9 @@ const worlds = [
     scenarioId: "inhibition-stabilized-cascade",
     scenarioLabel: "Inhibition-Stabilized Cascade",
     scenarioName: "Neural Excitation Network baseline",
-    firstChange: "Global threshold"
+    firstChange: "Global threshold",
+    suggestedValue: "1.4",
+    outputLabel: "Cascade size"
   }
 ] as const;
 
@@ -93,7 +107,10 @@ for (const viewport of viewports) {
     await expect(page.locator("[data-worlds-catalog]")).toBeVisible();
     await expect(page.getByRole("heading", { level: 1, name: "Explore Worlds" })).toHaveCount(1);
     await expect(page.getByRole("heading", { level: 2, name: "How can coordinated movement emerge without a leader?" })).toBeVisible();
-    await expect(page.getByRole("link", { name: "Explore featured world" })).toHaveAttribute("href", "/worlds/collective-motion");
+    await expect(page.getByRole("link", { name: "Explore featured world: Collective Motion" })).toHaveAttribute(
+      "href",
+      "/worlds/collective-motion"
+    );
     await expect(page.locator("[data-starter-card]")).toHaveCount(7);
     await expect(page.getByLabel("Explore Worlds filters")).toBeVisible();
     await expect(page.getByLabel("Search worlds")).toBeVisible();
@@ -107,6 +124,19 @@ for (const viewport of viewports) {
     await expectNoDiagnostics(diagnostics);
   });
 }
+
+test("catalog card actions have world-specific accessible names and visuals remain non-quantitative", async ({ page }) => {
+  await page.goto("/worlds", { waitUntil: "domcontentloaded" });
+  for (const world of worlds) {
+    await expect(
+      page.locator(`[data-starter-card='${world.id}']`).getByRole("link", { name: `Explore ${world.title}`, exact: true })
+    ).toHaveAttribute("href", `/worlds/${world.slug}`);
+  }
+  const ecologyVisual = page.locator("[data-starter-card='predator-prey'] [data-starter-visual='population-cycle']");
+  await expect(ecologyVisual.locator(".starter-world-visual__prey")).not.toHaveCount(0);
+  await expect(ecologyVisual.locator(".starter-world-visual__predator")).not.toHaveCount(0);
+  await expect(ecologyVisual.locator(".starter-world-visual__cycle-bar")).toHaveCount(0);
+});
 
 test("catalog filters, combined filters, search, empty state, reset, keyboard input, and session-only state are deterministic", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 720 });
@@ -147,6 +177,8 @@ test("catalog filters, combined filters, search, empty state, reset, keyboard in
   await search.fill("delayed excitation");
   await expect(page.locator("[data-starter-card]")).toHaveCount(1);
   await expect(page.locator("[data-starter-card='neural-excitation']")).toBeVisible();
+  await search.fill("  DELAYED---EXCITATION!!!  ");
+  await expect(page.locator("[data-starter-card='neural-excitation']")).toBeVisible();
   await search.fill("future unicorn economy");
   await expect(page.locator("[data-starter-card]")).toHaveCount(0);
   await expect(page.getByRole("heading", { name: "No runnable worlds match this combination" })).toBeVisible();
@@ -180,14 +212,13 @@ test("every detail route exposes the required invitation, anatomy, investigation
     await expect(detail.locator(".world-detail__anatomy > section")).not.toHaveCount(0);
     await expect(detail.locator(".world-detail__prompts > li")).toHaveCount(world.id === "neural-excitation" ? 4 : 3);
     await expect(detail.locator(".world-detail__research li")).not.toHaveCount(0);
+    await expect(detail.locator(".world-detail__research-boundary")).toHaveCount(1);
     await expect(detail.getByText(/do not validate or calibrate this implementation/i)).toBeVisible();
+    await expect(detail).not.toContainText(world.scenarioId);
     await expect(detail.locator(".world-detail__boundary > div > p")).toBeVisible();
     await expect(detail.locator(".world-detail__remix-list > section")).not.toHaveCount(0);
     const launch = detail.getByRole("link", { name: "Launch this world" });
-    await expect(launch).toHaveAttribute(
-      "href",
-      `/world?starter=${world.id}&template=${world.templateId}&scenario=${world.scenarioId}`
-    );
+    await expect(launch).toHaveAttribute("href", `/world?starter=${world.id}`);
     await expectNoHorizontalOverflow(page);
     await expectNoDiagnostics(diagnostics);
   }
@@ -204,6 +235,8 @@ test("research links are visibly external and use safe new-tab attributes", asyn
     await expect(source).toHaveAttribute("rel", /noopener/);
     await expect(source).toHaveAttribute("href", /^https:\/\//);
   }
+  await expect(page.locator(".world-detail__research")).toContainText("Conference paper");
+  await expect(page.locator(".world-detail__research")).toContainText("Canonical model");
 });
 
 test("mobile detail keeps the launch ahead of research and avoids nested scroll traps", async ({ page }) => {
@@ -234,15 +267,14 @@ test("all seven strict handoffs prepare the intended scenario as a fresh paused 
 
   for (const world of worlds) {
     const diagnostics = observePageDiagnostics(page);
-    await page.goto(
-      `/world?starter=${world.id}&template=${world.templateId}&scenario=${world.scenarioId}`,
-      { waitUntil: "domcontentloaded" }
-    );
+    await page.goto(`/world?starter=${world.id}`, { waitUntil: "domcontentloaded" });
+    expect(new URL(page.url()).search).toBe(`?starter=${world.id}`);
     await expect(page.locator(".ortus-shell:not(.ortus-shell--hydrating)")).toBeVisible();
     await expect(page.getByLabel("World template")).toHaveValue(world.templateId);
     await expect(page.locator("[data-starter-nudge]")).toHaveAttribute("data-starter-world-id", world.id);
     await expect(page.locator("[data-starter-nudge]")).toContainText(world.title);
     await expect(page.locator("[data-starter-nudge]")).toContainText(world.firstChange);
+    await expect(page.locator("[data-starter-nudge]")).not.toContainText(world.scenarioId);
     await expect(page.locator(".timeline-strip__readout strong").first()).toHaveText("0");
     await expect(page.locator(".timeline-strip__label strong")).toHaveText("Paused");
     await expect(page.getByRole("heading", { name: world.scenarioName })).toBeVisible();
@@ -254,6 +286,34 @@ test("all seven strict handoffs prepare the intended scenario as a fresh paused 
     await expect(dialog).toContainText(world.scenarioLabel);
     await dialog.getByRole("button", { name: "Close run details" }).click();
     await expectNoDiagnostics(diagnostics);
+  }
+});
+
+test("all seven first activities run, rebuild with the stated control, and expose the named output", async ({ page }) => {
+  test.setTimeout(180_000);
+  await page.setViewportSize({ width: 1280, height: 720 });
+
+  for (const world of worlds) {
+    await page.goto(`/worlds/${world.slug}`, { waitUntil: "domcontentloaded" });
+    await page.getByRole("link", { name: "Launch this world" }).click();
+    await expect(page.locator(".ortus-shell:not(.ortus-shell--hydrating)")).toBeVisible();
+    await expect(page.locator(".timeline-strip__label strong")).toHaveText("Paused");
+
+    for (let step = 0; step < 3; step += 1) {
+      await page.getByRole("button", { name: "Step exactly one tick" }).click();
+    }
+    await expect(page.locator(".timeline-strip__readout strong").first()).toHaveText("3");
+
+    const parameter = page.getByRole("spinbutton", { name: `${world.firstChange} numeric value` });
+    await parameter.fill(world.suggestedValue);
+    await page.getByRole("button", { name: "Rebuild run with parameter drafts" }).click();
+    await expect(page.locator(".timeline-strip__readout strong").first()).toHaveText("0");
+    await expect(page.locator(".timeline-strip__label strong")).toHaveText("Paused");
+    await expect(parameter).toHaveValue(world.suggestedValue);
+
+    await page.getByRole("button", { name: "Step exactly one tick" }).click();
+    await page.getByRole("navigation", { name: "World tasks" }).getByRole("button", { name: "Observe" }).click();
+    await expect(page.locator("[data-observe-view='summary']")).toContainText(world.outputLabel);
   }
 });
 
@@ -296,7 +356,9 @@ test("invalid, empty, duplicate, and runtime-mismatched launches stop before con
     "/world?starter=",
     "/world?starter=flocking&starter=epidemic",
     "/world?starter=flocking&template=epidemic-spread",
-    "/world?starter=flocking&template=flocking-boids&scenario=missing"
+    "/world?starter=flocking&scenario=missing",
+    "/world?starter=flocking&task=observe&task=setup",
+    "/world?starter=flocking&unexpected=runtime"
   ]) {
     await page.goto(path, { waitUntil: "domcontentloaded" });
     await expect(page.locator("[data-starter-launch-error]")).toBeVisible();
@@ -313,17 +375,26 @@ test("catalog, representative details, and launch are Axe-clean with quiet diagn
     "/worlds",
     "/worlds/collective-motion",
     "/worlds/signal-cascades",
-    "/world?starter=flocking&template=flocking-boids&scenario=random-headings"
+    "/world?starter=missing",
+    "/world?starter=flocking"
   ]) {
     const diagnostics = observePageDiagnostics(page);
     await page.goto(path, { waitUntil: "domcontentloaded" });
-    if (path.startsWith("/world?")) {
+    if (path === "/world?starter=flocking") {
       await expect(page.locator(".ortus-shell:not(.ortus-shell--hydrating)")).toBeVisible();
     }
     const results = await new AxeBuilder({ page }).analyze();
     expect(results.violations.map((violation) => violation.id), `${path} Axe violations`).toEqual([]);
     await expectNoDiagnostics(diagnostics);
   }
+
+  const diagnostics = observePageDiagnostics(page);
+  await page.goto("/worlds", { waitUntil: "domcontentloaded" });
+  await page.getByLabel("Mechanism", { exact: true }).selectOption("threshold");
+  expect((await new AxeBuilder({ page }).analyze()).violations.map((violation) => violation.id)).toEqual([]);
+  await page.getByLabel("Search worlds").fill("nothing can match this");
+  expect((await new AxeBuilder({ page }).analyze()).violations.map((violation) => violation.id)).toEqual([]);
+  await expectNoDiagnostics(diagnostics);
 });
 
 interface PageDiagnostics {

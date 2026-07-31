@@ -248,4 +248,4 @@ Final verification passed `29` dedicated R2/R2B browser tests in `2.8m`, `53` fo
 
 C1 is now complete. It uses the audited R2B World shell as a destination and does not reopen its layout architecture. Every Starter World launch resolves authoritative IDs, uses existing scenario construction, and enters World as a fresh paused tick-0 run. The only World presentation addition is a compact dismissible definition-driven nudge with a detail-page back link.
 
-R1 complete. R1B complete. R2 complete. R2B complete. C1 complete. `C1B: Starter World Content Framework Audit` is next and has not started.
+R1 complete. R1B complete. R2 complete. R2B complete. C1 complete. C1B complete. C2: Flagship Starter Pack One is next.

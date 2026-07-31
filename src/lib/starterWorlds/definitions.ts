@@ -42,7 +42,7 @@ export const rawStarterWorldDefinitions = [
     systemDynamics:
       "No agent receives a group destination or leader command. Collective direction is an aggregate pattern produced by repeated local updates, and it can weaken when alignment falls or noise rises.",
     firstRun: {
-      action: "Run the random-headings baseline and let the agents find local neighbors.",
+      action: "Begin with Random Headings and give scattered boids time to encounter local neighbors.",
       demonstrates: "The baseline shows whether local steering can organize initially scattered headings into coordinated motion.",
       recommendedTask: "setup"
     },
@@ -50,7 +50,7 @@ export const rawStarterWorldDefinitions = [
       targetType: "parameter",
       targetId: "alignmentWeight",
       targetLabel: "Alignment weight",
-      action: "Set Alignment weight to 0.20, then rebuild and run the same seeded world.",
+      action: "Lower Alignment weight to 0.20, rebuild, then replay the same seeded world.",
       direction: "decrease",
       suggestedValue: 0.2,
       runSemantics: "rebuild-world",
@@ -79,7 +79,7 @@ export const rawStarterWorldDefinitions = [
         title: "Flocks, Herds, and Schools: A Distributed Behavioral Model",
         authorsOrOrganization: "Craig W. Reynolds",
         year: 1987,
-        sourceType: "peer-reviewed-paper",
+        sourceType: "conference-paper",
         urlOrDoi: "https://doi.org/10.1145/37401.37406",
         relationship: "canonical-model",
         note: "Introduces the distributed local-behavior approach that inspired boids; ORTUS implements its own bounded template rules."
@@ -165,7 +165,7 @@ export const rawStarterWorldDefinitions = [
     systemDynamics:
       "The outbreak curve is assembled from many local contact trials and fixed recovery delays. The model can fade out early, spread broadly, or peak at different times under different supported parameters.",
     firstRun: {
-      action: "Run the random-outbreak baseline and follow the infected model-agent count.",
+      action: "Follow the Infected agents output from the Random Outbreak start.",
       demonstrates: "The baseline shows how local stochastic contacts can accumulate into a population-level outbreak curve.",
       recommendedTask: "setup"
     },
@@ -173,7 +173,7 @@ export const rawStarterWorldDefinitions = [
       targetType: "parameter",
       targetId: "infectionProbability",
       targetLabel: "Infection probability",
-      action: "Set Infection probability to 0.10, rebuild the fresh run, and compare it with the baseline.",
+      action: "Reduce Infection probability to 0.10 and rebuild the fresh run for comparison.",
       direction: "decrease",
       suggestedValue: 0.1,
       runSemantics: "rebuild-world",
@@ -287,7 +287,7 @@ export const rawStarterWorldDefinitions = [
     systemDynamics:
       "Repeated influence can reduce disagreement, preserve separated clusters, or shift the population depending on starting conditions and supported parameters. The values describe the model, not people.",
     firstRun: {
-      action: "Run the random-opinions baseline and follow the distribution of model opinion values.",
+      action: "Watch the bounded opinion distribution evolve from Random Opinions.",
       demonstrates: "The baseline shows how repeated local averaging and noise reshape a bounded numeric opinion field.",
       recommendedTask: "setup"
     },
@@ -295,7 +295,7 @@ export const rawStarterWorldDefinitions = [
       targetType: "parameter",
       targetId: "influenceStrength",
       targetLabel: "Influence strength",
-      action: "Set Influence strength to 0.35, rebuild, and compare how rapidly the distribution changes.",
+      action: "Raise Influence strength to 0.35, rebuild, and compare how rapidly the distribution changes.",
       direction: "increase",
       suggestedValue: 0.35,
       runSemantics: "rebuild-world",
@@ -315,7 +315,7 @@ export const rawStarterWorldDefinitions = [
     ],
     investigationPrompts: [
       "Does a larger influence radius produce one cluster or simply accelerate local movement?",
-      "How do polarized-camps and random-opinions starts differ under the same influence strength?",
+      "How do Polarized Camps and Random Opinions starts differ under the same influence strength?",
       "When does noise preserve variation that local averaging would otherwise reduce?"
     ],
     sources: [
@@ -411,7 +411,7 @@ export const rawStarterWorldDefinitions = [
     systemDynamics:
       "Prey growth can support more predators; increased predation can then reduce prey and leave predators without enough energy. The resulting counts may cycle, collapse, or stabilize only within this stylized rule set.",
     firstRun: {
-      action: "Run the random-ecology baseline and follow both population counts.",
+      action: "Track both populations after Random Ecology seeds predators and prey across the field.",
       demonstrates: "The baseline reveals how encounter, energy, reproduction, and mortality rules can create lagged population change.",
       recommendedTask: "setup"
     },
@@ -419,7 +419,7 @@ export const rawStarterWorldDefinitions = [
       targetType: "parameter",
       targetId: "predatorEnergyLoss",
       targetLabel: "Predator energy loss",
-      action: "Set Predator energy loss to 0.45, rebuild, and compare predator persistence with the baseline.",
+      action: "Increase Predator energy loss to 0.45 before rebuilding; compare how long predators persist.",
       direction: "increase",
       suggestedValue: 0.45,
       runSemantics: "rebuild-world",
@@ -448,7 +448,7 @@ export const rawStarterWorldDefinitions = [
         title: "Fluctuations in the Abundance of a Species Considered Mathematically",
         authorsOrOrganization: "Vito Volterra",
         year: 1926,
-        sourceType: "peer-reviewed-paper",
+        sourceType: "historical-source",
         urlOrDoi: "https://doi.org/10.1038/118558a0",
         relationship: "historical-context",
         note: "Provides canonical mathematical context for interacting population fluctuations; ORTUS is a spatial agent model and does not reproduce the Lotka-Volterra equations."
@@ -525,7 +525,7 @@ export const rawStarterWorldDefinitions = [
     systemDynamics:
       "One move changes several neighborhoods at once, so local choices can reinforce or disrupt larger spatial clusters. Aggregate patterns do not reveal the motives or identities of real people.",
     firstRun: {
-      action: "Run the random-neighborhood baseline and watch vacancies and clusters reorganize.",
+      action: "Start from Random Neighborhood and watch vacancies redirect movement.",
       demonstrates: "The baseline shows how repeated local threshold checks can reshape a mixed grid.",
       recommendedTask: "setup"
     },
@@ -533,7 +533,7 @@ export const rawStarterWorldDefinitions = [
       targetType: "parameter",
       targetId: "similarityThreshold",
       targetLabel: "Similarity threshold",
-      action: "Set Similarity threshold to 0.50, rebuild, and compare movement and clustering.",
+      action: "Move Similarity threshold up to 0.50, rebuild, and inspect movement and clustering.",
       direction: "increase",
       suggestedValue: 0.5,
       runSemantics: "rebuild-world",
@@ -645,7 +645,7 @@ export const rawStarterWorldDefinitions = [
     systemDynamics:
       "Connected fuel can carry a front across the grid while gaps interrupt it. Stochastic ignition and optional regrowth can create repeated episodes, but the runtime does not model weather or physical fire behavior.",
     firstRun: {
-      action: "Run the random-forest baseline and follow the active burning cells.",
+      action: "Ignite Random Forest and trace the active front through gaps in the fuel grid.",
       demonstrates: "The baseline shows how local adjacency and fuel fragmentation shape a propagation path.",
       recommendedTask: "setup"
     },
@@ -653,7 +653,7 @@ export const rawStarterWorldDefinitions = [
       targetType: "parameter",
       targetId: "spreadProbability",
       targetLabel: "Spread probability",
-      action: "Set Spread probability to 0.25, rebuild, and compare the connected burn area.",
+      action: "Drop Spread probability to 0.25, rebuild, and trace the connected burn area.",
       direction: "decrease",
       suggestedValue: 0.25,
       runSemantics: "rebuild-world",
@@ -698,7 +698,7 @@ export const rawStarterWorldDefinitions = [
       },
       {
         title: "Compare landscape recipes",
-        description: "Use dense, sparse, regrowing, and central-ignition starts with bounded model-output comparisons.",
+        description: "Use Dense Forest, Sparse Forest, Regrowing Forest, and Central Ignition starts with bounded model-output comparisons.",
         status: "advanced-tools"
       },
       {
@@ -767,7 +767,7 @@ export const rawStarterWorldDefinitions = [
     systemDynamics:
       "Connection structure and excitation-inhibition balance can keep activity quiet, support intermittent cascades, fragment it into modules, or approach the runtime saturation guard. Readout labels are assigned by the model designer.",
     firstRun: {
-      action: "Run the inhibition-stabilized baseline and watch activity move between network clusters.",
+      action: "Stimulate the Inhibition-Stabilized Cascade and watch activity move between network clusters.",
       demonstrates: "The baseline shows how delayed excitation, inhibition, decay, and refractory state shape bounded signal cascades.",
       recommendedTask: "setup"
     },
@@ -775,7 +775,7 @@ export const rawStarterWorldDefinitions = [
       targetType: "parameter",
       targetId: "globalThreshold",
       targetLabel: "Global threshold",
-      action: "Set Global threshold to 1.40, rebuild, and compare the size and frequency of cascades.",
+      action: "Use Global threshold 1.40 in a rebuilt world, then compare cascade size and frequency.",
       direction: "increase",
       suggestedValue: 1.4,
       runSemantics: "rebuild-world",

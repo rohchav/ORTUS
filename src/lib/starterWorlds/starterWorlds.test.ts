@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 import {
   createEngineFromScenario,
   getProductionTemplate,
+  patchScenarioParameters,
   productionTemplates
 } from "../../simulation";
 import { rawStarterWorldDefinitions } from "./definitions";
@@ -46,6 +47,19 @@ describe("Starter World content framework", () => {
     expect(new Set(starterWorlds.map((world) => world.id)).size).toBe(7);
     expect(new Set(starterWorlds.map((world) => world.slug)).size).toBe(7);
     expect(starterWorlds.every((world) => world.version === "1" && world.runtimeStatus === "runnable")).toBe(true);
+  });
+
+  it("deep-freezes the validated registry, definitions, nested runtime references, and content arrays", () => {
+    const world = starterWorlds[0]!;
+    expect(Object.isFrozen(starterWorlds)).toBe(true);
+    expect(Object.isFrozen(world)).toBe(true);
+    expect(Object.isFrozen(world.runtime)).toBe(true);
+    expect(Object.isFrozen(world.runtime!.supportedScenarioIds)).toBe(true);
+    expect(Object.isFrozen(world.whatToWatch)).toBe(true);
+    expect(Object.isFrozen(world.whatToWatch[0])).toBe(true);
+    expect(Reflect.set(world.runtime!, "templateId", "epidemic-spread")).toBe(false);
+    expect(() => (world.runtime!.supportedScenarioIds as string[]).push("invented-preset")).toThrow(TypeError);
+    expect(world.runtime!.templateId).toBe("flocking-boids");
   });
 
   it("rejects unsupported versions, statuses, missing content, taxonomy values, and empty anatomy", () => {
@@ -98,6 +112,13 @@ describe("Starter World content framework", () => {
     const unsafe = cloneDefinition(0);
     Object.defineProperty(unsafe, "__proto__", { value: { polluted: true }, enumerable: true });
     expect(() => parseStarterWorldDefinition(unsafe)).toThrow(/Unsafe object key/i);
+
+    const repeatedRunOpening = cloneDefinitions();
+    repeatedRunOpening[1]!.firstRun.action = repeatedRunOpening[0]!.firstRun.action.replace(
+      "Random Headings",
+      "Random Outbreak"
+    );
+    expect(() => validateStarterWorldDefinitions(repeatedRunOpening)).toThrow(/repeats the opening/i);
   });
 
   it("revalidates every template, scenario, metric, parameter, and optional intervention reference", () => {
@@ -139,6 +160,18 @@ describe("Starter World content framework", () => {
 
     validIntervention.firstChange.targetId = "epidemic.missing";
     expect(() => parseStarterWorldDefinition(validIntervention)).toThrow(/Unknown intervention/i);
+
+    const missingSuggestedValue = cloneDefinition(0);
+    delete missingSuggestedValue.firstChange.suggestedValue;
+    expect(() => parseStarterWorldDefinition(missingSuggestedValue)).toThrow(/require a bounded suggested value/i);
+
+    const wrongDirection = cloneDefinition(0);
+    wrongDirection.firstChange.direction = "increase";
+    expect(() => parseStarterWorldDefinition(wrongDirection)).toThrow(/does not increase/i);
+
+    const rawPresetId = cloneDefinition(0);
+    rawPresetId.firstRun.action = "Begin with random-headings and inspect local neighbors.";
+    expect(() => parseStarterWorldDefinition(rawPresetId)).toThrow(/authoritative preset label/i);
   });
 
   it("validates source URLs, DOI links, relationships, counts, and investigation uniqueness", () => {
@@ -154,6 +187,14 @@ describe("Starter World content framework", () => {
     const malformedUrl = cloneDefinition(0);
     malformedUrl.sources[0].urlOrDoi = "doi:made-up";
     expect(() => parseStarterWorldDefinition(malformedUrl)).toThrow();
+
+    const malformedDoi = cloneDefinition(0);
+    malformedDoi.sources[0].urlOrDoi = "https://doi.org/not-a-doi";
+    expect(() => parseStarterWorldDefinition(malformedDoi)).toThrow(/well-formed HTTPS DOI/i);
+
+    const malformedSourceId = cloneDefinition(0);
+    malformedSourceId.sources[0].sourceId = "Source ID";
+    expect(() => parseStarterWorldDefinition(malformedSourceId)).toThrow();
 
     const duplicateSource = cloneDefinition(0);
     duplicateSource.sources.push(structuredClone(duplicateSource.sources[0]));
@@ -180,6 +221,20 @@ describe("Starter World content framework", () => {
       summary: "This world proves the real cause of coordinated movement in living animals."
     };
     expect(evaluateStarterWorldQuality(overclaim).map((issue) => issue.code)).toContain("unsupported-research-claim");
+
+    const duplicateTaxonomy = {
+      ...starterWorlds[0]!,
+      mechanisms: ["local-neighbor", "local-neighbor"] as typeof starterWorlds[0]["mechanisms"]
+    };
+    expect(evaluateStarterWorldQuality(duplicateTaxonomy).map((issue) => issue.code)).toContain("duplicate-taxonomy");
+
+    const uncatalogedPrimary = {
+      ...starterWorlds[0]!,
+      primaryMechanisms: ["threshold"] as typeof starterWorlds[0]["primaryMechanisms"]
+    };
+    expect(evaluateStarterWorldQuality(uncatalogedPrimary).map((issue) => issue.code)).toContain(
+      "primary-mechanism-not-cataloged"
+    );
   });
 
   it("filters and searches deterministically across all required bounded dimensions", () => {
@@ -208,6 +263,10 @@ describe("Starter World content framework", () => {
     ).toEqual(["forest-spread"]);
     expect(queryStarterWorlds(starterWorlds, {}, "delayed excitation").map((world) => world.id)).toEqual(["neural-excitation"]);
     expect(queryStarterWorlds(starterWorlds, {}, "local grid").map((world) => world.id)).toEqual(["schelling", "forest-spread"]);
+    expect(queryStarterWorlds(starterWorlds, {}, "  DELAYED---excitation!!!  ").map((world) => world.id)).toEqual([
+      "neural-excitation"
+    ]);
+    expect(queryStarterWorlds(starterWorlds, {}, "vacancies threshold").map((world) => world.id)).toEqual(["schelling"]);
     expect(queryStarterWorlds(starterWorlds, {}, "no matching future world")).toEqual([]);
   });
 
@@ -220,24 +279,69 @@ describe("Starter World content framework", () => {
       templateId: "flocking-boids",
       scenarioId: "random-headings",
       task: "setup",
-      href: "/world?starter=flocking&template=flocking-boids&scenario=random-headings"
+      href: "/world?starter=flocking"
     });
     expect(starterWorldLaunchSchema.safeParse({ ...launch, parameters: { alignmentWeight: 3 } }).success).toBe(false);
     expect(resolveStarterWorldLaunch({ starterId: "missing" })).toMatchObject({ ok: false, code: "unknown-starter" });
     expect(resolveStarterWorldLaunch({ starterId: "flocking", templateId: "epidemic-spread" })).toMatchObject({
       ok: false,
-      code: "runtime-mismatch"
+      code: "invalid-request"
     });
     expect(resolveStarterWorldLaunch({ starterId: "flocking", scenarioId: "missing" })).toMatchObject({
       ok: false,
-      code: "unknown-scenario"
+      code: "invalid-request"
     });
     expect(resolveStarterWorldLaunch({ starterId: "flocking", task: "invent" })).toMatchObject({ ok: false, code: "invalid-task" });
+    expect(resolveStarterWorldLaunch({ starterId: "flocking", task: "observe" })).toMatchObject({
+      ok: true,
+      launch: {
+        templateId: "flocking-boids",
+        scenarioId: "random-headings",
+        task: "observe",
+        href: "/world?starter=flocking"
+      }
+    });
     expect(resolveStarterWorldLaunch({ starterId: "flocking", runConfig: { parameters: {} } })).toMatchObject({
       ok: false,
       code: "invalid-request"
     });
+    expect(() => createStarterWorldScenario({ ...launch, scenarioId: "aligned-flock" })).toThrow(/stale or invalid/i);
+    expect(() => createStarterWorldScenario({ ...launch, href: "/world?starter=epidemic" })).toThrow(/stale or invalid/i);
   });
+
+  it("executes every documented first parameter change deterministically and produces the stated model-level difference", () => {
+    const contracts = [
+      { id: "flocking", steps: 50, direction: "lower" },
+      { id: "epidemic", steps: 50, direction: "lower" },
+      { id: "opinion-dynamics", steps: 50, direction: "lower" },
+      { id: "predator-prey", steps: 100, direction: "higher" },
+      { id: "schelling", steps: 25, direction: "lower" },
+      { id: "forest-spread", steps: 100, direction: "lower" },
+      { id: "neural-excitation", steps: 50, direction: "lower" }
+    ] as const;
+
+    for (const contract of contracts) {
+      const world = starterWorlds.find((candidate) => candidate.id === contract.id)!;
+      expect(world.firstChange.targetType).toBe("parameter");
+      const baseline = createStarterWorldScenario(createDefaultStarterWorldLaunch(world.id));
+      const changed = patchScenarioParameters(baseline, {
+        ...baseline.parameters,
+        [world.firstChange.targetId]: world.firstChange.suggestedValue!
+      });
+      const metricId = world.runtime!.recommendedMetricId;
+      const baselineValue = metricAfterSteps(baseline, metricId, contract.steps);
+      const changedValue = metricAfterSteps(changed, metricId, contract.steps);
+
+      expect(Number.isFinite(baselineValue)).toBe(true);
+      expect(Number.isFinite(changedValue)).toBe(true);
+      if (contract.direction === "lower") {
+        expect(changedValue, `${world.id} ${metricId}`).toBeLessThan(baselineValue);
+      } else {
+        expect(changedValue, `${world.id} ${metricId}`).toBeGreaterThan(baselineValue);
+      }
+      expect(metricAfterSteps(changed, metricId, contract.steps)).toBe(changedValue);
+    }
+  }, 60_000);
 
   it("uses existing scenario construction for fresh paused tick-0 runs without mutating runtime defaults or bounds", () => {
     const runtimeContractsBefore = JSON.stringify(
@@ -303,4 +407,18 @@ function cloneDefinition(index: number): MutableDefinition {
 
 function cloneDefinitions(): MutableDefinition[] {
   return structuredClone(rawStarterWorldDefinitions) as unknown as MutableDefinition[];
+}
+
+function metricAfterSteps(
+  scenario: ReturnType<typeof createStarterWorldScenario>,
+  metricId: string,
+  steps: number
+): number {
+  const { engine } = createEngineFromScenario(scenario);
+  engine.runSteps(steps);
+  const value = engine.createSnapshot().metricsHistory.at(-1)?.values[metricId];
+  if (typeof value !== "number") {
+    throw new Error(`Metric "${metricId}" was not recorded after ${steps} steps.`);
+  }
+  return value;
 }

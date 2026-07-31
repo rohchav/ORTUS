@@ -81,7 +81,7 @@ These foundations are deliberately service-first or metadata-first unless docume
 
 After Prompt 30B, ORTUS completed a repository hygiene, durable context, dependency stabilization, and performance/scalability pass. That pass added and validated performance instrumentation and spatial-indexing foundations, but it does not turn reserved structural primitives into runtime support and is not evidence for high-scale readiness by itself.
 
-Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 39B: Scenario Planning From Schema Audit are complete. The documented side-track and Research World/UI prompts through GW9B are complete. R1, R1B, R2, R2B, and C1 are complete. The next documented roadmap milestone is C1B: Starter World Content Framework Audit. F1 and the fractal branch remain documented but are paused under E3 Analytical Lenses.
+Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 39B: Scenario Planning From Schema Audit are complete. The documented side-track and Research World/UI prompts through GW9B are complete. R1, R1B, R2, R2B, C1, and C1B are complete. C2: Flagship Starter Pack One is next and has not started. F1 and the fractal branch remain documented but are paused under E3 Analytical Lenses.
 
 ## Active Product Experience Reset
 
@@ -94,7 +94,7 @@ S1 / S1B -> S2 / S2B -> S3 / S3B -> S4 / S4B -> S5 / S5B
 E1 / E1B -> E2 / E2B -> E3 / E3B
 ```
 
-R1 is Start Hub and World-First Product Reset. R1B is its completed First-Run and World-First Shell Audit + Hardening gate. R2 World Layout and Interaction Reclaim and R2B World Layout and Interaction Audit + Hardening are complete. C1 Starter World Content Framework is complete. C1B Starter World Content Framework Audit is next and has not started. The R/C/S/E labels describe planned milestones, not implemented capabilities. F0 remains a historical documentation branch; F1 is paused beneath E3 and must not start as the former immediate next milestone.
+R1 is Start Hub and World-First Product Reset. R1B is its completed First-Run and World-First Shell Audit + Hardening gate. R2 World Layout and Interaction Reclaim and R2B World Layout and Interaction Audit + Hardening are complete. C1 Starter World Content Framework and C1B Starter World Content Framework Audit are complete. C2: Flagship Starter Pack One is next and has not started. The R/C/S/E labels describe planned milestones, not implemented capabilities. F0 remains a historical documentation branch; F1 is paused beneath E3 and must not start as the former immediate next milestone.
 
 ## Revised Prompt Sequence
 

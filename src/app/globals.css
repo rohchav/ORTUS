@@ -11408,7 +11408,7 @@ textarea[aria-invalid="true"] {
 .starter-world-visual__motion,
 .starter-world-visual__contact,
 .starter-world-visual__opinion,
-.starter-world-visual__cycles,
+.starter-world-visual__ecology,
 .starter-world-visual__signal {
   position: absolute;
   inset: 0;
@@ -11520,36 +11520,58 @@ textarea[aria-invalid="true"] {
   background: #d7d5cc;
 }
 
-.starter-world-visual__cycles {
-  inset: 18px 18px 16px;
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 3px;
-  border-bottom: 1px solid rgba(243, 241, 232, 0.24);
+.starter-world-visual__ecology {
+  inset: 12px;
+  background:
+    linear-gradient(24deg, transparent 0 47%, rgba(174, 199, 144, 0.08) 48% 52%, transparent 53%),
+    linear-gradient(-19deg, transparent 0 60%, rgba(214, 154, 103, 0.06) 61% 64%, transparent 65%);
 }
 
-.starter-world-visual__cycle-column {
-  height: 100%;
-  flex: 1 1 0;
-  display: flex;
-  align-items: flex-end;
-  gap: 2px;
-}
-
-.starter-world-visual__cycle-bar {
-  width: 50%;
-  height: var(--height);
+.starter-world-visual__prey,
+.starter-world-visual__predator {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
   display: block;
-  border-radius: 1px 1px 0 0;
+  transform: translate(-50%, -50%);
 }
 
-.starter-world-visual__cycle-bar--prey {
+.starter-world-visual__prey {
+  width: 10px;
+  height: 10px;
+  border: 2px solid #0a0d0c;
+  border-radius: 50%;
   background: #aec790;
+  box-shadow: 0 0 0 3px rgba(174, 199, 144, 0.08);
 }
 
-.starter-world-visual__cycle-bar--predator {
+.starter-world-visual__predator {
+  width: 15px;
+  height: 15px;
+  border: 2px solid #0a0d0c;
   background: #d69a67;
+  box-shadow: 0 0 0 4px rgba(214, 154, 103, 0.1);
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.starter-world-visual__encounter-ring {
+  position: absolute;
+  width: 72px;
+  height: 72px;
+  border: 1px dashed rgba(214, 154, 103, 0.32);
+  border-radius: 50%;
+}
+
+.starter-world-visual__encounter-ring--one {
+  left: 11%;
+  top: 7%;
+}
+
+.starter-world-visual__encounter-ring--two {
+  right: 12%;
+  bottom: 8%;
+  width: 58px;
+  height: 58px;
 }
 
 .starter-world-visual__grid {
@@ -11980,7 +12002,8 @@ textarea[aria-invalid="true"] {
   text-underline-offset: 3px;
 }
 
-.world-detail__research li > span {
+.world-detail__research li > span,
+.world-detail__research li > small {
   color: var(--text-muted);
   font-size: 12px;
 }

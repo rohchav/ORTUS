@@ -1617,4 +1617,14 @@ The HCI strength is a coherent invitation-to-action chain: Start -> Explore Worl
 
 Catalog and detail states were exercised at the six required viewports, with keyboard controls, focus behavior, reduced motion, no horizontal overflow, browser diagnostics, and representative Axe checks. Actual browser zoom, screen readers, assistive technology, forced colors, complete touch workflow, participant comprehension, educational outcomes, and WCAG conformance remain unverified.
 
-R1 complete. R1B complete. R2 complete. R2B complete. C1 complete. `C1B: Starter World Content Framework Audit` is next and has not started.
+R1 complete. R1B complete. R2 complete. R2B complete. C1 complete. C1B complete. C2: Flagship Starter Pack One is next.
+
+## C1B Starter World Audit Update
+
+C1B found that the strongest C1 risks were authority and interpretation, not layout. Canonical launch links exposed template and preset fields even though the definition was supposed to own them; validated definitions were only shallow-frozen; source types were not always publication-accurate; internal preset IDs and repeated sentence patterns leaked into learning content; generic card link names weakened nonvisual navigation; and the Predator-Prey illustration looked like an unlabeled quantitative chart.
+
+The hardening makes launch links Starter-ID-only, revalidates frozen definition-owned runtime references, strengthens content/runtime and source contracts, names every catalog action by world, and replaces the quantitative-looking ecology graphic with a decorative spatial encounter scene. All seven first activities have deterministic engine regressions and a rendered control, rebuild, and Observe path. This supports product honesty; it does not establish participant comprehension, educational effectiveness, scientific validity, or real-world fidelity.
+
+The six required viewports, keyboard paths, reduced motion, diagnostics, and representative Axe states completed baseline, affected post-fix, and final full-suite coverage. Actual browser zoom, screen-reader and assistive-technology use, forced colors, complete touch workflow, participant study, educational outcomes, and WCAG conformance remain unverified.
+
+C1B's required focused and complete browser gate passed without retries or skipped tests. C1B is complete. C2 has not started.

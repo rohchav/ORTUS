@@ -1,13 +1,13 @@
 # Explore Worlds Catalog
 
 Date: 2026-07-27
-Status: C1 implementation complete; C1B audit next
+Status: C1 and C1B complete; C2 next
 
 ## 1. Route Structure
 
 - `/worlds` is the runnable Starter World catalog.
 - `/worlds/[slug]` is a directly linkable detail route.
-- `/world?starter=<id>&template=<id>&scenario=<id>` is the strict launch destination.
+- `/world?starter=<id>` is the strict canonical launch destination.
 - `/` remains Start, and `/world` remains the live workbench.
 
 Explore Worlds is reachable from Start without becoming another equal-weight global destination. On `/worlds`, primary navigation keeps Start current because the catalog belongs to the entry and discovery flow.
@@ -74,7 +74,7 @@ Only represented anatomy facets render. Research stays below action. One main bo
 - moving directional agents;
 - contact rings and state nodes;
 - opinions along a bounded axis;
-- coupled population bars;
+- a spatial predator/prey encounter scene;
 - neighborhood cells;
 - landscape spread cells;
 - excitation/inhibition network nodes and links.
@@ -83,7 +83,7 @@ They are illustrative system identities, not screenshots, live engines, measured
 
 ## 8. Launch Behavior
 
-The primary detail action uses a canonical, ID-only URL created by the validated launch adapter. World revalidates context server-side and constructs a fresh paused tick-0 scenario through existing scenario services.
+The primary detail action uses a canonical URL containing only the Starter World ID. World derives and revalidates the template, default initialization preset, task, and runtime references server-side, then constructs a fresh paused tick-0 scenario through existing scenario services. Template, scenario, RunConfig, and unknown query overrides fail before World construction.
 
 The selected template, initialization preset, recommended task, and Starter World identity remain inspectable. A compact definition-driven nudge links back to detail and identifies the first run, first change, and outputs to watch.
 
@@ -120,7 +120,7 @@ No screen-reader, assistive-technology, forced-colors, browser-zoom, WCAG, or co
 
 ## 12. Verification
 
-Focused tests cover the strict schema, versions, taxonomy, anatomy, quality lint, source structure, unsafe keys, duplicate identities, production registry references, deterministic query behavior, ID-only launch context, every fresh paused tick-0 handoff, no storage, six catalog viewports, all detail routes, mobile order, focus, Back/reload semantics, diagnostics, reduced motion, and Axe.
+Focused tests cover the strict schema, versions, recursive registry immutability, taxonomy, anatomy, quality lint, source structure and DOI shape, unsafe keys, duplicate identities, production registry references, deterministic query behavior, ID-only launch context, override rejection, every fresh paused tick-0 handoff, all seven first-change control paths, no storage, six catalog viewports, all detail routes, mobile order, focus, Back/reload semantics, diagnostics, reduced motion, and Axe.
 
 The required final C1 gate also runs the established destination-shell suite, full UI suite, typecheck, unit suite, production build, simulation performance smoke, Atlas preview smoke, and `git diff --check`.
 
@@ -139,4 +139,4 @@ The required final C1 gate also runs the established destination-shell suite, fu
 - R2 complete.
 - R2B complete.
 - C1 complete.
-C1B: Starter World Content Framework Audit is next.
+C1B final focused and complete browser verification passed. C1B is complete. C2: Flagship Starter Pack One is next and has not started.

@@ -296,4 +296,12 @@ C1 owns content discovery before World, not a new permanent World drawer. `/worl
 
 The launch URL contains stable IDs only. World revalidates those IDs, uses existing scenario services, and creates a fresh paused tick-0 run. The existing compact context remains authoritative; a dismissible nudge supplies local Starter World context without progress, locks, storage, or task replacement.
 
-R1 complete. R1B complete. R2 complete. R2B complete. C1 complete. `C1B: Starter World Content Framework Audit` is next and has not started.
+R1 complete. R1B complete. R2 complete. R2B complete. C1 complete. C1B complete. C2: Flagship Starter Pack One is next.
+
+## C1B Starter World Content Hardening
+
+C1B keeps Explore Worlds outside the live World task architecture and preserves the existing World shell. Canonical detail actions now navigate with only `starter=<id>`. The World route derives and revalidates template, default preset, and recommended task from the recursively frozen Starter World registry. A later ordinary World task query can change the visible task but cannot provide or override runtime identity.
+
+The audit also aligns user-facing preset, control, and metric labels with authoritative registries; adds visible source type and relationship metadata; keeps research subordinate to action; and verifies all seven first-change paths without adding a second control system. Catalog search, filters, detail browsing, and the nudge remain URL or component-session state only. No storage key, progress model, recommendation system, profile, runtime mechanic, Builder handoff, Atlas record, or Lab record was added.
+
+C1B final focused and complete browser verification passed. C1B is complete. C2 has not started.

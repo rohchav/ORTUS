@@ -64,7 +64,12 @@ export function ExploreWorldsCatalog({ worlds, featuredWorldId }: ExploreWorldsC
               <span key={indicator}>{indicator}</span>
             ))}
           </div>
-          <Link href={`/worlds/${featured.slug}`}>Explore featured world</Link>
+          <Link
+            href={`/worlds/${featured.slug}`}
+            aria-label={`Explore featured world: ${featured.title}`}
+          >
+            Explore featured world
+          </Link>
         </div>
       </section>
 
@@ -142,7 +147,9 @@ export function ExploreWorldsCatalog({ worlds, featuredWorldId }: ExploreWorldsC
                     <span>First activity</span>
                     <strong>{world.estimatedFirstActivity}</strong>
                   </div>
-                  <Link href={`/worlds/${world.slug}`}>Explore world</Link>
+                  <Link href={`/worlds/${world.slug}`} aria-label={`Explore ${world.title}`}>
+                    Explore world
+                  </Link>
                 </div>
               </article>
             ))}

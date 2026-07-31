@@ -1,7 +1,7 @@
 # Starter World Content Framework
 
 Date: 2026-07-27
-Status: C1 implementation complete; C1B audit next
+Status: C1 and C1B complete; C2 next
 
 ## 1. Scope
 
@@ -79,7 +79,7 @@ Parameter changes retain the existing draft-then-rebuild contract. Current-run i
 
 Sources are structured with `sourceId`, title, authors or organization, year, source type, HTTPS URL or DOI, relationship, and a model-specific note.
 
-Allowed source types include peer-reviewed paper, book, official institution, research project, educational reference, and historical source. Relationships distinguish canonical model, mechanism inspiration, research context, educational context, and historical context.
+Allowed source types include peer-reviewed paper, conference paper, book, official institution, research project, educational reference, and historical source. Relationships distinguish canonical model, mechanism inspiration, research context, educational context, and historical context. Source IDs are slug-safe, source URLs use HTTPS, and `doi.org` links must contain a DOI-shaped path.
 
 Each runnable world has one to three checked sources. The detail page states:
 
@@ -103,9 +103,9 @@ Passing lint means the content satisfies C1's structural and editorial contract.
 
 ## 11. Launch Handoff
 
-`src/lib/starterWorlds/launch.ts` accepts strict ID-only requests. Canonical links carry `starter`, `template`, and `scenario`, plus `task` only when the recommended task is not Setup. Unknown fields such as parameter payloads or RunConfigs are rejected.
+`src/lib/starterWorlds/launch.ts` accepts strict Starter World requests. Canonical detail links carry only `starter=<id>`. Template and initialization preset are never accepted as public handoff inputs; they are derived from the recursively frozen, validated definition. Unknown fields such as template overrides, scenario overrides, parameter payloads, or RunConfigs are rejected.
 
-The World route re-resolves the starter, template, initialization preset, and task. `createStarterWorldScenario` then uses `createDefaultScenario`, `updateScenarioPreset`, and `validateScenario` to create a fresh deterministic paused tick-0 run. Starter identity is retained as scenario metadata.
+The World route re-resolves the starter, template, initialization preset, and task. Ordinary World task navigation may add a validated `task` query after launch, but it cannot override runtime identity. `createStarterWorldScenario` then uses `createDefaultScenario`, `updateScenarioPreset`, and `validateScenario` to create a fresh deterministic paused tick-0 run. Starter identity is retained as scenario metadata.
 
 Malformed, stale, unknown, or mismatched context stops at an accessible error. It never silently selects another template or creates a partial World.
 
@@ -155,9 +155,9 @@ C1 does not implement new mechanics, new templates, runtime composition, multisc
 
 Seven current worlds are richer content surfaces over seven existing runtimes. They are not seven claims of real-world fidelity.
 
-## 17. C1B Handoff
+## 17. C1B Audit
 
-C1B must independently audit:
+C1B independently audited:
 
 - every runtime reference and suggested control against current registries;
 - source accuracy and relationship wording;
@@ -168,9 +168,11 @@ C1B must independently audit:
 - keyboard, focus, responsive, short-height, diagnostics, and Axe evidence;
 - no runtime, persistence, Builder, Atlas, Lab, or research-validity creep.
 
+The audit found and fixed a nested-registry mutation path, canonical handoff override fields, inaccurate source-type classifications, weak DOI/source-ID checks, repetitive and internal-ID content, incomplete content/runtime cross-checks, generic card action names, a quantitative-looking Predator-Prey illustration, an unsupported bounded-confidence portfolio claim, incomplete Tier C multiscale fields, and one displayed metric-label mismatch. `docs/product/STARTER_WORLD_CONTENT_FRAMEWORK_AUDIT.md` records the evidence and remaining external validation limits.
+
 - R1 complete.
 - R1B complete.
 - R2 complete.
 - R2B complete.
 - C1 complete.
-C1B: Starter World Content Framework Audit is next.
+C1B final focused and complete browser verification passed. C1B is complete. C2: Flagship Starter Pack One is next and has not started.
