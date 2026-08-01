@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { LeftInstrumentStack } from "./LeftInstrumentStack";
 import { RightContextDrawer } from "./RightContextDrawer";
 import { RunProvenanceObservationPanel } from "./RunProvenanceObservationPanel";
@@ -17,7 +17,13 @@ import {
   simulationWorkspaceModeQueryValue,
   type SimulationWorkspaceModeId
 } from "../lib/workspaceModes";
-import { createStarterWorldScenario, type StarterWorldLaunch } from "../lib/starterWorlds";
+import {
+  createStarterWorldScenario,
+  deriveGuidedInvestigationAuthority,
+  getStarterWorldLaunchRecipeById,
+  requireStarterWorldById,
+  type StarterWorldLaunch
+} from "../lib/starterWorlds";
 import type { TemplateId } from "../lib/templateVisuals";
 import { useSimulationStore } from "../state/simulationStore";
 
@@ -40,11 +46,32 @@ export function AppShell({ initialTemplateId, initialWorkspaceMode, starterLaunc
   );
   const [toolsHidden, setToolsHidden] = useState(false);
   const [runDetailsOpen, setRunDetailsOpen] = useState(false);
+  const [guideVisible, setGuideVisible] = useState(Boolean(starterLaunch?.guideId));
+  const guideLaunchIdentity = starterLaunch?.guideId
+    ? `${starterLaunch.guideId}:${starterLaunch.recipeId ?? ""}`
+    : undefined;
   const frameRef = useRef<number | null>(null);
   const lastTimeRef = useRef<number | null>(null);
   const accumulatedRef = useRef(0);
   const starterInitializedRef = useRef<string | null>(null);
   const runDetailsTriggerRef = useRef<HTMLButtonElement>(null);
+  const previousGuideLaunchIdentityRef = useRef(guideLaunchIdentity);
+  const defaultWorkspaceMode = useMemo(
+    () => starterLaunch ? starterLaunchDefaultWorkspaceMode(starterLaunch) : defaultSimulationWorkspaceModeId,
+    [starterLaunch]
+  );
+  const guidedAuthority = useMemo(
+    () => starterLaunch?.guideId ? deriveGuidedInvestigationAuthority(starterLaunch.guideId) : undefined,
+    [starterLaunch?.guideId]
+  );
+
+  useEffect(() => {
+    if (previousGuideLaunchIdentityRef.current === guideLaunchIdentity) {
+      return;
+    }
+    previousGuideLaunchIdentityRef.current = guideLaunchIdentity;
+    setGuideVisible(Boolean(starterLaunch?.guideId));
+  }, [guideLaunchIdentity, starterLaunch?.guideId]);
 
   useEffect(() => {
     setMounted(true);
@@ -66,25 +93,38 @@ export function AppShell({ initialTemplateId, initialWorkspaceMode, starterLaunc
   useEffect(() => {
     const mode = workspaceModeFromLocation(initialWorkspaceMode);
     setActiveWorkspaceMode(mode);
-    replaceNonCanonicalWorkspaceHref(mode);
-  }, [initialWorkspaceMode]);
+    replaceNonCanonicalWorkspaceHref(mode, defaultWorkspaceMode);
+  }, [defaultWorkspaceMode, initialWorkspaceMode]);
 
   useEffect(() => {
     function syncWorkspaceModeFromHistory() {
-      setActiveWorkspaceMode(workspaceModeFromLocation());
+      setActiveWorkspaceMode(workspaceModeFromLocation(defaultWorkspaceMode));
     }
     window.addEventListener("popstate", syncWorkspaceModeFromHistory);
     return () => window.removeEventListener("popstate", syncWorkspaceModeFromHistory);
-  }, []);
+  }, [defaultWorkspaceMode]);
 
   function changeWorkspaceMode(mode: SimulationWorkspaceModeId) {
     setActiveWorkspaceMode(mode);
 
-    const nextHref = workspaceHref(mode);
+    const nextHref = workspaceHref(mode, defaultWorkspaceMode);
     const currentHref = `${window.location.pathname}${window.location.search}${window.location.hash}`;
     if (nextHref !== currentHref) {
       window.history.pushState(window.history.state, "", nextHref);
     }
+  }
+
+  function exitGuide() {
+    const query = new URLSearchParams(window.location.search);
+    query.delete("guide");
+    const nextHref = `/world${query.size > 0 ? `?${query.toString()}` : ""}${window.location.hash}`;
+    window.history.replaceState(window.history.state, "", nextHref);
+    setGuideVisible(false);
+    window.requestAnimationFrame(() => document.querySelector<HTMLElement>(".world-stage")?.focus());
+  }
+
+  function focusPlayback() {
+    document.querySelector<HTMLButtonElement>('[aria-label="Run simulation"], [aria-label="Pause simulation"]')?.focus();
   }
 
   useEffect(() => {
@@ -150,7 +190,12 @@ export function AppShell({ initialTemplateId, initialWorkspaceMode, starterLaunc
       <div className="ortus-layout" data-tools-state={toolsHidden ? "hidden" : "visible"}>
         <section className="workspace-center" aria-label="Simulation workspace" data-workspace-region="center">
           <div className="world-workspace">
-            {starterLaunch ? <StarterActionNudge launch={starterLaunch} /> : null}
+            {starterLaunch ? (
+              <StarterActionNudge
+                launch={starterLaunch}
+                activeGuideId={guideVisible ? starterLaunch.guideId : undefined}
+              />
+            ) : null}
             <WorldStage />
           </div>
           <TimelineControlStrip />
@@ -162,6 +207,11 @@ export function AppShell({ initialTemplateId, initialWorkspaceMode, starterLaunc
           toolsHidden={toolsHidden}
           onHideTools={() => setToolsHidden(true)}
           onShowTools={() => setToolsHidden(false)}
+          guidedInvestigation={guideVisible && guidedAuthority && starterLaunch?.recipeId
+            ? { authority: guidedAuthority, launch: starterLaunch }
+            : undefined}
+          onExitGuide={exitGuide}
+          onFocusPlayback={focusPlayback}
         />
       </div>
       <ModalSurface
@@ -186,21 +236,35 @@ function workspaceModeFromLocation(fallback = defaultSimulationWorkspaceModeId):
   return simulationWorkspaceModeFromQuery(query.get("task") ?? undefined) ?? fallback;
 }
 
-function workspaceHref(mode: SimulationWorkspaceModeId): string {
+function workspaceHref(
+  mode: SimulationWorkspaceModeId,
+  defaultMode: SimulationWorkspaceModeId
+): string {
   const query = new URLSearchParams(window.location.search);
-  const task = simulationWorkspaceModeQueryValue(mode);
-  if (task) {
-    query.set("task", task);
-  } else {
+  if (mode === defaultMode) {
     query.delete("task");
+  } else {
+    const task = simulationWorkspaceModeQueryValue(mode) ?? "setup";
+    query.set("task", task);
   }
   return `/world${query.size > 0 ? `?${query.toString()}` : ""}${window.location.hash}`;
 }
 
-function replaceNonCanonicalWorkspaceHref(mode: SimulationWorkspaceModeId): void {
-  const canonicalHref = workspaceHref(mode);
+function replaceNonCanonicalWorkspaceHref(
+  mode: SimulationWorkspaceModeId,
+  defaultMode: SimulationWorkspaceModeId
+): void {
+  const canonicalHref = workspaceHref(mode, defaultMode);
   const currentHref = `${window.location.pathname}${window.location.search}${window.location.hash}`;
   if (canonicalHref !== currentHref) {
     window.history.replaceState(window.history.state, "", canonicalHref);
   }
+}
+
+function starterLaunchDefaultWorkspaceMode(launch: StarterWorldLaunch): SimulationWorkspaceModeId {
+  const recipe = launch.recipeId ? getStarterWorldLaunchRecipeById(launch.recipeId) : undefined;
+  if (recipe) {
+    return recipe.recommendedTask;
+  }
+  return requireStarterWorldById(launch.starterWorldId).runtime?.recommendedTask ?? defaultSimulationWorkspaceModeId;
 }

@@ -1,6 +1,6 @@
 # ORTUS Current Context
 
-Last updated: 2026-08-01 after Prompt C2B Flagship Starter Pack One Audit + Hardening
+Last updated: 2026-08-01 after Prompt C3 Guided Investigation / Tutorial World
 
 ## Current Prompt Status
 
@@ -12,13 +12,14 @@ Last updated: 2026-08-01 after Prompt C2B Flagship Starter Pack One Audit + Hard
 - C1B complete.
 - C2 complete.
 - C2B complete.
-- C3: Guided Investigation / Tutorial World is next and has not started.
+- C3 complete.
+- C3B: Guided Investigation Audit is next and has not started.
 
-`/` is the task-centered Start Hub; `/worlds` is its eleven-entry runnable Starter World catalog; `/worlds/[slug]` is the source-backed detail experience; `/worlds/packs/local-rules-global-patterns` is the first flagship collection; `/world` is the live workbench; `/builder`, `/atlas`, and `/lab` retain their established behavior. Primary navigation remains Start, World, Workshop, and a keyboard-operated Research tools menu. Explore Worlds is Start-adjacent rather than an equal global destination. F1 remains paused under E3 Analytical Lenses.
+`/` is the task-centered Start Hub; `/worlds` is its eleven-entry runnable Starter World catalog; `/worlds/[slug]` is the source-backed detail experience; `/worlds/packs/local-rules-global-patterns` is the first flagship collection; `/worlds/guides/reading-a-flock` is the first optional guided investigation; `/world` is the live workbench; `/builder`, `/atlas`, and `/lab` retain their established behavior. Primary navigation remains Start, World, Workshop, and a keyboard-operated Research tools menu. Explore Worlds and the guide are Start-adjacent rather than equal global destinations. F1 remains paused under E3 Analytical Lenses.
 
 C1's implementation records are `docs/product/STARTER_WORLD_CONTENT_FRAMEWORK.md`, `docs/product/STARTER_WORLD_PORTFOLIO.md`, and `docs/ui/EXPLORE_WORLDS_CATALOG.md`. The strict version `"1"` data model and validated registry are in `src/lib/starterWorlds`. All seven current production templates have rich runnable definitions with represented anatomy, bounded taxonomy, one existing first-change control, existing observations, two to four investigations, one to three verified sources, a compact model boundary, and current-versus-future remix status.
 
-Runnable definitions revalidate production template, initialization preset, metric, parameter, and optional intervention references. `defaultScenarioId` refers to the authoritative template initialization preset used through existing scenario services; C1 does not create a parallel scenario registry. C1B recursively freezes the validated registry and strengthens content/runtime checks. C1 canonical launch links carry only the Starter World ID; C2 flagship links additionally carry one strict recipe ID. World derives and revalidates the remaining runtime identity, rejects public runtime overrides, and creates a fresh deterministic paused tick-0 run through existing scenario services. Malformed launches render an error before the World shell is constructed.
+Runnable definitions revalidate production template, initialization preset, metric, parameter, and optional intervention references. `defaultScenarioId` refers to the authoritative template initialization preset used through existing scenario services; C1 does not create a parallel scenario registry. C1B recursively freezes the validated registry and strengthens content/runtime checks. C1 canonical launch links carry only the Starter World ID; C2 flagship links additionally carry one strict recipe ID; C3 guided links additionally carry one strict guide ID. World derives and revalidates the remaining runtime identity, guide/comparison/recipe ownership and role, rejects public runtime or guide-state overrides, and creates a fresh deterministic paused tick-0 run through existing scenario services. Malformed launches render an error before the World shell is constructed.
 
 Starter World content is metadata and presentation, not runtime capability. The seven definitions do not change template logic, defaults, bounds, metrics, interventions, scheduling, RNG, snapshots, experiments, comparisons, Atlas, Builder, or persistence. Portfolio candidates are documentation only. Sources provide a research connection; they do not validate or calibrate ORTUS models. C1/C1B add no storage key.
 
@@ -31,6 +32,14 @@ C2 changes no engine service, scheduling contract, template parameter default or
 C2B's audit record is `docs/product/FLAGSHIP_STARTER_PACK_ONE_AUDIT.md`. It independently reconstructs all eight effective scenarios, inspects all four tick-zero pairs, runs each fixed seed to its documented horizon, audits all rendered entry/World/error paths, and verifies Forest Fire containment. It found no P0, one P1 hidden Firebreak fuel-quantity difference, and three bounded P2 families covering sibling focus, shared-setting hierarchy, and outcome language. The fixes add an engine-tested tick-zero summary, truthful Firebreak quantity copy, recipe-relevant shared-setting priority, and explicit focus transfer without changing template rules or persistence. All four pairs classify `Works as written`; remaining gaps are external verification only, so C2B is conditionally ready for C3.
 
 C2B final verification passed Research World `53 tests (6.5m)`, combined Starter/C2B/Start `51 tests (7.3m)`, and complete UI/Axe `148 tests (17.3m)` with no failures, retries, or skips. Typecheck passed in `4.1s`; unit verification passed `77 files / 638 tests` in `81.49s`; the production build passed in `26.9s` with Next compilation in `6.7s` and `21` pages; simulation and bounded Atlas performance smoke passed; and `git diff --check` passed. `npm run lint: unavailable, package.json has no lint script.` Actual browser zoom, screen-reader/AT use, forced colors, complete touch workflows, participant comprehension, educational outcomes, empirical validation, and WCAG conformance remain unverified.
+
+C3's implementation records are `docs/product/GUIDED_INVESTIGATION_TUTORIAL_WORLD.md` and `docs/ui/GUIDED_INVESTIGATION_WORLD_EXPERIENCE.md`. The strict version `"1"` `src/lib/starterWorlds/guides` layer contains exactly one `prepared-pair-reading` guide, `Reading a Flock`. Its deterministic recursively frozen registry references the existing flagship pack, `Coordination Under Sensor Noise`, the audited prepared comparison, and the Alignment/Dispersion outputs. Derived authority resolves both recipes, Noise values, shared seed/entity count, tick-zero facts, horizon, output labels, and canonical guided URLs from C2/C2B sources rather than duplicating runtime values.
+
+The guide landing route is `/worlds/guides/reading-a-flock`; subordinate callouts appear on the flagship collection and Coordination detail while the runnable catalog remains eleven worlds. Valid World launches contain only strict starter, recipe, and guide IDs. The optional guide renders inside the existing active-tool scroll region, leaves stage/playback/tasks/expert tools available, supports four directly selectable baseline or contrast steps, and uses only existing Setup, Observe, Compare, playback, and sibling-recipe behavior. Direct contrast entry is supported without baseline-completion claims.
+
+C3 adds no simulation, Flocking rule/default/bound/metric, recipe, prepared comparison, comparison schema/cap, Experiment Runner, Atlas, Lab, Builder, dependency, asset, or storage change. It does not auto-run, auto-pause, auto-save, hard-gate, score, infer learning, or create evidence. Exit removes only guide URL/presentation state and preserves the current engine, tick, playback, Setup drafts, task where possible, and comparison summaries. Reload reconstructs the selected recipe as a fresh paused tick-0 run and resets mounted guide state. The guide can report only generic comparison-summary availability without exact provenance.
+
+C3 focused headless and rendered verification covers strict contracts, authority derivation, exact fixed-seed regression, valid/invalid launch behavior, baseline/contrast/direct-entry flows, explicit Compare capture, missing-summary fallback, reflection, Back/Forward, reload, collapse, state-preserving exit, focus, reduced motion, six viewports, Axe, diagnostics, and unchanged C1/C2 behavior. Final verification passed `53` Research World tests, `64` combined Starter/C2/C3 tests, `161` complete UI/Axe tests, `78 files / 647` unit tests, typecheck, a `22`-page production build, simulation/Atlas performance smoke, and `git diff --check`. Actual browser zoom, screen-reader/AT use, forced colors, complete touch workflows, participant comprehension, educational outcomes, empirical validity, and WCAG conformance remain unverified.
 
 R2's implementation record is `docs/ui/WORLD_LAYOUT_AND_INTERACTION_RECLAIM.md`; R2B's audit record is `docs/ui/WORLD_LAYOUT_AND_INTERACTION_RECLAIM_AUDIT.md`. World uses a stable `tasks + stage/playback + active tool` frame. Setup, Observe, Change, Compare, and Explain are direct tasks; More groups Experiment Runner and Diagnostics. The selected tool owns one bounded scroll, full model notes and technical run details use focus-contained modal surfaces, and desktop collapse/restore preserves local tool state.
 
@@ -181,7 +190,7 @@ Built-in production templates currently include Epidemic Spread, Opinion Dynamic
 
 ## Completed Prompt State
 
-Durable docs and source indicate completed roadmap work through Prompt 39B plus the documented side tracks, Research World/UI work through Prompt GW9B, and R1/R1B/R2/R2B/C1/C1B/C2. Prompt 31 through Prompt 39B are complete. UX6/UX6B established and audited the bounded Guided Builder; GW9/GW9B established and audited the bounded Atlas preview; R1 resets product entry and the World shell; R1B audits and hardens that reset; R2 reclaims the World layout and interaction hierarchy; R2B audits and hardens it; C1 adds the Starter World content/catalog layer without changing engine semantics or persistence scope; C1B audits and hardens that layer; C2 adds the first bounded flagship collection and recipe comparison layer without generalizing runtime or persistence.
+Durable docs and source indicate completed roadmap work through Prompt 39B plus the documented side tracks, Research World/UI work through Prompt GW9B, and R1/R1B/R2/R2B/C1/C1B/C2/C2B/C3. Prompt 31 through Prompt 39B are complete. UX6/UX6B established and audited the bounded Guided Builder; GW9/GW9B established and audited the bounded Atlas preview; R1 resets product entry and the World shell; R1B audits and hardens that reset; R2 reclaims the World layout and interaction hierarchy; R2B audits and hardens it; C1 adds and C1B audits the Starter World content/catalog layer; C2 adds and C2B audits the first bounded flagship collection and recipe comparison layer; C3 adds one optional non-persistent guide over that audited authority.
 
 The post-30B repository hygiene, dependency stabilization, durable context, and performance/scalability pass has also been completed. Recent commits include `dd6c256` for repo context/generated-artifact hygiene, `4949b72` for dependency and performance script stabilization, and `a80d5b7` for simulation performance instrumentation and spatial indexing foundations.
 
@@ -197,11 +206,12 @@ C1 complete.
 C1B complete.
 C2 complete.
 C2B complete.
-C3: Guided Investigation / Tutorial World is next.
+C3 complete.
+C3B: Guided Investigation Audit is next and has not started.
 
-Completed sequence: UX6B -> GW9 -> GW9B -> R1 -> R1B -> R2 -> R2B -> C1 -> C1B -> C2 -> C2B. C3 has not started.
+Completed sequence: UX6B -> GW9 -> GW9B -> R1 -> R1B -> R2 -> R2B -> C1 -> C1B -> C2 -> C2B -> C3. C3B has not started.
 
-Do not start C3, recipe-first Builder, composition, multiscale runtime, adaptive-controller generalization, Lab/Atlas persistence, E3, F1, or other reset-roadmap capability without its dedicated prompt. Rendered Playwright/Axe evidence does not establish actual browser zoom, screen-reader, assistive-technology, forced-colors, full WCAG, mobile-workflow, or user-comprehension readiness.
+Do not start C3B, C4, recipe-first Builder, composition, multiscale runtime, adaptive-controller generalization, Lab/Atlas persistence, E3, F1, or other reset-roadmap capability without its dedicated prompt. Rendered Playwright/Axe evidence does not establish actual browser zoom, screen-reader, assistive-technology, forced-colors, full WCAG, mobile-workflow, or user-comprehension readiness.
 
 Implemented runtime foundations include scenarios, snapshots, template-defined behavior modes, agent composition, interventions, experiments, run summaries/comparison, seeded randomness, metrics, spaces, template metadata, and a narrow Opinion Dynamics `socialLearning` behavior mode audited in Prompt 33D.
 
@@ -314,7 +324,7 @@ Prompt 35 and Prompt 35B were committed together in `7696381 feat: Implement Mod
 
 ## Next Recommended Prompt
 
-Prompt C3: Guided Investigation / Tutorial World is next and has not started. Do not begin C3, F1, or any later reset-roadmap capability without its dedicated prompt. F1 remains paused under E3 Analytical Lenses.
+Prompt C3B: Guided Investigation Audit is next and has not started. Do not begin C3B, C4, F1, or any later reset-roadmap capability without its dedicated prompt. F1 remains paused under E3 Analytical Lenses.
 
 Next recommended UI/design-system prompt after UX2B: `UI-DESIGN-SYSTEM-1: Rendered Responsive, Typography + Visualization Accessibility Audit`.
 
@@ -374,3 +384,8 @@ Next recommended UI/design-system prompt after UX2B: `UI-DESIGN-SYSTEM-1: Render
 - Do not add GW3 storage, timestamps, random ids, UUIDs, fingerprints, route state, hidden readiness stores, runtime behavior, template behavior, Builder execution, Lab intervention records, Atlas records, sampled regions, behavioral landscapes, progression state, policy-effectiveness claims, or real-world causal claims without a dedicated audited prompt.
 - UX6B is complete. Keep Guided-generated ids within each authoritative target-schema bound, keep focus on visible selected tabs when switching authoring views, clear canceled handoff staging status, and keep Workshop guidance in normal responsive flow.
 - GW9/GW9B are complete. Keep the capability allowlisted, bounded, deterministic, sequential, isolated, exact-coordinate only, and component-memory-only. Do not infer a complete landscape, persistence, regime detection, statistical confidence, validation, or broader template support.
+- C3 guide definitions are strict, versioned, data-only instructional metadata. They are not templates, scenarios, RunConfigs, results, experiments, evidence, learner records, progression records, or runtime capabilities.
+- Keep guide actions/checks bounded and advisory. Do not add arbitrary workflow conditions, auto-run, auto-pause, auto-save, hard gates, scoring, progress storage, learner profiles, recommendations, or learning/comprehension inference.
+- Derive guide recipe values, shared conditions, tick-zero facts, outputs, horizons, and URLs from audited registries. Fail closed on authority drift; do not silently retain stale guide copy.
+- Guide exit must remove only guide presentation and URL state while preserving active run state, tick, playback, Setup drafts, current task where possible, and existing comparisons. Reload must reset mounted guide state under normal fresh-run recipe semantics.
+- Direct contrast entry must not imply baseline execution or capture. Generic comparison availability is not guide provenance, evidence, causality, robustness, significance, or validation.

@@ -1,7 +1,7 @@
 # ORTUS Product Experience Reset Roadmap
 
 Date: 2026-08-01
-Status: active product sequence; R1, R1B, R2, R2B, C1, C1B, C2, and C2B complete; C3 next
+Status: active product sequence; R1, R1B, R2, R2B, C1, C1B, C2, C2B, and C3 complete; C3B next
 
 ## Why This Sequence Exists
 
@@ -54,9 +54,11 @@ C1 is complete. It adds the strict source-backed Starter World registry, `/world
 
 `C2: Flagship Starter Pack One` is complete. It adds `Local Rules, Global Patterns`, four focused Starter Worlds, eight strict prepared recipes, four comparisons derived from validated effective scenarios, a collection route, and recipe-aware fresh-run handoffs. The bounded Forest Fire corridor preset changes initialization layout only. C2 adds no general engine primitive, new metric, intervention, persistence, Lab/Atlas record, Builder execution, or scientific-validation claim.
 
-`C2B: Flagship Starter Pack One Audit + Hardening` is complete. It independently audits all eight authoritative scenarios, tick-zero initialization, all four fixed-seed horizons, the existing Compare workflow, public launch rejection, responsive/accessibility behavior, and Forest Fire containment. It corrects a hidden Firebreak fuel-quantity difference, sibling focus transfer, shared-setting hierarchy, and overcommitted comparison language without changing template rules or persistence. C3: Guided Investigation / Tutorial World is next and has not started; C4, S1-S5, and E1-E3 have not started under this roadmap.
+`C2B: Flagship Starter Pack One Audit + Hardening` is complete. It independently audits all eight authoritative scenarios, tick-zero initialization, all four fixed-seed horizons, the existing Compare workflow, public launch rejection, responsive/accessibility behavior, and Forest Fire containment. It corrects a hidden Firebreak fuel-quantity difference, sibling focus transfer, shared-setting hierarchy, and overcommitted comparison language without changing template rules or persistence.
 
-The active route hierarchy is Start `/`, Start-adjacent Explore Worlds `/worlds`, the flagship collection `/worlds/packs/local-rules-global-patterns`, World `/world`, Workshop `/builder`, Atlas `/atlas`, and Lab `/lab`. `/worlds` contains eleven validated runnable definitions. Four are focused C2 experiences over existing production templates; their existence is not evidence that C2B, later starter packs, composition, Lab, Atlas, or analysis milestones exist.
+`C3: Guided Investigation / Tutorial World` is complete. It adds one strict, recursively frozen `Reading a Flock` guide over the audited clear/noisy Coordination pair, a static landing route, strict guide-aware World handoffs, and an optional mounted-page guide inside the existing active-tool surface. It derives recipe and runtime facts from C2 authority, uses only existing playback/tasks/Compare behavior, stores no progress, makes no learning inference, and changes no simulation behavior or comparison persistence. `C3B: Guided Investigation Audit` is next and has not started; C4, S1-S5, and E1-E3 have not started under this roadmap.
+
+The active route hierarchy is Start `/`, Start-adjacent Explore Worlds `/worlds`, the flagship collection `/worlds/packs/local-rules-global-patterns`, the `Reading a Flock` guide `/worlds/guides/reading-a-flock`, World `/world`, Workshop `/builder`, Atlas `/atlas`, and Lab `/lab`. `/worlds` contains eleven validated runnable definitions. The guide is a separate instructional route, not a twelfth world. Four catalog worlds are focused C2 experiences over existing production templates; their existence is not evidence that later starter packs, composition, Lab, Atlas, or analysis milestones exist.
 
 ## Paused Fractal Branch
 
@@ -87,6 +89,10 @@ Explicit user direction may revise this roadmap, but documentation-only mileston
 - Effective configuration equality does not prove equal initialized state. Material tick-zero count, geometry, topology, and state differences must be audited and disclosed.
 - A featured starter launch must create its documented fresh prepared run; it must not silently resume a prior in-memory trajectory.
 - Explicit sibling-recipe activation must transfer focus to the replacement recipe context while preserving any Setup draft as a draft distinct from the new active run.
+- Guided investigations must remain strict versioned data-only metadata over existing authoritative worlds, comparisons, recipes, tasks, outputs, and horizons. A guide is not a scenario, RunConfig, result, experiment, evidence record, learner record, or runtime capability.
+- Guide phases may use only bounded actions and factual checks. They must not auto-run, auto-pause, auto-save, hard-gate steps, score users, infer learning, or store completion.
+- Guide exit removes only guide presentation and URL state while preserving the active run, tick, playback, Setup drafts, task, and comparison summaries. Reload resets mounted guide state and reconstructs the recipe under existing fresh-run semantics.
+- Direct contrast guide entry must remain truthful when no baseline was run or saved. Generic comparison availability must not be relabeled as guide provenance.
 - The live system remains the primary World visual object.
 - World task labels, query state, current navigation, and visible task must agree without resetting the active run.
 - Keep World Stage and persistent playback mounted outside task rendering; task switching must not recreate or reset the active run.

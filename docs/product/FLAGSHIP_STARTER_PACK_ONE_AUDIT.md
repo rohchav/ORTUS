@@ -2,7 +2,7 @@
 
 Prompt: C2B
 
-Status: complete; C3 next
+Status: C2B complete; C3 completed subsequently; C3B next
 
 ## 1. Scope
 
@@ -136,4 +136,4 @@ All implementation defects found in C2 scope are resolved; no P0 or P1 remains. 
 
 Final gates passed without failures, retries, or skips: Research World `53 passed (6.5m)`; combined Starter/C2B/Start `51 passed (7.3m)`; complete UI/Axe `148 passed (17.3m)`; typecheck `4.1s`; unit `77 files / 638 tests (81.49s)`; production build `26.9s` with Next compilation `6.7s` and `21` pages; simulation and Atlas performance smoke; and `git diff --check`. `npm run lint: unavailable, package.json has no lint script.`
 
-Conditionally ready for `C3: Guided Investigation / Tutorial World`. R1, R1B, R2, R2B, C1, C1B, C2, and C2B are complete. C3 is next and has not started.
+The C2B decision was conditionally ready for `C3: Guided Investigation / Tutorial World`. C3 has subsequently implemented one guide over the audited Coordination pair without changing these C2B scenario, runtime, comparison, or persistence findings. R1, R1B, R2, R2B, C1, C1B, C2, C2B, and C3 are complete. C3B is next and has not started.

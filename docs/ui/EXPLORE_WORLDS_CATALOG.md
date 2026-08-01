@@ -1,15 +1,17 @@
 # Explore Worlds Catalog
 
 Date: 2026-08-01
-Status: C1, C1B, C2, and C2B complete; C3 next
+Status: C1, C1B, C2, C2B, and C3 complete; C3B next
 
 ## 1. Route Structure
 
 - `/worlds` is the runnable Starter World catalog.
 - `/worlds/[slug]` is a directly linkable detail route.
 - `/worlds/packs/local-rules-global-patterns` is the first flagship collection route.
+- `/worlds/guides/reading-a-flock` is one separate guided-investigation route over an existing prepared pair.
 - `/world?starter=<id>` is the strict canonical launch destination.
 - `/world?starter=<id>&recipe=<id>` is the strict canonical C2 recipe launch destination.
+- `/world?starter=<id>&recipe=<id>&guide=<id>` is the strict canonical C3 guided launch destination.
 - `/` remains Start, and `/world` remains the live workbench.
 
 Explore Worlds is reachable from Start without becoming another equal-weight global destination. On `/worlds`, primary navigation keeps Start current because the catalog belongs to the entry and discovery flow.
@@ -85,11 +87,11 @@ They are illustrative system identities, not screenshots, live engines, measured
 
 ## 8. Launch Behavior
 
-The primary C1 detail action uses a canonical URL containing only the Starter World ID. C2 recipe actions add one strict recipe ID. World derives and revalidates the template, initialization preset, task, runtime references, recipe ownership, values, and outputs server-side, then constructs a fresh paused tick-0 scenario through existing scenario services. Template, scenario, RunConfig, parameter payload, duplicate, and unknown query overrides fail before World construction.
+The primary C1 detail action uses a canonical URL containing only the Starter World ID. C2 recipe actions add one strict recipe ID. C3 guided actions add one strict guide ID to one of that guide's prepared recipes. World derives and revalidates the template, initialization preset, task, runtime references, recipe and guide ownership, values, outputs, and recipe role server-side, then constructs a fresh paused tick-0 scenario through existing scenario services. Template, scenario, RunConfig, parameter payload, guide-state, duplicate, and unknown query overrides fail before World construction.
 
 The selected template, initialization preset, recommended task, and Starter World identity remain inspectable. A compact definition-driven nudge links back to detail and identifies the first run, first change, and outputs to watch. Recipe launches additionally identify the recipe, its purpose and horizon, the collection, and the explicit baseline/contrast sibling action.
 
-No arbitrary parameter object, RunConfig, template mutation, or stored progress enters the handoff.
+No arbitrary parameter object, RunConfig, template mutation, serialized guide state, or stored progress enters the handoff. The guide is static instructional metadata and does not change the eleven-world catalog count.
 
 ## 9. Error States
 
@@ -122,7 +124,7 @@ No screen-reader, assistive-technology, forced-colors, browser-zoom, WCAG, or co
 
 ## 12. Verification
 
-Focused tests cover the strict schemas, versions, recursive registry immutability, taxonomy, anatomy, quality lint, source structure and DOI shape, unsafe keys, duplicate identities, production registry references, deterministic query behavior, ID-only launch context, override rejection, every fresh paused tick-0 handoff, all original first-change control paths, all eight C2 recipes, effective-scenario and tick-zero comparison values, deterministic pair horizons, no storage, six catalog viewports, all detail routes, mobile order, sibling focus, Back/reload semantics, diagnostics, reduced motion, and Axe.
+Focused tests cover the strict schemas, versions, recursive registry immutability, taxonomy, anatomy, quality lint, source structure and DOI shape, unsafe keys, duplicate identities, production registry references, deterministic query behavior, ID-only launch context, override rejection, every fresh paused tick-0 handoff, all original first-change control paths, all eight C2 recipes, the one C3 guide, effective-scenario and tick-zero comparison values, deterministic pair horizons, no new storage, six catalog/guide viewports, all detail routes, mobile order, sibling focus, Back/reload semantics, diagnostics, reduced motion, and Axe.
 
 The required final C1 gate also runs the established destination-shell suite, full UI suite, typecheck, unit suite, production build, simulation performance smoke, Atlas preview smoke, and `git diff --check`.
 
@@ -131,6 +133,7 @@ The required final C1 gate also runs the established destination-shell suite, fu
 - The diagrams are authored illustrations, not live previews.
 - Catalog controls reset on reload by design.
 - No saved tutorial progress or personalization exists.
+- `Reading a Flock` is the only production guide; C3 is not a generic curriculum or adaptive tutoring system.
 - Eleven Starter definitions currently wrap only seven production templates; the four C2 additions are focused experiences, not new mechanics.
 - Remix directions are explanatory and do not execute Builder handoffs.
 - Source connections do not calibrate or validate the implementations.
@@ -142,4 +145,4 @@ The required final C1 gate also runs the established destination-shell suite, fu
 - R2B complete.
 - C1 complete.
 At the close of C1B, its final focused and complete browser verification had passed and C2 was the next prompt.
-C2 is complete. C2B is complete. C3: Guided Investigation / Tutorial World is next and has not started.
+C2 is complete. C2B is complete. C3 is complete. C3B: Guided Investigation Audit is next and has not started.

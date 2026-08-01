@@ -242,11 +242,13 @@ test("sibling navigation replaces running state, preserves explicit drafts and c
   await expect(page.locator("[data-starter-recipe-id='coordination-clear-signals']")).toBeVisible();
 
   await page.getByRole("navigation", { name: "World tasks" }).getByRole("button", { name: "Compare" }).click();
+  await expect(page).toHaveURL(/task=compare/);
   await page.getByLabel("Run label").fill("Existing comparison summary");
   await page.getByRole("button", { name: "Capture Run" }).click();
   await expect(page.getByLabel("Label", { exact: true })).toHaveValue("Existing comparison summary");
 
   await page.getByRole("navigation", { name: "World tasks" }).getByRole("button", { name: "Setup" }).click();
+  await expect(page).toHaveURL(/task=setup/);
   await page.getByRole("button", { name: /All parameters/ }).click();
   const noiseDraft = page.getByRole("spinbutton", { name: "Noise numeric value" });
   await noiseDraft.fill("0.2");
@@ -255,6 +257,7 @@ test("sibling navigation replaces running state, preserves explicit drafts and c
   );
 
   await page.getByRole("navigation", { name: "World tasks" }).getByRole("button", { name: "Change" }).click();
+  await expect(page).toHaveURL(/task=change/);
   await page.getByRole("button", { name: "Run simulation" }).click();
   await expect.poll(async () => Number(await page.locator(".timeline-strip__readout strong").first().textContent())).toBeGreaterThan(2);
   const storageBeforeSibling = await readStorage(page);
@@ -269,6 +272,7 @@ test("sibling navigation replaces running state, preserves explicit drafts and c
   await expect(page.locator(".timeline-strip__label strong")).toHaveText("Paused");
 
   await page.getByRole("navigation", { name: "World tasks" }).getByRole("button", { name: "Setup" }).click();
+  await expect(page).toHaveURL(/task=setup/);
   const allParameters = page.getByRole("button", { name: /All parameters/ });
   if (await allParameters.isVisible()) {
     await allParameters.click();
@@ -279,6 +283,7 @@ test("sibling navigation replaces running state, preserves explicit drafts and c
     "Active run: 0.28. Draft pending."
   );
   await page.getByRole("navigation", { name: "World tasks" }).getByRole("button", { name: "Compare" }).click();
+  await expect(page).toHaveURL(/task=compare/);
   await expect(page.getByLabel("Label", { exact: true })).toHaveValue("Existing comparison summary");
   expect(await readStorage(page)).toEqual(storageBeforeSibling);
 

@@ -2,7 +2,7 @@
 
 Prompt: C2 / C2B
 
-Status: C2 and C2B complete; C3 next
+Status: C2, C2B, and C3 complete; C3B next
 
 ## 1. Scope
 
@@ -66,7 +66,7 @@ C2 adds no storage key. Pack, recipe, comparison guidance, catalog state, and nu
 
 ## 16. Non-Goals
 
-C2/C2B do not implement C3, progress tracking, profiles, achievements, analytics, recommendations, AI-generated content, Lab or Atlas persistence, general resource or multiscale runtime, new metrics, new interventions, arbitrary formulas, arbitrary code, custom-model execution, or Tier B/C portfolio candidates.
+C2/C2B did not implement guide behavior, progress tracking, profiles, achievements, analytics, recommendations, AI-generated content, Lab or Atlas persistence, general resource or multiscale runtime, new metrics, new interventions, arbitrary formulas, arbitrary code, custom-model execution, or Tier B/C portfolio candidates. C3 subsequently adds only one non-persistent instructional layer over the existing Coordination pair; it does not widen the pack or runtime.
 
 ## 17. Verification
 
@@ -78,4 +78,4 @@ Actual browser zoom, screen-reader and assistive-technology operation, forced-co
 
 ## 19. C2B Audit Outcome
 
-C2B found and fixed one P1 hidden Firebreak quantity difference and bounded P2 focus, shared-setting hierarchy, and outcome-language defects. No P0 remains. C2 and C2B are complete; the decision is conditionally ready for C3 because external zoom, AT, forced-colors, touch, participant, educational-outcome, and formal-conformance verification remains. `C3: Guided Investigation / Tutorial World` is next and has not started.
+C2B found and fixed one P1 hidden Firebreak quantity difference and bounded P2 focus, shared-setting hierarchy, and outcome-language defects. No P0 remains. Its decision was conditionally ready for C3 because external zoom, AT, forced-colors, touch, participant, educational-outcome, and formal-conformance verification remained. C3 has now added `Reading a Flock` over the audited Coordination pair without changing this pack's recipes, comparison, outputs, fixed-seed evidence, runtime, or persistence. C3B is next and has not started.

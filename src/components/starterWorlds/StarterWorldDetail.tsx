@@ -1,6 +1,8 @@
 import Link from "next/link";
 import {
   createDefaultStarterWorldLaunch,
+  deriveGuidedInvestigationAuthority,
+  getGuidedInvestigationForWorld,
   getPreparedStarterComparisonForWorld,
   getStarterWorldPackForWorld,
   getStarterWorldById,
@@ -16,6 +18,7 @@ import {
   type StarterWorldDefinition,
   type StarterWorldLaunchRecipe
 } from "../../lib/starterWorlds";
+import { GuidedInvestigationCallout } from "./GuidedInvestigationCallout";
 import { StarterWorldVisual } from "./StarterWorldVisual";
 
 interface StarterWorldDetailProps {
@@ -49,6 +52,8 @@ export function StarterWorldDetail({ world }: StarterWorldDetailProps) {
     ? recipes.find((recipe) => recipe.id === comparison.contrastRecipeId)
     : undefined;
   const pack = getStarterWorldPackForWorld(world.id);
+  const guide = getGuidedInvestigationForWorld(world.id);
+  const guideAuthority = guide ? deriveGuidedInvestigationAuthority(guide) : undefined;
   const parent = world.parentWorldId ? getStarterWorldById(world.parentWorldId) : undefined;
   const launch = baselineRecipe
     ? requireRecipeLaunch(world.id, baselineRecipe.id)
@@ -102,6 +107,7 @@ export function StarterWorldDetail({ world }: StarterWorldDetailProps) {
       </header>
 
       <div className="world-detail__body">
+        {guideAuthority ? <GuidedInvestigationCallout authority={guideAuthority} context="world" /> : null}
         {!comparison ? (
           <section className="world-detail__question" aria-labelledby="world-detail-question">
             <p>01 / The question</p>

@@ -583,7 +583,7 @@
 - Keep Starter World browsing, filters, search, nudge dismissal, and launch context non-persistent. Do not add storage, progress, completion, XP, achievements, profiling, recommendations, or step locks.
 - Keep remix status explicit: runtime-now, current Advanced structural tools, or future capability. Do not expose fake Builder, generate, compile, apply, or run actions.
 - C1 portfolio candidates are documentation only. Tier A is not implemented content; Tier B and C do not become runtime support until dedicated implementation and audit prompts.
-- R1, R1B, R2, R2B, C1, C1B, C2, and C2B are complete. C3: Guided Investigation / Tutorial World is next; do not start C3 or later C/S/E milestones without a dedicated prompt.
+- R1, R1B, R2, R2B, C1, C1B, C2, C2B, and C3 are complete. C3B: Guided Investigation Audit is next; do not start C3B, C4, or later C/S/E milestones without a dedicated prompt.
 - Complete and commit GW1 before starting GW1B.
 - Treat UX0 as documentation and design planning only.
 - Do not implement World/Lab/Atlas/Workshop without a dedicated prompt.
@@ -664,7 +664,7 @@
 - Atlas preview results are component-memory-only exact sampled coordinates. Do not add storage, saved records, history, publication, interpolation, smoothing, contours, inferred unsampled values, regime/transition/tipping-point detection, confidence/coverage/evidence scores, or scientific-validation claims.
 - Keep cancellation language honest: `Cancel after current sample` means the current synchronous sample finishes before cancellation is effective. Unstarted runs remain unsampled and partial results remain visibly partial. Route unmount must cancel remaining cooperative work and suppress post-unmount UI updates.
 - Multiple preview seeds show selected deterministic model variation only; they are not confidence intervals, calibrated probabilities, or real-world uncertainty estimates.
-- GW9/GW9B do not generalize Atlas sampling, make the conceptual behavioral-landscape scaffold runtime-backed, make probe plans executable, or create Discovery Atlas/Lab persistence. GW9B, R1, R1B, R2, R2B, C1, C1B, C2, and C2B are complete. C3 is next; F1 is paused under E3 Analytical Lenses.
+- GW9/GW9B do not generalize Atlas sampling, make the conceptual behavioral-landscape scaffold runtime-backed, make probe plans executable, or create Discovery Atlas/Lab persistence. GW9B, R1, R1B, R2, R2B, C1, C1B, C2, C2B, and C3 are complete. C3B is next; F1 is paused under E3 Analytical Lenses.
 - A featured starter launch must create the documented fresh prepared run once per starter page mount. It must not silently resume modified parameters, an advanced tick, or a running state beneath baseline instructions.
 - Parameter controls that rebuild the run must remain drafts until explicit apply and state that apply produces a fresh paused tick-0 run; do not imply live mutation.
 - World visible task, `task` query, top-navigation current state, and task heading must remain coherent without resetting active runtime state.
@@ -686,3 +686,14 @@
 - Verify Starter World source type, relationship, destination, and DOI metadata. Research connections are context, not validation or calibration.
 - A documented Starter World first activity needs a deterministic engine regression and a rendered control, rebuild, and output path before it is called supported.
 - Static Starter World visuals are illustrative. They must not resemble or claim quantitative runtime output unless backed by an actual labelled output.
+- Guided Investigation definitions must remain strict, versioned, data-only, deterministic, recursively frozen instructional metadata over existing authoritative packs, worlds, comparisons, recipes, tasks, outputs, and horizons.
+- A Guided Investigation is not a template, scenario, RunConfig, result, experiment, evidence record, learner record, progression record, curriculum engine, or runtime capability.
+- Support only explicitly scoped bounded investigation modes, actions, and factual checks. Do not add arbitrary workflow conditions, callbacks, authored runtime payloads, automatic execution, automatic pause, automatic capture, hard gates, scoring, quizzes, completion percentages, profiles, recommendations, analytics, or learning inference.
+- Derive guide recipe roles, controlled differences, shared settings, tick-zero claims, output labels, horizons, and canonical URLs from audited source registries. Reject authority drift rather than falling back to stale guide copy.
+- Guide-aware World URLs may add only one strict guide ID to a valid owned starter/recipe pair. Reject missing, malformed, duplicated, mismatched, guide-state, runtime-override, encoded-object, and unsafe-key queries before AppShell or engine construction.
+- Current guide step and collapse state are mounted-page state only. Add no guide storage key, module-level mutable progress, browser-history completion state, learner record, or hidden persistence.
+- Guide exit must remove only guide presentation and URL state while preserving active run state, tick, playback, Setup drafts, current task where possible, and existing comparison summaries. Reload must reset guide state and reconstruct the recipe under established fresh paused tick-zero semantics.
+- Direct contrast guide entry must remain valid without claiming a baseline run or saved baseline. Generic World comparison-summary availability must not be relabeled as guide provenance.
+- Guided investigations may use only the existing explicit World Compare workflow. Do not auto-save, auto-name, auto-overwrite, add a guide result table/schema/store, change `ortus.runComparison.v1`, or turn model output into evidence.
+- Guided investigation copy must not claim learning, mastery, correctness, causality, robustness, significance, validation, real-world applicability, or a universal threshold. Two prepared runs remain seed- and configuration-specific stylized model outputs.
+- Keep guided World UI optional and compact inside the existing active-tool flow. Do not add a permanent column, modal tour, forced sequence, replacement task rail, or obstruction over the dominant stage and persistent playback.

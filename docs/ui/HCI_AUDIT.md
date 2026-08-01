@@ -1645,4 +1645,12 @@ C2B found one P1 comprehension-integrity defect: the Firebreak pair changed both
 
 The hardening exposes a concise engine-tested tick-zero summary, distinguishes matching scenario settings from initialized state, prioritizes recipe-relevant shared settings, and transfers focus to replacement recipe context after explicit sibling activation. All four fixed-seed procedures work as written at their documented horizons. This is deterministic model and browser evidence, not robustness across seeds, participant comprehension, educational effectiveness, actual browser zoom, screen-reader/AT testing, forced-colors testing, complete touch operation, empirical validation, or WCAG conformance.
 
-R1 complete. R1B complete. R2 complete. R2B complete. C1 complete. C1B complete. C2 complete. C2B complete. C3: Guided Investigation / Tutorial World is next and has not started.
+R1 complete. R1B complete. R2 complete. R2B complete. C1 complete. C1B complete. C2 complete. C2B complete. C3 complete. C3B: Guided Investigation Audit is next and has not started.
+
+## C3 Guided Investigation Update
+
+C3 adds one optional guided investigation instead of a generic onboarding framework. `Reading a Flock` begins with a compact, action-first landing and then places four baseline or contrast steps inside the existing World active-tool scroll surface. The live stage and playback remain primary; every normal task stays available; steps are directly selectable; unmet technical checks do not block navigation; collapse and exit remain reachable.
+
+The strongest HCI boundary is state honesty. Recipe role, not stored completion, determines the phase. Direct contrast entry explicitly says it does not establish that a baseline was run. Reload returns to a fresh paused tick-0 recipe and phase step one. Exiting removes only guide presentation while preserving active run state, tick, playback, Setup drafts, current task where possible, and existing comparison summaries. A generic saved summary is not called the guided baseline.
+
+Rendered automation covers landing, baseline, contrast, direct contrast, collapse, exit, invalid state, keyboard focus, reduced motion, horizontal overflow, Axe, diagnostics, and the six required viewports. This is not participant-comprehension or educational-outcome evidence. Actual browser zoom, screen-reader/AT use, forced colors, complete touch operation, and formal WCAG conformance remain unverified. R1 through C3 are complete; C3B is next and has not started.

@@ -4038,3 +4038,79 @@ Roadmap result:
 - C3 is next and has not started.
 - F1 remains paused under E3 Analytical Lenses.
 - Commit gate target: `test: audit flagship starter world pack one`; no push is authorized.
+
+### Prompt C3: Guided Investigation / Tutorial World - Reading a Flock
+
+Date: 2026-08-01
+
+Goal: add one optional, non-persistent guided investigation over the audited `Coordination Under Sensor Noise` prepared pair without adding runtime behavior, a second comparison system, progression, learner inference, or persistence.
+
+Starting state and baseline:
+
+- Branch `main` was clean and aligned at `b6ff30e test: audit flagship starter world pack one`; `HEAD` matched `origin/main` after fetch.
+- Untouched Research World Playwright passed `53 tests (4.4m)`, and untouched dedicated C2B Playwright passed `16 tests (1.9m)`.
+- The first untouched combined Starter/C2/Start run reached `46` passes before one failure and left `4` tests unrun; the first full UI run reached `143` passes before the same failure and left `4` tests unrun. Both exposed an existing C2 recipe task-history defect: recipe launches defaulted to Observe while the shared URL helper treated Setup as the only queryless default, so direct Observe-to-Setup history was not representable.
+- Untouched typecheck passed in about `2.0s`; unit verification passed `77 files / 638 tests` in `54.74s`; the production build passed in about `16.7s` with `21` pages; simulation and bounded Atlas performance smoke passed; and `git diff --check` passed.
+- `npm run lint: unavailable, package.json has no lint script.`
+
+Implemented contracts and experience:
+
+- Added strict version-`"1"` guided-investigation schemas, validation, definitions, deterministic registry, recursive freezing, and derived authority under `src/lib/starterWorlds/guides`.
+- The registry contains exactly one data-only guide, `reading-a-flock`, and exactly one mode, `prepared-pair-reading`. It references the existing `local-rules-global-patterns` pack, `coordination-under-sensor-noise` world, its audited prepared comparison, and the existing Alignment and Dispersion outputs.
+- Guide authority derives the clear/noisy recipes, Noise values, shared seed, entity count, matching tick-zero state, output labels/descriptions, common horizon, effective conditions, and strict guided URLs from the C2/C2B authorities. Guide content does not duplicate authored parameter payloads or expected numeric results.
+- Added the statically generated `/worlds/guides/reading-a-flock` landing route and subordinate guide callouts on the flagship collection and Coordination detail. The runnable catalog remains exactly eleven worlds.
+- Extended strict World launch parsing with one optional guide ID. Missing, malformed, unknown, duplicate, mismatched, cross-world, wrong-recipe, arbitrary guide-state, runtime-override, encoded-object, and unsafe-key requests stop before AppShell and World runtime construction. Existing C1 starter-only and C2 recipe-only URLs remain valid.
+- Added a compact collapsible guide inside the existing active-tool scroll region. Baseline and contrast roles are derived from the selected recipe, each exposes four directly selectable steps, and all normal World tasks, playback, stage, recipe context, and expert tools remain usable.
+- The guide uses only existing Setup, Observe, Compare, playback, and sibling-recipe actions. It does not auto-run, auto-pause, auto-advance, auto-save, auto-name, overwrite, hard-gate, score, quiz, persist answers, infer learning, or create evidence.
+- Exit removes only guide URL and presentation state, preserves the engine, tick, playback state, current task where possible, unrelated Setup drafts, and existing comparison summaries, and moves focus to stable World context. Collapse preserves mounted-page step and run state. Reload creates the selected recipe's normal fresh paused tick-zero run and resets the phase step. Direct contrast starts honestly at contrast step one without claiming a baseline was run.
+- Existing Compare remains the only comparison workflow. The guide can state only that a comparison summary is available; it does not infer guide provenance, create a guide record, change the schema/cap, or fabricate missing baseline values.
+
+Findings and hardening:
+
+- The existing recipe-aware task-history defect was fixed by making the queryless default depend on the active recipe's authoritative recommended task. Explicit Setup is now serialized when Observe is the recipe default; ordinary `/world` still defaults to Setup. Focused C2 and combined browser coverage prove Back/Forward preserves the mounted run.
+- Derived-authority tests initially proved the happy path but did not fail closed when C2/C2B stopped supplying a shared horizon, controlled Noise values, seed/count, tick-zero wording, or output authority. The derivation service and adversarial tests now reject those source drifts rather than falling back to guide copy.
+- The first rendered short-height pass did not leave the required next-section cue visible at `1280x600`. The landing hero height was reduced for short viewports, the viewport assertion was strengthened, and the corrected state was visually reinspected.
+- Rapid navigation in the first expanded C3 Playwright matrix produced aborted-navigation diagnostics even though target states rendered. The harness now waits for route settlement between states and retains strict diagnostics assertions; no browser error is filtered or ignored.
+- The first final unit run found one stale source-shape assertion after the recipe-aware URL repair. A behavior-neutral named canonical `task` value restored the architectural contract; the focused file and complete suite then passed.
+
+Rendered and integrity evidence:
+
+- Visually inspected landing, baseline, direct contrast, contrast review, collapsed, exited, and invalid states at `1440x900`, `1280x720`, `1024x768`, `900x700`, `1280x600`, and `390x844` using local deterministic rendering. The stage remained dominant, playback/tasks/expert access remained reachable, baseline and contrast stayed distinct, and mobile avoided an oversized-card sequence or nested-scroll trap.
+- Automated coverage verifies one H1, heading order, ordered/current steps, specific control names, task and recipe focus transfer, step-heading focus, collapse/expand, stable-context exit focus, hidden-content tab exclusion, keyboard order, reduced motion, document overflow, Axe, and quiet browser diagnostics.
+- Actual browser zoom, screen-reader or other assistive-technology use, forced colors, complete touch operation, participant comprehension, educational outcomes, empirical validity, and formal WCAG conformance remain unverified.
+- The required persistence search found only pre-existing preference, instrumentation, scenario/panel, and bounded `ortus.runComparison.v1` paths. C3 adds no persistence and no storage key. The definition is static content, guide ID is URL state, and current step is mounted-page state only.
+- No production file under `src/simulation` changed. C3 changes no scheduler, deterministic RNG, Flocking rule/default/bound/metric/preset, recipe, prepared comparison, scenario service, snapshot, intervention, Experiment Runner, comparison persistence, Atlas, Lab, Builder execution boundary, dependency, remote asset, backend, analytics, or telemetry.
+- Alignment and Dispersion remain stylized model outputs. The guide does not reveal fixed-seed expected results in advance or claim fragmentation, spread increase, causality, robustness, significance, validation, a universal threshold, real-world applicability, comprehension, or mastery.
+
+Final verification:
+
+- Focused guide/roadmap contracts: `4 files / 26 tests passed (4.76s)`.
+- Dedicated C3 Playwright after final history hardening: `13 passed (1.8m)`.
+- Research World Playwright: `53 passed (4.3m)`.
+- Combined Starter/C2/C3 Playwright: `64 passed (6.4m)`; the C3 portion was `13/13` across all required viewports and states.
+- Complete Playwright/Axe suite: `161 passed (13.2m)`.
+- All final browser runs had zero failures, retries, or skips; diagnostics and Axe assertions passed.
+- Typecheck: passed in `1.20s` after the final source adjustment.
+- Unit tests: `78 files / 647 tests` passed in `55.41s`.
+- Production build: passed in `18.86s`; Next compiled in `3.1s`, generated `22` pages, and emitted the static guide route.
+- Simulation performance smoke: Flocking-100 `231.28` ticks/sec, Flocking-500 `30.82`, Forest Fire `49.77`, and Predator-Prey `139.42`.
+- Bounded Atlas smoke: `2` runs / `10` work units / horizon `5` completed in `27.66ms`; this remains an executor smoke, not a scalability or validation claim.
+- `git diff --check`: passed before the final evidence-only documentation update and is rerun at the commit gate.
+- `npm run lint: unavailable, package.json has no lint script.`
+
+Roadmap result:
+
+- R1 complete.
+- R1B complete.
+- R2 complete.
+- R2B complete.
+- C1 complete.
+- C1B complete.
+- C2 complete.
+- C2B complete.
+- C3 complete.
+- Decision: conditionally ready for C3B because implementation defects are resolved and only external zoom, assistive-technology, forced-colors, touch, participant, educational-outcome, empirical-validity, and formal-conformance verification remains.
+- C3B: Guided Investigation Audit is next and has not started.
+- C4 has not started.
+- F1 remains paused under E3 Analytical Lenses.
+- Commit gate target: `feat: add guided investigation tutorial world`; no push is authorized.

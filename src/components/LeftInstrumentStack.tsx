@@ -8,8 +8,10 @@ import { ModelExplanationPanel } from "./ModelExplanationPanel";
 import { RunSettingsPanel } from "./RunSettingsPanel";
 import { WorldComparePanel } from "./WorldComparePanel";
 import { WorldObservePanel } from "./WorldObservePanel";
+import { GuidedInvestigationPanel } from "./starterWorlds/GuidedInvestigationPanel";
 import { getWorkspacePanelDefinition } from "../lib/workspacePanels";
 import { getSimulationWorkspaceMode, type SimulationWorkspaceModeId } from "../lib/workspaceModes";
+import type { GuidedInvestigationAuthority, StarterWorldLaunch } from "../lib/starterWorlds";
 
 interface LeftInstrumentStackProps {
   activeMode: SimulationWorkspaceModeId;
@@ -17,6 +19,12 @@ interface LeftInstrumentStackProps {
   toolsHidden: boolean;
   onHideTools: () => void;
   onShowTools: () => void;
+  guidedInvestigation?: {
+    authority: GuidedInvestigationAuthority;
+    launch: StarterWorldLaunch;
+  };
+  onExitGuide?: () => void;
+  onFocusPlayback?: () => void;
 }
 
 export function LeftInstrumentStack({
@@ -24,7 +32,10 @@ export function LeftInstrumentStack({
   onModeChange,
   toolsHidden,
   onHideTools,
-  onShowTools
+  onShowTools,
+  guidedInvestigation,
+  onExitGuide,
+  onFocusPlayback
 }: LeftInstrumentStackProps) {
   const mode = getSimulationWorkspaceMode(activeMode);
   const [moreOpen, setMoreOpen] = useState(false);
@@ -37,6 +48,7 @@ export function LeftInstrumentStack({
   const panelHeadingRef = useRef<HTMLHeadingElement>(null);
   const panelScrollRef = useRef<HTMLDivElement>(null);
   const focusPanelAfterChangeRef = useRef(false);
+  const scrollTaskAfterGuideActionRef = useRef(false);
   const moreCurrent = moreModes.some((candidate) => candidate.id === activeMode);
 
   useEffect(() => {
@@ -61,7 +73,14 @@ export function LeftInstrumentStack({
       return;
     }
     focusPanelAfterChangeRef.current = false;
-    window.requestAnimationFrame(() => panelHeadingRef.current?.focus());
+    window.requestAnimationFrame(() => {
+      if (scrollTaskAfterGuideActionRef.current && panelScrollRef.current) {
+        scrollTaskAfterGuideActionRef.current = false;
+        const guide = panelScrollRef.current.querySelector<HTMLElement>("[data-guided-investigation-panel]");
+        panelScrollRef.current.scrollTop = guide?.offsetHeight ?? 0;
+      }
+      panelHeadingRef.current?.focus();
+    });
   }, [activeMode, toolsHidden]);
 
   useEffect(() => {
@@ -95,6 +114,21 @@ export function LeftInstrumentStack({
       }
       focusPanelAfterChangeRef.current = false;
       window.requestAnimationFrame(() => panelHeadingRef.current?.focus());
+    }
+  }
+
+  function chooseModeFromGuide(modeId: SimulationWorkspaceModeId) {
+    scrollTaskAfterGuideActionRef.current = true;
+    chooseMode(modeId);
+    if (modeId === activeMode && !toolsHidden) {
+      window.requestAnimationFrame(() => {
+        if (!scrollTaskAfterGuideActionRef.current || !panelScrollRef.current) {
+          return;
+        }
+        scrollTaskAfterGuideActionRef.current = false;
+        const guide = panelScrollRef.current.querySelector<HTMLElement>("[data-guided-investigation-panel]");
+        panelScrollRef.current.scrollTop = guide?.offsetHeight ?? 0;
+      });
     }
   }
 
@@ -279,6 +313,16 @@ export function LeftInstrumentStack({
             </button>
           </header>
           <div ref={panelScrollRef} className="workspace-context-panel__scroll" data-intentional-scroll-region="workspace-context">
+            {guidedInvestigation && onExitGuide && onFocusPlayback ? (
+              <GuidedInvestigationPanel
+                authority={guidedInvestigation.authority}
+                launch={guidedInvestigation.launch}
+                activeMode={activeMode}
+                onOpenTask={chooseModeFromGuide}
+                onFocusPlayback={onFocusPlayback}
+                onExitGuide={onExitGuide}
+              />
+            ) : null}
             <div hidden={activeMode !== "setup"}>
               <RailPanelSlot panelId="runSettings">
                 <RunSettingsPanel active={activeMode === "setup" && !toolsHidden} />

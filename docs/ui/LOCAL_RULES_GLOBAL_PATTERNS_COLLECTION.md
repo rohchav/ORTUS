@@ -2,7 +2,7 @@
 
 Prompt: C2 / C2B
 
-Status: C2 and C2B complete; C3 next
+Status: C2, C2B, and C3 complete; C3B next
 
 ## 1. Catalog Integration
 
@@ -59,3 +59,7 @@ Invalid recipe requests use the existing Starter launch error surface with `role
 ## 14. Verification
 
 `tests/ui/starter-world-pack.spec.ts` covers catalog integration, collection hierarchy, all four details, all eight launches, recipe values, tick-zero disclosure, reload, Back, running/draft/comparison sibling replacement, focus, dismissal, hostile requests, six viewports, mobile operation, reduced motion, diagnostics, and Axe. C2B's audit is `docs/product/FLAGSHIP_STARTER_PACK_ONE_AUDIT.md`; full final gates are recorded in `docs/codex/SESSION_LOG.md`.
+
+## 15. Guided Investigation Integration
+
+C3 adds one subordinate `Reading a Flock` callout to this collection and the Coordination detail page. It links to `/worlds/guides/reading-a-flock`, derives the prepared pair and output names from the audited pack, and leaves all ordinary recipe actions prominent. The guide is not a fifth pack world or a twelfth catalog world, does not participate in search/filter/counts, and adds no progress, automatic execution, automatic capture, comparison store, or runtime behavior. C3B is next and has not started.

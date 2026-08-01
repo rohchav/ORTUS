@@ -1,10 +1,13 @@
 import Link from "next/link";
 import {
+  deriveGuidedInvestigationAuthority,
+  getGuidedInvestigationForWorld,
   getPreparedStarterComparisonForWorld,
   requireStarterWorldById,
   starterWorldSystemFormLabels,
   type StarterWorldPackDefinition
 } from "../../lib/starterWorlds";
+import { GuidedInvestigationCallout } from "./GuidedInvestigationCallout";
 import { StarterWorldCollectionVisual } from "./StarterWorldCollectionVisual";
 import { StarterWorldVisual } from "./StarterWorldVisual";
 
@@ -15,6 +18,8 @@ interface StarterWorldPackDetailProps {
 export function StarterWorldPackDetail({ pack }: StarterWorldPackDetailProps) {
   const worlds = pack.worldIds.map(requireStarterWorldById);
   const featured = requireStarterWorldById(pack.featuredWorldId);
+  const guide = getGuidedInvestigationForWorld(featured.id);
+  const guideAuthority = guide ? deriveGuidedInvestigationAuthority(guide) : undefined;
 
   return (
     <article className="starter-pack-detail" data-starter-pack={pack.id}>
@@ -33,6 +38,7 @@ export function StarterWorldPackDetail({ pack }: StarterWorldPackDetailProps) {
       </header>
 
       <div className="starter-pack-detail__body">
+        {guideAuthority ? <GuidedInvestigationCallout authority={guideAuthority} context="collection" /> : null}
         <section className="starter-pack-detail__questions" aria-labelledby="pack-questions-title">
           <header>
             <p>01 / Four systems</p>

@@ -19,22 +19,27 @@ export default async function WorldPage({ searchParams }: WorldPageProps) {
   const template = singleValue(query.template);
   const task = singleValue(query.task);
   const recipe = singleValue(query.recipe);
+  const guide = singleValue(query.guide);
 
   if (query.recipe !== undefined && query.starter === undefined) {
     return <StarterLaunchError message="A prepared recipe must identify its Starter World." />;
   }
+  if (query.guide !== undefined && query.starter === undefined) {
+    return <StarterLaunchError message="A guided investigation must identify its Starter World and prepared recipe." />;
+  }
 
   if (query.starter !== undefined) {
-    if ([query.starter, query.recipe, query.task].some(Array.isArray)) {
+    if ([query.starter, query.recipe, query.guide, query.task].some(Array.isArray)) {
       return <StarterLaunchError message="The Starter World launch URL contains duplicate values." />;
     }
-    if (Object.keys(query).some((key) => key !== "starter" && key !== "recipe" && key !== "task")) {
+    if (Object.keys(query).some((key) => key !== "starter" && key !== "recipe" && key !== "guide" && key !== "task")) {
       return <StarterLaunchError message="The Starter World launch URL contains unsupported runtime overrides." />;
     }
 
     const result = resolveStarterWorldLaunch({
       starterId: query.starter,
       ...(recipe ? { recipeId: recipe } : {}),
+      ...(guide ? { guideId: guide } : {}),
       ...(task ? { task } : {})
     });
     if (!result.ok || !isTemplateId(result.launch.templateId)) {

@@ -1,10 +1,10 @@
 # ORTUS Full Prompt Roadmap
 
-*Last updated after Prompt C2B Flagship Starter Pack One Audit + Hardening.*
+*Last updated after Prompt C3 Guided Investigation / Tutorial World.*
 
 ## Current Status
 
-ORTUS has completed the core runtime/template and modeling-workbench foundations through Prompt 39B, the neural/runtime-lab side track, the Research World sequence through GW9B, the UX3 through UX6B track, RH1 source-of-truth hygiene, and the product reset through C2B.
+ORTUS has completed the core runtime/template and modeling-workbench foundations through Prompt 39B, the neural/runtime-lab side track, the Research World sequence through GW9B, the UX3 through UX6B track, RH1 source-of-truth hygiene, and the product reset through C3.
 
 Current project status:
 
@@ -58,6 +58,7 @@ Completed implementation prompt: Prompt C1 — Starter World Content Framework +
 Completed audit prompt: Prompt C1B — Starter World Content Framework Audit + Hardening; audits and hardens source accuracy, runtime references, registry immutability, content lint, seven first activities, strict ID-only handoffs, model boundaries, portfolio tiers, rendered accessibility, and responsive behavior without changing simulation runtime or persistence
 Completed implementation prompt: Prompt C2 — Flagship Starter Pack One; adds the strict `Local Rules, Global Patterns` pack, four focused runnable worlds, eight validated recipe launches, four comparisons whose differences are derived from effective scenarios, one bounded Forest Fire corridor preset, collection/detail UI, and recipe-aware fresh-run World context without new engine services, metrics, interventions, general runtime composition, or persistence
 Completed audit prompt: Prompt C2B — Flagship Starter Pack One Audit + Hardening; independently audits all eight effective scenarios and four deterministic pairs, fixes hidden tick-zero fuel quantity, sibling focus, shared-setting hierarchy, and overcommitted comparison language, and preserves runtime and persistence scope
+Completed implementation prompt: Prompt C3 — Guided Investigation / Tutorial World; adds one strict recursively frozen `Reading a Flock` guide, a static landing route, strict guide-aware fresh-run handoffs, and an optional non-persistent World guide over the audited clear/noisy Coordination pair without new simulation, comparison, persistence, progression, or learning-inference behavior
 Post-30B stabilization completed: repo hygiene, durable Codex context, dependency repair, generated-artifact cleanup, and runtime performance/scalability baseline
 UX6 complete.
 UX6B complete.
@@ -71,10 +72,11 @@ C1 complete.
 C1B complete.
 C2 complete.
 C2B complete.
-C3: Guided Investigation / Tutorial World is next.
+C3 complete.
+C3B: Guided Investigation Audit is next and has not started.
 F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, and trajectory motif analytics are paused under E3 Analytical Lenses.
 
-Completed sequence: UX6B -> GW9 -> GW9B -> R1 -> R1B -> R2 -> R2B -> C1 -> C1B -> C2 -> C2B. C3 is next and has not started.
+Completed sequence: UX6B -> GW9 -> GW9B -> R1 -> R1B -> R2 -> R2B -> C1 -> C1B -> C2 -> C2B -> C3. C3B is next and has not started.
 ```
 
 Critical global boundary:
@@ -107,7 +109,7 @@ E2 Atlas as Question Map -> E2B Atlas Question-Map Audit
 E3 Analytical Lenses -> E3B Analytical-Lens Audit
 ```
 
-R1, R1B, R2, R2B, C1, C1B, C2, and C2B are complete. C3: Guided Investigation / Tutorial World is next and has not started. The prior post-GW9B sequence that named F1 next is superseded; F0 remains historical documentation and F1 is paused under E3. C2/C2B provide and audit bounded pack/recipe/comparison content over current runtime support plus one template-owned firebreak initialization preset; they do not implement C3 or any S/E/F capability.
+R1, R1B, R2, R2B, C1, C1B, C2, C2B, and C3 are complete. C3B: Guided Investigation Audit is next and has not started. The prior post-GW9B sequence that named F1 next is superseded; F0 remains historical documentation and F1 is paused under E3. C3 adds one bounded guide over C2/C2B authority; it does not implement C3B, C4, or any S/E/F capability.
 
 Current production templates:
 
@@ -3727,8 +3729,8 @@ No global service availability treated as template runtime support.
 Recommended immediate next steps:
 
 ```text
-1. Prompt C3: Guided Investigation / Tutorial World is next and has not started.
-2. Do not start C3, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or later reset-roadmap capability without its dedicated prompt.
+1. Prompt C3B: Guided Investigation Audit is next and has not started.
+2. Do not start C3B, C4, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or later reset-roadmap capability without its dedicated prompt.
 3. Do not make mobile-readiness, WCAG, actual browser-zoom, screen-reader, assistive-technology, forced-colors, or user-comprehension claims without direct evidence.
 ```
 
@@ -3797,11 +3799,12 @@ Prompt C1 Starter World Content Framework + Explore-Worlds Catalog is complete.
 Prompt C1B Starter World Content Framework Audit + Hardening is complete.
 Prompt C2 Flagship Starter Pack One is complete.
 Prompt C2B Flagship Starter Pack One Audit + Hardening is complete.
+Prompt C3 Guided Investigation / Tutorial World is complete.
 R1 complete.
 R1B complete.
 R2 complete.
 R2B complete.
 C1 complete.
 C1B complete.
-C2 complete. C2B complete. C3: Guided Investigation / Tutorial World is next. F1 is paused under E3 Analytical Lenses.
+C2 complete. C2B complete. C3 complete. C3B: Guided Investigation Audit is next and has not started. F1 is paused under E3 Analytical Lenses.
 ```
