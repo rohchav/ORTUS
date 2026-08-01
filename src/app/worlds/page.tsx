@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { ExploreWorldsCatalog } from "../../components/starterWorlds/ExploreWorldsCatalog";
-import { featuredStarterWorld, runnableStarterWorlds } from "../../lib/starterWorlds";
+import {
+  preparedStarterComparisons,
+  runnableStarterWorlds,
+  starterWorldPacks
+} from "../../lib/starterWorlds";
 
 export const metadata: Metadata = {
   title: "Explore Worlds | ORTUS",
@@ -8,5 +12,11 @@ export const metadata: Metadata = {
 };
 
 export default function ExploreWorldsPage() {
-  return <ExploreWorldsCatalog worlds={runnableStarterWorlds} featuredWorldId={featuredStarterWorld.id} />;
+  return (
+    <ExploreWorldsCatalog
+      worlds={runnableStarterWorlds}
+      featuredPack={starterWorldPacks[0]!}
+      featuredComparisons={preparedStarterComparisons}
+    />
+  );
 }

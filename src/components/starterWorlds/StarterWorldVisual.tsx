@@ -51,6 +51,22 @@ const signalEdges = [
   [28, 73, 45, 43, "excite"], [45, 43, 63, 22, "inhibit"], [45, 43, 55, 72, "excite"],
   [63, 22, 76, 48, "excite"], [55, 72, 76, 48, "inhibit"], [76, 48, 88, 28, "excite"], [76, 48, 88, 72, "excite"]
 ] as const;
+const comparisonMotionPoints = [
+  [16, 22, 3], [34, 38, -4], [57, 24, 5], [76, 43, -2], [25, 70, 4], [52, 63, -3], [82, 74, 2]
+] as const;
+const comparisonOutbreakClusterPoints = [
+  [35, 27], [48, 29], [58, 38], [39, 43], [51, 49], [63, 51], [35, 59], [48, 66], [60, 68]
+] as const;
+const comparisonOutbreakHotspotPoints = [
+  [16, 22], [27, 27], [20, 38], [66, 24], [79, 31], [70, 42], [28, 67], [40, 75], [21, 80]
+] as const;
+const firebreakCells = Array.from({ length: 60 }, (_, index) => {
+  const column = index % 10;
+  if (column === 6) {
+    return "corridor";
+  }
+  return column < 6 && index % 4 !== 0 ? "burned" : "fuel";
+});
 
 export function StarterWorldVisual({ kind, compact = false }: StarterWorldVisualProps) {
   return (
@@ -161,6 +177,75 @@ export function StarterWorldVisual({ kind, compact = false }: StarterWorldVisual
               className={`starter-world-visual__signal-node starter-world-visual__signal-node--${state}`}
               style={{ "--x": `${x}%`, "--y": `${y}%` } as VisualStyle}
             />
+          ))}
+        </div>
+      ) : null}
+
+      {kind === "coordination-noise" ? (
+        <div className="starter-world-visual__paired starter-world-visual__paired--coordination">
+          <div>
+            {comparisonMotionPoints.map(([x, y, rotation], index) => (
+              <span
+                key={`clear-${index}`}
+                className="starter-world-visual__paired-boid"
+                style={{ "--x": `${x}%`, "--y": `${y}%`, "--rotation": `${rotation}deg` } as VisualStyle}
+              />
+            ))}
+          </div>
+          <div>
+            {comparisonMotionPoints.map(([x, y], index) => (
+              <span
+                key={`noise-${index}`}
+                className="starter-world-visual__paired-boid"
+                style={{ "--x": `${x}%`, "--y": `${y}%`, "--rotation": `${-56 + index * 23}deg` } as VisualStyle}
+              />
+            ))}
+          </div>
+        </div>
+      ) : null}
+
+      {kind === "clustered-outbreaks" ? (
+        <div className="starter-world-visual__paired starter-world-visual__paired--outbreaks">
+          <div>
+            <span className="starter-world-visual__outbreak-ring" />
+            {comparisonOutbreakClusterPoints.map(([x, y], index) => (
+              <span
+                key={`cluster-${index}`}
+                className="starter-world-visual__outbreak-node"
+                style={{ "--x": `${x}%`, "--y": `${y}%` } as VisualStyle}
+              />
+            ))}
+          </div>
+          <div>
+            {comparisonOutbreakHotspotPoints.map(([x, y], index) => (
+              <span
+                key={`hotspot-${index}`}
+                className="starter-world-visual__outbreak-node"
+                style={{ "--x": `${x}%`, "--y": `${y}%` } as VisualStyle}
+              />
+            ))}
+            <span className="starter-world-visual__hotspot starter-world-visual__hotspot--one" />
+            <span className="starter-world-visual__hotspot starter-world-visual__hotspot--two" />
+            <span className="starter-world-visual__hotspot starter-world-visual__hotspot--three" />
+          </div>
+        </div>
+      ) : null}
+
+      {kind === "predator-pressure" ? (
+        <div className="starter-world-visual__pressure">
+          <span className="starter-world-visual__pressure-line starter-world-visual__pressure-line--prey" />
+          <span className="starter-world-visual__pressure-line starter-world-visual__pressure-line--predator" />
+          <span className="starter-world-visual__pressure-marker starter-world-visual__pressure-marker--one" />
+          <span className="starter-world-visual__pressure-marker starter-world-visual__pressure-marker--two" />
+          <span className="starter-world-visual__pressure-marker starter-world-visual__pressure-marker--three" />
+          <span className="starter-world-visual__pressure-axis" />
+        </div>
+      ) : null}
+
+      {kind === "firebreak-corridor" ? (
+        <div className="starter-world-visual__grid starter-world-visual__grid--firebreak">
+          {firebreakCells.map((state, index) => (
+            <span key={index} className={`starter-world-visual__cell starter-world-visual__cell--${state}`} />
           ))}
         </div>
       ) : null}

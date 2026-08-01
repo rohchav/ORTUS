@@ -106,12 +106,12 @@ for (const viewport of viewports) {
     await page.goto("/worlds", { waitUntil: "domcontentloaded" });
     await expect(page.locator("[data-worlds-catalog]")).toBeVisible();
     await expect(page.getByRole("heading", { level: 1, name: "Explore Worlds" })).toHaveCount(1);
-    await expect(page.getByRole("heading", { level: 2, name: "How can coordinated movement emerge without a leader?" })).toBeVisible();
-    await expect(page.getByRole("link", { name: "Explore featured world: Collective Motion" })).toHaveAttribute(
+    await expect(page.getByRole("heading", { level: 2, name: "Local Rules, Global Patterns" })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Open collection: Local Rules, Global Patterns" })).toHaveAttribute(
       "href",
-      "/worlds/collective-motion"
+      "/worlds/packs/local-rules-global-patterns"
     );
-    await expect(page.locator("[data-starter-card]")).toHaveCount(7);
+    await expect(page.locator("[data-starter-card]")).toHaveCount(11);
     await expect(page.getByLabel("Explore Worlds filters")).toBeVisible();
     await expect(page.getByLabel("Search worlds")).toBeVisible();
     await expect(page.getByText("Active filters:")).toBeVisible();
@@ -124,6 +124,24 @@ for (const viewport of viewports) {
     await expectNoDiagnostics(diagnostics);
   });
 }
+
+test("mobile catalog keeps search immediate and filters explicitly disclosable without persistence", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/worlds", { waitUntil: "networkidle" });
+  const toggle = page.getByRole("button", { name: "Filters", exact: true });
+  const domain = page.getByLabel("Domain", { exact: true });
+  await expect(toggle).toHaveAttribute("aria-expanded", "false");
+  await expect(page.getByLabel("Search worlds")).toBeVisible();
+  await expect(domain).not.toBeVisible();
+  await toggle.click();
+  await expect(toggle).toHaveAttribute("aria-expanded", "true");
+  await expect(domain).toBeVisible();
+  await domain.selectOption("population-dynamics");
+  await expect(page.locator("[data-starter-card='predator-pressure-recovery']")).toBeVisible();
+  await toggle.click();
+  await expect(domain).not.toBeVisible();
+  await expect(page.getByText("Domain: Population dynamics")).toBeVisible();
+});
 
 test("catalog card actions have world-specific accessible names and visuals remain non-quantitative", async ({ page }) => {
   await page.goto("/worlds", { waitUntil: "domcontentloaded" });
@@ -157,7 +175,7 @@ test("catalog filters, combined filters, search, empty state, reset, keyboard in
   await page.getByRole("button", { name: "Reset", exact: true }).click();
 
   await page.getByLabel("System form", { exact: true }).selectOption("grid");
-  await expect(page.locator("[data-starter-card]")).toHaveCount(2);
+  await expect(page.locator("[data-starter-card]")).toHaveCount(3);
   await page.getByRole("button", { name: "Reset", exact: true }).click();
 
   await page.getByLabel("Complexity", { exact: true }).selectOption("quick-start");
@@ -167,8 +185,9 @@ test("catalog filters, combined filters, search, empty state, reset, keyboard in
   await page.getByLabel("Domain", { exact: true }).selectOption("living-systems");
   await page.getByLabel("System form", { exact: true }).selectOption("grid");
   await page.getByLabel("Complexity", { exact: true }).selectOption("layered");
-  await expect(page.locator("[data-starter-card]")).toHaveCount(1);
+  await expect(page.locator("[data-starter-card]")).toHaveCount(2);
   await expect(page.locator("[data-starter-card='forest-spread']")).toBeVisible();
+  await expect(page.locator("[data-starter-card='patch-density-firebreaks']")).toBeVisible();
   await page.getByRole("button", { name: "Reset", exact: true }).click();
 
   const search = page.getByLabel("Search worlds");
@@ -184,7 +203,7 @@ test("catalog filters, combined filters, search, empty state, reset, keyboard in
   await expect(page.getByRole("heading", { name: "No runnable worlds match this combination" })).toBeVisible();
   await expect(page.getByText(/does not add planned or imaginary results/i)).toBeVisible();
   await page.getByRole("button", { name: "Reset browse controls" }).press("Enter");
-  await expect(page.locator("[data-starter-card]")).toHaveCount(7);
+  await expect(page.locator("[data-starter-card]")).toHaveCount(11);
   await expect(page.getByText("Active filters: None")).toBeVisible();
   expect(await readStorage(page)).toEqual(storageBefore);
 });

@@ -3895,3 +3895,76 @@ Roadmap result:
 - C1B complete.
 - C2: Flagship Starter Pack One is next.
 - F1 remains paused under E3 Analytical Lenses.
+
+### Prompt C2: Flagship Starter Pack One - Local Rules, Global Patterns
+
+Date: 2026-07-31
+
+Goal: prove that the Starter World framework can support deeper controlled experiences over existing runtime behavior by adding one coherent four-world collection, eight strict launch recipes, and four derived prepared comparisons without adding a general engine mechanic or persistence.
+
+Starting state:
+
+- Branch `main` was clean and aligned at `523eacb test: audit starter world content framework`; `HEAD` matched `origin/main`.
+- C1B baseline evidence was Research World shell `53` passed, Starter Worlds `16` passed, Start/World reset `18` passed, full UI `131` passed, `76 files / 623 tests`, typecheck, production build, simulation/Atlas performance smoke, and `git diff --check`.
+- `npm run lint: unavailable, package.json has no lint script.`
+
+Implemented content and contracts:
+
+- Added strict version-1 `StarterWorldPackDefinition`, `StarterWorldLaunchRecipe`, and `PreparedStarterComparison` artifacts under `src/lib/starterWorlds/packs/`, with deterministic registry order, strict Zod validation, unsafe-key rejection, authoritative cross-validation, and recursive freezing.
+- Added the `Local Rules, Global Patterns` pack with four new Starter Worlds alongside the original seven: Coordination Under Sensor Noise, Clustered Outbreak Starts, Predator Pressure and Recovery, and Patch Density and Firebreaks.
+- Added eight bounded recipes and four comparisons. Controlled differences and shared conditions are derived from authoritative recipe values rather than accepted as prose claims.
+- Added the one necessary template-owned initialization preset, Forest Fire `firebreak-corridor`. It creates a full-height nonburnable corridor through existing empty-cell state and the existing spread pipeline; it adds no spread rule, field, metric, intervention, default, bound, or capability.
+- Added strict recipe handoff at `/world?starter=<id>&recipe=<id>`. Missing, unknown, malformed, duplicate, mismatched, extra, stale-preset, and invalid-value requests stop before World construction; valid launches create a fresh paused tick-0 engine with the authoritative template, preset, seed, parameter values, and recommended task.
+- Added `/worlds/packs/local-rules-global-patterns`, a featured collection region on `/worlds`, four action-first detail experiences, two recipe cards per flagship world, compact definition-backed World context, page-session-only nudge dismissal, and explicit sibling-recipe navigation.
+- Added deterministic local illustrations with text and shape distinctions. The outbreak pair encodes the same nine initial infections on both sides, so its visual no longer contradicts the controlled recipe count.
+- Extended content lint to reject unsupported outputs, generic expected patterns, exposed internal IDs, unavailable save/publish/send guidance, duplicate questions, unsupported claims, mismatched controlled values, unsafe fields, and other runtime-honesty violations.
+
+Audit findings and corrections:
+
+- A rendered outbreak illustration initially showed five concentrated markers against four hotspot markers even though both recipes initialize nine infections. Both sides now render nine deterministic markers, and Playwright asserts equal counts.
+- Expected-pattern lint initially enforced bounded opening language but did not require the prose to name real outputs and a real controlled difference. Deterministic token-overlap checks and adversarial tests now reject generic copy.
+- Forest Fire and UI wording were tightened so stochastic outcomes are not described as deterministic trials and matching recipe values are not described as scientifically validated.
+- Documentation was corrected to distinguish registry-time validation from request-time validation and C1 starter-only URLs from C2 recipe URLs.
+- Newly added viewport-scaled heading sizes were replaced with fixed breakpoint sizes to preserve the repository typography contract.
+
+Rendered evidence:
+
+- Audited Explore Worlds at `1440x900` and `1280x720`; the collection at `1440x900`, `1280x720`, and `390x844`; all four flagship details at `1280x720`; a flagship detail at `390x844`; all eight recipe Worlds at `1280x720`; one recipe World at `390x844`; and invalid recipe handling at `1280x720`.
+- The collection remains action-first, the four visuals are coherent but distinct, controlled differences read as named content rather than raw payloads, research stays subordinate, limitations remain proportional, and all actions remain reachable.
+- Temporary rendered-audit screenshots remained in `/tmp` and were not committed.
+- Actual browser zoom, screen-reader or other assistive-technology use, forced colors, complete touch operation, participant comprehension, educational effectiveness, and formal WCAG conformance remain unverified.
+
+Integrity:
+
+- C2 changes no simulation scheduling, seeded randomness, general engine service, template rule, parameter default, parameter bound, metric, intervention, Experiment Runner behavior, comparison schema/cap, Atlas execution, or Builder execution boundary.
+- The Forest Fire preset is a bounded deterministic initialization arrangement using existing states and mechanics; no other scenario or preset behavior changed.
+- C2 adds no persistence and no storage key. Pack, recipe, collection, and comparison guidance remain content, URL, or page-session state. Existing World comparison storage remains unchanged.
+- Prepared comparisons are instructional configuration pairs, not experiment results, Lab evidence, Atlas discoveries, causal evidence, robustness evidence, or empirical validation.
+
+Final verification:
+
+- Focused Research World shell: `53 passed (6.4m)`.
+- Final dedicated C2 Playwright: `16 passed (2.6m)`.
+- Complete Playwright/Axe suite: `148 passed (16.7m)` with no failures, retries, or skips.
+- Typecheck: passed in `3.49s`.
+- Unit tests: `77 files / 636 tests` passed in `83.77s`.
+- Production build: passed in `29.62s`; Next compiled in `5.6s`, generated `21` pages, and emitted the collection plus all `11` Starter World detail routes.
+- Simulation performance smoke: Flocking-100 `147.59` ticks/sec, Flocking-500 `19.91`, Forest Fire `30.00`, and Predator-Prey `87.76`.
+- Bounded Atlas smoke: `2` runs / `10` work units / horizon `5` completed in `46.16ms`; this is an executor smoke, not a scalability or validation claim.
+- `git diff --check`: passed.
+- `npm run lint: unavailable, package.json has no lint script.`
+- One browser attempt against a long-lived development server after a production build encountered stale missing Next chunks. The contaminated server was stopped; clean focused and complete invocations passed and are the results reported above.
+
+Roadmap result:
+
+- R1 complete.
+- R1B complete.
+- R2 complete.
+- R2B complete.
+- C1 complete.
+- C1B complete.
+- C2 complete.
+- Decision: conditionally ready for C2B because only external zoom, assistive-technology, forced-colors, touch, participant, educational-outcome, and formal-conformance verification remains.
+- C2B: Starter Pack One Audit is next and has not started.
+- C3 has not started.
+- F1 remains paused under E3 Analytical Lenses.

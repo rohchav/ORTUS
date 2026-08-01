@@ -1,6 +1,6 @@
 # ORTUS Current Context
 
-Last updated: 2026-07-31 after Prompt C1B Starter World Content Framework Audit + Hardening
+Last updated: 2026-07-31 after Prompt C2 Flagship Starter Pack One
 
 ## Current Prompt Status
 
@@ -10,17 +10,22 @@ Last updated: 2026-07-31 after Prompt C1B Starter World Content Framework Audit 
 - R2B complete.
 - C1 complete.
 - C1B complete.
-- C2: Flagship Starter Pack One is next.
+- C2 complete.
+- C2B: Starter Pack One Audit is next.
 
-`/` is the task-centered Start Hub; `/worlds` is its seven-entry runnable Starter World catalog; `/worlds/[slug]` is the source-backed detail experience; `/world` is the live workbench; `/builder`, `/atlas`, and `/lab` retain their established behavior. Primary navigation remains Start, World, Workshop, and a keyboard-operated Research tools menu. Explore Worlds is Start-adjacent rather than an equal global destination. F1 remains paused under E3 Analytical Lenses.
+`/` is the task-centered Start Hub; `/worlds` is its eleven-entry runnable Starter World catalog; `/worlds/[slug]` is the source-backed detail experience; `/worlds/packs/local-rules-global-patterns` is the first flagship collection; `/world` is the live workbench; `/builder`, `/atlas`, and `/lab` retain their established behavior. Primary navigation remains Start, World, Workshop, and a keyboard-operated Research tools menu. Explore Worlds is Start-adjacent rather than an equal global destination. F1 remains paused under E3 Analytical Lenses.
 
 C1's implementation records are `docs/product/STARTER_WORLD_CONTENT_FRAMEWORK.md`, `docs/product/STARTER_WORLD_PORTFOLIO.md`, and `docs/ui/EXPLORE_WORLDS_CATALOG.md`. The strict version `"1"` data model and validated registry are in `src/lib/starterWorlds`. All seven current production templates have rich runnable definitions with represented anatomy, bounded taxonomy, one existing first-change control, existing observations, two to four investigations, one to three verified sources, a compact model boundary, and current-versus-future remix status.
 
-Runnable definitions revalidate production template, initialization preset, metric, parameter, and optional intervention references. `defaultScenarioId` refers to the authoritative template initialization preset used through existing scenario services; C1 does not create a parallel scenario registry. C1B recursively freezes the validated registry and strengthens content/runtime checks. Canonical launch links carry only the Starter World ID; World derives and revalidates template and default preset, rejects runtime overrides, and creates a fresh deterministic paused tick-0 run through `createDefaultScenario`, `updateScenarioPreset`, and `validateScenario`. Malformed launches render an error before the World shell is constructed.
+Runnable definitions revalidate production template, initialization preset, metric, parameter, and optional intervention references. `defaultScenarioId` refers to the authoritative template initialization preset used through existing scenario services; C1 does not create a parallel scenario registry. C1B recursively freezes the validated registry and strengthens content/runtime checks. C1 canonical launch links carry only the Starter World ID; C2 flagship links additionally carry one strict recipe ID. World derives and revalidates the remaining runtime identity, rejects public runtime overrides, and creates a fresh deterministic paused tick-0 run through existing scenario services. Malformed launches render an error before the World shell is constructed.
 
 Starter World content is metadata and presentation, not runtime capability. The seven definitions do not change template logic, defaults, bounds, metrics, interventions, scheduling, RNG, snapshots, experiments, comparisons, Atlas, Builder, or persistence. Portfolio candidates are documentation only. Sources provide a research connection; they do not validate or calibrate ORTUS models. C1/C1B add no storage key.
 
-C1B's audit record is `docs/product/STARTER_WORLD_CONTENT_FRAMEWORK_AUDIT.md`. It fixes one P0 nested-registry mutation path, one P1 launch-authority family, and nine bounded P2 families covering source metadata, content/runtime cross-checks, accessible link names, visual implication, portfolio fit, Tier C multiscale fields, and displayed metric labels. Every documented first change has a deterministic fixed-seed metric regression and a rendered control/rebuild/output path. Final focused and complete Playwright/Axe reruns passed without retries or skipped tests. C1B is complete; C2 has not started.
+C1B's audit record is `docs/product/STARTER_WORLD_CONTENT_FRAMEWORK_AUDIT.md`. It fixes one P0 nested-registry mutation path, one P1 launch-authority family, and nine bounded P2 families covering source metadata, content/runtime cross-checks, accessible link names, visual implication, portfolio fit, Tier C multiscale fields, and displayed metric labels. Every documented first change has a deterministic fixed-seed metric regression and a rendered control/rebuild/output path. Final focused and complete Playwright/Axe reruns passed without retries or skipped tests. C1B is complete.
+
+C2's implementation records are `docs/product/FLAGSHIP_STARTER_PACK_ONE.md` and `docs/ui/LOCAL_RULES_GLOBAL_PATTERNS_COLLECTION.md`. The strict `src/lib/starterWorlds/packs` layer defines one recursively frozen pack, eight validated recipes, and four prepared comparisons whose differences and shared conditions are derived from effective scenarios. `Local Rules, Global Patterns` adds Coordination Under Sensor Noise, Clustered Outbreak Starts, Predator Pressure and Recovery, and Patch Density and Firebreaks as focused Starter World experiences over Flocking, Epidemic, Predator-Prey, and Forest Fire. Recipe URLs contain only strict starter and recipe IDs, always construct fresh paused tick-0 runs, and expose explicit sibling navigation without mutating the active run.
+
+C2 changes no engine service, scheduling contract, template parameter default or bound, metric, intervention, World comparison storage, Atlas/Lab behavior, Builder execution, or persistence. Its one template-owned addition is the deterministic Forest Fire `firebreak-corridor` initialization preset, which uses existing empty-cell state and existing spread mechanics. Prepared pairs are instructional configurations, not results, experiments, robustness evidence, causal evidence, or empirical validation. C2 is complete; C2B has not started.
 
 R2's implementation record is `docs/ui/WORLD_LAYOUT_AND_INTERACTION_RECLAIM.md`; R2B's audit record is `docs/ui/WORLD_LAYOUT_AND_INTERACTION_RECLAIM_AUDIT.md`. World uses a stable `tasks + stage/playback + active tool` frame. Setup, Observe, Change, Compare, and Explain are direct tasks; More groups Experiment Runner and Diagnostics. The selected tool owns one bounded scroll, full model notes and technical run details use focus-contained modal surfaces, and desktop collapse/restore preserves local tool state.
 
@@ -171,7 +176,7 @@ Built-in production templates currently include Epidemic Spread, Opinion Dynamic
 
 ## Completed Prompt State
 
-Durable docs and source indicate completed roadmap work through Prompt 39B plus the documented side tracks, Research World/UI work through Prompt GW9B, and R1/R1B/R2/R2B/C1/C1B. Prompt 31 through Prompt 39B are complete. UX6/UX6B established and audited the bounded Guided Builder; GW9/GW9B established and audited the bounded Atlas preview; R1 resets product entry and the World shell; R1B audits and hardens that reset; R2 reclaims the World layout and interaction hierarchy; R2B audits and hardens it; C1 adds the Starter World content/catalog layer without changing engine semantics or persistence scope; C1B audits and hardens that layer without expanding runtime or persistence.
+Durable docs and source indicate completed roadmap work through Prompt 39B plus the documented side tracks, Research World/UI work through Prompt GW9B, and R1/R1B/R2/R2B/C1/C1B/C2. Prompt 31 through Prompt 39B are complete. UX6/UX6B established and audited the bounded Guided Builder; GW9/GW9B established and audited the bounded Atlas preview; R1 resets product entry and the World shell; R1B audits and hardens that reset; R2 reclaims the World layout and interaction hierarchy; R2B audits and hardens it; C1 adds the Starter World content/catalog layer without changing engine semantics or persistence scope; C1B audits and hardens that layer; C2 adds the first bounded flagship collection and recipe comparison layer without generalizing runtime or persistence.
 
 The post-30B repository hygiene, dependency stabilization, durable context, and performance/scalability pass has also been completed. Recent commits include `dd6c256` for repo context/generated-artifact hygiene, `4949b72` for dependency and performance script stabilization, and `a80d5b7` for simulation performance instrumentation and spatial indexing foundations.
 
@@ -185,11 +190,12 @@ R2 complete.
 R2B complete.
 C1 complete.
 C1B complete.
-C2: Flagship Starter Pack One is next.
+C2 complete.
+C2B: Starter Pack One Audit is next.
 
-Completed sequence: UX6B -> GW9 -> GW9B -> R1 -> R1B -> R2 -> R2B -> C1 -> C1B. C2 has not started.
+Completed sequence: UX6B -> GW9 -> GW9B -> R1 -> R1B -> R2 -> R2B -> C1 -> C1B -> C2. C2B has not started.
 
-Do not start C2, recipe-first Builder, composition, multiscale runtime, adaptive-controller generalization, Lab/Atlas persistence, E3, F1, or other reset-roadmap capability without its dedicated prompt. Rendered Playwright/Axe evidence does not establish actual browser zoom, screen-reader, assistive-technology, forced-colors, full WCAG, mobile-workflow, or user-comprehension readiness.
+Do not start C2B, C3, recipe-first Builder, composition, multiscale runtime, adaptive-controller generalization, Lab/Atlas persistence, E3, F1, or other reset-roadmap capability without its dedicated prompt. Rendered Playwright/Axe evidence does not establish actual browser zoom, screen-reader, assistive-technology, forced-colors, full WCAG, mobile-workflow, or user-comprehension readiness.
 
 Implemented runtime foundations include scenarios, snapshots, template-defined behavior modes, agent composition, interventions, experiments, run summaries/comparison, seeded randomness, metrics, spaces, template metadata, and a narrow Opinion Dynamics `socialLearning` behavior mode audited in Prompt 33D.
 
@@ -302,7 +308,7 @@ Prompt 35 and Prompt 35B were committed together in `7696381 feat: Implement Mod
 
 ## Next Recommended Prompt
 
-Prompt C2: Flagship Starter Pack One is next and has not started. Do not begin C2, F1, or any later reset-roadmap capability without its dedicated prompt. F1 remains paused under E3 Analytical Lenses.
+Prompt C2B: Starter Pack One Audit is next and has not started. Do not begin C2B, C3, F1, or any later reset-roadmap capability without its dedicated prompt. F1 remains paused under E3 Analytical Lenses.
 
 Next recommended UI/design-system prompt after UX2B: `UI-DESIGN-SYSTEM-1: Rendered Responsive, Typography + Visualization Accessibility Audit`.
 

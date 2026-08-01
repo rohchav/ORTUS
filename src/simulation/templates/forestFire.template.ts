@@ -322,6 +322,12 @@ const initializationPresets: InitializationPresetDefinition[] = [
     label: "Central Ignition",
     description: "A deterministic ignition near the center of a fully fueled landscape.",
     parameterOverrides: { initialFuelDensity: 1, initialIgnitionCount: 1, lightningProbability: 0, regrowthProbability: 0 }
+  },
+  {
+    id: "firebreak-corridor",
+    label: "Firebreak Corridor",
+    description: "A central ignition and one full-height corridor of existing empty cells in an otherwise fueled landscape.",
+    parameterOverrides: { initialFuelDensity: 1, initialIgnitionCount: 1, lightningProbability: 0, regrowthProbability: 0 }
   }
 ];
 
@@ -435,6 +441,15 @@ export const forestFireTemplate: SimulationTemplate = {
     const stateByKey = new Map<string, ForestFireCellStatus>();
     for (const cell of cells) {
       stateByKey.set(cellKey(cell), chance(initRng, params.initialFuelDensity) ? "fuel" : "empty");
+    }
+
+    if (presetId === "firebreak-corridor") {
+      const corridorColumn = Math.floor(params.gridWidth * (2 / 3));
+      for (const cell of cells) {
+        if (cell.col === corridorColumn) {
+          stateByKey.set(cellKey(cell), "empty");
+        }
+      }
     }
 
     for (const cell of initialIgnitionCells(cells, stateByKey, params, presetId, initRng)) {
@@ -843,7 +858,7 @@ function initialIgnitionCells(
   if (ignitionCount <= 0) {
     return [];
   }
-  if (presetId === "central-ignition") {
+  if (presetId === "central-ignition" || presetId === "firebreak-corridor") {
     const centerRow = (params.gridHeight - 1) / 2;
     const centerCol = (params.gridWidth - 1) / 2;
     return [...fuelCells]

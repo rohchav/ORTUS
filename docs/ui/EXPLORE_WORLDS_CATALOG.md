@@ -1,13 +1,15 @@
 # Explore Worlds Catalog
 
-Date: 2026-07-27
-Status: C1 and C1B complete; C2 next
+Date: 2026-07-31
+Status: C1, C1B, and C2 complete; C2B next
 
 ## 1. Route Structure
 
 - `/worlds` is the runnable Starter World catalog.
 - `/worlds/[slug]` is a directly linkable detail route.
+- `/worlds/packs/local-rules-global-patterns` is the first flagship collection route.
 - `/world?starter=<id>` is the strict canonical launch destination.
+- `/world?starter=<id>&recipe=<id>` is the strict canonical C2 recipe launch destination.
 - `/` remains Start, and `/world` remains the live workbench.
 
 Explore Worlds is reachable from Start without becoming another equal-weight global destination. On `/worlds`, primary navigation keeps Start current because the catalog belongs to the entry and discovery flow.
@@ -18,15 +20,15 @@ The first viewport presents:
 
 1. `Explore Worlds`;
 2. one concise product sentence;
-3. one featured runnable world led by a question;
-4. browse controls;
-5. at least the beginning of the runnable catalog.
+3. one featured collection led by a question and four included systems;
+4. one clear collection action;
+5. browse controls and at least the beginning of the runnable catalog.
 
 The page does not explain the registry, schemas, or internal IDs before showing a system. Planned and concept-only candidates remain in documentation.
 
 ## 3. Card Anatomy
 
-Each of seven cards shows:
+Each of eleven cards shows:
 
 - a hook question;
 - user-facing title;
@@ -40,7 +42,7 @@ Tags remain secondary to the hook and premise. Internal template IDs are absent.
 
 ## 4. Filters
 
-Four bounded native-select filters cover Domain, Mechanism, System form, and Complexity. Filters combine with logical AND and operate only over the seven runnable definitions.
+Four bounded native-select filters cover Domain, Mechanism, System form, and Complexity. Filters combine with logical AND and operate only over the eleven runnable definitions.
 
 Current filter state is repeated in text. Reset clears all filter and search state. Complexity describes the depth of the modeled interaction, not the intelligence or expertise of a person.
 
@@ -69,7 +71,7 @@ Only represented anatomy facets render. Research stays below action. One main bo
 
 ## 7. Visual Identity
 
-`StarterWorldVisual` provides seven deterministic, local CSS/DOM diagrams:
+`StarterWorldVisual` provides eleven deterministic, local CSS/DOM diagrams. The original seven motifs remain, and C2 adds four collection-related motifs for coordination noise, outbreak clustering, predator pressure, and a firebreak corridor:
 
 - moving directional agents;
 - contact rings and state nodes;
@@ -83,9 +85,9 @@ They are illustrative system identities, not screenshots, live engines, measured
 
 ## 8. Launch Behavior
 
-The primary detail action uses a canonical URL containing only the Starter World ID. World derives and revalidates the template, default initialization preset, task, and runtime references server-side, then constructs a fresh paused tick-0 scenario through existing scenario services. Template, scenario, RunConfig, and unknown query overrides fail before World construction.
+The primary C1 detail action uses a canonical URL containing only the Starter World ID. C2 recipe actions add one strict recipe ID. World derives and revalidates the template, initialization preset, task, runtime references, recipe ownership, values, and outputs server-side, then constructs a fresh paused tick-0 scenario through existing scenario services. Template, scenario, RunConfig, parameter payload, duplicate, and unknown query overrides fail before World construction.
 
-The selected template, initialization preset, recommended task, and Starter World identity remain inspectable. A compact definition-driven nudge links back to detail and identifies the first run, first change, and outputs to watch.
+The selected template, initialization preset, recommended task, and Starter World identity remain inspectable. A compact definition-driven nudge links back to detail and identifies the first run, first change, and outputs to watch. Recipe launches additionally identify the recipe, its purpose and horizon, the collection, and the explicit baseline/contrast sibling action.
 
 No arbitrary parameter object, RunConfig, template mutation, or stored progress enters the handoff.
 
@@ -120,7 +122,7 @@ No screen-reader, assistive-technology, forced-colors, browser-zoom, WCAG, or co
 
 ## 12. Verification
 
-Focused tests cover the strict schema, versions, recursive registry immutability, taxonomy, anatomy, quality lint, source structure and DOI shape, unsafe keys, duplicate identities, production registry references, deterministic query behavior, ID-only launch context, override rejection, every fresh paused tick-0 handoff, all seven first-change control paths, no storage, six catalog viewports, all detail routes, mobile order, focus, Back/reload semantics, diagnostics, reduced motion, and Axe.
+Focused tests cover the strict schemas, versions, recursive registry immutability, taxonomy, anatomy, quality lint, source structure and DOI shape, unsafe keys, duplicate identities, production registry references, deterministic query behavior, ID-only launch context, override rejection, every fresh paused tick-0 handoff, all original first-change control paths, all eight C2 recipes, derived comparison values, no storage, six catalog viewports, all detail routes, mobile order, focus, Back/reload semantics, diagnostics, reduced motion, and Axe.
 
 The required final C1 gate also runs the established destination-shell suite, full UI suite, typecheck, unit suite, production build, simulation performance smoke, Atlas preview smoke, and `git diff --check`.
 
@@ -129,7 +131,7 @@ The required final C1 gate also runs the established destination-shell suite, fu
 - The diagrams are authored illustrations, not live previews.
 - Catalog controls reset on reload by design.
 - No saved tutorial progress or personalization exists.
-- Starter definitions currently wrap only the seven production templates.
+- Eleven Starter definitions currently wrap only seven production templates; the four C2 additions are focused experiences, not new mechanics.
 - Remix directions are explanatory and do not execute Builder handoffs.
 - Source connections do not calibrate or validate the implementations.
 - Actual participant comprehension, browser zoom, screen readers, assistive technology, forced colors, complete touch workflow, and WCAG conformance remain unverified.
@@ -139,4 +141,5 @@ The required final C1 gate also runs the established destination-shell suite, fu
 - R2 complete.
 - R2B complete.
 - C1 complete.
-C1B final focused and complete browser verification passed. C1B is complete. C2: Flagship Starter Pack One is next and has not started.
+At the close of C1B, its final focused and complete browser verification had passed and C2 was the next prompt.
+C2 is now complete. C2B: Starter Pack One Audit is next and has not started.

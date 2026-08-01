@@ -17,6 +17,10 @@ import {
 import { queryStarterWorlds } from "./query";
 import { runnableStarterWorlds, starterWorlds } from "./registry";
 import {
+  getPreparedStarterComparisonForWorld,
+  starterWorldLaunchRecipesForWorld
+} from "./packs";
+import {
   starterWorldDefinitionSchema,
   starterWorldDomains,
   starterWorldMechanisms,
@@ -31,21 +35,25 @@ import {
 } from "./validation";
 
 describe("Starter World content framework", () => {
-  it("validates seven versioned runnable definitions in deterministic catalog order", () => {
-    expect(starterWorlds).toHaveLength(7);
-    expect(runnableStarterWorlds).toHaveLength(7);
-    expect(starterWorlds.map((world) => world.catalogOrder)).toEqual([10, 20, 30, 40, 50, 60, 70]);
+  it("validates eleven versioned runnable definitions in deterministic catalog order", () => {
+    expect(starterWorlds).toHaveLength(11);
+    expect(runnableStarterWorlds).toHaveLength(11);
+    expect(starterWorlds.map((world) => world.catalogOrder)).toEqual([10, 15, 20, 25, 30, 40, 45, 50, 60, 65, 70]);
     expect(starterWorlds.map((world) => world.id)).toEqual([
       "flocking",
+      "coordination-under-sensor-noise",
       "epidemic",
+      "clustered-outbreak-starts",
       "opinion-dynamics",
       "predator-prey",
+      "predator-pressure-recovery",
       "schelling",
       "forest-spread",
+      "patch-density-firebreaks",
       "neural-excitation"
     ]);
-    expect(new Set(starterWorlds.map((world) => world.id)).size).toBe(7);
-    expect(new Set(starterWorlds.map((world) => world.slug)).size).toBe(7);
+    expect(new Set(starterWorlds.map((world) => world.id)).size).toBe(11);
+    expect(new Set(starterWorlds.map((world) => world.slug)).size).toBe(11);
     expect(starterWorlds.every((world) => world.version === "1" && world.runtimeStatus === "runnable")).toBe(true);
   });
 
@@ -251,7 +259,8 @@ describe("Starter World content framework", () => {
     ]);
     expect(queryStarterWorlds(starterWorlds, { systemForm: "grid" }, "").map((world) => world.id)).toEqual([
       "schelling",
-      "forest-spread"
+      "forest-spread",
+      "patch-density-firebreaks"
     ]);
     expect(queryStarterWorlds(starterWorlds, { complexity: "quick-start" }, "").map((world) => world.id)).toEqual([
       "flocking",
@@ -260,9 +269,13 @@ describe("Starter World content framework", () => {
     expect(
       queryStarterWorlds(starterWorlds, { domain: "living-systems", systemForm: "grid", complexity: "layered" }, "")
         .map((world) => world.id)
-    ).toEqual(["forest-spread"]);
+    ).toEqual(["forest-spread", "patch-density-firebreaks"]);
     expect(queryStarterWorlds(starterWorlds, {}, "delayed excitation").map((world) => world.id)).toEqual(["neural-excitation"]);
-    expect(queryStarterWorlds(starterWorlds, {}, "local grid").map((world) => world.id)).toEqual(["schelling", "forest-spread"]);
+    expect(queryStarterWorlds(starterWorlds, {}, "local grid").map((world) => world.id)).toEqual([
+      "schelling",
+      "forest-spread",
+      "patch-density-firebreaks"
+    ]);
     expect(queryStarterWorlds(starterWorlds, {}, "  DELAYED---excitation!!!  ").map((world) => world.id)).toEqual([
       "neural-excitation"
     ]);
@@ -353,12 +366,22 @@ describe("Starter World content framework", () => {
     );
 
     for (const world of starterWorlds) {
-      const launch = createDefaultStarterWorldLaunch(world.id);
-      const scenario = createStarterWorldScenario(launch);
+      const comparison = getPreparedStarterComparisonForWorld(world.id);
+      const baseline = comparison
+        ? starterWorldLaunchRecipesForWorld(world.id).find((recipe) => recipe.id === comparison.baselineRecipeId)
+        : undefined;
+      const launch = baseline
+        ? resolveStarterWorldLaunch({ starterId: world.id, recipeId: baseline.id })
+        : { ok: true as const, launch: createDefaultStarterWorldLaunch(world.id) };
+      expect(launch.ok).toBe(true);
+      if (!launch.ok) {
+        throw new Error(launch.message);
+      }
+      const scenario = createStarterWorldScenario(launch.launch);
       const { engine, validation } = createEngineFromScenario(scenario);
       const snapshot = engine.createSnapshot();
       expect(validation.scenario.templateId).toBe(world.runtime!.templateId);
-      expect(validation.scenario.initializationPreset).toBe(world.runtime!.defaultScenarioId);
+      expect(validation.scenario.initializationPreset).toBe(baseline?.initializationPresetId ?? world.runtime!.defaultScenarioId);
       expect(validation.scenario.metadata.starterWorldId).toBe(world.id);
       expect(snapshot.tick).toBe(0);
       expect(engine.clock.running).toBe(false);
@@ -381,7 +404,11 @@ describe("Starter World content framework", () => {
       "query.ts",
       "registry.ts",
       "types.ts",
-      "validation.ts"
+      "validation.ts",
+      "packs/definitions.ts",
+      "packs/registry.ts",
+      "packs/types.ts",
+      "packs/validation.ts"
     ]
       .map((file) => readFileSync(join(process.cwd(), "src", "lib", "starterWorlds", file), "utf8"))
       .join("\n");

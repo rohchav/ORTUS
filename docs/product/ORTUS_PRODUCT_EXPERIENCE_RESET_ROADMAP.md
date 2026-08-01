@@ -1,7 +1,7 @@
 # ORTUS Product Experience Reset Roadmap
 
 Date: 2026-07-31
-Status: active product sequence; R1, R1B, R2, R2B, C1, and C1B complete; C2 next
+Status: active product sequence; R1, R1B, R2, R2B, C1, C1B, and C2 complete; C2B next
 
 ## Why This Sequence Exists
 
@@ -50,9 +50,11 @@ R1 and its required R1B audit are complete. R2 and its required R2B audit are al
 
 C1 is complete. It adds the strict source-backed Starter World registry, `/worlds`, seven detail routes, deterministic catalog browsing, strict existing-scenario launch handoffs, quality lint, and a researched future portfolio. It does not add runtime behavior or persistence.
 
-`C1B: Starter World Content Framework Audit` is complete. It audited and hardened source, content, launch, portfolio, rendered accessibility, responsive behavior, and test contracts without changing simulation runtime or persistence. C2: Flagship Starter Pack One is next and has not started; C3-C4, S1-S5, and E1-E3 have not started under this roadmap.
+`C1B: Starter World Content Framework Audit` is complete. It audited and hardened source, content, launch, portfolio, rendered accessibility, responsive behavior, and test contracts without changing simulation runtime or persistence.
 
-The active route hierarchy is Start `/`, Start-adjacent Explore Worlds `/worlds`, World `/world`, Workshop `/builder`, Atlas `/atlas`, and Lab `/lab`. `/worlds` contains only seven validated runnable definitions; its existence is not evidence that later starter packs, composition, Lab, Atlas, or analysis milestones exist.
+`C2: Flagship Starter Pack One` is complete. It adds `Local Rules, Global Patterns`, four focused Starter Worlds, eight strict prepared recipes, four comparisons derived from validated effective scenarios, a collection route, and recipe-aware fresh-run handoffs. The bounded Forest Fire corridor preset changes initialization layout only. C2 adds no general engine primitive, new metric, intervention, persistence, Lab/Atlas record, Builder execution, or scientific-validation claim. C2B: Starter Pack One Audit is next and has not started; C3-C4, S1-S5, and E1-E3 have not started under this roadmap.
+
+The active route hierarchy is Start `/`, Start-adjacent Explore Worlds `/worlds`, the flagship collection `/worlds/packs/local-rules-global-patterns`, World `/world`, Workshop `/builder`, Atlas `/atlas`, and Lab `/lab`. `/worlds` contains eleven validated runnable definitions. Four are focused C2 experiences over existing production templates; their existence is not evidence that C2B, later starter packs, composition, Lab, Atlas, or analysis milestones exist.
 
 ## Paused Fractal Branch
 
@@ -78,6 +80,8 @@ Explicit user direction may revise this roadmap, but documentation-only mileston
 - Runtime support must be derived from authoritative template and registry behavior.
 - Structural validity, runnability, scientific validation, and empirical truth are separate claims.
 - Starter content must not create hidden parameter defaults or mechanics.
+- Prepared recipes must remain strict ID-addressed, validated data over authoritative template presets, parameters, tasks, and outputs; they must not accept arbitrary RunConfig payloads or hidden runtime capabilities.
+- Prepared-comparison differences and shared conditions must be derived from effective validated scenarios. A prepared pair is instructional content, not a result, controlled experiment, robustness claim, causal claim, or validation artifact.
 - A featured starter launch must create its documented fresh prepared run; it must not silently resume a prior in-memory trajectory.
 - The live system remains the primary World visual object.
 - World task labels, query state, current navigation, and visible task must agree without resetting the active run.

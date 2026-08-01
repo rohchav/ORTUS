@@ -847,5 +847,478 @@ export const rawStarterWorldDefinitions = [
         requiredCapability: "Dedicated bounded network authoring and interpreter contract"
       }
     ]
+  },
+  {
+    id: "coordination-under-sensor-noise",
+    version: "1",
+    slug: "coordination-under-sensor-noise",
+    title: "Coordination Under Sensor Noise",
+    shortTitle: "Noisy Coordination",
+    hookQuestion: "How much uncertain local sensing can a moving group tolerate before coordination fragments?",
+    oneSentencePremise: "The same moving agents organize from local steering while one bounded noise value changes between prepared runs.",
+    summary:
+      "This focused Collective Motion experience holds the seeded starting positions and steering rules steady while changing model noise. Comparing alignment, dispersion, and visible subgroup formation reveals how one local uncertainty term can reorganize aggregate motion.",
+    runtimeStatus: "runnable",
+    parentWorldId: "flocking",
+    catalogOrder: 15,
+    featured: false,
+    domain: ["collective-behavior", "living-systems"],
+    mechanisms: ["local-neighbor", "feedback", "stochastic-transition"],
+    systemForms: ["spatial-agents"],
+    complexity: "layered",
+    estimatedFirstActivity: "About 8 minutes",
+    visualKind: "coordination-noise",
+    catalogIndicators: ["Controlled noise pair", "Local steering", "Same seeded start", "Alignment history"],
+    runtime: {
+      templateId: "flocking-boids",
+      defaultScenarioId: "random-headings",
+      supportedScenarioIds: ["random-headings"],
+      recommendedTask: "observe",
+      recommendedMetricId: "alignmentScore",
+      recommendedParameterId: "noise"
+    },
+    anatomy: {
+      entities: ["Boids with bounded position, velocity, and local steering state."],
+      environment: ["A continuous two-dimensional field in which distance defines each local neighborhood."],
+      boundaries: ["The same template-owned boundary rule is shared by both prepared recipes."],
+      feedbackLoops: ["Motion changes neighborhoods, and later neighborhoods change steering."],
+      stochasticity: ["One deterministic seed drives both starts while the bounded steering-noise value differs."],
+      observables: ["Alignment and dispersion histories are model outputs; visible subgroups are qualitative run structure."]
+    },
+    primaryMechanisms: ["local-neighbor", "feedback", "stochastic-transition"],
+    interactionPattern:
+      "Each boid combines alignment, cohesion, and separation from nearby agents, then receives bounded seeded steering noise before movement.",
+    systemDynamics:
+      "The prepared pair changes only the noise value. Repeated local heading disagreement may delay one common direction, widen the flock, or leave several moving subgroups in this stylized model.",
+    firstRun: {
+      action: "Compare the Random Headings start while the model remains paused at tick 0.",
+      demonstrates: "The starting field keeps local steering structure visible before the low-noise baseline begins.",
+      recommendedTask: "observe"
+    },
+    firstChange: {
+      targetType: "parameter",
+      targetId: "noise",
+      targetLabel: "Noise",
+      action: "Raise Noise to 0.28, rebuild, and compare alignment and dispersion under the same seed.",
+      direction: "increase",
+      suggestedValue: 0.28,
+      runSemantics: "rebuild-world",
+      differenceToLookFor: "Watch whether common direction forms later or visible moving subgroups remain separated."
+    },
+    whatToWatch: [
+      {
+        label: "Alignment score",
+        description: "Compare the model-output heading-similarity history; it is not a measurement of animal coordination.",
+        metricId: "alignmentScore"
+      },
+      {
+        label: "Dispersion",
+        description: "Follow how broadly the abstract moving agents occupy the field.",
+        metricId: "dispersion"
+      },
+      {
+        label: "Visible subgroup formation",
+        description: "Inspect whether one coherent flock or several moving clusters remain visible without treating appearance as a new metric."
+      }
+    ],
+    investigationPrompts: [
+      "Does higher noise delay coordination for the full suggested horizon or only during early motion?",
+      "Can similar final alignment histories hide different visible subgroup arrangements?",
+      "How does replaying both prepared recipes clarify which differences belong to noise rather than the seed?"
+    ],
+    sources: [
+      {
+        sourceId: "coordination-vicsek-noise-1995",
+        title: "Novel Type of Phase Transition in a System of Self-Driven Particles",
+        authorsOrOrganization: "Tamas Vicsek, Andras Czirok, Eshel Ben-Jacob, Inon Cohen, and Ofer Shochet",
+        year: 1995,
+        sourceType: "peer-reviewed-paper",
+        urlOrDoi: "https://doi.org/10.1103/PhysRevLett.75.1226",
+        relationship: "research-context",
+        note: "Provides research context for local alignment and noise; it does not validate ORTUS parameters, thresholds, or visual outcomes."
+      }
+    ],
+    mainLimitation:
+      "The agents have abstract perfect-radius neighborhoods plus a noise term; this is not animal-behavior validation, autonomous-vehicle safety evidence, or an optimized swarm controller.",
+    remixIdeas: [
+      {
+        title: "Move the noise contrast",
+        description: "Use current bounded parameters to compare other noise values while keeping the same template and seed explicit.",
+        status: "runtime-now"
+      },
+      {
+        title: "Record both bounded summaries",
+        description: "Use the existing World Compare task to inspect the two run summaries without creating Lab evidence.",
+        status: "advanced-tools"
+      },
+      {
+        title: "Represent sensing errors explicitly",
+        description: "Agent-specific occlusion, delay, or biased sensing would require future audited template behavior.",
+        status: "future-capability"
+      }
+    ],
+    futureExpansion: [
+      {
+        title: "Heterogeneous sensing",
+        description: "Give bounded agent groups distinct template-owned sensing contracts without introducing arbitrary controller code.",
+        requiredCapability: "Audited heterogeneous perception and delay runtime"
+      }
+    ]
+  },
+  {
+    id: "clustered-outbreak-starts",
+    version: "1",
+    slug: "clustered-outbreak-starts",
+    title: "Clustered Outbreak Starts",
+    shortTitle: "Outbreak Geometry",
+    hookQuestion: "When do several local outbreaks merge into one population-wide wave?",
+    oneSentencePremise: "Equal infected counts begin in one cluster or several seeded hotspots while contact and recovery rules remain shared.",
+    summary:
+      "This focused Local Contact Outbreaks experience isolates initial spatial geometry. One prepared run concentrates nine infected model agents near the center; the other distributes the same count around three seeded hotspots before identical local transmission and recovery updates begin.",
+    runtimeStatus: "runnable",
+    parentWorldId: "epidemic",
+    catalogOrder: 25,
+    featured: false,
+    domain: ["environment-and-spread", "population-dynamics"],
+    mechanisms: ["spatial-contact", "contagion", "event-resolution", "stochastic-transition"],
+    systemForms: ["spatial-agents", "population"],
+    complexity: "layered",
+    estimatedFirstActivity: "About 9 minutes",
+    visualKind: "clustered-outbreaks",
+    catalogIndicators: ["Matched infected count", "Spatial starting geometry", "Recovery delay", "Count histories"],
+    runtime: {
+      templateId: "epidemic-spread",
+      defaultScenarioId: "single-cluster-outbreak",
+      supportedScenarioIds: ["single-cluster-outbreak", "multiple-hotspots"],
+      recommendedTask: "observe",
+      recommendedMetricId: "infectedCount",
+      recommendedParameterId: "infectionProbability"
+    },
+    anatomy: {
+      entities: ["Moving susceptible, infected, and recovered model agents."],
+      groups: ["Initial infected agents form either one spatial cluster or several seeded hotspots."],
+      environment: ["A bounded continuous contact field shared by both recipes."],
+      delays: ["The same scheduled recovery delay resolves infected state in each run."],
+      stochasticity: ["One deterministic seed controls positions, movement, and contact trials across the pair."],
+      observables: ["Infected and recovered model-agent counts plus visible spatial propagation paths."]
+    },
+    primaryMechanisms: ["spatial-contact", "contagion", "event-resolution", "stochastic-transition"],
+    interactionPattern:
+      "Infected agents transmit only through bounded nearby contact, and each infected agent receives the same template-owned scheduled recovery process.",
+    systemDynamics:
+      "Starting geometry changes which susceptible neighborhoods encounter infection first. Separate pockets may remain apart, fade, or visibly coalesce while aggregate count histories rise and fall.",
+    firstRun: {
+      action: "Inspect Single Cluster Outbreak with nine infected model agents concentrated near one center.",
+      demonstrates: "The baseline establishes one spatial source before local contact and recovery events reshape the population counts.",
+      recommendedTask: "observe"
+    },
+    firstChange: {
+      targetType: "parameter",
+      targetId: "infectionProbability",
+      targetLabel: "Infection probability",
+      action: "Test Infection probability at 0.10 in a rebuilt cluster start and compare the infected history.",
+      direction: "decrease",
+      suggestedValue: 0.1,
+      runSemantics: "rebuild-world",
+      differenceToLookFor: "Look for a changed peak Infected count, timing, or seeded fade-out without interpreting it as a forecast."
+    },
+    whatToWatch: [
+      {
+        label: "Infected count",
+        description: "Follow current infected model agents and compare the highest visible history value rather than treating it as case data.",
+        metricId: "infectedCount"
+      },
+      {
+        label: "Recovered count",
+        description: "Track model agents whose scheduled recovery event has resolved.",
+        metricId: "recoveredCount"
+      },
+      {
+        label: "Spatial coalescence",
+        description: "Inspect whether separate infected pockets remain visible or merge through local contact paths."
+      }
+    ],
+    investigationPrompts: [
+      "Do separated hotspots produce an earlier or later peak Infected count under this seed?",
+      "Can the two runs end with similar Recovered counts after visibly different propagation paths?",
+      "At what part of the run do several local pockets become difficult to distinguish spatially?"
+    ],
+    sources: [
+      {
+        sourceId: "outbreak-keeling-spatial-1999",
+        title: "The Effects of Local Spatial Structure on Epidemiological Invasions",
+        authorsOrOrganization: "Matt J. Keeling",
+        year: 1999,
+        sourceType: "peer-reviewed-paper",
+        urlOrDoi: "https://doi.org/10.1098/rspb.1999.0716",
+        relationship: "research-context",
+        note: "Connects spatial structure with epidemic invasion dynamics; it does not calibrate this stylized contact runtime or support forecasts."
+      }
+    ],
+    mainLimitation:
+      "This stylized homogeneous contact process has no disease-specific biology, behavior response, or empirical calibration and must not be used for forecasts, public-health guidance, or policy advice.",
+    remixIdeas: [
+      {
+        title: "Change contact conditions",
+        description: "Rebuild both supported starts with one shared infection radius, transmission chance, or recovery delay change.",
+        status: "runtime-now"
+      },
+      {
+        title: "Compare equal horizons",
+        description: "Use the existing World Compare task to inspect bounded output summaries from the two explicit recipes.",
+        status: "advanced-tools"
+      },
+      {
+        title: "Add structured places",
+        description: "Households, workplaces, schedules, and heterogeneous susceptibility require future audited template mechanics.",
+        status: "future-capability"
+      }
+    ],
+    futureExpansion: [
+      {
+        title: "Typed contact settings",
+        description: "Represent bounded place and schedule types without turning the model into public-health prediction.",
+        requiredCapability: "Audited place, schedule, and heterogeneous-contact runtime"
+      }
+    ]
+  },
+  {
+    id: "predator-pressure-recovery",
+    version: "1",
+    slug: "predator-pressure-and-recovery",
+    title: "Predator Pressure and Recovery",
+    shortTitle: "Predator Pressure",
+    hookQuestion: "Which starting conditions let prey recover, sustain cycles, or collapse?",
+    oneSentencePremise: "The same prey population and seeded field begin under low or high predator pressure without changing ecological mechanics.",
+    summary:
+      "This focused Predator-Prey Cycles experience changes only the starting predator count while holding prey count, seed, movement, encounter, energy-loss, and reproduction rules steady. The pair supports inspection of delayed count feedback, extinction states, and possible model-population recovery.",
+    runtimeStatus: "runnable",
+    parentWorldId: "predator-prey",
+    catalogOrder: 45,
+    featured: false,
+    domain: ["population-dynamics", "living-systems"],
+    mechanisms: ["predation", "resource-consumption", "feedback", "stochastic-transition"],
+    systemForms: ["spatial-agents", "population"],
+    complexity: "layered",
+    estimatedFirstActivity: "About 10 minutes",
+    visualKind: "predator-pressure",
+    catalogIndicators: ["Starting-ratio pair", "Delayed feedback", "Population histories", "Extinction state"],
+    runtime: {
+      templateId: "predator-prey",
+      defaultScenarioId: "random-ecology",
+      supportedScenarioIds: ["random-ecology"],
+      recommendedTask: "observe",
+      recommendedMetricId: "preyCount",
+      recommendedParameterId: "initialPredators"
+    },
+    anatomy: {
+      entities: ["Moving prey and predator model agents."],
+      groups: ["Prepared starts use the same prey count with two or twelve initial predators."],
+      environment: ["A continuous seeded field with shared movement and encounter rules."],
+      resources: ["Predator energy is a bounded template state gained through prey encounters and lost over time."],
+      feedbackLoops: ["Predation changes prey availability, which changes later predator energy, reproduction, and death."],
+      observables: ["Prey and predator model-agent counts, zero-count states, and the timing of visible cycles."]
+    },
+    primaryMechanisms: ["predation", "resource-consumption", "feedback", "stochastic-transition"],
+    interactionPattern:
+      "Predators consume nearby prey, gain and lose energy, reproduce above a fixed threshold, and die at depleted energy while prey reproduce stochastically.",
+    systemDynamics:
+      "A changed starting ratio alters early encounter pressure. Later prey availability feeds back into predator persistence, so count declines and recoveries may be delayed relative to the initial difference.",
+    firstRun: {
+      action: "Observe Random Ecology with a prey-heavy starting ratio before following both population histories.",
+      demonstrates: "The shared seeded arrangement makes the starting population ratio explicit before local encounters begin.",
+      recommendedTask: "observe"
+    },
+    firstChange: {
+      targetType: "parameter",
+      targetId: "initialPredators",
+      targetLabel: "Initial predators",
+      action: "Set Initial predators to 12, rebuild, and compare prey persistence and predator depletion.",
+      direction: "increase",
+      suggestedValue: 12,
+      runSemantics: "rebuild-world",
+      differenceToLookFor: "Look for earlier prey decline, a zero-count state, shifted cycle timing, or later model-population recovery."
+    },
+    whatToWatch: [
+      {
+        label: "Prey count",
+        description: "Track living prey model agents and note any zero-count or later recovery state.",
+        metricId: "preyCount"
+      },
+      {
+        label: "Predator count",
+        description: "Follow predator persistence as energy gain depends on remaining local prey encounters.",
+        metricId: "predatorCount"
+      },
+      {
+        label: "Cycle timing and extinction",
+        description: "Compare count-history timing and visible absence without treating either as ecological evidence."
+      }
+    ],
+    investigationPrompts: [
+      "Does the high-pressure run reach a zero prey count before predators begin to decline?",
+      "How long after the initial ratio difference do the two predator histories remain separated?",
+      "Can a lower early prey count be followed by recovery under the unchanged reproduction and encounter rules?"
+    ],
+    sources: [
+      {
+        sourceId: "predator-volterra-1926-context",
+        title: "Fluctuations in the Abundance of a Species Considered Mathematically",
+        authorsOrOrganization: "Vito Volterra",
+        year: 1926,
+        sourceType: "historical-source",
+        urlOrDoi: "https://doi.org/10.1038/118558a0",
+        relationship: "historical-context",
+        note: "Provides historical population-feedback context; ORTUS uses explicit moving agents and does not reproduce or calibrate Volterra's equations."
+      }
+    ],
+    mainLimitation:
+      "The model omits species biology, habitat, food webs, environmental variation, and empirical calibration; it is not a reproduction of a specific ecosystem, conservation forecast, or policy evidence.",
+    remixIdeas: [
+      {
+        title: "Move the starting ratio",
+        description: "Use bounded Initial prey and Initial predators values to form another explicit paired comparison.",
+        status: "runtime-now"
+      },
+      {
+        title: "Inspect bounded count summaries",
+        description: "Use the existing World Compare task without expanding storage or creating persistent evidence.",
+        status: "advanced-tools"
+      },
+      {
+        title: "Add habitat and food-web structure",
+        description: "Multiple species, explicit resources, and heterogeneous habitat need future audited runtime behavior.",
+        status: "future-capability"
+      }
+    ],
+    futureExpansion: [
+      {
+        title: "Structured ecological interactions",
+        description: "Add bounded species and habitat types while preserving clear model-risk language.",
+        requiredCapability: "Audited multi-species and habitat runtime"
+      }
+    ]
+  },
+  {
+    id: "patch-density-firebreaks",
+    version: "1",
+    slug: "patch-density-and-firebreaks",
+    title: "Patch Density and Firebreaks",
+    shortTitle: "Firebreak Paths",
+    hookQuestion: "How does the arrangement of burnable cells decide whether spread crosses the landscape?",
+    oneSentencePremise: "A connected fuel grid and a grid interrupted by one empty-cell corridor use the same local spread settings.",
+    summary:
+      "This focused Landscape Spread experience compares an uninterrupted fuel path with one deterministic full-height corridor made from the existing empty-cell state. Both starts share a central ignition, seed, local neighborhood, and spread settings so spatial connectivity remains the visible distinction.",
+    runtimeStatus: "runnable",
+    parentWorldId: "forest-spread",
+    catalogOrder: 65,
+    featured: false,
+    domain: ["environment-and-spread", "living-systems"],
+    mechanisms: ["local-neighbor", "contagion", "stochastic-transition"],
+    systemForms: ["grid"],
+    complexity: "layered",
+    estimatedFirstActivity: "About 8 minutes",
+    visualKind: "firebreak-corridor",
+    catalogIndicators: ["Connected-path pair", "Actual empty corridor", "Local grid spread", "Burn histories"],
+    runtime: {
+      templateId: "forest-fire",
+      defaultScenarioId: "central-ignition",
+      supportedScenarioIds: ["central-ignition", "firebreak-corridor"],
+      recommendedTask: "observe",
+      recommendedMetricId: "activeFireCount",
+      recommendedParameterId: "spreadProbability"
+    },
+    anatomy: {
+      entities: ["Grid cells in existing empty, fuel, burning, or burned template states."],
+      environment: ["A connected fuel layout or the same layout with one full-height empty-cell corridor."],
+      boundaries: ["Closed grid boundaries keep the corridor connected to both outer edges."],
+      feedbackLoops: ["Burning consumes connected fuel and changes which local paths remain available on later ticks."],
+      stochasticity: ["The pair uses one deterministic seed while its selected spread probability removes uncertainty from local spread outcomes."],
+      observables: ["Active fires, burned cells, extinction state, and visible crossing of the model grid."]
+    },
+    primaryMechanisms: ["local-neighbor", "contagion", "stochastic-transition"],
+    interactionPattern:
+      "Burning cells ignite only neighboring fuel cells through existing local grid rules; empty corridor cells cannot carry that state transition.",
+    systemDynamics:
+      "A connected layout offers a path across the field, while the full-height corridor interrupts adjacency without adding suppression, weather, terrain, or a new spread mechanic.",
+    firstRun: {
+      action: "Trace Central Ignition through the fully connected fuel grid from paused tick 0.",
+      demonstrates: "The baseline exposes an uninterrupted local path before the contrast inserts an actual spatial corridor.",
+      recommendedTask: "observe"
+    },
+    firstChange: {
+      targetType: "parameter",
+      targetId: "spreadProbability",
+      targetLabel: "Spread probability",
+      action: "Set Spread probability to 1.00, rebuild, and inspect connected landscape crossing.",
+      direction: "increase",
+      suggestedValue: 1,
+      runSemantics: "rebuild-world",
+      differenceToLookFor: "Watch the active front and final Burned cells while keeping the result inside the abstract grid model."
+    },
+    whatToWatch: [
+      {
+        label: "Active fires",
+        description: "Follow currently burning model cells as the local front moves through available paths.",
+        metricId: "activeFireCount"
+      },
+      {
+        label: "Burned cells",
+        description: "Compare burned model-cell extent after equal run horizons.",
+        metricId: "burnedTotalCount"
+      },
+      {
+        label: "Extinguished state",
+        description: "Note when no model cells remain burning; this is not evidence about fire suppression.",
+        metricId: "extinguished"
+      },
+      {
+        label: "Landscape crossing",
+        description: "Inspect whether the visible front reaches cells beyond the corridor without treating appearance as a field measurement."
+      }
+    ],
+    investigationPrompts: [
+      "At what tick does the connected front reach the far side of the model grid?",
+      "How do active-fire histories differ even before final Burned cells separate?",
+      "Does the corridor change extinction timing after it prevents access to the isolated fuel region?"
+    ],
+    sources: [
+      {
+        sourceId: "firebreak-drossel-schwabl-1992",
+        title: "Self-Organized Critical Forest-Fire Model",
+        authorsOrOrganization: "Barbara Drossel and Franz Schwabl",
+        year: 1992,
+        sourceType: "peer-reviewed-paper",
+        urlOrDoi: "https://doi.org/10.1103/PhysRevLett.69.1629",
+        relationship: "research-context",
+        note: "Provides context for abstract grid fire models; ORTUS does not implement that paper's full model or claim criticality from this comparison."
+      }
+    ],
+    mainLimitation:
+      "This abstract grid is not a calibrated wildfire model and includes no weather, terrain, suppression, evacuation, risk assessment, or real-world safety guidance.",
+    remixIdeas: [
+      {
+        title: "Change the corridor context",
+        description: "Use current bounded fuel, spread, neighborhood, or burn-duration settings while keeping each comparison explicit.",
+        status: "runtime-now"
+      },
+      {
+        title: "Compare equal run horizons",
+        description: "Use the existing World Compare task to inspect bounded cell-count summaries from both recipes.",
+        status: "advanced-tools"
+      },
+      {
+        title: "Add real environmental structure",
+        description: "Weather, terrain, suppression, GIS data, and operational risk need separate validated systems and remain out of scope.",
+        status: "future-capability"
+      }
+    ],
+    futureExpansion: [
+      {
+        title: "Typed landscape structure",
+        description: "Represent audited environmental factors without converting stylized output into wildfire guidance.",
+        requiredCapability: "Validated environmental-field and provenance runtime"
+      }
+    ]
   }
 ] as const;

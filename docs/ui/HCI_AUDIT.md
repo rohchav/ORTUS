@@ -1617,7 +1617,7 @@ The HCI strength is a coherent invitation-to-action chain: Start -> Explore Worl
 
 Catalog and detail states were exercised at the six required viewports, with keyboard controls, focus behavior, reduced motion, no horizontal overflow, browser diagnostics, and representative Axe checks. Actual browser zoom, screen readers, assistive technology, forced colors, complete touch workflow, participant comprehension, educational outcomes, and WCAG conformance remain unverified.
 
-R1 complete. R1B complete. R2 complete. R2B complete. C1 complete. C1B complete. C2: Flagship Starter Pack One is next.
+At the close of C1, R1 through C1 were complete, C1B was the required audit, and C2 remained future work.
 
 ## C1B Starter World Audit Update
 
@@ -1627,4 +1627,14 @@ The hardening makes launch links Starter-ID-only, revalidates frozen definition-
 
 The six required viewports, keyboard paths, reduced motion, diagnostics, and representative Axe states completed baseline, affected post-fix, and final full-suite coverage. Actual browser zoom, screen-reader and assistive-technology use, forced colors, complete touch workflow, participant study, educational outcomes, and WCAG conformance remain unverified.
 
-C1B's required focused and complete browser gate passed without retries or skipped tests. C1B is complete. C2 has not started.
+C1B's required focused and complete browser gate passed without retries or skipped tests. C1B is complete.
+
+## C2 Flagship Starter Pack Update
+
+C2 makes the Starter World layer meaningfully deeper. `/worlds` now leads with one coherent four-world collection while preserving all eleven runnable entries, and the directly linkable collection page explains four distinct comparison questions without implying one shared mathematical model. Each flagship detail keeps the existing action-first hierarchy and adds a baseline launch, visible contrast cue, two explicit recipe cards, derived differences and shared conditions, named outputs, and bounded instructions for the existing Compare task.
+
+The strongest HCI gain is inspectable contrast: users can see what changes, what remains controlled, which outputs matter, and why the sibling run is worth opening before entering World. Recipe context remains compact and dismissible; sibling navigation is explicit and creates a fresh run. No progress tracker, lock, recommendation, auto-run, auto-save, or second comparison workflow was introduced.
+
+Rendered checks cover the collection, four details, eight recipe launches, invalid contexts, six viewports, mobile hierarchy, short-height layouts, keyboard focus, reduced motion, diagnostics, and representative Axe states. These checks do not establish participant comprehension, educational effectiveness, actual browser zoom, screen-reader or assistive-technology operation, forced-colors behavior, complete touch workflows, empirical validity, or WCAG conformance.
+
+R1 complete. R1B complete. R2 complete. R2B complete. C1 complete. C1B complete. C2 complete. C2B: Starter Pack One Audit is next and has not started.

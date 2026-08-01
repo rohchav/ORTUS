@@ -43,15 +43,18 @@ export function AppShell({ initialTemplateId, initialWorkspaceMode, starterLaunc
   const frameRef = useRef<number | null>(null);
   const lastTimeRef = useRef<number | null>(null);
   const accumulatedRef = useRef(0);
-  const starterInitializedRef = useRef(false);
+  const starterInitializedRef = useRef<string | null>(null);
   const runDetailsTriggerRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     setMounted(true);
     hydratePreferences();
     const state = useSimulationStore.getState();
-    if (starterLaunch && !starterInitializedRef.current) {
-      starterInitializedRef.current = true;
+    const starterIdentity = starterLaunch
+      ? `${starterLaunch.starterWorldId}:${starterLaunch.recipeId ?? "default"}`
+      : null;
+    if (starterLaunch && starterInitializedRef.current !== starterIdentity) {
+      starterInitializedRef.current = starterIdentity;
       state.applyScenario(createStarterWorldScenario(starterLaunch));
     } else if (initialTemplateId && state.selectedTemplateId !== initialTemplateId) {
       state.selectTemplate(initialTemplateId);
@@ -61,7 +64,7 @@ export function AppShell({ initialTemplateId, initialWorkspaceMode, starterLaunc
   }, [hydratePreferences, initialTemplateId, starterLaunch]);
 
   useEffect(() => {
-    const mode = workspaceModeFromLocation();
+    const mode = workspaceModeFromLocation(initialWorkspaceMode);
     setActiveWorkspaceMode(mode);
     replaceNonCanonicalWorkspaceHref(mode);
   }, [initialWorkspaceMode]);
@@ -147,7 +150,7 @@ export function AppShell({ initialTemplateId, initialWorkspaceMode, starterLaunc
       <div className="ortus-layout" data-tools-state={toolsHidden ? "hidden" : "visible"}>
         <section className="workspace-center" aria-label="Simulation workspace" data-workspace-region="center">
           <div className="world-workspace">
-            {starterLaunch ? <StarterActionNudge starterWorldId={starterLaunch.starterWorldId} /> : null}
+            {starterLaunch ? <StarterActionNudge launch={starterLaunch} /> : null}
             <WorldStage />
           </div>
           <TimelineControlStrip />
@@ -178,9 +181,9 @@ export function AppShell({ initialTemplateId, initialWorkspaceMode, starterLaunc
   );
 }
 
-function workspaceModeFromLocation(): SimulationWorkspaceModeId {
+function workspaceModeFromLocation(fallback = defaultSimulationWorkspaceModeId): SimulationWorkspaceModeId {
   const query = new URLSearchParams(window.location.search);
-  return simulationWorkspaceModeFromQuery(query.get("task") ?? undefined) ?? defaultSimulationWorkspaceModeId;
+  return simulationWorkspaceModeFromQuery(query.get("task") ?? undefined) ?? fallback;
 }
 
 function workspaceHref(mode: SimulationWorkspaceModeId): string {

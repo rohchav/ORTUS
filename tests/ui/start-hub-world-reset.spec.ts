@@ -24,7 +24,7 @@ for (const viewport of viewports) {
       "href",
       "/worlds/collective-motion"
     );
-    await expect(page.locator(".start-world-index > a")).toHaveCount(7);
+    await expect(page.locator(".start-world-index > a")).toHaveCount(11);
     await expect(page.locator("[data-capability-guidance-destination]")).toHaveCount(0);
     await expect(page.getByText("Pick a system. Run it. Change something. See what happens. Then go deeper.")).toBeVisible();
 

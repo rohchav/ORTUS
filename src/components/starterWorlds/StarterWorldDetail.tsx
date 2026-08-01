@@ -1,13 +1,20 @@
 import Link from "next/link";
 import {
   createDefaultStarterWorldLaunch,
+  getPreparedStarterComparisonForWorld,
+  getStarterWorldPackForWorld,
+  getStarterWorldById,
+  resolveStarterWorldLaunch,
   starterWorldAnatomyLabels,
+  starterWorldLaunchRecipesForWorld,
   starterWorldMechanismLabels,
   starterWorldRemixStatusLabels,
   starterWorldSourceRelationshipLabels,
   starterWorldSourceTypeLabels,
+  type PreparedStarterComparison,
   type StarterWorldAnatomy,
-  type StarterWorldDefinition
+  type StarterWorldDefinition,
+  type StarterWorldLaunchRecipe
 } from "../../lib/starterWorlds";
 import { StarterWorldVisual } from "./StarterWorldVisual";
 
@@ -33,30 +40,53 @@ const anatomyOrder: readonly (keyof StarterWorldAnatomy)[] = [
 ];
 
 export function StarterWorldDetail({ world }: StarterWorldDetailProps) {
-  const launch = createDefaultStarterWorldLaunch(world.id);
+  const comparison = getPreparedStarterComparisonForWorld(world.id);
+  const recipes = starterWorldLaunchRecipesForWorld(world.id);
+  const baselineRecipe = comparison
+    ? recipes.find((recipe) => recipe.id === comparison.baselineRecipeId)
+    : undefined;
+  const contrastRecipe = comparison
+    ? recipes.find((recipe) => recipe.id === comparison.contrastRecipeId)
+    : undefined;
+  const pack = getStarterWorldPackForWorld(world.id);
+  const parent = world.parentWorldId ? getStarterWorldById(world.parentWorldId) : undefined;
+  const launch = baselineRecipe
+    ? requireRecipeLaunch(world.id, baselineRecipe.id)
+    : createDefaultStarterWorldLaunch(world.id);
   const anatomy = anatomyOrder.flatMap((facet) => {
     const items = world.anatomy[facet];
     return items ? [{ facet, items }] : [];
   });
 
   return (
-    <article className={`world-detail world-detail--${world.visualKind}`} data-world-detail={world.id}>
+    <article className={`world-detail world-detail--${world.visualKind}${comparison ? " world-detail--flagship" : ""}`} data-world-detail={world.id}>
       <header className="world-detail__hero">
         <div className="world-detail__hero-copy">
-          <Link className="world-detail__back" href="/worlds">Back to Explore Worlds</Link>
+          <nav className="world-detail__back" aria-label="Starter World breadcrumbs">
+            <Link href="/worlds">Explore Worlds</Link>
+            {pack ? <Link href={`/worlds/packs/${pack.slug}`}>{pack.shortTitle} collection</Link> : null}
+          </nav>
           <p>{world.hookQuestion}</p>
           <h1>{world.title}</h1>
           <span className="world-detail__premise">{world.oneSentencePremise}</span>
+          {parent ? (
+            <span className="world-detail__parent">
+              A focused investigation built on <Link href={`/worlds/${parent.slug}`}>{parent.title}</Link>.
+            </span>
+          ) : null}
           <ul className="world-detail__signals" aria-label={`${world.title} system characteristics`}>
             {world.catalogIndicators.map((indicator) => (
               <li key={indicator}>{indicator}</li>
             ))}
           </ul>
           <div className="world-detail__first-action">
-            <span>Start with</span>
-            <strong>{world.firstRun.action}</strong>
+            <span>{baselineRecipe ? "Prepared baseline" : "Start with"}</span>
+            <strong>{baselineRecipe?.title ?? world.firstRun.action}</strong>
+            {contrastRecipe ? <small>Paired contrast available: {contrastRecipe.title}</small> : null}
           </div>
-          <Link className="world-detail__launch" href={launch.href}>Launch this world</Link>
+          <Link className="world-detail__launch" href={launch.href}>
+            {baselineRecipe ? `Launch baseline: ${baselineRecipe.title}` : "Launch this world"}
+          </Link>
         </div>
         <div className="world-detail__hero-visual">
           <StarterWorldVisual kind={world.visualKind} />
@@ -72,15 +102,17 @@ export function StarterWorldDetail({ world }: StarterWorldDetailProps) {
       </header>
 
       <div className="world-detail__body">
-        <section className="world-detail__question" aria-labelledby="world-detail-question">
-          <p>01 / The question</p>
-          <h2 id="world-detail-question">{world.hookQuestion}</h2>
-          <span>{world.summary}</span>
-        </section>
+        {!comparison ? (
+          <section className="world-detail__question" aria-labelledby="world-detail-question">
+            <p>01 / The question</p>
+            <h2 id="world-detail-question">{world.hookQuestion}</h2>
+            <span>{world.summary}</span>
+          </section>
+        ) : null}
 
         <section className="world-detail__section" aria-labelledby="world-detail-inside">
           <header>
-            <p>02 / System anatomy</p>
+            <p>{comparison ? "01" : "02"} / System anatomy</p>
             <h2 id="world-detail-inside">Inside this world</h2>
           </header>
           <div className="world-detail__anatomy">
@@ -97,7 +129,7 @@ export function StarterWorldDetail({ world }: StarterWorldDetailProps) {
 
         <section className="world-detail__section world-detail__mechanisms" aria-labelledby="world-detail-mechanisms">
           <header>
-            <p>03 / Interaction</p>
+            <p>{comparison ? "02" : "03"} / Interaction</p>
             <h2 id="world-detail-mechanisms">How the system works</h2>
           </header>
           <div>
@@ -111,30 +143,71 @@ export function StarterWorldDetail({ world }: StarterWorldDetailProps) {
           </div>
         </section>
 
-        <section className="world-detail__section world-detail__start" aria-labelledby="world-detail-start">
-          <header>
-            <p>04 / First investigation</p>
-            <h2 id="world-detail-start">Start here</h2>
-          </header>
-          <ol>
-            <li>
-              <span>Run the baseline</span>
-              <strong>{world.firstRun.action}</strong>
-              <p>{world.firstRun.demonstrates}</p>
-            </li>
-            <li>
-              <span>Make one change</span>
-              <strong>{world.firstChange.action}</strong>
-              <p>{world.firstChange.differenceToLookFor}</p>
-            </li>
-            <li>
-              <span>Watch the result</span>
-              <strong>{world.whatToWatch.map((item) => item.label).join(" and ")}</strong>
-              <p>{world.whatToWatch[0]!.description}</p>
-            </li>
-          </ol>
-          <Link className="world-detail__launch world-detail__launch--inline" href={launch.href}>Launch fresh at tick 0</Link>
-        </section>
+        {comparison && baselineRecipe && contrastRecipe ? (
+          <>
+            <section className="world-detail__section world-detail__comparison" aria-labelledby="world-detail-comparison">
+              <header>
+                <p>03 / Prepared pair</p>
+                <h2 id="world-detail-comparison">Prepared comparison</h2>
+              </header>
+              <div className="world-detail__comparison-intro">
+                <strong>{comparison.question}</strong>
+                <p>{comparison.expectedPattern}</p>
+              </div>
+              <div className="world-detail__recipe-grid">
+                <RecipeCard world={world} recipe={baselineRecipe} comparison={comparison} />
+                <RecipeCard world={world} recipe={contrastRecipe} comparison={comparison} />
+              </div>
+              <div className="world-detail__compare-workflow">
+                <h3>Use the existing World Compare task</h3>
+                <ol>
+                  {comparison.suggestedProcedure.map((step) => <li key={step}>{step}</li>)}
+                </ol>
+                <p>A prepared pair makes configuration differences easier to inspect. It does not establish robustness, causality, or empirical validity.</p>
+              </div>
+            </section>
+
+            <section className="world-detail__section world-detail__watch" aria-labelledby="world-detail-watch">
+              <header>
+                <p>04 / Named outputs</p>
+                <h2 id="world-detail-watch">What to watch</h2>
+              </header>
+              <div>
+                {world.whatToWatch.map((item) => (
+                  <article key={item.label}>
+                    <h3>{item.label}</h3>
+                    <p>{item.description}</p>
+                  </article>
+                ))}
+              </div>
+            </section>
+          </>
+        ) : (
+          <section className="world-detail__section world-detail__start" aria-labelledby="world-detail-start">
+            <header>
+              <p>04 / First investigation</p>
+              <h2 id="world-detail-start">Start here</h2>
+            </header>
+            <ol>
+              <li>
+                <span>Run the baseline</span>
+                <strong>{world.firstRun.action}</strong>
+                <p>{world.firstRun.demonstrates}</p>
+              </li>
+              <li>
+                <span>Make one change</span>
+                <strong>{world.firstChange.action}</strong>
+                <p>{world.firstChange.differenceToLookFor}</p>
+              </li>
+              <li>
+                <span>Watch the result</span>
+                <strong>{world.whatToWatch.map((item) => item.label).join(" and ")}</strong>
+                <p>{world.whatToWatch[0]!.description}</p>
+              </li>
+            </ol>
+            <Link className="world-detail__launch world-detail__launch--inline" href={launch.href}>Launch fresh at tick 0</Link>
+          </section>
+        )}
 
         <section className="world-detail__section" aria-labelledby="world-detail-investigate">
           <header>
@@ -175,7 +248,7 @@ export function StarterWorldDetail({ world }: StarterWorldDetailProps) {
         <section className="world-detail__section world-detail__boundary" aria-labelledby="world-detail-boundary">
           <header>
             <p>07 / Model boundary</p>
-            <h2 id="world-detail-boundary">What this world leaves out</h2>
+            <h2 id="world-detail-boundary">{comparison ? "Main model boundary" : "What this world leaves out"}</h2>
           </header>
           <div>
             <p>{world.mainLimitation}</p>
@@ -209,4 +282,85 @@ export function StarterWorldDetail({ world }: StarterWorldDetailProps) {
       </div>
     </article>
   );
+}
+
+function RecipeCard({
+  world,
+  recipe,
+  comparison
+}: {
+  world: StarterWorldDefinition;
+  recipe: StarterWorldLaunchRecipe;
+  comparison: PreparedStarterComparison;
+}) {
+  const launch = requireRecipeLaunch(world.id, recipe.id);
+  const role = recipe.comparisonRole === "baseline" ? "Baseline" : "Contrast";
+  const shared = [
+    ...comparison.sharedConditions.filter((condition) => condition.field === "seed"),
+    ...comparison.sharedConditions.filter((condition) => condition.field !== "seed")
+  ];
+  const outputs = recipe.outputsToWatch.map((metricId) => {
+    return world.whatToWatch.find((item) => item.metricId === metricId)?.label ?? metricId;
+  });
+
+  return (
+    <article className={`world-recipe world-recipe--${recipe.comparisonRole}`} data-starter-recipe={recipe.id}>
+      <header>
+        <span>{role}</span>
+        <h3>{recipe.title}</h3>
+        <p>{recipe.shortDescription}</p>
+      </header>
+      <div>
+        <h4>What differs</h4>
+        <dl>
+          {comparison.controlledDifferences.map((difference) => (
+            <div key={difference.field}>
+              <dt>{difference.label}</dt>
+              <dd>{formatComparisonValue(recipe.comparisonRole === "baseline" ? difference.baselineValue : difference.contrastValue)}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+      <div>
+        <h4>What remains controlled</h4>
+        <ul>
+          {shared.slice(0, 6).map((condition) => (
+            <li key={condition.field}><span>{condition.label}</span><strong>{formatComparisonValue(condition.value)}</strong></li>
+          ))}
+        </ul>
+        {shared.length > 6 ? <small>Plus {shared.length - 6} other matching effective values.</small> : null}
+      </div>
+      <dl className="world-recipe__run">
+        <div><dt>Task</dt><dd>{capitalize(recipe.recommendedTask)}</dd></div>
+        <div><dt>Run horizon</dt><dd>{recipe.suggestedRunHorizon} ticks</dd></div>
+        <div><dt>Outputs</dt><dd>{outputs.join(" and ")}</dd></div>
+      </dl>
+      {recipe.visualCue ? <p className="world-recipe__cue">{recipe.visualCue}</p> : null}
+      <Link href={launch.href} aria-label={`Launch ${role.toLowerCase()}: ${recipe.title}`}>
+        Launch {role.toLowerCase()}
+      </Link>
+    </article>
+  );
+}
+
+function requireRecipeLaunch(starterWorldId: string, recipeId: string) {
+  const result = resolveStarterWorldLaunch({ starterId: starterWorldId, recipeId });
+  if (!result.ok) {
+    throw new Error(result.message);
+  }
+  return result.launch;
+}
+
+function formatComparisonValue(value: string | number | boolean | null): string {
+  if (value === null) {
+    return "Not used";
+  }
+  if (typeof value === "boolean") {
+    return value ? "On" : "Off";
+  }
+  return String(value);
+}
+
+function capitalize(value: string): string {
+  return `${value.charAt(0).toUpperCase()}${value.slice(1)}`;
 }

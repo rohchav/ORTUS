@@ -1,11 +1,11 @@
 # Starter World Portfolio
 
-Date: 2026-07-27
-Status: C1 planning artifact; C1B audit complete; no candidate below is a new runtime capability
+Date: 2026-07-31
+Status: C1 planning artifact; C1B and C2 complete; no candidate below is a new runtime capability
 
 ## Portfolio Boundary
 
-This portfolio prioritizes future Starter World content by demonstrated engine fit. It is not a template registry, launch catalog, implementation authorization, or promise. Only the seven definitions in `src/lib/starterWorlds/definitions.ts` are runnable Starter Worlds.
+This portfolio prioritizes future Starter World content by demonstrated engine fit. It is not a template registry, launch catalog, implementation authorization, or promise. Eleven definitions in `src/lib/starterWorlds/definitions.ts` are runnable Starter Worlds: the original seven plus four C2 focused experiences over existing templates. None of the 24 candidates below became runnable in C2.
 
 Research anchors connect candidates to related concepts. They do not validate, calibrate, or prescribe an ORTUS implementation. Any later implementation needs a dedicated prompt, exact runtime contract, focused tests, and its required audit.
 

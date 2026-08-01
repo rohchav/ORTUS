@@ -146,6 +146,34 @@ export function validateStarterWorldDefinitions(input: unknown): readonly Starte
       featuredRunnableCount += 1;
     }
 
+    if (definition.parentWorldId) {
+      const parent = parsed.data.find((candidate) => candidate.id === definition.parentWorldId);
+      if (!parent) {
+        issues.push({
+          code: "unknown-parent-world",
+          path: `${path}.parentWorldId`,
+          message: `Unknown parent Starter World "${definition.parentWorldId}".`
+        });
+      } else if (parent.id === definition.id) {
+        issues.push({
+          code: "self-parent-world",
+          path: `${path}.parentWorldId`,
+          message: "A Starter World cannot be its own parent."
+        });
+      } else if (
+        parent.runtimeStatus !== "runnable" ||
+        !parent.runtime ||
+        !definition.runtime ||
+        parent.runtime.templateId !== definition.runtime.templateId
+      ) {
+        issues.push({
+          code: "parent-runtime-mismatch",
+          path: `${path}.parentWorldId`,
+          message: "A parent Starter World must be runnable on the same authoritative template."
+        });
+      }
+    }
+
     issues.push(
       ...validateRuntimeReferences(definition).map((issue) => ({ ...issue, path: `${path}.${issue.path}` })),
       ...evaluateStarterWorldQuality(definition).map((issue) => ({ ...issue, path: `${path}.${issue.path}` }))
@@ -291,6 +319,7 @@ export function validateRuntimeReferences(definition: StarterWorldDefinition): S
   const presets = initializationPresetsForTemplate(template);
   const presetIds = new Set(presets.map((preset) => preset.id));
   const defaultPreset = defaultInitializationPresetForTemplate(template);
+  const launchPreset = presets.find((preset) => preset.id === runtime.defaultScenarioId) ?? defaultPreset;
   const userFacingText = normalizeText(starterWorldUserFacingText(definition));
   for (const preset of presets) {
     if (userFacingText.includes(normalizeText(preset.id))) {
@@ -304,7 +333,7 @@ export function validateRuntimeReferences(definition: StarterWorldDefinition): S
   if (!presetIds.has(runtime.defaultScenarioId)) {
     add("unknown-default-scenario", "runtime.defaultScenarioId", `Unknown initialization scenario "${runtime.defaultScenarioId}".`);
   }
-  if (runtime.defaultScenarioId !== defaultPreset.id) {
+  if (!definition.parentWorldId && runtime.defaultScenarioId !== defaultPreset.id) {
     add(
       "non-default-scenario",
       "runtime.defaultScenarioId",
@@ -318,14 +347,14 @@ export function validateRuntimeReferences(definition: StarterWorldDefinition): S
     add(
       "raw-preset-id",
       "firstRun.action",
-      `First-run copy must use the authoritative preset label "${defaultPreset.label}", not its internal ID.`
+      `First-run copy must use the authoritative preset label "${launchPreset.label}", not its internal ID.`
     );
   }
-  if (!normalizeText(definition.firstRun.action).includes(normalizeText(defaultPreset.label))) {
+  if (!normalizeText(definition.firstRun.action).includes(normalizeText(launchPreset.label))) {
     add(
       "missing-preset-label",
       "firstRun.action",
-      `First-run copy must name the authoritative preset label "${defaultPreset.label}".`
+      `First-run copy must name the authoritative preset label "${launchPreset.label}".`
     );
   }
   if (new Set(runtime.supportedScenarioIds).size !== runtime.supportedScenarioIds.length) {
@@ -392,7 +421,7 @@ export function validateRuntimeReferences(definition: StarterWorldDefinition): S
       } else if (definition.firstChange.suggestedValue !== undefined) {
         validateChangeDirection(
           definition.firstChange.direction,
-          baselineParameterValue(defaultPreset.parameterOverrides?.[changeParameter.key], changeParameter),
+          baselineParameterValue(launchPreset.parameterOverrides?.[changeParameter.key], changeParameter),
           definition.firstChange.suggestedValue,
           add
         );

@@ -14,12 +14,18 @@ import {
 } from "../workspaceModes";
 import { getStarterWorldById } from "./registry";
 import { assertSafeStarterWorldValue, validateRuntimeReferences } from "./validation";
+import {
+  buildValidatedRecipeScenario,
+  getStarterWorldLaunchRecipeById,
+  getStarterWorldPackForWorld
+} from "./packs";
 
 const launchTimestamp = "2026-07-27T00:00:00.000Z";
 
 const launchRequestSchema = z
   .object({
-    starterId: z.string().trim().min(1).max(120),
+    starterId: z.string().trim().min(1).max(120).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
+    recipeId: z.string().trim().min(1).max(120).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).optional(),
     task: z.string().trim().min(1).max(40).optional()
   })
   .strict();
@@ -28,6 +34,7 @@ export const starterWorldLaunchSchema = z
   .object({
     starterWorldId: z.string().trim().min(1).max(120),
     starterWorldVersion: z.literal("1"),
+    recipeId: z.string().trim().min(1).max(120).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).optional(),
     slug: z.string().trim().min(1).max(120),
     templateId: z.string().trim().min(1).max(120),
     scenarioId: z.string().trim().min(1).max(120),
@@ -52,6 +59,9 @@ type StarterWorldLaunchErrorCode =
   | "not-runnable"
   | "runtime-mismatch"
   | "unknown-scenario"
+  | "missing-recipe"
+  | "unknown-recipe"
+  | "recipe-mismatch"
   | "invalid-task";
 
 export function resolveStarterWorldLaunch(input: unknown): StarterWorldLaunchResult {
@@ -81,7 +91,23 @@ export function resolveStarterWorldLaunch(input: unknown): StarterWorldLaunchRes
     return failure("runtime-mismatch", "The Starter World runtime template is unavailable.");
   }
 
-  const scenarioId = definition.runtime.defaultScenarioId;
+  const recipe = parsed.data.recipeId
+    ? getStarterWorldLaunchRecipeById(parsed.data.recipeId)
+    : undefined;
+  if (parsed.data.recipeId && !recipe) {
+    return failure("unknown-recipe", "That prepared Starter World recipe is not available.");
+  }
+  if (recipe && recipe.starterWorldId !== definition.id) {
+    return failure("recipe-mismatch", "That prepared recipe does not belong to this Starter World.");
+  }
+  if (!recipe && getStarterWorldPackForWorld(definition.id)) {
+    return failure("missing-recipe", "Choose the baseline or contrast recipe before launching this flagship Starter World.");
+  }
+  if (recipe && recipe.templateId !== template.id) {
+    return failure("runtime-mismatch", "The prepared recipe no longer matches the authoritative runtime template.");
+  }
+
+  const scenarioId = recipe?.initializationPresetId ?? definition.runtime.defaultScenarioId;
   if (
     !definition.runtime.supportedScenarioIds.includes(scenarioId) ||
     !findInitializationPreset(template, scenarioId)
@@ -91,7 +117,7 @@ export function resolveStarterWorldLaunch(input: unknown): StarterWorldLaunchRes
 
   const task = parsed.data.task
     ? simulationWorkspaceModeFromQuery(parsed.data.task)
-    : definition.runtime.recommendedTask;
+    : recipe?.recommendedTask ?? definition.runtime.recommendedTask;
   if (!task || !isSimulationWorkspaceModeId(task)) {
     return failure("invalid-task", "The requested World task is unavailable.");
   }
@@ -99,6 +125,7 @@ export function resolveStarterWorldLaunch(input: unknown): StarterWorldLaunchRes
   const launchWithoutHref = {
     starterWorldId: definition.id,
     starterWorldVersion: definition.version,
+    ...(recipe ? { recipeId: recipe.id } : {}),
     slug: definition.slug,
     templateId: template.id,
     scenarioId,
@@ -106,7 +133,7 @@ export function resolveStarterWorldLaunch(input: unknown): StarterWorldLaunchRes
   } as const;
   const launch = starterWorldLaunchSchema.parse({
     ...launchWithoutHref,
-    href: starterWorldLaunchHref(definition.id)
+    href: starterWorldLaunchHref(definition.id, recipe?.id)
   });
   return { ok: true, launch };
 }
@@ -124,6 +151,7 @@ export function createStarterWorldScenario(input: unknown): AuthoredScenario {
   const launch = starterWorldLaunchSchema.parse(input);
   const resolved = resolveStarterWorldLaunch({
     starterId: launch.starterWorldId,
+    ...(launch.recipeId ? { recipeId: launch.recipeId } : {}),
     task: launch.task
   });
   if (!resolved.ok || !sameLaunchIdentity(launch, resolved.launch)) {
@@ -136,27 +164,37 @@ export function createStarterWorldScenario(input: unknown): AuthoredScenario {
     throw new Error("Starter World runtime is unavailable.");
   }
 
-  const base = createDefaultScenario({
-    template,
-    now: launchTimestamp,
-    seed: "ortus-field-001",
-    name: `${definition.shortTitle} baseline`
-  });
-  const scenario = updateScenarioPreset(base, launch.scenarioId, launchTimestamp);
+  const recipe = launch.recipeId ? getStarterWorldLaunchRecipeById(launch.recipeId) : undefined;
+  const scenario = recipe
+    ? buildValidatedRecipeScenario(recipe)
+    : updateScenarioPreset(
+        createDefaultScenario({
+          template,
+          now: launchTimestamp,
+          seed: "ortus-field-001",
+          name: `${definition.shortTitle} baseline`
+        }),
+        launch.scenarioId,
+        launchTimestamp
+      );
   return validateScenario({
     ...scenario,
     metadata: {
       ...scenario.metadata,
       starterWorldId: definition.id,
       starterWorldSlug: definition.slug,
-      starterWorldVersion: definition.version
+      starterWorldVersion: definition.version,
+      ...(recipe ? { starterWorldRecipeId: recipe.id } : {})
     }
   }).scenario;
 }
 
-export function starterWorldLaunchHref(starterWorldId: string): string {
+export function starterWorldLaunchHref(starterWorldId: string, recipeId?: string): string {
   const query = new URLSearchParams();
   query.set("starter", starterWorldId);
+  if (recipeId) {
+    query.set("recipe", recipeId);
+  }
   return `/world?${query.toString()}`;
 }
 
@@ -164,6 +202,7 @@ function sameLaunchIdentity(left: StarterWorldLaunch, right: StarterWorldLaunch)
   return (
     left.starterWorldId === right.starterWorldId &&
     left.starterWorldVersion === right.starterWorldVersion &&
+    left.recipeId === right.recipeId &&
     left.slug === right.slug &&
     left.templateId === right.templateId &&
     left.scenarioId === right.scenarioId &&

@@ -54,7 +54,11 @@ export const starterWorldVisualKinds = [
   "population-cycle",
   "neighborhood-grid",
   "landscape-spread",
-  "signal-network"
+  "signal-network",
+  "coordination-noise",
+  "clustered-outbreaks",
+  "predator-pressure",
+  "firebreak-corridor"
 ] as const;
 
 export type StarterWorldRuntimeStatus = (typeof starterWorldRuntimeStatuses)[number];
@@ -220,6 +224,7 @@ const starterWorldDefinitionObjectSchema = z
     oneSentencePremise: boundedText(20, 280),
     summary: boundedText(60, 800),
     runtimeStatus: z.enum(starterWorldRuntimeStatuses),
+    parentWorldId: boundedText(2, 120).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).optional(),
     catalogOrder: z.number().int().min(0).max(10_000),
     featured: z.boolean(),
     domain: z.array(z.enum(starterWorldDomains)).min(1).max(3),

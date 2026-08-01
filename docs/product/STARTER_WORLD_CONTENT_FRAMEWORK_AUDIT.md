@@ -2,7 +2,7 @@
 
 Date: 2026-07-31
 Prompt: C1B
-Status: complete; conditionally ready for C2
+Status: complete; C2 subsequently complete; C2B next
 
 ## 1. Scope
 
@@ -198,4 +198,4 @@ The completed audit evidence supports:
 Conditionally ready for C2: Flagship Starter Pack One
 ```
 
-The conditional qualifier is limited to the external validation gaps in Section 28. C2 has not started.
+The conditional qualifier was limited to the external validation gaps in Section 28. C2 subsequently completed without erasing those limits. C2B: Starter Pack One Audit is next and has not started.

@@ -292,11 +292,11 @@ R2 changes UI presentation and state coordination only. R2B audits and hardens t
 
 ## C1 Starter World Content Layer
 
-C1 owns content discovery before World, not a new permanent World drawer. `/worlds` provides deterministic search and bounded filters over only seven validated runnable definitions. `/worlds/[slug]` introduces question, premise, represented anatomy, baseline, specific first change, outputs, research connection, one main boundary, and non-executable remix directions before launching.
+C1 owns content discovery before World, not a new permanent World drawer. Its original `/worlds` layer provides deterministic search and bounded filters over seven validated runnable definitions. `/worlds/[slug]` introduces question, premise, represented anatomy, baseline, specific first change, outputs, research connection, one main boundary, and non-executable remix directions before launching. C2 later expands that catalog to eleven definitions.
 
 The launch URL contains stable IDs only. World revalidates those IDs, uses existing scenario services, and creates a fresh paused tick-0 run. The existing compact context remains authoritative; a dismissible nudge supplies local Starter World context without progress, locks, storage, or task replacement.
 
-R1 complete. R1B complete. R2 complete. R2B complete. C1 complete. C1B complete. C2: Flagship Starter Pack One is next.
+R1 complete. R1B complete. R2 complete. R2B complete. C1 complete. C1B complete. C2 complete. C2B: Starter Pack One Audit is next.
 
 ## C1B Starter World Content Hardening
 
@@ -304,4 +304,12 @@ C1B keeps Explore Worlds outside the live World task architecture and preserves 
 
 The audit also aligns user-facing preset, control, and metric labels with authoritative registries; adds visible source type and relationship metadata; keeps research subordinate to action; and verifies all seven first-change paths without adding a second control system. Catalog search, filters, detail browsing, and the nudge remain URL or component-session state only. No storage key, progress model, recommendation system, profile, runtime mechanic, Builder handoff, Atlas record, or Lab record was added.
 
-C1B final focused and complete browser verification passed. C1B is complete. C2 has not started.
+C1B final focused and complete browser verification passed. C1B is complete.
+
+## C2 Flagship Collection Layer
+
+C2 extends entry-side content rather than adding a permanent World tool. `/worlds` now presents one featured `Local Rules, Global Patterns` collection before the complete eleven-world catalog, and `/worlds/packs/local-rules-global-patterns` provides a directly linkable route across four model-specific questions. The collection does not track order, completion, profiles, or learning state.
+
+Each flagship detail owns its prepared-comparison explanation. Baseline and contrast actions use strict `starter` and `recipe` IDs; World revalidates both and creates a fresh paused tick-0 scenario. The mounted World shell remains unchanged and dominant. A compact recipe nudge provides purpose, horizon, outputs, back links, and an explicit sibling link without mutating the current run or replacing the existing Compare task.
+
+Pack, recipe, and prepared-comparison artifacts are data-only content. Derived differences describe configuration, not results. Existing comparison summaries remain bounded World-local storage and do not become curriculum progress, Lab evidence, or Atlas discovery. C2 is complete. C2B: Starter Pack One Audit is next and has not started.

@@ -17,21 +17,29 @@ import {
   type StarterWorldDomain,
   type StarterWorldFilters,
   type StarterWorldMechanism,
+  type PreparedStarterComparison,
+  type StarterWorldPackDefinition,
   type StarterWorldSystemForm
 } from "../../lib/starterWorlds";
+import { StarterWorldCollectionVisual } from "./StarterWorldCollectionVisual";
 import { StarterWorldVisual } from "./StarterWorldVisual";
 
 interface ExploreWorldsCatalogProps {
   worlds: readonly StarterWorldDefinition[];
-  featuredWorldId: string;
+  featuredPack: StarterWorldPackDefinition;
+  featuredComparisons: readonly PreparedStarterComparison[];
 }
 
 const noFilters: StarterWorldFilters = {};
 
-export function ExploreWorldsCatalog({ worlds, featuredWorldId }: ExploreWorldsCatalogProps) {
+export function ExploreWorldsCatalog({ worlds, featuredPack, featuredComparisons }: ExploreWorldsCatalogProps) {
   const [filters, setFilters] = useState<StarterWorldFilters>(noFilters);
   const [search, setSearch] = useState("");
-  const featured = worlds.find((world) => world.id === featuredWorldId) ?? worlds[0]!;
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const collectionWorlds = featuredPack.worldIds.flatMap((worldId) => {
+    const world = worlds.find((candidate) => candidate.id === worldId);
+    return world ? [world] : [];
+  });
   const results = useMemo(() => queryStarterWorlds(worlds, filters, search), [filters, search, worlds]);
   const activeFilterText = filterSummary(filters, search);
   const domainOptions = starterWorldDomains.filter((value) => worlds.some((world) => world.domain.includes(value)));
@@ -52,23 +60,26 @@ export function ExploreWorldsCatalog({ worlds, featuredWorldId }: ExploreWorldsC
         <span>Choose a question, inspect the mechanism, and enter a fresh runnable world with one useful change already in view.</span>
       </header>
 
-      <section className="worlds-feature" aria-labelledby="worlds-feature-title">
-        <StarterWorldVisual kind={featured.visualKind} />
-        <div className="worlds-feature__copy">
-          <p>Featured Starter World</p>
-          <h2 id="worlds-feature-title">{featured.hookQuestion}</h2>
-          <strong>{featured.title}</strong>
-          <span>{featured.oneSentencePremise}</span>
-          <div className="worlds-feature__signals" aria-label="Featured world characteristics">
-            {featured.catalogIndicators.slice(0, 3).map((indicator) => (
-              <span key={indicator}>{indicator}</span>
-            ))}
-          </div>
-          <Link
-            href={`/worlds/${featured.slug}`}
-            aria-label={`Explore featured world: ${featured.title}`}
-          >
-            Explore featured world
+      <section className="worlds-collection-feature" aria-labelledby="worlds-collection-title" data-featured-collection={featuredPack.id}>
+        <StarterWorldCollectionVisual worlds={collectionWorlds} />
+        <div className="worlds-collection-feature__copy">
+          <p>Featured collection</p>
+          <h2 id="worlds-collection-title">{featuredPack.title}</h2>
+          <strong>{featuredPack.hook}</strong>
+          <span>{featuredPack.summary}</span>
+          <ol aria-label={`${featuredPack.title} worlds`}>
+            {collectionWorlds.map((world) => {
+              const comparison = featuredComparisons.find((candidate) => candidate.starterWorldId === world.id);
+              return (
+                <li key={world.id}>
+                  <span>{world.title}</span>
+                  <small>{comparison?.question ?? world.hookQuestion}</small>
+                </li>
+              );
+            })}
+          </ol>
+          <Link href={`/worlds/packs/${featuredPack.slug}`} aria-label={`Open collection: ${featuredPack.title}`}>
+            Open collection
           </Link>
         </div>
       </section>
@@ -76,13 +87,17 @@ export function ExploreWorldsCatalog({ worlds, featuredWorldId }: ExploreWorldsC
       <section className="worlds-browse" aria-labelledby="worlds-browse-title">
         <div className="worlds-browse__heading">
           <div>
-            <p>Browse runnable worlds</p>
+            <p>All runnable worlds</p>
             <h2 id="worlds-browse-title">Find a system by question or mechanism</h2>
           </div>
           <span aria-live="polite">{results.length} of {worlds.length} worlds shown</span>
         </div>
 
-        <div className="worlds-filters" aria-label="Explore Worlds filters">
+        <div
+          className="worlds-filters"
+          aria-label="Explore Worlds filters"
+          data-mobile-filters-open={mobileFiltersOpen ? "true" : "false"}
+        >
           <label className="worlds-search">
             <span>Search worlds</span>
             <input
@@ -92,6 +107,14 @@ export function ExploreWorldsCatalog({ worlds, featuredWorldId }: ExploreWorldsC
               placeholder="Try coordination, grid, delay..."
             />
           </label>
+          <button
+            type="button"
+            className="worlds-filters__mobile-toggle"
+            aria-expanded={mobileFiltersOpen}
+            onClick={() => setMobileFiltersOpen((current) => !current)}
+          >
+            Filters
+          </button>
           <FilterSelect
             label="Domain"
             value={filters.domain}

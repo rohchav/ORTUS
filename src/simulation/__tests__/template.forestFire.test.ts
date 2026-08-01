@@ -285,6 +285,17 @@ describe("forest fire / landscape spread template", () => {
     expect(burningCells.length).toBeGreaterThanOrEqual(1);
     expect(burningCells.some((cell) => Math.abs(cell.row - 19) <= 1 && Math.abs(cell.col - 29) <= 1)).toBe(true);
 
+    const corridorScenario = updateScenarioPreset(base, "firebreak-corridor", now);
+    const corridor = createEngineFromScenario(corridorScenario).engine.createSnapshot();
+    const corridorRepeat = createEngineFromScenario(corridorScenario).engine.createSnapshot();
+    expect(corridor).toEqual(corridorRepeat);
+    expect(countStates(corridor).empty).toBe(40);
+    for (let row = 0; row < 40; row += 1) {
+      expect(stateAt(corridor, row, 40)?.state).toBe("empty");
+    }
+    expect(burningCellCoordinates(corridor).some((cell) => Math.abs(cell.row - 19) <= 1 && Math.abs(cell.col - 29) <= 1)).toBe(true);
+    expect(corridorScenario.parameters).toEqual(updateScenarioPreset(base, "central-ignition", now).parameters);
+
     const dense = countStates(createEngineFromScenario(updateScenarioPreset(base, "dense-dry-landscape", now)).engine.createSnapshot());
     const sparse = countStates(createEngineFromScenario(updateScenarioPreset(base, "sparse-fragmented-landscape", now)).engine.createSnapshot());
     expect(dense.fuel + dense.burning).toBeGreaterThan(sparse.fuel + sparse.burning);

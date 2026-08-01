@@ -263,6 +263,18 @@ describe("roadmap alignment and missing pillar reservations", () => {
       "ui",
       "EXPLORE_WORLDS_CATALOG.md"
     );
+    const flagshipStarterPackPath = join(
+      repoRoot,
+      "docs",
+      "product",
+      "FLAGSHIP_STARTER_PACK_ONE.md"
+    );
+    const localRulesCollectionPath = join(
+      repoRoot,
+      "docs",
+      "ui",
+      "LOCAL_RULES_GLOBAL_PATTERNS_COLLECTION.md"
+    );
     expect(existsSync(roadmapPath)).toBe(true);
     expect(existsSync(missingPillarsPath)).toBe(true);
     expect(existsSync(productPhilosophyPath)).toBe(true);
@@ -291,6 +303,8 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(existsSync(starterWorldFrameworkAuditPath)).toBe(true);
     expect(existsSync(starterWorldPortfolioPath)).toBe(true);
     expect(existsSync(exploreWorldsCatalogPath)).toBe(true);
+    expect(existsSync(flagshipStarterPackPath)).toBe(true);
+    expect(existsSync(localRulesCollectionPath)).toBe(true);
 
     const roadmap = readFileSync(roadmapPath, "utf8");
     const productPhilosophy = readFileSync(productPhilosophyPath, "utf8");
@@ -319,6 +333,8 @@ describe("roadmap alignment and missing pillar reservations", () => {
     const starterWorldFrameworkAudit = readFileSync(starterWorldFrameworkAuditPath, "utf8");
     const starterWorldPortfolio = readFileSync(starterWorldPortfolioPath, "utf8");
     const exploreWorldsCatalog = readFileSync(exploreWorldsCatalogPath, "utf8");
+    const flagshipStarterPack = readFileSync(flagshipStarterPackPath, "utf8");
+    const localRulesCollection = readFileSync(localRulesCollectionPath, "utf8");
     expect(roadmap).toContain("completed through Prompt 39B");
     expect(roadmap).toContain("Post-30B stabilization");
     expect(roadmap).toContain(
@@ -342,8 +358,8 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(roadmap).toContain("UX6B complete.");
     expect(roadmap).toContain("GW9 complete.");
     expect(roadmap).toContain("GW9B complete.");
-    expect(roadmap).toContain("R1, R1B, R2, R2B, C1, and C1B are complete.");
-    expect(roadmap).toContain("C2: Flagship Starter Pack One is next and has not started.");
+    expect(roadmap).toContain("R1, R1B, R2, R2B, C1, C1B, and C2 are complete.");
+    expect(roadmap).toContain("C2B: Starter Pack One Audit is next and has not started.");
     expect(roadmap).toContain("F1 and the fractal branch remain documented but are paused under E3 Analytical Lenses.");
     expect(startHubReset).toContain("/         -> Start Hub");
     expect(startHubReset).toContain("/world    -> live World workbench");
@@ -356,7 +372,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(worldLayoutReclaim).toContain("C1 is complete.");
     expect(worldLayoutReclaim).toContain("C1B");
     expect(productExperienceResetRoadmap).toContain(
-      "Status: active product sequence; R1, R1B, R2, R2B, C1, and C1B complete; C2 next"
+      "Status: active product sequence; R1, R1B, R2, R2B, C1, C1B, and C2 complete; C2B next"
     );
     expect(productExperienceResetRoadmap).toContain("Every implementation milestone is followed by an audit milestone.");
     expect(productExperienceResetRoadmap).toContain("F1 and the rest of the F branch are paused beneath E3 Analytical Lenses.");
@@ -366,12 +382,19 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(productExperienceResetRoadmap).toContain(
       "-> S5 -> S5B -> E1 -> E1B -> E2 -> E2B -> E3 -> E3B"
     );
-    expect(starterWorldFramework).toContain("C1B is complete. C2: Flagship Starter Pack One is next and has not started.");
+    expect(starterWorldFramework).toContain("C2 is now complete.");
+    expect(starterWorldFramework).toContain("C2B: Starter Pack One Audit is next and has not started.");
     expect(starterWorldFramework.match(/^## \d+\. /gm)).toHaveLength(17);
     expect(starterWorldFrameworkAudit.match(/^## \d+\. /gm)).toHaveLength(30);
     expect(starterWorldFrameworkAudit).toContain("Conditionally ready for C2: Flagship Starter Pack One");
     expect(starterWorldFrameworkAudit).toContain("C1/C1B add no persistence and no storage key.");
     expect(exploreWorldsCatalog.match(/^## \d+\. /gm)).toHaveLength(13);
+    expect(flagshipStarterPack.match(/^## \d+\. /gm)).toHaveLength(19);
+    expect(flagshipStarterPack).toContain("Prepared pairs are configuration guidance.");
+    expect(flagshipStarterPack).toContain("C2B has not started.");
+    expect(localRulesCollection.match(/^## \d+\. /gm)).toHaveLength(14);
+    expect(localRulesCollection).toContain("all eleven runnable Starter Worlds");
+    expect(localRulesCollection).toContain("No template, stage, engine, or partial run is mounted.");
     expect(starterWorldPortfolio.match(/^### [ABC]\d+\. /gm)).toHaveLength(24);
     expect(starterWorldPortfolio.match(/^### A\d+\. /gm)).toHaveLength(8);
     expect(starterWorldPortfolio.match(/^### B\d+\. /gm)).toHaveLength(8);

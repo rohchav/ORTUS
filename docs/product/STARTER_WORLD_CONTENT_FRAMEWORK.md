@@ -1,7 +1,7 @@
 # Starter World Content Framework
 
-Date: 2026-07-27
-Status: C1 and C1B complete; C2 next
+Date: 2026-07-31
+Status: C1, C1B, and C2 complete; C2B next
 
 ## 1. Scope
 
@@ -103,7 +103,7 @@ Passing lint means the content satisfies C1's structural and editorial contract.
 
 ## 11. Launch Handoff
 
-`src/lib/starterWorlds/launch.ts` accepts strict Starter World requests. Canonical detail links carry only `starter=<id>`. Template and initialization preset are never accepted as public handoff inputs; they are derived from the recursively frozen, validated definition. Unknown fields such as template overrides, scenario overrides, parameter payloads, or RunConfigs are rejected.
+`src/lib/starterWorlds/launch.ts` accepts strict Starter World requests. Canonical C1 detail links carry only `starter=<id>`. C2 prepared-recipe links carry only `starter=<id>&recipe=<id>`. Template and initialization preset are never accepted as public handoff inputs; they are derived from recursively frozen, validated definitions and recipes. Unknown fields such as template overrides, scenario overrides, parameter payloads, or RunConfigs are rejected.
 
 The World route re-resolves the starter, template, initialization preset, and task. Ordinary World task navigation may add a validated `task` query after launch, but it cannot override runtime identity. `createStarterWorldScenario` then uses `createDefaultScenario`, `updateScenarioPreset`, and `validateScenario` to create a fresh deterministic paused tick-0 run. Starter identity is retained as scenario metadata.
 
@@ -111,7 +111,7 @@ Malformed, stale, unknown, or mismatched context stops at an accessible error. I
 
 ## 12. World Integration
 
-World keeps its established R2B shell. A compact dismissible nudge is generated from the selected definition and links back to the detail route. It names the baseline action, the specific first change, and the observations to watch.
+World keeps its established R2B shell. A compact dismissible nudge is generated from the selected definition and links back to the detail route. It names the baseline action, the specific first change, and the observations to watch. For a validated C2 recipe, the same surface also names the recipe, purpose, horizon, outputs, collection link, and explicit paired-recipe action.
 
 Dismissal is component-local and moves focus to the World stage. It does not write progress, completion, achievement, or storage state. Normal task navigation preserves the active run. A direct page reload intentionally creates a fresh run from the URL contract.
 
@@ -151,9 +151,9 @@ Catalog order is explicit and then deterministically tie-broken by ID. IDs, slug
 
 ## 16. Non-Goals
 
-C1 does not implement new mechanics, new templates, runtime composition, multiscale coupling, user-authored execution, formulas, arbitrary code, LLM agents, profiling, persuasion optimization, recommendation generation, saved learning progress, backend storage, Atlas or Lab persistence, scientific validation, C2 content, or F1 analysis.
+C1 does not implement new mechanics, new templates, runtime composition, multiscale coupling, user-authored execution, formulas, arbitrary code, LLM agents, profiling, persuasion optimization, recommendation generation, saved learning progress, backend storage, Atlas or Lab persistence, scientific validation, C2 content, or F1 analysis. C2 later adds bounded pack, recipe, and prepared-comparison content plus one template-owned initialization preset; it does not weaken any of these runtime or inference boundaries.
 
-Seven current worlds are richer content surfaces over seven existing runtimes. They are not seven claims of real-world fidelity.
+The original seven worlds and four focused C2 worlds are richer content surfaces over seven existing runtimes. They are not eleven claims of distinct mechanics or real-world fidelity.
 
 ## 17. C1B Audit
 
@@ -175,4 +175,5 @@ The audit found and fixed a nested-registry mutation path, canonical handoff ove
 - R2 complete.
 - R2B complete.
 - C1 complete.
-C1B final focused and complete browser verification passed. C1B is complete. C2: Flagship Starter Pack One is next and has not started.
+At the close of C1B, its final focused and complete browser verification had passed and C2 was the next prompt.
+C2 is now complete. `docs/product/FLAGSHIP_STARTER_PACK_ONE.md` records its contracts and boundaries. C2B: Starter Pack One Audit is next and has not started.
