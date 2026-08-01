@@ -296,7 +296,7 @@ C1 owns content discovery before World, not a new permanent World drawer. Its or
 
 The launch URL contains stable IDs only. World revalidates those IDs, uses existing scenario services, and creates a fresh paused tick-0 run. The existing compact context remains authoritative; a dismissible nudge supplies local Starter World context without progress, locks, storage, or task replacement.
 
-R1 complete. R1B complete. R2 complete. R2B complete. C1 complete. C1B complete. C2 complete. C2B: Starter Pack One Audit is next.
+R1 complete. R1B complete. R2 complete. R2B complete. C1 complete. C1B complete. C2 complete. C2B complete. C3: Guided Investigation / Tutorial World is next.
 
 ## C1B Starter World Content Hardening
 
@@ -312,4 +312,10 @@ C2 extends entry-side content rather than adding a permanent World tool. `/world
 
 Each flagship detail owns its prepared-comparison explanation. Baseline and contrast actions use strict `starter` and `recipe` IDs; World revalidates both and creates a fresh paused tick-0 scenario. The mounted World shell remains unchanged and dominant. A compact recipe nudge provides purpose, horizon, outputs, back links, and an explicit sibling link without mutating the current run or replacing the existing Compare task.
 
-Pack, recipe, and prepared-comparison artifacts are data-only content. Derived differences describe configuration, not results. Existing comparison summaries remain bounded World-local storage and do not become curriculum progress, Lab evidence, or Atlas discovery. C2 is complete. C2B: Starter Pack One Audit is next and has not started.
+Pack, recipe, and prepared-comparison artifacts are data-only content. Derived differences describe configuration, not results. Existing comparison summaries remain bounded World-local storage and do not become curriculum progress, Lab evidence, or Atlas discovery. C2 is complete.
+
+## C2B Flagship Collection Hardening
+
+C2B preserves the C2 route and workspace ownership while correcting its comparison boundary. Effective scenario configuration and initialized tick-zero state are separate layers: the detail page now states material tick-zero equality and difference explicitly, including the Firebreak pair's changed fuel quantity. Matching scenario fields are no longer presented as an exhaustive claim about initialized worlds.
+
+Explicit sibling activation still replaces the current recipe with a fresh paused tick-zero run through the same mounted World route. Focus moves to the replacement recipe context, while an existing Setup edit remains a visible draft distinct from the new active value. Existing bounded World comparisons survive unchanged; no automatic capture, progress state, Lab/Atlas record, or new storage path exists. C2B is complete. C3: Guided Investigation / Tutorial World is next and has not started.

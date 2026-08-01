@@ -854,7 +854,7 @@ export const rawStarterWorldDefinitions = [
     slug: "coordination-under-sensor-noise",
     title: "Coordination Under Sensor Noise",
     shortTitle: "Noisy Coordination",
-    hookQuestion: "How much uncertain local sensing can a moving group tolerate before coordination fragments?",
+    hookQuestion: "How does uncertain local sensing change coordination in a moving group?",
     oneSentencePremise: "The same moving agents organize from local steering while one bounded noise value changes between prepared runs.",
     summary:
       "This focused Collective Motion experience holds the seeded starting positions and steering rules steady while changing model noise. Comparing alignment, dispersion, and visible subgroup formation reveals how one local uncertainty term can reorganize aggregate motion.",
@@ -971,7 +971,7 @@ export const rawStarterWorldDefinitions = [
     slug: "clustered-outbreak-starts",
     title: "Clustered Outbreak Starts",
     shortTitle: "Outbreak Geometry",
-    hookQuestion: "When do several local outbreaks merge into one population-wide wave?",
+    hookQuestion: "Do several local outbreak starts remain separate or merge into a broader model wave?",
     oneSentencePremise: "Equal infected counts begin in one cluster or several seeded hotspots while contact and recovery rules remain shared.",
     summary:
       "This focused Local Contact Outbreaks experience isolates initial spatial geometry. One prepared run concentrates nine infected model agents near the center; the other distributes the same count around three seeded hotspots before identical local transmission and recovery updates begin.",
@@ -1208,7 +1208,7 @@ export const rawStarterWorldDefinitions = [
     hookQuestion: "How does the arrangement of burnable cells decide whether spread crosses the landscape?",
     oneSentencePremise: "A connected fuel grid and a grid interrupted by one empty-cell corridor use the same local spread settings.",
     summary:
-      "This focused Landscape Spread experience compares an uninterrupted fuel path with one deterministic full-height corridor made from the existing empty-cell state. Both starts share a central ignition, seed, local neighborhood, and spread settings so spatial connectivity remains the visible distinction.",
+      "This focused Landscape Spread experience compares an uninterrupted fuel path with one deterministic full-height corridor made from the existing empty-cell state. Both starts share a central ignition, seed, local neighborhood, and spread settings; the corridor changes connectivity and removes one column from the initial fuel quantity.",
     runtimeStatus: "runnable",
     parentWorldId: "forest-spread",
     catalogOrder: 65,

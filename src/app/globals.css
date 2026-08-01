@@ -12441,6 +12441,33 @@ textarea[aria-invalid="true"] {
   line-height: 1.45;
 }
 
+.world-detail__comparison-intro > dl {
+  display: grid;
+  grid-template-columns: 76px minmax(0, 1fr);
+  gap: 10px;
+  margin: 7px 0 0;
+  padding-top: 10px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.world-detail__comparison-intro dt,
+.world-detail__comparison-intro dd {
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.world-detail__comparison-intro dt {
+  color: var(--palette-amber-320);
+  font-family: var(--font-label);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.world-detail__comparison-intro dd {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
 .world-detail__recipe-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -12964,6 +12991,11 @@ textarea[aria-invalid="true"] {
 .starter-nudge--recipe {
   width: min(480px, calc(100% - 24px));
   align-items: flex-start;
+}
+
+.starter-nudge:focus-visible {
+  outline: var(--interaction-focus-outline);
+  outline-offset: 3px;
 }
 
 .starter-nudge--recipe > button {

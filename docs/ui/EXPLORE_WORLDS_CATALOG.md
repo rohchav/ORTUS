@@ -1,7 +1,7 @@
 # Explore Worlds Catalog
 
-Date: 2026-07-31
-Status: C1, C1B, and C2 complete; C2B next
+Date: 2026-08-01
+Status: C1, C1B, C2, and C2B complete; C3 next
 
 ## 1. Route Structure
 
@@ -122,7 +122,7 @@ No screen-reader, assistive-technology, forced-colors, browser-zoom, WCAG, or co
 
 ## 12. Verification
 
-Focused tests cover the strict schemas, versions, recursive registry immutability, taxonomy, anatomy, quality lint, source structure and DOI shape, unsafe keys, duplicate identities, production registry references, deterministic query behavior, ID-only launch context, override rejection, every fresh paused tick-0 handoff, all original first-change control paths, all eight C2 recipes, derived comparison values, no storage, six catalog viewports, all detail routes, mobile order, focus, Back/reload semantics, diagnostics, reduced motion, and Axe.
+Focused tests cover the strict schemas, versions, recursive registry immutability, taxonomy, anatomy, quality lint, source structure and DOI shape, unsafe keys, duplicate identities, production registry references, deterministic query behavior, ID-only launch context, override rejection, every fresh paused tick-0 handoff, all original first-change control paths, all eight C2 recipes, effective-scenario and tick-zero comparison values, deterministic pair horizons, no storage, six catalog viewports, all detail routes, mobile order, sibling focus, Back/reload semantics, diagnostics, reduced motion, and Axe.
 
 The required final C1 gate also runs the established destination-shell suite, full UI suite, typecheck, unit suite, production build, simulation performance smoke, Atlas preview smoke, and `git diff --check`.
 
@@ -142,4 +142,4 @@ The required final C1 gate also runs the established destination-shell suite, fu
 - R2B complete.
 - C1 complete.
 At the close of C1B, its final focused and complete browser verification had passed and C2 was the next prompt.
-C2 is now complete. C2B: Starter Pack One Audit is next and has not started.
+C2 is complete. C2B is complete. C3: Guided Investigation / Tutorial World is next and has not started.

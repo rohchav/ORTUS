@@ -27,7 +27,7 @@ C1B rejected one Tier A bounded-confidence claim that the current Opinion runtim
 ### A1. Coordination Under Sensor Noise
 
 - `workingTitle`: Coordination Under Sensor Noise
-- `hookQuestion`: How much uncertain local sensing can a moving group tolerate before coordination fragments?
+- `hookQuestion`: How does uncertain local sensing change coordination in a moving group?
 - `domain`: Collective behavior; engineering systems.
 - `fictionalOrResearchContext`: Research-grounded stylized swarm.
 - `entities`: Moving boids with local steering neighborhoods.
@@ -49,7 +49,7 @@ C1B rejected one Tier A bounded-confidence claim that the current Opinion runtim
 ### A2. Clustered Outbreak Starts
 
 - `workingTitle`: Clustered Outbreak Starts
-- `hookQuestion`: When do several local outbreaks merge into one population-wide wave?
+- `hookQuestion`: Do several local outbreak starts remain separate or merge into a broader model wave?
 - `domain`: Epidemiology; spatial contagion.
 - `fictionalOrResearchContext`: Research-grounded stylized contact process.
 - `entities`: Existing susceptible, infected, and recovered model agents.

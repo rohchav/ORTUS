@@ -1,8 +1,8 @@
 # Local Rules, Global Patterns Collection
 
-Prompt: C2
+Prompt: C2 / C2B
 
-Status: complete; C2B audit next
+Status: C2 and C2B complete; C3 next
 
 ## 1. Catalog Integration
 
@@ -22,11 +22,11 @@ The four flagship details retain the C1 anatomy, mechanisms, investigations, res
 
 ## 5. Recipe Cards
 
-Each `Prepared comparison` section contains one Baseline and one Contrast card. Text labels distinguish roles independently of color. Cards show the recipe title, actual role-specific differences, a bounded subset of derived shared values, recommended task, run horizon, named outputs, visual cue, and specific launch action.
+Each `Prepared comparison` section contains one Baseline and one Contrast card. Text labels distinguish roles independently of color. A comparison-wide tick-zero row states material initialized-state equality and difference. Cards show the recipe title, role-specific scenario differences, a bounded subset of shared scenario settings, recommended task, run horizon, named outputs, visual cue, and specific launch action.
 
 ## 6. Controlled Differences
 
-UI values come from `PreparedStarterComparison.controlledDifferences`, which is derived from effective validated recipes. The cards do not accept hand-written difference claims or dump URL/runtime payloads. Shared conditions are likewise generated and summarized without hiding the full data artifact.
+Card values come from `PreparedStarterComparison.controlledDifferences`, which is derived from validated scenario configurations. Shared settings are likewise generated. C2B established that this configuration diff does not exhaust initialized-world differences, so material tick-zero state is separately disclosed and engine-tested; Firebreak now states its 40-cell fuel-quantity change directly.
 
 ## 7. World Handoff
 
@@ -38,7 +38,7 @@ World shows the flagship title, recipe title, concise purpose, bounded run horiz
 
 ## 9. Sibling Navigation
 
-The sibling action is an explicit link to the paired recipe. Activation creates a fresh paused tick-0 scenario; it never mutates the current run in place. Browser Back remains coherent, and dismissal does not create storage or progress state.
+The sibling action is an explicit link to the paired recipe. Activation creates a fresh paused tick-0 scenario; it never mutates the current run in place. Focus moves to the newly loaded recipe context instead of remaining on a link whose action has reversed. Browser Back remains coherent, and dismissal does not create storage or progress state.
 
 ## 10. Visual Identity
 
@@ -46,11 +46,11 @@ Deterministic local CSS/DOM motifs show aligned versus scattered motion, one clu
 
 ## 11. Responsive Behavior
 
-Rendered checks cover `1440x900`, `1280x720`, `1024x768`, `900x700`, `1280x600`, and `390x844`. The collection, details, recipe cards, and World context avoid horizontal document overflow and keep actions reachable. World retains its dominant batched-render stage.
+Rendered C2B checks cover `1440x900`, `1280x720`, `1024x768`, `900x700`, `1280x600`, and `390x844`. The collection, details, tick-zero disclosure, recipe cards, and World context avoid horizontal document overflow and keep actions reachable. World retains its dominant batched-render stage.
 
 ## 12. Accessibility
 
-Routes retain one H1, meaningful section order, specific card and action names, visible role text, keyboard-operable links and controls, focus return after nudge dismissal, reduced-motion usability, and representative Axe-clean states. This is rendered automated evidence, not screen-reader, AT, forced-colors, touch, or WCAG certification.
+Routes retain one H1, meaningful section order, specific card and action names, visible role text, keyboard-operable links and controls, focus return after dismissal, focus transfer after sibling activation, reduced-motion usability, and expanded Axe-clean states. This is rendered automated evidence, not screen-reader, AT, forced-colors, touch, or WCAG certification.
 
 ## 13. Error States
 
@@ -58,4 +58,4 @@ Invalid recipe requests use the existing Starter launch error surface with `role
 
 ## 14. Verification
 
-`tests/ui/starter-world-pack.spec.ts` covers catalog integration, collection hierarchy, all four details, all eight launches, recipe values, reload, Back, sibling fresh-run semantics, nudge dismissal, invalid requests, six viewports, mobile operation, reduced motion, diagnostics, and Axe. Full final gate results are recorded in `docs/codex/SESSION_LOG.md`.
+`tests/ui/starter-world-pack.spec.ts` covers catalog integration, collection hierarchy, all four details, all eight launches, recipe values, tick-zero disclosure, reload, Back, running/draft/comparison sibling replacement, focus, dismissal, hostile requests, six viewports, mobile operation, reduced motion, diagnostics, and Axe. C2B's audit is `docs/product/FLAGSHIP_STARTER_PACK_ONE_AUDIT.md`; full final gates are recorded in `docs/codex/SESSION_LOG.md`.

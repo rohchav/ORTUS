@@ -153,6 +153,10 @@ export function StarterWorldDetail({ world }: StarterWorldDetailProps) {
               <div className="world-detail__comparison-intro">
                 <strong>{comparison.question}</strong>
                 <p>{comparison.expectedPattern}</p>
+                <dl>
+                  <dt>Tick-0 state</dt>
+                  <dd>{comparison.tickZeroSummary}</dd>
+                </dl>
               </div>
               <div className="world-detail__recipe-grid">
                 <RecipeCard world={world} recipe={baselineRecipe} comparison={comparison} />
@@ -295,10 +299,7 @@ function RecipeCard({
 }) {
   const launch = requireRecipeLaunch(world.id, recipe.id);
   const role = recipe.comparisonRole === "baseline" ? "Baseline" : "Contrast";
-  const shared = [
-    ...comparison.sharedConditions.filter((condition) => condition.field === "seed"),
-    ...comparison.sharedConditions.filter((condition) => condition.field !== "seed")
-  ];
+  const shared = prioritizeSharedConditions(recipe, comparison.sharedConditions);
   const outputs = recipe.outputsToWatch.map((metricId) => {
     return world.whatToWatch.find((item) => item.metricId === metricId)?.label ?? metricId;
   });
@@ -322,13 +323,13 @@ function RecipeCard({
         </dl>
       </div>
       <div>
-        <h4>What remains controlled</h4>
+        <h4>What remains controlled in the scenario</h4>
         <ul>
           {shared.slice(0, 6).map((condition) => (
             <li key={condition.field}><span>{condition.label}</span><strong>{formatComparisonValue(condition.value)}</strong></li>
           ))}
         </ul>
-        {shared.length > 6 ? <small>Plus {shared.length - 6} other matching effective values.</small> : null}
+        {shared.length > 6 ? <small>Plus {shared.length - 6} other matching scenario settings.</small> : null}
       </div>
       <dl className="world-recipe__run">
         <div><dt>Task</dt><dd>{capitalize(recipe.recommendedTask)}</dd></div>
@@ -341,6 +342,22 @@ function RecipeCard({
       </Link>
     </article>
   );
+}
+
+function prioritizeSharedConditions(
+  recipe: StarterWorldLaunchRecipe,
+  conditions: PreparedStarterComparison["sharedConditions"]
+) {
+  const preferredFields = [
+    "seed",
+    ...Object.keys(recipe.parameterOverrides).map((key) => `parameters.${key}`),
+    ...Object.keys(recipe.initializationOptions ?? {}).map((key) => `initializationOptions.${key}`)
+  ];
+  const preferred = new Set(preferredFields);
+  return [
+    ...preferredFields.flatMap((field) => conditions.filter((condition) => condition.field === field)),
+    ...conditions.filter((condition) => !preferred.has(condition.field))
+  ];
 }
 
 function requireRecipeLaunch(starterWorldId: string, recipeId: string) {

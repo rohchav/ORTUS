@@ -159,6 +159,7 @@ test("all four flagship details preserve action-first hierarchy and expose exact
       `/world?starter=${world.id}&recipe=${world.contrast.id}`
     );
     await expect(detail.getByText(/what remains controlled/i).first()).toBeVisible();
+    await expect(detail.getByText("Tick-0 state", { exact: true })).toBeVisible();
     for (const output of world.outputs) {
       await expect(detail.getByText(output, { exact: true }).first()).toBeVisible();
     }
@@ -168,6 +169,17 @@ test("all four flagship details preserve action-first hierarchy and expose exact
       await expect(outbreakSides).toHaveCount(2);
       await expect(outbreakSides.nth(0).locator(".starter-world-visual__outbreak-node")).toHaveCount(9);
       await expect(outbreakSides.nth(1).locator(".starter-world-visual__outbreak-node")).toHaveCount(9);
+    }
+    if (world.id === "patch-density-firebreaks") {
+      await expect(detail.getByText(/2,399 fuel cells and 1 burning cell/i)).toBeVisible();
+      await expect(detail.getByText(/changes both fuel arrangement and fuel quantity/i)).toBeVisible();
+      for (const recipeId of [world.baseline.id, world.contrast.id]) {
+        const recipe = detail.locator(`[data-starter-recipe='${recipeId}']`);
+        await expect(recipe).toContainText("Spread probability1");
+        await expect(recipe).toContainText("Neighbor modevonNeumann");
+        await expect(recipe).toContainText("Boundary modeclosed");
+        await expect(recipe).toContainText("Seedc2-firebreak-001");
+      }
     }
     await expectNoHorizontalOverflow(page);
     await expectNoDiagnostics(diagnostics);
@@ -221,22 +233,68 @@ test("all eight recipe URLs create the intended fresh paused run and compact def
   }
 });
 
-test("sibling navigation is explicit, creates a fresh contrast, preserves Back, and keeps dismissal page-session only", async ({ page }) => {
+test("sibling navigation replaces running state, preserves explicit drafts and comparisons, moves focus, and keeps Back coherent", async ({ page }) => {
+  test.setTimeout(120_000);
   await page.setViewportSize({ width: 1280, height: 720 });
   await page.goto("/worlds/coordination-under-sensor-noise", { waitUntil: "domcontentloaded" });
   const detailUrl = page.url();
   await page.getByRole("link", { name: "Launch baseline: Clear local signals" }).first().click();
   await expect(page.locator("[data-starter-recipe-id='coordination-clear-signals']")).toBeVisible();
-  await page.getByRole("button", { name: "Step exactly one tick" }).click();
-  await expect(page.locator(".timeline-strip__readout strong").first()).toHaveText("1");
-  await page.getByRole("link", { name: "Launch contrast: Noisy local signals" }).click();
-  await expect(page.locator("[data-starter-recipe-id='coordination-noisy-signals']")).toBeVisible();
+
+  await page.getByRole("navigation", { name: "World tasks" }).getByRole("button", { name: "Compare" }).click();
+  await page.getByLabel("Run label").fill("Existing comparison summary");
+  await page.getByRole("button", { name: "Capture Run" }).click();
+  await expect(page.getByLabel("Label", { exact: true })).toHaveValue("Existing comparison summary");
+
+  await page.getByRole("navigation", { name: "World tasks" }).getByRole("button", { name: "Setup" }).click();
+  await page.getByRole("button", { name: /All parameters/ }).click();
+  const noiseDraft = page.getByRole("spinbutton", { name: "Noise numeric value" });
+  await noiseDraft.fill("0.2");
+  await expect(noiseDraft.locator("xpath=ancestor::label").locator(".parameter-control__mode")).toHaveText(
+    "Active run: 0.01. Draft pending."
+  );
+
+  await page.getByRole("navigation", { name: "World tasks" }).getByRole("button", { name: "Change" }).click();
+  await page.getByRole("button", { name: "Run simulation" }).click();
+  await expect.poll(async () => Number(await page.locator(".timeline-strip__readout strong").first().textContent())).toBeGreaterThan(2);
+  const storageBeforeSibling = await readStorage(page);
+  const sibling = page.getByRole("link", { name: "Launch contrast: Noisy local signals" });
+  await sibling.focus();
+  await sibling.press("Enter");
+  const contrastNudge = page.locator("[data-starter-recipe-id='coordination-noisy-signals']");
+  await expect(contrastNudge).toBeVisible();
+  await expect(contrastNudge).toBeFocused();
+  await expect(page).toHaveURL(/starter=coordination-under-sensor-noise&recipe=coordination-noisy-signals/);
   await expect(page.locator(".timeline-strip__readout strong").first()).toHaveText("0");
   await expect(page.locator(".timeline-strip__label strong")).toHaveText("Paused");
-  await page.goBack({ waitUntil: "domcontentloaded" });
+
+  await page.getByRole("navigation", { name: "World tasks" }).getByRole("button", { name: "Setup" }).click();
+  const allParameters = page.getByRole("button", { name: /All parameters/ });
+  if (await allParameters.isVisible()) {
+    await allParameters.click();
+  }
+  const contrastNoise = page.getByRole("spinbutton", { name: "Noise numeric value" });
+  await expect(contrastNoise).toHaveValue("0.2");
+  await expect(contrastNoise.locator("xpath=ancestor::label").locator(".parameter-control__mode")).toHaveText(
+    "Active run: 0.28. Draft pending."
+  );
+  await page.getByRole("navigation", { name: "World tasks" }).getByRole("button", { name: "Compare" }).click();
+  await expect(page.getByLabel("Label", { exact: true })).toHaveValue("Existing comparison summary");
+  expect(await readStorage(page)).toEqual(storageBeforeSibling);
+
+  await page.goBack();
+  await expect(page.locator("[data-starter-recipe-id='coordination-noisy-signals']")).toBeVisible();
+  await page.goBack();
+  await expect(page.locator("[data-starter-recipe-id='coordination-noisy-signals']")).toBeVisible();
+  await page.goBack();
   await expect(page.locator("[data-starter-recipe-id='coordination-clear-signals']")).toBeVisible();
   await expect(page.locator(".timeline-strip__readout strong").first()).toHaveText("0");
-  await page.goBack({ waitUntil: "domcontentloaded" });
+  for (let index = 0; index < 4 && page.url() !== detailUrl; index += 1) {
+    await page.goBack();
+    if (page.url() !== detailUrl) {
+      await expect(page.locator("[data-starter-recipe-id='coordination-clear-signals']")).toBeVisible();
+    }
+  }
   await expect(page.url()).toBe(detailUrl);
 
   await page.getByRole("link", { name: "Launch baseline: Clear local signals" }).first().click();
@@ -263,10 +321,21 @@ test("invalid recipe requests are announced and stop before any World constructi
   const invalidPaths = [
     "/world?starter=coordination-under-sensor-noise",
     "/world?recipe=coordination-clear-signals",
+    "/world?starter=missing-starter&recipe=coordination-clear-signals",
     "/world?starter=coordination-under-sensor-noise&recipe=missing-recipe",
     "/world?starter=coordination-under-sensor-noise&recipe=outbreak-one-cluster",
+    "/world?starter=coordination-under-sensor-noise&starter=clustered-outbreak-starts&recipe=coordination-clear-signals",
     "/world?starter=coordination-under-sensor-noise&recipe=coordination-clear-signals&recipe=coordination-noisy-signals",
     "/world?starter=coordination-under-sensor-noise&recipe=coordination-clear-signals&noise=0.5",
+    "/world?starter=coordination-under-sensor-noise&recipe=coordination-clear-signals&preset=stale-preset",
+    "/world?starter=coordination-under-sensor-noise&recipe=coordination-clear-signals&task=predict",
+    "/world?starter=coordination-under-sensor-noise&recipe=coordination-clear-signals&template=epidemic-spread",
+    "/world?starter=coordination-under-sensor-noise&recipe=coordination-clear-signals&scenario=random-headings",
+    "/world?starter=coordination-under-sensor-noise&recipe=coordination-clear-signals&parameters=%7B%22noise%22%3A0.5%7D",
+    "/world?starter=coordination-under-sensor-noise&recipe=coordination-clear-signals&runConfig=%7B%7D",
+    "/world?starter=coordination-under-sensor-noise&recipe=coordination-clear-signals&payload=%7B%22templateId%22%3A%22flocking-boids%22%7D",
+    "/world?starter=coordination-under-sensor-noise&recipe=coordination-clear-signals&__proto__=%7B%22polluted%22%3Atrue%7D",
+    "/world?starter=%20&recipe=coordination-clear-signals",
     "/world?starter=coordination-under-sensor-noise&recipe=Bad%20Recipe",
     "/world?starter=coordination-under-sensor-noise&recipe="
   ];
@@ -277,16 +346,26 @@ test("invalid recipe requests are announced and stop before any World constructi
     await expect(page.locator(".ortus-shell")).toHaveCount(0);
     await expect(page.locator(".world-stage")).toHaveCount(0);
   }
+
+  await page.goto(
+    "/world?recipe=coordination-clear-signals&starter=coordination-under-sensor-noise",
+    { waitUntil: "domcontentloaded" }
+  );
+  await expect(page.locator("[data-starter-recipe-id='coordination-clear-signals']")).toBeVisible();
+  await expect(page.locator(".timeline-strip__readout strong").first()).toHaveText("0");
 });
 
-test("representative C2 states are Axe-clean, reduced-motion usable, overflow-free, and diagnostically quiet", async ({ page }) => {
+test("catalog, collection, every detail, recipe states, and invalid state are Axe-clean and diagnostically quiet", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   for (const path of [
     "/worlds",
     collectionPath,
     "/worlds/coordination-under-sensor-noise",
+    "/worlds/clustered-outbreak-starts",
+    "/worlds/predator-pressure-and-recovery",
     "/worlds/patch-density-and-firebreaks",
     "/world?starter=coordination-under-sensor-noise&recipe=coordination-clear-signals",
+    "/world?starter=clustered-outbreak-starts&recipe=outbreak-separated-hotspots",
     "/world?starter=patch-density-firebreaks&recipe=fire-corridor-break",
     "/world?starter=coordination-under-sensor-noise&recipe=missing-recipe"
   ]) {
@@ -309,7 +388,9 @@ test("mobile recipe World keeps the stage reachable and recipe actions keyboard-
   await sibling.focus();
   await expect(sibling).toBeFocused();
   await sibling.press("Enter");
-  await expect(page.locator("[data-starter-recipe-id='fire-connected-fuel']")).toBeVisible();
+  const baselineNudge = page.locator("[data-starter-recipe-id='fire-connected-fuel']");
+  await expect(baselineNudge).toBeVisible();
+  await expect(baselineNudge).toBeFocused();
   await expect(page.locator(".timeline-strip__readout strong").first()).toHaveText("0");
   await expectNoHorizontalOverflow(page);
 });

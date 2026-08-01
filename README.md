@@ -48,11 +48,11 @@ npm run build
 
 `npm run lint: unavailable, package.json has no lint script.` Lint is intentionally unavailable until a dedicated lint/tooling prompt adds it; do not treat missing lint as a failing gate.
 
-`npm run test:ui` is a dev-only Playwright/Axe rendered audit harness for `/`, `/worlds`, `/worlds/[slug]`, `/worlds/packs/[slug]`, `/world`, `/builder`, `/lab`, and `/atlas`. R1/R1B cover the Start Hub and first-run handoff; R2/R2B cover the stable World stage and task architecture; C1/C1B cover the original seven-world framework; C2 covers the first flagship collection, four focused details, eight strict recipe handoffs, responsive states, keyboard focus, reduced motion, diagnostics, and Axe. These checks are not a beginner user study, screen-reader, assistive-technology, forced-colors, actual browser-zoom, complete mobile-workflow, or WCAG conformance claim.
+`npm run test:ui` is a dev-only Playwright/Axe rendered audit harness for `/`, `/worlds`, `/worlds/[slug]`, `/worlds/packs/[slug]`, `/world`, `/builder`, `/lab`, and `/atlas`. R1/R1B cover the Start Hub and first-run handoff; R2/R2B cover the stable World stage and task architecture; C1/C1B cover the original seven-world framework; C2/C2B cover the first flagship collection, four focused details, eight strict recipe handoffs, effective-scenario and tick-zero comparison disclosure, responsive states, keyboard focus, reduced motion, diagnostics, and Axe. These checks are not a beginner user study, screen-reader, assistive-technology, forced-colors, actual browser-zoom, complete mobile-workflow, or WCAG conformance claim.
 
 ## Roadmap Status
 
-ORTUS has completed Prompt 39B plus the documented neural, Research World, and UI work through GW9B, followed by R1, R1B, R2, R2B, C1, C1B, and `C2: Flagship Starter Pack One`. `C2B: Starter Pack One Audit` is next and has not started. The active product sequence is documented in `docs/product/ORTUS_PRODUCT_EXPERIENCE_RESET_ROADMAP.md`. The F0 fractal branch remains documented but F1 is paused under the future E3 Analytical Lenses milestone.
+ORTUS has completed Prompt 39B plus the documented neural, Research World, and UI work through GW9B, followed by R1, R1B, R2, R2B, C1, C1B, C2, and `C2B: Flagship Starter Pack One Audit + Hardening`. `C3: Guided Investigation / Tutorial World` is next and has not started. The active product sequence is documented in `docs/product/ORTUS_PRODUCT_EXPERIENCE_RESET_ROADMAP.md`. The F0 fractal branch remains documented but F1 is paused under the future E3 Analytical Lenses milestone.
 
 ## Product Philosophy
 

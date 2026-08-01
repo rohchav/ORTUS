@@ -328,6 +328,83 @@ describe("forest fire / landscape spread template", () => {
     ).toThrow(/do not accept custom options/);
   });
 
+  it("keeps the firebreak corridor continuous, in bounds, and blocking at minimum and odd/even grid sizes", () => {
+    const dimensions = [
+      { width: 10, height: 10 },
+      { width: 11, height: 10 },
+      { width: 10, height: 11 },
+      { width: 61, height: 41 }
+    ];
+
+    for (const { width, height } of dimensions) {
+      const options = {
+        seed: `firebreak-${width}-${height}`,
+        parameters: params({
+          gridWidth: width,
+          gridHeight: height,
+          initialFuelDensity: 1,
+          initialIgnitionCount: 1,
+          spreadProbability: 1,
+          lightningProbability: 0,
+          regrowthProbability: 0,
+          neighborMode: "vonNeumann",
+          boundaryMode: "closed"
+        }),
+        initialization: { presetId: "firebreak-corridor", options: {} }
+      } as const;
+      const first = new SimulationEngine(forestFireTemplate, options).createSnapshot();
+      const repeat = new SimulationEngine(forestFireTemplate, options).createSnapshot();
+      const corridorColumn = Math.floor(width * (2 / 3));
+
+      expect(first).toEqual(repeat);
+      expect(first.entities).toHaveLength(width * height);
+      expect(countStates(first)).toEqual({
+        empty: height,
+        fuel: width * height - height - 1,
+        burning: 1,
+        burned: 0
+      });
+      for (let row = 0; row < height; row += 1) {
+        expect(stateAt(first, row, corridorColumn)?.state).toBe("empty");
+      }
+      expect(burningCellCoordinates(first)).toHaveLength(1);
+      expect(burningCellCoordinates(first)[0]!.col).toBeLessThan(corridorColumn);
+      const grid = first.spaces.find((space) => space.kind === "grid2d");
+      expect(grid?.kind).toBe("grid2d");
+      if (grid?.kind === "grid2d") {
+        for (const cell of Object.values(grid.cells)) {
+          expect(cell.row).toBeGreaterThanOrEqual(0);
+          expect(cell.row).toBeLessThan(height);
+          expect(cell.col).toBeGreaterThanOrEqual(0);
+          expect(cell.col).toBeLessThan(width);
+        }
+      }
+    }
+
+    const boundedOptions = {
+      seed: "firebreak-bounded-spread",
+      parameters: params({
+        gridWidth: 10,
+        gridHeight: 10,
+        initialFuelDensity: 1,
+        initialIgnitionCount: 1,
+        spreadProbability: 1,
+        lightningProbability: 0,
+        regrowthProbability: 0,
+        neighborMode: "vonNeumann",
+        boundaryMode: "closed"
+      }),
+      initialization: { presetId: "firebreak-corridor", options: {} }
+    } as const;
+    const engine = new SimulationEngine(forestFireTemplate, boundedOptions);
+    const initial = engine.createSnapshot();
+    engine.runSteps(30);
+    expect(countStates(engine.createSnapshot())).toEqual({ empty: 10, fuel: 30, burning: 0, burned: 60 });
+    const restored = SimulationEngine.fromSnapshot(forestFireTemplate, engine.exportSnapshot());
+    expect(restored.createSnapshot()).toEqual(engine.createSnapshot());
+    expect(new SimulationEngine(forestFireTemplate, boundedOptions).createSnapshot()).toEqual(initial);
+  });
+
   it("round-trips scenarios and RunConfig recipes without carrying stale run state", () => {
     const scenario = updateScenarioPreset(
       createDefaultScenario({ template: forestFireTemplate, scenarioId: "scenario-forest-roundtrip", now, seed: "forest-scenario-seed" }),

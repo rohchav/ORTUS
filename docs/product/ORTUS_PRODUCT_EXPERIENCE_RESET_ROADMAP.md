@@ -1,7 +1,7 @@
 # ORTUS Product Experience Reset Roadmap
 
-Date: 2026-07-31
-Status: active product sequence; R1, R1B, R2, R2B, C1, C1B, and C2 complete; C2B next
+Date: 2026-08-01
+Status: active product sequence; R1, R1B, R2, R2B, C1, C1B, C2, and C2B complete; C3 next
 
 ## Why This Sequence Exists
 
@@ -52,7 +52,9 @@ C1 is complete. It adds the strict source-backed Starter World registry, `/world
 
 `C1B: Starter World Content Framework Audit` is complete. It audited and hardened source, content, launch, portfolio, rendered accessibility, responsive behavior, and test contracts without changing simulation runtime or persistence.
 
-`C2: Flagship Starter Pack One` is complete. It adds `Local Rules, Global Patterns`, four focused Starter Worlds, eight strict prepared recipes, four comparisons derived from validated effective scenarios, a collection route, and recipe-aware fresh-run handoffs. The bounded Forest Fire corridor preset changes initialization layout only. C2 adds no general engine primitive, new metric, intervention, persistence, Lab/Atlas record, Builder execution, or scientific-validation claim. C2B: Starter Pack One Audit is next and has not started; C3-C4, S1-S5, and E1-E3 have not started under this roadmap.
+`C2: Flagship Starter Pack One` is complete. It adds `Local Rules, Global Patterns`, four focused Starter Worlds, eight strict prepared recipes, four comparisons derived from validated effective scenarios, a collection route, and recipe-aware fresh-run handoffs. The bounded Forest Fire corridor preset changes initialization layout only. C2 adds no general engine primitive, new metric, intervention, persistence, Lab/Atlas record, Builder execution, or scientific-validation claim.
+
+`C2B: Flagship Starter Pack One Audit + Hardening` is complete. It independently audits all eight authoritative scenarios, tick-zero initialization, all four fixed-seed horizons, the existing Compare workflow, public launch rejection, responsive/accessibility behavior, and Forest Fire containment. It corrects a hidden Firebreak fuel-quantity difference, sibling focus transfer, shared-setting hierarchy, and overcommitted comparison language without changing template rules or persistence. C3: Guided Investigation / Tutorial World is next and has not started; C4, S1-S5, and E1-E3 have not started under this roadmap.
 
 The active route hierarchy is Start `/`, Start-adjacent Explore Worlds `/worlds`, the flagship collection `/worlds/packs/local-rules-global-patterns`, World `/world`, Workshop `/builder`, Atlas `/atlas`, and Lab `/lab`. `/worlds` contains eleven validated runnable definitions. Four are focused C2 experiences over existing production templates; their existence is not evidence that C2B, later starter packs, composition, Lab, Atlas, or analysis milestones exist.
 
@@ -82,7 +84,9 @@ Explicit user direction may revise this roadmap, but documentation-only mileston
 - Starter content must not create hidden parameter defaults or mechanics.
 - Prepared recipes must remain strict ID-addressed, validated data over authoritative template presets, parameters, tasks, and outputs; they must not accept arbitrary RunConfig payloads or hidden runtime capabilities.
 - Prepared-comparison differences and shared conditions must be derived from effective validated scenarios. A prepared pair is instructional content, not a result, controlled experiment, robustness claim, causal claim, or validation artifact.
+- Effective configuration equality does not prove equal initialized state. Material tick-zero count, geometry, topology, and state differences must be audited and disclosed.
 - A featured starter launch must create its documented fresh prepared run; it must not silently resume a prior in-memory trajectory.
+- Explicit sibling-recipe activation must transfer focus to the replacement recipe context while preserving any Setup draft as a draft distinct from the new active run.
 - The live system remains the primary World visual object.
 - World task labels, query state, current navigation, and visible task must agree without resetting the active run.
 - Keep World Stage and persistent playback mounted outside task rendering; task switching must not recreate or reset the active run.

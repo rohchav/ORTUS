@@ -393,6 +393,7 @@ function validateComparisonDeclaration(
   const allText = [
     declaration.title,
     declaration.question,
+    declaration.tickZeroSummary,
     declaration.expectedPattern,
     declaration.interpretationBoundary,
     ...declaration.suggestedProcedure

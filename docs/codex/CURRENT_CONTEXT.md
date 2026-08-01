@@ -1,6 +1,6 @@
 # ORTUS Current Context
 
-Last updated: 2026-07-31 after Prompt C2 Flagship Starter Pack One
+Last updated: 2026-08-01 after Prompt C2B Flagship Starter Pack One Audit + Hardening
 
 ## Current Prompt Status
 
@@ -11,7 +11,8 @@ Last updated: 2026-07-31 after Prompt C2 Flagship Starter Pack One
 - C1 complete.
 - C1B complete.
 - C2 complete.
-- C2B: Starter Pack One Audit is next.
+- C2B complete.
+- C3: Guided Investigation / Tutorial World is next and has not started.
 
 `/` is the task-centered Start Hub; `/worlds` is its eleven-entry runnable Starter World catalog; `/worlds/[slug]` is the source-backed detail experience; `/worlds/packs/local-rules-global-patterns` is the first flagship collection; `/world` is the live workbench; `/builder`, `/atlas`, and `/lab` retain their established behavior. Primary navigation remains Start, World, Workshop, and a keyboard-operated Research tools menu. Explore Worlds is Start-adjacent rather than an equal global destination. F1 remains paused under E3 Analytical Lenses.
 
@@ -25,7 +26,11 @@ C1B's audit record is `docs/product/STARTER_WORLD_CONTENT_FRAMEWORK_AUDIT.md`. I
 
 C2's implementation records are `docs/product/FLAGSHIP_STARTER_PACK_ONE.md` and `docs/ui/LOCAL_RULES_GLOBAL_PATTERNS_COLLECTION.md`. The strict `src/lib/starterWorlds/packs` layer defines one recursively frozen pack, eight validated recipes, and four prepared comparisons whose differences and shared conditions are derived from effective scenarios. `Local Rules, Global Patterns` adds Coordination Under Sensor Noise, Clustered Outbreak Starts, Predator Pressure and Recovery, and Patch Density and Firebreaks as focused Starter World experiences over Flocking, Epidemic, Predator-Prey, and Forest Fire. Recipe URLs contain only strict starter and recipe IDs, always construct fresh paused tick-0 runs, and expose explicit sibling navigation without mutating the active run.
 
-C2 changes no engine service, scheduling contract, template parameter default or bound, metric, intervention, World comparison storage, Atlas/Lab behavior, Builder execution, or persistence. Its one template-owned addition is the deterministic Forest Fire `firebreak-corridor` initialization preset, which uses existing empty-cell state and existing spread mechanics. Prepared pairs are instructional configurations, not results, experiments, robustness evidence, causal evidence, or empirical validation. C2 is complete; C2B has not started.
+C2 changes no engine service, scheduling contract, template parameter default or bound, metric, intervention, World comparison storage, Atlas/Lab behavior, Builder execution, or persistence. Its one template-owned addition is the deterministic Forest Fire `firebreak-corridor` initialization preset, which uses existing empty-cell state and existing spread mechanics. Prepared pairs are instructional configurations, not results, experiments, robustness evidence, causal evidence, or empirical validation. C2 is complete.
+
+C2B's audit record is `docs/product/FLAGSHIP_STARTER_PACK_ONE_AUDIT.md`. It independently reconstructs all eight effective scenarios, inspects all four tick-zero pairs, runs each fixed seed to its documented horizon, audits all rendered entry/World/error paths, and verifies Forest Fire containment. It found no P0, one P1 hidden Firebreak fuel-quantity difference, and three bounded P2 families covering sibling focus, shared-setting hierarchy, and outcome language. The fixes add an engine-tested tick-zero summary, truthful Firebreak quantity copy, recipe-relevant shared-setting priority, and explicit focus transfer without changing template rules or persistence. All four pairs classify `Works as written`; remaining gaps are external verification only, so C2B is conditionally ready for C3.
+
+C2B final verification passed Research World `53 tests (6.5m)`, combined Starter/C2B/Start `51 tests (7.3m)`, and complete UI/Axe `148 tests (17.3m)` with no failures, retries, or skips. Typecheck passed in `4.1s`; unit verification passed `77 files / 638 tests` in `81.49s`; the production build passed in `26.9s` with Next compilation in `6.7s` and `21` pages; simulation and bounded Atlas performance smoke passed; and `git diff --check` passed. `npm run lint: unavailable, package.json has no lint script.` Actual browser zoom, screen-reader/AT use, forced colors, complete touch workflows, participant comprehension, educational outcomes, empirical validation, and WCAG conformance remain unverified.
 
 R2's implementation record is `docs/ui/WORLD_LAYOUT_AND_INTERACTION_RECLAIM.md`; R2B's audit record is `docs/ui/WORLD_LAYOUT_AND_INTERACTION_RECLAIM_AUDIT.md`. World uses a stable `tasks + stage/playback + active tool` frame. Setup, Observe, Change, Compare, and Explain are direct tasks; More groups Experiment Runner and Diagnostics. The selected tool owns one bounded scroll, full model notes and technical run details use focus-contained modal surfaces, and desktop collapse/restore preserves local tool state.
 
@@ -191,11 +196,12 @@ R2B complete.
 C1 complete.
 C1B complete.
 C2 complete.
-C2B: Starter Pack One Audit is next.
+C2B complete.
+C3: Guided Investigation / Tutorial World is next.
 
-Completed sequence: UX6B -> GW9 -> GW9B -> R1 -> R1B -> R2 -> R2B -> C1 -> C1B -> C2. C2B has not started.
+Completed sequence: UX6B -> GW9 -> GW9B -> R1 -> R1B -> R2 -> R2B -> C1 -> C1B -> C2 -> C2B. C3 has not started.
 
-Do not start C2B, C3, recipe-first Builder, composition, multiscale runtime, adaptive-controller generalization, Lab/Atlas persistence, E3, F1, or other reset-roadmap capability without its dedicated prompt. Rendered Playwright/Axe evidence does not establish actual browser zoom, screen-reader, assistive-technology, forced-colors, full WCAG, mobile-workflow, or user-comprehension readiness.
+Do not start C3, recipe-first Builder, composition, multiscale runtime, adaptive-controller generalization, Lab/Atlas persistence, E3, F1, or other reset-roadmap capability without its dedicated prompt. Rendered Playwright/Axe evidence does not establish actual browser zoom, screen-reader, assistive-technology, forced-colors, full WCAG, mobile-workflow, or user-comprehension readiness.
 
 Implemented runtime foundations include scenarios, snapshots, template-defined behavior modes, agent composition, interventions, experiments, run summaries/comparison, seeded randomness, metrics, spaces, template metadata, and a narrow Opinion Dynamics `socialLearning` behavior mode audited in Prompt 33D.
 
@@ -308,7 +314,7 @@ Prompt 35 and Prompt 35B were committed together in `7696381 feat: Implement Mod
 
 ## Next Recommended Prompt
 
-Prompt C2B: Starter Pack One Audit is next and has not started. Do not begin C2B, C3, F1, or any later reset-roadmap capability without its dedicated prompt. F1 remains paused under E3 Analytical Lenses.
+Prompt C3: Guided Investigation / Tutorial World is next and has not started. Do not begin C3, F1, or any later reset-roadmap capability without its dedicated prompt. F1 remains paused under E3 Analytical Lenses.
 
 Next recommended UI/design-system prompt after UX2B: `UI-DESIGN-SYSTEM-1: Rendered Responsive, Typography + Visualization Accessibility Audit`.
 

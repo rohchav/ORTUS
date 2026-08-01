@@ -1,7 +1,19 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { createEngineFromScenario, productionTemplates } from "../../../simulation";
+import {
+  createEngineFromScenario,
+  productionTemplates,
+  type ParameterValues,
+  type SimulationSnapshotView
+} from "../../../simulation";
+import { Position2D, Velocity2D, InfectionState } from "../../../simulation/templates/epidemic.template";
+import { Species } from "../../../simulation/templates/predatorPrey.template";
+import {
+  ForestFireCellPosition,
+  ForestFireCellState,
+  type ForestFireCellStateComponent
+} from "../../../simulation/templates/forestFire.template";
 import { createStarterWorldScenario, resolveStarterWorldLaunch, starterWorldLaunchHref } from "../launch";
 import {
   rawPreparedStarterComparisonDeclarations,
@@ -51,7 +63,23 @@ describe("flagship Starter World pack contracts", () => {
     const pack = starterWorldPacks[0]!;
     const recipe = starterWorldLaunchRecipes[0]!;
     const comparison = preparedStarterComparisons[0]!;
-    for (const value of [starterWorldPacks, pack, pack.worldIds, starterWorldLaunchRecipes, recipe, recipe.parameterOverrides, preparedStarterComparisons, comparison, comparison.controlledDifferences, comparison.controlledDifferences[0]]) {
+    for (const value of [
+      starterWorldPacks,
+      pack,
+      pack.worldIds,
+      pack.mechanisms,
+      starterWorldLaunchRecipes,
+      recipe,
+      recipe.parameterOverrides,
+      preparedStarterComparisons,
+      comparison,
+      comparison.controlledDifferences,
+      comparison.controlledDifferences[0],
+      comparison.sharedConditions,
+      comparison.sharedConditions[0],
+      comparison.outputsToCompare,
+      comparison.suggestedProcedure
+    ]) {
       expect(Object.isFrozen(value)).toBe(true);
     }
     expect(Reflect.set(recipe.parameterOverrides, "noise", 0.5)).toBe(false);
@@ -164,6 +192,22 @@ describe("flagship Starter World pack contracts", () => {
     const wrongRoles = validateStarterWorldLaunchRecipes(wrongRoleRecipes);
     expect(() => validatePreparedStarterComparisons(cloneComparisons(), wrongRoles)).toThrow(/baseline role/i);
 
+    const baselineTwice = cloneComparisons();
+    baselineTwice[0].contrastRecipeId = baselineTwice[0].baselineRecipeId;
+    expect(() => validatePreparedStarterComparisons(baselineTwice, starterWorldLaunchRecipes)).toThrow(/different recipes/i);
+
+    const contrastTwice = cloneComparisons();
+    contrastTwice[0].baselineRecipeId = contrastTwice[0].contrastRecipeId;
+    expect(() => validatePreparedStarterComparisons(contrastTwice, starterWorldLaunchRecipes)).toThrow(/different recipes/i);
+
+    const differentWorlds = cloneComparisons();
+    differentWorlds[0].contrastRecipeId = "outbreak-separated-hotspots";
+    expect(() => validatePreparedStarterComparisons(differentWorlds, starterWorldLaunchRecipes)).toThrow(/Starter World|template IDs/i);
+
+    const differentTemplates = structuredClone(starterWorldLaunchRecipes) as any[];
+    differentTemplates[1].templateId = "epidemic-spread";
+    expect(() => validatePreparedStarterComparisons([cloneComparisons()[0]], differentTemplates)).toThrow(/template IDs must match/i);
+
     const unsupportedOutput = cloneComparisons();
     unsupportedOutput[0].outputsToCompare = ["predatorCount"];
     expect(() => validatePreparedStarterComparisons(unsupportedOutput, starterWorldLaunchRecipes)).toThrow(/must exist in both recipes/i);
@@ -183,6 +227,10 @@ describe("flagship Starter World pack contracts", () => {
     const supplied = cloneComparisons();
     supplied[0].controlledDifferences = [{ field: "fake", label: "Fake", baselineValue: 0, contrastValue: 1 }];
     expect(() => validatePreparedStarterComparisons(supplied, starterWorldLaunchRecipes)).toThrow(/Unrecognized key|Invalid/i);
+
+    const unsafe = cloneComparisons();
+    Object.defineProperty(unsafe[0], "__proto__", { value: { polluted: true }, enumerable: true });
+    expect(() => validatePreparedStarterComparisons(unsafe, starterWorldLaunchRecipes)).toThrow(/Unsafe object key/i);
 
     const sameConfiguration = cloneRecipes();
     sameConfiguration[1].initializationPresetId = sameConfiguration[0].initializationPresetId;
@@ -213,6 +261,9 @@ describe("flagship Starter World pack contracts", () => {
       expect(scenario.templateId).toBe(recipe.templateId);
       expect(scenario.seed).toBe(recipe.seed);
       expect(scenario.metadata.starterWorldRecipeId).toBe(recipe.id);
+      expect(scenario.initializationPreset).toBe(expectedRecipeScenarios[recipe.id]!.preset);
+      expect(scenario.parameters).toEqual(expectedRecipeScenarios[recipe.id]!.parameters);
+      expect(scenario.initializationOptions).toEqual(expectedRecipeScenarios[recipe.id]!.initializationOptions);
       expect(engine.createSnapshot().tick).toBe(0);
       expect(engine.clock.running).toBe(false);
       for (const [key, value] of Object.entries(recipe.parameterOverrides)) {
@@ -221,39 +272,105 @@ describe("flagship Starter World pack contracts", () => {
     }
   });
 
-  it("runs every prepared pair for its stated horizon with deterministic, inspectable output differences", () => {
+  it("audits the material tick-0 state of every prepared pair", () => {
+    const snapshots = new Map(
+      starterWorldLaunchRecipes.map((recipe) => [recipe.id, snapshotForRecipe(recipe.id)] as const)
+    );
+
+    const clear = snapshots.get("coordination-clear-signals")!;
+    const noisy = snapshots.get("coordination-noisy-signals")!;
+    expect(clear.entities).toHaveLength(160);
+    expect(clear.entities).toEqual(noisy.entities);
+    expect(clear.components).toEqual(noisy.components);
+    expect(clear.spaces).toEqual(noisy.spaces);
+    expect(spaceGeometry(clear)).toEqual([
+      { id: "flocking-space", kind: "continuous2d", width: 100, height: 100, boundaryMode: "wrap" }
+    ]);
+
+    const cluster = snapshots.get("outbreak-one-cluster")!;
+    const hotspots = snapshots.get("outbreak-separated-hotspots")!;
+    expect(cluster.entities).toHaveLength(80);
+    expect(cluster.components[Position2D]).toEqual(hotspots.components[Position2D]);
+    expect(cluster.components[Velocity2D]).toEqual(hotspots.components[Velocity2D]);
+    expect(cluster.spaces).toEqual(hotspots.spaces);
+    expect(infectionCounts(cluster)).toEqual({ susceptible: 71, infected: 9, recovered: 0 });
+    expect(infectionCounts(hotspots)).toEqual({ susceptible: 71, infected: 9, recovered: 0 });
+    const clusterPoints = infectedPositions(cluster);
+    const hotspotPoints = infectedPositions(hotspots);
+    expect(Math.max(...clusterPoints.map((point) => distance(point, { x: 50, y: 50 })))).toBeLessThan(18);
+    expect(connectedComponentCount(hotspotPoints, 20)).toBe(3);
+    expect(infectedEntityIds(cluster)).not.toEqual(infectedEntityIds(hotspots));
+    expect(spaceGeometry(cluster)).toEqual([
+      { id: "epidemic-space", kind: "continuous2d", width: 100, height: 100, boundaryMode: "wrap" }
+    ]);
+
+    const recovery = snapshots.get("predator-recovery-margin")!;
+    const pressure = snapshots.get("predator-high-pressure")!;
+    expect(speciesCounts(recovery)).toEqual({ prey: 160, predator: 2 });
+    expect(speciesCounts(pressure)).toEqual({ prey: 160, predator: 12 });
+    expect(recovery.entities).toHaveLength(162);
+    expect(pressure.entities).toHaveLength(172);
+    expect(spaceGeometry(recovery)).toEqual(spaceGeometry(pressure));
+    for (const [component, baselineValues] of Object.entries(recovery.components)) {
+      for (const entity of recovery.entities) {
+        expect(pressure.components[component]?.[entity.id]).toEqual(baselineValues[entity.id]);
+      }
+    }
+
+    const connected = snapshots.get("fire-connected-fuel")!;
+    const corridor = snapshots.get("fire-corridor-break")!;
+    expect(forestFireCounts(connected)).toEqual({ empty: 0, fuel: 2399, burning: 1, burned: 0 });
+    expect(forestFireCounts(corridor)).toEqual({ empty: 40, fuel: 2359, burning: 1, burned: 0 });
+    expect(spaceGeometry(connected)).toEqual([
+      { id: "forest-fire-grid", kind: "grid2d", rows: 40, cols: 60, boundaryMode: "clamp" }
+    ]);
+    expect(spaceGeometry(corridor)).toEqual(spaceGeometry(connected));
+    const corridorStates = forestFireStatesByPoint(corridor);
+    for (let row = 0; row < 40; row += 1) {
+      expect(corridorStates.get(`40,${row}`)).toBe("empty");
+    }
+    expect(burningPoints(connected)).toEqual([{ x: 29, y: 19 }]);
+    expect(burningPoints(corridor)).toEqual([{ x: 29, y: 19 }]);
+  });
+
+  it("runs both members of every pair to the documented horizon with exact deterministic model evidence", () => {
+    const completed = new Map<string, SimulationSnapshotView>();
+    for (const recipe of starterWorldLaunchRecipes) {
+      const scenario = scenarioForRecipe(recipe.id);
+      const engine = createEngineFromScenario(scenario).engine;
+      engine.runSteps(recipe.suggestedRunHorizon);
+      const snapshot = engine.createSnapshot();
+      expect(snapshot.tick).toBe(recipe.suggestedRunHorizon);
+      expect(metricSummary(snapshot, recipe.outputsToWatch)).toEqual(expectedMetricSummaries[recipe.id]);
+      expect(snapshot.metricsHistory.every((entry) =>
+        recipe.outputsToWatch.every((output) => Number.isFinite(entry.values[output]))
+      )).toBe(true);
+      completed.set(recipe.id, snapshot);
+
+      const repeat = createEngineFromScenario(scenario).engine;
+      repeat.runSteps(recipe.suggestedRunHorizon);
+      expect(repeat.createSnapshot().metricsHistory).toEqual(snapshot.metricsHistory);
+    }
+
     for (const comparison of preparedStarterComparisons) {
       const baselineRecipe = getStarterWorldLaunchRecipeById(comparison.baselineRecipeId)!;
       const contrastRecipe = getStarterWorldLaunchRecipeById(comparison.contrastRecipeId)!;
-      const baselineScenario = scenarioForRecipe(baselineRecipe.id);
-      const contrastScenario = scenarioForRecipe(contrastRecipe.id);
-      const baselineEngine = createEngineFromScenario(baselineScenario).engine;
-      const contrastEngine = createEngineFromScenario(contrastScenario).engine;
-      baselineEngine.runSteps(baselineRecipe.suggestedRunHorizon);
-      contrastEngine.runSteps(contrastRecipe.suggestedRunHorizon);
-      const baselineSnapshot = baselineEngine.createSnapshot();
-      const contrastSnapshot = contrastEngine.createSnapshot();
-      const baselineHistory = baselineSnapshot.metricsHistory.map((entry) =>
-        comparison.outputsToCompare.map((output) => entry.values[output])
+      expect(baselineRecipe.suggestedRunHorizon).toBe(contrastRecipe.suggestedRunHorizon);
+      expect(completed.get(baselineRecipe.id)?.metricsHistory).not.toEqual(
+        completed.get(contrastRecipe.id)?.metricsHistory
       );
-      const contrastHistory = contrastSnapshot.metricsHistory.map((entry) =>
-        comparison.outputsToCompare.map((output) => entry.values[output])
-      );
-      expect(baselineHistory).not.toEqual(contrastHistory);
-      for (const history of [baselineHistory, contrastHistory]) {
-        expect(history.flat().every((value) => typeof value === "number" && Number.isFinite(value))).toBe(true);
-      }
-      const repeat = createEngineFromScenario(baselineScenario).engine;
-      repeat.runSteps(baselineRecipe.suggestedRunHorizon);
-      expect(repeat.createSnapshot().metricsHistory).toEqual(baselineSnapshot.metricsHistory);
     }
 
-    const connected = engineAfterRecipe("fire-connected-fuel");
-    const corridor = engineAfterRecipe("fire-corridor-break");
-    expect(Number(connected.metricsHistory.at(-1)?.values.burnedTotalCount)).toBeGreaterThan(
-      Number(corridor.metricsHistory.at(-1)?.values.burnedTotalCount)
-    );
-  }, 60_000);
+    const corridor = completed.get("fire-corridor-break")!;
+    expect(forestFireCounts(corridor)).toEqual({ empty: 40, fuel: 760, burning: 0, burned: 1600 });
+    const states = forestFireStatesByPoint(corridor);
+    for (let row = 0; row < 40; row += 1) {
+      expect(states.get(`40,${row}`)).toBe("empty");
+      for (let column = 41; column < 60; column += 1) {
+        expect(states.get(`${column},${row}`)).toBe("fuel");
+      }
+    }
+  }, 120_000);
 
   it("rejects missing, unknown, mismatched, malformed, and arbitrary recipe launch inputs", () => {
     expect(resolveStarterWorldLaunch({ starterId: "coordination-under-sensor-noise" })).toMatchObject({ ok: false, code: "missing-recipe" });
@@ -328,6 +445,177 @@ function cloneComparisons(): any[] {
   return structuredClone(rawPreparedStarterComparisonDeclarations) as any[];
 }
 
+const expectedRecipeScenarios: Record<
+  string,
+  { preset: string; parameters: ParameterValues; initializationOptions: ParameterValues }
+> = {
+  "coordination-clear-signals": {
+    preset: "random-headings",
+    parameters: {
+      agentCount: 160,
+      perceptionRadius: 30,
+      separationRadius: 10,
+      alignmentWeight: 0.55,
+      cohesionWeight: 0.35,
+      separationWeight: 0.9,
+      maxSpeed: 2.4,
+      maxForce: 0.08,
+      noise: 0.01,
+      boundaryMode: "wrap"
+    },
+    initializationOptions: {}
+  },
+  "coordination-noisy-signals": {
+    preset: "random-headings",
+    parameters: {
+      agentCount: 160,
+      perceptionRadius: 30,
+      separationRadius: 10,
+      alignmentWeight: 0.55,
+      cohesionWeight: 0.35,
+      separationWeight: 0.9,
+      maxSpeed: 2.4,
+      maxForce: 0.08,
+      noise: 0.28,
+      boundaryMode: "wrap"
+    },
+    initializationOptions: {}
+  },
+  "outbreak-one-cluster": {
+    preset: "single-cluster-outbreak",
+    parameters: {
+      agentCount: 80,
+      initialInfected: 9,
+      infectionRadius: 8,
+      infectionProbability: 0.22,
+      recoveryTicks: 45,
+      movementSpeed: 1.1
+    },
+    initializationOptions: { initialInfectedCount: 9, centerX: 50, centerY: 50 }
+  },
+  "outbreak-separated-hotspots": {
+    preset: "multiple-hotspots",
+    parameters: {
+      agentCount: 80,
+      initialInfected: 9,
+      infectionRadius: 8,
+      infectionProbability: 0.22,
+      recoveryTicks: 45,
+      movementSpeed: 1.1
+    },
+    initializationOptions: { initialInfectedCount: 9, hotspotCount: 3 }
+  },
+  "predator-recovery-margin": {
+    preset: "random-ecology",
+    parameters: {
+      initialPrey: 160,
+      initialPredators: 2,
+      preyReproductionProbability: 0.015,
+      predatorEnergyLoss: 0.25,
+      predatorEnergyGain: 8,
+      predatorReproductionThreshold: 18,
+      predationRadius: 1.5,
+      movementSpeed: 1
+    },
+    initializationOptions: {}
+  },
+  "predator-high-pressure": {
+    preset: "random-ecology",
+    parameters: {
+      initialPrey: 160,
+      initialPredators: 12,
+      preyReproductionProbability: 0.015,
+      predatorEnergyLoss: 0.25,
+      predatorEnergyGain: 8,
+      predatorReproductionThreshold: 18,
+      predationRadius: 1.5,
+      movementSpeed: 1
+    },
+    initializationOptions: {}
+  },
+  "fire-connected-fuel": {
+    preset: "central-ignition",
+    parameters: {
+      gridWidth: 60,
+      gridHeight: 40,
+      initialFuelDensity: 1,
+      initialIgnitionCount: 1,
+      spreadProbability: 1,
+      lightningProbability: 0,
+      regrowthProbability: 0,
+      neighborMode: "vonNeumann",
+      boundaryMode: "closed",
+      burnDuration: 1
+    },
+    initializationOptions: {}
+  },
+  "fire-corridor-break": {
+    preset: "firebreak-corridor",
+    parameters: {
+      gridWidth: 60,
+      gridHeight: 40,
+      initialFuelDensity: 1,
+      initialIgnitionCount: 1,
+      spreadProbability: 1,
+      lightningProbability: 0,
+      regrowthProbability: 0,
+      neighborMode: "vonNeumann",
+      boundaryMode: "closed",
+      burnDuration: 1
+    },
+    initializationOptions: {}
+  }
+};
+
+const expectedMetricSummaries: Record<string, Record<string, MetricSummary>> = {
+  "coordination-clear-signals": {
+    alignmentScore: { first: 0.052665, final: 0.992133, peak: 0.994385, peakTick: 220 },
+    dispersion: { first: 38.042608, final: 37.678772, peak: 41.258838, peakTick: 114 }
+  },
+  "coordination-noisy-signals": {
+    alignmentScore: { first: 0.048271, final: 0.647431, peak: 0.647431, peakTick: 240 },
+    dispersion: { first: 38.05548, final: 38.055022, peak: 39.748028, peakTick: 49 }
+  },
+  "outbreak-one-cluster": {
+    infectedCount: { first: 9, final: 0, peak: 61, peakTick: 42 },
+    recoveredCount: { first: 0, final: 80, peak: 80, peakTick: 133 }
+  },
+  "outbreak-separated-hotspots": {
+    infectedCount: { first: 9, final: 0, peak: 70, peakTick: 44 },
+    recoveredCount: { first: 0, final: 80, peak: 80, peakTick: 103 }
+  },
+  "predator-recovery-margin": {
+    preyCount: { first: 161, final: 0, peak: 420, peakTick: 82 },
+    predatorCount: { first: 2, final: 0, peak: 325, peakTick: 131 }
+  },
+  "predator-high-pressure": {
+    preyCount: { first: 158, final: 519, peak: 519, peakTick: 400 },
+    predatorCount: { first: 15, final: 0, peak: 163, peakTick: 115 }
+  },
+  "fire-connected-fuel": {
+    activeFireCount: { first: 4, final: 0, peak: 80, peakTick: 21 },
+    burnedTotalCount: { first: 1, final: 2400, peak: 2400, peakTick: 51 },
+    extinguished: { first: 0, final: 1, peak: 1, peakTick: 51 }
+  },
+  "fire-corridor-break": {
+    activeFireCount: { first: 4, final: 0, peak: 60, peakTick: 20 },
+    burnedTotalCount: { first: 1, final: 1600, peak: 1600, peakTick: 50 },
+    extinguished: { first: 0, final: 1, peak: 1, peakTick: 50 }
+  }
+};
+
+interface MetricSummary {
+  first: number;
+  final: number;
+  peak: number;
+  peakTick: number;
+}
+
+interface Point {
+  x: number;
+  y: number;
+}
+
 function scenarioForRecipe(recipeId: string) {
   const recipe = getStarterWorldLaunchRecipeById(recipeId)!;
   const launch = resolveStarterWorldLaunch({ starterId: recipe.starterWorldId, recipeId });
@@ -337,9 +625,130 @@ function scenarioForRecipe(recipeId: string) {
   return createStarterWorldScenario(launch.launch);
 }
 
-function engineAfterRecipe(recipeId: string) {
-  const recipe = getStarterWorldLaunchRecipeById(recipeId)!;
-  const engine = createEngineFromScenario(scenarioForRecipe(recipeId)).engine;
-  engine.runSteps(recipe.suggestedRunHorizon);
-  return engine.createSnapshot();
+function snapshotForRecipe(recipeId: string): SimulationSnapshotView {
+  return createEngineFromScenario(scenarioForRecipe(recipeId)).engine.createSnapshot();
+}
+
+function spaceGeometry(snapshot: SimulationSnapshotView) {
+  return snapshot.spaces.map((space) => {
+    if (space.kind === "continuous2d") {
+      return {
+        id: space.id,
+        kind: space.kind,
+        width: space.width,
+        height: space.height,
+        boundaryMode: space.boundaryMode
+      };
+    }
+    if (space.kind === "grid2d") {
+      return {
+        id: space.id,
+        kind: space.kind,
+        rows: space.rows,
+        cols: space.cols,
+        boundaryMode: space.boundaryMode
+      };
+    }
+    return { id: space.id, kind: space.kind };
+  });
+}
+
+function infectionCounts(snapshot: SimulationSnapshotView) {
+  const counts = { susceptible: 0, infected: 0, recovered: 0 };
+  for (const state of Object.values(snapshot.components[InfectionState] ?? {}) as Array<{ status: keyof typeof counts }>) {
+    counts[state.status] += 1;
+  }
+  return counts;
+}
+
+function infectedEntityIds(snapshot: SimulationSnapshotView): string[] {
+  return Object.entries(snapshot.components[InfectionState] ?? {})
+    .filter(([, value]) => value.status === "infected")
+    .map(([entityId]) => entityId);
+}
+
+function infectedPositions(snapshot: SimulationSnapshotView): Point[] {
+  const positions = snapshot.components[Position2D] ?? {};
+  return infectedEntityIds(snapshot).map((entityId) => positions[entityId] as unknown as Point);
+}
+
+function connectedComponentCount(points: readonly Point[], maximumDistance: number): number {
+  const remaining = new Set(points.map((_, index) => index));
+  let count = 0;
+  while (remaining.size > 0) {
+    count += 1;
+    const first = remaining.values().next().value as number;
+    remaining.delete(first);
+    const pending = [first];
+    while (pending.length > 0) {
+      const current = pending.pop()!;
+      for (const candidate of [...remaining]) {
+        if (distance(points[current]!, points[candidate]!) <= maximumDistance) {
+          remaining.delete(candidate);
+          pending.push(candidate);
+        }
+      }
+    }
+  }
+  return count;
+}
+
+function distance(left: Point, right: Point): number {
+  return Math.hypot(left.x - right.x, left.y - right.y);
+}
+
+function speciesCounts(snapshot: SimulationSnapshotView) {
+  const counts = { prey: 0, predator: 0 };
+  for (const value of Object.values(snapshot.components[Species] ?? {}) as Array<{ kind: keyof typeof counts }>) {
+    counts[value.kind] += 1;
+  }
+  return counts;
+}
+
+function forestFireCounts(snapshot: SimulationSnapshotView) {
+  const counts = { empty: 0, fuel: 0, burning: 0, burned: 0 };
+  for (const value of Object.values(snapshot.components[ForestFireCellState] ?? {}) as ForestFireCellStateComponent[]) {
+    counts[value.state] += 1;
+  }
+  return counts;
+}
+
+function forestFireStatesByPoint(snapshot: SimulationSnapshotView): Map<string, ForestFireCellStateComponent["state"]> {
+  const positions = snapshot.components[ForestFireCellPosition] ?? {};
+  const states = snapshot.components[ForestFireCellState] ?? {};
+  return new Map(
+    Object.entries(states).map(([entityId, value]) => {
+      const point = positions[entityId] as unknown as Point;
+      return [`${point.x},${point.y}`, (value as ForestFireCellStateComponent).state];
+    })
+  );
+}
+
+function burningPoints(snapshot: SimulationSnapshotView): Point[] {
+  const positions = snapshot.components[ForestFireCellPosition] ?? {};
+  return Object.entries(snapshot.components[ForestFireCellState] ?? {})
+    .filter(([, value]) => value.state === "burning")
+    .map(([entityId]) => positions[entityId] as unknown as Point);
+}
+
+function metricSummary(snapshot: SimulationSnapshotView, keys: readonly string[]): Record<string, MetricSummary> {
+  return Object.fromEntries(
+    keys.map((key) => {
+      const values = snapshot.metricsHistory.map((entry) => entry.values[key]!);
+      const peak = Math.max(...values);
+      return [
+        key,
+        {
+          first: round(values[0]!),
+          final: round(values.at(-1)!),
+          peak: round(peak),
+          peakTick: snapshot.metricsHistory[values.indexOf(peak)]!.tick
+        }
+      ];
+    })
+  );
+}
+
+function round(value: number): number {
+  return Math.round(value * 1_000_000) / 1_000_000;
 }

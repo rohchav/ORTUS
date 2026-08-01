@@ -3968,3 +3968,73 @@ Roadmap result:
 - C2B: Starter Pack One Audit is next and has not started.
 - C3 has not started.
 - F1 remains paused under E3 Analytical Lenses.
+
+### Prompt C2B: Flagship Starter Pack One Audit + Hardening
+
+Date: 2026-08-01
+
+Goal: independently audit whether `Local Rules, Global Patterns` isolates truthful effective and initialized-state differences, produces useful fixed-seed comparisons at its documented horizons, and preserves runtime, persistence, accessibility, and product-honesty boundaries before C3.
+
+Starting state:
+
+- Branch `main` was clean at `02a65d7 feat: add flagship starter world pack one`; `HEAD` matched `origin/main` after fetch.
+- Untouched Research World Playwright passed `53 tests (6.5m)`.
+- Untouched combined Starter/C2/Start Playwright passed `51 tests (7.0m)`.
+- Untouched complete UI Playwright passed `148 tests (16.6m)` with no failures, retries, or skips.
+- Untouched typecheck passed in `3.13s`; unit verification passed `77 files / 636 tests` in `84.49s`; the production build passed with Next compilation in `14.0s` and `21` pages; simulation/Atlas smoke and `git diff --check` passed.
+- `npm run lint: unavailable, package.json has no lint script.`
+
+Independent executable audit:
+
+- All eight public recipe handoffs were resolved, scenario-expanded, instantiated through the same authoritative services as World, and inspected at tick 0. All template, preset, preset-option, parameter, seed, task, horizon, output, space, count, component, and initialized-state claims were checked directly.
+- Coordination differs only in Noise `0.01` versus `0.28`; all `160` tick-zero entities, positions, headings, components, spaces, and other effective values match. At tick `240`, clear/noisy Alignment is `0.992133`/`0.647431`, with final Dispersion `37.678772`/`38.055022`.
+- Outbreak uses `80` agents with `9` infected and `71` susceptible in both starts. Positions and velocities match; infected identity creates one concentrated cluster or three separated components. Peak infected is `61` at tick `42` versus `70` at tick `44`; both end at `0` infected / `80` recovered by tick `240`.
+- Predator uses `160` prey in both starts and `2` versus `12` predators, so total tick-zero population is `162` versus `172`. At tick `400`, the two-predator run ends prey/predators `0`/`0`, while the twelve-predator run ends `519`/`0`. This counterintuitive fixed-seed path is not generalized across seeds.
+- Fire uses a `60x40` closed von-Neumann grid with spread probability `1` and central ignition `(29,19)`. Connected fuel starts `2,399` fuel + `1` burning; corridor starts `2,359` fuel + `1` burning + `40` empty cells, so both arrangement and quantity differ. At tick `100`, connected burned `2,400`; corridor burned `1,600`, retained `760` fuel beyond the barrier, and never crossed it.
+- All four comparisons classify `Works as written` after hardening. Their deterministic results are model-output evidence for the specified configurations, not robustness, confidence, causality, calibration, empirical validity, or universal system properties.
+
+Defects and hardening:
+
+- No P0 or P3 defect was reproduced.
+- One P1 was reproduced and fixed: Firebreak omitted its material `40`-cell tick-zero fuel-quantity difference while matching scenario settings were presented as though they exhausted effective state.
+- Three bounded P2 families were reproduced and fixed: sibling focus remained on a link whose meaning reversed, high-salience shared recipe settings were buried by generic ordering, and comparison hooks/copy presupposed outcomes or understated the Firebreak difference.
+- Prepared comparisons now require a bounded tick-zero summary whose material claims are locked by headless regressions. Detail pages expose it, label shared fields as scenario settings, and prioritize seed plus recipe-owned settings.
+- Explicit sibling activation focuses the replacement recipe context, creates a fresh paused tick-zero run, preserves an unrelated Setup edit as a visible draft, retains unrelated saved comparisons, and keeps Back coherent.
+- Forest Fire containment tests now cover minimum dimensions, odd/even grids, deterministic initialization, exact state counts, valid ignition, continuous boundary-to-boundary corridor geometry, closed/von-Neumann no-crossing behavior, reset/rebuild, and snapshot restoration.
+
+Rendered and integrity evidence:
+
+- The collection was directly rendered at `1440x900`, `1280x720`, `1024x768`, `900x700`, `1280x600`, and `390x844`; all four details, representative desktop/mobile World states, every recipe, and invalid-launch states were inspected or asserted. No incoherent overlap or document overflow was found.
+- Focused C2B Playwright passed `16 tests (2.9m)`. The affected five-file contract/runtime set passed `44 tests (54.12s)`.
+- Expanded Axe coverage includes catalog, collection, all four details, baseline/contrast Worlds, invalid recipe, and mobile states. Browser diagnostics observed no unexpected console, page, hydration, asset, key, duplicate-ID/landmark, route-generation, unmount-update, or overflow errors.
+- C2/C2B add no production simulation source change, dependency, public asset, persistence API, or storage key. Existing World comparison persistence, cap, and confirmation semantics remain unchanged; no automatic capture, Lab record, Atlas record, or hidden progression was added.
+- No scheduler, RNG contract, Flocking/Epidemic/Predator-Prey/Forest Fire rule, parameter default/bound, metric, intervention, Experiment Runner, comparison schema/cap, Atlas behavior, Lab behavior, or Builder execution boundary changed.
+
+Final verification:
+
+- Research World Playwright: `53 passed (6.5m)`.
+- Combined Starter/C2B/Start Playwright: `51 passed (7.3m)`.
+- Complete Playwright/Axe: `148 passed (17.3m)`.
+- All three final browser runs had zero failures, retries, or skips.
+- Typecheck: passed in `4.1s`.
+- Unit tests: `77 files / 638 tests` passed in `81.49s`.
+- Production build: passed in `26.9s`; Next compiled in `6.7s` and generated `21` pages.
+- Simulation smoke: Flocking-100 `150.50` ticks/sec, Flocking-500 `18.84`, Forest Fire `30.17`, and Predator-Prey `89.31`.
+- Bounded Atlas smoke: `2` runs / `10` work units / horizon `5` completed in `43.99ms`; this remains an executor smoke, not a scalability or validation claim.
+- `git diff --check`: passed.
+- `npm run lint: unavailable, package.json has no lint script.`
+
+Roadmap result:
+
+- R1 complete.
+- R1B complete.
+- R2 complete.
+- R2B complete.
+- C1 complete.
+- C1B complete.
+- C2 complete.
+- C2B complete.
+- Decision: conditionally ready for `C3: Guided Investigation / Tutorial World` because only external zoom, screen-reader/AT, forced-colors, complete touch, participant, educational-outcome, empirical-validation, and formal-conformance verification remain.
+- C3 is next and has not started.
+- F1 remains paused under E3 Analytical Lenses.
+- Commit gate target: `test: audit flagship starter world pack one`; no push is authorized.

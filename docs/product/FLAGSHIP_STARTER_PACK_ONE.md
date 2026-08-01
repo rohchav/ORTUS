@@ -1,16 +1,16 @@
 # Flagship Starter Pack One
 
-Prompt: C2
+Prompt: C2 / C2B
 
-Status: complete; C2B audit next
+Status: C2 and C2B complete; C3 next
 
 ## 1. Scope
 
-C2 adds the `Local Rules, Global Patterns` flagship collection over four existing production templates. It adds four focused runnable Starter Worlds, eight strict launch recipes, four derived prepared comparisons, one collection route, recipe-aware World context, and one bounded Forest Fire initialization preset.
+C2 adds the `Local Rules, Global Patterns` flagship collection over four existing production templates. It adds four focused runnable Starter Worlds, eight strict launch recipes, four derived prepared comparisons, one collection route, recipe-aware World context, and one bounded Forest Fire initialization preset. C2B audits and hardens those contracts without adding runtime behavior.
 
 ## 2. Product Purpose
 
-The pack demonstrates that one implemented template can support several model-specific investigations without inventing mechanics. Each world offers a baseline and contrast whose differences are named, validated, and worth inspecting through existing outputs.
+The pack shows how one implemented template can support several model-specific investigations without inventing mechanics. Each world offers a baseline and contrast whose scenario differences and initialized-state consequences are explicit and inspectable through existing outputs.
 
 ## 3. Collection Theme
 
@@ -26,7 +26,7 @@ The collection asks how local noise, spatial starting structure, starting popula
 
 ## 6. Prepared-Comparison Artifact
 
-`PreparedStarterComparison` is strict version-1 instructional content. Its controlled differences and shared conditions are generated from validated effective recipe scenarios rather than accepted as authored claims. Both recipes must belong to one world, use one template, declare opposite roles, and reference outputs available to both.
+`PreparedStarterComparison` is strict version-1 instructional content. Its controlled differences and shared conditions are generated from validated scenario configurations rather than accepted as authored claims. Because matching scenario fields do not prove matching initialized worlds, each comparison also carries a bounded tick-zero summary whose material claims are backed by headless engine regressions. Both recipes must belong to one world, use one template, declare opposite roles, and reference outputs available to both.
 
 ## 7. Runtime Boundaries
 
@@ -46,7 +46,7 @@ This focused Predator-Prey Cycles world compares `Recovery margin` with `High pr
 
 ## 11. Patch Density and Firebreaks
 
-This focused Landscape Spread world compares `Connected fuel` with `Firebreak corridor`. Both use a central ignition, full fuel apart from the corridor, seed `c2-firebreak-001`, closed boundaries, von Neumann neighbors, and spread probability `1`. The contrast inserts one full-height column of the existing empty-cell state. Users compare Active fires, Burned cells, extinction, and visible crossing.
+This focused Landscape Spread world compares `Connected fuel` with `Firebreak corridor`. Both use a central ignition, seed `c2-firebreak-001`, closed boundaries, von Neumann neighbors, and spread probability `1`. The contrast replaces one full-height 40-cell fuel column with the existing empty-cell state, so it changes both connectivity and initial fuel quantity. Users compare Active fires, Burned cells, extinction, and visible crossing.
 
 ## 12. Scenario and Preset Additions
 
@@ -66,16 +66,16 @@ C2 adds no storage key. Pack, recipe, comparison guidance, catalog state, and nu
 
 ## 16. Non-Goals
 
-C2 does not implement C2B, C3, progress tracking, profiles, achievements, analytics, recommendations, AI-generated content, Lab or Atlas persistence, general resource or multiscale runtime, new metrics, new interventions, arbitrary formulas, arbitrary code, custom-model execution, or Tier B/C portfolio candidates.
+C2/C2B do not implement C3, progress tracking, profiles, achievements, analytics, recommendations, AI-generated content, Lab or Atlas persistence, general resource or multiscale runtime, new metrics, new interventions, arbitrary formulas, arbitrary code, custom-model execution, or Tier B/C portfolio candidates.
 
 ## 17. Verification
 
-Focused contract tests cover strict schemas, versions, registry order, recursive freezing, pack references, recipe ownership, authoritative presets and values, output references, derived differences, shared conditions, canonical URLs, all eight fresh runs, invalid launches, deterministic pair histories, and the firebreak corridor. Rendered checks cover six required viewports, catalog and collection IA, four detail pages, eight recipe launches, sibling navigation, errors, reduced motion, diagnostics, and Axe. Final repository-wide gate results are recorded in `docs/codex/SESSION_LOG.md`.
+Focused contract tests cover strict schemas, versions, registry order, recursive freezing, pack references, recipe ownership, authoritative presets and values, output references, scenario differences, initialized tick-zero state, canonical URLs, all eight fresh runs, hostile launches, exact deterministic pair histories, and the firebreak corridor. Rendered checks cover six required viewports, catalog and collection IA, four detail pages, eight recipe launches, running/draft/comparison sibling replacement, errors, keyboard focus, reduced motion, diagnostics, and Axe. The evidence-based C2B record is `docs/product/FLAGSHIP_STARTER_PACK_ONE_AUDIT.md`; final repository-wide gates are recorded in `docs/codex/SESSION_LOG.md`.
 
 ## 18. Remaining Limitations
 
 Actual browser zoom, screen-reader and assistive-technology operation, forced-colors behavior, complete touch coverage, participant comprehension, educational effectiveness, empirical validity, and formal WCAG conformance remain unverified. Prepared outcomes remain seed- and configuration-specific model behavior.
 
-## 19. C2B Handoff
+## 19. C2B Audit Outcome
 
-C2 is complete. C2B must independently audit comprehension, exact recipe/runtime fidelity, controlled-difference derivation, first-comparison behavior, model-specific language, responsive hierarchy, accessibility evidence, and the absence of runtime or persistence creep. C2B has not started.
+C2B found and fixed one P1 hidden Firebreak quantity difference and bounded P2 focus, shared-setting hierarchy, and outcome-language defects. No P0 remains. C2 and C2B are complete; the decision is conditionally ready for C3 because external zoom, AT, forced-colors, touch, participant, educational-outcome, and formal-conformance verification remains. `C3: Guided Investigation / Tutorial World` is next and has not started.

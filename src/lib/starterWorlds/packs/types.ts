@@ -97,6 +97,7 @@ export const preparedStarterComparisonSchema = z
     sharedConditions: z.array(preparedRecipeSharedConditionSchema).min(1).max(64),
     outputsToCompare: z.array(runtimeReferenceKeySchema).min(1).max(8),
     suggestedProcedure: z.array(boundedText(12, 320)).min(3).max(6),
+    tickZeroSummary: boundedText(30, 520),
     expectedPattern: boundedText(30, 520),
     interpretationBoundary: boundedText(30, 520)
   })

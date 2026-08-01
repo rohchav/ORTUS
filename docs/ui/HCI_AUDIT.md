@@ -1637,4 +1637,12 @@ The strongest HCI gain is inspectable contrast: users can see what changes, what
 
 Rendered checks cover the collection, four details, eight recipe launches, invalid contexts, six viewports, mobile hierarchy, short-height layouts, keyboard focus, reduced motion, diagnostics, and representative Axe states. These checks do not establish participant comprehension, educational effectiveness, actual browser zoom, screen-reader or assistive-technology operation, forced-colors behavior, complete touch workflows, empirical validity, or WCAG conformance.
 
-R1 complete. R1B complete. R2 complete. R2B complete. C1 complete. C1B complete. C2 complete. C2B: Starter Pack One Audit is next and has not started.
+R1 complete. R1B complete. R2 complete. R2B complete. C1 complete. C1B complete. C2 complete.
+
+## C2B Flagship Starter Pack Audit Update
+
+C2B found one P1 comprehension-integrity defect: the Firebreak pair changed both connectivity and tick-zero fuel quantity, but the latter was absent while matching scenario settings were presented as though they exhausted effective state. It also found three bounded P2 families: sibling focus stayed on a link whose meaning reversed, recipe-owned shared settings were buried by generic ordering, and several hooks or summaries presupposed outcomes or understated a material difference.
+
+The hardening exposes a concise engine-tested tick-zero summary, distinguishes matching scenario settings from initialized state, prioritizes recipe-relevant shared settings, and transfers focus to replacement recipe context after explicit sibling activation. All four fixed-seed procedures work as written at their documented horizons. This is deterministic model and browser evidence, not robustness across seeds, participant comprehension, educational effectiveness, actual browser zoom, screen-reader/AT testing, forced-colors testing, complete touch operation, empirical validation, or WCAG conformance.
+
+R1 complete. R1B complete. R2 complete. R2B complete. C1 complete. C1B complete. C2 complete. C2B complete. C3: Guided Investigation / Tutorial World is next and has not started.

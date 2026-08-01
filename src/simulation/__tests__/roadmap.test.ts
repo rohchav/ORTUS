@@ -269,6 +269,12 @@ describe("roadmap alignment and missing pillar reservations", () => {
       "product",
       "FLAGSHIP_STARTER_PACK_ONE.md"
     );
+    const flagshipStarterPackAuditPath = join(
+      repoRoot,
+      "docs",
+      "product",
+      "FLAGSHIP_STARTER_PACK_ONE_AUDIT.md"
+    );
     const localRulesCollectionPath = join(
       repoRoot,
       "docs",
@@ -304,6 +310,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(existsSync(starterWorldPortfolioPath)).toBe(true);
     expect(existsSync(exploreWorldsCatalogPath)).toBe(true);
     expect(existsSync(flagshipStarterPackPath)).toBe(true);
+    expect(existsSync(flagshipStarterPackAuditPath)).toBe(true);
     expect(existsSync(localRulesCollectionPath)).toBe(true);
 
     const roadmap = readFileSync(roadmapPath, "utf8");
@@ -334,6 +341,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
     const starterWorldPortfolio = readFileSync(starterWorldPortfolioPath, "utf8");
     const exploreWorldsCatalog = readFileSync(exploreWorldsCatalogPath, "utf8");
     const flagshipStarterPack = readFileSync(flagshipStarterPackPath, "utf8");
+    const flagshipStarterPackAudit = readFileSync(flagshipStarterPackAuditPath, "utf8");
     const localRulesCollection = readFileSync(localRulesCollectionPath, "utf8");
     expect(roadmap).toContain("completed through Prompt 39B");
     expect(roadmap).toContain("Post-30B stabilization");
@@ -358,8 +366,8 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(roadmap).toContain("UX6B complete.");
     expect(roadmap).toContain("GW9 complete.");
     expect(roadmap).toContain("GW9B complete.");
-    expect(roadmap).toContain("R1, R1B, R2, R2B, C1, C1B, and C2 are complete.");
-    expect(roadmap).toContain("C2B: Starter Pack One Audit is next and has not started.");
+    expect(roadmap).toContain("R1, R1B, R2, R2B, C1, C1B, C2, and C2B are complete.");
+    expect(roadmap).toContain("C3: Guided Investigation / Tutorial World is next and has not started.");
     expect(roadmap).toContain("F1 and the fractal branch remain documented but are paused under E3 Analytical Lenses.");
     expect(startHubReset).toContain("/         -> Start Hub");
     expect(startHubReset).toContain("/world    -> live World workbench");
@@ -372,7 +380,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(worldLayoutReclaim).toContain("C1 is complete.");
     expect(worldLayoutReclaim).toContain("C1B");
     expect(productExperienceResetRoadmap).toContain(
-      "Status: active product sequence; R1, R1B, R2, R2B, C1, C1B, and C2 complete; C2B next"
+      "Status: active product sequence; R1, R1B, R2, R2B, C1, C1B, C2, and C2B complete; C3 next"
     );
     expect(productExperienceResetRoadmap).toContain("Every implementation milestone is followed by an audit milestone.");
     expect(productExperienceResetRoadmap).toContain("F1 and the rest of the F branch are paused beneath E3 Analytical Lenses.");
@@ -391,7 +399,11 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(exploreWorldsCatalog.match(/^## \d+\. /gm)).toHaveLength(13);
     expect(flagshipStarterPack.match(/^## \d+\. /gm)).toHaveLength(19);
     expect(flagshipStarterPack).toContain("Prepared pairs are configuration guidance.");
-    expect(flagshipStarterPack).toContain("C2B has not started.");
+    expect(flagshipStarterPack).toContain("C2 and C2B are complete");
+    expect(flagshipStarterPack).toContain("C3: Guided Investigation / Tutorial World");
+    expect(flagshipStarterPackAudit.match(/^## \d+\. /gm)).toHaveLength(33);
+    expect(flagshipStarterPackAudit).toContain("Conditionally ready for `C3: Guided Investigation / Tutorial World`");
+    expect(flagshipStarterPackAudit).toContain("C2/C2B add no persistence and no storage key.");
     expect(localRulesCollection.match(/^## \d+\. /gm)).toHaveLength(14);
     expect(localRulesCollection).toContain("all eleven runnable Starter Worlds");
     expect(localRulesCollection).toContain("No template, stage, engine, or partial run is mounted.");

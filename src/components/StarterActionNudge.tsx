@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   getSiblingStarterWorldRecipe,
   getStarterWorldLaunchRecipeById,
@@ -17,10 +17,20 @@ interface StarterActionNudgeProps {
 
 export function StarterActionNudge({ launch }: StarterActionNudgeProps) {
   const [visible, setVisible] = useState(true);
+  const nudgeRef = useRef<HTMLElement>(null);
+  const focusAfterSiblingActivation = useRef(false);
   const world = requireStarterWorldById(launch.starterWorldId);
   const recipe = launch.recipeId ? getStarterWorldLaunchRecipeById(launch.recipeId) : undefined;
   const pack = getStarterWorldPackForWorld(world.id);
   const sibling = recipe ? getSiblingStarterWorldRecipe(recipe.id) : undefined;
+
+  useEffect(() => {
+    if (!focusAfterSiblingActivation.current) {
+      return;
+    }
+    focusAfterSiblingActivation.current = false;
+    requestAnimationFrame(() => nudgeRef.current?.focus());
+  }, [recipe?.id]);
 
   if (!visible) {
     return null;
@@ -33,8 +43,10 @@ export function StarterActionNudge({ launch }: StarterActionNudgeProps) {
 
   return (
     <aside
+      ref={nudgeRef}
       className={`starter-nudge${recipe ? " starter-nudge--recipe" : ""}`}
       aria-label={`${world.title} starter steps`}
+      tabIndex={-1}
       data-starter-nudge
       data-starter-world-id={world.id}
       {...(recipe ? { "data-starter-recipe-id": recipe.id } : {})}
@@ -55,7 +67,12 @@ export function StarterActionNudge({ launch }: StarterActionNudgeProps) {
             <nav aria-label="Prepared recipe links">
               {pack ? <Link href={`/worlds/packs/${pack.slug}`}>Back to collection</Link> : null}
               {sibling ? (
-                <Link href={starterWorldLaunchHref(world.id, sibling.id)}>
+                <Link
+                  href={starterWorldLaunchHref(world.id, sibling.id)}
+                  onClick={() => {
+                    focusAfterSiblingActivation.current = true;
+                  }}
+                >
                   Launch {sibling.comparisonRole}: {sibling.title}
                 </Link>
               ) : null}

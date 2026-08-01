@@ -206,6 +206,8 @@ export const rawPreparedStarterComparisonDeclarations = [
       "Launch Noisy local signals and run it for the same 240 ticks.",
       "Inspect alignment and dispersion alongside visible subgroup formation."
     ],
+    tickZeroSummary:
+      "At tick 0, all 160 boids have matching positions and headings in both recipes. Steering noise changes updates only after the run begins.",
     expectedPattern:
       "Compare whether stronger steering noise delays common direction, lowers alignment, widens dispersion, or leaves visible subgroups under this seed.",
     interpretationBoundary:
@@ -216,7 +218,7 @@ export const rawPreparedStarterComparisonDeclarations = [
     version: "1",
     starterWorldId: "clustered-outbreak-starts",
     title: "One cluster versus several hotspots",
-    question: "When do separated infected pockets merge into a broader model wave?",
+    question: "Do separated infected pockets remain distinct or merge into a broader model wave?",
     baselineRecipeId: "outbreak-one-cluster",
     contrastRecipeId: "outbreak-separated-hotspots",
     outputsToCompare: ["infectedCount", "recoveredCount"],
@@ -226,6 +228,8 @@ export const rawPreparedStarterComparisonDeclarations = [
       "Launch Several separated hotspots and run it for the same 240 ticks.",
       "Compare infection-count histories and inspect whether visible pockets coalesce."
     ],
+    tickZeroSummary:
+      "At tick 0, both recipes contain 80 agents: 9 infected and 71 susceptible, with matching positions and velocities. Which nine agents are infected creates one cluster or three separated hotspots.",
     expectedPattern:
       "Watch for differences in the timing and shape of infected and recovered counts as one cluster or several seeded hotspots propagate locally.",
     interpretationBoundary:
@@ -246,6 +250,8 @@ export const rawPreparedStarterComparisonDeclarations = [
       "Launch High predator pressure and run it for the same 400 ticks.",
       "Compare prey and predator histories, including any zero-count state or recovery."
     ],
+    tickZeroSummary:
+      "At tick 0, both recipes contain 160 prey. The predator change raises total entities from 162 to 172, so total starting population is not shared.",
     expectedPattern:
       "Compare whether higher initial predator pressure produces earlier prey decline, altered cycle timing, or a different extinction state in this seeded model.",
     interpretationBoundary:
@@ -266,6 +272,8 @@ export const rawPreparedStarterComparisonDeclarations = [
       "Launch Firebreak corridor and run it for the same 100 ticks.",
       "Compare active fires, burned cells, extinction state, and visible landscape crossing."
     ],
+    tickZeroSummary:
+      "At tick 0, Connected fuel has 2,399 fuel cells and 1 burning cell. Firebreak corridor has 2,359 fuel cells, 1 burning cell, and 40 empty corridor cells. The pair changes both fuel arrangement and fuel quantity.",
     expectedPattern:
       "Watch for active-fire and burned-cell histories to separate when the connected run crosses the grid while the corridor run may stop at the full-height empty-cell path.",
     interpretationBoundary:
