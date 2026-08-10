@@ -4182,3 +4182,68 @@ Roadmap result:
 - C4 is next and has not started.
 - F1 remains paused under E3 Analytical Lenses.
 - Commit gate target: `test: audit guided investigation tutorial world`; no push is authorized.
+
+### Prompt I0: Immersive World Direction + Performance Baseline
+
+Date: 2026-08-10
+
+Goal: prototype and measure three isolated, real-runtime Flocking presentation directions so ORTUS can choose an immersive World architecture without changing production World, simulation semantics, or persistence.
+
+Starting state and untouched baseline:
+
+- Branch `main` was clean and aligned with `origin/main` at `33f9385 test: audit guided investigation tutorial world` after fetch.
+- Untouched typecheck passed; unit verification passed `78 files / 647 tests`; complete UI Playwright/Axe passed `170 tests (22.5m)` with zero failures, retries, or skips; and the production build generated `22` pages.
+- Untouched `npm run perf:simulation` measured Flocking-100 at `118.68` ticks/sec with `8.398ms` mean step time, and Flocking-500 at `20.90` ticks/sec with `47.812ms` mean step time.
+- Untouched production browser Flocking measured `23.49` ticks/sec and `57.84` FPS at 100, then `23.15` ticks/sec and `6.23` FPS at 500. Median/p95 frame time was `16.7/16.8ms` at 100 and `183.4/216.7ms` at 500. Startup was approximately `1,687ms`; rebuild was `113.2ms` at 100 and `140.3ms` at 500.
+
+Prototype architecture and interaction:
+
+- Added the unlinked, noindex `/world/immersive-prototype` route with strict `concept` and `agents` query parsing. The existing unsafe async-query middleware now also covers this route, so promise/prototype-like keys fail closed without stalling Next search-parameter handling.
+- All concepts use one validated `flocking-boids` random-headings scenario, id `i0-immersive-flocking-v1`, seed `i0-immersive-flocking-seed-v1`, and only 100 or 500 boids. Concept switching preserves the authoritative engine, tick, history, and deterministic runtime signature. Restore and load replacement are explicit fresh paused tick-0 actions.
+- Living Diorama adds a bounded 2.5D world, depth ordering, shadows, camera easing, follow, and recent movement trails. It is rated `Strong`.
+- God-Hand adds Hand, Inspect, and Measure pointer modes with immediate spatial feedback but no arbitrary manipulation. It is rated `Promising with issues` because its interaction language can imply unsupported control.
+- Field Scientist adds System, Local, and Follow observation modes, selected-neighborhood framing, and exact model-state inspection. It is rated `Strong`.
+- `WorldSceneAdapter` reads immutable snapshots into render-friendly entities, selected relationships, inspectable values, selection geometry, Alignment lens data, and a cached deterministic signature. It writes nothing to the engine and contains no Flocking rule.
+- Canvas owns the continuous batched entity render loop. React owns controls, dialogs, inspector text, and coarse notifications at roughly 120ms intervals; no boid is a React component.
+- Camera, hover, selection, active tool, active lens, follow, rubric, and confirmation state are presentation-only. Numeric/keyboard selection and a DOM inspector mirror critical canvas information. Alignment remains a stylized model output, not measured animal coordination or empirical truth.
+- Trails are capped at `32 x 12 = 384` points, transient effects at `24`, and timing samples at `360`. Reduced motion removes transient effects and makes camera transitions immediate without removing information or controls.
+
+Performance and integrity findings:
+
+- An initial one-step-per-timeout prototype driver produced only `16.44..19.60` ticks/sec at 500 and was rejected. The corrected route-local elapsed-time accumulator mirrors production's 24 Hz target, 250ms elapsed cap, and engine catch-up ceiling; one snapshot is published after each catch-up batch.
+- At 100, Living Diorama/God-Hand/Field Scientist measured `23.37/23.54/23.65` ticks/sec and `59.58/58.41/59.19` FPS. Median frame time was `16.7ms` for all three; React emitted `54/57/55` observed commits in the bounded window.
+- At 500, Living Diorama/God-Hand/Field Scientist measured `23.16/23.29/23.38` ticks/sec and `6.72/8.08/9.20` FPS. Median frame time was `166.7/133.3/116.7ms`; React emitted `56/58/60` observed commits. Model progress remained within `0.23` ticks/sec of untouched production while visual cadence degraded.
+- Forced-GC retained heap after roughly 11-12 seconds was `+0.85 MiB` for production and `+4.40/+4.35/+4.45 MiB` for Living Diorama/God-Hand/Field Scientist. The bounded pass does not prove lifetime leak freedom; longer soak testing remains open.
+- All three concepts were rendered and checked at `1440x900`, `1280x720`, `1024x768`, `900x700`, `1280x600`, and `390x844`. The world remained dominant, controls and inspection stayed reachable, canvases were nonblank, and no document overflow or nested scroll trap was observed.
+- Camera, selection, lens, and concept changes were asserted not to mutate the runtime signature. No production source under `src/simulation`, Flocking rule/default/bound/preset/metric, RNG, snapshot, scenario service, intervention, experiment, comparison, Starter World, Atlas, Lab, Builder, dependency, or storage contract changed.
+- I0 adds no persistence and no storage key. The immersive renderer changes presentation only. Simulation semantics remain unchanged. Visual quality may degrade independently of model fidelity.
+
+Decision and handoff:
+
+- The selected direction is an exact hybrid: `50% Living Diorama` owns environment, bounded depth, camera, and whole-system framing; `20% God-Hand` owns hover, press, selection, and contextual instruments without generic manipulation; `30% Field Scientist` owns System/Local/Follow observation, exact inspection, and scientific lens semantics.
+- Three.js/full 3D, per-boid React components, generic entity dragging, invented forces/events, unbounded histories, persisted prototype state, and immediate production World replacement were rejected.
+- I1 should migrate the hybrid incrementally around the proven snapshot-to-scene adapter and measured scheduler boundary, starting with Flocking only and preserving independent visual degradation plus exact DOM inspection. Other-template support is not implied.
+
+Final verification:
+
+- Focused I0 Playwright: `8 passed (1.9m)`.
+- Complete Playwright/Axe: `178 passed (25.6m)`.
+- Both final browser runs had zero failures, retries, or skips; diagnostics, Axe, responsive, reduced-motion, focus, storage, bounded-buffer, 500-boid, and production World assertions passed.
+- Typecheck: passed.
+- Unit tests: `79 files / 655 tests` passed in `82.35s`.
+- Production build: passed; Next compiled in `14.2s`, generated `23` pages, and emitted `/world/immersive-prototype` plus middleware.
+- Final simulation smoke: Flocking-100 `135.71` ticks/sec, Flocking-500 `20.00`, Forest Fire `32.25`, and Predator-Prey `99.83`.
+- Bounded Atlas smoke: `2` runs / `10` work units / horizon `5` completed in `42.57ms`; this remains an executor smoke, not a scalability or validation claim.
+- `git diff --check`: passed before this evidence-only record update and is rerun at the commit gate.
+- `npm run lint: unavailable, package.json has no lint script.`
+- Actual browser zoom, screen-reader/AT use, forced colors, complete touch ergonomics, participant comprehension, longer memory soak, and formal WCAG conformance remain unverified.
+
+Roadmap result:
+
+- C3B complete.
+- I0 complete.
+- I0B: Immersive World Direction Audit is next and has not started.
+- I1 through I5B have not started.
+- C4: Flagship Starter Pack Two is deferred until I5B and has not started.
+- F1 remains paused under E3 Analytical Lenses.
+- Commit gate target: `feat: prototype immersive world directions`; no push is authorized.

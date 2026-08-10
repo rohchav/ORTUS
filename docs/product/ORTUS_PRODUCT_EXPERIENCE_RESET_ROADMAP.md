@@ -1,7 +1,7 @@
 # ORTUS Product Experience Reset Roadmap
 
-Date: 2026-08-01
-Status: active product sequence; R1, R1B, R2, R2B, C1, C1B, C2, C2B, C3, and C3B complete; C4 next
+Date: 2026-08-10
+Status: active product sequence; R1 through C3B and I0 complete; I0B next; C4 deferred until I5B
 
 ## Why This Sequence Exists
 
@@ -23,6 +23,18 @@ Historical prompt records remain authoritative accounts of completed work. This 
 | C2B | Starter Pack One Audit | Audit comprehension, model specificity, and runtime fidelity. |
 | C3 | Guided Investigation / Tutorial World | Add a bounded, dismissible investigation flow without coercive progression. |
 | C3B | Guided Investigation Audit | Audit storage, accessibility, inference boundaries, and learning claims. |
+| I0 | Immersive World Direction + Performance Baseline | Compare three isolated real-runtime Flocking presentation concepts without replacing production World. |
+| I0B | Immersive World Direction Audit | Audit I0 runtime integrity, performance evidence, accessibility, isolation, and the selected direction. |
+| I1 | Reserved Immersive Phase 1 | Scope only through its dedicated prompt; I0 does not implement it. |
+| I1B | Reserved Immersive Phase 1 Audit | Required audit gate. |
+| I2 | Reserved Immersive Phase 2 | Scope only through its dedicated prompt; I0 does not implement it. |
+| I2B | Reserved Immersive Phase 2 Audit | Required audit gate. |
+| I3 | Reserved Immersive Phase 3 | Scope only through its dedicated prompt; I0 does not implement it. |
+| I3B | Reserved Immersive Phase 3 Audit | Required audit gate. |
+| I4 | Reserved Immersive Phase 4 | Scope only through its dedicated prompt; I0 does not implement it. |
+| I4B | Reserved Immersive Phase 4 Audit | Required audit gate. |
+| I5 | Reserved Immersive Phase 5 | Scope only through its dedicated prompt; I0 does not implement it. |
+| I5B | Reserved Immersive Phase 5 Audit | Required audit gate before returning to C4. |
 | C4 | Flagship Starter Pack Two | Broaden starter coverage only where existing runtimes support it. |
 | C4B | Starter Pack Two Audit | Audit cross-template quality and scientific honesty. |
 | S1 | Starter Remix and Builder Handoff | Hand off a supported starter structure without implying generic execution. |
@@ -56,7 +68,9 @@ C1 is complete. It adds the strict source-backed Starter World registry, `/world
 
 `C2B: Flagship Starter Pack One Audit + Hardening` is complete. It independently audits all eight authoritative scenarios, tick-zero initialization, all four fixed-seed horizons, the existing Compare workflow, public launch rejection, responsive/accessibility behavior, and Forest Fire containment. It corrects a hidden Firebreak fuel-quantity difference, sibling focus transfer, shared-setting hierarchy, and overcommitted comparison language without changing template rules or persistence.
 
-`C3: Guided Investigation / Tutorial World` and `C3B: Guided Investigation Audit + Hardening` are complete. The implementation adds one strict, recursively frozen `Reading a Flock` guide over the audited clear/noisy Coordination pair; C3B hardens fail-closed authority, modified-run provenance and restore, generic comparison provenance, hostile public queries, metric language, focus, history, accessibility, and non-persistence. It uses only existing playback/tasks/Compare and validated scenario behavior, stores no progress, makes no learning inference, and changes no simulation behavior or comparison persistence. `C4: Flagship Starter Pack Two` is next and has not started; S1-S5 and E1-E3 have not started under this roadmap.
+`C3: Guided Investigation / Tutorial World` and `C3B: Guided Investigation Audit + Hardening` are complete. The implementation adds one strict, recursively frozen `Reading a Flock` guide over the audited clear/noisy Coordination pair; C3B hardens fail-closed authority, modified-run provenance and restore, generic comparison provenance, hostile public queries, metric language, focus, history, accessibility, and non-persistence. It uses only existing playback/tasks/Compare and validated scenario behavior, stores no progress, makes no learning inference, and changes no simulation behavior or comparison persistence.
+
+`I0: Immersive World Direction + Performance Baseline` is complete. It adds one unlinked internal comparison route with Living Diorama, God-Hand, and Field Scientist presentations over the same fixed validated Flocking scenario. Camera, selection, tools, and Alignment lens are presentation-only; Canvas owns batched boid drawing; React owns coarse controls and text; trails/effects are bounded; no storage or production World migration was added. The evidence selects a 50% Living Diorama / 20% God-Hand / 30% Field Scientist hybrid. `I0B: Immersive World Direction Audit` is next and has not started. I1 through I5B are reserved and unstarted. `C4: Flagship Starter Pack Two` is deferred until I5B; S1-S5 and E1-E3 have not started under this roadmap.
 
 The active route hierarchy is Start `/`, Start-adjacent Explore Worlds `/worlds`, the flagship collection `/worlds/packs/local-rules-global-patterns`, the `Reading a Flock` guide `/worlds/guides/reading-a-flock`, World `/world`, Workshop `/builder`, Atlas `/atlas`, and Lab `/lab`. `/worlds` contains eleven validated runnable definitions. The guide is a separate instructional route, not a twelfth world. Four catalog worlds are focused C2 experiences over existing production templates; their existence is not evidence that later starter packs, composition, Lab, Atlas, or analysis milestones exist.
 
@@ -72,6 +86,7 @@ Earlier files may state that F1 follows GW9B. That was the prior sequence and is
 
 ```text
 R1 -> R1B -> R2 -> R2B -> C1 -> C1B -> C2 -> C2B -> C3 -> C3B
+-> I0 -> I0B -> I1 -> I1B -> I2 -> I2B -> I3 -> I3B -> I4 -> I4B -> I5 -> I5B
 -> C4 -> C4B -> S1 -> S1B -> S2 -> S2B -> S3 -> S3B -> S4 -> S4B
 -> S5 -> S5B -> E1 -> E1B -> E2 -> E2B -> E3 -> E3B
 ```
@@ -96,6 +111,8 @@ Explicit user direction may revise this roadmap, but documentation-only mileston
 - Guided prepared-pair claims must be suspended when active template, recipe provenance, initialization, seed, parameters, or interventions diverge. Show active facts and require explicit confirmation before restoring the prepared fresh run.
 - Public `/world` boundaries must reject promise/prototype-like query names before async search-parameter interpretation; invalid guided requests must not partially construct AppShell or runtime state.
 - The live system remains the primary World visual object.
+- Immersive presentation must remain downstream of authoritative snapshots. Camera, hover, selection, focus, and lenses must not alter runtime state, metrics, seeds, or model outcomes.
+- React must not become a continuously rerendering per-entity loop. Visual frame rate and bounded atmosphere may degrade before model ticks, rules, RNG, metrics, or scenario fidelity.
 - World task labels, query state, current navigation, and visible task must agree without resetting the active run.
 - Keep World Stage and persistent playback mounted outside task rendering; task switching must not recreate or reset the active run.
 - Keep one bounded active-tool scroll region. Desktop collapse/restore must preserve local tool state, and mobile layouts must not clip deeper controls or create document overflow.

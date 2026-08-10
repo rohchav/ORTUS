@@ -515,6 +515,18 @@ Intended future homes:
 - Agent, Node, and Resource Inspectors -> right context drawer.
 - Visual Model Builder, Rule Editor, and Calibration -> full workspace mode.
 
+## Immersive World Presentation
+
+I0 introduces an isolated presentation architecture, not a new simulation artifact family or production World runtime.
+
+A `WorldSceneAdapter` is a read-only projection from one authoritative engine snapshot into render-friendly entities, selected-entity relationships, inspectable state, selection geometry, and model-derived lens data. It does not mutate the engine, contain template rules, create a second model, or imply that every production template has an adapter.
+
+An immersive camera contains bounded position, zoom, focus target, and a presentation mode such as System, Free, Local, or Follow. Camera zoom is visual magnification, not multi-scale modeling. Camera movement, hover, selection, and active lens state are UI-only and must not alter ticks, metrics, parameters, RNG, snapshots, scenarios, or comparisons.
+
+The I0 Flocking route uses the real validated `flocking-boids` scenario/runtime. Its Alignment lens and neighborhood geometry are snapshot-derived model information. Perspective, shadows, pointer presence, camera interpolation, and transient pulses are presentation. The renderer may reduce visual cadence or bounded atmosphere under load, but it must not reduce model-agent count, rules, deterministic steps, RNG work, metrics, or scenario fidelity.
+
+React owns controls and semantic inspection, not continuously updated boid components. Canvas owns batched visual projection. I0's route, state, trails, and effects are non-persistent and bounded. This boundary does not implement generic manipulation, cross-template immersive support, model-scale zoom, visual-builder execution, or a 3D runtime.
+
 ## Randomness
 
 Randomness in ORTUS should be explicit, seeded, and reproducible. Hidden randomness makes experiments, comparisons, calibration, and uncertainty analysis unreliable.

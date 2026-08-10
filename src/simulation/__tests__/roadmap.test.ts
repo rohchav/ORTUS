@@ -299,6 +299,9 @@ describe("roadmap alignment and missing pillar reservations", () => {
       "ui",
       "GUIDED_INVESTIGATION_WORLD_EXPERIENCE.md"
     );
+    const immersiveDirectionPath = join(repoRoot, "docs", "product", "IMMERSIVE_WORLD_DIRECTION.md");
+    const immersivePrototypesPath = join(repoRoot, "docs", "ui", "IMMERSIVE_WORLD_PROTOTYPES.md");
+    const immersivePerformancePath = join(repoRoot, "docs", "performance", "IMMERSIVE_RENDERING_BASELINE.md");
     expect(existsSync(roadmapPath)).toBe(true);
     expect(existsSync(missingPillarsPath)).toBe(true);
     expect(existsSync(productPhilosophyPath)).toBe(true);
@@ -333,6 +336,9 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(existsSync(guidedInvestigationProductPath)).toBe(true);
     expect(existsSync(guidedInvestigationAuditPath)).toBe(true);
     expect(existsSync(guidedInvestigationUiPath)).toBe(true);
+    expect(existsSync(immersiveDirectionPath)).toBe(true);
+    expect(existsSync(immersivePrototypesPath)).toBe(true);
+    expect(existsSync(immersivePerformancePath)).toBe(true);
 
     const roadmap = readFileSync(roadmapPath, "utf8");
     const productPhilosophy = readFileSync(productPhilosophyPath, "utf8");
@@ -367,6 +373,9 @@ describe("roadmap alignment and missing pillar reservations", () => {
     const guidedInvestigationProduct = readFileSync(guidedInvestigationProductPath, "utf8");
     const guidedInvestigationAudit = readFileSync(guidedInvestigationAuditPath, "utf8");
     const guidedInvestigationUi = readFileSync(guidedInvestigationUiPath, "utf8");
+    const immersiveDirection = readFileSync(immersiveDirectionPath, "utf8");
+    const immersivePrototypes = readFileSync(immersivePrototypesPath, "utf8");
+    const immersivePerformance = readFileSync(immersivePerformancePath, "utf8");
     expect(roadmap).toContain("completed through Prompt 39B");
     expect(roadmap).toContain("Post-30B stabilization");
     expect(roadmap).toContain(
@@ -390,8 +399,9 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(roadmap).toContain("UX6B complete.");
     expect(roadmap).toContain("GW9 complete.");
     expect(roadmap).toContain("GW9B complete.");
-    expect(roadmap).toContain("R1, R1B, R2, R2B, C1, C1B, C2, C2B, C3, and C3B are complete.");
-    expect(roadmap).toContain("C4: Flagship Starter Pack Two is next and has not started.");
+    expect(roadmap).toContain("R1 through C3B and I0 are complete.");
+    expect(roadmap).toContain("I0B: Immersive World Direction Audit is next and has not started.");
+    expect(roadmap).toContain("C4: Flagship Starter Pack Two is deferred until I5B.");
     expect(roadmap).toContain("F1 and the fractal branch remain documented but are paused under E3 Analytical Lenses.");
     expect(startHubReset).toContain("/         -> Start Hub");
     expect(startHubReset).toContain("/world    -> live World workbench");
@@ -404,12 +414,15 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(worldLayoutReclaim).toContain("C1 is complete.");
     expect(worldLayoutReclaim).toContain("C1B");
     expect(productExperienceResetRoadmap).toContain(
-      "Status: active product sequence; R1, R1B, R2, R2B, C1, C1B, C2, C2B, C3, and C3B complete; C4 next"
+      "Status: active product sequence; R1 through C3B and I0 complete; I0B next; C4 deferred until I5B"
     );
     expect(productExperienceResetRoadmap).toContain("Every implementation milestone is followed by an audit milestone.");
     expect(productExperienceResetRoadmap).toContain("F1 and the rest of the F branch are paused beneath E3 Analytical Lenses.");
     expect(productExperienceResetRoadmap).toContain(
       "R1 -> R1B -> R2 -> R2B -> C1 -> C1B -> C2 -> C2B -> C3 -> C3B"
+    );
+    expect(productExperienceResetRoadmap).toContain(
+      "-> I0 -> I0B -> I1 -> I1B -> I2 -> I2B -> I3 -> I3B -> I4 -> I4B -> I5 -> I5B"
     );
     expect(productExperienceResetRoadmap).toContain(
       "-> S5 -> S5B -> E1 -> E1B -> E2 -> E2B -> E3 -> E3B"
@@ -441,6 +454,11 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(guidedInvestigationUi.match(/^## \d+\. /gm)).toHaveLength(16);
     expect(guidedInvestigationUi).toContain("The guide is not a Starter World card");
     expect(guidedInvestigationUi).toContain("mounts no AppShell, stage, template, or engine");
+    expect(immersiveDirection).toContain("Hybrid wins: 50% Living Diorama, 20% God-Hand, 30% Field Scientist");
+    expect(immersiveDirection).toContain("I0B: Immersive World Direction Audit");
+    expect(immersivePrototypes).toContain("React does not map boids into components");
+    expect(immersivePrototypes).toContain("Total trail points: maximum 384");
+    expect(immersivePerformance).toContain("Simulation semantics remain unchanged");
     expect(starterWorldPortfolio.match(/^### [ABC]\d+\. /gm)).toHaveLength(24);
     expect(starterWorldPortfolio.match(/^### A\d+\. /gm)).toHaveLength(8);
     expect(starterWorldPortfolio.match(/^### B\d+\. /gm)).toHaveLength(8);

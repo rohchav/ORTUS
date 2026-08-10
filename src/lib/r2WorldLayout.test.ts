@@ -128,7 +128,7 @@ describe("R2 World layout and interaction reclaim contracts", () => {
     expect(shell).toContain('title="Technical run details"');
   });
 
-  it("records completed C3B after C3 with C4 next", () => {
+  it("records completed I0 after C3B with I0B next", () => {
     const roadmap = source("planned_roadmap.md");
     const context = source("docs/codex/CURRENT_CONTEXT.md");
 
@@ -143,10 +143,12 @@ describe("R2 World layout and interaction reclaim contracts", () => {
       expect(record).toContain("C2B complete");
       expect(record).toContain("C3 complete");
       expect(record).toContain("C3B complete");
+      expect(record).toContain("I0 complete");
     }
     expect(context).toContain("WORLD_LAYOUT_AND_INTERACTION_RECLAIM_AUDIT.md");
     expect(context).toContain("STARTER_WORLD_CONTENT_FRAMEWORK_AUDIT.md");
-    expect(context).toContain("C4: Flagship Starter Pack Two is next");
+    expect(context).toContain("I0B: Immersive World Direction Audit is next");
+    expect(context).toContain("C4: Flagship Starter Pack Two is deferred until I5B");
     expect(context).not.toMatch(/F1 (?:is next|resumed|in progress)/i);
   });
 });

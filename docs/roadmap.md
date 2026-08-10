@@ -4,7 +4,7 @@ This roadmap reserves the major complex-systems pillars that ORTUS must support 
 
 ## Current Foundation
 
-ORTUS has completed through Prompt 39B, the documented neural/runtime-lab side track, the Research World sequence through GW9B, UX3 through UX6B, RH1, R1, R1B, R2, R2B, C1, C1B, C2, C2B, and C3. Prompts 1-39B established the modeling foundation; GW9/GW9B established the first bounded Atlas sampling slice; R1-R2B reset and hardened product entry and World; C1/C1B established and audited the strict source-backed Starter World layer; C2/C2B added and audited the first flagship prepared-comparison collection; C3 adds one optional guided investigation over that existing runtime behavior:
+ORTUS has completed through Prompt 39B, the documented neural/runtime-lab side track, the Research World sequence through GW9B, UX3 through UX6B, RH1, R1 through C3B, and I0. Prompts 1-39B established the modeling foundation; GW9/GW9B established the first bounded Atlas sampling slice; R1-R2B reset and hardened product entry and World; C1/C1B established and audited the strict source-backed Starter World layer; C2/C2B added and audited the first flagship prepared-comparison collection; C3/C3B add and audit one optional guided investigation; I0 establishes and measures an isolated immersive presentation direction:
 
 - Engine/runtime/UI foundation.
 - Scenario Builder.
@@ -80,12 +80,13 @@ ORTUS has completed through Prompt 39B, the documented neural/runtime-lab side t
 - Prompt C2B adds `docs/product/FLAGSHIP_STARTER_PACK_ONE_AUDIT.md`; independently audits all eight effective scenarios, tick-zero state, four deterministic comparison horizons, rendered workflows, invalid launches, and Forest Fire containment. It fixes one hidden material fuel-quantity difference plus bounded focus, hierarchy, and model-language defects without changing runtime rules or persistence.
 - Prompt C3 adds `docs/product/GUIDED_INVESTIGATION_TUTORIAL_WORLD.md` and `docs/ui/GUIDED_INVESTIGATION_WORLD_EXPERIENCE.md`; one strict recursively frozen `Reading a Flock` guide; `/worlds/guides/reading-a-flock`; strict guide-aware fresh-run handoffs; and an optional World guide over existing tasks, playback, outputs, and Compare behavior. It adds no runtime mechanics, automatic execution/capture, progress storage, learner inference, Lab/Atlas evidence, Builder execution, dependency, or asset.
 - Prompt C3B adds `docs/product/GUIDED_INVESTIGATION_TUTORIAL_WORLD_AUDIT.md`; strengthens fail-closed source authority, active prepared-run provenance, modified-run disclosure and restore, generic comparison provenance, hostile query rejection, focus, metric language, and adversarial browser coverage. It adds no simulation behavior, storage key, learner state, comparison schema, or C4 content.
+- Prompt I0 adds `docs/product/IMMERSIVE_WORLD_DIRECTION.md`, `docs/ui/IMMERSIVE_WORLD_PROTOTYPES.md`, and `docs/performance/IMMERSIVE_RENDERING_BASELINE.md`; one unlinked comparison route for Living Diorama, God-Hand, and Field Scientist over the same validated real Flocking scenario; a thin read-only scene adapter; bounded camera/trails/effects; batched Canvas rendering; accessibility mirrors; and measured 100/500 behavior. It selects a 50% Living Diorama / 20% God-Hand / 30% Field Scientist hybrid. It does not replace production World, change simulation rules/outcomes, add storage, add generic manipulation, add 3D dependencies, or implement I0B/I1.
 
 These foundations are deliberately service-first or metadata-first unless documented otherwise. Networks, resources, feedback primitives, boundary/environment models, spatial fields, observability models, causal assumptions, quantity semantics, emergence descriptors, robustness/resilience descriptors, and strategy/control descriptors are headless structural services until a template explicitly uses them at runtime. A template must not claim support for a primitive merely because a service exists.
 
 After Prompt 30B, ORTUS completed a repository hygiene, durable context, dependency stabilization, and performance/scalability pass. That pass added and validated performance instrumentation and spatial-indexing foundations, but it does not turn reserved structural primitives into runtime support and is not evidence for high-scale readiness by itself.
 
-Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 39B: Scenario Planning From Schema Audit are complete. The documented side-track and Research World/UI prompts through GW9B are complete. R1, R1B, R2, R2B, C1, C1B, C2, C2B, C3, and C3B are complete. C4: Flagship Starter Pack Two is next and has not started. F1 and the fractal branch remain documented but are paused under E3 Analytical Lenses.
+Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 39B: Scenario Planning From Schema Audit are complete. The documented side-track and Research World/UI prompts through GW9B are complete. R1 through C3B and I0 are complete. I0B: Immersive World Direction Audit is next and has not started. I1 through I5B are reserved and unstarted; C4: Flagship Starter Pack Two is deferred until I5B. F1 and the fractal branch remain documented but are paused under E3 Analytical Lenses.
 
 ## Active Product Experience Reset
 
@@ -93,12 +94,14 @@ Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 39B: Scenario
 
 ```text
 R1 / R1B -> R2 / R2B
-C1 / C1B -> C2 / C2B -> C3 / C3B -> C4 / C4B
+C1 / C1B -> C2 / C2B -> C3 / C3B
+I0 / I0B -> I1 / I1B -> I2 / I2B -> I3 / I3B -> I4 / I4B -> I5 / I5B
+C4 / C4B
 S1 / S1B -> S2 / S2B -> S3 / S3B -> S4 / S4B -> S5 / S5B
 E1 / E1B -> E2 / E2B -> E3 / E3B
 ```
 
-R1 is Start Hub and World-First Product Reset. R1B is its completed First-Run and World-First Shell Audit + Hardening gate. R2 World Layout and Interaction Reclaim and R2B World Layout and Interaction Audit + Hardening are complete. C1 Starter World Content Framework, C1B Starter World Content Framework Audit, C2 Flagship Starter Pack One, C2B Starter Pack One Audit + Hardening, C3 Guided Investigation / Tutorial World, and C3B Guided Investigation Audit + Hardening are complete. C4: Flagship Starter Pack Two is next and has not started. The R/C/S/E labels describe planned milestones, not implemented capabilities. F0 remains a historical documentation branch; F1 is paused beneath E3 and must not start as the former immediate next milestone.
+R1 is Start Hub and World-First Product Reset. R1B is its completed First-Run and World-First Shell Audit + Hardening gate. R2 World Layout and Interaction Reclaim and R2B World Layout and Interaction Audit + Hardening are complete. C1 through C3B are complete. I0 Immersive World Direction + Performance Baseline is complete. I0B is next and has not started; I1 through I5B are reserved for dedicated prompts; C4 is deferred until I5B. The R/C/I/S/E labels describe planned milestones, not implemented capabilities. F0 remains a historical documentation branch; F1 is paused beneath E3 and must not start as the former immediate next milestone.
 
 ## Revised Prompt Sequence
 

@@ -583,7 +583,7 @@
 - Keep Starter World browsing, filters, search, nudge dismissal, and launch context non-persistent. Do not add storage, progress, completion, XP, achievements, profiling, recommendations, or step locks.
 - Keep remix status explicit: runtime-now, current Advanced structural tools, or future capability. Do not expose fake Builder, generate, compile, apply, or run actions.
 - C1 portfolio candidates are documentation only. Tier A is not implemented content; Tier B and C do not become runtime support until dedicated implementation and audit prompts.
-- R1, R1B, R2, R2B, C1, C1B, C2, C2B, C3, and C3B are complete. C4: Flagship Starter Pack Two is next; do not start C4 or later C/S/E milestones without a dedicated prompt.
+- R1 through C3B and I0 are complete. I0B: Immersive World Direction Audit is next. I1 through I5B are reserved; C4 is deferred until I5B. Do not start I0B, I1, C4, or later I/C/S/E milestones without a dedicated prompt.
 - Complete and commit GW1 before starting GW1B.
 - Treat UX0 as documentation and design planning only.
 - Do not implement World/Lab/Atlas/Workshop without a dedicated prompt.
@@ -664,7 +664,7 @@
 - Atlas preview results are component-memory-only exact sampled coordinates. Do not add storage, saved records, history, publication, interpolation, smoothing, contours, inferred unsampled values, regime/transition/tipping-point detection, confidence/coverage/evidence scores, or scientific-validation claims.
 - Keep cancellation language honest: `Cancel after current sample` means the current synchronous sample finishes before cancellation is effective. Unstarted runs remain unsampled and partial results remain visibly partial. Route unmount must cancel remaining cooperative work and suppress post-unmount UI updates.
 - Multiple preview seeds show selected deterministic model variation only; they are not confidence intervals, calibrated probabilities, or real-world uncertainty estimates.
-- GW9/GW9B do not generalize Atlas sampling, make the conceptual behavioral-landscape scaffold runtime-backed, make probe plans executable, or create Discovery Atlas/Lab persistence. GW9B, R1, R1B, R2, R2B, C1, C1B, C2, C2B, C3, and C3B are complete. C4 is next; F1 is paused under E3 Analytical Lenses.
+- GW9/GW9B do not generalize Atlas sampling, make the conceptual behavioral-landscape scaffold runtime-backed, make probe plans executable, or create Discovery Atlas/Lab persistence. GW9B, R1, R1B, R2, R2B, C1, C1B, C2, C2B, C3, C3B, and I0 are complete. I0B is next; C4 is deferred until I5B; F1 is paused under E3 Analytical Lenses.
 - A featured starter launch must create the documented fresh prepared run once per starter page mount. It must not silently resume modified parameters, an advanced tick, or a running state beneath baseline instructions.
 - Parameter controls that rebuild the run must remain drafts until explicit apply and state that apply produces a fresh paused tick-0 run; do not imply live mutation.
 - World visible task, `task` query, top-navigation current state, and task heading must remain coherent without resetting active runtime state.
@@ -700,3 +700,14 @@
 - A guided prepared-run reference is not the active runtime after template, recipe provenance, initialization, seed, parameter, or intervention divergence. Suspend the controlled-pair claim, show active facts, and keep continue, explicit restore, and exit available.
 - Do not infer a prepared baseline, guide ownership, completion, or a controlled pair from the existence of any saved World comparison summary. Use generic availability and existing bounded provenance unless every stronger claim is proved.
 - Reject promise/prototype-like public World query names before Next.js async search-parameter interpretation. Invalid guided requests must not partially construct AppShell, a stage, a template, or an engine.
+- I0 immersive prototypes are isolated presentation evidence. Do not link them from normal navigation, treat them as the production World renderer, or infer I1-I5B completion from their existence.
+- All immersive concepts must read the same authoritative validated template runtime through a read-only scene adapter. The adapter must not contain model rules, mutate engine state, create a second model, or imply cross-template support.
+- Camera, hover, selection, focus, pointer presence, tool state, and model-output lenses are presentation state only. They must not change ticks, parameters, metrics, RNG, snapshots, scenarios, comparisons, Starter World state, Atlas, Lab, Builder, or persistence.
+- React must not render one continuously updating component per model entity. Keep batched entity projection in Canvas or an explicitly audited renderer and keep React notifications coarse.
+- Preserve production scheduler semantics for immersive runtime slices. Under load, degrade atmosphere, trails, effects, shadows, distant detail, or visual cadence before agent count, deterministic steps, model rules, RNG, metrics, or scenario fidelity.
+- Keep immersive trails, effects, timing samples, and any future visual histories explicitly bounded. Do not add storage keys, saved prototype state, unbounded trajectories, arbitrary event payloads, biographies, documents, or per-agent histories.
+- Immersive overlays must distinguish snapshot-derived model information from decorative presentation. Do not invent collisions, wind, turbulence, force fields, terrain, emotions, intent, awareness, or relationships the runtime does not expose.
+- God-Hand does not authorize arbitrary manipulation. Add only template-defined, validated interventions through existing engine paths in a later dedicated prompt; selection itself must never move or mutate an entity.
+- System, Local, and Follow are visual camera modes, not multi-scale runtime, agent point of view, awareness, or perception unless explicit model state supports those claims.
+- The I0 Alignment lens is a Flocking model-output view, not measured animal coordination, empirical truth, validation, or a simulation-changing instrument.
+- The selected I0 direction is exactly 50% Living Diorama ownership of environment/camera, 20% God-Hand ownership of direct interaction/contextual instruments, and 30% Field Scientist ownership of observation/inspection. I0B must audit that decision before I1 starts.
