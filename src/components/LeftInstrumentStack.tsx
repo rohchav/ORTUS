@@ -25,6 +25,7 @@ interface LeftInstrumentStackProps {
   };
   onExitGuide?: () => void;
   onFocusPlayback?: () => void;
+  onRestorePreparedRecipe?: () => void;
 }
 
 export function LeftInstrumentStack({
@@ -35,7 +36,8 @@ export function LeftInstrumentStack({
   onShowTools,
   guidedInvestigation,
   onExitGuide,
-  onFocusPlayback
+  onFocusPlayback,
+  onRestorePreparedRecipe
 }: LeftInstrumentStackProps) {
   const mode = getSimulationWorkspaceMode(activeMode);
   const [moreOpen, setMoreOpen] = useState(false);
@@ -313,7 +315,7 @@ export function LeftInstrumentStack({
             </button>
           </header>
           <div ref={panelScrollRef} className="workspace-context-panel__scroll" data-intentional-scroll-region="workspace-context">
-            {guidedInvestigation && onExitGuide && onFocusPlayback ? (
+            {guidedInvestigation && onExitGuide && onFocusPlayback && onRestorePreparedRecipe ? (
               <GuidedInvestigationPanel
                 authority={guidedInvestigation.authority}
                 launch={guidedInvestigation.launch}
@@ -321,6 +323,7 @@ export function LeftInstrumentStack({
                 onOpenTask={chooseModeFromGuide}
                 onFocusPlayback={onFocusPlayback}
                 onExitGuide={onExitGuide}
+                onRestorePreparedRecipe={onRestorePreparedRecipe}
               />
             ) : null}
             <div hidden={activeMode !== "setup"}>

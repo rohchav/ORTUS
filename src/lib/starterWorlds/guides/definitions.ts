@@ -15,7 +15,7 @@ export const rawGuidedInvestigationDefinitions = [
     preparedComparisonId: "coordination-noise-comparison",
     focusOutputIds: ["alignmentScore", "dispersion"],
     opening: [
-      "Run the same initialized flock twice.",
+      "Run the same initialized positions and headings twice.",
       "Only the steering-noise setting changes.",
       "Watch whether directional alignment and spatial dispersion tell the same story."
     ],
@@ -29,7 +29,7 @@ export const rawGuidedInvestigationDefinitions = [
             id: "confirm-prepared-start",
             title: "Start from the prepared flock",
             summary:
-              "Inspect the active prepared configuration and its audited paired starting-state statement before motion begins.",
+              "Inspect the prepared reference and compare it with the active runtime before motion begins.",
             actions: [{ type: "inspect-start" }, { type: "open-task", task: "setup" }],
             technicalChecks: ["correct-recipe-loaded", "run-is-paused", "tick-is-zero"]
           },
@@ -37,7 +37,7 @@ export const rawGuidedInvestigationDefinitions = [
             id: "run-clear-signals",
             title: "Watch coordinated motion form",
             summary:
-              "Use the existing playback controls and watch the live world through the prepared recipe's suggested horizon.",
+              "Use the existing playback controls and watch the live world; the prepared reference supplies a suggested horizon.",
             actions: [{ type: "run-prepared-world" }],
             technicalChecks: ["tick-reached-horizon"]
           },
@@ -77,7 +77,7 @@ export const rawGuidedInvestigationDefinitions = [
             id: "confirm-paired-reset",
             title: "Start the paired run",
             summary:
-              "Confirm that this recipe is a fresh run and inspect the audited controlled difference without assuming the baseline was run.",
+              "Compare the active runtime with the fresh prepared contrast reference without assuming the baseline was run.",
             actions: [{ type: "inspect-start" }, { type: "open-task", task: "setup" }],
             technicalChecks: ["paired-recipe-loaded", "run-is-paused", "tick-is-zero"]
           },
@@ -85,7 +85,7 @@ export const rawGuidedInvestigationDefinitions = [
             id: "run-noisy-signals",
             title: "Give the contrast equal runtime",
             summary:
-              "Use the existing playback controls for the same prepared horizon so the bounded summaries are easier to inspect.",
+              "The prepared reference uses the same horizon; playback remains under your control and you may proceed earlier.",
             actions: [{ type: "run-prepared-world" }],
             technicalChecks: ["tick-reached-horizon"]
           },
@@ -99,7 +99,7 @@ export const rawGuidedInvestigationDefinitions = [
             prompts: [
               "Did directional alignment change?",
               "Did dispersion change by a similar amount?",
-              "Does the visible flock support the same interpretation as both metrics?"
+              "Where does visible motion agree or disagree with the two bounded output summaries?"
             ]
           },
           {
@@ -120,7 +120,7 @@ export const rawGuidedInvestigationDefinitions = [
       }
     ],
     reflectionPrompts: [
-      "Which changed more in your prepared runs: Alignment or Dispersion?",
+      "For an intact prepared pair, which changed more: Alignment or Dispersion?",
       "Did the visual movement and numeric outputs suggest the same interpretation?",
       "What additional run would help distinguish a seed-specific outcome from a broader model pattern?",
       "What intermediate Noise setting would you investigate next?"

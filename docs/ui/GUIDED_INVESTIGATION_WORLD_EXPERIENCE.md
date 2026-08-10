@@ -1,8 +1,8 @@
 # Guided Investigation World Experience
 
-Prompt: C3
+Prompt: C3 / C3B
 
-Status: complete; C3B Guided Investigation Audit is next
+Status: C3 and C3B complete; C4 Flagship Starter Pack Two next
 
 ## 1. Guide landing route
 
@@ -26,7 +26,7 @@ All four phase steps are visible as native buttons. Users can jump, move Previou
 
 ## 6. Technical status
 
-Technical checks report current recipe, paused/running state, tick, horizon, metric availability, task visibility, and generic summary availability with neutral language. Horizon status uses a bounded announcement and never announces every tick. Checks orient the workflow; they do not infer learning, correctness, or completion and never disable forward movement.
+Technical checks report prepared-run match, paused/running state, tick, horizon, metric availability, task visibility, and generic summary availability with neutral language. Horizon status uses a bounded announcement and never announces every tick. Checks orient the workflow; they do not infer learning, correctness, or completion and never disable forward movement. C3B adds a persistent modified-run state when template, recipe provenance, initialization, seed, parameters, or interventions diverge.
 
 ## 7. Baseline flow
 
@@ -34,7 +34,7 @@ Baseline step one shows the active `Clear local signals` recipe, derived Noise v
 
 ## 8. Contrast flow
 
-Contrast step one shows a fresh paused tick-0 `Noisy local signals` run, both Noise values, shared seed/count, and the audited matching initialized state. Step two requests the same horizon without calling the pair statistical evidence. Step three opens Observe for the same outputs. Step four opens Compare, preserves a truthful no-baseline fallback, and offers a direct baseline reopen.
+Contrast step one shows a fresh paused tick-0 `Noisy local signals` run, both Noise values, shared seed/count, and the audited matching initialized state. Step two requests the same horizon without calling the pair statistical evidence. Step three opens Observe for the same outputs. Step four opens Compare, preserves a truthful no-summary fallback, shows bounded existing summary metadata without assigning guide provenance, and offers a direct baseline reopen.
 
 ## 9. Reflection
 
@@ -42,7 +42,7 @@ The final contrast step includes non-scored questions about relative output chan
 
 ## 10. Exit and collapse
 
-Collapse unmounts hidden guide content, preserves the mounted-page step and active run, and focuses the Expand guide control. Exit removes only guide presentation and the `guide` URL parameter with same-document history replacement. It preserves tick, playback, Setup drafts, current task where possible, and existing comparison summaries, then focuses stable World stage context.
+Collapse unmounts hidden guide content, preserves the mounted-page step and active run, closes staged restore confirmation, and focuses the Expand guide control. Exit removes only guide presentation and the `guide` URL parameter with same-document history replacement. It preserves tick, playback, Setup drafts, current task where possible, and existing comparison summaries, then focuses stable World stage context.
 
 ## 11. Direct contrast entry
 
@@ -50,7 +50,7 @@ A strict contrast URL opens contrast step one directly. The copy says direct ent
 
 ## 12. Focus management
 
-Existing task actions focus the selected task heading. Playback focus lands on the current Run or Pause control. User step changes focus the current step heading. Paired-recipe navigation focuses replacement recipe context. Collapse focuses Expand, expansion preserves logical location, and exit focuses the World stage. Hidden guide content is unmounted and cannot remain tabbable.
+Existing task actions focus the selected task heading. Playback focus lands on the current Run or Pause control. User step changes focus the current step heading. Paired-recipe navigation focuses replacement recipe context. Material rebuild divergence focuses its warning; staged restore and cancellation have deterministic focus return. Collapse focuses Expand, expansion preserves logical location, and exit focuses the World stage. Hidden guide content is unmounted and cannot remain tabbable.
 
 ## 13. Responsive behavior
 
@@ -62,8 +62,8 @@ Routes use one H1, coherent headings, visible recipe and step text, native contr
 
 ## 15. Error states
 
-Unknown, malformed, duplicated, owner-mismatched, recipe-mismatched, recipe-missing, guide-state, runtime-override, object-payload, and unsafe-key query forms fail on the existing announced Starter launch error. The invalid route provides Explore Worlds and Start return paths and mounts no AppShell, stage, template, or engine.
+Unknown, malformed, duplicated, owner-mismatched, recipe-mismatched, recipe-missing, guide-state, runtime-override, object-payload, and unsafe-key query forms fail on the existing announced Starter launch error. C3B adds a `/world` middleware boundary for promise/prototype-like query names that Next may interpret before page code. The invalid route provides Explore Worlds and Start return paths and mounts no AppShell, stage, template, or engine.
 
 ## 16. Verification
 
-`tests/ui/guided-investigation.spec.ts` covers landing authority and hierarchy, discovery placement, all baseline and contrast steps, explicit Compare capture, missing-summary fallback, reflection, direct entry, Back/Forward, reload, collapse, exit with active runtime and drafts, strict errors, stage dominance, six viewports, reduced motion, Axe, overflow, and browser diagnostics. Headless guide and launch contracts live with `src/lib/starterWorlds/guides` tests; final repository gates are recorded in `docs/codex/SESSION_LOG.md`.
+`tests/ui/guided-investigation.spec.ts` preserves the C3 happy paths. `tests/ui/guided-investigation-audit.spec.ts` adds parameter/seed/population/template divergence, restore/cancel, generic summary provenance, all primary task replacements, Back/Forward, reload/new tab, hostile query keys, responsive modified states, reduced motion, Axe, overflow, and diagnostics. Headless guide and authority-drift contracts live with `src/lib/starterWorlds/guides` tests; C3B evidence is in `docs/product/GUIDED_INVESTIGATION_TUTORIAL_WORLD_AUDIT.md` and final gates are recorded in `docs/codex/SESSION_LOG.md`.

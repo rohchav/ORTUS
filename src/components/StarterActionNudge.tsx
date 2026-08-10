@@ -58,7 +58,7 @@ export function StarterActionNudge({ launch, activeGuideId }: StarterActionNudge
         </p>
         {recipe ? (
           <>
-            <p className="starter-nudge__recipe"><strong>Recipe:</strong> {recipe.title}</p>
+            <p className="starter-nudge__recipe"><strong>{activeGuideId ? "Prepared reference:" : "Recipe:"}</strong> {recipe.title}</p>
             {!activeGuideId ? (
               <>
                 <span>{recipe.purpose}</span>

@@ -296,7 +296,7 @@ C1 owns content discovery before World, not a new permanent World drawer. Its or
 
 The launch URL contains stable IDs only. World revalidates those IDs, uses existing scenario services, and creates a fresh paused tick-0 run. The existing compact context remains authoritative; a dismissible nudge supplies local Starter World context without progress, locks, storage, or task replacement.
 
-R1 complete. R1B complete. R2 complete. R2B complete. C1 complete. C1B complete. C2 complete. C2B complete. C3 complete. C3B: Guided Investigation Audit is next.
+R1 complete. R1B complete. R2 complete. R2B complete. C1 complete. C1B complete. C2 complete. C2B complete. C3 complete. C3B complete. C4: Flagship Starter Pack Two is next.
 
 ## C1B Starter World Content Hardening
 
@@ -324,4 +324,4 @@ Explicit sibling activation still replaces the current recipe with a fresh pause
 
 C3 keeps guide ownership outside simulation state. `/worlds/guides/reading-a-flock` is an entry-side instructional route; a strict `guide` ID joins one existing starter/recipe handoff only after server validation. Inside World, the guide is rendered in the existing active-tool scroll region rather than adding a column, modal, or replacement task. Stage, playback, task rail, and expert controls retain their established owners.
 
-Guide phase comes from the active prepared recipe role. Current step and collapse state are component-local only. Existing task actions update the same task/query/history contract and do not reset the engine. Recipe replacement retains existing fresh-run semantics, exit removes only guide URL/presentation state, and reload does not recover hidden completion. The guide may observe bounded runtime facts and generic comparison availability; it cannot execute the engine, capture results, mutate comparison storage, persist progress, or infer learning. C3 is complete; C3B is next and has not started.
+Guide phase comes from the requested prepared recipe role. Current step, collapse, and staged restore state are component-local only. Existing task actions update the same task/query/history contract and do not reset the engine. Recipe replacement retains existing fresh-run semantics, exit removes only guide URL/presentation state, and reload does not recover hidden completion. C3B compares live template, recipe metadata, initialization provenance, seed, complete parameters, and interventions with the prepared reference; material divergence suspends the pair claim without locking expert tools. Generic summary availability exposes only existing bounded provenance. The guide cannot execute the engine, capture results, mutate comparison storage, persist progress, or infer learning. C3 and C3B are complete; C4 is next and has not started.

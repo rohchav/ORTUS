@@ -1645,7 +1645,7 @@ C2B found one P1 comprehension-integrity defect: the Firebreak pair changed both
 
 The hardening exposes a concise engine-tested tick-zero summary, distinguishes matching scenario settings from initialized state, prioritizes recipe-relevant shared settings, and transfers focus to replacement recipe context after explicit sibling activation. All four fixed-seed procedures work as written at their documented horizons. This is deterministic model and browser evidence, not robustness across seeds, participant comprehension, educational effectiveness, actual browser zoom, screen-reader/AT testing, forced-colors testing, complete touch operation, empirical validation, or WCAG conformance.
 
-R1 complete. R1B complete. R2 complete. R2B complete. C1 complete. C1B complete. C2 complete. C2B complete. C3 complete. C3B: Guided Investigation Audit is next and has not started.
+R1 complete. R1B complete. R2 complete. R2B complete. C1 complete. C1B complete. C2 complete. C2B complete. C3 complete. C3B complete. C4: Flagship Starter Pack Two is next and has not started.
 
 ## C3 Guided Investigation Update
 
@@ -1653,4 +1653,12 @@ C3 adds one optional guided investigation instead of a generic onboarding framew
 
 The strongest HCI boundary is state honesty. Recipe role, not stored completion, determines the phase. Direct contrast entry explicitly says it does not establish that a baseline was run. Reload returns to a fresh paused tick-0 recipe and phase step one. Exiting removes only guide presentation while preserving active run state, tick, playback, Setup drafts, current task where possible, and existing comparison summaries. A generic saved summary is not called the guided baseline.
 
-Rendered automation covers landing, baseline, contrast, direct contrast, collapse, exit, invalid state, keyboard focus, reduced motion, horizontal overflow, Axe, diagnostics, and the six required viewports. This is not participant-comprehension or educational-outcome evidence. Actual browser zoom, screen-reader/AT use, forced colors, complete touch operation, and formal WCAG conformance remain unverified. R1 through C3 are complete; C3B is next and has not started.
+Rendered automation covers landing, baseline, contrast, direct contrast, collapse, exit, invalid state, keyboard focus, reduced motion, horizontal overflow, Axe, diagnostics, and the six required viewports. This is not participant-comprehension or educational-outcome evidence. Actual browser zoom, screen-reader/AT use, forced colors, complete touch operation, and formal WCAG conformance remain unverified.
+
+## C3B Guided Investigation Audit Update
+
+C3B reproduced the central state-honesty failure: an unrelated Setup rebuild could leave `Reading a Flock` foregrounding the prepared recipe and its only-Noise claim even though active runtime provenance had changed. The hardening now labels the run modified, shows active world/Noise/seed and changed context, suspends the controlled-pair claim, and offers advisory continue, staged restore/cancel, or exit. It does not lock Setup or silently undo expert changes.
+
+The audit also makes summary availability explicitly generic, shows bounded existing provenance, tightens Alignment and Dispersion semantics, gives Previous/Next controls destination-specific names, and rejects hostile promise/prototype-like World query keys before page/runtime construction. Step, collapse, and restore confirmation remain mounted-page state; exit still removes presentation only; existing comparison persistence remains unchanged.
+
+The C3B rendered audit covers nine adversarial flows including every primary task replacement, Back/Forward, reload/new-tab state, modified-run restoration, short-height/mobile layouts, reduced motion, Axe, and browser diagnostics. No known P0 or P1 remains. Participant comprehension, educational outcomes, actual zoom, screen-reader/AT, forced colors, complete touch use, multi-seed robustness, and formal WCAG evidence remain absent. C3B is complete; C4 is next and has not started.

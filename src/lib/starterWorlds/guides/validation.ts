@@ -3,11 +3,11 @@ import { getProductionTemplate } from "../../../simulation";
 import { getStarterWorldById } from "../registry";
 import { assertSafeStarterWorldValue } from "../validation";
 import {
-  buildValidatedRecipeScenario,
   getPreparedStarterComparisonById,
   getStarterWorldLaunchRecipeById,
   getStarterWorldPackById
 } from "../packs";
+import { deriveRequiredGuidedInvestigationFacts } from "./authority";
 import {
   guidedInvestigationDefinitionListSchema,
   type GuidedInvestigationDefinition
@@ -90,6 +90,8 @@ function referenceIssues(guide: GuidedInvestigationDefinition): GuidedInvestigat
   }
   if (pack && !pack.worldIds.includes(guide.starterWorldId)) {
     add("guide-world-outside-pack", "starterWorldId", "The guided Starter World does not belong to the referenced pack.");
+  } else if (pack && pack.featuredWorldId !== guide.starterWorldId) {
+    add("guide-world-not-featured", "starterWorldId", "The guided Starter World is no longer the referenced pack's flagship world.");
   }
   if (!comparison) {
     add("unknown-guide-comparison", "preparedComparisonId", `Unknown prepared comparison "${guide.preparedComparisonId}".`);
@@ -123,17 +125,20 @@ function referenceIssues(guide: GuidedInvestigationDefinition): GuidedInvestigat
   }
 
   try {
-    const baselineScenario = buildValidatedRecipeScenario(baseline);
-    const contrastScenario = buildValidatedRecipeScenario(contrast);
-    if (baselineScenario.seed !== contrastScenario.seed) {
-      add("guide-seed-mismatch", "preparedComparisonId", "Prepared-pair reading requires a shared seed.");
+    if (!pack) {
+      return issues;
     }
-    if (baseline.suggestedRunHorizon !== contrast.suggestedRunHorizon) {
-      add("guide-horizon-mismatch", "preparedComparisonId", "Prepared-pair reading requires one shared suggested horizon.");
-    }
+    deriveRequiredGuidedInvestigationFacts({
+      guide,
+      pack,
+      world,
+      comparison,
+      baselineRecipe: baseline,
+      contrastRecipe: contrast
+    });
   } catch (error) {
     add(
-      "invalid-guide-recipe-runtime",
+      "stale-guide-authority",
       "preparedComparisonId",
       error instanceof Error ? error.message : "The prepared recipe runtime is invalid."
     );
@@ -168,6 +173,9 @@ function structureIssues(guide: GuidedInvestigationDefinition): GuidedInvestigat
   const phaseIds = new Set<string>();
   const stepIds = new Set<string>();
   const roles = new Set<string>();
+  if (guide.phases[0]?.recipeRole !== "baseline" || guide.phases[1]?.recipeRole !== "contrast") {
+    add("invalid-phase-order", "phases", "Prepared-pair reading requires baseline first and contrast second.");
+  }
   for (const [phaseIndex, phase] of guide.phases.entries()) {
     if (phaseIds.has(phase.id)) {
       add("duplicate-phase-id", `phases[${phaseIndex}].id`, `Phase ID "${phase.id}" is duplicated.`);

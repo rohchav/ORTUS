@@ -14,6 +14,7 @@ import {
   guidedInvestigationActionTypes,
   guidedInvestigationDefinitionSchema,
   guidedInvestigationModes,
+  guidedInvestigationNextActions,
   guidedInvestigationSchemaVersion,
   guidedInvestigationTechnicalChecks
 } from "./types";
@@ -62,15 +63,24 @@ describe("Reading a Flock guided investigation", () => {
       {
         metricId: "alignmentScore",
         label: "Alignment score",
-        description: "Compare the model-output heading-similarity history; it is not a measurement of animal coordination."
+        description: "Magnitude of the mean normalized heading vector, from 0 to 1. Higher values mean more similar model headings, not animal coordination or spatial cohesion."
       },
       {
         metricId: "dispersion",
         label: "Dispersion",
-        description: "Follow how broadly the abstract moving agents occupy the field."
+        description: "Mean distance in world units from the flock's current center of mass. Higher values mean wider spread around that center, not necessarily fragmentation."
       }
     ]);
     expect(authority.suggestedRunHorizon).toBe(240);
+    expect(authority.baselineRecipe.recommendedTask).toBe("observe");
+    expect(authority.contrastRecipe.recommendedTask).toBe("observe");
+    expect(authority.baselineRunReference).toMatchObject({
+      starterWorldId: "coordination-under-sensor-noise",
+      recipeId: "coordination-clear-signals",
+      templateId: "flocking-boids",
+      seed: "c2-coordination-001",
+      initializationPreset: "random-headings"
+    });
     expect(authority.baselineHref).toBe(
       "/world?starter=coordination-under-sensor-noise&recipe=coordination-clear-signals&guide=reading-a-flock"
     );
@@ -86,6 +96,7 @@ describe("Reading a Flock guided investigation", () => {
     const authority = deriveGuidedInvestigationAuthority("reading-a-flock");
     const source = () => ({
       guide: structuredClone(authority.guide),
+      pack: structuredClone(authority.pack),
       world: structuredClone(authority.world),
       comparison: structuredClone(authority.comparison),
       baselineRecipe: structuredClone(authority.baselineRecipe),
@@ -96,6 +107,53 @@ describe("Reading a Flock guided investigation", () => {
         name: "Noise difference",
         mutate: (value) => { value.comparison.controlledDifferences = []; },
         message: /Noise difference/i
+      },
+      {
+        name: "additional controlled difference",
+        mutate: (value) => {
+          value.comparison.controlledDifferences.push({
+            field: "parameters.alignmentWeight",
+            label: "Alignment weight",
+            baselineValue: 1,
+            contrastValue: 0.5
+          });
+        },
+        message: /exactly one.*Noise difference/i
+      },
+      {
+        name: "renamed recipe",
+        mutate: (value) => { value.baselineRecipe.id = "renamed-baseline"; },
+        message: /recipe references are stale/i
+      },
+      {
+        name: "baseline role",
+        mutate: (value) => { value.baselineRecipe.comparisonRole = "contrast"; },
+        message: /baseline and contrast recipe roles/i
+      },
+      {
+        name: "comparison ownership",
+        mutate: (value) => { value.comparison.starterWorldId = "clustered-outbreak-starts"; },
+        message: /comparison ownership/i
+      },
+      {
+        name: "pack membership",
+        mutate: (value) => { value.pack.worldIds = value.pack.worldIds.filter((id) => id !== value.world.id); },
+        message: /pack membership/i
+      },
+      {
+        name: "flagship ownership",
+        mutate: (value) => { value.pack.featuredWorldId = "clustered-outbreak-starts"; },
+        message: /flagship pack membership/i
+      },
+      {
+        name: "initialization preset",
+        mutate: (value) => { value.contrastRecipe.initializationPresetId = "aligned-flock"; },
+        message: /matching prepared initialization|not permitted/i
+      },
+      {
+        name: "unrelated parameter",
+        mutate: (value) => { value.contrastRecipe.parameterOverrides.alignmentWeight = 0.5; },
+        message: /differ only in Noise/i
       },
       {
         name: "shared seed",
@@ -115,6 +173,16 @@ describe("Reading a Flock guided investigation", () => {
       {
         name: "output authority",
         mutate: (value) => { value.comparison.outputsToCompare = ["alignmentScore"]; },
+        message: /no longer authoritative/i
+      },
+      {
+        name: "world output authority",
+        mutate: (value) => { value.world.whatToWatch = value.world.whatToWatch.filter((item) => item.metricId !== "dispersion"); },
+        message: /no longer authoritative/i
+      },
+      {
+        name: "recipe output authority",
+        mutate: (value) => { value.contrastRecipe.outputsToWatch = ["alignmentScore"]; },
         message: /no longer authoritative/i
       },
       {
@@ -141,18 +209,31 @@ describe("Reading a Flock guided investigation", () => {
       { name: "unrelated comparison", mutate: (guides) => { guides[0].preparedComparisonId = "outbreak-geometry-comparison"; }, message: /another Starter World|guided Starter World/i },
       { name: "unsupported output", mutate: (guides) => { guides[0].focusOutputIds[0] = "infectedCount"; }, message: /not in the prepared comparison|not available/i },
       { name: "duplicate output", mutate: (guides) => { guides[0].focusOutputIds[1] = guides[0].focusOutputIds[0]; }, message: /must be unique/i },
+      { name: "wrong version", mutate: (guides) => { guides[0].version = "2"; }, message: /Invalid input|Invalid literal/i },
+      { name: "wrong mode", mutate: (guides) => { guides[0].mode = "adaptive-tutor"; }, message: /Invalid input|Invalid literal/i },
       { name: "empty phases", mutate: (guides) => { guides[0].phases = []; }, message: /at least 2|too small/i },
       { name: "duplicate phase", mutate: (guides) => { guides[0].phases[1].id = guides[0].phases[0].id; }, message: /Phase ID.*duplicated/i },
       { name: "duplicate phase role", mutate: (guides) => { guides[0].phases[1].recipeRole = "baseline"; }, message: /role.*duplicated|baseline and one contrast/i },
+      { name: "reversed phase order", mutate: (guides) => { guides[0].phases.reverse(); }, message: /baseline first and contrast second/i },
+      { name: "wrong step count", mutate: (guides) => { guides[0].phases[0].steps.pop(); }, message: /exactly four steps/i },
       { name: "duplicate step", mutate: (guides) => { guides[0].phases[1].steps[0].id = guides[0].phases[0].steps[0].id; }, message: /Step ID.*duplicated/i },
+      { name: "duplicate action", mutate: (guides) => { guides[0].phases[0].steps[0].actions.push({ type: "inspect-start" }); }, message: /Actions must be unique/i },
+      { name: "duplicate check", mutate: (guides) => { guides[0].phases[0].steps[0].technicalChecks.push("tick-is-zero"); }, message: /Technical checks must be unique/i },
       { name: "invalid action", mutate: (guides) => { guides[0].phases[0].steps[0].actions[0] = { type: "run-code" }; }, message: /Invalid|union/i },
       { name: "unsupported task", mutate: (guides) => { guides[0].phases[0].steps[0].actions[1].task = "debug"; }, message: /Invalid input|Invalid enum value|Invalid option/i },
       { name: "invalid check", mutate: (guides) => { guides[0].phases[0].steps[0].technicalChecks[0] = "learner-understood"; }, message: /Invalid enum value|Invalid option/i },
+      { name: "invalid next action", mutate: (guides) => { guides[0].nextActions[0] = "recommend-next-guide"; }, message: /Invalid enum value|Invalid option/i },
       { name: "arbitrary condition", mutate: (guides) => { guides[0].phases[0].steps[0].condition = { when: "tick > 10" }; }, message: /Unrecognized key/i },
       { name: "arbitrary runtime", mutate: (guides) => { guides[0].runConfig = { ticks: 240 }; }, message: /Unrecognized key/i },
+      { name: "runtime callback", mutate: (guides) => { guides[0].phases[0].steps[0].actions[0].execute = () => true; }, message: /data values only/i },
       { name: "parameter payload", mutate: (guides) => { guides[0].parameterOverrides = { noise: 0.5 }; }, message: /Unrecognized key/i },
       { name: "expected result payload", mutate: (guides) => { guides[0].expectedResults = { alignment: 1 }; }, message: /Unrecognized key/i },
       { name: "progress storage", mutate: (guides) => { guides[0].progressionStorage = { key: "guide" }; }, message: /Unrecognized key/i },
+      { name: "storage key", mutate: (guides) => { guides[0].storageKey = "reading-a-flock"; }, message: /Unrecognized key/i },
+      { name: "completion state", mutate: (guides) => { guides[0].completed = true; }, message: /Unrecognized key/i },
+      { name: "learner profile", mutate: (guides) => { guides[0].learnerProfile = { level: "expert" }; }, message: /Unrecognized key/i },
+      { name: "reflection response", mutate: (guides) => { guides[0].reflectionResponses = ["stored answer"]; }, message: /Unrecognized key/i },
+      { name: "score", mutate: (guides) => { guides[0].score = 1; }, message: /Unrecognized key/i },
       { name: "numeric expected result copy", mutate: (guides) => { guides[0].summary = "The expected Alignment result is 0.9 after the prepared run finishes."; }, message: /numeric recipe values or expected results/i },
       { name: "unsupported claim", mutate: (guides) => { guides[0].summary = "This proves that the flock always fragments and validates a causal effect in reality."; }, message: /prohibited scientific or learning claim/i },
       { name: "callback", mutate: (guides) => { guides[0].onComplete = () => true; }, message: /data values only/i }
@@ -268,6 +349,9 @@ describe("Reading a Flock guided investigation", () => {
     expect(guidedInvestigationTechnicalChecks).toEqual([
       "correct-recipe-loaded", "run-is-paused", "tick-is-zero", "tick-reached-horizon",
       "task-is-visible", "metric-is-available", "comparison-summary-exists", "paired-recipe-loaded"
+    ]);
+    expect(guidedInvestigationNextActions).toEqual([
+      "open-setup", "open-flagship", "open-collection", "exit-guide"
     ]);
     const source = ["definitions.ts", "derived.ts", "registry.ts", "types.ts", "validation.ts"]
       .map((file) => readFileSync(join(process.cwd(), "src", "lib", "starterWorlds", "guides", file), "utf8"))

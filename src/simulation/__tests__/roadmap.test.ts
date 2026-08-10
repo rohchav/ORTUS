@@ -287,6 +287,12 @@ describe("roadmap alignment and missing pillar reservations", () => {
       "product",
       "GUIDED_INVESTIGATION_TUTORIAL_WORLD.md"
     );
+    const guidedInvestigationAuditPath = join(
+      repoRoot,
+      "docs",
+      "product",
+      "GUIDED_INVESTIGATION_TUTORIAL_WORLD_AUDIT.md"
+    );
     const guidedInvestigationUiPath = join(
       repoRoot,
       "docs",
@@ -325,6 +331,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(existsSync(flagshipStarterPackAuditPath)).toBe(true);
     expect(existsSync(localRulesCollectionPath)).toBe(true);
     expect(existsSync(guidedInvestigationProductPath)).toBe(true);
+    expect(existsSync(guidedInvestigationAuditPath)).toBe(true);
     expect(existsSync(guidedInvestigationUiPath)).toBe(true);
 
     const roadmap = readFileSync(roadmapPath, "utf8");
@@ -358,6 +365,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
     const flagshipStarterPackAudit = readFileSync(flagshipStarterPackAuditPath, "utf8");
     const localRulesCollection = readFileSync(localRulesCollectionPath, "utf8");
     const guidedInvestigationProduct = readFileSync(guidedInvestigationProductPath, "utf8");
+    const guidedInvestigationAudit = readFileSync(guidedInvestigationAuditPath, "utf8");
     const guidedInvestigationUi = readFileSync(guidedInvestigationUiPath, "utf8");
     expect(roadmap).toContain("completed through Prompt 39B");
     expect(roadmap).toContain("Post-30B stabilization");
@@ -382,8 +390,8 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(roadmap).toContain("UX6B complete.");
     expect(roadmap).toContain("GW9 complete.");
     expect(roadmap).toContain("GW9B complete.");
-    expect(roadmap).toContain("R1, R1B, R2, R2B, C1, C1B, C2, C2B, and C3 are complete.");
-    expect(roadmap).toContain("C3B: Guided Investigation Audit is next and has not started.");
+    expect(roadmap).toContain("R1, R1B, R2, R2B, C1, C1B, C2, C2B, C3, and C3B are complete.");
+    expect(roadmap).toContain("C4: Flagship Starter Pack Two is next and has not started.");
     expect(roadmap).toContain("F1 and the fractal branch remain documented but are paused under E3 Analytical Lenses.");
     expect(startHubReset).toContain("/         -> Start Hub");
     expect(startHubReset).toContain("/world    -> live World workbench");
@@ -396,7 +404,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(worldLayoutReclaim).toContain("C1 is complete.");
     expect(worldLayoutReclaim).toContain("C1B");
     expect(productExperienceResetRoadmap).toContain(
-      "Status: active product sequence; R1, R1B, R2, R2B, C1, C1B, C2, C2B, and C3 complete; C3B next"
+      "Status: active product sequence; R1, R1B, R2, R2B, C1, C1B, C2, C2B, C3, and C3B complete; C4 next"
     );
     expect(productExperienceResetRoadmap).toContain("Every implementation milestone is followed by an audit milestone.");
     expect(productExperienceResetRoadmap).toContain("F1 and the rest of the F branch are paused beneath E3 Analytical Lenses.");
@@ -415,8 +423,8 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(exploreWorldsCatalog.match(/^## \d+\. /gm)).toHaveLength(13);
     expect(flagshipStarterPack.match(/^## \d+\. /gm)).toHaveLength(19);
     expect(flagshipStarterPack).toContain("Prepared pairs are configuration guidance.");
-    expect(flagshipStarterPack).toContain("C2, C2B, and C3 complete");
-    expect(flagshipStarterPack).toContain("C3 has now added `Reading a Flock`");
+    expect(flagshipStarterPack).toContain("C2, C2B, C3, and C3B complete");
+    expect(flagshipStarterPack).toContain("C3 added `Reading a Flock`");
     expect(flagshipStarterPackAudit.match(/^## \d+\. /gm)).toHaveLength(33);
     expect(flagshipStarterPackAudit).toContain("conditionally ready for `C3: Guided Investigation / Tutorial World`");
     expect(flagshipStarterPackAudit).toContain("C2/C2B add no persistence and no storage key.");
@@ -425,7 +433,11 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(localRulesCollection).toContain("No template, stage, engine, or partial run is mounted.");
     expect(guidedInvestigationProduct.match(/^## \d+\. /gm)).toHaveLength(17);
     expect(guidedInvestigationProduct).toContain("prepared-pair-reading");
-    expect(guidedInvestigationProduct).toContain("C3B is next and has not started");
+    expect(guidedInvestigationProduct).toContain("C3B is complete; C4 is next and has not started");
+    expect(guidedInvestigationAudit.match(/^## \d+\. /gm)).toHaveLength(33);
+    expect(guidedInvestigationAudit).toContain("Conditionally ready for C4: Flagship Starter Pack Two");
+    expect(guidedInvestigationAudit).toContain("C3/C3B add no persistence and no storage key.");
+    expect(guidedInvestigationAudit).toContain("controlled-pair claim no longer applies");
     expect(guidedInvestigationUi.match(/^## \d+\. /gm)).toHaveLength(16);
     expect(guidedInvestigationUi).toContain("The guide is not a Starter World card");
     expect(guidedInvestigationUi).toContain("mounts no AppShell, stage, template, or engine");

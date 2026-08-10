@@ -1,8 +1,8 @@
 # Guided Investigation Tutorial World
 
-Prompt: C3
+Prompt: C3 / C3B
 
-Status: complete; C3B Guided Investigation Audit is next
+Status: C3 and C3B complete; C4 Flagship Starter Pack Two next
 
 ## 1. Scope
 
@@ -42,11 +42,11 @@ The final contrast surface asks which output changed more, whether visual motion
 
 ## 10. Runtime authority
 
-The renderer derives baseline and contrast recipes, controlled differences, shared effective settings, seed, entity count, tick-zero claims, output labels, horizon, and canonical URLs from the audited C2 registries. Production derivation constructs no engine and fails closed rather than falling back to stale copy when the referenced authority cannot provide a required fact. World revalidates guide, world, comparison, recipe role, template, preset, task, outputs, seed, and parameters before runtime construction.
+The renderer derives baseline and contrast recipes, controlled differences, shared effective settings, seed, entity count, tick-zero claims, output labels, horizon, and canonical URLs from the audited C2 registries. C3B centralizes the strict cross-check for pack flagship membership, comparison/recipe ownership, exact roles, validated initialization, exactly one numeric Noise difference, shared conditions, outputs, and horizon. Production derivation constructs no engine and fails closed rather than falling back to stale copy when authority drifts. World revalidates guide, world, comparison, recipe role, template, preset, task, outputs, seed, and parameters before runtime construction.
 
 ## 11. Comparison boundary
 
-C3 uses only the existing World Compare workflow and `ortus.runComparison.v1`. A user must explicitly capture a bounded run summary. The guide can detect only that a comparison summary exists unless stored provenance supports a stronger claim; it does not label a generic summary as the guided baseline, alter the schema or cap, auto-name, overwrite, add statistics, or create evidence.
+C3 uses only the existing World Compare workflow and `ortus.runComparison.v1`. A user must explicitly capture a bounded run summary. C3B keeps availability generic and exposes existing label/template/seed/tick metadata instead of claiming guide ownership or a valid baseline without proof. It does not alter the schema or cap, auto-name, overwrite, add statistics, or create evidence.
 
 ## 12. Learning-inference boundary
 
@@ -54,20 +54,20 @@ The guide reports software and model facts, not a learner state. It does not inf
 
 ## 13. Persistence boundary
 
-C3 adds no persistence and no storage key. The guide definition is static content, the guide identifier is URL state, and the current phase step and collapsed state are mounted-page state only. Reload reconstructs the selected recipe as a fresh paused tick-0 run and resets to that phase's first step. Existing World comparison persistence is unchanged.
+C3/C3B add no persistence and no storage key. The guide definition is static content, the guide identifier is URL state, and the current phase step, collapse, and restore-confirmation state are mounted-page state only. Reload reconstructs the selected recipe as a fresh paused tick-0 run and resets to that phase's first step. Existing World comparison persistence is unchanged.
 
 ## 14. Non-goals
 
-C3 does not add a curriculum engine, multiple guides, progress, completion, quizzes, grades, profiles, recommendations, adaptive tutoring, analytics, AI explanations, automatic interpretation, automatic execution, automatic capture, runtime metrics, Flocking behavior, recipes, comparisons, engine primitives, Lab evidence, Atlas discoveries, Builder execution, dependencies, or remote assets. C3B and C4 are not implemented here.
+C3/C3B do not add a curriculum engine, multiple guides, progress, completion, quizzes, grades, profiles, recommendations, adaptive tutoring, analytics, AI explanations, automatic interpretation, automatic execution, automatic capture, runtime metrics, Flocking behavior, recipes, comparisons, engine primitives, Lab evidence, Atlas discoveries, Builder execution, dependencies, or remote assets. C4 is not implemented here.
 
 ## 15. Verification
 
-Headless coverage locks the schema, strict parsing, registry determinism and freezing, reference authority, canonical launches, fresh paused tick-zero construction, invalid-launch rejection, exact initialized-state equality, fixed-seed horizon regression, forbidden copy, and persistence/runtime isolation. Rendered coverage exercises landing, baseline, contrast, direct contrast, collapse, exit, reload, Compare, errors, focus, keyboard order, reduced motion, six viewports, Axe, diagnostics, and the unchanged eleven-world catalog.
+Headless coverage locks the schema, strict parsing, registry determinism and freezing, adversarial authority drift, canonical launches, fresh paused tick-zero construction, invalid-launch rejection, exact initialized-state equality, fixed-seed horizon regression, forbidden copy, and persistence/runtime isolation. Rendered coverage exercises landing, baseline, contrast, direct contrast, parameter/seed/population/template divergence, restore/cancel, summary provenance, all primary task histories, collapse, exit, reload/new tab, hostile query keys, focus, reduced motion, six viewports, Axe, diagnostics, and the unchanged eleven-world catalog. The evidence record is `docs/product/GUIDED_INVESTIGATION_TUTORIAL_WORLD_AUDIT.md`.
 
 ## 16. Remaining limitations
 
 Automated and expert browser checks do not establish participant comprehension, educational outcomes, actual browser zoom, screen-reader or other assistive-technology behavior, forced-colors support, complete touch operation, formal WCAG conformance, robustness across seeds, calibration, or empirical validity.
 
-## 17. C3B handoff
+## 17. C3B audit result
 
-C3 is conditionally ready for `C3B: Guided Investigation Audit`. The audit must independently recheck authority drift, direct-entry truthfulness, exit and reload semantics, comparison provenance, storage absence, focus and responsive behavior, inference language, and runtime isolation. C3B is next and has not started; C4 must wait for that audit.
+C3B found and fixed one P0 unsafe public-handoff family, two P1 authority/runtime-identity families, and five bounded P2 comprehension/focus/language families. No known P0 or P1 remains. External participant, educational-outcome, zoom, screen-reader/AT, forced-colors, touch, multi-seed, empirical, and formal WCAG evidence remains absent, so the result is `Conditionally ready for C4: Flagship Starter Pack Two`. C3B is complete; C4 is next and has not started.

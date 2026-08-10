@@ -2,7 +2,7 @@
 
 Prompt: C2 / C2B
 
-Status: C2, C2B, and C3 complete; C3B next
+Status: C2, C2B, C3, and C3B complete; C4 next
 
 ## 1. Scope
 
@@ -78,4 +78,4 @@ Actual browser zoom, screen-reader and assistive-technology operation, forced-co
 
 ## 19. C2B Audit Outcome
 
-C2B found and fixed one P1 hidden Firebreak quantity difference and bounded P2 focus, shared-setting hierarchy, and outcome-language defects. No P0 remains. Its decision was conditionally ready for C3 because external zoom, AT, forced-colors, touch, participant, educational-outcome, and formal-conformance verification remained. C3 has now added `Reading a Flock` over the audited Coordination pair without changing this pack's recipes, comparison, outputs, fixed-seed evidence, runtime, or persistence. C3B is next and has not started.
+C2B found and fixed one P1 hidden Firebreak quantity difference and bounded P2 focus, shared-setting hierarchy, and outcome-language defects. No P0 remains. Its decision was conditionally ready for C3 because external zoom, AT, forced-colors, touch, participant, educational-outcome, and formal-conformance verification remained. C3 added `Reading a Flock` over the audited Coordination pair, and C3B hardened guide authority, active-run divergence, and provenance without changing this pack's recipes, comparison, outputs, fixed-seed evidence, runtime, or persistence. C3B is complete; C4 is next and has not started.

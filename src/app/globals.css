@@ -11469,7 +11469,9 @@ textarea[aria-invalid="true"] {
 .world-guide__head-actions button,
 .world-guide__commands button,
 .world-guide__navigation button,
-.world-guide__reflection nav button {
+.world-guide__reflection nav button,
+.world-guide__divergence-actions button,
+.world-guide__restore-confirmation button {
   min-height: 30px;
   padding: 0 8px;
   border: 1px solid var(--border-default);
@@ -11502,6 +11504,82 @@ textarea[aria-invalid="true"] {
 .world-guide__reflection a {
   color: var(--palette-teal-320);
   text-underline-offset: 3px;
+}
+
+.world-guide__divergence {
+  min-width: 0;
+  display: grid;
+  gap: 7px;
+  padding: 9px;
+  color: var(--text-secondary);
+  border-left: 3px solid var(--palette-amber-320);
+  background: rgba(229, 196, 107, 0.07);
+  font-size: 10.5px;
+  line-height: 1.4;
+}
+
+.world-guide__divergence h3,
+.world-guide__divergence p {
+  margin: 0;
+}
+
+.world-guide__divergence h3 {
+  color: var(--palette-amber-320);
+  font-size: 13px;
+  letter-spacing: 0;
+}
+
+.world-guide__divergence h3:focus-visible {
+  outline: var(--interaction-focus-outline);
+  outline-offset: 2px;
+}
+
+.world-guide__divergence dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  margin: 0;
+}
+
+.world-guide__divergence dl > div {
+  min-width: 0;
+  padding: 5px 6px;
+  border: 1px solid var(--border-subtle);
+  background: rgba(8, 11, 10, 0.54);
+}
+
+.world-guide__divergence dt {
+  color: var(--text-muted);
+  font-size: 9px;
+}
+
+.world-guide__divergence dd {
+  margin: 2px 0 0;
+  color: var(--text-primary);
+  overflow-wrap: anywhere;
+}
+
+.world-guide__divergence-actions,
+.world-guide__restore-confirmation {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.world-guide__divergence-actions button:first-child,
+.world-guide__restore-confirmation button:first-of-type {
+  color: var(--text-inverse);
+  border-color: var(--palette-teal-320);
+  background: var(--palette-teal-320);
+}
+
+.world-guide__restore-confirmation {
+  padding-top: 7px;
+  border-top: 1px solid var(--border-default);
+}
+
+.world-guide__restore-confirmation p {
+  flex: 1 0 100%;
 }
 
 .world-guide__steps {
@@ -11737,6 +11815,43 @@ textarea[aria-invalid="true"] {
   font-size: 10px;
 }
 
+.world-guide__summary-provenance {
+  display: grid;
+  gap: 4px;
+  color: var(--text-secondary);
+  font-size: 9.5px;
+}
+
+.world-guide__summary-provenance > strong {
+  color: var(--text-primary);
+  font-size: 10px;
+}
+
+.world-guide__summary-provenance ul {
+  display: grid;
+  gap: 3px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.world-guide__summary-provenance li {
+  min-width: 0;
+  display: grid;
+  gap: 1px;
+  padding-left: 7px;
+  border-left: 2px solid var(--border-default);
+}
+
+.world-guide__summary-provenance li b,
+.world-guide__summary-provenance li span {
+  overflow-wrap: anywhere;
+}
+
+.world-guide__summary-provenance small {
+  color: var(--text-muted);
+}
+
 .world-guide[data-guide-collapsed="true"] .world-guide__head {
   align-items: center;
 }
@@ -11756,6 +11871,10 @@ textarea[aria-invalid="true"] {
   }
 
   .world-guide__facts {
+    grid-template-columns: 1fr;
+  }
+
+  .world-guide__divergence dl {
     grid-template-columns: 1fr;
   }
 }

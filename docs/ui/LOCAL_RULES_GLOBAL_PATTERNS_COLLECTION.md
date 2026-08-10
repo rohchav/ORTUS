@@ -2,7 +2,7 @@
 
 Prompt: C2 / C2B
 
-Status: C2, C2B, and C3 complete; C3B next
+Status: C2, C2B, C3, and C3B complete; C4 next
 
 ## 1. Catalog Integration
 
@@ -62,4 +62,4 @@ Invalid recipe requests use the existing Starter launch error surface with `role
 
 ## 15. Guided Investigation Integration
 
-C3 adds one subordinate `Reading a Flock` callout to this collection and the Coordination detail page. It links to `/worlds/guides/reading-a-flock`, derives the prepared pair and output names from the audited pack, and leaves all ordinary recipe actions prominent. The guide is not a fifth pack world or a twelfth catalog world, does not participate in search/filter/counts, and adds no progress, automatic execution, automatic capture, comparison store, or runtime behavior. C3B is next and has not started.
+C3 adds one subordinate `Reading a Flock` callout to this collection and the Coordination detail page. It links to `/worlds/guides/reading-a-flock`, derives the prepared pair and output names from the audited pack, and leaves all ordinary recipe actions prominent. C3B verifies that source drift fails closed and that modified active runs cannot retain the prepared-pair claim. The guide is not a fifth pack world or a twelfth catalog world, does not participate in search/filter/counts, and adds no progress, automatic execution, automatic capture, comparison store, or runtime behavior. C3B is complete; C4 is next.

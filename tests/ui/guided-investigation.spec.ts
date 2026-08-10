@@ -192,7 +192,7 @@ test("paired navigation, direct contrast, missing-baseline fallback, reflection,
   await panel.getByRole("button", { name: /3 Read alignment and spread again/ }).click();
   await expect(panel).toContainText("Did directional alignment change?");
   await panel.getByRole("button", { name: /4 Compare without overgeneralizing/ }).click();
-  await expect(panel).toContainText("No saved baseline summary is available in the existing comparison workspace.");
+  await expect(panel).toContainText("No comparison summary is available in the existing comparison workspace.");
   await expect(panel.getByRole("link", { name: "Reopen Clear local signals" })).toHaveAttribute("href", baselinePath);
   await expect(panel.getByRole("heading", { level: 4, name: "Questions for the next run" })).toBeVisible();
   await expect(panel).toContainText("What intermediate Noise setting would you investigate next?");

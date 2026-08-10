@@ -1,6 +1,6 @@
 # ORTUS Current Context
 
-Last updated: 2026-08-01 after Prompt C3 Guided Investigation / Tutorial World
+Last updated: 2026-08-01 after Prompt C3B Guided Investigation Audit + Hardening
 
 ## Current Prompt Status
 
@@ -13,7 +13,8 @@ Last updated: 2026-08-01 after Prompt C3 Guided Investigation / Tutorial World
 - C2 complete.
 - C2B complete.
 - C3 complete.
-- C3B: Guided Investigation Audit is next and has not started.
+- C3B complete.
+- C4: Flagship Starter Pack Two is next and has not started.
 
 `/` is the task-centered Start Hub; `/worlds` is its eleven-entry runnable Starter World catalog; `/worlds/[slug]` is the source-backed detail experience; `/worlds/packs/local-rules-global-patterns` is the first flagship collection; `/worlds/guides/reading-a-flock` is the first optional guided investigation; `/world` is the live workbench; `/builder`, `/atlas`, and `/lab` retain their established behavior. Primary navigation remains Start, World, Workshop, and a keyboard-operated Research tools menu. Explore Worlds and the guide are Start-adjacent rather than equal global destinations. F1 remains paused under E3 Analytical Lenses.
 
@@ -40,6 +41,12 @@ The guide landing route is `/worlds/guides/reading-a-flock`; subordinate callout
 C3 adds no simulation, Flocking rule/default/bound/metric, recipe, prepared comparison, comparison schema/cap, Experiment Runner, Atlas, Lab, Builder, dependency, asset, or storage change. It does not auto-run, auto-pause, auto-save, hard-gate, score, infer learning, or create evidence. Exit removes only guide URL/presentation state and preserves the current engine, tick, playback, Setup drafts, task where possible, and comparison summaries. Reload reconstructs the selected recipe as a fresh paused tick-0 run and resets mounted guide state. The guide can report only generic comparison-summary availability without exact provenance.
 
 C3 focused headless and rendered verification covers strict contracts, authority derivation, exact fixed-seed regression, valid/invalid launch behavior, baseline/contrast/direct-entry flows, explicit Compare capture, missing-summary fallback, reflection, Back/Forward, reload, collapse, state-preserving exit, focus, reduced motion, six viewports, Axe, diagnostics, and unchanged C1/C2 behavior. Final verification passed `53` Research World tests, `64` combined Starter/C2/C3 tests, `161` complete UI/Axe tests, `78 files / 647` unit tests, typecheck, a `22`-page production build, simulation/Atlas performance smoke, and `git diff --check`. Actual browser zoom, screen-reader/AT use, forced colors, complete touch workflows, participant comprehension, educational outcomes, empirical validity, and WCAG conformance remain unverified.
+
+C3B's audit record is `docs/product/GUIDED_INVESTIGATION_TUTORIAL_WORLD_AUDIT.md`. It found one P0 unsafe public-handoff family, two P1 authority/active-runtime identity families, and five bounded P2 comprehension, focus, provenance, and language families. The hardening adds a strict reusable guide-authority checker, rejects promise/prototype-like World query names before async search-parameter interpretation, compares active template/recipe/initialization/seed/parameters/interventions with an immutable prepared reference, suspends the controlled-pair claim after divergence, and provides explicit staged restore/cancel/exit without locking expert controls.
+
+C3B keeps saved comparison availability generic and shows only existing label/template/seed/tick provenance. Alignment is the magnitude of the mean normalized heading vector; Dispersion is mean world-unit distance from current center of mass. Neither output exhausts flock structure or represents empirical measurement. Guide step, collapse, and restore-confirmation state remain mounted-page only; exit preserves the active run; no new storage key, simulation behavior, comparison schema, learner state, analytics, or C4 content was added. No known P0 or P1 remains, and C4 is conditionally ready only because external participant, educational-outcome, actual zoom, screen-reader/AT, forced-colors, complete touch, multi-seed, empirical, and formal WCAG verification remain absent.
+
+C3B final verification passed guide/roadmap contracts `4 files / 26 tests (7.78s)`, dedicated C3B Playwright `9 tests (2.3m)`, Research World Playwright `53 tests (6.7m)`, combined Starter/C2/C3/C3B Playwright `55 tests (10.3m)`, complete UI/Axe `170 tests (21.9m)`, typecheck in `3.39s`, unit verification `78 files / 647 tests (80.90s)`, a production build in `33.56s` with Next compilation in `8.0s` and `22` pages, simulation/Atlas performance smoke, and `git diff --check`. All final browser runs had zero failures, retries, or skips. `npm run lint: unavailable, package.json has no lint script.`
 
 R2's implementation record is `docs/ui/WORLD_LAYOUT_AND_INTERACTION_RECLAIM.md`; R2B's audit record is `docs/ui/WORLD_LAYOUT_AND_INTERACTION_RECLAIM_AUDIT.md`. World uses a stable `tasks + stage/playback + active tool` frame. Setup, Observe, Change, Compare, and Explain are direct tasks; More groups Experiment Runner and Diagnostics. The selected tool owns one bounded scroll, full model notes and technical run details use focus-contained modal surfaces, and desktop collapse/restore preserves local tool state.
 
@@ -207,11 +214,12 @@ C1B complete.
 C2 complete.
 C2B complete.
 C3 complete.
-C3B: Guided Investigation Audit is next and has not started.
+C3B complete.
+C4: Flagship Starter Pack Two is next and has not started.
 
-Completed sequence: UX6B -> GW9 -> GW9B -> R1 -> R1B -> R2 -> R2B -> C1 -> C1B -> C2 -> C2B -> C3. C3B has not started.
+Completed sequence: UX6B -> GW9 -> GW9B -> R1 -> R1B -> R2 -> R2B -> C1 -> C1B -> C2 -> C2B -> C3 -> C3B. C4 has not started.
 
-Do not start C3B, C4, recipe-first Builder, composition, multiscale runtime, adaptive-controller generalization, Lab/Atlas persistence, E3, F1, or other reset-roadmap capability without its dedicated prompt. Rendered Playwright/Axe evidence does not establish actual browser zoom, screen-reader, assistive-technology, forced-colors, full WCAG, mobile-workflow, or user-comprehension readiness.
+Do not start C4, recipe-first Builder, composition, multiscale runtime, adaptive-controller generalization, Lab/Atlas persistence, E3, F1, or other reset-roadmap capability without its dedicated prompt. Rendered Playwright/Axe evidence does not establish actual browser zoom, screen-reader, assistive-technology, forced-colors, full WCAG, mobile-workflow, or user-comprehension readiness.
 
 Implemented runtime foundations include scenarios, snapshots, template-defined behavior modes, agent composition, interventions, experiments, run summaries/comparison, seeded randomness, metrics, spaces, template metadata, and a narrow Opinion Dynamics `socialLearning` behavior mode audited in Prompt 33D.
 
@@ -324,7 +332,7 @@ Prompt 35 and Prompt 35B were committed together in `7696381 feat: Implement Mod
 
 ## Next Recommended Prompt
 
-Prompt C3B: Guided Investigation Audit is next and has not started. Do not begin C3B, C4, F1, or any later reset-roadmap capability without its dedicated prompt. F1 remains paused under E3 Analytical Lenses.
+Prompt C3B: Guided Investigation Audit + Hardening is complete. Prompt C4: Flagship Starter Pack Two is next and has not started. Do not begin C4, F1, or any later reset-roadmap capability without its dedicated prompt. F1 remains paused under E3 Analytical Lenses.
 
 Next recommended UI/design-system prompt after UX2B: `UI-DESIGN-SYSTEM-1: Rendered Responsive, Typography + Visualization Accessibility Audit`.
 

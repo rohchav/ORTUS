@@ -4114,3 +4114,71 @@ Roadmap result:
 - C4 has not started.
 - F1 remains paused under E3 Analytical Lenses.
 - Commit gate target: `feat: add guided investigation tutorial world`; no push is authorized.
+
+### Prompt C3B: Guided Investigation Audit + Hardening
+
+Date: 2026-08-01
+
+Goal: independently audit and harden `Reading a Flock` so C4 can rely on strict source authority, truthful active-run identity, optional non-persistent guidance, honest comparison provenance, coherent World navigation, and unchanged simulation/runtime boundaries.
+
+Starting state and baseline:
+
+- Branch `main` was clean and aligned with `origin/main` at `d18d753 feat: add guided investigation tutorial world` after fetch.
+- Untouched guide headless coverage passed `1 file / 9 tests`; dedicated C3 Playwright passed `13/13 (2.9m)`; Research World passed `53/53 (6.6m)`; and the exact Starter/C2/C3 focused specs passed `46/46 (8.2m)`. There were no failures, retries, or skips.
+- C3's historical final record remained `161` complete UI tests and `78 files / 647 tests`, but C3B ran fresh final gates rather than relying on that record.
+
+Independent findings:
+
+- One P0 unsafe public-handoff family was reproduced: a `constructor` query key could fail in Next's async search-parameter handling before the ORTUS safe error surface.
+- Two P1 families were reproduced: a modified active run could remain foregrounded as the prepared recipe with an intact only-Noise claim; and guide authority did not reject every pack/flagship, recipe-role/ownership, initialization, only-Noise, output, and horizon drift.
+- Five bounded P2 families were corrected: vague Alignment/Dispersion semantics, absent nearby summary metadata, imprecise estimated-time/capture wording, leading visual/output prompts, and insufficiently specific navigation/divergence focus and readability.
+- No P3 defect was recorded. A black `N` in mobile development screenshots was Next.js's development indicator, not product content.
+
+Hardening:
+
+- Added one reusable fail-closed guide-authority checker. It verifies pack flagship membership, comparison and exact recipe ownership/roles, validated scenarios, shared initialization, exactly one numeric Noise difference, seed/entity/tick-zero/horizon facts, and output authority. Adversarial tests cover rename, ownership, role, membership, initialization, extra differences, missing outputs, and changed horizon.
+- Added a `/world` middleware boundary for promise/prototype-like query names (`__proto__`, `prototype`, `constructor`, `then`, `catch`, and `finally`). Such requests now reach the existing announced safe error before page search-parameter interpretation and construct no AppShell, stage, template, or engine.
+- The guide now compares active template, recipe metadata, initialization provenance, seed, every parameter key/value, and applied interventions with the prepared reference. Divergence changes the visible state to `Modified active run`, exposes active world/Noise/seed and changed context, and states that the controlled-pair claim no longer applies.
+- Modified runs remain explorable. Users can explicitly stage and confirm a fresh paused tick-0 prepared restore, cancel while preserving the modified run, or exit. The confirmation states that current tick/world state is discarded and that Setup drafts and comparison summaries remain separate. No expert control is locked and no change is silently undone.
+- Saved-summary availability remains generic across no summary, unrelated template/recipe, wrong seed/horizon, stale, baseline, and multiple-summary cases. Existing label/template/seed/tick metadata is shown, but availability is never called guide completion, a prepared baseline, or a valid controlled pair.
+- Alignment now names the magnitude of the mean normalized heading vector on `[0,1]`; Dispersion names mean world-unit distance from current center of mass. Neither is called cohesion, fragmentation proof, exhaustive flock structure, animal measurement, or empirical evidence.
+- Previous/Next names include their destination, divergence and restore/cancel focus is deterministic, estimated time is labelled as an estimate, and Compare capture is explicitly bounded and user initiated.
+
+State, persistence, and runtime conclusions:
+
+- C3/C3B add no persistence and no storage key. The guide remains optional instructional metadata over one existing prepared pair. Current step, collapse, and restore-confirmation state are mounted-page only. Exit removes guide presentation without resetting the active run. Existing World comparison persistence remains unchanged. No learning, mastery, completion, or scientific-validation state is inferred.
+- No production file under `src/simulation` changed. Scheduler, deterministic RNG, Flocking initialization/update/defaults/bounds/metrics/interventions, snapshots, scenarios, Experiment Runner, comparison schema/cap/key, Atlas, Lab, Builder execution, dependencies, backend, analytics, and telemetry remain unchanged.
+- Prepared fixed-seed output is not multi-seed robustness, empirical causality, calibration, validation, or real-world truth. Existing summary provenance remains insufficient for automatic guide attribution, so C3B deliberately does not extend that schema.
+
+Rendered and final verification:
+
+- Guide/roadmap contracts: `4 files / 26 tests passed (7.78s)`.
+- Dedicated C3B Playwright: `9 passed (2.3m)`.
+- Research World Playwright: `53 passed (6.7m)`.
+- Combined Starter/C2/C3/C3B Playwright: `55 passed (10.3m)`.
+- Complete Playwright/Axe: `170 passed (21.9m)`.
+- All browser gates had zero failures, retries, or skips. Axe and diagnostics assertions passed; the only server output was the known `NO_COLOR`/`FORCE_COLOR` harness warning.
+- Typecheck passed in `3.39s`.
+- Unit tests passed `78 files / 647 tests` in `80.90s` (`81.51s` wall).
+- Production build passed in `33.56s`; Next compiled in `8.0s`, generated `22` pages, and emitted the `/world` middleware.
+- Simulation smoke: Flocking-100 `130.53` ticks/sec, Flocking-500 `16.83`, Forest Fire `24.26`, and Predator-Prey `68.98`. These are current-machine smoke figures, not scale guarantees.
+- Bounded Atlas smoke: `2` runs / `10` work units / horizon `5` completed in `55.88ms`; this is not a scalability or scientific-validation claim.
+- `git diff --check`: passed at the commit gate.
+- `npm run lint: unavailable, package.json has no lint script.`
+
+Roadmap result:
+
+- R1 complete.
+- R1B complete.
+- R2 complete.
+- R2B complete.
+- C1 complete.
+- C1B complete.
+- C2 complete.
+- C2B complete.
+- C3 complete.
+- C3B complete.
+- Decision: conditionally ready for `C4: Flagship Starter Pack Two` because only participant comprehension, educational outcomes, actual browser zoom, screen-reader/AT, forced colors, complete touch, multi-seed robustness, empirical validity, and formal WCAG verification remain.
+- C4 is next and has not started.
+- F1 remains paused under E3 Analytical Lenses.
+- Commit gate target: `test: audit guided investigation tutorial world`; no push is authorized.

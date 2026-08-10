@@ -1,7 +1,7 @@
 # ORTUS Product Experience Reset Roadmap
 
 Date: 2026-08-01
-Status: active product sequence; R1, R1B, R2, R2B, C1, C1B, C2, C2B, and C3 complete; C3B next
+Status: active product sequence; R1, R1B, R2, R2B, C1, C1B, C2, C2B, C3, and C3B complete; C4 next
 
 ## Why This Sequence Exists
 
@@ -56,7 +56,7 @@ C1 is complete. It adds the strict source-backed Starter World registry, `/world
 
 `C2B: Flagship Starter Pack One Audit + Hardening` is complete. It independently audits all eight authoritative scenarios, tick-zero initialization, all four fixed-seed horizons, the existing Compare workflow, public launch rejection, responsive/accessibility behavior, and Forest Fire containment. It corrects a hidden Firebreak fuel-quantity difference, sibling focus transfer, shared-setting hierarchy, and overcommitted comparison language without changing template rules or persistence.
 
-`C3: Guided Investigation / Tutorial World` is complete. It adds one strict, recursively frozen `Reading a Flock` guide over the audited clear/noisy Coordination pair, a static landing route, strict guide-aware World handoffs, and an optional mounted-page guide inside the existing active-tool surface. It derives recipe and runtime facts from C2 authority, uses only existing playback/tasks/Compare behavior, stores no progress, makes no learning inference, and changes no simulation behavior or comparison persistence. `C3B: Guided Investigation Audit` is next and has not started; C4, S1-S5, and E1-E3 have not started under this roadmap.
+`C3: Guided Investigation / Tutorial World` and `C3B: Guided Investigation Audit + Hardening` are complete. The implementation adds one strict, recursively frozen `Reading a Flock` guide over the audited clear/noisy Coordination pair; C3B hardens fail-closed authority, modified-run provenance and restore, generic comparison provenance, hostile public queries, metric language, focus, history, accessibility, and non-persistence. It uses only existing playback/tasks/Compare and validated scenario behavior, stores no progress, makes no learning inference, and changes no simulation behavior or comparison persistence. `C4: Flagship Starter Pack Two` is next and has not started; S1-S5 and E1-E3 have not started under this roadmap.
 
 The active route hierarchy is Start `/`, Start-adjacent Explore Worlds `/worlds`, the flagship collection `/worlds/packs/local-rules-global-patterns`, the `Reading a Flock` guide `/worlds/guides/reading-a-flock`, World `/world`, Workshop `/builder`, Atlas `/atlas`, and Lab `/lab`. `/worlds` contains eleven validated runnable definitions. The guide is a separate instructional route, not a twelfth world. Four catalog worlds are focused C2 experiences over existing production templates; their existence is not evidence that later starter packs, composition, Lab, Atlas, or analysis milestones exist.
 
@@ -93,6 +93,8 @@ Explicit user direction may revise this roadmap, but documentation-only mileston
 - Guide phases may use only bounded actions and factual checks. They must not auto-run, auto-pause, auto-save, hard-gate steps, score users, infer learning, or store completion.
 - Guide exit removes only guide presentation and URL state while preserving the active run, tick, playback, Setup drafts, task, and comparison summaries. Reload resets mounted guide state and reconstructs the recipe under existing fresh-run semantics.
 - Direct contrast guide entry must remain truthful when no baseline was run or saved. Generic comparison availability must not be relabeled as guide provenance.
+- Guided prepared-pair claims must be suspended when active template, recipe provenance, initialization, seed, parameters, or interventions diverge. Show active facts and require explicit confirmation before restoring the prepared fresh run.
+- Public `/world` boundaries must reject promise/prototype-like query names before async search-parameter interpretation; invalid guided requests must not partially construct AppShell or runtime state.
 - The live system remains the primary World visual object.
 - World task labels, query state, current navigation, and visible task must agree without resetting the active run.
 - Keep World Stage and persistent playback mounted outside task rendering; task switching must not recreate or reset the active run.

@@ -1,7 +1,7 @@
 # Explore Worlds Catalog
 
 Date: 2026-08-01
-Status: C1, C1B, C2, C2B, and C3 complete; C3B next
+Status: C1, C1B, C2, C2B, C3, and C3B complete; C4 next
 
 ## 1. Route Structure
 
@@ -145,4 +145,4 @@ The required final C1 gate also runs the established destination-shell suite, fu
 - R2B complete.
 - C1 complete.
 At the close of C1B, its final focused and complete browser verification had passed and C2 was the next prompt.
-C2 is complete. C2B is complete. C3 is complete. C3B: Guided Investigation Audit is next and has not started.
+C2 is complete. C2B is complete. C3 is complete. C3B is complete. C4: Flagship Starter Pack Two is next and has not started.

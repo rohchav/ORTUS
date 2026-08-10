@@ -37,6 +37,7 @@ interface AppShellProps {
 
 export function AppShell({ initialTemplateId, initialWorkspaceMode, starterLaunch }: AppShellProps) {
   const hydratePreferences = useSimulationStore((state) => state.hydratePreferences);
+  const applyScenario = useSimulationStore((state) => state.applyScenario);
   const isRunning = useSimulationStore((state) => state.isRunning);
   const speedMultiplier = useSimulationStore((state) => state.speedMultiplier);
   const engine = useSimulationStore((state) => state.engine);
@@ -127,6 +128,13 @@ export function AppShell({ initialTemplateId, initialWorkspaceMode, starterLaunc
     document.querySelector<HTMLButtonElement>('[aria-label="Run simulation"], [aria-label="Pause simulation"]')?.focus();
   }
 
+  function restorePreparedRecipe() {
+    if (!starterLaunch?.guideId || !starterLaunch.recipeId) {
+      return;
+    }
+    applyScenario(createStarterWorldScenario(starterLaunch));
+  }
+
   useEffect(() => {
     if (!isRunning) {
       if (frameRef.current !== null) {
@@ -212,6 +220,7 @@ export function AppShell({ initialTemplateId, initialWorkspaceMode, starterLaunc
             : undefined}
           onExitGuide={exitGuide}
           onFocusPlayback={focusPlayback}
+          onRestorePreparedRecipe={restorePreparedRecipe}
         />
       </div>
       <ModalSurface

@@ -26,7 +26,7 @@ export function GuidedInvestigationLanding({
             <Link href="/worlds">Explore Worlds</Link>
             <Link href={authority.collectionHref}>{authority.pack.shortTitle} collection</Link>
           </nav>
-          <p>Guided investigation · {guide.estimatedMinutes} minutes</p>
+          <p>Guided investigation · Estimated time: {guide.estimatedMinutes} minutes</p>
           <h1>{guide.title}</h1>
           <strong>{guide.hookQuestion}</strong>
           <div className="guided-investigation-hero__premise">
@@ -115,7 +115,7 @@ export function GuidedInvestigationLanding({
           <ol className="guided-investigation-outline">
             <li>Run the clear-signals baseline.</li>
             <li>Inspect {focusOutputs.map((output) => output.label).join(" and ")}.</li>
-            <li>Capture the existing comparison summary.</li>
+            <li>Explicitly capture a bounded summary in Compare.</li>
             <li>Run the noisy-signals contrast.</li>
             <li>Review what changed and what did not.</li>
           </ol>

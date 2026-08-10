@@ -908,12 +908,12 @@ export const rawStarterWorldDefinitions = [
     whatToWatch: [
       {
         label: "Alignment score",
-        description: "Compare the model-output heading-similarity history; it is not a measurement of animal coordination.",
+        description: "Magnitude of the mean normalized heading vector, from 0 to 1. Higher values mean more similar model headings, not animal coordination or spatial cohesion.",
         metricId: "alignmentScore"
       },
       {
         label: "Dispersion",
-        description: "Follow how broadly the abstract moving agents occupy the field.",
+        description: "Mean distance in world units from the flock's current center of mass. Higher values mean wider spread around that center, not necessarily fragmentation.",
         metricId: "dispersion"
       },
       {

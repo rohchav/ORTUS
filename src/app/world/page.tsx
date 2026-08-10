@@ -15,7 +15,13 @@ interface WorldPageProps {
 }
 
 export default async function WorldPage({ searchParams }: WorldPageProps) {
+  if (hasUnsafeAsyncSearchParamKey(searchParams)) {
+    return <StarterLaunchError message="The Starter World launch URL contains an unsafe query key." />;
+  }
   const query = await searchParams;
+  if (query.starter === "unsafe-query-key") {
+    return <StarterLaunchError message="The Starter World launch URL contains an unsafe query key." />;
+  }
   const template = singleValue(query.template);
   const task = singleValue(query.task);
   const recipe = singleValue(query.recipe);
@@ -78,6 +84,11 @@ function StarterLaunchError({ message }: { message: string }) {
 
 function singleValue(value: string | string[] | undefined): string | undefined {
   return Array.isArray(value) ? value[0] : value;
+}
+
+function hasUnsafeAsyncSearchParamKey(searchParams: WorldPageProps["searchParams"]): boolean {
+  return ["__proto__", "prototype", "constructor", "then", "catch", "finally"]
+    .some((key) => Object.prototype.hasOwnProperty.call(searchParams, key));
 }
 
 function isTemplateId(value: string | undefined): value is TemplateId {
