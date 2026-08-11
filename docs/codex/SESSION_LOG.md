@@ -4247,3 +4247,89 @@ Roadmap result:
 - C4: Flagship Starter Pack Two is deferred until I5B and has not started.
 - F1 remains paused under E3 Analytical Lenses.
 - Commit gate target: `feat: prototype immersive world directions`; no push is authorized.
+
+### Prompt I0B: Immersive World Direction Audit + Performance Hardening
+
+Date: 2026-08-11
+
+Goal: independently audit I0's isolated immersive Flocking prototypes, fix defects that materially affect the I1 direction, and decide whether the initial 50/20/30 hybrid is credible without starting I1 or changing simulation semantics.
+
+Starting state and untouched baseline:
+
+- Branch `main` was clean and aligned with `origin/main` at `5719c9d feat: prototype immersive world directions` after fetch.
+- Untouched typecheck passed; unit verification passed `79 files / 655 tests`; the production build generated `23` pages; focused I0 Playwright passed `8/8`; and complete Playwright/Axe passed `178/178` with zero failures, retries, or skips.
+- Untouched simulation smoke measured Flocking-100 `245.58` ticks/s, Flocking-500 `32.30`, Forest Fire `48.46`, and Predator-Prey `138.36`; these were current-machine smoke figures only.
+- An independent untouched eight-case browser run measured about `23.67..23.86` model ticks/s. At 100, production/prototypes rendered about `59.5..59.9 FPS`; at 500, production rendered `35.13 FPS` and prototypes `41.35..47.88 FPS`.
+- The untouched 500-boid run did not reproduce I0's reported `6.23..9.20 FPS`. A later equivalent final run measured `4.88..7.64 FPS` without a production renderer change, establishing severe local environment/run variance and invalidating raw cross-run FPS as optimization proof.
+
+Independent findings:
+
+- No P0 was found. One P1 architecture family and fourteen bounded P2 families were fixed. No known P0/P1 remains.
+- The P1 was a Flocking-shaped adapter contract presented as the future scene seam. A generic typed read-only base with explicit `templateId` now contains the common contract while `WorldSceneAdapter` remains explicitly Flocking-specific. This does not implement cross-template support.
+- P2 findings covered overly frequent/broad React publication, hidden canvas reconciliation, eager lens vectors/signatures, arbitrary first-32-boid trails, trail allocation/storage mismatch, fixed DPR/detail, stale focus after deselection, false System zoom state, toroidal follow sweep, Hand/pointer ambiguity, wave/force-like pulses, causal-looking radial proximity spokes, anthropomorphic inspection language, mobile toolbar overlap, and missing phase evidence.
+- Scene-adapter reads remained immutable and authoritative. It creates no independent evolution and has no write path. Current proximity is a read-only snapshot query, not a causal edge or recorded perception.
+- Camera, selection, tools, lens, follow, and quality remained presentation-only and did not change deterministic runtime signatures.
+
+Performance findings and hardening:
+
+- Headless 500-boid phase timing measured engine step `58.515 ms` mean / `82.316 ms` p95, snapshot `2.690 / 4.604 ms`, and adapter `0.568 / 1.088 ms`.
+- Chrome CPU profiling was dominated by Flocking neighbor search (`queryPairsWithinRadius`, about `1,156.5 ms` self time), two deep-clone paths (about `924.5` and `856 ms`), then GC/tick preparation. Canvas draw was not a top cost and remained about `0.9..1.3 ms` median in final 500-boid cases.
+- Coarse React publication moved from roughly 120 ms to 250 ms; the Canvas boundary is memoized; parent callbacks are stable; Alignment vectors and runtime signatures are lazy.
+- Five-second 500-boid React-profile commit counts changed from `34/45/39/43/34` for unselected/selected/lens/follow/trails to `25/22/18/23/20`. The development profiler affects throughput, so this is directional evidence only.
+- Detail is selected-oriented: only one selected trajectory is retained, selected proximity is the only relationship query, and no hidden cohort-wide trail state remains.
+- Automatic local High/Balanced/Performance quality uses bounded p95/hysteresis and may reduce DPR, grid, shadows, strokes, selected-trail points/frequency, and effects. It never changes agent count, deterministic steps, rules, RNG, metrics, or scenario fidelity and adds no storage key.
+- A soak exposed that Performance drew five trail points while storage could retain twelve; storage now enforces the active 12/8/5 bound and the focused browser assertion rejects the retired 384-point budget.
+
+Visual, camera, and language hardening:
+
+- Initialization/step rings were removed because they resembled waves or forces. Selection feedback uses bounded corner marks.
+- Radial neighborhood spokes were removed because they implied causal influence. Small target-position markers represent only selected current proximity.
+- `Hand` became `Navigate`; Navigate, Inspect, and Measure use distinct arrow, corner-bracket, and ruler shapes rather than color/rings alone. None mutates an entity.
+- User zoom now enters truthful Free mode; deselection exits Local/Follow; missing focus returns to System; same-target toroidal wrap no longer eases across the full world.
+- `Last sensed` became a model-state neighbor count and the separate current calculation is labelled `Proximity check`.
+- The compact stage readout was moved below the mobile concept toolbar after a reproduced overlap.
+
+Soak and rendered evidence:
+
+- Living, God-Hand, and Field Scientist each ran for at least 60 seconds at 100 and 500 boids.
+- Forced-GC retained deltas at 100 were approximately `-6.49..-6.53 MiB`; at 500 they were `+4.50..+4.88 MiB`, with non-monotonic checkpoints and reclaimed transient allocations.
+- Active listener count stayed flat at `586` in the instrumented page; running had two active rAF callbacks, paused had one renderer callback, and route navigation removed prototype callbacks. Selected trail ended at exactly five points under Performance quality; effects and unselected trails returned to zero.
+- Desktop and mobile canvases were nonblank under pixel checks. All concepts were rechecked at the six required viewports; mobile and short-height controls remained reachable, the world remained dominant, and Axe/diagnostics were clean.
+- These one-minute local soaks do not prove multi-hour leak freedom, actual touch behavior, screen-reader/AT behavior, browser zoom, forced-colors quality, GPU diversity, participant comprehension, or WCAG conformance.
+
+Final performance interpretation:
+
+- Final matched 100-boid production/prototype rates were `23.61..23.76` ticks/s and `54.37..59.43 FPS`.
+- Final matched 500-boid production/Living/God-Hand/Field rates were `20.97/21.88/22.11/23.54` ticks/s and `4.88/5.19/5.36/7.64 FPS`, with p95 frame times `266.7/283.4/283.4/250.0 ms`.
+- Only Field improved final matched p95. Because unchanged production varied from `35.13` to `4.88 FPS`, I0B makes no defensible cross-run material frame-time improvement claim.
+- The credible I1 path is a dedicated worker/scheduler and snapshot-publication investigation before assuming WebGL or more Canvas micro-optimization solves the bottleneck. I0B adds neither worker nor WebGL support.
+
+Decision and cross-template result:
+
+- Decision: `Revise hybrid`. The I0 50/20/30 percentages are retired as false precision.
+- Living Diorama owns world surface, spatial presence, restrained depth, boundary, whole-system camera, and selected-only trajectory.
+- Field Scientist owns observation information architecture, System/Local/Follow, exact DOM inspection, selected proximity framing, model-output lenses, runtime-honesty language, and accessibility authority.
+- The former God-Hand concept contributes only immediate pointer feedback, selection, and contextual instrument switching; the God-Hand/Hand metaphor does not migrate.
+- Epidemic, Predator-Prey, and Opinion require template adapters. Forest Fire and Schelling require grid rendering primitives. Neural requires a network rendering primitive and template adapter. No support was implemented or claimed.
+- I0B is conditionally ready for `I1: Immersive World Shell`; I1 remains unstarted.
+
+Final verification:
+
+- Focused I0/I0B Playwright: `13 passed (3.0m)`.
+- Complete Playwright/Axe: `183 passed (25.5m)` with zero failures, retries, or skips.
+- Typecheck: passed.
+- Unit tests: `79 files / 657 tests passed (82.99s)`. The first full run exposed three stale roadmap assertions; the assertions were updated to require the new audit/status without weakening them, their focused set passed `17/17`, and the complete suite then passed.
+- Production build: passed; Next compiled in `8.9s` and generated `23` pages.
+- Simulation smoke: Flocking-100 `113.87` ticks/s, Flocking-500 `15.87`, Forest Fire `23.35`, and Predator-Prey `72.26`.
+- Bounded Atlas smoke: `2` runs / `10` work units / horizon `5` completed in `54.03 ms`; this is not a scalability or validation claim.
+- `git diff --check`: passed before this evidence-only record update and is rerun at the commit gate.
+- `npm run lint: unavailable, package.json has no lint script.`
+
+Roadmap result:
+
+- I0 complete.
+- I0B complete.
+- I1: Immersive World Shell is next and has not started.
+- I2 through I5B have not started.
+- C4: Flagship Starter Pack Two is deferred until I5B.
+- Commit gate target: `test: audit immersive world directions`; no push is authorized.

@@ -1,6 +1,6 @@
 # ORTUS Current Context
 
-Last updated: 2026-08-10 after Prompt I0 Immersive World Direction + Performance Baseline
+Last updated: 2026-08-11 after Prompt I0B Immersive World Direction Audit + Performance Hardening
 
 ## Current Prompt Status
 
@@ -15,11 +15,12 @@ Last updated: 2026-08-10 after Prompt I0 Immersive World Direction + Performance
 - C3 complete.
 - C3B complete.
 - I0 complete.
-- I0B: Immersive World Direction Audit is next and has not started.
-- I1 through I5B have not started.
+- I0B complete.
+- I1: Immersive World Shell is next and has not started.
+- I2 through I5B have not started.
 - C4: Flagship Starter Pack Two is deferred until I5B and has not started.
 
-`/` is the task-centered Start Hub; `/worlds` is its eleven-entry runnable Starter World catalog; `/worlds/[slug]` is the source-backed detail experience; `/worlds/packs/local-rules-global-patterns` is the first flagship collection; `/worlds/guides/reading-a-flock` is the first optional guided investigation; `/world` is the live workbench; `/builder`, `/atlas`, and `/lab` retain their established behavior. `/world/immersive-prototype` is an unlinked, noindex I0 comparison surface and is not production World. Primary navigation remains Start, World, Workshop, and a keyboard-operated Research tools menu. Explore Worlds and the guide are Start-adjacent rather than equal global destinations. F1 remains paused under E3 Analytical Lenses.
+`/` is the task-centered Start Hub; `/worlds` is its eleven-entry runnable Starter World catalog; `/worlds/[slug]` is the source-backed detail experience; `/worlds/packs/local-rules-global-patterns` is the first flagship collection; `/worlds/guides/reading-a-flock` is the first optional guided investigation; `/world` is the live workbench; `/builder`, `/atlas`, and `/lab` retain their established behavior. `/world/immersive-prototype` is an unlinked, noindex I0/I0B comparison surface and is not production World or cross-template renderer support. Primary navigation remains Start, World, Workshop, and a keyboard-operated Research tools menu. Explore Worlds and the guide are Start-adjacent rather than equal global destinations. F1 remains paused under E3 Analytical Lenses.
 
 C1's implementation records are `docs/product/STARTER_WORLD_CONTENT_FRAMEWORK.md`, `docs/product/STARTER_WORLD_PORTFOLIO.md`, and `docs/ui/EXPLORE_WORLDS_CATALOG.md`. The strict version `"1"` data model and validated registry are in `src/lib/starterWorlds`. All seven current production templates have rich runnable definitions with represented anatomy, bounded taxonomy, one existing first-change control, existing observations, two to four investigations, one to three verified sources, a compact model boundary, and current-versus-future remix status.
 
@@ -51,15 +52,23 @@ C3B keeps saved comparison availability generic and shows only existing label/te
 
 C3B final verification passed guide/roadmap contracts `4 files / 26 tests (7.78s)`, dedicated C3B Playwright `9 tests (2.3m)`, Research World Playwright `53 tests (6.7m)`, combined Starter/C2/C3/C3B Playwright `55 tests (10.3m)`, complete UI/Axe `170 tests (21.9m)`, typecheck in `3.39s`, unit verification `78 files / 647 tests (80.90s)`, a production build in `33.56s` with Next compilation in `8.0s` and `22` pages, simulation/Atlas performance smoke, and `git diff --check`. All final browser runs had zero failures, retries, or skips. `npm run lint: unavailable, package.json has no lint script.`
 
-I0's records are `docs/product/IMMERSIVE_WORLD_DIRECTION.md`, `docs/ui/IMMERSIVE_WORLD_PROTOTYPES.md`, and `docs/performance/IMMERSIVE_RENDERING_BASELINE.md`. The isolated route compares Living Diorama, God-Hand, and Field Scientist over one fixed validated `flocking-boids` random-headings scenario with seed `i0-immersive-flocking-seed-v1`, at only 100 or 500 boids. Concept switches preserve one engine; load changes and restore are explicit fresh-run replacement. The route is not linked from production navigation and adds no storage key.
+I0/I0B records are `docs/product/IMMERSIVE_WORLD_DIRECTION.md`, `docs/product/IMMERSIVE_WORLD_DIRECTION_AUDIT.md`, `docs/ui/IMMERSIVE_WORLD_PROTOTYPES.md`, and `docs/performance/IMMERSIVE_RENDERING_BASELINE.md`. The isolated route compares Living Diorama, God-Hand, and Field Scientist over one fixed validated `flocking-boids` random-headings scenario with seed `i0-immersive-flocking-seed-v1`, at only 100 or 500 boids. Concept switches preserve one engine; load changes and restore are explicit fresh-run replacements. The route remains unlinked, noindex, non-persistent, and separate from production World.
 
-I0's `WorldSceneAdapter` reads authoritative snapshots into render-friendly entities, one selected neighborhood, inspectable state, geometry, Alignment lens data, and a deterministic runtime signature. Canvas performs batched drawing and bounded camera interpolation; React receives coarse control/readout notifications rather than per-boid visual updates. Camera, hover, selection, tools, follow, and lenses are presentation-only. Trails are bounded to 32 entities by 12 points (384 total), transient effects to 24, and timing samples to 360. No `src/simulation` file, Flocking rule/preset/default/bound/metric, RNG, snapshot, comparison, Experiment Runner, Starter World, Atlas, Lab, Builder, persistence, or dependency changed.
+I0B found no P0, one fixed P1 architecture family, and fourteen fixed bounded P2 families. The read-only adapter now has a generic typed base with an explicit template id, while `WorldSceneAdapter` remains the Flocking specialization. This is an interface boundary, not cross-template support. Alignment vectors and runtime signatures are lazy, selected proximity work remains one bounded O(n) read, and the adapter contains no evolution or write path.
 
-Final local measurements preserve production-equivalent model progress: production browser was 23.49 ticks/s at 100 and 23.15 at 500; prototypes measured 23.37-23.65 at 100 and 23.16-23.38 at 500. Rendered performance was 58.41-59.58 FPS at 100 and 6.72-9.20 FPS at 500. At 500 the production-style elapsed-time accumulator preserves deterministic ticks while visual cadence degrades. Forced-GC retained heap after roughly 11-12 seconds was +0.85 MiB production and +4.35-4.45 MiB for prototypes; longer soak evidence remains absent. These are machine-specific development measurements, not universal guarantees.
+Canvas remains the batched entity renderer; React publishes coarse controls/readouts at roughly 250 ms and does not animate entities. I0B removes arbitrary first-32-boid trails, retains only one selected trajectory, and enforces High/Balanced/Performance storage and drawing bounds of 12/8/5 points. Automatic quality may reduce DPR, decorative grid, shadows, strokes, trails, and effects only. Camera, hover, selection, tools, follow, and lenses remain presentation-only. User zoom enters Free mode, deselection exits Local/Follow, and toroidal follow no longer sweeps across the world boundary.
 
-The I0 decision is an exact hybrid: 50% Living Diorama owns environment/camera/depth; 20% God-Hand owns hover/press/selection and contextual instruments without generic manipulation; 30% Field Scientist owns System/Local/Follow, exact inspection, and scientific lens semantics. I0B must audit this decision and evidence before I1. I1 through I5B are reserved and unstarted. C4 is deferred until I5B.
+I0B removed initialization/step rings and radial neighborhood spokes because they resembled waves, forces, or causal links. It replaces `Hand` with `Navigate` and uses shape-distinct Navigate, Inspect, and Measure feedback. Neighbor wording now distinguishes model-state count from a current read-only proximity check. No `src/simulation` file, scheduler, Flocking rule/preset/default/bound/metric, RNG, snapshot, comparison, Experiment Runner, Starter World, Atlas, Lab, Builder, persistence, dependency, or production World behavior changed.
 
-I0 final verification passed focused prototype Playwright `8 tests (1.9m)` and complete UI/Axe `178 tests (25.6m)` with zero failures, retries, or skips. Typecheck passed; unit verification passed `79 files / 655 tests (82.35s)`; the production build compiled in `14.2s`, generated `23` pages, and emitted the prototype route plus the existing middleware; simulation and bounded Atlas performance smoke passed; and `git diff --check` passed. `npm run lint: unavailable, package.json has no lint script.` Actual browser zoom, screen-reader/AT use, forced colors, complete touch ergonomics, participant comprehension, longer memory-soak behavior, and formal WCAG conformance remain unverified.
+Profiling at 500 measured engine step `58.515 ms` mean / `82.316 ms` p95, snapshot `2.690 / 4.604 ms`, and adapter `0.568 / 1.088 ms`. Chrome CPU self time was led by Flocking neighbor search, two deep-clone paths, and GC/tick preparation. Canvas draw remained roughly `0.9..1.3 ms` median in final 500-boid cases. The credible I1 path is a dedicated worker/scheduler and snapshot-publication investigation before assuming WebGL or more Canvas micro-optimization solves the bottleneck. No worker or WebGL support was added.
+
+Equivalent local 500-boid browser runs varied from roughly `35..48 FPS` untouched to `4.88..7.64 FPS` at the final gate without a production renderer change. I0B therefore makes no cross-run frame-time improvement or hardware-independent FPS claim. The final matched prototypes used fewer React commits and bounded adaptive detail; only Field Scientist improved final matched p95 frame time versus final production. Six one-minute soaks found non-monotonic retained memory with about `+4.50..4.88 MiB` final 500-boid deltas, flat instrumented listener count, cleaned-up rAF lifecycle, and bounded trail/effect state. This is not multi-hour leak proof.
+
+The I0B decision is `Revise hybrid`; the `50/20/30` percentages are retired. Living Diorama owns the primary world surface, spatial presence, restrained depth, boundary, whole-system camera, and selected-only trajectory. Field Scientist owns observation information architecture, System/Local/Follow semantics, exact DOM inspection, selected proximity framing, model-output lenses, runtime-honesty language, and accessibility authority. The former God-Hand concept contributes only immediate pointer feedback, selection, and contextual instrument switching; the God-Hand/Hand metaphor does not migrate.
+
+I0B is conditionally ready for `I1: Immersive World Shell` because no P0/P1 remains and the architecture has a credible measured path. I1 has not started. Epidemic, Predator-Prey, and Opinion require template adapters; Forest Fire, Schelling, and Neural require new rendering primitives, with Neural also requiring a template-specific adapter. These are feasibility classifications, not support claims. Actual browser zoom, screen-reader/AT use, forced colors, actual touch devices, participant comprehension, multi-hour memory soak, GPU/browser diversity, production-build profiling, and formal WCAG conformance remain unverified.
+
+I0B final verification passed focused prototype Playwright `13 tests (3.0m)` and complete UI/Axe `183 tests (25.5m)` with zero failures, retries, or skips. Typecheck passed; unit verification passed `79 files / 657 tests (82.99s)`; the production build compiled in `8.9s` and generated `23` pages; simulation smoke measured Flocking-100 `113.87` ticks/s, Flocking-500 `15.87`, Forest Fire `23.35`, and Predator-Prey `72.26`; bounded Atlas smoke completed `2` runs / `10` work units / horizon `5` in `54.03 ms`; and `git diff --check` passed. `npm run lint: unavailable, package.json has no lint script.`
 
 R2's implementation record is `docs/ui/WORLD_LAYOUT_AND_INTERACTION_RECLAIM.md`; R2B's audit record is `docs/ui/WORLD_LAYOUT_AND_INTERACTION_RECLAIM_AUDIT.md`. World uses a stable `tasks + stage/playback + active tool` frame. Setup, Observe, Change, Compare, and Explain are direct tasks; More groups Experiment Runner and Diagnostics. The selected tool owns one bounded scroll, full model notes and technical run details use focus-contained modal surfaces, and desktop collapse/restore preserves local tool state.
 
@@ -229,13 +238,14 @@ C2B complete.
 C3 complete.
 C3B complete.
 I0 complete.
-I0B: Immersive World Direction Audit is next and has not started.
-I1 through I5B have not started.
+I0B complete.
+I1: Immersive World Shell is next and has not started.
+I2 through I5B have not started.
 C4: Flagship Starter Pack Two is deferred until I5B and has not started.
 
-Completed sequence: UX6B -> GW9 -> GW9B -> R1 -> R1B -> R2 -> R2B -> C1 -> C1B -> C2 -> C2B -> C3 -> C3B -> I0. I0B is next; C4 has not started.
+Completed sequence: UX6B -> GW9 -> GW9B -> R1 -> R1B -> R2 -> R2B -> C1 -> C1B -> C2 -> C2B -> C3 -> C3B -> I0 -> I0B. I1 is next; C4 has not started.
 
-Do not start I0B, I1, C4, recipe-first Builder, composition, multiscale runtime, adaptive-controller generalization, Lab/Atlas persistence, E3, F1, or other reset-roadmap capability without its dedicated prompt. Rendered Playwright/Axe evidence does not establish actual browser zoom, screen-reader, assistive-technology, forced-colors, full WCAG, complete touch workflow, or user-comprehension readiness.
+Do not start I1, C4, recipe-first Builder, composition, multiscale runtime, adaptive-controller generalization, Lab/Atlas persistence, E3, F1, or other reset-roadmap capability without its dedicated prompt. Rendered Playwright/Axe evidence does not establish actual browser zoom, screen-reader, assistive-technology, forced-colors, full WCAG, complete touch workflow, or user-comprehension readiness.
 
 Implemented runtime foundations include scenarios, snapshots, template-defined behavior modes, agent composition, interventions, experiments, run summaries/comparison, seeded randomness, metrics, spaces, template metadata, and a narrow Opinion Dynamics `socialLearning` behavior mode audited in Prompt 33D.
 
@@ -348,7 +358,7 @@ Prompt 35 and Prompt 35B were committed together in `7696381 feat: Implement Mod
 
 ## Next Recommended Prompt
 
-Prompt I0: Immersive World Direction + Performance Baseline is complete. Prompt I0B: Immersive World Direction Audit is next and has not started. Do not begin I0B, I1, C4, F1, or any later reset-roadmap capability without its dedicated prompt. C4 is deferred until I5B; F1 remains paused under E3 Analytical Lenses.
+Prompt I0 and Prompt I0B are complete. Prompt I1: Immersive World Shell is next and has not started. Do not begin I1, C4, F1, or any later reset-roadmap capability without its dedicated prompt. C4 is deferred until I5B; F1 remains paused under E3 Analytical Lenses.
 
 Next recommended UI/design-system prompt after UX2B: `UI-DESIGN-SYSTEM-1: Rendered Responsive, Typography + Visualization Accessibility Audit`.
 

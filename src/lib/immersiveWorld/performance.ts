@@ -1,3 +1,5 @@
+import type { ImmersiveRenderQuality } from "./renderQuality";
+
 const maxPerformanceSamples = 360;
 
 export interface ImmersiveRenderPerformanceSummary {
@@ -11,6 +13,7 @@ export interface ImmersiveRenderPerformanceSummary {
   p95DrawMs: number;
   trailPointCount: number;
   effectCount: number;
+  renderQuality: ImmersiveRenderQuality;
 }
 
 export class ImmersiveRenderPerformanceMonitor {
@@ -22,6 +25,7 @@ export class ImmersiveRenderPerformanceMonitor {
   private drawDurations: number[] = [];
   private trailPointCount = 0;
   private effectCount = 0;
+  private renderQuality: ImmersiveRenderQuality = "high";
 
   reset(at: number): void {
     this.startedAt = at;
@@ -32,9 +36,16 @@ export class ImmersiveRenderPerformanceMonitor {
     this.drawDurations = [];
     this.trailPointCount = 0;
     this.effectCount = 0;
+    this.renderQuality = "high";
   }
 
-  recordFrame(at: number, drawMs: number, trailPointCount: number, effectCount: number): void {
+  recordFrame(
+    at: number,
+    drawMs: number,
+    trailPointCount: number,
+    effectCount: number,
+    renderQuality: ImmersiveRenderQuality = "high"
+  ): void {
     if (this.startedAt === 0) {
       this.reset(at);
     }
@@ -50,6 +61,7 @@ export class ImmersiveRenderPerformanceMonitor {
     pushBounded(this.drawDurations, Math.max(0, drawMs));
     this.trailPointCount = trailPointCount;
     this.effectCount = effectCount;
+    this.renderQuality = renderQuality;
   }
 
   summary(at: number): ImmersiveRenderPerformanceSummary {
@@ -66,7 +78,8 @@ export class ImmersiveRenderPerformanceMonitor {
       medianDrawMs: percentile(drawDurations, 0.5),
       p95DrawMs: percentile(drawDurations, 0.95),
       trailPointCount: this.trailPointCount,
-      effectCount: this.effectCount
+      effectCount: this.effectCount,
+      renderQuality: this.renderQuality
     };
   }
 }

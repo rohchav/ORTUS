@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState, type MutableRefObject, type PointerEvent as ReactPointerEvent, type WheelEvent as ReactWheelEvent } from "react";
+import { memo, useEffect, useRef, useState, type MutableRefObject, type PointerEvent as ReactPointerEvent, type WheelEvent as ReactWheelEvent } from "react";
 import {
+  AdaptiveRenderQualityController,
   BoundedTrailBuffer,
   BoundedVisualEffectBuffer,
   ImmersiveRenderPerformanceMonitor,
@@ -14,11 +15,12 @@ import {
   type ImmersiveConceptId,
   type ImmersiveGodHandTool,
   type ImmersiveRenderPerformanceSummary,
+  type ImmersiveRenderQualityPolicy,
   type ImmersiveSceneEntity,
   type ImmersiveWorldBounds,
   type WorldSceneAdapter
 } from "../../lib/immersiveWorld";
-import type { ImmersiveAdvanceKind, ImmersiveFlockingRuntime } from "./ImmersiveFlockingRuntime";
+import type { ImmersiveFlockingRuntime } from "./ImmersiveFlockingRuntime";
 
 export interface ImmersiveCanvasAuditHandle {
   reset(at?: number): void;
@@ -37,7 +39,6 @@ interface ImmersiveWorldCanvasProps {
   godHandTool: ImmersiveGodHandTool;
   reducedMotion: boolean;
   isRunning: boolean;
-  lastAdvanceKind: ImmersiveAdvanceKind;
   auditHandleRef: MutableRefObject<ImmersiveCanvasAuditHandle | null>;
 }
 
@@ -67,11 +68,11 @@ interface Projection {
   skew: number;
 }
 
-const trailEntityLimit = 32;
+const trailEntityLimit = 1;
 const trailPointsPerEntity = 12;
 const effectLimit = 24;
 
-export function ImmersiveWorldCanvas({
+export const ImmersiveWorldCanvas = memo(function ImmersiveWorldCanvas({
   runtime,
   concept,
   camera,
@@ -83,7 +84,6 @@ export function ImmersiveWorldCanvas({
   godHandTool,
   reducedMotion,
   isRunning,
-  lastAdvanceKind,
   auditHandleRef
 }: ImmersiveWorldCanvasProps) {
   const shellRef = useRef<HTMLDivElement | null>(null);
@@ -92,6 +92,7 @@ export function ImmersiveWorldCanvas({
   const trailBufferRef = useRef(new BoundedTrailBuffer(trailEntityLimit, trailPointsPerEntity));
   const effectBufferRef = useRef(new BoundedVisualEffectBuffer(effectLimit));
   const monitorRef = useRef(new ImmersiveRenderPerformanceMonitor());
+  const qualityControllerRef = useRef(new AdaptiveRenderQualityController(runtime.agentCount));
   const lastTickRef = useRef(-1);
   const lastDatasetAtRef = useRef(0);
   const lastFrameAtRef = useRef<number | null>(null);
@@ -115,8 +116,7 @@ export function ImmersiveWorldCanvas({
     lensActive,
     godHandTool,
     reducedMotion,
-    isRunning,
-    lastAdvanceKind
+    isRunning
   });
 
   propsRef.current = {
@@ -126,9 +126,17 @@ export function ImmersiveWorldCanvas({
     lensActive,
     godHandTool,
     reducedMotion,
-    isRunning,
-    lastAdvanceKind
+    isRunning
   };
+
+  useEffect(() => {
+    qualityControllerRef.current.reset(runtime.agentCount);
+    trailBufferRef.current.clear();
+    effectBufferRef.current.clear();
+    lastTickRef.current = -1;
+    lastFrameAtRef.current = null;
+    displayCameraRef.current = null;
+  }, [concept, runtime]);
 
   useEffect(() => {
     const element = shellRef.current;
@@ -182,36 +190,55 @@ export function ImmersiveWorldCanvas({
     if (!canvas) {
       return;
     }
-    const pixelRatio = Math.min(2, window.devicePixelRatio || 1);
-    canvas.width = Math.floor(size.width * pixelRatio);
-    canvas.height = Math.floor(size.height * pixelRatio);
     canvas.style.width = `${size.width}px`;
     canvas.style.height = `${size.height}px`;
     const context = canvas.getContext("2d");
     if (!context) {
       return;
     }
-    context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
     let frameId = 0;
+    let appliedPixelRatio = 0;
+    let appliedWidth = 0;
+    let appliedHeight = 0;
 
     const drawFrame = (at: number) => {
       const drawStartedAt = performance.now();
       const adapter = runtime.getSceneAdapter();
       const current = propsRef.current;
+      const previousFrameAt = lastFrameAtRef.current;
+      if (previousFrameAt !== null) {
+        qualityControllerRef.current.recordFrameInterval(Math.max(0, at - previousFrameAt));
+      }
+      const quality = qualityControllerRef.current.getPolicy();
+      const pixelRatio = Math.min(quality.pixelRatioCeiling, window.devicePixelRatio || 1);
+      if (pixelRatio !== appliedPixelRatio || size.width !== appliedWidth || size.height !== appliedHeight) {
+        canvas.width = Math.floor(size.width * pixelRatio);
+        canvas.height = Math.floor(size.height * pixelRatio);
+        context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+        appliedPixelRatio = pixelRatio;
+        appliedWidth = size.width;
+        appliedHeight = size.height;
+      }
       const targetCamera = resolveImmersiveCamera(current.camera, adapter.getEntities(), adapter.getBounds());
       const displayCamera = displayCameraRef.current === null
         ? targetCamera
         : interpolateImmersiveCamera(
             displayCameraRef.current,
             targetCamera,
-            at - (lastFrameAtRef.current ?? at),
-            current.reducedMotion
+            at - (previousFrameAt ?? at),
+            current.reducedMotion,
+            {
+              bounds: adapter.getBounds(),
+              wrap: adapter.parameters.boundaryMode === "wrap"
+            }
           );
       displayCameraRef.current = displayCamera;
       lastFrameAtRef.current = at;
-      updateVisualHistory(adapter, current, at, trailBufferRef.current, effectBufferRef.current, lastTickRef);
+      updateVisualHistory(adapter, current, quality, trailBufferRef.current, effectBufferRef.current, lastTickRef);
       const activeEffects = effectBufferRef.current.active(at);
-      const renderedEffects = current.reducedMotion ? [] : activeEffects;
+      const renderedEffects = current.reducedMotion || quality.effectLimit === 0
+        ? []
+        : activeEffects.slice(-quality.effectLimit);
       drawImmersiveWorld({
         context,
         width: size.width,
@@ -226,6 +253,7 @@ export function ImmersiveWorldCanvas({
         effects: renderedEffects,
         isRunning: current.isRunning,
         godHandTool: current.godHandTool,
+        quality,
         at
       });
       const drawMs = performance.now() - drawStartedAt;
@@ -233,7 +261,8 @@ export function ImmersiveWorldCanvas({
         at,
         drawMs,
         trailBufferRef.current.pointCount(),
-        renderedEffects.length
+        renderedEffects.length,
+        quality.level
       );
       if (at - lastDatasetAtRef.current >= 250) {
         lastDatasetAtRef.current = at;
@@ -241,6 +270,7 @@ export function ImmersiveWorldCanvas({
         canvas.dataset.runtimeSignature = adapter.getRuntimeSignature();
         canvas.dataset.trailPoints = String(trailBufferRef.current.pointCount());
         canvas.dataset.effectCount = String(renderedEffects.length);
+        canvas.dataset.renderQuality = quality.level;
         canvas.dataset.hoveredEntity = pointerRef.current.hoveredEntityId ?? "";
       }
       frameId = requestAnimationFrame(drawFrame);
@@ -267,7 +297,7 @@ export function ImmersiveWorldCanvas({
     const pointer = pointerRef.current;
     const deltaClientX = event.clientX - pointer.lastClientX;
     const deltaClientY = event.clientY - pointer.lastClientY;
-    const canPan = concept === "living-diorama" || (concept === "god-hand" && godHandTool === "hand");
+    const canPan = concept === "living-diorama" || (concept === "god-hand" && godHandTool === "navigate");
     if (pointer.pressed && canPan && (Math.abs(deltaClientX) + Math.abs(deltaClientY) > 0)) {
       pointer.moved = true;
       onCameraChange(
@@ -387,7 +417,7 @@ export function ImmersiveWorldCanvas({
       />
     </div>
   );
-}
+});
 
 function updateVisualHistory(
   adapter: WorldSceneAdapter,
@@ -395,9 +425,8 @@ function updateVisualHistory(
     concept: ImmersiveConceptId;
     selectedEntityId: string | null;
     reducedMotion: boolean;
-    lastAdvanceKind: ImmersiveAdvanceKind;
   },
-  at: number,
+  quality: ImmersiveRenderQualityPolicy,
   trails: BoundedTrailBuffer,
   effects: BoundedVisualEffectBuffer,
   lastTickRef: MutableRefObject<number>
@@ -408,32 +437,11 @@ function updateVisualHistory(
   if (adapter.tick < lastTickRef.current || adapter.tick === 0) {
     trails.clear();
     effects.clear();
-    if (!current.reducedMotion) {
-      const bounds = adapter.getBounds();
-      effects.add({
-        kind: "initialization",
-        x: bounds.width / 2,
-        y: bounds.height / 2,
-        startedAt: at,
-        durationMs: 700
-      });
-    }
   }
   const entities = adapter.getEntities();
-  const trackedIds = current.concept === "living-diorama"
-    ? uniqueIds([current.selectedEntityId, ...entities.slice(0, trailEntityLimit).map((entity) => entity.id)])
-    : uniqueIds([current.selectedEntityId]);
-  trails.update(entities, trackedIds, adapter.tick);
-  if (current.lastAdvanceKind === "step" && !current.reducedMotion) {
-    const geometry = adapter.getSelectionGeometry(current.selectedEntityId);
-    const bounds = adapter.getBounds();
-    effects.add({
-      kind: "step",
-      x: geometry?.x ?? bounds.width / 2,
-      y: geometry?.y ?? bounds.height / 2,
-      startedAt: at,
-      durationMs: 420
-    });
+  const trackedIds = current.selectedEntityId ? [current.selectedEntityId] : [];
+  if (trackedIds.length === 0 || adapter.tick % quality.trailUpdateEveryTicks === 0) {
+    trails.update(entities, trackedIds, adapter.tick, quality.trailPointLimit);
   }
   lastTickRef.current = adapter.tick;
 }
@@ -452,6 +460,7 @@ function drawImmersiveWorld(options: {
   effects: readonly { kind: string; x: number; y: number; startedAt: number; durationMs: number }[];
   isRunning: boolean;
   godHandTool: ImmersiveGodHandTool;
+  quality: ImmersiveRenderQualityPolicy;
   at: number;
 }): void {
   const { context: ctx, width, height, adapter, concept } = options;
@@ -463,11 +472,11 @@ function drawImmersiveWorld(options: {
   ctx.clearRect(0, 0, width, height);
   ctx.fillStyle = concept === "field-scientist" ? "#0b1112" : concept === "god-hand" ? "#10100f" : "#10130f";
   ctx.fillRect(0, 0, width, height);
-  drawCoordinateSurface(ctx, projection, resolvedCamera, bounds, concept);
-  drawTrails(ctx, options.trailBuffer, projection, resolvedCamera, bounds, concept);
+  drawCoordinateSurface(ctx, projection, resolvedCamera, bounds, concept, options.quality);
+  drawTrails(ctx, options.trailBuffer, projection, resolvedCamera, bounds, concept, options.quality);
 
   const relationships = adapter.getRelationships(options.selectedEntityId);
-  drawRelationships(ctx, relationships, projection, resolvedCamera, concept);
+  drawProximityMarkers(ctx, relationships, entities, projection, resolvedCamera, concept);
   if (options.lensActive) {
     drawAlignmentLens(ctx, adapter, projection, resolvedCamera);
   }
@@ -484,7 +493,8 @@ function drawImmersiveWorld(options: {
       bounds,
       concept,
       entity.id === options.selectedEntityId,
-      entity.id === options.pointer.hoveredEntityId
+      entity.id === options.pointer.hoveredEntityId,
+      options.quality
     );
   }
 
@@ -564,7 +574,8 @@ function drawCoordinateSurface(
   projection: Projection,
   camera: ImmersiveCameraState,
   bounds: ImmersiveWorldBounds,
-  concept: ImmersiveConceptId
+  concept: ImmersiveConceptId,
+  quality: ImmersiveRenderQualityPolicy
 ): void {
   const corners = [
     worldToScreen(0, 0, projection, camera),
@@ -584,7 +595,7 @@ function drawCoordinateSurface(
   ctx.clip();
   ctx.strokeStyle = concept === "field-scientist" ? "rgba(123, 215, 199, 0.13)" : "rgba(241, 223, 176, 0.1)";
   ctx.lineWidth = 1;
-  for (let coordinate = 0; coordinate <= 100; coordinate += 10) {
+  for (let coordinate = 0; coordinate <= 100; coordinate += quality.gridStep) {
     const verticalStart = worldToScreen(coordinate, 0, projection, camera);
     const verticalEnd = worldToScreen(coordinate, bounds.height, projection, camera);
     ctx.beginPath();
@@ -618,14 +629,16 @@ function drawTrails(
   projection: Projection,
   camera: ImmersiveCameraState,
   bounds: ImmersiveWorldBounds,
-  concept: ImmersiveConceptId
+  concept: ImmersiveConceptId,
+  quality: ImmersiveRenderQualityPolicy
 ): void {
   ctx.save();
   ctx.lineWidth = concept === "living-diorama" ? 1.3 : 1;
   ctx.strokeStyle = concept === "living-diorama" ? "rgba(217, 163, 78, 0.28)" : "rgba(123, 215, 199, 0.24)";
-  for (const [, points] of trails.entries()) {
+  trails.forEach((_entityId, allPoints) => {
+    const points = allPoints.slice(-quality.trailPointLimit);
     if (points.length < 2) {
-      continue;
+      return;
     }
     ctx.beginPath();
     let previous = points[0]!;
@@ -641,28 +654,35 @@ function drawTrails(
       previous = point;
     }
     ctx.stroke();
-  }
+  });
   ctx.restore();
 }
 
-function drawRelationships(
+function drawProximityMarkers(
   ctx: CanvasRenderingContext2D,
-  relationships: readonly { sourceX: number; sourceY: number; targetX: number; targetY: number }[],
+  relationships: readonly { targetId: string }[],
+  entities: readonly ImmersiveSceneEntity[],
   projection: Projection,
   camera: ImmersiveCameraState,
   concept: ImmersiveConceptId
 ): void {
-  ctx.save();
-  ctx.strokeStyle = concept === "field-scientist" ? "rgba(123, 215, 199, 0.34)" : "rgba(241, 223, 176, 0.22)";
-  ctx.lineWidth = 0.9;
-  ctx.setLineDash([3, 5]);
+  if (relationships.length === 0) {
+    return;
+  }
+  const targetIds = new Set<string>();
   for (const relationship of relationships) {
-    const source = worldToScreen(relationship.sourceX, relationship.sourceY, projection, camera);
-    const target = worldToScreen(relationship.targetX, relationship.targetY, projection, camera);
+    targetIds.add(relationship.targetId);
+  }
+  ctx.save();
+  ctx.fillStyle = concept === "field-scientist" ? "rgba(123, 215, 199, 0.58)" : "rgba(241, 223, 176, 0.4)";
+  for (const entity of entities) {
+    if (!targetIds.has(entity.id)) {
+      continue;
+    }
+    const target = worldToScreen(entity.x, entity.y, projection, camera);
     ctx.beginPath();
-    ctx.moveTo(source.x, source.y);
-    ctx.lineTo(target.x, target.y);
-    ctx.stroke();
+    ctx.arc(target.x, target.y, 2.2, 0, Math.PI * 2);
+    ctx.fill();
   }
   ctx.restore();
 }
@@ -694,12 +714,16 @@ function drawEntity(
   bounds: ImmersiveWorldBounds,
   concept: ImmersiveConceptId,
   selected: boolean,
-  hovered: boolean
+  hovered: boolean,
+  quality: ImmersiveRenderQualityPolicy
 ): void {
   const screen = worldToScreen(entity.x, entity.y, projection, camera);
   const depth = concept === "living-diorama" ? 0.82 + (entity.y / bounds.height) * 0.32 : 1;
   const radius = Math.max(3.4, entity.radius * 1.25 * depth);
-  if (concept === "living-diorama") {
+  const selectedDetail = selected || hovered;
+  const drawShadow = concept === "living-diorama"
+    && (quality.shadowDetail === "all" || (quality.shadowDetail === "selected" && selectedDetail));
+  if (drawShadow) {
     ctx.save();
     ctx.fillStyle = "rgba(0, 0, 0, 0.28)";
     ctx.beginPath();
@@ -720,7 +744,9 @@ function drawEntity(
   ctx.strokeStyle = selected ? "#f3f1e8" : hovered ? "#7bd7c7" : entity.stroke;
   ctx.lineWidth = selected ? 2.2 : hovered ? 1.8 : 1;
   ctx.fill();
-  ctx.stroke();
+  if (quality.strokeDetail === "all" || selectedDetail) {
+    ctx.stroke();
+  }
   ctx.restore();
   if (hovered || selected) {
     ctx.save();
@@ -777,14 +803,10 @@ function drawEffects(
   for (const effect of effects) {
     const progress = clamp((at - effect.startedAt) / effect.durationMs, 0, 1);
     const center = worldToScreen(effect.x, effect.y, projection, camera);
-    const radius = effect.kind === "initialization" ? 28 + progress * 90 : 12 + progress * 28;
-    ctx.strokeStyle = effect.kind === "selection"
-      ? `rgba(241, 223, 176, ${0.56 * (1 - progress)})`
-      : `rgba(123, 215, 199, ${0.42 * (1 - progress)})`;
+    const radius = 15 + progress * 5;
+    ctx.strokeStyle = `rgba(241, 223, 176, ${0.56 * (1 - progress)})`;
     ctx.lineWidth = 1.4;
-    ctx.beginPath();
-    ctx.arc(center.x, center.y, radius, 0, Math.PI * 2);
-    ctx.stroke();
+    drawCornerMarker(ctx, center.x, center.y, radius, 6);
   }
   ctx.restore();
 }
@@ -798,20 +820,61 @@ function drawPointerPresence(
   if (concept !== "god-hand" || !pointer.active) {
     return;
   }
-  const radius = pointer.pressed ? 13 : tool === "measure" ? 16 : 10;
+  const x = pointer.screenX;
+  const y = pointer.screenY;
   ctx.save();
   ctx.strokeStyle = tool === "measure" ? "rgba(123, 215, 199, 0.9)" : "rgba(216, 255, 62, 0.78)";
   ctx.lineWidth = pointer.pressed ? 2 : 1.2;
-  ctx.beginPath();
-  ctx.arc(pointer.screenX, pointer.screenY, radius, 0, Math.PI * 2);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(pointer.screenX - radius - 5, pointer.screenY);
-  ctx.lineTo(pointer.screenX - radius + 2, pointer.screenY);
-  ctx.moveTo(pointer.screenX + radius - 2, pointer.screenY);
-  ctx.lineTo(pointer.screenX + radius + 5, pointer.screenY);
-  ctx.stroke();
+  if (tool === "navigate") {
+    ctx.beginPath();
+    ctx.moveTo(x - 12, y);
+    ctx.lineTo(x + 12, y);
+    ctx.moveTo(x - 12, y);
+    ctx.lineTo(x - 7, y - 4);
+    ctx.moveTo(x - 12, y);
+    ctx.lineTo(x - 7, y + 4);
+    ctx.moveTo(x + 12, y);
+    ctx.lineTo(x + 7, y - 4);
+    ctx.moveTo(x + 12, y);
+    ctx.lineTo(x + 7, y + 4);
+    ctx.stroke();
+  } else if (tool === "inspect") {
+    drawCornerMarker(ctx, x, y, 11, 6);
+  } else {
+    ctx.beginPath();
+    ctx.moveTo(x - 15, y);
+    ctx.lineTo(x + 15, y);
+    for (let offset = -15; offset <= 15; offset += 5) {
+      const tickHeight = Math.abs(offset) === 15 ? 6 : 3;
+      ctx.moveTo(x + offset, y - tickHeight);
+      ctx.lineTo(x + offset, y + tickHeight);
+    }
+    ctx.stroke();
+  }
   ctx.restore();
+}
+
+function drawCornerMarker(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  radius: number,
+  armLength: number
+): void {
+  ctx.beginPath();
+  ctx.moveTo(x - radius, y - radius + armLength);
+  ctx.lineTo(x - radius, y - radius);
+  ctx.lineTo(x - radius + armLength, y - radius);
+  ctx.moveTo(x + radius - armLength, y - radius);
+  ctx.lineTo(x + radius, y - radius);
+  ctx.lineTo(x + radius, y - radius + armLength);
+  ctx.moveTo(x + radius, y + radius - armLength);
+  ctx.lineTo(x + radius, y + radius);
+  ctx.lineTo(x + radius - armLength, y + radius);
+  ctx.moveTo(x - radius + armLength, y + radius);
+  ctx.lineTo(x - radius, y + radius);
+  ctx.lineTo(x - radius, y + radius - armLength);
+  ctx.stroke();
 }
 
 function pickEntity(
@@ -830,10 +893,6 @@ function pickEntity(
     }
   }
   return best?.id ?? null;
-}
-
-function uniqueIds(ids: readonly (string | null)[]): string[] {
-  return [...new Set(ids.filter((id): id is string => Boolean(id)))];
 }
 
 function clamp(value: number, minimum: number, maximum: number): number {

@@ -9,7 +9,7 @@ export type ImmersiveAgentCount = (typeof immersiveAgentCounts)[number];
 export const immersiveCameraModes = ["system", "free", "local", "follow"] as const;
 export type ImmersiveCameraMode = (typeof immersiveCameraModes)[number];
 
-export const immersiveGodHandTools = ["hand", "inspect", "measure"] as const;
+export const immersiveGodHandTools = ["navigate", "inspect", "measure"] as const;
 export type ImmersiveGodHandTool = (typeof immersiveGodHandTools)[number];
 
 export interface ImmersivePrototypeRouteConfig {
@@ -75,14 +75,29 @@ export interface ImmersiveLensData {
   }[];
 }
 
-export interface WorldSceneAdapter {
+export interface ReadOnlyWorldSceneAdapter<
+  Entity,
+  InspectableState,
+  SelectionGeometry,
+  LensData
+> {
+  readonly templateId: string;
   readonly tick: number;
-  readonly parameters: ParameterValues;
+  readonly parameters: Readonly<ParameterValues>;
   getBounds(): ImmersiveWorldBounds;
-  getEntities(): readonly ImmersiveSceneEntity[];
-  getRelationships(entityId: string | null): readonly ImmersiveSceneRelationship[];
-  getInspectableState(entityId: string | null): ImmersiveInspectableState | null;
-  getSelectionGeometry(entityId: string | null): ImmersiveSelectionGeometry | null;
-  getLensData(): ImmersiveLensData;
+  getEntities(): readonly Entity[];
+  getInspectableState(entityId: string | null): InspectableState | null;
+  getSelectionGeometry(entityId: string | null): SelectionGeometry | null;
+  getLensData(): LensData;
   getRuntimeSignature(): string;
+}
+
+export interface WorldSceneAdapter extends ReadOnlyWorldSceneAdapter<
+  ImmersiveSceneEntity,
+  ImmersiveInspectableState,
+  ImmersiveSelectionGeometry,
+  ImmersiveLensData
+> {
+  getRelationships(entityId: string | null): readonly ImmersiveSceneRelationship[];
+  getAlignment(): number | null;
 }

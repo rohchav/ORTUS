@@ -14896,12 +14896,12 @@ textarea[aria-invalid="true"] {
 }
 
 .immersive-canvas-shell[data-concept="living-diorama"] .immersive-world-canvas,
-.immersive-canvas-shell[data-concept="god-hand"][data-tool="hand"] .immersive-world-canvas {
+.immersive-canvas-shell[data-concept="god-hand"][data-tool="navigate"] .immersive-world-canvas {
   cursor: grab;
 }
 
 .immersive-canvas-shell[data-concept="living-diorama"] .immersive-world-canvas:active,
-.immersive-canvas-shell[data-concept="god-hand"][data-tool="hand"] .immersive-world-canvas:active {
+.immersive-canvas-shell[data-concept="god-hand"][data-tool="navigate"] .immersive-world-canvas:active {
   cursor: grabbing;
 }
 
@@ -15447,7 +15447,7 @@ textarea[aria-invalid="true"] {
   }
 
   .immersive-stage-readout {
-    top: 53px;
+    top: 84px;
     right: 8px;
     min-width: 100px;
     padding: 5px 7px;

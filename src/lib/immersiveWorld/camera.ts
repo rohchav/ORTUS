@@ -12,6 +12,11 @@ export interface ImmersiveCameraState {
   focusTargetId: string | null;
 }
 
+export interface ImmersiveCameraInterpolationOptions {
+  bounds: ImmersiveWorldBounds;
+  wrap: boolean;
+}
+
 export const immersiveCameraMinZoom = 0.72;
 export const immersiveCameraMaxZoom = 4;
 
@@ -48,10 +53,25 @@ export function zoomImmersiveCamera(camera: ImmersiveCameraState, factor: number
   if (!Number.isFinite(factor) || factor <= 0) {
     return camera;
   }
+  const zoom = clamp(camera.zoom * factor, immersiveCameraMinZoom, immersiveCameraMaxZoom);
+  if (zoom === camera.zoom) {
+    return camera;
+  }
   return {
     ...camera,
-    zoom: clamp(camera.zoom * factor, immersiveCameraMinZoom, immersiveCameraMaxZoom)
+    zoom,
+    mode: camera.mode === "system" ? "free" : camera.mode,
+    focusTargetId: camera.mode === "system" ? null : camera.focusTargetId
   };
+}
+
+export function releaseImmersiveCameraFocus(
+  camera: ImmersiveCameraState,
+  bounds: ImmersiveWorldBounds
+): ImmersiveCameraState {
+  return camera.mode === "local" || camera.mode === "follow"
+    ? createSystemCamera(bounds)
+    : camera;
 }
 
 export function focusImmersiveCamera(
@@ -89,19 +109,39 @@ export function interpolateImmersiveCamera(
   current: ImmersiveCameraState,
   target: ImmersiveCameraState,
   elapsedMs: number,
-  reducedMotion: boolean
+  reducedMotion: boolean,
+  options?: ImmersiveCameraInterpolationOptions
 ): ImmersiveCameraState {
   if (reducedMotion || !Number.isFinite(elapsedMs) || elapsedMs <= 0) {
     return { ...target };
   }
+  const interpolationStart = prepareWrappedFocusTransition(current, target, options);
   const amount = 1 - Math.exp(-Math.min(elapsedMs, 64) / 150);
   const next = {
     ...target,
-    x: lerp(current.x, target.x, amount),
-    y: lerp(current.y, target.y, amount),
-    zoom: lerp(current.zoom, target.zoom, amount)
+    x: lerp(interpolationStart.x, target.x, amount),
+    y: lerp(interpolationStart.y, target.y, amount),
+    zoom: lerp(interpolationStart.zoom, target.zoom, amount)
   };
   return cameraDistance(next, target) < 0.001 ? { ...target } : next;
+}
+
+function prepareWrappedFocusTransition(
+  current: ImmersiveCameraState,
+  target: ImmersiveCameraState,
+  options?: ImmersiveCameraInterpolationOptions
+): ImmersiveCameraState {
+  const followsSameTarget = target.focusTargetId !== null
+    && target.focusTargetId === current.focusTargetId
+    && (target.mode === "local" || target.mode === "follow");
+  if (!options?.wrap || !followsSameTarget) {
+    return current;
+  }
+  return {
+    ...current,
+    x: Math.abs(target.x - current.x) > options.bounds.width / 2 ? target.x : current.x,
+    y: Math.abs(target.y - current.y) > options.bounds.height / 2 ? target.y : current.y
+  };
 }
 
 function lerp(from: number, to: number, amount: number): number {

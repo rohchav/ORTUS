@@ -32,11 +32,17 @@ export interface ImmersiveRuntimePerformanceSummary {
   ticksPerSecond: number;
   medianStepAndSnapshotMs: number;
   p95StepAndSnapshotMs: number;
+  medianEngineStepMs: number;
+  p95EngineStepMs: number;
+  medianSnapshotMs: number;
+  p95SnapshotMs: number;
+  medianAdapterMs: number;
+  p95AdapterMs: number;
   sampleCount: number;
 }
 
 const targetTicksPerSecond = 24;
-const uiNotificationIntervalMs = 120;
+const uiNotificationIntervalMs = 250;
 const maxStepSamples = 360;
 const maximumAccumulatedMs = 250;
 
@@ -59,6 +65,9 @@ export class ImmersiveFlockingRuntime {
   private measurementStartedAt = 0;
   private measurementStartTick = 0;
   private stepSamples: number[] = [];
+  private engineStepSamples: number[] = [];
+  private snapshotSamples: number[] = [];
+  private adapterSamples: number[] = [];
 
   constructor(readonly agentCount: ImmersiveAgentCount) {
     this.engine = createImmersiveFlockingEngine(agentCount);
@@ -87,8 +96,7 @@ export class ImmersiveFlockingRuntime {
     this.engine.play();
     this.lastFrameAt = null;
     this.accumulatedMs = 0;
-    this.refreshView();
-    this.notify(true);
+    this.publish(true);
     this.scheduleNextFrame();
   }
 
@@ -101,8 +109,7 @@ export class ImmersiveFlockingRuntime {
     this.clearScheduler();
     this.lastFrameAt = null;
     this.accumulatedMs = 0;
-    this.refreshView();
-    this.notify(true);
+    this.publish(true);
   }
 
   toggleRunning(): void {
@@ -131,21 +138,29 @@ export class ImmersiveFlockingRuntime {
     this.lastAdvanceKind = "restore";
     this.error = null;
     this.stepSamples = [];
+    this.engineStepSamples = [];
+    this.snapshotSamples = [];
+    this.adapterSamples = [];
     this.measurementStartedAt = 0;
     this.measurementStartTick = 0;
-    this.refreshView();
-    this.notify(true);
+    this.publish(true);
   }
 
   startPerformanceMeasurement(at = readNow()): void {
     this.measurementStartedAt = at;
     this.measurementStartTick = this.snapshot.tick;
     this.stepSamples = [];
+    this.engineStepSamples = [];
+    this.snapshotSamples = [];
+    this.adapterSamples = [];
   }
 
   performanceSummary(at = readNow()): ImmersiveRuntimePerformanceSummary {
     const elapsedMs = this.measurementStartedAt > 0 ? Math.max(0, at - this.measurementStartedAt) : 0;
     const sorted = [...this.stepSamples].sort((left, right) => left - right);
+    const engineSteps = [...this.engineStepSamples].sort((left, right) => left - right);
+    const snapshots = [...this.snapshotSamples].sort((left, right) => left - right);
+    const adapters = [...this.adapterSamples].sort((left, right) => left - right);
     const ticksAdvanced = this.snapshot.tick - this.measurementStartTick;
     return {
       elapsedMs,
@@ -153,6 +168,12 @@ export class ImmersiveFlockingRuntime {
       ticksPerSecond: elapsedMs > 0 ? (ticksAdvanced / elapsedMs) * 1000 : 0,
       medianStepAndSnapshotMs: percentile(sorted, 0.5),
       p95StepAndSnapshotMs: percentile(sorted, 0.95),
+      medianEngineStepMs: percentile(engineSteps, 0.5),
+      p95EngineStepMs: percentile(engineSteps, 0.95),
+      medianSnapshotMs: percentile(snapshots, 0.5),
+      p95SnapshotMs: percentile(snapshots, 0.95),
+      medianAdapterMs: percentile(adapters, 0.5),
+      p95AdapterMs: percentile(adapters, 0.95),
       sampleCount: sorted.length
     };
   }
@@ -205,20 +226,24 @@ export class ImmersiveFlockingRuntime {
       } else {
         this.engine.runSteps(steps);
       }
+      const engineCompletedAt = readNow();
       this.snapshot = this.engine.createSnapshot();
+      const snapshotCompletedAt = readNow();
       this.adapter = createFlockingWorldSceneAdapter(this.snapshot, this.engine.parameters);
+      const adapterCompletedAt = readNow();
       this.lastAdvanceKind = kind;
       this.error = null;
-      pushBounded(this.stepSamples, Math.max(0, readNow() - startedAt) / steps);
-      this.refreshView();
-      this.notify(forceNotification);
+      pushBounded(this.stepSamples, Math.max(0, adapterCompletedAt - startedAt) / steps);
+      pushBounded(this.engineStepSamples, Math.max(0, engineCompletedAt - startedAt) / steps);
+      pushBounded(this.snapshotSamples, Math.max(0, snapshotCompletedAt - engineCompletedAt));
+      pushBounded(this.adapterSamples, Math.max(0, adapterCompletedAt - snapshotCompletedAt));
+      this.publish(forceNotification);
     } catch (error) {
       this.running = false;
       this.engine.pause();
       this.clearScheduler();
       this.error = error instanceof Error ? error.message : String(error);
-      this.refreshView();
-      this.notify(true);
+      this.publish(true);
     }
   }
 
@@ -229,7 +254,7 @@ export class ImmersiveFlockingRuntime {
       time: this.snapshot.time,
       isRunning: this.running,
       agentCount: this.agentCount,
-      alignment: this.adapter.getLensData().alignment,
+      alignment: this.adapter.getAlignment(),
       scenarioId: immersiveFlockingScenarioId,
       seed: immersiveFlockingSeed,
       initializationPreset: immersiveFlockingInitializationPreset,
@@ -244,12 +269,13 @@ export class ImmersiveFlockingRuntime {
     this.view = this.buildView();
   }
 
-  private notify(force: boolean): void {
+  private publish(force: boolean): void {
     const now = readNow();
     if (!force && now - this.lastNotificationAt < uiNotificationIntervalMs) {
       return;
     }
     this.lastNotificationAt = now;
+    this.refreshView();
     for (const listener of this.listeners) {
       listener();
     }

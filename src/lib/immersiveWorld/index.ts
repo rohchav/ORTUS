@@ -5,4 +5,5 @@ export * from "./sceneAdapter";
 export * from "./camera";
 export * from "./boundedVisualState";
 export * from "./performance";
+export * from "./renderQuality";
 export * from "./comparison";

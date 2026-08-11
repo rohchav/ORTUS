@@ -6,7 +6,7 @@ export interface ImmersiveTrailPoint {
   tick: number;
 }
 
-export type ImmersiveVisualEffectKind = "initialization" | "selection" | "step";
+export type ImmersiveVisualEffectKind = "selection";
 
 export interface ImmersiveVisualEffect {
   id: number;
@@ -30,30 +30,47 @@ export class BoundedTrailBuffer {
     this.maxPointsPerEntity = maxPointsPerEntity;
   }
 
-  update(entities: readonly ImmersiveSceneEntity[], trackedIds: readonly string[], tick: number): void {
+  update(
+    entities: readonly ImmersiveSceneEntity[],
+    trackedIds: readonly string[],
+    tick: number,
+    pointLimit = this.maxPointsPerEntity
+  ): void {
+    if (!Number.isInteger(pointLimit) || pointLimit <= 0) {
+      throw new Error("Active trail point bound must be a positive integer");
+    }
+    const activePointLimit = Math.min(pointLimit, this.maxPointsPerEntity);
     const allowedIds = new Set(trackedIds.slice(0, this.maxEntities));
+    if (allowedIds.size === 0) {
+      this.trails.clear();
+      return;
+    }
     for (const id of this.trails.keys()) {
       if (!allowedIds.has(id)) {
         this.trails.delete(id);
       }
     }
-    const byId = new Map(entities.map((entity) => [entity.id, entity]));
-    for (const id of allowedIds) {
-      const entity = byId.get(id);
-      if (!entity) {
-        this.trails.delete(id);
+    const foundIds = new Set<string>();
+    for (const entity of entities) {
+      if (!allowedIds.has(entity.id)) {
         continue;
       }
-      const trail = this.trails.get(id) ?? [];
+      foundIds.add(entity.id);
+      const trail = this.trails.get(entity.id) ?? [];
       const previous = trail.at(-1);
       if (previous?.tick === tick) {
         continue;
       }
       trail.push({ x: entity.x, y: entity.y, tick });
-      if (trail.length > this.maxPointsPerEntity) {
-        trail.splice(0, trail.length - this.maxPointsPerEntity);
+      if (trail.length > activePointLimit) {
+        trail.splice(0, trail.length - activePointLimit);
       }
-      this.trails.set(id, trail);
+      this.trails.set(entity.id, trail);
+    }
+    for (const id of allowedIds) {
+      if (!foundIds.has(id)) {
+        this.trails.delete(id);
+      }
     }
   }
 
@@ -64,7 +81,17 @@ export class BoundedTrailBuffer {
   }
 
   pointCount(): number {
-    return [...this.trails.values()].reduce((sum, points) => sum + points.length, 0);
+    let total = 0;
+    for (const points of this.trails.values()) {
+      total += points.length;
+    }
+    return total;
+  }
+
+  forEach(visitor: (entityId: string, points: readonly ImmersiveTrailPoint[]) => void): void {
+    for (const [entityId, points] of this.trails) {
+      visitor(entityId, points);
+    }
   }
 
   clear(): void {

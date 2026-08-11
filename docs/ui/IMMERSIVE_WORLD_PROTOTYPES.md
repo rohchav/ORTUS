@@ -1,8 +1,8 @@
 # Immersive World Prototypes
 
-Date: 2026-08-10
-Prompt: I0
-Status: implemented on an isolated internal route; production World unchanged
+Date: 2026-08-11
+Prompts: I0 and I0B
+Status: implemented and audited on an isolated internal route; production World unchanged
 
 ## Route
 
@@ -40,7 +40,7 @@ Each concept provides:
 - bounded pan/zoom and System reset;
 - hover and selection;
 - numeric and keyboard entity inspection;
-- selected heading and authoritative local-neighborhood geometry;
+- selected heading and a current snapshot proximity check;
 - exact selected-entity DOM values;
 - the existing Alignment model output as a lens;
 - current tick, playback state, agent load, preset, and seed;
@@ -56,18 +56,18 @@ Camera, selection, hover, active lens, active tool, rubric, and confirmation sta
 - Skewed 2.5D bounded surface and depth-sorted boids.
 - Soft visual shadows and restrained non-model atmosphere.
 - Pan, zoom, System, and selected-boid Follow.
-- Up to 32 tracked trajectories with at most 12 points each.
+- Only the selected boid's trajectory, with 5, 8, or 12 points according to automatic quality.
 - Alignment vectors only when the lens is active.
 
 The perspective grid, shadows, and selection pulse are presentation. Boid position, velocity, heading, radius, neighborhood, and Alignment come from the snapshot adapter.
 
 ### God-Hand
 
-- A pointer ring provides visible spatial presence and pressed-state feedback.
-- Hand pans and selects; it does not move agents.
+- Navigate uses a horizontal navigation mark and pressed-state feedback.
+- Navigate pans and selects; it does not move agents.
 - Inspect supports selection and authoritative contextual geometry.
 - Measure activates the same read-only Alignment lens.
-- Cursor shape, active segment, text state, and stroke treatment make tool state more than a color cue.
+- Navigate, Inspect, and Measure use distinct arrow, corner-bracket, and ruler shapes as well as active text and stroke treatment.
 
 There is no manipulate, attract, repel, wind, drag-agent, paint, or arbitrary perturbation tool.
 
@@ -76,36 +76,48 @@ There is no manipulate, attract, repel, wind, drag-agent, paint, or arbitrary pe
 - System shows the full flock.
 - Local centers the camera on a selected boid's model neighborhood.
 - Follow eases toward the selected boid as the model advances.
-- Neighborhood relationships and headings are derived from the current snapshot.
+- Selected proximity markers and headings are derived from the current snapshot.
 - System is always available as the explicit return path.
 
 System, Local, and Follow are observation-camera modes. They are not ORTUS multi-scale runtime, boid perception, agent point of view, or evidence of awareness.
 
 ## Scene Adapter Boundary
 
-`WorldSceneAdapter` is the narrow I0 rendering seam:
+I0B separates the reusable read-only contract from the current Flocking specialization:
 
 ```ts
-interface WorldSceneAdapter {
+interface ReadOnlyWorldSceneAdapter<Entity, Inspectable, Selection, Lens> {
+  readonly templateId: string;
+  readonly tick: number;
+  readonly parameters: Readonly<ParameterValues>;
   getBounds(): ImmersiveWorldBounds;
-  getEntities(): readonly ImmersiveSceneEntity[];
-  getRelationships(entityId: string | null): readonly ImmersiveSceneRelationship[];
-  getInspectableState(entityId: string | null): ImmersiveInspectableState | null;
-  getSelectionGeometry(entityId: string | null): ImmersiveSelectionGeometry | null;
-  getLensData(): ImmersiveLensData;
+  getEntities(): readonly Entity[];
+  getInspectableState(entityId: string | null): Inspectable | null;
+  getSelectionGeometry(entityId: string | null): Selection | null;
+  getLensData(): Lens;
   getRuntimeSignature(): string;
+}
+
+interface WorldSceneAdapter extends ReadOnlyWorldSceneAdapter<
+  ImmersiveSceneEntity,
+  ImmersiveInspectableState,
+  ImmersiveSelectionGeometry,
+  ImmersiveLensData
+> {
+  getRelationships(entityId: string | null): readonly ImmersiveSceneRelationship[];
+  getAlignment(): number | null;
 }
 ```
 
-The Flocking adapter reads positions, velocities, `BoidState`, world bounds, parameters, and metric history from an authoritative snapshot. Its selected-neighborhood query is a bounded O(n) read for one selected entity, not an all-pairs visual pass. It applies wrap-aware minimum-image geometry because that is the template's active boundary behavior. It creates no model rule and writes nothing back.
+The Flocking adapter reads positions, velocities, `BoidState`, world bounds, parameters, and metric history from an authoritative snapshot. Its current-proximity query is a bounded O(n) read for one selected entity, not an all-pairs visual pass or a causal relationship. It applies wrap-aware minimum-image geometry because that is the template's active boundary behavior. Alignment vectors and the deterministic audit signature are lazy and cached only for that immutable snapshot. The adapter creates no update rule and writes nothing back.
 
-This interface proves a boundary; it is not the complete future I2 scene framework and does not imply support for other templates.
+This interface proves a boundary; it is not a complete production scene framework and does not imply support for other templates. Grid worlds and the Neural network require new rendering primitives, while the other continuous-agent templates require their own audited adapters.
 
 ## Render Loop Boundary
 
 The canvas performs batched imperative drawing in `requestAnimationFrame`. It reads the latest immutable adapter from the route-local runtime. React does not map boids into components and does not receive a state update per entity or per visual frame.
 
-The runtime mirrors production World's 24 Hz elapsed-time accumulator and engine `maxStepsPerFrame` catch-up cap. It may execute several deterministic engine steps and publish one snapshot when rendering stalls. React notifications are throttled to a coarse 120 ms interval for text/control state. Canvas still reads the latest adapter directly.
+The runtime mirrors production World's 24 Hz elapsed-time accumulator and engine `maxStepsPerFrame` catch-up cap. It may execute several deterministic engine steps and publish one snapshot when rendering stalls. React-visible notifications are throttled to a coarse 250 ms interval for text/control state. The memoized Canvas boundary still reads the latest adapter directly.
 
 This makes degradation explicit:
 
@@ -117,9 +129,17 @@ atmosphere/trails/effects: independently bounded
 React control updates: coarse, not per boid
 ```
 
+The route records bounded engine-step, snapshot, adapter, frame, and Canvas-draw timings. I0B profiling found engine neighbor search and cloning/snapshot publication dominate 500-boid main-thread pressure; Canvas drawing is not the primary bottleneck.
+
+## Automatic Render Quality
+
+One hundred boids starts at High quality and 500 starts at Balanced. A bounded p95 frame window with hysteresis may select High, Balanced, or Performance. The policy caps DPR at 2, 1.5, or 1; progressively removes unselected shadows/strokes; reduces the selected trail to 12, 8, or 5 points and updates it less often; and reduces effects from 24 to 12 to 0. The world grid also becomes coarser.
+
+Quality is local presentation state. It has no settings panel, storage key, model input, or effect on agent count, ticks, deterministic steps, rules, RNG, metrics, or scenario fidelity.
+
 ## Camera
 
-The reusable I0 camera state contains position, zoom, mode, and focus target. Position is clamped to world bounds and zoom is clamped to `0.72..4`. Modes are `system`, `free`, `local`, and `follow`. Missing focus targets fall back to System. Pointer picking uses the displayed camera so eased Local/Follow views remain spatially correct.
+The reusable camera state contains position, zoom, mode, and focus target. Position is clamped to world bounds and zoom is clamped to `0.72..4`. Modes are `system`, `free`, `local`, and `follow`. User zoom correctly enters Free mode. Missing or deselected focus targets fall back to System. Follow interpolation handles toroidal wrap without crossing the whole displayed world. Pointer picking uses the displayed camera so eased Local/Follow views remain spatially correct.
 
 Camera interpolation occurs only in the renderer. With `prefers-reduced-motion: reduce`, the displayed camera moves immediately to its target and transient visual effects are not drawn. Neither path changes runtime state or metrics.
 
@@ -133,8 +153,8 @@ The DOM inspector is the textual authority for:
 - position;
 - heading in degrees;
 - speed in model units per tick;
-- template-reported last sensed neighbor count;
-- currently computed neighborhood count and radius;
+- neighbor count stored in current model state;
+- current proximity-check count and radius;
 - current Alignment value;
 - playback, camera, tool, and lens state.
 
@@ -148,23 +168,23 @@ Alignment is a model output, not measured animal coordination, cohesion, intent,
 
 ## Bounded Visual State
 
-- Trail entities: maximum 32.
-- Trail points per entity: maximum 12.
-- Total trail points: maximum 384.
+- Trail entities: maximum 1 selected entity.
+- Trail points: maximum 12 at High, 8 at Balanced, and 5 at Performance.
+- Total trail points: maximum 12.
 - Transient effects: maximum 24.
 - Performance timing samples per bounded series: maximum 360.
-- Initialization, selection, and step effects expire by time.
+- Selection feedback expires by time; initialization and step pulses were removed because they resembled model forces or waves.
 - Reduced motion draws zero transient effects.
 - No full snapshot, arbitrary event payload, document, biography, or unbounded history is retained by the renderer.
 
 ## Responsive And Accessibility Evidence
 
-All concepts were rendered and checked at `1440x900`, `1280x720`, `1024x768`, `900x700`, `1280x600`, and `390x844`. The stage occupied more than 58% of the prototype root at every checked size, playback and camera reset remained visible, active concepts/tools remained explicit, canvases were nonblank, and no document-level horizontal or vertical overflow was found. Mobile keeps the world in the dominant stage and places exact inspection in one bounded internal region rather than stacking dashboard cards through the document.
+All concepts were rechecked at `1440x900`, `1280x720`, `1024x768`, `900x700`, `1280x600`, and `390x844`. The stage remains dominant, playback and camera reset remain visible, active concepts/tools are explicit, canvases are nonblank, and no document-level overflow or nested-scroll trap was found. I0B moved the compact readout below the concept toolbar after reproducing a mobile overlap. Mobile keeps exact inspection in one bounded internal region rather than stacking dashboard cards through the document.
 
-Focused browser coverage verifies keyboard concept tabs, canvas selection, camera reset, Escape clearing, rubric focus return, staged replacement, reduced motion, Axe, diagnostics, six viewports, 500-boid smoke, no storage, and production `/world` regression.
+Focused browser coverage verifies keyboard concept tabs and tool switching, canvas selection, truthful camera labels, Follow exit, camera reset, Escape clearing, rubric focus return, staged replacement, rapid state churn, adaptive quality, selected-only bounds, reduced motion, Axe, diagnostics, required viewports, 500-boid behavior, no storage, and production `/world` regression.
 
 This evidence does not establish formal WCAG conformance, screen-reader or other assistive-technology behavior, forced-colors quality, actual browser-zoom quality, complete touch ergonomics, or participant comprehension.
 
 ## Scope Boundary
 
-I0 adds no production navigation, production World migration, template mechanic, parameter, preset, metric, intervention, snapshot shape, comparison shape/key, Experiment Runner behavior, Starter World contract, Atlas behavior, Lab behavior, Builder execution, persistence, dependency, remote asset, 3D engine, model-scale zoom, or cross-template renderer claim.
+I0/I0B add no production navigation, production World migration, template mechanic, parameter, preset, metric, intervention, snapshot shape, comparison shape/key, Experiment Runner behavior, Starter World contract, Atlas behavior, Lab behavior, Builder execution, persistence, dependency, remote asset, 3D engine, model-scale zoom, or cross-template renderer claim. The I0B decision and evidence are recorded in `docs/product/IMMERSIVE_WORLD_DIRECTION_AUDIT.md`.

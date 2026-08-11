@@ -1,7 +1,7 @@
 # ORTUS Product Experience Reset Roadmap
 
-Date: 2026-08-10
-Status: active product sequence; R1 through C3B and I0 complete; I0B next; C4 deferred until I5B
+Date: 2026-08-11
+Status: active product sequence; R1 through C3B and I0/I0B complete; I1 next; C4 deferred until I5B
 
 ## Why This Sequence Exists
 
@@ -70,7 +70,7 @@ C1 is complete. It adds the strict source-backed Starter World registry, `/world
 
 `C3: Guided Investigation / Tutorial World` and `C3B: Guided Investigation Audit + Hardening` are complete. The implementation adds one strict, recursively frozen `Reading a Flock` guide over the audited clear/noisy Coordination pair; C3B hardens fail-closed authority, modified-run provenance and restore, generic comparison provenance, hostile public queries, metric language, focus, history, accessibility, and non-persistence. It uses only existing playback/tasks/Compare and validated scenario behavior, stores no progress, makes no learning inference, and changes no simulation behavior or comparison persistence.
 
-`I0: Immersive World Direction + Performance Baseline` is complete. It adds one unlinked internal comparison route with Living Diorama, God-Hand, and Field Scientist presentations over the same fixed validated Flocking scenario. Camera, selection, tools, and Alignment lens are presentation-only; Canvas owns batched boid drawing; React owns coarse controls and text; trails/effects are bounded; no storage or production World migration was added. The evidence selects a 50% Living Diorama / 20% God-Hand / 30% Field Scientist hybrid. `I0B: Immersive World Direction Audit` is next and has not started. I1 through I5B are reserved and unstarted. `C4: Flagship Starter Pack Two` is deferred until I5B; S1-S5 and E1-E3 have not started under this roadmap.
+`I0: Immersive World Direction + Performance Baseline` and `I0B: Immersive World Direction Audit + Performance Hardening` are complete. The isolated internal route compares Living Diorama, God-Hand, and Field Scientist presentations over the same fixed validated Flocking scenario. Camera, selection, tools, and Alignment lens remain presentation-only; Canvas owns batched boid drawing; React owns coarse controls and text; visual state is bounded; and no storage or production World migration was added. I0B independently reproduced severe machine/run variance, found engine neighbor search and cloning/snapshot pressure rather than Canvas draw to dominate 500-boid cadence, localized detail to one selection, added automatic bounded visual quality, removed misleading effects and the Hand metaphor, and completed six one-minute soaks. It revises the initial 50/20/30 split into exact Living Diorama surface ownership, Field Scientist observation ownership, and non-manipulative direct-feedback ownership. `I1: Immersive World Shell` is next and has not started. I2 through I5B are reserved and unstarted. `C4: Flagship Starter Pack Two` is deferred until I5B; S1-S5 and E1-E3 have not started under this roadmap.
 
 The active route hierarchy is Start `/`, Start-adjacent Explore Worlds `/worlds`, the flagship collection `/worlds/packs/local-rules-global-patterns`, the `Reading a Flock` guide `/worlds/guides/reading-a-flock`, World `/world`, Workshop `/builder`, Atlas `/atlas`, and Lab `/lab`. `/worlds` contains eleven validated runnable definitions. The guide is a separate instructional route, not a twelfth world. Four catalog worlds are focused C2 experiences over existing production templates; their existence is not evidence that later starter packs, composition, Lab, Atlas, or analysis milestones exist.
 
@@ -113,6 +113,9 @@ Explicit user direction may revise this roadmap, but documentation-only mileston
 - The live system remains the primary World visual object.
 - Immersive presentation must remain downstream of authoritative snapshots. Camera, hover, selection, focus, and lenses must not alter runtime state, metrics, seeds, or model outcomes.
 - React must not become a continuously rerendering per-entity loop. Visual frame rate and bounded atmosphere may degrade before model ticks, rules, RNG, metrics, or scenario fidelity.
+- The audited immersive direction uses Living Diorama for the world surface and spatial presence, Field Scientist for observation/inspection truth, and only non-manipulative pointer feedback from the God-Hand prototype. Do not restore percentage weights or the God-Hand/Hand metaphor as a production capability claim.
+- Automatic immersive quality may cap DPR and reduce decorative grid, shadow, stroke, selected-trail, and transient-effect work. It must remain local presentation state and must never change model fidelity.
+- Flocking 500-boid main-thread pressure is dominated by engine neighbor search and cloning/snapshot allocation on the measured machine. Do not infer that WebGL or further Canvas micro-optimization solves it; worker/scheduler or publication changes require a dedicated measured prompt.
 - World task labels, query state, current navigation, and visible task must agree without resetting the active run.
 - Keep World Stage and persistent playback mounted outside task rendering; task switching must not recreate or reset the active run.
 - Keep one bounded active-tool scroll region. Desktop collapse/restore must preserve local tool state, and mobile layouts must not clip deeper controls or create document overflow.

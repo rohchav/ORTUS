@@ -1,8 +1,8 @@
 # Immersive World Direction
 
-Date: 2026-08-10
-Prompt: I0
-Status: I0 complete; I0B Immersive World Direction Audit next
+Date: 2026-08-11
+Prompts: I0 and I0B
+Status: I0 and I0B complete; I1 Immersive World Shell next but unstarted
 
 ## Product Objective
 
@@ -14,29 +14,29 @@ Immersion remains subordinate to runtime truth. Atmosphere, camera, hover, selec
 
 ### Living Diorama
 
-Living Diorama presents Flocking as a bounded miniature system with a skewed 2.5D surface, depth ordering, soft model-agent shadows, restrained atmosphere, bounded recent trajectories, camera easing, zoom, selection, and follow mode.
+Living Diorama presents Flocking as a bounded miniature system with a skewed 2.5D surface, depth ordering, soft model-agent shadows, restrained atmosphere, one selected recent trajectory, camera easing, zoom, selection, and follow mode.
 
 Rating: **Strong**.
 
 - Strongest spatial presence and clearest break from a dashboard-contained chart.
-- The boundary, depth, and trails remain distinguishable from model-derived heading and neighborhood overlays.
+- The boundary, depth, and selected trail remain distinguishable from model-derived heading and proximity overlays.
 - Whole-system and follow movement are coherent, but exact inspection still depends on the contextual inspector.
-- At 500 boids it is the most expensive prototype, although measured tick throughput remains aligned with production by allowing visual frame rate to fall.
+- At 500 boids it is the most visually elaborate prototype. Automatic quality degradation removes nonessential detail before model fidelity, but local cadence remains hardware-sensitive and can still be poor.
 
 ### God-Hand Sandbox
 
-God-Hand makes the pointer visibly present in the model surface and exposes Hand, Inspect, and Measure modes. Hand pans and selects; Inspect exposes authoritative boid state; Measure activates the Alignment lens. Selection never moves a boid and no unsupported manipulation tool exists.
+The I0 God-Hand concept made the pointer visibly present in the model surface. I0B renamed its modes to Navigate, Inspect, and Measure, removed the hand metaphor, and gave each mode shape-distinct feedback. Navigate pans and selects; Inspect exposes authoritative boid state; Measure activates the read-only Alignment lens. Selection never moves a boid and no unsupported manipulation tool exists.
 
 Rating: **Promising with issues**.
 
 - Strongest directness and immediate hover/press/selection feedback.
 - The explicit tool state is discoverable and can scale to template-owned actions later.
-- The name and pointer presence can imply more control than ORTUS currently supports. A pure God-Hand direction would pressure the product toward invented manipulation.
+- The original name and ring-like pointer presence implied more control than ORTUS supports. The production direction therefore retains direct feedback but retires the God-Hand/Hand metaphor.
 - Performance is better than Living Diorama at 500 boids, but directness alone does not supply enough scientific orientation.
 
 ### Field Scientist
 
-Field Scientist organizes observation around System, Local, and Follow scales, with authoritative neighborhood lines, heading vectors, exact DOM inspection, and a clear return to System view. These are camera scales, not model-scale or multi-scale runtime support.
+Field Scientist organizes observation around System, Local, and Follow camera modes, with selected proximity markers, heading vectors, exact DOM inspection, and a clear return to System view. These are camera modes, not model-scale or multi-scale runtime support.
 
 Rating: **Strong**.
 
@@ -55,24 +55,24 @@ Rating: **Strong**.
 | Interface mediation | Some inspector travel | Lowest for mode changes | Low for observation, higher for setup |
 | Cross-template potential | Strong for spatial/grid worlds | Useful only with strict template-owned actions | Strong for all inspectable worlds |
 | Precise tool depth | Preserved in DOM inspector | Preserved in DOM inspector | Central to the concept |
-| 100-boid rendering | 59.58 FPS measured | 58.41 FPS measured | 59.19 FPS measured |
-| 500-boid rendering | 6.72 FPS measured | 8.08 FPS measured | 9.20 FPS measured |
+| I0 100-boid rendering | 59.58 FPS measured | 58.41 FPS measured | 59.19 FPS measured |
+| I0 500-boid rendering | 6.72 FPS measured | 8.08 FPS measured | 9.20 FPS measured |
 | Accessibility viability | DOM and keyboard mirror | DOM and keyboard mirror | Most naturally aligned |
 | Responsive viability | Passed six tested sizes | Passed six tested sizes | Passed six tested sizes |
 
-These FPS values are one-machine development measurements, not product guarantees. Full methodology and caveats are in `docs/performance/IMMERSIVE_RENDERING_BASELINE.md`.
+These are historical I0 measurements. I0B observed roughly order-of-magnitude variation across equivalent 500-boid development runs, so they are not product guarantees or reliable cross-run optimization evidence. Full methodology and caveats are in `docs/performance/IMMERSIVE_RENDERING_BASELINE.md`.
 
 ## Decision
 
-**Hybrid wins: 50% Living Diorama, 20% God-Hand, 30% Field Scientist.**
+**I0B decision: Revise hybrid.**
 
-The ownership split is explicit:
+The I0 `50/20/30` percentages are retired. They conveyed precision the prototype evidence did not earn. The replacement is an exact responsibility model:
 
-- **Living Diorama, 50%:** owns the primary world surface, bounded spatial depth, visible model boundary, restrained environment, camera interpolation, whole-system framing, and bounded truthful movement trails.
-- **God-Hand, 20%:** owns pointer presence, immediate hover/press/selection feedback, and the compact contextual instrument switcher. It does not own generic manipulation, arbitrary perturbation, or entity dragging.
-- **Field Scientist, 30%:** owns System/Local/Follow observation, selected-neighborhood framing, exact model-state inspection, lens semantics, textual authority, and the clear return to system context.
+- **Living Diorama:** owns the primary world surface, restrained bounded depth, visible model boundary, whole-system camera, camera easing, and selected-only truthful trajectory.
+- **Field Scientist:** owns observation information architecture, System/Local/Follow semantics, exact model-state inspection, selected proximity framing, model-output lenses, runtime-honesty language, and the accessible textual authority.
+- **Direct interaction contribution formerly tested as God-Hand:** owns immediate pointer feedback, selection, and contextual instrument switching only. The God-Hand/Hand metaphor does not migrate to production and never authorizes generic manipulation, arbitrary perturbation, or entity dragging.
 
-This is not "use the best parts." It assigns one owner to environment/camera, one to direct interaction, and one to scientific inspection. Production I1 work should preserve those ownership boundaries.
+The full defect, performance, visual-truth, soak, and cross-template evidence is in `docs/product/IMMERSIVE_WORLD_DIRECTION_AUDIT.md`.
 
 ## Common Interaction Contract
 
@@ -91,15 +91,15 @@ Every future immersive World slice should preserve:
 
 ## Rendering And Runtime Boundary
 
-The engine remains authoritative. `WorldSceneAdapter` reads a snapshot and exposes render-friendly entities, relationships, inspectable state, selection geometry, and lens data. It does not mutate the engine or contain Flocking rules. Canvas owns batched entity drawing and bounded visual history. React owns controls, inspector text, mode state, confirmation state, and coarse runtime notifications; it is not the per-boid render loop.
+The engine remains authoritative. A generic typed read-only scene-adapter base exposes snapshot-derived rendering data; the current `WorldSceneAdapter` is still its Flocking specialization. It does not mutate the engine, evolve independent state, or contain a Flocking update rule. Canvas owns batched entity drawing and bounded visual history. React owns controls, inspector text, mode state, confirmation state, and coarse runtime notifications; it is not the per-boid render loop.
 
-At 500 boids, the route-local driver uses the same 24 Hz elapsed-time accumulator and five-step catch-up ceiling as production World. When main-thread pressure rises, rendering degrades while deterministic ticks catch up. It never silently reduces agent count, rule execution, RNG work, metrics, or scenario fidelity.
+At 500 boids, the route-local driver uses the same 24 Hz elapsed-time accumulator and five-step catch-up ceiling as production World. When main-thread pressure rises, automatic High/Balanced/Performance presentation quality can reduce DPR, decorative shadows/strokes, trail density/frequency, effects, and grid detail. It never silently reduces agent count, deterministic steps, rule execution, RNG work, metrics, or scenario fidelity. Quality state is bounded and non-persistent.
 
 ## Accessibility Strategy
 
-Canvas interaction has a semantic mirror: selected boid, position, heading, speed, last sensed neighbor count, current computed neighborhood, camera mode, active tool, active lens, playback, and Alignment are exposed in DOM text. A numeric boid selector and arrow-key canvas path provide non-pointer inspection. Tools, tabs, playback, modals, focus return, and camera controls are keyboard reachable. Reduced motion removes transient effects and makes camera transitions immediate without removing information or controls.
+Canvas interaction has a semantic mirror: selected boid, position, heading, speed, neighbor count recorded in model state, current proximity check, camera mode, active tool, active lens, playback, and Alignment are exposed in DOM text. A numeric boid selector and arrow-key canvas path provide non-pointer inspection. Tools, tabs, playback, modals, focus return, and camera controls are keyboard reachable. Reduced motion removes transient effects and makes camera transitions immediate without removing information or controls.
 
-The I0 Axe and keyboard checks passed. This is not formal WCAG conformance, screen-reader certification, assistive-technology certification, forced-colors verification, actual browser-zoom verification, or a user-comprehension study.
+The I0/I0B Axe and keyboard checks passed. This is not formal WCAG conformance, screen-reader certification, assistive-technology certification, forced-colors verification, actual browser-zoom verification, or a user-comprehension study.
 
 ## Rejected Approaches
 
@@ -116,14 +116,15 @@ The I0 Axe and keyboard checks passed. This is not formal WCAG conformance, scre
 
 ## I1 Handoff
 
-I1 should migrate the winning hybrid incrementally, beginning with Flocking and preserving the existing production `/world` contract until the audited replacement is ready.
+I1 should migrate the revised ownership model incrementally, beginning with Flocking and preserving the existing production `/world` contract until the audited replacement is ready.
 
 Required I1 boundaries:
 
 - Extract a production-ready renderer host around the proven snapshot-to-scene adapter boundary.
-- Keep the 50/20/30 ownership split visible in component and interaction responsibilities.
+- Keep the responsibility boundaries explicit; do not restore unsupported percentage weights or the God-Hand/Hand metaphor.
 - Preserve production scheduler semantics and measure 100/500 before and after each renderer migration.
 - Keep visual cadence, effect density, trails, shadows, and distant detail independently degradable.
+- Investigate worker/scheduler isolation and snapshot-publication cost before assuming WebGL solves the 500-boid bottleneck.
 - Introduce only template-derived relationships, lenses, and actions.
 - Preserve exact DOM inspection and current World task reachability.
 - Add no new Flocking mechanics, persistence, generic manipulation, 3D dependency, or cross-template support claim.
@@ -131,4 +132,4 @@ Required I1 boundaries:
 
 ## Status
 
-C3B is complete. I0 is complete. `I0B: Immersive World Direction Audit` is next and has not started. I1 through I5B have not started. C4 is deferred until I5B and has not started.
+C3B, I0, and I0B are complete. `I1: Immersive World Shell` is next and has not started. I2 through I5B have not started. C4 is deferred until I5B and has not started.

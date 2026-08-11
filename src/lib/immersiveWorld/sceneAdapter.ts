@@ -48,7 +48,10 @@ export function createFlockingWorldSceneAdapter(
       radius: agent.radius
     };
   });
-  const entityById = new Map(entities.map((entity) => [entity.id, entity]));
+  const entityById = new Map<string, ImmersiveSceneEntity>();
+  for (const entity of entities) {
+    entityById.set(entity.id, entity);
+  }
   const latestMetrics = snapshot.metricsHistory.at(-1)?.values;
   const alignment = finiteOrNull(latestMetrics?.alignmentScore);
 
@@ -60,15 +63,15 @@ export function createFlockingWorldSceneAdapter(
     if (!source) {
       return [];
     }
-    return entities
-      .filter((target) => target.id !== source.id)
-      .map((target) => {
-        const offset = minimumImageOffset(source, target, bounds, boundaryMode === "wrap");
-        const distance = Math.hypot(offset.x, offset.y);
-        if (distance > perceptionRadius) {
-          return undefined;
-        }
-        return {
+    const relationships: ImmersiveSceneRelationship[] = [];
+    for (const target of entities) {
+      if (target.id === source.id) {
+        continue;
+      }
+      const offset = minimumImageOffset(source, target, bounds, boundaryMode === "wrap");
+      const distance = Math.hypot(offset.x, offset.y);
+      if (distance <= perceptionRadius) {
+        relationships.push({
           sourceId: source.id,
           targetId: target.id,
           distance,
@@ -76,25 +79,19 @@ export function createFlockingWorldSceneAdapter(
           sourceY: source.y,
           targetX: source.x + offset.x,
           targetY: source.y + offset.y
-        };
-      })
-      .filter((relationship): relationship is ImmersiveSceneRelationship => relationship !== undefined)
-      .sort((left, right) => left.distance - right.distance || left.targetId.localeCompare(right.targetId));
+        });
+      }
+    }
+    return relationships.sort(
+      (left, right) => left.distance - right.distance || left.targetId.localeCompare(right.targetId)
+    );
   }
 
-  const lensData: ImmersiveLensData = {
-    alignment,
-    vectors: entities.map((entity) => ({
-      entityId: entity.id,
-      x: entity.x,
-      y: entity.y,
-      headingX: entity.speed > 0 ? entity.velocityX / entity.speed : 0,
-      headingY: entity.speed > 0 ? entity.velocityY / entity.speed : 0
-    }))
-  };
-  const signature = runtimeSignature(snapshot.tick, entities, alignment);
+  let lensData: ImmersiveLensData | null = null;
+  let signature: string | null = null;
 
   return {
+    templateId: snapshot.templateId,
     tick: snapshot.tick,
     parameters,
     getBounds: () => bounds,
@@ -125,8 +122,24 @@ export function createFlockingWorldSceneAdapter(
         interactionRadius: perceptionRadius
       };
     },
-    getLensData: () => lensData,
-    getRuntimeSignature: () => signature
+    getAlignment: () => alignment,
+    getLensData() {
+      lensData ??= {
+        alignment,
+        vectors: entities.map((entity) => ({
+          entityId: entity.id,
+          x: entity.x,
+          y: entity.y,
+          headingX: entity.speed > 0 ? entity.velocityX / entity.speed : 0,
+          headingY: entity.speed > 0 ? entity.velocityY / entity.speed : 0
+        }))
+      };
+      return lensData;
+    },
+    getRuntimeSignature() {
+      signature ??= runtimeSignature(snapshot.tick, entities, alignment);
+      return signature;
+    }
   };
 }
 

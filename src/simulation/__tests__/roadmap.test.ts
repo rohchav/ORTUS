@@ -300,6 +300,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
       "GUIDED_INVESTIGATION_WORLD_EXPERIENCE.md"
     );
     const immersiveDirectionPath = join(repoRoot, "docs", "product", "IMMERSIVE_WORLD_DIRECTION.md");
+    const immersiveDirectionAuditPath = join(repoRoot, "docs", "product", "IMMERSIVE_WORLD_DIRECTION_AUDIT.md");
     const immersivePrototypesPath = join(repoRoot, "docs", "ui", "IMMERSIVE_WORLD_PROTOTYPES.md");
     const immersivePerformancePath = join(repoRoot, "docs", "performance", "IMMERSIVE_RENDERING_BASELINE.md");
     expect(existsSync(roadmapPath)).toBe(true);
@@ -337,6 +338,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(existsSync(guidedInvestigationAuditPath)).toBe(true);
     expect(existsSync(guidedInvestigationUiPath)).toBe(true);
     expect(existsSync(immersiveDirectionPath)).toBe(true);
+    expect(existsSync(immersiveDirectionAuditPath)).toBe(true);
     expect(existsSync(immersivePrototypesPath)).toBe(true);
     expect(existsSync(immersivePerformancePath)).toBe(true);
 
@@ -374,6 +376,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
     const guidedInvestigationAudit = readFileSync(guidedInvestigationAuditPath, "utf8");
     const guidedInvestigationUi = readFileSync(guidedInvestigationUiPath, "utf8");
     const immersiveDirection = readFileSync(immersiveDirectionPath, "utf8");
+    const immersiveDirectionAudit = readFileSync(immersiveDirectionAuditPath, "utf8");
     const immersivePrototypes = readFileSync(immersivePrototypesPath, "utf8");
     const immersivePerformance = readFileSync(immersivePerformancePath, "utf8");
     expect(roadmap).toContain("completed through Prompt 39B");
@@ -399,8 +402,8 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(roadmap).toContain("UX6B complete.");
     expect(roadmap).toContain("GW9 complete.");
     expect(roadmap).toContain("GW9B complete.");
-    expect(roadmap).toContain("R1 through C3B and I0 are complete.");
-    expect(roadmap).toContain("I0B: Immersive World Direction Audit is next and has not started.");
+    expect(roadmap).toContain("R1 through C3B and I0/I0B are complete.");
+    expect(roadmap).toContain("I1: Immersive World Shell is next and unstarted");
     expect(roadmap).toContain("C4: Flagship Starter Pack Two is deferred until I5B.");
     expect(roadmap).toContain("F1 and the fractal branch remain documented but are paused under E3 Analytical Lenses.");
     expect(startHubReset).toContain("/         -> Start Hub");
@@ -414,7 +417,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(worldLayoutReclaim).toContain("C1 is complete.");
     expect(worldLayoutReclaim).toContain("C1B");
     expect(productExperienceResetRoadmap).toContain(
-      "Status: active product sequence; R1 through C3B and I0 complete; I0B next; C4 deferred until I5B"
+      "Status: active product sequence; R1 through C3B and I0/I0B complete; I1 next; C4 deferred until I5B"
     );
     expect(productExperienceResetRoadmap).toContain("Every implementation milestone is followed by an audit milestone.");
     expect(productExperienceResetRoadmap).toContain("F1 and the rest of the F branch are paused beneath E3 Analytical Lenses.");
@@ -454,10 +457,12 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(guidedInvestigationUi.match(/^## \d+\. /gm)).toHaveLength(16);
     expect(guidedInvestigationUi).toContain("The guide is not a Starter World card");
     expect(guidedInvestigationUi).toContain("mounts no AppShell, stage, template, or engine");
-    expect(immersiveDirection).toContain("Hybrid wins: 50% Living Diorama, 20% God-Hand, 30% Field Scientist");
-    expect(immersiveDirection).toContain("I0B: Immersive World Direction Audit");
+    expect(immersiveDirection).toContain("I0B decision: Revise hybrid");
+    expect(immersiveDirection).toContain("The I0 `50/20/30` percentages are retired");
+    expect(immersiveDirectionAudit).toContain("Conditionally ready for I1");
+    expect(immersiveDirectionAudit).toContain("No known P0 or P1 remains");
     expect(immersivePrototypes).toContain("React does not map boids into components");
-    expect(immersivePrototypes).toContain("Total trail points: maximum 384");
+    expect(immersivePrototypes).toContain("Total trail points: maximum 12");
     expect(immersivePerformance).toContain("Simulation semantics remain unchanged");
     expect(starterWorldPortfolio.match(/^### [ABC]\d+\. /gm)).toHaveLength(24);
     expect(starterWorldPortfolio.match(/^### A\d+\. /gm)).toHaveLength(8);

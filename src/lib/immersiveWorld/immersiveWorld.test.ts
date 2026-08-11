@@ -5,6 +5,7 @@ import { ImmersiveFlockingRuntime } from "../../components/immersive/ImmersiveFl
 import {
   BoundedTrailBuffer,
   BoundedVisualEffectBuffer,
+  AdaptiveRenderQualityController,
   ImmersiveRenderPerformanceMonitor,
   createFlockingWorldSceneAdapter,
   createImmersiveFlockingEngine,
@@ -19,8 +20,13 @@ import {
   panImmersiveCamera,
   parseImmersivePrototypeQuery,
   resolveImmersiveCamera,
+  releaseImmersiveCameraFocus,
   zoomImmersiveCamera,
-  type ImmersiveSceneEntity
+  type ImmersiveLensData,
+  type ImmersiveInspectableState,
+  type ImmersiveSceneEntity,
+  type ImmersiveSelectionGeometry,
+  type ReadOnlyWorldSceneAdapter
 } from ".";
 
 describe("I0 immersive Flocking foundation", () => {
@@ -94,10 +100,19 @@ describe("I0 immersive Flocking foundation", () => {
     expect(inspected?.relationshipCount).toBe(relationships.length);
     expect(relationships.every((relationship) => relationship.distance <= inspected!.perceptionRadius)).toBe(true);
     expect(adapter.getSelectionGeometry(first.id)?.entityId).toBe(first.id);
+    expect(adapter.getAlignment()).toBeTypeOf("number");
     expect(adapter.getLensData().vectors).toHaveLength(100);
     expect(adapter.getLensData().alignment).toBeTypeOf("number");
     expect(adapter.getInspectableState("missing")).toBeNull();
     expect(adapter.getRelationships("missing")).toEqual([]);
+
+    const genericAdapter: ReadOnlyWorldSceneAdapter<
+      ImmersiveSceneEntity,
+      ImmersiveInspectableState,
+      ImmersiveSelectionGeometry,
+      ImmersiveLensData
+    > = adapter;
+    expect(genericAdapter.templateId).toBe("flocking-boids");
   });
 
   it("keeps camera, selection, and lens-oriented reads outside authoritative runtime state", () => {
@@ -113,6 +128,8 @@ describe("I0 immersive Flocking foundation", () => {
     const panned = panImmersiveCamera(zoomed, 8, -5, adapter.getBounds());
     const eased = interpolateImmersiveCamera(system, resolved, 16, false);
     const immediate = interpolateImmersiveCamera(system, resolved, 16, true);
+    const freeZoom = zoomImmersiveCamera(system, 1.2);
+    const released = releaseImmersiveCameraFocus(focused, adapter.getBounds());
 
     expect(resolved).toMatchObject({ mode: "follow", focusTargetId: first.id, x: first.x, y: first.y });
     expect(zoomed.zoom).toBeGreaterThan(system.zoom);
@@ -120,6 +137,8 @@ describe("I0 immersive Flocking foundation", () => {
     expect(eased.x).not.toBe(resolved.x);
     expect(eased.mode).toBe("follow");
     expect(immediate).toEqual(resolved);
+    expect(freeZoom).toMatchObject({ mode: "free", focusTargetId: null });
+    expect(released).toEqual(system);
     expect(adapter.getInspectableState(first.id)).not.toBeNull();
     expect(adapter.getLensData().vectors).toHaveLength(100);
     expect(adapter.getRuntimeSignature()).toBe(signature);
@@ -136,8 +155,8 @@ describe("I0 immersive Flocking foundation", () => {
 
     const effects = new BoundedVisualEffectBuffer(2);
     effects.add({ kind: "selection", x: 1, y: 1, startedAt: 100, durationMs: 20 });
-    effects.add({ kind: "step", x: 2, y: 2, startedAt: 105, durationMs: 20 });
-    effects.add({ kind: "initialization", x: 3, y: 3, startedAt: 110, durationMs: 20 });
+    effects.add({ kind: "selection", x: 2, y: 2, startedAt: 105, durationMs: 20 });
+    effects.add({ kind: "selection", x: 3, y: 3, startedAt: 110, durationMs: 20 });
     expect(effects.count()).toBe(2);
     expect(effects.active(131)).toEqual([]);
 
@@ -151,6 +170,53 @@ describe("I0 immersive Flocking foundation", () => {
     expect(summary.trailPointCount).toBe(6);
     expect(summary.effectCount).toBe(0);
     expect(summary.medianFrameMs).toBe(16);
+    expect(summary.renderQuality).toBe("high");
+
+    trails.update(entities, [], 11);
+    expect(trails.pointCount()).toBe(0);
+    for (let tick = 12; tick < 20; tick += 1) {
+      trails.update(entities, ["one"], tick, 2);
+    }
+    expect(trails.pointCount()).toBe(2);
+  });
+
+  it("degrades only bounded visual detail while preserving an automatic recovery path", () => {
+    const high = new AdaptiveRenderQualityController(100);
+    const loaded = new AdaptiveRenderQualityController(500);
+    expect(high.getPolicy()).toMatchObject({ level: "high", trailPointLimit: 12, trailUpdateEveryTicks: 1 });
+    expect(loaded.getPolicy()).toMatchObject({ level: "balanced", trailPointLimit: 8, trailUpdateEveryTicks: 2 });
+
+    for (let frame = 0; frame < 90; frame += 1) {
+      loaded.recordFrameInterval(90);
+    }
+    expect(loaded.getPolicy()).toMatchObject({
+      level: "performance",
+      pixelRatioCeiling: 1,
+      shadowDetail: "none",
+      trailPointLimit: 5
+    });
+
+    for (let frame = 0; frame < 360; frame += 1) {
+      loaded.recordFrameInterval(16);
+    }
+    expect(loaded.getPolicy().level).toBe("balanced");
+  });
+
+  it("snaps only a continuously followed target across a wrapped boundary", () => {
+    const current = { x: 99, y: 50, zoom: 3, mode: "follow", focusTargetId: "one" } as const;
+    const target = { ...current, x: 1 };
+    const wrapped = interpolateImmersiveCamera(current, target, 16, false, {
+      bounds: { width: 100, height: 100 },
+      wrap: true
+    });
+    const bounded = interpolateImmersiveCamera(current, target, 16, false, {
+      bounds: { width: 100, height: 100 },
+      wrap: false
+    });
+
+    expect(wrapped.x).toBe(1);
+    expect(bounded.x).toBeGreaterThan(1);
+    expect(bounded.x).toBeLessThan(99);
   });
 
   it("steps and restores a fresh runtime without persisting presentation state", () => {
@@ -163,6 +229,12 @@ describe("I0 immersive Flocking foundation", () => {
     expect(runtime.getView()).toMatchObject({ tick: 1, isRunning: false, lastAdvanceKind: "step" });
     expect(runtime.getView().runtimeSignature).not.toBe(initialSignature);
     expect(runtime.getView().alignment).toBeTypeOf("number");
+    expect(runtime.performanceSummary()).toMatchObject({
+      sampleCount: 1,
+      medianEngineStepMs: expect.any(Number),
+      medianSnapshotMs: expect.any(Number),
+      medianAdapterMs: expect.any(Number)
+    });
     runtime.restore();
     expect(runtime.getView()).toMatchObject({ tick: 0, isRunning: false, lastAdvanceKind: "restore" });
     expect(runtime.getView().runtimeSignature).toBe(initialSignature);

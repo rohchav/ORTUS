@@ -188,7 +188,12 @@ test("runs bounded 500-boid performance smoke for each concept without runtime o
     const result = await page.evaluate(() => (window as Window & {
       __ORTUS_IMMERSIVE_AUDIT__: { readMeasurement(): {
         runtime: { ticksAdvanced: number; ticksPerSecond: number; sampleCount: number };
-        render: { frameCount: number; trailPointCount: number; effectCount: number } | null;
+        render: {
+          frameCount: number;
+          trailPointCount: number;
+          effectCount: number;
+          renderQuality: string;
+        } | null;
       } };
     }).__ORTUS_IMMERSIVE_AUDIT__.readMeasurement());
 
@@ -196,8 +201,9 @@ test("runs bounded 500-boid performance smoke for each concept without runtime o
     expect(result.runtime.ticksPerSecond, concept.id).toBeGreaterThan(0);
     expect(result.runtime.sampleCount, concept.id).toBeGreaterThan(0);
     expect(result.render?.frameCount, concept.id).toBeGreaterThan(0);
-    expect(result.render?.trailPointCount ?? 0, concept.id).toBeLessThanOrEqual(384);
+    expect(result.render?.trailPointCount ?? 0, concept.id).toBeLessThanOrEqual(12);
     expect(result.render?.effectCount ?? 0, concept.id).toBeLessThanOrEqual(24);
+    expect(result.render?.renderQuality, concept.id).toMatch(/high|balanced|performance/);
   }
   await expectNoDiagnostics(diagnostics);
 });

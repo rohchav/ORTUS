@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type {
   ImmersiveCameraMode,
   ImmersiveConceptId,
@@ -38,19 +38,19 @@ export function ImmersiveInspector({
   onFollowSelection,
   onSystemView
 }: ImmersiveInspectorProps) {
-  const entities = orderedEntities(adapter);
+  const entities = useMemo(() => orderedEntities(adapter), [adapter]);
   const selected = adapter.getInspectableState(selectedEntityId);
+  const selectedNumber = selected
+    ? entities.findIndex((entity) => entity.id === selected.entity.id) + 1
+    : 0;
   const [boidNumber, setBoidNumber] = useState(1);
 
   useEffect(() => {
-    if (!selected) {
+    if (selectedNumber <= 0) {
       return;
     }
-    const index = entities.findIndex((entity) => entity.id === selected.entity.id);
-    if (index >= 0) {
-      setBoidNumber(index + 1);
-    }
-  }, [entities, selected]);
+    setBoidNumber((current) => current === selectedNumber ? current : selectedNumber);
+  }, [selectedNumber]);
 
   function inspectNumber() {
     const entity = entities[Math.max(0, Math.min(entities.length - 1, Math.round(boidNumber) - 1))];
@@ -95,8 +95,8 @@ export function ImmersiveInspector({
           <div><dt>Position</dt><dd>{formatNumber(selected.entity.x, 2)}, {formatNumber(selected.entity.y, 2)}</dd></div>
           <div><dt>Heading</dt><dd>{formatNumber(selected.entity.headingDegrees, 1)} deg</dd></div>
           <div><dt>Speed</dt><dd>{formatNumber(selected.entity.speed, 3)} units/tick</dd></div>
-          <div><dt>Last sensed</dt><dd>{selected.entity.neighborCount} neighbors</dd></div>
-          <div><dt>Current radius</dt><dd>{selected.relationshipCount} inside {formatNumber(selected.perceptionRadius, 1)}</dd></div>
+          <div><dt>Neighbor count</dt><dd>{selected.entity.neighborCount} in model state</dd></div>
+          <div><dt>Proximity check</dt><dd>{selected.relationshipCount} within {formatNumber(selected.perceptionRadius, 1)}</dd></div>
         </dl>
       ) : (
         <div className="immersive-inspector__empty" aria-live="polite">

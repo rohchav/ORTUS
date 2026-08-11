@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import {
+  useCallback,
   useEffect,
   useRef,
   useState,
@@ -16,6 +17,7 @@ import {
   immersiveConceptIds,
   immersivePrototypeHref,
   parseImmersivePrototypeQuery,
+  releaseImmersiveCameraFocus,
   resetImmersiveCamera,
   zoomImmersiveCamera,
   type ImmersiveAgentCount,
@@ -112,7 +114,7 @@ function ImmersivePrototypeSession({
   const [camera, setCamera] = useState<ImmersiveCameraState>(() => createSystemCamera({ width: 100, height: 100 }));
   const [selectedEntityId, setSelectedEntityId] = useState<string | null>(null);
   const [alignmentLens, setAlignmentLens] = useState(false);
-  const [godHandTool, setGodHandTool] = useState<ImmersiveGodHandTool>("hand");
+  const [godHandTool, setGodHandTool] = useState<ImmersiveGodHandTool>("navigate");
   const [restoreArmed, setRestoreArmed] = useState(false);
   const [rubricOpen, setRubricOpen] = useState(false);
   const [pendingAgentCount, setPendingAgentCount] = useState<ImmersiveAgentCount | null>(null);
@@ -139,7 +141,7 @@ function ImmersivePrototypeSession({
 
   useEffect(() => {
     setCamera(createSystemCamera(runtime.getSceneAdapter().getBounds()));
-    setGodHandTool("hand");
+    setGodHandTool("navigate");
     setRestoreArmed(false);
   }, [concept, runtime]);
 
@@ -173,14 +175,19 @@ function ImmersivePrototypeSession({
     };
   }, [agentCount, concept, runtime]);
 
-  function selectEntity(entityId: string | null) {
+  const selectEntity = useCallback((entityId: string | null) => {
     setSelectedEntityId(entityId);
-    if (entityId && (camera.mode === "local" || camera.mode === "follow")) {
-      setCamera(focusImmersiveCamera(camera, camera.mode, entityId));
-    }
-  }
+    setCamera((current) => {
+      if (!entityId) {
+        return releaseImmersiveCameraFocus(current, runtime.getSceneAdapter().getBounds());
+      }
+      return current.mode === "local" || current.mode === "follow"
+        ? focusImmersiveCamera(current, current.mode, entityId)
+        : current;
+    });
+  }, [runtime]);
 
-  function cycleSelection(direction: -1 | 1) {
+  const cycleSelection = useCallback((direction: -1 | 1) => {
     const entities = [...runtime.getSceneAdapter().getEntities()].sort(
       (left, right) => boidNumber(left.label) - boidNumber(right.label) || left.id.localeCompare(right.id)
     );
@@ -192,15 +199,15 @@ function ImmersivePrototypeSession({
       ? direction > 0 ? 0 : entities.length - 1
       : (currentIndex + direction + entities.length) % entities.length;
     selectEntity(entities[nextIndex]?.id ?? null);
-  }
+  }, [runtime, selectEntity, selectedEntityId]);
 
-  function showSystemView() {
+  const showSystemView = useCallback(() => {
     setCamera(resetImmersiveCamera(runtime.getSceneAdapter().getBounds()));
-  }
+  }, [runtime]);
 
-  function focusSelection(mode: "local" | "follow") {
-    setCamera(focusImmersiveCamera(camera, mode, selectedEntityId));
-  }
+  const focusSelection = useCallback((mode: "local" | "follow") => {
+    setCamera((current) => focusImmersiveCamera(current, mode, selectedEntityId));
+  }, [selectedEntityId]);
 
   function requestAgentCount(next: ImmersiveAgentCount) {
     if (next === agentCount) {
@@ -295,7 +302,6 @@ function ImmersivePrototypeSession({
           godHandTool={godHandTool}
           reducedMotion={reducedMotion}
           isRunning={runtimeView.isRunning}
-          lastAdvanceKind={runtimeView.lastAdvanceKind}
           auditHandleRef={canvasAuditRef}
         />
 
@@ -450,7 +456,7 @@ function ConceptTools({
     <div className="immersive-context-tools" aria-label={`${conceptLabels[concept]} contextual tools`}>
       {concept === "god-hand" ? (
         <div className="immersive-tool-segments" aria-label="God-Hand tool">
-          {(["hand", "inspect", "measure"] as const).map((tool) => (
+          {(["navigate", "inspect", "measure"] as const).map((tool) => (
             <button
               key={tool}
               type="button"
