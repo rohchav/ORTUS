@@ -137,10 +137,12 @@ export class SimulationEngine {
     const metricsMs = this.performanceMonitor.elapsedSince(metricsStarted);
     assertWorldInvariants(this.world);
     this.template.validateWorld?.(this.world.view());
+    const stepMs = this.performanceMonitor.elapsedSince(stepStarted);
+    this.performanceMonitor.recordDuration("ortus.sim.step", stepMs);
     this.performanceMonitor.recordTick({
       tick: this.world.tick,
       time: this.world.time,
-      stepMs: this.performanceMonitor.elapsedSince(stepStarted),
+      stepMs,
       schedulerMs,
       metricsMs,
       entityCount: this.performanceMonitor.enabled ? this.world.entityStore.aliveCount() : 0
@@ -220,9 +222,11 @@ export class SimulationEngine {
   createSnapshot(): SimulationSnapshotView {
     const started = this.performanceMonitor.mark();
     const snapshot = createSnapshotView(this.template, this.world, this.metrics);
+    const snapshotMs = this.performanceMonitor.elapsedSince(started);
+    this.performanceMonitor.recordDuration("ortus.sim.snapshot", snapshotMs);
     this.performanceMonitor.recordSnapshot({
       tick: snapshot.tick,
-      snapshotMs: this.performanceMonitor.elapsedSince(started),
+      snapshotMs,
       entityCount: snapshot.entities.filter((entity) => entity.alive).length,
       metricsHistoryLength: snapshot.metricsHistory.length
     });
@@ -383,7 +387,10 @@ export class SimulationEngine {
       spaces,
       metrics,
       performance: {
-        recordCounter: (counterId, value) => this.performanceMonitor.recordCounter(counterId, value)
+        recordCounter: (counterId, value) => this.performanceMonitor.recordCounter(counterId, value),
+        mark: () => this.performanceMonitor.mark(),
+        elapsedSince: (mark) => this.performanceMonitor.elapsedSince(mark),
+        recordDuration: (name, durationMs) => this.performanceMonitor.recordDuration(name, durationMs)
       },
       ...(entityIds ? { entityIds } : {})
     };

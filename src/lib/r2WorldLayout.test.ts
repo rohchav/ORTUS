@@ -128,7 +128,7 @@ describe("R2 World layout and interaction reclaim contracts", () => {
     expect(shell).toContain('title="Technical run details"');
   });
 
-  it("records completed I0B after I0 with I1 next", () => {
+  it("records completed PERF1 after I0B with PERF1B next", () => {
     const roadmap = source("planned_roadmap.md");
     const context = source("docs/codex/CURRENT_CONTEXT.md");
 
@@ -145,11 +145,13 @@ describe("R2 World layout and interaction reclaim contracts", () => {
       expect(record).toContain("C3B complete");
       expect(record).toContain("I0 complete");
       expect(record).toContain("I0B complete");
+      expect(record).toContain("PERF1 complete");
     }
     expect(context).toContain("WORLD_LAYOUT_AND_INTERACTION_RECLAIM_AUDIT.md");
     expect(context).toContain("STARTER_WORLD_CONTENT_FRAMEWORK_AUDIT.md");
     expect(context).toContain("IMMERSIVE_WORLD_DIRECTION_AUDIT.md");
-    expect(context).toContain("I1: Immersive World Shell is next");
+    expect(context).toContain("PERF1B: Runtime Performance Architecture Audit is next");
+    expect(context).toContain("I1: Immersive World Shell has not started");
     expect(context).toContain("C4: Flagship Starter Pack Two is deferred until I5B");
     expect(context).not.toMatch(/F1 (?:is next|resumed|in progress)/i);
   });

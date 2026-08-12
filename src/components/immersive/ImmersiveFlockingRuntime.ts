@@ -1,7 +1,19 @@
-import type { SimulationEngine, SimulationSnapshotView } from "../../simulation";
 import {
-  createFlockingWorldSceneAdapter,
-  createImmersiveFlockingEngine,
+  BoundedPerformanceRecorder,
+  LocalRuntimeDriver,
+  WorkerRuntimeDriver,
+  type PerformanceMeasureName,
+  type PerformanceMeasureSummary,
+  type RuntimeExecutionKind,
+  type RuntimePublication,
+  type RuntimeWorkerLike,
+  type SimulationRuntimePort,
+  type UIProjection
+} from "../../simulation";
+import {
+  createEmptyFlockingFrameSceneAdapter,
+  createFlockingFrameSceneAdapter,
+  createImmersiveFlockingRunConfig,
   immersiveFlockingInitializationPreset,
   immersiveFlockingScenarioId,
   immersiveFlockingSeed,
@@ -9,13 +21,16 @@ import {
   type WorldSceneAdapter
 } from "../../lib/immersiveWorld";
 
-export type ImmersiveAdvanceKind = "initialization" | "run" | "step" | "restore";
+export type ImmersiveAdvanceKind = "initialization" | "run" | "step" | "command" | "restore" | "replacement";
 
 export interface ImmersiveRuntimeView {
   revision: number;
+  generation: number;
   tick: number;
   time: number;
+  isReady: boolean;
   isRunning: boolean;
+  executionKind: RuntimeExecutionKind;
   agentCount: ImmersiveAgentCount;
   alignment: number | null;
   scenarioId: string;
@@ -39,41 +54,82 @@ export interface ImmersiveRuntimePerformanceSummary {
   medianAdapterMs: number;
   p95AdapterMs: number;
   sampleCount: number;
+  executionKind: RuntimeExecutionKind;
+  generation: number;
+  framePublications: number;
+  uiPublications: number;
+  framesCoalesced: number;
+  uiCoalesced: number;
+  measures: readonly PerformanceMeasureSummary[];
 }
 
-const targetTicksPerSecond = 24;
-const uiNotificationIntervalMs = 250;
-const maxStepSamples = 360;
-const maximumAccumulatedMs = 250;
+export interface ImmersiveFlockingRuntimeOptions {
+  execution?: RuntimeExecutionKind;
+  port?: SimulationRuntimePort;
+}
+
+const maxPerformanceSamples = 360;
 
 export class ImmersiveFlockingRuntime {
-  private engine: SimulationEngine;
-  private snapshot: SimulationSnapshotView;
-  private adapter: WorldSceneAdapter;
-  private running = false;
-  private frameRequest: number | null = null;
-  private fallbackTimer: ReturnType<typeof setTimeout> | null = null;
-  private lastFrameAt: number | null = null;
-  private accumulatedMs = 0;
+  private port: SimulationRuntimePort | null = null;
+  private readonly requestedExecution: RuntimeExecutionKind;
+  private readonly providedPort: SimulationRuntimePort | undefined;
+  private adapter: WorldSceneAdapter = createEmptyFlockingFrameSceneAdapter();
+  private latestUI: UIProjection | null = null;
   private disposed = false;
   private revision = 0;
   private listeners = new Set<() => void>();
-  private lastNotificationAt = 0;
-  private lastAdvanceKind: ImmersiveAdvanceKind = "initialization";
   private error: string | null = null;
   private view: ImmersiveRuntimeView;
-  private measurementStartedAt = 0;
+  private unsubscribePort: (() => void) | null = null;
+  private initialization: Promise<void> = Promise.resolve();
+  private measurementStartedAt: number | null = null;
   private measurementStartTick = 0;
-  private stepSamples: number[] = [];
-  private engineStepSamples: number[] = [];
-  private snapshotSamples: number[] = [];
+  private measurementStartFramePublications = 0;
+  private measurementStartUiPublications = 0;
+  private framePublications = 0;
+  private uiPublications = 0;
   private adapterSamples: number[] = [];
+  private readonly presentationMeasures = new BoundedPerformanceRecorder({ enabled: true, maxSamples: maxPerformanceSamples });
 
-  constructor(readonly agentCount: ImmersiveAgentCount) {
-    this.engine = createImmersiveFlockingEngine(agentCount);
-    this.snapshot = this.engine.createSnapshot();
-    this.adapter = createFlockingWorldSceneAdapter(this.snapshot, this.engine.parameters);
-    this.view = this.buildView();
+  constructor(
+    readonly agentCount: ImmersiveAgentCount,
+    options: ImmersiveFlockingRuntimeOptions = {}
+  ) {
+    const requestedExecution = options.port?.executionKind ?? options.execution ?? "local";
+    this.requestedExecution = requestedExecution;
+    this.providedPort = options.port;
+    this.view = this.buildView(requestedExecution);
+    if (requestedExecution === "local" || options.port) {
+      this.start();
+    }
+  }
+
+  start(): void {
+    if (this.disposed || this.port) {
+      return;
+    }
+    try {
+      this.port = this.providedPort ?? createRuntimePort(this.requestedExecution);
+    } catch (error) {
+      this.handleRejectedOperation(error);
+      return;
+    }
+    if (!this.port) {
+      return;
+    }
+    this.unsubscribePort = this.port.subscribe((publication) => this.handlePublication(publication));
+    this.initialization = this.port.initialize({
+      runId: immersiveFlockingScenarioId,
+      runConfig: createImmersiveFlockingRunConfig(this.agentCount),
+      instrumentation: true
+    }).then(() => undefined).catch((error) => {
+      if (!this.error) {
+        this.error = error instanceof Error ? error.message : String(error);
+        this.refreshView();
+        this.notify();
+      }
+    });
   }
 
   subscribe = (listener: () => void): (() => void) => {
@@ -83,98 +139,114 @@ export class ImmersiveFlockingRuntime {
 
   getView = (): ImmersiveRuntimeView => this.view;
 
+  whenReady(): Promise<void> {
+    this.start();
+    return this.initialization;
+  }
+
   getSceneAdapter(): WorldSceneAdapter {
     return this.adapter;
   }
 
   play(): void {
-    if (this.disposed || this.running) {
+    if (this.disposed || !this.view.isReady) {
       return;
     }
-    this.running = true;
-    this.error = null;
-    this.engine.play();
-    this.lastFrameAt = null;
-    this.accumulatedMs = 0;
-    this.publish(true);
-    this.scheduleNextFrame();
+    try {
+      this.port?.play();
+    } catch (error) {
+      this.handleRejectedOperation(error);
+    }
   }
 
   pause(): void {
     if (this.disposed) {
       return;
     }
-    this.running = false;
-    this.engine.pause();
-    this.clearScheduler();
-    this.lastFrameAt = null;
-    this.accumulatedMs = 0;
-    this.publish(true);
+    this.port?.pause();
   }
 
   toggleRunning(): void {
-    if (this.running) {
+    if (this.view.isRunning) {
       this.pause();
     } else {
       this.play();
     }
   }
 
-  stepOnce(): void {
-    if (this.disposed || this.running) {
-      return;
+  stepOnce(): Promise<void> {
+    if (this.disposed || !this.view.isReady || this.view.isRunning || !this.port) {
+      return Promise.resolve();
     }
-    this.advance("step", true);
+    return this.port.step().then(() => undefined).catch((error) => this.handleRejectedOperation(error));
   }
 
-  restore(): void {
-    if (this.disposed) {
+  restore(): Promise<void> {
+    if (this.disposed || !this.port) {
+      return Promise.resolve();
+    }
+    this.error = null;
+    this.adapterSamples = [];
+    this.presentationMeasures.clear();
+    return this.port.reset().then(() => undefined).catch((error) => this.handleRejectedOperation(error));
+  }
+
+  setSelectedEntity(entityId: string | null): void {
+    if (this.disposed || !this.view.isReady || !this.port) {
       return;
     }
-    this.pause();
-    this.engine = createImmersiveFlockingEngine(this.agentCount);
-    this.snapshot = this.engine.createSnapshot();
-    this.adapter = createFlockingWorldSceneAdapter(this.snapshot, this.engine.parameters);
-    this.lastAdvanceKind = "restore";
-    this.error = null;
-    this.stepSamples = [];
-    this.engineStepSamples = [];
-    this.snapshotSamples = [];
-    this.adapterSamples = [];
-    this.measurementStartedAt = 0;
-    this.measurementStartTick = 0;
-    this.publish(true);
+    try {
+      this.port.setSelectedEntity(entityId);
+    } catch (error) {
+      this.handleRejectedOperation(error);
+    }
   }
 
   startPerformanceMeasurement(at = readNow()): void {
     this.measurementStartedAt = at;
-    this.measurementStartTick = this.snapshot.tick;
-    this.stepSamples = [];
-    this.engineStepSamples = [];
-    this.snapshotSamples = [];
+    this.measurementStartTick = this.adapter.tick;
+    this.measurementStartFramePublications = this.framePublications;
+    this.measurementStartUiPublications = this.uiPublications;
     this.adapterSamples = [];
+    this.presentationMeasures.clear();
+    this.port?.resetPerformance();
+  }
+
+  recordPresentationDuration(name: Extract<PerformanceMeasureName, "ortus.render.draw">, durationMs: number): void {
+    this.presentationMeasures.record(name, durationMs);
   }
 
   performanceSummary(at = readNow()): ImmersiveRuntimePerformanceSummary {
-    const elapsedMs = this.measurementStartedAt > 0 ? Math.max(0, at - this.measurementStartedAt) : 0;
-    const sorted = [...this.stepSamples].sort((left, right) => left - right);
-    const engineSteps = [...this.engineStepSamples].sort((left, right) => left - right);
-    const snapshots = [...this.snapshotSamples].sort((left, right) => left - right);
+    const elapsedMs = this.measurementStartedAt === null ? 0 : Math.max(0, at - this.measurementStartedAt);
+    const ticksAdvanced = this.adapter.tick - this.measurementStartTick;
+    const workerMeasures = this.latestUI?.performance.measures ?? [];
+    const engineStep = findMeasure(workerMeasures, "ortus.sim.step");
+    const snapshot = findMeasure(workerMeasures, "ortus.sim.snapshot");
+    const packetProjection = findMeasure(workerMeasures, "ortus.scene.project");
     const adapters = [...this.adapterSamples].sort((left, right) => left - right);
-    const ticksAdvanced = this.snapshot.tick - this.measurementStartTick;
+    const measures = [...workerMeasures, ...this.presentationMeasures.summaries()]
+      .sort((left, right) => left.name.localeCompare(right.name));
+    const publications = this.latestUI?.performance.publications;
     return {
       elapsedMs,
       ticksAdvanced,
-      ticksPerSecond: elapsedMs > 0 ? (ticksAdvanced / elapsedMs) * 1000 : 0,
-      medianStepAndSnapshotMs: percentile(sorted, 0.5),
-      p95StepAndSnapshotMs: percentile(sorted, 0.95),
-      medianEngineStepMs: percentile(engineSteps, 0.5),
-      p95EngineStepMs: percentile(engineSteps, 0.95),
-      medianSnapshotMs: percentile(snapshots, 0.5),
-      p95SnapshotMs: percentile(snapshots, 0.95),
+      ticksPerSecond: elapsedMs > 0 ? ticksAdvanced / elapsedMs * 1000 : 0,
+      medianStepAndSnapshotMs: (engineStep?.medianMs ?? 0) + (packetProjection?.medianMs ?? 0),
+      p95StepAndSnapshotMs: (engineStep?.p95Ms ?? 0) + (packetProjection?.p95Ms ?? 0),
+      medianEngineStepMs: engineStep?.medianMs ?? 0,
+      p95EngineStepMs: engineStep?.p95Ms ?? 0,
+      medianSnapshotMs: snapshot?.medianMs ?? 0,
+      p95SnapshotMs: snapshot?.p95Ms ?? 0,
       medianAdapterMs: percentile(adapters, 0.5),
       p95AdapterMs: percentile(adapters, 0.95),
-      sampleCount: sorted.length
+      sampleCount: engineStep?.count ?? 0,
+      executionKind: this.view.executionKind,
+      generation: this.view.generation,
+      framePublications: this.framePublications - this.measurementStartFramePublications,
+      uiPublications: this.uiPublications - this.measurementStartUiPublications,
+      framesCoalesced: publications?.framesCoalesced ?? 0,
+      uiCoalesced: publications?.uiCoalesced ?? 0,
+      measures
     };
   }
 
@@ -182,115 +254,99 @@ export class ImmersiveFlockingRuntime {
     if (this.disposed) {
       return;
     }
-    this.running = false;
-    this.engine.pause();
-    this.clearScheduler();
     this.disposed = true;
+    this.unsubscribePort?.();
+    this.unsubscribePort = null;
+    this.port?.dispose();
     this.listeners.clear();
   }
 
-  private scheduleNextFrame(): void {
-    this.clearScheduler();
-    if (typeof globalThis.requestAnimationFrame === "function") {
-      this.frameRequest = globalThis.requestAnimationFrame((at) => this.runScheduledFrame(at));
+  private handlePublication(publication: RuntimePublication): void {
+    if (this.disposed) {
       return;
     }
-    this.fallbackTimer = setTimeout(() => this.runScheduledFrame(readNow()), 1000 / 60);
-  }
-
-  private runScheduledFrame(at: number): void {
-    if (!this.running || this.disposed) {
+    if (publication.type === "frame") {
+      const started = readNow();
+      const adapter = createFlockingFrameSceneAdapter(publication.frame);
+      adapter.getEntities();
+      pushBounded(this.adapterSamples, Math.max(0, readNow() - started));
+      this.adapter = adapter;
+      this.framePublications += 1;
       return;
     }
-    const previous = this.lastFrameAt ?? at;
-    this.lastFrameAt = at;
-    this.accumulatedMs += Math.min(maximumAccumulatedMs, Math.max(0, at - previous));
-    const intervalMs = 1000 / targetTicksPerSecond;
-    const requestedSteps = Math.floor(this.accumulatedMs / intervalMs);
-    const steps = Math.min(requestedSteps, this.engine.clock.maxStepsPerFrame);
-    if (steps > 0) {
-      this.accumulatedMs -= steps * intervalMs;
-      this.advance("run", false, steps);
-    }
-    if (!this.running || this.disposed) {
+    if (publication.type === "ui") {
+      this.latestUI = publication.ui;
+      this.uiPublications += 1;
+      this.refreshView();
+      this.notify();
       return;
     }
-    this.scheduleNextFrame();
+    this.error = publication.failure.message;
+    this.refreshView();
+    this.notify();
   }
 
-  private advance(kind: "run" | "step", forceNotification: boolean, steps = 1): void {
-    const startedAt = readNow();
-    try {
-      if (steps === 1) {
-        this.engine.step();
-      } else {
-        this.engine.runSteps(steps);
-      }
-      const engineCompletedAt = readNow();
-      this.snapshot = this.engine.createSnapshot();
-      const snapshotCompletedAt = readNow();
-      this.adapter = createFlockingWorldSceneAdapter(this.snapshot, this.engine.parameters);
-      const adapterCompletedAt = readNow();
-      this.lastAdvanceKind = kind;
-      this.error = null;
-      pushBounded(this.stepSamples, Math.max(0, adapterCompletedAt - startedAt) / steps);
-      pushBounded(this.engineStepSamples, Math.max(0, engineCompletedAt - startedAt) / steps);
-      pushBounded(this.snapshotSamples, Math.max(0, snapshotCompletedAt - engineCompletedAt));
-      pushBounded(this.adapterSamples, Math.max(0, adapterCompletedAt - snapshotCompletedAt));
-      this.publish(forceNotification);
-    } catch (error) {
-      this.running = false;
-      this.engine.pause();
-      this.clearScheduler();
-      this.error = error instanceof Error ? error.message : String(error);
-      this.publish(true);
-    }
+  private handleRejectedOperation(error: unknown): void {
+    this.error = error instanceof Error ? error.message : String(error);
+    this.refreshView();
+    this.notify();
   }
 
-  private buildView(): ImmersiveRuntimeView {
+  private buildView(executionKind = this.port?.executionKind ?? "worker"): ImmersiveRuntimeView {
+    const ui = this.latestUI;
     return {
       revision: this.revision,
-      tick: this.snapshot.tick,
-      time: this.snapshot.time,
-      isRunning: this.running,
+      generation: ui?.generation ?? this.port?.generation ?? 0,
+      tick: ui?.tick ?? 0,
+      time: ui?.time ?? 0,
+      isReady: ui !== null && (ui.playback === "paused" || ui.playback === "running") && this.error === null,
+      isRunning: ui?.playback === "running",
+      executionKind,
       agentCount: this.agentCount,
-      alignment: this.adapter.getAlignment(),
+      alignment: ui?.alignment ?? null,
       scenarioId: immersiveFlockingScenarioId,
       seed: immersiveFlockingSeed,
       initializationPreset: immersiveFlockingInitializationPreset,
       runtimeSignature: this.adapter.getRuntimeSignature(),
-      lastAdvanceKind: this.lastAdvanceKind,
+      lastAdvanceKind: ui?.lastAdvanceKind ?? "initialization",
       error: this.error
     };
   }
 
   private refreshView(): void {
     this.revision += 1;
-    this.view = this.buildView();
+    this.view = this.buildView(this.view.executionKind);
   }
 
-  private publish(force: boolean): void {
-    const now = readNow();
-    if (!force && now - this.lastNotificationAt < uiNotificationIntervalMs) {
-      return;
-    }
-    this.lastNotificationAt = now;
-    this.refreshView();
+  private notify(): void {
     for (const listener of this.listeners) {
       listener();
     }
   }
+}
 
-  private clearScheduler(): void {
-    if (this.frameRequest !== null && typeof globalThis.cancelAnimationFrame === "function") {
-      globalThis.cancelAnimationFrame(this.frameRequest);
-      this.frameRequest = null;
-    }
-    if (this.fallbackTimer !== null) {
-      clearTimeout(this.fallbackTimer);
-      this.fallbackTimer = null;
-    }
+function createRuntimePort(execution: RuntimeExecutionKind): SimulationRuntimePort | null {
+  if (execution === "local") {
+    return new LocalRuntimeDriver();
   }
+  if (typeof window === "undefined") {
+    return null;
+  }
+  if (typeof Worker !== "function") {
+    throw new Error("This browser cannot initialize the required Simulation Worker; no implicit local fallback was started");
+  }
+  const worker = new Worker(new URL("../../workers/simulationRuntime.worker.ts", import.meta.url), {
+    type: "module",
+    name: "ortus-simulation-runtime"
+  });
+  return new WorkerRuntimeDriver(worker as unknown as RuntimeWorkerLike);
+}
+
+function findMeasure(
+  measures: readonly PerformanceMeasureSummary[],
+  name: PerformanceMeasureName
+): PerformanceMeasureSummary | undefined {
+  return measures.find((measure) => measure.name === name);
 }
 
 function readNow(): number {
@@ -299,8 +355,8 @@ function readNow(): number {
 
 function pushBounded(target: number[], value: number): void {
   target.push(value);
-  if (target.length > maxStepSamples) {
-    target.splice(0, target.length - maxStepSamples);
+  if (target.length > maxPerformanceSamples) {
+    target.splice(0, target.length - maxPerformanceSamples);
   }
 }
 

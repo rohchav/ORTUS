@@ -3,9 +3,11 @@ import {
   createEngineFromScenario,
   flockingTemplate,
   patchScenarioParameters,
+  runConfigFromScenario,
   validateScenario,
   type AuthoredScenario,
-  type SimulationEngine
+  type SimulationEngine,
+  type SimulationRunConfig
 } from "../../simulation";
 import { immersiveAgentCounts, type ImmersiveAgentCount } from "./types";
 
@@ -45,4 +47,8 @@ export function createImmersiveFlockingScenario(agentCount: ImmersiveAgentCount)
 
 export function createImmersiveFlockingEngine(agentCount: ImmersiveAgentCount): SimulationEngine {
   return createEngineFromScenario(createImmersiveFlockingScenario(agentCount)).engine;
+}
+
+export function createImmersiveFlockingRunConfig(agentCount: ImmersiveAgentCount): SimulationRunConfig {
+  return runConfigFromScenario(createImmersiveFlockingScenario(agentCount));
 }

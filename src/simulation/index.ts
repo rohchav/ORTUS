@@ -9,7 +9,7 @@ export { World, WorldView } from "./kernel/World";
 export { EntityStore } from "./kernel/EntityStore";
 export { ComponentStore } from "./kernel/ComponentStore";
 export { MetricsCollector } from "./kernel/Metrics";
-export { SimulationPerformanceMonitor } from "./kernel/Performance";
+export { BoundedPerformanceRecorder, SimulationPerformanceMonitor } from "./kernel/Performance";
 export type * from "./kernel/Performance";
 export {
   appendSimulationEventLog,
@@ -53,6 +53,7 @@ export * from "./runs";
 export * from "./scenarios";
 export * from "./uncertainty";
 export * from "./atlasPreview";
+export * from "./runtime";
 export * from "./assumptions";
 export * from "./networks";
 export * from "./resources";

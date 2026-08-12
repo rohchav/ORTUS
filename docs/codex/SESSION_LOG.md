@@ -4333,3 +4333,59 @@ Roadmap result:
 - I2 through I5B have not started.
 - C4: Flagship Starter Pack Two is deferred until I5B.
 - Commit gate target: `test: audit immersive world directions`; no push is authorized.
+
+### Prompt PERF1: Runtime Performance Architecture
+
+Date: 2026-08-12
+
+Goal: establish a deterministic, bounded runtime boundary before I1 so simulation execution can scale independently from Canvas and React without turning renderer packets into snapshots or research evidence.
+
+Starting state and untouched baseline:
+
+- Branch `main` was clean and aligned with `origin/main` at `fd54941 test: audit immersive world directions` after fetch.
+- Untouched typecheck passed; focused tests passed `4 files / 34 tests`; unit verification passed `79 files / 657 tests`; the production build generated `23` pages; complete Playwright/Axe passed `183/183` with zero failures, retries, or skips.
+- Untouched smoke measured Flocking-100 `138.88` ticks/s, Flocking-500 `21.51`, Forest Fire `35.07`, and Predator-Prey `103.06`. Snapshot/render-model costs were recorded separately.
+- Three valid controlled local-browser repetitions held about `23.85` ticks/s and `57.60..59.06 FPS` at 100. At 500 they held `23.46..23.78` ticks/s but only `6.67..12.97 FPS`, median frames `66.7..166.6ms`, p95 `116.8..233.3ms`, and `49..85` long render frames. Earlier tick-zero harness results were rejected.
+
+Runtime architecture:
+
+- Added bounded named instrumentation for simulation step, neighbor work, snapshots, runtime publication, scene projection, Canvas draw, UI publication, and run rebuild. Disabled instrumentation avoids clock reads; enabled samples are bounded and non-persistent.
+- Added one shared `RuntimeSession` beneath `LocalRuntimeDriver` and `WorkerRuntimeDriver`, with validated RunConfig/template construction, explicit generation/run/request/publication identity, 24Hz elapsed-time scheduling, bounded catch-up, deterministic commands, reset/replacement, selected detail, failure, and disposal.
+- Added a strict Zod Worker protocol and a static dedicated Worker importing trusted ORTUS code only. Malformed output terminates without fallback; initialization/runtime/Worker failures do not fabricate partial frames or restart with a different seed.
+- Added one-in-flight plus one-newest-pending frame/UI gates. Transferable typed-array buffers avoid nested world cloning. Coalescing applies only to ephemeral publication; model steps remain ordered and complete.
+- `RenderFramePacket` carries compact Flocking ids, positions, velocities, neighbor counts, densities, group codes, scalar frame facts, and bounded selected-only neighborhood detail. `UIProjection` carries coarse React/accessibility facts. Neither is a snapshot, persistence artifact, evidence record, or `CanonicalObservation`.
+- The isolated prototype now uses the real Worker. Canvas adapts packets on the main thread; React receives no per-agent motion state. Production `/world` remains on its established engine/snapshot/Zustand path.
+
+Correctness and neighbor-search decision:
+
+- Differential tests found the inherited spatial hash dropped legal toroidal neighbors when world dimensions were not divisible by cell size. The opt-in `uniformCoverage` experiment uses equal effective cell dimensions and no-op avoidance for already-normalized coordinates to repair membership and floating-point identity without changing existing callers.
+- The corrected index exactly matches stable all-pairs membership, offsets, distances, pair order, and full snapshot exports over adversarial states, deterministic 500-agent states/multiple radii, 100 agents/40 ticks, and 500 agents/16 ticks.
+- Correctness did not make the index worthwhile. A tuned grid cut 500-agent checks from `124,750` to about `62,064` per tick but final repeated headless medians measured neighbor work `12.456ms` versus `2.775ms`, and overall `28.836` versus `43.964` ticks/s. At 100 it measured `268.195` versus `296.996` ticks/s; the preserved automatic path measured `264.867` and `33.959` at 100/500. An independent preceding report showed the same corrected-versus-reference direction.
+- Automatic Flocking preserves the pre-PERF1 spatial-hash threshold, nominal-cell behavior, and all-pairs fallback so PERF1 does not migrate historical deterministic runs. The corrected index stays available only as an explicit differential/benchmark path. Its trajectories are not represented as identical to the inherited path.
+
+Controlled browser and lifecycle evidence:
+
+- Three independent eight-second Worker repetitions measured 100-agent `23.85..23.88` ticks/s and `59.95..60.04 FPS`; 500-agent `23.66..23.69` ticks/s and `59.84..59.99 FPS`. Median/p95 frames were `16.7/16.8ms` at both bounds, with zero render long frames in all samples.
+- At 500, p95 main-thread event-loop delay fell from baseline `131.8..266.5ms` to `2.7..4.3ms`. Startup still produced browser long tasks, so PERF1 does not claim a long-task-free app or universal FPS.
+- Required 60-second soaks completed `1,445` ordered ticks at 100 and `1,444` at 500, about `23.98/23.96` ticks/s and `59.99/60.00 FPS`, with no page/console error or long render frame. Bounded samples remained capped at `360`; coarse post-GC heap readings stayed `81.4/86.4MB`.
+- Real-browser replay matched after reset. A Strict Mode audit found and fixed render-time Worker construction that leaked discarded instances. Ten replacement cycles now retain exactly one Worker, route disposal reaches zero, and Back creates one fresh Worker.
+- Packet versus full-snapshot headless measurements at 500 were about `0.123/2.589ms` median/p95 and `13.5KB` typed arrays versus `1.135/5.735ms` and about `182KB` snapshot JSON. Continuous Worker presentation records zero snapshot work; the isolated packet p95 is volatile, while its median and size advantage repeated.
+
+Scope and handoff:
+
+- No new dependency, template, parameter, metric, intervention, RNG scheme, persistence key, production World UI, Starter content, Atlas/Lab/Builder behavior, `CanonicalObservation`, `OffscreenCanvas`, shared memory, WebGL/WebGPU, Wasm, Arrow, or Parquet was added.
+- PERF1B must independently audit protocol validation, stale races, failure recovery, Strict Mode lifecycle, backpressure accounting, corrected neighbor semantics, deterministic migration implications, performance methodology, memory limits, and production isolation.
+- PERF1 is complete when final gates and the local commit pass. PERF1B is next and unstarted; I1 remains unstarted; C4 remains deferred until I5B.
+
+Verification at this record point:
+
+- Focused runtime/neighbor/index/roadmap tests passed `6 files / 54 tests`; focused real-Worker Playwright passed `2/2`, including deterministic replay and ten replacement/disposal cycles.
+- Controlled browser benchmark and both required 60-second soaks passed without runtime/page/console errors.
+- Complete Playwright/Axe passed `185/185 (16.6m)` with zero failures, retries, or skips.
+- Typecheck passed. Unit verification passed `81 files / 678 tests`; the first complete run exposed only two stale pre-PERF1 roadmap assertions, their focused `13/13` gate passed, and the complete reruns passed.
+- The final production build compiled in `4.1s` and generated `23` pages.
+- Simulation smoke measured Flocking-100 `236.93` ticks/s, Flocking-500 `31.65`, Forest Fire `50.24`, and Predator-Prey `140.64`; bounded Atlas smoke completed `2` runs / `10` work units / horizon `5` in `38.84ms`.
+- Automatic Flocking emitted exactly `316,971` and `7,721,264` pair checks at 100/500, matching the untouched baseline operation counts. `npm run perf:runtime` passed with exact corrected-index/reference exports.
+- `git diff --check` passed. `npm run lint: unavailable, package.json has no lint script.`
+
+Commit target: `perf: add runtime performance architecture`; no push is authorized.

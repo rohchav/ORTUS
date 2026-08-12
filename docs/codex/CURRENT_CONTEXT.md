@@ -1,6 +1,6 @@
 # ORTUS Current Context
 
-Last updated: 2026-08-11 after Prompt I0B Immersive World Direction Audit + Performance Hardening
+Last updated: 2026-08-12 after Prompt PERF1 Runtime Performance Architecture
 
 ## Current Prompt Status
 
@@ -16,7 +16,9 @@ Last updated: 2026-08-11 after Prompt I0B Immersive World Direction Audit + Perf
 - C3B complete.
 - I0 complete.
 - I0B complete.
-- I1: Immersive World Shell is next and has not started.
+- PERF1 complete.
+- PERF1B: Runtime Performance Architecture Audit is next and has not started.
+- I1: Immersive World Shell has not started.
 - I2 through I5B have not started.
 - C4: Flagship Starter Pack Two is deferred until I5B and has not started.
 
@@ -66,9 +68,25 @@ Equivalent local 500-boid browser runs varied from roughly `35..48 FPS` untouche
 
 The I0B decision is `Revise hybrid`; the `50/20/30` percentages are retired. Living Diorama owns the primary world surface, spatial presence, restrained depth, boundary, whole-system camera, and selected-only trajectory. Field Scientist owns observation information architecture, System/Local/Follow semantics, exact DOM inspection, selected proximity framing, model-output lenses, runtime-honesty language, and accessibility authority. The former God-Hand concept contributes only immediate pointer feedback, selection, and contextual instrument switching; the God-Hand/Hand metaphor does not migrate.
 
-I0B is conditionally ready for `I1: Immersive World Shell` because no P0/P1 remains and the architecture has a credible measured path. I1 has not started. Epidemic, Predator-Prey, and Opinion require template adapters; Forest Fire, Schelling, and Neural require new rendering primitives, with Neural also requiring a template-specific adapter. These are feasibility classifications, not support claims. Actual browser zoom, screen-reader/AT use, forced colors, actual touch devices, participant comprehension, multi-hour memory soak, GPU/browser diversity, production-build profiling, and formal WCAG conformance remain unverified.
+I0B was conditionally ready for the runtime investigation that became PERF1. Epidemic, Predator-Prey, and Opinion still require template projectors/adapters; Forest Fire, Schelling, and Neural require new rendering primitives, with Neural also requiring a template-specific adapter. These are feasibility classifications, not support claims. Actual browser zoom, screen-reader/AT use, forced colors, actual touch devices, participant comprehension, multi-hour memory soak, GPU/browser diversity, production-build profiling, and formal WCAG conformance remain unverified.
 
 I0B final verification passed focused prototype Playwright `13 tests (3.0m)` and complete UI/Axe `183 tests (25.5m)` with zero failures, retries, or skips. Typecheck passed; unit verification passed `79 files / 657 tests (82.99s)`; the production build compiled in `8.9s` and generated `23` pages; simulation smoke measured Flocking-100 `113.87` ticks/s, Flocking-500 `15.87`, Forest Fire `23.35`, and Predator-Prey `72.26`; bounded Atlas smoke completed `2` runs / `10` work units / horizon `5` in `54.03 ms`; and `git diff --check` passed. `npm run lint: unavailable, package.json has no lint script.`
+
+PERF1's architecture record is `docs/performance/RUNTIME_PERFORMANCE_ARCHITECTURE.md`. `src/simulation/runtime` now supplies a shared `RuntimeSession`, `LocalRuntimeDriver`, `WorkerRuntimeDriver`, elapsed-time scheduler, strict Zod Worker protocol, generation/run/request/publication identity, bounded newest-publication gates, transferable Flocking `RenderFramePacket`, and separate coarse `UIProjection`. The isolated prototype uses the real browser Worker. Production `/world`, Zustand snapshot publication, Starter launches, guide behavior, Compare, Experiment Runner, Atlas, Lab, Builder, storage, and navigation remain unchanged.
+
+The Worker owns the existing validated engine, scheduler, deterministic stepping, neighbor work, frame projection, and coarse UI projection. The main thread owns React, DOM, Canvas, accessibility, input, camera, and presentation state. There is no implicit fallback, arbitrary script URL, dynamic code, `eval`, plugin execution, `OffscreenCanvas`, shared memory, cross-origin-isolation requirement, persistence, or cross-template Worker claim. Local and Worker paths use the same engine construction and runtime semantics.
+
+`RenderFramePacket` contains typed ids, positions, velocities, neighbor counts, local densities, group codes, bounded selected-only detail, world/scalar readouts, and explicit generation/run/tick identity. It contains no full entities/components/spaces, event/RNG state, metric history, engine methods, or evidence record. `UIProjection` carries coarse playback/tick/readout/selection/warning/performance facts at about 250ms while running. `CanonicalObservation` remains a reserved future evidence boundary and is not implemented.
+
+PERF1 found that the inherited Flocking spatial hash was not equivalent for non-divisible toroidal cell dimensions. The opt-in corrected index exactly matches brute force over adversarial and generated 500-agent states and exact full trajectories. However, corrected/tuned spatial hashing measured slower than all-pairs: final repeated headless medians were `268.195` versus `296.996` ticks/s at 100 and `28.836` versus `43.964` at 500, despite cutting 500-agent checks from `124,750` to about `62,064` per tick. The preserved automatic path measured `264.867` and `33.959` ticks/s. An independent preceding report showed the same corrected-versus-reference direction. Automatic Flocking preserves the pre-PERF1 threshold, nominal-cell behavior, and fallback so historical runs do not migrate; the corrected index remains an explicit differential path. The known wrap limitation is documented, and inherited/corrected trajectories are not claimed identical.
+
+Three controlled eight-second Worker repetitions measured 100-agent `23.85..23.88` ticks/s and `59.95..60.04 FPS`; 500-agent `23.66..23.69` ticks/s and `59.84..59.99 FPS`, with 16.7ms median and 16.8ms p95 frames. Baseline 500-agent main-thread runs were `6.67..12.97 FPS`, p95 `116.8..233.3ms`, and `49..85` render long frames. The Worker runs had zero render long frames in all three samples, while startup still produced browser long tasks. This demonstrates local main-thread pressure reduction, not universal FPS.
+
+Required 60-second Worker soaks completed 1,445 ordered ticks at 100 and 1,444 at 500, approximately 23.98/23.96 ticks/s and 59.99/60.00 FPS, with no page/console errors or long render frames. Instrumentation stayed capped at 360 samples; queues stayed one-in-flight plus one-newest-pending; post-GC heap readings were unchanged at the browser's coarse 81.4/86.4MB values. Ten real Worker replacements held one Worker, route disposal reached zero, and Back created one. This is not multi-hour/mobile/browser-diversity leak proof.
+
+PERF1 final verification passed focused runtime/neighbor/index/roadmap coverage `6 files / 54 tests`, focused real-Worker Playwright `2/2`, complete Playwright/Axe `185/185 (16.6m)` with no failures/retries/skips, typecheck, `81 files / 678` unit tests, and a `23`-page production build. Final smoke measured Flocking-100 `236.93` ticks/s, Flocking-500 `31.65`, Forest Fire `50.24`, Predator-Prey `140.64`, and bounded Atlas `2` runs / `10` work units / horizon `5` in `38.84ms`. Flocking automatic-path pair checks remained exactly `316,971` and `7,721,264`, matching the untouched baseline at 100/500. `npm run perf:runtime` and `git diff --check` passed. `npm run lint: unavailable, package.json has no lint script.`
+
+PERF1 is ready for its required independent PERF1B audit, which is next. I1 remains unstarted. PERF1B must audit the restored neighbor semantics, Worker races/failures/lifecycle, protocol bounds, memory evidence, production isolation, and claims before I1 may consume the boundary.
 
 R2's implementation record is `docs/ui/WORLD_LAYOUT_AND_INTERACTION_RECLAIM.md`; R2B's audit record is `docs/ui/WORLD_LAYOUT_AND_INTERACTION_RECLAIM_AUDIT.md`. World uses a stable `tasks + stage/playback + active tool` frame. Setup, Observe, Change, Compare, and Explain are direct tasks; More groups Experiment Runner and Diagnostics. The selected tool owns one bounded scroll, full model notes and technical run details use focus-contained modal surfaces, and desktop collapse/restore preserves local tool state.
 
@@ -239,13 +257,15 @@ C3 complete.
 C3B complete.
 I0 complete.
 I0B complete.
-I1: Immersive World Shell is next and has not started.
+PERF1 complete.
+PERF1B: Runtime Performance Architecture Audit is next and has not started.
+I1: Immersive World Shell has not started.
 I2 through I5B have not started.
 C4: Flagship Starter Pack Two is deferred until I5B and has not started.
 
-Completed sequence: UX6B -> GW9 -> GW9B -> R1 -> R1B -> R2 -> R2B -> C1 -> C1B -> C2 -> C2B -> C3 -> C3B -> I0 -> I0B. I1 is next; C4 has not started.
+Completed sequence: UX6B -> GW9 -> GW9B -> R1 -> R1B -> R2 -> R2B -> C1 -> C1B -> C2 -> C2B -> C3 -> C3B -> I0 -> I0B -> PERF1. PERF1B is next; I1 and C4 have not started.
 
-Do not start I1, C4, recipe-first Builder, composition, multiscale runtime, adaptive-controller generalization, Lab/Atlas persistence, E3, F1, or other reset-roadmap capability without its dedicated prompt. Rendered Playwright/Axe evidence does not establish actual browser zoom, screen-reader, assistive-technology, forced-colors, full WCAG, complete touch workflow, or user-comprehension readiness.
+Do not start PERF1B, I1, C4, recipe-first Builder, composition, multiscale runtime, adaptive-controller generalization, Lab/Atlas persistence, E3, F1, or other reset-roadmap capability without its dedicated prompt. Rendered Playwright/Axe evidence does not establish actual browser zoom, screen-reader, assistive-technology, forced-colors, full WCAG, complete touch workflow, browser/mobile diversity, or user-comprehension readiness.
 
 Implemented runtime foundations include scenarios, snapshots, template-defined behavior modes, agent composition, interventions, experiments, run summaries/comparison, seeded randomness, metrics, spaces, template metadata, and a narrow Opinion Dynamics `socialLearning` behavior mode audited in Prompt 33D.
 
@@ -358,7 +378,7 @@ Prompt 35 and Prompt 35B were committed together in `7696381 feat: Implement Mod
 
 ## Next Recommended Prompt
 
-Prompt I0 and Prompt I0B are complete. Prompt I1: Immersive World Shell is next and has not started. Do not begin I1, C4, F1, or any later reset-roadmap capability without its dedicated prompt. C4 is deferred until I5B; F1 remains paused under E3 Analytical Lenses.
+Prompt I0, Prompt I0B, and Prompt PERF1 are complete. Prompt PERF1B: Runtime Performance Architecture Audit is next and has not started. Prompt I1: Immersive World Shell has not started. Do not begin PERF1B, I1, C4, F1, or any later reset-roadmap capability without its dedicated prompt. C4 is deferred until I5B; F1 remains paused under E3 Analytical Lenses.
 
 Next recommended UI/design-system prompt after UX2B: `UI-DESIGN-SYSTEM-1: Rendered Responsive, Typography + Visualization Accessibility Audit`.
 

@@ -2,7 +2,7 @@
 
 ORTUS is organized around a small set of simulation concepts. Keeping these boundaries explicit prevents model-family definitions, live run state, exploratory comparisons, and UI workspace data from collapsing into one ambiguous artifact.
 
-Roadmap status: ORTUS has completed the current modeling foundation through Prompt 39B, the documented neural/runtime-lab side track, and the Research World/UI sequence through GW9B. GW9B complete. The next documented roadmap milestone is F1: Fractal Metrics V1, ready after commit publication and not started. Do not start F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or any further Research World/fractal/multiscale implementation without explicit approval.
+Roadmap status: ORTUS has completed the current modeling foundation, the documented neural/runtime-lab side track, the Research World/UI sequence through GW9B, the world-first reset and first Starter World content sequence, and immersive direction through I0B. PERF1 establishes the bounded runtime performance architecture. PERF1B is next; I1-I5B remain unstarted, and C4 remains deferred until I5B. Do not start PERF1B, I1, C4, Scale Lens, fractal metrics, or further immersive/runtime expansion without explicit approval.
 
 ## Product Philosophy And Learning Mission
 
@@ -248,7 +248,7 @@ Agent composition defines the initial mix of agents, groups, or types for a run.
 
 Flocking currently includes a `groupAware` behavior mode. In that mode, initialized boid groups weigh same-group neighbors more strongly for alignment and cohesion while separation still avoids all nearby boids. Ring Formation is an initialization preset only unless an orbit behavior mode is selected. Initial circular placement does not guarantee persistent circular motion.
 
-Current limitations are intentional: most production templates expose only `default` behavior mode, composition fields are still template-owned parameter definitions rather than a standalone model-builder schema, and no user-authored rule graph exists. `groupAware` reuses the same boid neighbor summaries as classic flocking. The flocking implementation may use a deterministic spatial hash for local-radius neighbor queries, but that is a runtime optimization detail, not a new modeling primitive or evidence of spatial-field support.
+Current limitations are intentional: most production templates expose only `default` behavior mode, composition fields are still template-owned parameter definitions rather than a standalone model-builder schema, and no user-authored rule graph exists. `groupAware` reuses the same boid neighbor summaries as classic flocking. PERF1 preserves the inherited automatic spatial-hash/all-pairs policy so historical deterministic behavior does not migrate inside a performance prompt. A corrected uniform-coverage index exactly matches all-pairs but did not provide a repeatable 100- or 500-agent engine benefit, so it remains an explicit differential implementation rather than a production capability, new modeling primitive, or evidence of spatial-field support.
 
 ### Uncertainty Config
 
@@ -519,11 +519,15 @@ Intended future homes:
 
 I0 introduces an isolated presentation architecture, not a new simulation artifact family or production World runtime.
 
-A `WorldSceneAdapter` is a read-only projection from one authoritative engine snapshot into render-friendly entities, selected-entity relationships, inspectable state, selection geometry, and model-derived lens data. It does not mutate the engine, contain template rules, create a second model, or imply that every production template has an adapter.
+A `WorldSceneAdapter` is a read-only projection from authoritative simulation output into render-friendly entities, selected-entity relationships, inspectable state, selection geometry, and model-derived lens data. It does not mutate the engine, contain template rules, create a second model, or imply that every production template has an adapter.
+
+PERF1 preserves four deliberately separate representations. Authoritative simulation state remains inside `SimulationEngine`. An ephemeral `RenderFramePacket` carries bounded typed-array presentation data. A lower-frequency `UIProjection` carries coarse React and accessibility facts. A future `CanonicalObservation` will define research/evidence records but is not implemented by PERF1. A render packet is neither a snapshot nor empirical evidence, and a UI projection is neither mutable model state nor a persistence format.
+
+The isolated PERF1 Flocking prototype uses a generation-safe browser Worker through `SimulationRuntimePort`; direct `LocalRuntimeDriver` execution remains available for deterministic tests and diagnostics. Both drivers use the same engine construction and projection code. The Worker owns deterministic stepping, scheduling, and frame projection. React and Canvas own presentation only. Visual publications use newest-frame bounded backpressure, while deterministic simulation steps and commands are never dropped.
 
 An immersive camera contains bounded position, zoom, focus target, and a presentation mode such as System, Free, Local, or Follow. Camera zoom is visual magnification, not multi-scale modeling. Camera movement, hover, selection, and active lens state are UI-only and must not alter ticks, metrics, parameters, RNG, snapshots, scenarios, or comparisons.
 
-The I0 Flocking route uses the real validated `flocking-boids` scenario/runtime. Its Alignment lens and neighborhood geometry are snapshot-derived model information. Perspective, shadows, pointer presence, camera interpolation, and transient pulses are presentation. The renderer may reduce visual cadence or bounded atmosphere under load, but it must not reduce model-agent count, rules, deterministic steps, RNG work, metrics, or scenario fidelity.
+The I0/PERF1 Flocking route uses the real validated `flocking-boids` scenario/runtime. Its Alignment lens and neighborhood geometry are model-derived information. Perspective, shadows, pointer presence, camera interpolation, and transient pulses are presentation. The renderer may reduce visual publication cadence or bounded atmosphere under load, but it must not reduce model-agent count, rules, deterministic steps, RNG work, metrics, or scenario fidelity.
 
 React owns controls and semantic inspection, not continuously updated boid components. Canvas owns batched visual projection. I0's route, state, trails, and effects are non-persistent and bounded. This boundary does not implement generic manipulation, cross-template immersive support, model-scale zoom, visual-builder execution, or a 3D runtime.
 

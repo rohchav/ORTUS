@@ -42,6 +42,7 @@ export interface ContinuousSpatialHashOptions {
   height: number;
   cellSize: number;
   topology: ContinuousSpatialHashTopology;
+  cellSizing?: "nominal" | "uniformCoverage";
   maxItems?: number;
   maxCells?: number;
 }
@@ -56,6 +57,9 @@ export class ContinuousSpatialHashIndex {
   readonly topology: ContinuousSpatialHashTopology;
   readonly cols: number;
   readonly rows: number;
+  private readonly cellSizing: "nominal" | "uniformCoverage";
+  private readonly cellWidth: number;
+  private readonly cellHeight: number;
   private readonly maxItems: number;
   private readonly cells: ContinuousSpatialHashItem[][];
   private readonly items: ContinuousSpatialHashItem[] = [];
@@ -71,6 +75,9 @@ export class ContinuousSpatialHashIndex {
     if (options.topology !== "closed" && options.topology !== "wrap") {
       throw new SimulationValidationError("ContinuousSpatialHashIndex topology must be closed or wrap");
     }
+    if (options.cellSizing !== undefined && options.cellSizing !== "nominal" && options.cellSizing !== "uniformCoverage") {
+      throw new SimulationValidationError("ContinuousSpatialHashIndex cellSizing must be nominal or uniformCoverage");
+    }
     const maxItems = options.maxItems ?? defaultMaxItems;
     if (!Number.isInteger(maxItems) || maxItems <= 0) {
       throw new SimulationValidationError("ContinuousSpatialHashIndex maxItems must be a positive integer");
@@ -84,11 +91,14 @@ export class ContinuousSpatialHashIndex {
     this.height = options.height;
     this.cellSize = options.cellSize;
     this.topology = options.topology;
+    this.cellSizing = options.cellSizing ?? "nominal";
     this.cols = Math.max(1, Math.ceil(this.width / this.cellSize));
     this.rows = Math.max(1, Math.ceil(this.height / this.cellSize));
     if (this.cols * this.rows > maxCells) {
       throw new SimulationValidationError(`ContinuousSpatialHashIndex cannot allocate more than ${maxCells} cells`);
     }
+    this.cellWidth = this.cellSizing === "uniformCoverage" ? this.width / this.cols : this.cellSize;
+    this.cellHeight = this.cellSizing === "uniformCoverage" ? this.height / this.rows : this.cellSize;
     this.maxItems = maxItems;
     this.cells = Array.from({ length: this.cols * this.rows }, () => []);
   }
@@ -205,8 +215,8 @@ export class ContinuousSpatialHashIndex {
 
   private nearbyCellIndices(position: Pick<ContinuousSpatialHashItem, "x" | "y">, radius: number): number[] {
     const center = this.cellFor(position);
-    const xRange = Math.min(this.cols - 1, Math.ceil(radius / this.cellSize));
-    const yRange = Math.min(this.rows - 1, Math.ceil(radius / this.cellSize));
+    const xRange = Math.min(this.cols - 1, Math.ceil(radius / this.cellWidth));
+    const yRange = Math.min(this.rows - 1, Math.ceil(radius / this.cellHeight));
     const indices: number[] = [];
     const needsDuplicateGuard = this.topology === "wrap" && (xRange * 2 + 1 > this.cols || yRange * 2 + 1 > this.rows);
     const seen = needsDuplicateGuard ? new Set<number>() : undefined;
@@ -238,8 +248,8 @@ export class ContinuousSpatialHashIndex {
   }
 
   private cellFor(position: Pick<ContinuousSpatialHashItem, "x" | "y">): { col: number; row: number; index: number } {
-    const col = clamp(Math.floor(position.x / this.cellSize), 0, this.cols - 1);
-    const row = clamp(Math.floor(position.y / this.cellSize), 0, this.rows - 1);
+    const col = clamp(Math.floor(position.x / this.cellWidth), 0, this.cols - 1);
+    const row = clamp(Math.floor(position.y / this.cellHeight), 0, this.rows - 1);
     return { col, row, index: this.cellIndex(col, row) };
   }
 
@@ -257,7 +267,13 @@ export class ContinuousSpatialHashIndex {
       throw new SimulationValidationError("ContinuousSpatialHashIndex coordinates must be finite numbers");
     }
     if (this.topology === "wrap") {
-      return { x: mod(x, this.width), y: mod(y, this.height) };
+      if (this.cellSizing === "nominal") {
+        return { x: mod(x, this.width), y: mod(y, this.height) };
+      }
+      return {
+        x: x >= 0 && x < this.width ? x : mod(x, this.width),
+        y: y >= 0 && y < this.height ? y : mod(y, this.height)
+      };
     }
     return { x: clamp(x, 0, this.width), y: clamp(y, 0, this.height) };
   }

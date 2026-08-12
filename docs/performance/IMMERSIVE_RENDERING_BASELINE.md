@@ -196,6 +196,6 @@ The 500 checkpoints were non-monotonic and reclaimed transient allocation. Activ
 
 I0B found no unexplained simulation-semantic change and no unbounded renderer state. It did not establish acceptable universal 500-boid interactivity or a stable raw FPS improvement. Current main-thread Flocking is dominated by engine neighbor search, cloning/snapshot work, and allocation pressure, not Canvas drawing.
 
-I1 should investigate worker/scheduler isolation and snapshot-publication cost in a dedicated measured scope before assuming stronger Canvas LOD or WebGL is the answer. I0B does not implement or authorize those systems.
+PERF1 subsequently investigated worker/scheduler isolation and snapshot-publication cost in the dedicated measured scope recorded in `RUNTIME_PERFORMANCE_ARCHITECTURE.md`. I0B itself does not implement or authorize those systems, and this baseline remains the untouched main-thread reference rather than a claim about the post-PERF1 prototype.
 
 **The immersive renderer changes presentation only. Simulation semantics remain unchanged. Visual quality may degrade independently of model fidelity.**

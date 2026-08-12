@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "perf:runtime": "vite-node src/simulation/testing/runtimePerformanceReport.ts",
     "perf:simulation": "vite-node src/simulation/testing/simulationPerformanceReport.ts",
     "test": "vitest run",
     "test:ui": "playwright test",

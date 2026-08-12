@@ -120,7 +120,7 @@ export function ImmersiveInspector({
       </section>
 
       <dl className="immersive-inspector__status" aria-label="Prototype state" aria-live="polite">
-        <div><dt>Playback</dt><dd>{runtimeView.isRunning ? "Running" : "Paused"}</dd></div>
+        <div><dt>Playback</dt><dd>{runtimeView.isReady ? runtimeView.isRunning ? "Running" : "Paused" : "Preparing"}</dd></div>
         <div><dt>Camera</dt><dd>{cameraModeLabel(cameraMode)}</dd></div>
         <div><dt>Tool</dt><dd>{toolLabel(concept, activeTool)}</dd></div>
         <div><dt>Lens</dt><dd>{lensActive ? "Alignment active" : "Off"}</dd></div>

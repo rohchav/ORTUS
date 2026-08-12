@@ -42,6 +42,7 @@ export interface BoidGroupComponent extends Record<string, JsonValue> {
 
 type Vec2 = Point2D;
 type FlockingBehaviorModeId = "default" | "groupAware";
+export type FlockingNeighborExecutionStrategy = "automatic" | "allPairsReference" | "spatialHash";
 
 interface CachedBoid {
   id: string;
@@ -295,12 +296,12 @@ const runtimeMetadata = {
   neighborSearchStrategy: "continuousSpatialHash",
   hotLoopNotes: [
     "Flocking computes deterministic tick-local neighbor summaries once per tick and reuses them for steering.",
-    "Local-radius runs at or above the spatial-index threshold use ContinuousSpatialHashIndex; tiny or global-radius runs use the all-pairs fallback."
+    "PERF1 preserves the pre-existing automatic spatial-hash/all-pairs selection so deterministic run semantics do not migrate inside a performance prompt."
   ],
   defaultEntityCount: 160,
   stressEntityCount: 500,
   knownPerformanceLimits: [
-    "Perception radii that cover most of the world intentionally fall back to all-pairs because the spatial index provides little pruning.",
+    "The corrected uniform-coverage spatial-hash experiment is exact against all-pairs but measured slower and is not adopted automatically.",
     "Snapshots and canvas render-model rebuilding still scale with visible boid count."
   ]
 } as const;
@@ -518,10 +519,7 @@ export const flockingTemplate: SimulationTemplate = {
     return world;
   },
   registerSystems(registry) {
-    const tickCache: FlockingTickCache = {};
-    registry.register(createBoidNeighborSensingSystem(tickCache));
-    registry.register(createBoidSteeringSystem(tickCache));
-    registry.register(createBoidMovementSystem());
+    registerFlockingSystemsWithNeighborStrategy(registry, "automatic");
   },
   registerMetrics(registry) {
     for (const metric of metricDefinitions) {
@@ -593,6 +591,16 @@ export const flockingTemplate: SimulationTemplate = {
   }
 };
 
+export function registerFlockingSystemsWithNeighborStrategy(
+  registry: { register(system: System): void },
+  strategy: FlockingNeighborExecutionStrategy
+): void {
+  const tickCache: FlockingTickCache = {};
+  registry.register(createBoidNeighborSensingSystem(tickCache, strategy));
+  registry.register(createBoidSteeringSystem(tickCache, strategy));
+  registry.register(createBoidMovementSystem());
+}
+
 function parameterDefinition(key: string): ParameterDefinition {
   const definition = parameterDefinitions.find((candidate) => candidate.key === key);
   if (!definition) {
@@ -601,7 +609,10 @@ function parameterDefinition(key: string): ParameterDefinition {
   return definition;
 }
 
-export function createBoidNeighborSensingSystem(cache?: FlockingTickCache): System {
+export function createBoidNeighborSensingSystem(
+  cache?: FlockingTickCache,
+  strategy: FlockingNeighborExecutionStrategy = "automatic"
+): System {
   return {
     id: "BoidNeighborSensingSystem",
     phase: "sense",
@@ -610,7 +621,7 @@ export function createBoidNeighborSensingSystem(cache?: FlockingTickCache): Syst
     update(ctx) {
       const params = flockingParams(ctx.params);
       const space = requireFlockingSpace(ctx.spaces.continuous2D(FLOCKING_SPACE_ID));
-      const data = ensureFlockingTickData(ctx, space, params, cache);
+      const data = ensureFlockingTickData(ctx, space, params, cache, strategy);
       if (cache) {
         return;
       }
@@ -631,7 +642,10 @@ export function createBoidNeighborSensingSystem(cache?: FlockingTickCache): Syst
   };
 }
 
-export function createBoidSteeringSystem(cache?: FlockingTickCache): System {
+export function createBoidSteeringSystem(
+  cache?: FlockingTickCache,
+  strategy: FlockingNeighborExecutionStrategy = "automatic"
+): System {
   return {
     id: "BoidSteeringSystem",
     phase: "decide",
@@ -640,7 +654,7 @@ export function createBoidSteeringSystem(cache?: FlockingTickCache): System {
     update(ctx) {
       const params = flockingParams(ctx.params);
       const space = requireFlockingSpace(ctx.spaces.continuous2D(FLOCKING_SPACE_ID));
-      const data = ensureFlockingTickData(ctx, space, params, cache);
+      const data = ensureFlockingTickData(ctx, space, params, cache, strategy);
       const noiseRng = ctx.rng.fork("flocking:noise");
       const boidCount = data.boids.length;
       const velocityUpdates: Record<string, ComponentValue> = {};
@@ -1028,10 +1042,11 @@ function ensureFlockingTickData(
   ctx: SystemContext,
   space: Continuous2DSpaceReader,
   params: ReturnType<typeof flockingParams>,
-  cache?: FlockingTickCache
+  cache?: FlockingTickCache,
+  strategy: FlockingNeighborExecutionStrategy = "automatic"
 ): FlockingTickData {
   const behaviorMode = flockingBehaviorModeFromWorld(ctx.world.globals);
-  const signature = `${behaviorMode}:${params.perceptionRadius}:${params.separationRadius}:${space.width}:${space.height}:${space.boundaryMode}`;
+  const signature = `${behaviorMode}:${params.perceptionRadius}:${params.separationRadius}:${space.width}:${space.height}:${space.boundaryMode}:${strategy}`;
   if (cache?.data?.tick === ctx.tick && cache.data.signature === signature) {
     return cache.data;
   }
@@ -1053,7 +1068,9 @@ function ensureFlockingTickData(
 
   const separationRadiusSquared = params.separationRadius * params.separationRadius;
   const allPairCount = (boids.length * (boids.length - 1)) / 2;
-  const pairQuery = queryFlockingNeighborPairs(boids, space, params);
+  const neighborStarted = ctx.performance.mark();
+  const pairQuery = queryFlockingNeighborPairs(boids, space, params, strategy);
+  ctx.performance.recordDuration("ortus.sim.neighbors", ctx.performance.elapsedSince(neighborStarted));
   ctx.performance.recordCounter("flockingTheoreticalAllPairs", allPairCount);
   ctx.performance.recordCounter("flockingPairwiseChecks", pairQuery.distanceChecks);
   ctx.performance.recordCounter("flockingNeighborPairs", pairQuery.pairs.length);
@@ -1114,14 +1131,22 @@ function ensureFlockingTickData(
 function queryFlockingNeighborPairs(
   boids: readonly CachedBoid[],
   space: Continuous2DSpaceReader,
-  params: ReturnType<typeof flockingParams>
+  params: ReturnType<typeof flockingParams>,
+  strategy: FlockingNeighborExecutionStrategy
 ): FlockingNeighborQuery {
-  if (!shouldUseSpatialHash(boids.length, space, params.perceptionRadius)) {
+  const useSpatialHash = strategy === "spatialHash"
+    || (strategy === "automatic" && shouldUseSpatialHash(boids.length, space, params.perceptionRadius));
+  if (!useSpatialHash) {
     return queryAllFlockingPairs(boids, space, params.perceptionRadius);
   }
 
   const boidsById = new Map(boids.map((boid) => [boid.id, boid]));
-  const query = createFlockingSpatialIndex(boids, space, params.perceptionRadius).queryPairsWithinRadius(params.perceptionRadius);
+  const query = createFlockingSpatialIndex(
+    boids,
+    space,
+    params.perceptionRadius,
+    strategy === "spatialHash" ? "uniformCoverage" : "nominal"
+  ).queryPairsWithinRadius(params.perceptionRadius);
   const pairs: FlockingNeighborPair[] = [];
   for (const pair of query.pairs) {
     const left = boidsById.get(pair.leftId);
@@ -1171,12 +1196,19 @@ function shouldUseSpatialHash(boidCount: number, space: Continuous2DSpaceReader,
   return perceptionRadius < Math.min(space.width, space.height) / 2;
 }
 
-function createFlockingSpatialIndex(boids: readonly CachedBoid[], space: Continuous2DSpaceReader, perceptionRadius: number): ContinuousSpatialHashIndex {
+function createFlockingSpatialIndex(
+  boids: readonly CachedBoid[],
+  space: Continuous2DSpaceReader,
+  perceptionRadius: number,
+  cellSizing: "nominal" | "uniformCoverage"
+): ContinuousSpatialHashIndex {
+  const correctedExperiment = cellSizing === "uniformCoverage";
   const index = new ContinuousSpatialHashIndex({
     width: space.width,
     height: space.height,
     topology: space.boundaryMode === "wrap" ? "wrap" : "closed",
-    cellSize: Math.max(1, Math.min(perceptionRadius, Math.max(space.width, space.height))),
+    cellSize: Math.max(1, Math.min(correctedExperiment ? perceptionRadius / 3 : perceptionRadius, Math.max(space.width, space.height))),
+    cellSizing,
     maxItems: Math.max(1, boids.length)
   });
   index.addAll(boids.map((boid) => ({ id: boid.id, x: boid.position.x, y: boid.position.y })));

@@ -4,11 +4,11 @@ This directory contains a headless TypeScript simulation engine for visual compl
 
 ## Philosophy
 
-The engine owns time, scheduling, mutation, seeded randomness, validation, metrics, snapshots, and serialization. Templates own domain behavior and metadata. Rendering layers should consume snapshots later without becoming part of the simulation loop.
+The engine owns time, scheduling, mutation, seeded randomness, validation, metrics, snapshots, and serialization. Templates own domain behavior and metadata. Rendering layers consume authoritative snapshots or bounded renderer projections without becoming part of the simulation loop.
 
-Roadmap status: ORTUS has completed the modeling foundation through Prompt 39B, the documented neural/runtime-lab side track, the Research World/UI sequence through Prompt GW9B, the product-reset sequence through C3B, and I0/I0B immersive direction prototyping and audit. I1: Immersive World Shell is next and has not started. I2 through I5B are reserved; C4 is deferred until I5B. F1 remains paused under E3 Analytical Lenses. Do not start I1, C4, F1, or other reserved work without its dedicated prompt.
+Roadmap status: ORTUS has completed the modeling foundation through Prompt 39B, the documented neural/runtime-lab side track, the Research World/UI sequence through Prompt GW9B, the product-reset sequence through C3B, I0/I0B immersive direction prototyping/audit, and PERF1 Runtime Performance Architecture. PERF1B is next and has not started. I1 through I5B are reserved and unstarted; C4 is deferred until I5B. F1 remains paused under E3 Analytical Lenses. Do not start PERF1B, I1, C4, F1, or other reserved work without its dedicated prompt.
 
-Prompt I0 changes presentation only. Its route-local runtime creates an existing validated Flocking engine, advances it with the same external 24 Hz elapsed-time accumulator and engine catch-up ceiling used by production World, and reads snapshots through a UI-side scene adapter. No file in `src/simulation` is changed by I0. Camera, hover, selection, follow, lenses, shadows, trails, and effects remain downstream presentation state; they do not change template rules, scheduling inside the headless engine, seeded RNG, initialization, parameters, metrics, snapshots, experiments, comparisons, or persistence. The I0 adapter and Canvas renderer do not imply cross-template immersive support.
+Prompt I0 changed presentation only. PERF1 now proves a dedicated Worker-backed execution boundary on that same isolated Flocking route. A shared `RuntimeSession` owns the existing validated engine, the same external 24 Hz elapsed accumulator and catch-up ceiling, compact frame projection, coarse UI projection, and generation-safe lifecycle. Camera, hover, selection, follow, lenses, shadows, trails, and effects remain downstream presentation state; they do not change template rules, seeded RNG, initialization, parameters, metrics, experiments, comparisons, or persistence. The Worker prototype, Flocking frame projector, and Canvas adapter do not imply production World migration or cross-template support.
 
 Prompt P0 is documentation only. ORTUS models are representations for exploration and comparison, not direct copies of reality. Simulation output is evidence about the model’s behavior, not automatically evidence about the world. P0 does not change the headless engine, add Research World progression, add scoring or unlocks, add templates, add primitives, add UI flows, or alter runtime behavior.
 
@@ -39,6 +39,14 @@ Prompt GW5 is a Lab UI/documentation foundation only. It defines non-persistent 
 Entities are stable identities. Components are plain serializable data. Systems contain behavior and run through scheduler phases. Spaces provide continuous, grid, or network relationships. Templates register systems, parameters, metrics, documentation, and visual mapping metadata without modifying engine internals.
 
 The cross-cutting vocabulary for templates, scenarios, runs, snapshots, run summaries, experiments, interventions, behavior modes, agent composition, and uncertainty configuration is documented in `../../docs/concepts.md`.
+
+### Runtime Presentation Boundary
+
+`src/simulation/runtime` provides one bounded port over authoritative engine ownership. `LocalRuntimeDriver` and `WorkerRuntimeDriver` share `RuntimeSession`, validated RunConfig/template construction, scheduler semantics, and projectors; they are not separate simulation implementations. The Worker imports trusted static ORTUS code only and exchanges strict Zod-validated protocol messages.
+
+`RenderFramePacket` is an ephemeral typed-array renderer projection with generation/run/tick identity. It is not a snapshot, persistence format, evidence record, or `CanonicalObservation`. `UIProjection` is lower-frequency React/accessibility state and does not carry per-entity motion arrays. The Flocking projector supports only `flocking-boids`; other templates require explicit audited projectors and rendering primitives.
+
+Frame/UI publication each permits one in-flight value and one newest pending value. Coalescing can discard obsolete visual publications but never simulation steps, commands, interventions, comparison captures, or future evidence records. Worker buffers transfer ownership; shared memory and `OffscreenCanvas` are not used. Failures are explicit and never trigger an undisclosed local run.
 
 ## Scheduler
 
@@ -98,7 +106,7 @@ Prompt F0 is documentation only. It records future fractal and multiscale analys
 
 Agent composition defines the initial mix of agents, groups, or types for a run. It should not be confused with live engine state or snapshots. Current composition fields are template-owned parameter definitions. Flocking adds a `groupAware` behavior mode with deterministic boid group assignment and group-weighted alignment/cohesion. Ring Formation is an initialization preset only unless an orbit behavior mode is selected. Initial circular placement does not guarantee persistent circular motion.
 
-V1 behavior/composition support remains deliberately narrow: most templates are default-mode only, composition is template-owned setup metadata, and custom rule authoring still requires future model-definition and compiler work. `groupAware` Flocking is a real runtime variant that reuses the same deterministic boid neighbor summaries as classic flocking. The template may use a spatial hash to reduce local-radius neighbor checks, but that is an implementation detail, not a new modeling primitive.
+V1 behavior/composition support remains deliberately narrow: most templates are default-mode only, composition is template-owned setup metadata, and custom rule authoring still requires future model-definition and compiler work. `groupAware` Flocking is a real runtime variant that reuses the same deterministic boid neighbor summaries as classic flocking. PERF1 preserves the inherited automatic spatial-hash/all-pairs policy; the exact corrected uniform-coverage path remains differential-only because it measured slower. This implementation decision is not a new modeling primitive.
 
 `SimulationRunConfig` is the generic fresh-run recipe shared by scenario authoring and experiment/uncertainty paths. It contains template id, seed, parameters, optional scenario id/name, initialization preset/options, agent composition, behavior mode, environment options, optional uncertainty config metadata for ensemble setup, and metadata. It is explicitly distinct from snapshots and run summaries.
 
@@ -441,9 +449,9 @@ Service primitives such as networks, resources, feedback, spatial fields, observ
 
 Default entity counts are UX defaults, not engine limits. Stress counts in `runtimeMetadata` are local benchmark targets that need evidence before being treated as safe product limits. ORTUS should not claim high-scale support without benchmark data from the current runtime and template configuration.
 
-Interactive UI runs advance the headless engine through fixed ticks, create a fresh snapshot when an animation frame has one or more completed ticks, publish that snapshot through Zustand, and render the World Stage with a batched canvas pass. The engine state remains the source of truth; snapshots are cloned/serialized views for UI consumption and import/export safety.
+Production World runs advance the headless engine through fixed ticks, create a fresh snapshot when an animation frame has one or more completed ticks, publish that snapshot through Zustand, and render the World Stage with a batched canvas pass. PERF1 does not migrate that workflow. Its isolated Worker prototype instead transfers a compact renderer packet and publishes a separate coarse UI projection. In both paths the engine remains the source of truth; canonical snapshots remain available for continuation, export, comparison, and other authoritative consumers.
 
-Optional performance instrumentation is available through `SimulationEngine` options or, in the browser UI, by setting `localStorage.setItem("ortus.performanceInstrumentation.v1", "enabled")` before creating/resetting a run. Removing that key disables it. Instrumentation records bounded last-N tick, metric, snapshot, frame/update, entity-count, and operation-counter samples. It does not alter model semantics and does not log every frame.
+Optional performance instrumentation is available through `SimulationEngine` options or, in the browser UI, by setting `localStorage.setItem("ortus.performanceInstrumentation.v1", "enabled")` before creating/resetting a run. Removing that key disables it. Instrumentation records bounded last-N tick, metric, snapshot, frame/update, entity-count, operation-counter, and named-duration samples. PERF1 names step, neighbor, snapshot, runtime publication, scene projection, render draw, UI publication, and run rebuild phases. It does not alter model semantics, persist telemetry, or require logging every frame.
 
 Movement-heavy templates need explicit spatial/projection services when local interactions dominate runtime. `Grid2DSpace` already supports local grid neighborhoods. `src/simulation/spatialIndex` provides the headless `ContinuousSpatialHashIndex` for deterministic continuous 2D local-radius lookup. Generic `Continuous2DSpace.queryNeighbors` now uses a versioned lazy `ContinuousSpatialHashIndex` for finite local-radius queries in non-tiny worlds, reusing the index across repeated queries until positions change. Tiny worlds and broad/global-radius queries keep deterministic all-pairs fallback. Arbitrary external `queryRadius` calls remain linear so existing boundary semantics are not silently changed.
 
@@ -451,7 +459,7 @@ Schelling uses `Grid2DSpace` with a per-tick occupancy map, so neighbor lookups 
 
 Forest Fire / Landscape Spread uses template-owned grid-local spread logic, not SpatialFieldModel or BoundaryEnvironmentModel runtime support. Its tick path uses cached neighbor-index lookup tables, compact numeric state arrays, active burning-cell indices, and changed-component updates. Metrics read current state counts from bounded world globals when available instead of rescanning every cell for every metric. Lightning and regrowth still scan bounded grid cells when enabled. Full engine invariant checks, template validation, snapshot serialization, Zustand publication, and render-grid model creation remain separate scalability costs.
 
-Flocking computes deterministic pair summaries once per tick for separation, alignment, cohesion, neighbor count, and local density. Those summaries are reused by steering, and Flocking emits batched command-buffer commands for velocity, position, and space movement updates. For local-radius queries with at least 100 boids and a perception radius smaller than half the world width/height, Flocking builds a headless `ContinuousSpatialHashIndex` and queries candidate pairs. Tiny flocks and global-radius settings use the all-pairs fallback because the grid overhead or coverage is not helpful. Pair order remains deterministic by sorted entity id.
+Flocking computes deterministic pair summaries once per tick for separation, alignment, cohesion, neighbor count, and local density. Those summaries are reused by steering, and Flocking emits batched command-buffer commands for velocity, position, and space movement updates. PERF1 found a non-divisible wrap-cell defect, isolated an exact corrected `uniformCoverage` path, and measured it against stable all-pairs accumulation order. At 100 and 500 boids the corrected path remained slower despite fewer 500-agent distance checks. Automatic Flocking therefore retains the pre-PERF1 nominal-cell strategy and fallback to preserve historical run semantics; the corrected index remains explicit differential/benchmark work, not a production scalability claim.
 
 The Flocking `dispersion` metric is a center-of-mass spread metric, computed as mean distance from the flock center. It is intentionally O(n) and is an approximate flock spread summary, not an average pairwise distance.
 
@@ -469,6 +477,12 @@ The broader local performance report can be run with:
 npm run perf:simulation
 ```
 
+The PERF1 strategy/projection comparison can be run with:
+
+```bash
+npm run perf:runtime
+```
+
 The report is non-asserting and intended for diagnosis. It includes elapsed time, ticks/sec, average scheduler compute time, average metrics time, validation/overhead remainder, snapshot creation time, render-model preparation time where accessible, entity/cell count, metrics-history length, continuous-space query counters, flocking pair checks, and forest-fire changed-cell counters. Timing varies by machine; use operation counters and repeated runs before making scalability claims.
 
 Latest direct Flocking baseline:
@@ -479,9 +493,9 @@ Latest direct Flocking baseline:
 | 300 ticks / 180 boids | 4237.02 | 14.1234 | 180 | 300 |
 | 300 ticks / 300 boids | 8423.42 | 28.0781 | 300 | 300 |
 
-These are coarse regression baselines, not portable performance guarantees. Structural counters are more reliable than timing for this optimization: in one default-radius run, 160 boids had 12,720 theoretical all-pairs checks and 7,278 spatial-hash candidate checks; 300 boids had 44,850 theoretical all-pairs checks and 25,847 spatial-hash candidate checks. UI layers should avoid React component-per-agent rendering and should render from snapshots with batching or canvas/WebGL-style primitives.
+These are historical coarse regression baselines, not portable performance guarantees. PERF1 supersedes the old assumption that fewer spatial-hash candidate checks necessarily improve supported-scale Flocking throughput; current repeated strategy evidence lives in `../../docs/performance/RUNTIME_PERFORMANCE_ARCHITECTURE.md`. UI layers should avoid React component-per-agent rendering and should consume snapshots or bounded frame projections with a batched renderer.
 
-Experiment runs execute locally and are chunked between completed trials so the browser can update progress and respond to cancellation. V1 does not use Web Workers, does not store per-run snapshots, and enforces run-count limits to avoid accidental long synchronous sweeps.
+Experiment Runner sweeps still execute locally and are chunked between completed trials so the browser can update progress and respond to cancellation. PERF1's dedicated Worker supports only the isolated Flocking runtime prototype; it does not migrate experiments. Experiment runs do not store per-run snapshots and enforce run-count limits to avoid accidental long synchronous sweeps.
 
 Interventions add no per-frame engine work. Radius target sets are computed only when the intervention is applied, and recent visual/target state stays in the UI layer.
 

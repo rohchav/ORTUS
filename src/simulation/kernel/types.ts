@@ -293,6 +293,9 @@ export interface MetricsAccess {
 
 export interface PerformanceAccess {
   recordCounter(counterId: string, value: number): void;
+  mark(): number;
+  elapsedSince(mark: number): number;
+  recordDuration(name: import("./Performance").PerformanceMeasureName, durationMs: number): void;
 }
 
 export interface EventAccess {

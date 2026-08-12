@@ -1,7 +1,7 @@
 # ORTUS Product Experience Reset Roadmap
 
-Date: 2026-08-11
-Status: active product sequence; R1 through C3B and I0/I0B complete; I1 next; C4 deferred until I5B
+Date: 2026-08-12
+Status: active product sequence; R1 through C3B, I0/I0B, and PERF1 complete; PERF1B next; I1 unstarted; C4 deferred until I5B
 
 ## Why This Sequence Exists
 
@@ -25,6 +25,8 @@ Historical prompt records remain authoritative accounts of completed work. This 
 | C3B | Guided Investigation Audit | Audit storage, accessibility, inference boundaries, and learning claims. |
 | I0 | Immersive World Direction + Performance Baseline | Compare three isolated real-runtime Flocking presentation concepts without replacing production World. |
 | I0B | Immersive World Direction Audit | Audit I0 runtime integrity, performance evidence, accessibility, isolation, and the selected direction. |
+| PERF1 | Runtime Performance Architecture | Prove a deterministic bounded Worker/runtime/projection boundary before production immersive migration. |
+| PERF1B | Runtime Performance Architecture Audit | Independently audit equivalence, races, failure paths, lifecycle, memory, performance evidence, and production isolation. |
 | I1 | Reserved Immersive Phase 1 | Scope only through its dedicated prompt; I0 does not implement it. |
 | I1B | Reserved Immersive Phase 1 Audit | Required audit gate. |
 | I2 | Reserved Immersive Phase 2 | Scope only through its dedicated prompt; I0 does not implement it. |
@@ -70,7 +72,7 @@ C1 is complete. It adds the strict source-backed Starter World registry, `/world
 
 `C3: Guided Investigation / Tutorial World` and `C3B: Guided Investigation Audit + Hardening` are complete. The implementation adds one strict, recursively frozen `Reading a Flock` guide over the audited clear/noisy Coordination pair; C3B hardens fail-closed authority, modified-run provenance and restore, generic comparison provenance, hostile public queries, metric language, focus, history, accessibility, and non-persistence. It uses only existing playback/tasks/Compare and validated scenario behavior, stores no progress, makes no learning inference, and changes no simulation behavior or comparison persistence.
 
-`I0: Immersive World Direction + Performance Baseline` and `I0B: Immersive World Direction Audit + Performance Hardening` are complete. The isolated internal route compares Living Diorama, God-Hand, and Field Scientist presentations over the same fixed validated Flocking scenario. Camera, selection, tools, and Alignment lens remain presentation-only; Canvas owns batched boid drawing; React owns coarse controls and text; visual state is bounded; and no storage or production World migration was added. I0B independently reproduced severe machine/run variance, found engine neighbor search and cloning/snapshot pressure rather than Canvas draw to dominate 500-boid cadence, localized detail to one selection, added automatic bounded visual quality, removed misleading effects and the Hand metaphor, and completed six one-minute soaks. It revises the initial 50/20/30 split into exact Living Diorama surface ownership, Field Scientist observation ownership, and non-manipulative direct-feedback ownership. `I1: Immersive World Shell` is next and has not started. I2 through I5B are reserved and unstarted. `C4: Flagship Starter Pack Two` is deferred until I5B; S1-S5 and E1-E3 have not started under this roadmap.
+`I0: Immersive World Direction + Performance Baseline`, `I0B: Immersive World Direction Audit + Performance Hardening`, and `PERF1: Runtime Performance Architecture` are complete. The isolated internal route still compares Living Diorama, God-Hand, and Field Scientist over one fixed validated Flocking scenario, but its authoritative engine and scheduler now run in a dedicated Worker. Canvas consumes bounded transferable `RenderFramePacket` arrays; React/accessibility consumes a separate coarse `UIProjection`; generation-safe messaging, newest-frame backpressure, explicit failure, selected-only detail, and bounded disposal are tested. PERF1 does not migrate production World or claim cross-template Worker/render support. It identified a toroidal spatial-index defect, proved an opt-in corrected path exact against all-pairs, rejected adoption because it measured slower at 100 and 500 boids, and preserved the inherited automatic path to avoid a deterministic migration. `PERF1B: Runtime Performance Architecture Audit` is next and has not started. I1 through I5B are reserved and unstarted. `C4: Flagship Starter Pack Two` is deferred until I5B; S1-S5 and E1-E3 have not started under this roadmap.
 
 The active route hierarchy is Start `/`, Start-adjacent Explore Worlds `/worlds`, the flagship collection `/worlds/packs/local-rules-global-patterns`, the `Reading a Flock` guide `/worlds/guides/reading-a-flock`, World `/world`, Workshop `/builder`, Atlas `/atlas`, and Lab `/lab`. `/worlds` contains eleven validated runnable definitions. The guide is a separate instructional route, not a twelfth world. Four catalog worlds are focused C2 experiences over existing production templates; their existence is not evidence that later starter packs, composition, Lab, Atlas, or analysis milestones exist.
 
@@ -86,7 +88,7 @@ Earlier files may state that F1 follows GW9B. That was the prior sequence and is
 
 ```text
 R1 -> R1B -> R2 -> R2B -> C1 -> C1B -> C2 -> C2B -> C3 -> C3B
--> I0 -> I0B -> I1 -> I1B -> I2 -> I2B -> I3 -> I3B -> I4 -> I4B -> I5 -> I5B
+-> I0 -> I0B -> PERF1 -> PERF1B -> I1 -> I1B -> I2 -> I2B -> I3 -> I3B -> I4 -> I4B -> I5 -> I5B
 -> C4 -> C4B -> S1 -> S1B -> S2 -> S2B -> S3 -> S3B -> S4 -> S4B
 -> S5 -> S5B -> E1 -> E1B -> E2 -> E2B -> E3 -> E3B
 ```
@@ -111,11 +113,14 @@ Explicit user direction may revise this roadmap, but documentation-only mileston
 - Guided prepared-pair claims must be suspended when active template, recipe provenance, initialization, seed, parameters, or interventions diverge. Show active facts and require explicit confirmation before restoring the prepared fresh run.
 - Public `/world` boundaries must reject promise/prototype-like query names before async search-parameter interpretation; invalid guided requests must not partially construct AppShell or runtime state.
 - The live system remains the primary World visual object.
-- Immersive presentation must remain downstream of authoritative snapshots. Camera, hover, selection, focus, and lenses must not alter runtime state, metrics, seeds, or model outcomes.
+- Immersive presentation must remain downstream of authoritative engine state through canonical snapshots or audited bounded projections. Camera, hover, selection, focus, and lenses must not alter runtime state, metrics, seeds, or model outcomes.
 - React must not become a continuously rerendering per-entity loop. Visual frame rate and bounded atmosphere may degrade before model ticks, rules, RNG, metrics, or scenario fidelity.
 - The audited immersive direction uses Living Diorama for the world surface and spatial presence, Field Scientist for observation/inspection truth, and only non-manipulative pointer feedback from the God-Hand prototype. Do not restore percentage weights or the God-Hand/Hand metaphor as a production capability claim.
 - Automatic immersive quality may cap DPR and reduce decorative grid, shadow, stroke, selected-trail, and transient-effect work. It must remain local presentation state and must never change model fidelity.
-- Flocking 500-boid main-thread pressure is dominated by engine neighbor search and cloning/snapshot allocation on the measured machine. Do not infer that WebGL or further Canvas micro-optimization solves it; worker/scheduler or publication changes require a dedicated measured prompt.
+- PERF1's Flocking Worker slice is one measured implementation, not generic Worker support. Keep `SimulationRuntimePort`, `RenderFramePacket`, and `UIProjection` distinct from snapshots and future `CanonicalObservation`; do not expose engine mutation, persist packets, or treat presentation values as evidence records.
+- Keep Worker messages generation/run/tick identified, strictly validated, transferable where bounded, and fail-closed without implicit local fallback. Frame/UI channels may retain one in-flight and one newest pending publication, but may never skip model steps or commands.
+- Correct neighbor membership, stable accumulation order, and explicit deterministic migration outrank candidate-count reductions. PERF1's corrected spatial-hash path remains non-automatic because it changes affected inherited trajectories and measured slower than all-pairs at the supported 500-boid bound; do not revive it as a scalability claim without a dedicated migration, new matched evidence, and exact differential tests.
+- Flocking 500-boid main-thread pressure was dominated by engine work and cloning/snapshot allocation on the measured machine. PERF1 credibly moves the isolated prototype's engine work off the main thread and removes continuous snapshots; it does not prove universal browser, mobile, multi-template, or high-scale readiness.
 - World task labels, query state, current navigation, and visible task must agree without resetting the active run.
 - Keep World Stage and persistent playback mounted outside task rendering; task switching must not recreate or reset the active run.
 - Keep one bounded active-tool scroll region. Desktop collapse/restore must preserve local tool state, and mobile layouts must not clip deeper controls or create document overflow.

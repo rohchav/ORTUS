@@ -115,7 +115,7 @@ test("keeps keyboard inspection, focus return, and reduced-motion equivalents av
   await page.keyboard.press("Enter");
   await expect(prototypeRoot(page)).toHaveAttribute("data-concept", "god-hand");
 
-  const canvas = page.getByRole("img", { name: "Immersive Flocking world rendered from the current engine snapshot" });
+  const canvas = page.getByRole("img", { name: "Immersive Flocking world rendered from the current runtime frame" });
   await canvas.focus();
   await canvas.press("ArrowRight");
   await expect(page.getByRole("heading", { level: 2, name: "Boid 1" })).toBeVisible();
@@ -243,10 +243,15 @@ function prototypeRoot(page: Page) {
 
 async function waitForPrototypeReady(page: Page) {
   await page.waitForFunction(() => {
-    const api = (window as Window & { __ORTUS_IMMERSIVE_AUDIT__?: { readMeasurement?: unknown } }).__ORTUS_IMMERSIVE_AUDIT__;
-    return typeof api?.readMeasurement === "function";
+    const api = (window as Window & { __ORTUS_IMMERSIVE_AUDIT__?: { readMeasurement?: unknown; whenReady?: unknown } }).__ORTUS_IMMERSIVE_AUDIT__;
+    return typeof api?.readMeasurement === "function" && typeof api.whenReady === "function";
   });
-  await expect(page.getByRole("img", { name: "Immersive Flocking world rendered from the current engine snapshot" }))
+  await page.evaluate(() => (window as Window & {
+    __ORTUS_IMMERSIVE_AUDIT__: { whenReady(): Promise<void> };
+  }).__ORTUS_IMMERSIVE_AUDIT__.whenReady());
+  await expect(prototypeRoot(page)).toHaveAttribute("data-runtime-ready", "true");
+  await expect(prototypeRoot(page)).toHaveAttribute("data-runtime-kind", "worker");
+  await expect(page.getByRole("img", { name: "Immersive Flocking world rendered from the current runtime frame" }))
     .toHaveAttribute("data-tick", /\d+/);
 }
 
@@ -265,7 +270,7 @@ async function activateByKeyboard(locator: Locator) {
 }
 
 async function sampledCanvasColorCount(page: Page): Promise<number> {
-  return page.getByRole("img", { name: "Immersive Flocking world rendered from the current engine snapshot" }).evaluate((element) => {
+  return page.getByRole("img", { name: "Immersive Flocking world rendered from the current runtime frame" }).evaluate((element) => {
     const canvas = element as HTMLCanvasElement;
     const context = canvas.getContext("2d")!;
     const pixels = context.getImageData(0, 0, canvas.width, canvas.height).data;

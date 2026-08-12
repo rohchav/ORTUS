@@ -38,6 +38,7 @@ interface ImmersiveWorldPrototypeProps {
 }
 
 interface ImmersiveAuditApi {
+  whenReady(): Promise<void>;
   startMeasurement(): void;
   readMeasurement(): {
     concept: ImmersiveConceptId;
@@ -45,6 +46,8 @@ interface ImmersiveAuditApi {
     runtime: ReturnType<ImmersiveFlockingRuntime["performanceSummary"]>;
     render: ReturnType<ImmersiveCanvasAuditHandle["summary"]> | null;
     runtimeSignature: string;
+    runtimeKind: "local" | "worker";
+    generation: number;
   };
 }
 
@@ -109,7 +112,7 @@ function ImmersivePrototypeSession({
   onConceptChange: (concept: ImmersiveConceptId) => void;
   onAgentCountChange: (agentCount: ImmersiveAgentCount) => void;
 }) {
-  const [runtime] = useState(() => new ImmersiveFlockingRuntime(agentCount));
+  const [runtime] = useState(() => new ImmersiveFlockingRuntime(agentCount, { execution: "worker" }));
   const runtimeView = useSyncExternalStore(runtime.subscribe, runtime.getView, runtime.getView);
   const [camera, setCamera] = useState<ImmersiveCameraState>(() => createSystemCamera({ width: 100, height: 100 }));
   const [selectedEntityId, setSelectedEntityId] = useState<string | null>(null);
@@ -128,6 +131,7 @@ function ImmersivePrototypeSession({
   const adapter = runtime.getSceneAdapter();
 
   useEffect(() => {
+    runtime.start();
     const generation = runtimeLifecycleGenerationRef.current + 1;
     runtimeLifecycleGenerationRef.current = generation;
     return () => {
@@ -154,6 +158,7 @@ function ImmersivePrototypeSession({
 
   useEffect(() => {
     window.__ORTUS_IMMERSIVE_AUDIT__ = {
+      whenReady: () => runtime.whenReady(),
       startMeasurement() {
         const now = performance.now();
         runtime.startPerformanceMeasurement(now);
@@ -166,7 +171,9 @@ function ImmersivePrototypeSession({
           agentCount,
           runtime: runtime.performanceSummary(now),
           render: canvasAuditRef.current?.summary(now) ?? null,
-          runtimeSignature: runtime.getSceneAdapter().getRuntimeSignature()
+          runtimeSignature: runtime.getSceneAdapter().getRuntimeSignature(),
+          runtimeKind: runtime.getView().executionKind,
+          generation: runtime.getView().generation
         };
       }
     };
@@ -176,6 +183,7 @@ function ImmersivePrototypeSession({
   }, [agentCount, concept, runtime]);
 
   const selectEntity = useCallback((entityId: string | null) => {
+    runtime.setSelectedEntity(entityId);
     setSelectedEntityId(entityId);
     setCamera((current) => {
       if (!entityId) {
@@ -242,6 +250,9 @@ function ImmersivePrototypeSession({
       data-agent-count={agentCount}
       data-tick={runtimeView.tick}
       data-runtime-signature={runtimeView.runtimeSignature}
+      data-runtime-ready={runtimeView.isReady}
+      data-runtime-kind={runtimeView.executionKind}
+      data-runtime-generation={runtimeView.generation}
       data-reduced-motion={reducedMotion}
     >
       <header className="immersive-prototype__bar">
@@ -320,7 +331,7 @@ function ImmersivePrototypeSession({
 
         <div className="immersive-stage-readout" aria-label="Current prototype run">
           <span>{conceptLabels[concept]}</span>
-          <strong>{runtimeView.isRunning ? "Running" : "Paused"}</strong>
+          <strong>{runtimeView.isReady ? runtimeView.isRunning ? "Running" : "Paused" : "Preparing"}</strong>
           <em>Tick {formatTick(runtimeView.tick)}</em>
         </div>
 
@@ -343,6 +354,7 @@ function ImmersivePrototypeSession({
         <div className="immersive-playback__buttons">
           <button
             type="button"
+            disabled={!runtimeView.isReady}
             aria-label={runtimeView.isRunning ? "Pause immersive simulation" : "Run immersive simulation"}
             aria-pressed={runtimeView.isRunning || undefined}
             onClick={() => {
@@ -353,12 +365,13 @@ function ImmersivePrototypeSession({
             <span aria-hidden="true">{runtimeView.isRunning ? "II" : ">"}</span>
             <b>{runtimeView.isRunning ? "Pause" : "Run"}</b>
           </button>
-          <button type="button" disabled={runtimeView.isRunning} onClick={() => runtime.stepOnce()}>
+          <button type="button" disabled={!runtimeView.isReady || runtimeView.isRunning} onClick={() => runtime.stepOnce()}>
             <span aria-hidden="true">→</span>
             <b>Step</b>
           </button>
           <button
             type="button"
+            disabled={!runtimeView.isReady}
             aria-label={restoreArmed ? "Confirm restore and discard current prototype run state" : "Restore prepared prototype run"}
             aria-pressed={restoreArmed || undefined}
             onClick={requestRestore}

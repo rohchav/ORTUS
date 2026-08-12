@@ -63,6 +63,29 @@ describe("ContinuousSpatialHashIndex", () => {
     expect(pairs[0]?.distance).toBeCloseTo(1);
   });
 
+  it("keeps nominal-cell compatibility while the opt-in uniform grid covers non-divisible wrap cells", () => {
+    const items = [
+      { id: "a", x: 1, y: 50 },
+      { id: "b", x: 72, y: 50 },
+      { id: "c", x: 40, y: 50 }
+    ];
+    const inherited = new ContinuousSpatialHashIndex({ width: 100, height: 100, cellSize: 30, topology: "wrap" });
+    inherited.addAll(items);
+    expect(inherited.queryNeighborIds("a", 30)).toEqual([]);
+
+    const corrected = new ContinuousSpatialHashIndex({
+      width: 100,
+      height: 100,
+      cellSize: 30,
+      topology: "wrap",
+      cellSizing: "uniformCoverage"
+    });
+    corrected.addAll(items);
+
+    expect(corrected.queryNeighborIds("a", 30)).toEqual(["b"]);
+    expect(corrected.queryPairsWithinRadius(30).pairs.map(pairKey)).toEqual(["a:b"]);
+  });
+
   it("reduces candidate checks for local-radius pair queries", () => {
     const items = Array.from({ length: 100 }, (_, itemIndex) => ({
       id: `p${itemIndex.toString().padStart(3, "0")}`,

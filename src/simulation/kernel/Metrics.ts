@@ -67,6 +67,10 @@ export class MetricsCollector {
     return this.history.all() as MetricRecord[];
   }
 
+  latestRecord(): MetricRecord | undefined {
+    return this.history.last();
+  }
+
   get maxHistoryLength(): number {
     return this.history.maxLength;
   }

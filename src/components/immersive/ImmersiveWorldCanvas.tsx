@@ -257,6 +257,7 @@ export const ImmersiveWorldCanvas = memo(function ImmersiveWorldCanvas({
         at
       });
       const drawMs = performance.now() - drawStartedAt;
+      runtime.recordPresentationDuration("ortus.render.draw", drawMs);
       monitorRef.current.recordFrame(
         at,
         drawMs,
@@ -383,7 +384,7 @@ export const ImmersiveWorldCanvas = memo(function ImmersiveWorldCanvas({
         className="immersive-world-canvas"
         role="img"
         tabIndex={0}
-        aria-label="Immersive Flocking world rendered from the current engine snapshot"
+        aria-label="Immersive Flocking world rendered from the current runtime frame"
         onPointerMove={handlePointerMove}
         onPointerDown={handlePointerDown}
         onPointerUp={handlePointerUp}

@@ -3,7 +3,7 @@ import { expect, test, type Locator, type Page } from "@playwright/test";
 
 test.describe.configure({ mode: "serial" });
 
-const canvasName = "Immersive Flocking world rendered from the current engine snapshot";
+const canvasName = "Immersive Flocking world rendered from the current runtime frame";
 
 test("keeps camera labels coherent when selection is released or System view is zoomed", async ({ page }) => {
   const diagnostics = observePageDiagnostics(page);
@@ -157,9 +157,14 @@ function prototypeRoot(page: Page) {
 
 async function waitForPrototypeReady(page: Page) {
   await page.waitForFunction(() => {
-    const api = (window as Window & { __ORTUS_IMMERSIVE_AUDIT__?: { readMeasurement?: unknown } }).__ORTUS_IMMERSIVE_AUDIT__;
-    return typeof api?.readMeasurement === "function";
+    const api = (window as Window & { __ORTUS_IMMERSIVE_AUDIT__?: { readMeasurement?: unknown; whenReady?: unknown } }).__ORTUS_IMMERSIVE_AUDIT__;
+    return typeof api?.readMeasurement === "function" && typeof api.whenReady === "function";
   });
+  await page.evaluate(() => (window as Window & {
+    __ORTUS_IMMERSIVE_AUDIT__: { whenReady(): Promise<void> };
+  }).__ORTUS_IMMERSIVE_AUDIT__.whenReady());
+  await expect(prototypeRoot(page)).toHaveAttribute("data-runtime-ready", "true");
+  await expect(prototypeRoot(page)).toHaveAttribute("data-runtime-kind", "worker");
   const canvas = page.getByRole("img", { name: canvasName });
   await expect(canvas).toHaveAttribute("data-tick", /\d+/);
   await expect(canvas).toHaveAttribute("data-render-quality", /high|balanced|performance/);

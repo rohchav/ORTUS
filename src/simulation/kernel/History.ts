@@ -18,6 +18,11 @@ export class BoundedHistory<T> {
     return this.records.map((record) => structuredClone(record));
   }
 
+  last(): T | undefined {
+    const record = this.records.at(-1);
+    return record === undefined ? undefined : structuredClone(record);
+  }
+
   reset(records: readonly T[] = []): void {
     this.records.length = 0;
     for (const record of records) {
