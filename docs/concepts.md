@@ -1,8 +1,10 @@
 # ORTUS Concepts And Architecture Vocabulary
 
+Status: HISTORICAL/SUBORDINATE implementation vocabulary. Current architecture, capability, scientific, and sequencing authority lives in `ARCHITECTURE.md`, `CAPABILITIES.md`, `SCIENTIFIC_MODEL.md`, and `ROADMAP.md`.
+
 ORTUS is organized around a small set of simulation concepts. Keeping these boundaries explicit prevents model-family definitions, live run state, exploratory comparisons, and UI workspace data from collapsing into one ambiguous artifact.
 
-This is a detailed implementation vocabulary, not the canonical architecture or capability ledger. Defer to `ARCHITECTURE.md`, `CAPABILITIES.md`, `SCIENTIFIC_MODEL.md`, and `ROADMAP.md` when status or terminology conflicts. A0 is complete; A0B is next and unstarted; I1 remains planned and unstarted; C4 has no I5B dependency.
+This is a detailed implementation vocabulary, not the canonical architecture or capability ledger. Defer to `ARCHITECTURE.md`, `CAPABILITIES.md`, `SCIENTIFIC_MODEL.md`, and `ROADMAP.md` when status or terminology conflicts.
 
 ## Product Philosophy And Learning Mission
 
@@ -190,7 +192,7 @@ Scenario JSON uses the `ortus.scenario` artifact type, is size-bounded, rejects 
 
 ### Run
 
-A run is one execution of a template/scenario/run configuration with a specific seed and parameter set. A run may be driven interactively, created from a scenario, produced as one trial in an experiment, or restored from a snapshot.
+A run is one execution of a template/scenario/run configuration with a specific seed and parameter set. A run may be driven interactively, created from a scenario, produced as one trial in an experiment, or restored from a validated `SnapshotExport`.
 
 ### RunConfig
 
@@ -198,11 +200,11 @@ A RunConfig is the normalized recipe needed to start a fresh run. It contains a 
 
 RunConfig is not a snapshot and not a run summary. It is the common fresh-run input for scenarios, experiments, and uncertainty sampling.
 
-### Snapshot
+### Snapshot Products
 
-A snapshot is exact saved simulation state at a specific tick. It includes enough state to restore deterministic continuation, such as the world, component stores, spaces, scheduled events, RNG streams, metrics history, and snapshot metadata.
+`SimulationSnapshot` is an umbrella term for execution-derived state captured at a modeled tick. Current products have different contracts: `SimulationSnapshotView` is a detached broad read model for rendering and inspection, while validated `SnapshotExport` contains the world, component stores, spaces, scheduled events, RNG streams, metrics history, configuration, and metadata needed for exact deterministic continuation.
 
-Snapshots are for restoring a running state. They are not scenario recipes and should not be used as bounded comparison summaries.
+Only `SnapshotExport` restores a running state. `SimulationSnapshotView` omits RNG and queued-event state and cannot be restored. Neither product is a scenario recipe, bounded comparison summary, or scientific observation.
 
 ### Run Summary
 
@@ -454,7 +456,7 @@ TemplateDefinition
   + Scenario / RunConfig
   + Seeded RNG
   -> Fresh engine instance
-  -> Snapshots + metrics + events
+  -> Snapshot views/exports + metrics + events
   -> Run summaries / experiments / uncertainty summaries / network summaries / comparison
 ```
 
@@ -464,7 +466,7 @@ Operationally:
 2. A scenario or run config selects initial conditions and supported variants.
 3. A seeded RNG makes initialization and stochastic behavior deterministic.
 4. A fresh engine instance runs the model.
-5. Snapshots preserve exact run state for restore.
+5. `SimulationSnapshotView` publishes detached read state; validated `SnapshotExport` preserves exact continuation state for restore.
 6. Metrics, events, and intervention history describe what happened during the run.
 7. Run summaries, experiment result sets, and uncertainty result sets compare outcomes without storing full world state by default.
 
@@ -535,7 +537,7 @@ React owns controls and semantic inspection, not continuously updated boid compo
 
 Randomness in ORTUS should be explicit, seeded, and reproducible. Hidden randomness makes experiments, comparisons, calibration, and uncertainty analysis unreliable.
 
-Simulation code, template initialization, experiments, and interventions must use `RandomService` or deterministic logic instead of `Math.random`. The current RNG service supports floats, integer ranges, booleans, choices, shuffles, normal values, and named/forked streams. Snapshots preserve RNG stream state so restored runs continue deterministically.
+Simulation code, template initialization, experiments, and interventions must use `RandomService` or deterministic logic instead of `Math.random`. The current RNG service supports floats, integer ranges, booleans, choices, shuffles, normal values, and named/forked streams. `SnapshotExport` preserves RNG stream state so restored runs continue deterministically; `SimulationSnapshotView` does not.
 
 UI-only ids, timestamps, exports, and storage metadata may use browser time or crypto APIs because they are not simulation randomness.
 
@@ -559,7 +561,7 @@ Event records include event id, tick, type, source, order, optional target/label
 
 ## Warning
 
-ORTUS simulations are exploratory models. Scenarios define initial conditions and supported model variants; snapshots restore exact run state; run summaries compare outcomes. None of these should be treated as real-world prediction without validation, uncertainty analysis, and clear assumptions.
+ORTUS simulations are exploratory models. Scenarios define initial conditions and supported model variants; validated `SnapshotExport` artifacts restore exact continuation state while `SimulationSnapshotView` values are detached read models; run summaries compare outcomes. None of these should be treated as real-world prediction without validation, uncertainty analysis, and clear assumptions.
 
 Scenarios define initial conditions and supported model variants. They do not guarantee outcomes; complex systems can behave differently across seeds, parameters, behavior modes, agent compositions, and future uncertainty settings.
 

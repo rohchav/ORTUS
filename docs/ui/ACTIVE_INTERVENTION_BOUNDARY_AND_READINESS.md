@@ -1,6 +1,6 @@
 # Active Intervention Boundary And Readiness
 
-Status: Prompt GW3 implementation source of truth, audited and hardened by Prompt GW3B, with Prompt GW4 adding a separate non-persistent Atlas foundation. Prompt GW3 adds a live, non-persistent World-only intervention-readiness and interpretation-boundary layer in Intervene mode. The GW3B audit record is `ACTIVE_INTERVENTION_BOUNDARY_AND_READINESS_AUDIT.md`.
+Status: HISTORICAL/SUBORDINATE Prompt GW3 implementation record, audited and hardened by Prompt GW3B. Defer current architecture, capability, scientific, and sequencing claims to `../ARCHITECTURE.md`, `../CAPABILITIES.md`, `../SCIENTIFIC_MODEL.md`, and `../ROADMAP.md`. Prompt GW3 adds a live, non-persistent World-only intervention-readiness and interpretation-boundary layer in Intervene mode. The GW3B audit record is `ACTIVE_INTERVENTION_BOUNDARY_AND_READINESS_AUDIT.md`.
 
 ## 1. Purpose
 

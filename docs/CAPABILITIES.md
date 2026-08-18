@@ -1,6 +1,6 @@
 # ORTUS Current Capabilities
 
-Status: CURRENT capability source of truth after A0
+Status: CURRENT capability source of truth after A0B
 
 This document answers what ORTUS actually supports now. Code and tests remain authoritative for behavior. `src/simulation/registry` is the machine-readable authority for systems primitives, artifact families, and per-template capability summaries. This document summarizes that evidence for contributors and product language.
 
@@ -41,7 +41,8 @@ The registry deliberately keeps the global `socialLearningRuntime` primitive res
 **CURRENT production World**
 
 - Runs all seven hand-built templates through the deterministic main-thread engine.
-- Uses fixed model ticks, seeded RNG streams, validated commands/interventions, broad snapshots, Zustand publication, and batched Canvas rendering.
+- Currently uses a mounted React animation-frame accumulator to request fixed engine steps through Zustand. The engine owns step semantics, system order, mutation, modeled time, and seeded RNG; production wall-clock cadence has not yet migrated to the runtime port.
+- Publishes detached broad `SimulationSnapshotView` read models through Zustand and renders them with batched Canvas.
 - Keeps renderer and React downstream of engine state.
 
 **CURRENT isolated runtime prototype**
@@ -60,7 +61,8 @@ Default entity counts and local performance reports are not engine limits, high-
 | Capability | CURRENT behavior | Not implied |
 | --- | --- | --- |
 | Scenario import/export | Validated initial-condition and supported-variant recipe; apply/preview creates a fresh tick-0 engine | Snapshot, outcome, mid-run intervention replay, or custom model execution |
-| Snapshot import/export | Validated exact run continuation including world, clock, RNG streams, events, metric history, and applied intervention history | Empirical observation or cross-version migration guarantee |
+| Snapshot read view | `SimulationSnapshotView` is a detached broad model-state projection for rendering and inspection; it omits RNG and queued-event state | Exact continuation, persistence, or scientific observation |
+| Snapshot import/export | Only `SnapshotExport` is accepted as exact continuation state, including configuration, world, clock, RNG streams, queued events, metric history, and world-held intervention history | Empirical observation or cross-version migration guarantee |
 | Experiment Runner | Bounded, chunked/cancellable local sweeps over supported templates; stores outcomes/metrics | Server jobs, Atlas probe execution, calibration, causal proof, or robustness validation |
 | Run comparison | At most 50 browser-local summaries, each with bounded metrics/history/intervention summaries rather than full snapshots | Persistent Lab evidence, Atlas discoveries, or external validation |
 | Scenario library | At most 50 validated browser-local authored scenarios | Accounts, cloud persistence, model definitions, or run history |

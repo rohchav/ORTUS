@@ -4,9 +4,9 @@ This directory contains a headless TypeScript simulation engine for visual compl
 
 ## Philosophy
 
-The engine owns time, scheduling, mutation, seeded randomness, validation, metrics, snapshots, and serialization. Templates own domain behavior and metadata. Rendering layers consume authoritative snapshots or bounded renderer projections without becoming part of the simulation loop.
+The engine owns modeled time, deterministic per-step system order, mutation, seeded randomness, validation, metrics, snapshot projection, and serialization. External callers may request steps; they do not redefine step semantics. Templates own domain behavior and metadata. Rendering layers consume detached snapshot views or bounded renderer projections without becoming part of the simulation loop.
 
-Canonical architecture and capability status now live in `../../docs/ARCHITECTURE.md` and `../../docs/CAPABILITIES.md`; future sequence lives in `../../docs/ROADMAP.md`. A0 is complete and A0B is next and unstarted. I1 remains planned and unstarted after A0B; later immersive phases are not an unconditional chain; C4 is not tied to I5B. Do not start A0B, I1, C4, F1, or other reserved work without its dedicated prompt.
+Canonical architecture and capability status live in `../../docs/ARCHITECTURE.md` and `../../docs/CAPABILITIES.md`; future sequence lives in `../../docs/ROADMAP.md`. Do not start or generalize reserved work without its dedicated prompt and audit.
 
 Prompt I0 changed presentation only. PERF1 adds and PERF1B audits a dedicated Worker-backed execution boundary on that same isolated Flocking route. A shared `RuntimeSession` owns the existing validated engine, the same external 24 Hz elapsed accumulator and catch-up ceiling, compact frame projection, coarse UI projection, and explicit lifecycle. Camera, hover, selection, follow, lenses, shadows, trails, and effects remain downstream presentation state; they do not change template rules, seeded RNG, initialization, parameters, metrics, experiments, comparisons, or persistence. The Worker prototype, explicit `flocking-v1` projector, and Canvas adapter do not imply production World migration or cross-template support.
 
@@ -58,7 +58,7 @@ The fixed phase order is `beforeStep`, `sense`, `decide`, `act`, `resolve`, `aft
 
 ## Seeded Randomness
 
-All stochastic behavior uses `RandomService` streams derived from a root seed. Stream state is included in snapshots so restored runs can continue deterministically.
+All stochastic behavior uses `RandomService` streams derived from a root seed. Stream state is included in `SnapshotExport` artifacts so restored runs can continue deterministically; it is intentionally absent from `SimulationSnapshotView` read models.
 
 Randomness in ORTUS should be explicit, seeded, and reproducible. Hidden randomness makes experiments, comparisons, calibration, and uncertainty analysis unreliable. Template initialization, systems, interventions, and experiment planning must not use `Math.random`; UI-only timestamps or ids are not simulation randomness.
 
@@ -449,7 +449,7 @@ Service primitives such as networks, resources, feedback, spatial fields, observ
 
 Default entity counts are UX defaults, not engine limits. Stress counts in `runtimeMetadata` are local benchmark targets that need evidence before being treated as safe product limits. ORTUS should not claim high-scale support without benchmark data from the current runtime and template configuration.
 
-Production World runs advance the headless engine through fixed ticks, create a fresh snapshot when an animation frame has one or more completed ticks, publish that snapshot through Zustand, and render the World Stage with a batched canvas pass. PERF1/PERF1B do not migrate that workflow. The isolated Worker prototype instead transfers a compact renderer packet and publishes a separate coarse UI projection. In both paths the engine remains the source of truth; canonical snapshots remain available for continuation, export, comparison, and other authoritative consumers.
+Production World currently uses a mounted React animation-frame accumulator to request fixed engine steps through Zustand. The engine retains step semantics, system order, modeled time, mutation, and seeded RNG authority. When ticks advance, the store publishes a detached `SimulationSnapshotView` and renders the World Stage with a batched Canvas pass. PERF1/PERF1B do not migrate that workflow. The isolated Worker prototype instead owns its external cadence, transfers a compact renderer packet, and publishes a separate coarse UI projection. Neither visual path is scientific observation, and only validated `SnapshotExport` data is exact continuation state.
 
 Optional performance instrumentation is available through `SimulationEngine` options or, in the browser UI, by setting `localStorage.setItem("ortus.performanceInstrumentation.v1", "enabled")` before creating/resetting a run. Removing that key disables it. Instrumentation records bounded last-N tick, metric, snapshot, frame/update, entity-count, operation-counter, and named-duration samples. PERF1 names step, neighbor, snapshot, runtime publication, scene projection, render draw, UI publication, and run rebuild phases. It does not alter model semantics, persist telemetry, or require logging every frame.
 

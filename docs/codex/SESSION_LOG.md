@@ -4528,3 +4528,39 @@ Handoff:
 - A0 is complete. A0B: Canonical Architecture + Source-of-Truth Audit is next and unstarted.
 - I1 remains planned and unstarted after A0B. I2 through I5B are not an unconditional sequence. C4 has no I5B dependency.
 - Commit target: `docs: consolidate canonical ORTUS architecture`; no push is authorized.
+
+### A0B: Canonical Architecture + Source-of-Truth Audit
+
+Date: 2026-08-18
+
+Starting state:
+
+- Branch `main` was clean at `722498c` (`docs: consolidate canonical ORTUS architecture`), aligned with the observed `origin/main` reference.
+- A0 was complete. A0B and I1 were unstarted.
+
+Adversarial findings and fixes:
+
+- Found and fixed one P0 static-gate bypass family, six P1 architecture/capability/authority families, and three bounded P2 lifecycle/scientific/static-accessibility families. No known unmitigated A0/A0B P0/P1 remains.
+- Corrected A0's false production-scheduling claim. Mounted React currently computes World wall-clock cadence and requests steps through Zustand; the engine owns deterministic step semantics, modeled time, system order, commands, mutation, and seeded RNG. A0B documents this I1-gated coupling without migrating it.
+- Split the ambiguous snapshot contract. `SimulationSnapshotView` is detached broad read state without RNG or queued-event continuation data; only validated `SnapshotExport` is exact restore state. Neither is scientific observation.
+- Clarified that model and ECS kernel contracts are siblings around neutral values and that runtime translation is the kernel-specific bridge. Future `ModelDefinition` and `SystemViewSpec` must not expose concrete ECS ontology by accident.
+- Verified seven production templates, Flocking-only `flocking-v1` Worker projection, Neural-only recognized runtime topology, narrow Opinion social learning, structural Workshop behavior, non-persistent Lab/Atlas foundations, and service-only primitive limits. No false generic runtime support was accepted.
+- Marked old UI implementation documents and detailed vocabulary as historical/subordinate, removed competing README/AGENTS authority, and made `docs/ROADMAP.md` the sole current sequence. The immersive prototype's “System view” is recorded as a camera reset, not scientific SystemView support.
+- Hardened architecture lint against static re-exports, CommonJS/dynamic module loading, captured `eval`/`Function`, string timers, bracketed/destructured/escaped randomness and browser globals, broad research authority imports, private runtime imports, inert click roles, and negative tab order. Existing focused simulation canvases retain an explicit `role="img"` exception. Regression fixtures cover realistic evasions; the gate remains syntax-level rather than full dependency/data-flow/accessibility analysis.
+- Expanded planned-object creator/owner/lifetime/persistence/invalidation rules and preserved supported, rejected, inconclusive, and non-identifiable scientific outcomes without implementing future research types or runtimes.
+
+Verification:
+
+- Focused canonical/package architecture coverage passed `2 files / 17 tests`; the broader focused architecture/serialization/registry/roadmap set passed before closure.
+- `npm run lint` passed, including unused-symbol checks and `381` production TypeScript files scanned by the architecture gate.
+- `npm run typecheck` passed.
+- `npm test` passed `83 files / 717 tests`.
+- `npm run build` compiled in `3.4s` and generated `23` pages.
+- `git diff --check` passed at the final review gate.
+- Performance and browser suites were not rerun because A0B changed documentation, static tooling, and tests only; no runtime/simulation or rendered behavior changed.
+
+Handoff:
+
+- A0 complete. A0B complete. I1 is next and unstarted.
+- I2 through I5B are not an unconditional sequence. C4 has no I5B dependency.
+- Commit target: `test: audit canonical ORTUS architecture`; no push is authorized.

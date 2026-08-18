@@ -1,6 +1,6 @@
 # ORTUS Current Context
 
-Last updated: 2026-08-18 for the A0 canonical architecture handoff
+Last updated: 2026-08-18 for the A0B canonical architecture audit handoff
 
 This file is continuation context, not canonical project authority. Use `docs/CAPABILITIES.md`, `docs/ARCHITECTURE.md`, `docs/SCIENTIFIC_MODEL.md`, and `docs/ROADMAP.md` after code/tests when current status or terminology conflicts with historical detail below.
 
@@ -21,13 +21,19 @@ This file is continuation context, not canonical project authority. Use `docs/CA
 - PERF1 complete.
 - PERF1B complete.
 - A0: Canonical Architecture + Source-of-Truth Consolidation is complete.
-- A0B: Canonical Architecture + Source-of-Truth Audit is next and has not started.
-- I1: Production Runtime Migration + Immersive Shell Foundation is planned and has not started after A0B.
+- A0B: Canonical Architecture + Source-of-Truth Audit is complete.
+- I1: Production Runtime Migration + Immersive Shell Foundation is next and unstarted.
 - I2 through I5B are not an unconditional contiguous sequence; C4 has no I5B dependency.
 
 A0 establishes four canonical sources, the Model/Run-Observation/Research-Representation/Experience planes, explicit fundamental-versus-derived objects, a strict authority map, SystemView graph direction, post-PERF1B branch gates, and a passing scoped lint/static architecture baseline. It implements no `ModelDefinition`, `RuntimePlan`, `CanonicalObservation`, SystemView runtime, research persistence, model family, or production Worker migration.
 
 A0 final verification passed typecheck, `83 files / 712 tests`, a production build with `23` generated pages, and the new scoped lint gate over `381` production TypeScript files. No simulation/runtime performance suite or complete browser suite was rerun because A0 changed documentation, source-of-truth contracts, static tooling, and unused declarations only; it did not change rendered behavior or simulation semantics.
+
+A0B's adversarial audit is recorded in `docs/CANONICAL_ARCHITECTURE_AUDIT.md`. It corrected two materially false A0 claims: production World wall-clock cadence is currently computed in React before the store requests engine steps, and `SimulationSnapshotView` is a detached read model rather than exact continuation state. Only validated `SnapshotExport` includes RNG and queued-event state for restore. The audit also made `ModelDefinition` and the ECS kernel sibling dependencies around neutral contracts, identified the prototype “System view” as a presentation camera reset, removed competing current-roadmap/source labels, expanded lifecycle/invalidation rules, and hardened the static gate against re-exports, CommonJS/dynamic loading, indirect dynamic execution, bracketed randomness/platform globals, research/runtime boundary bypasses, and obvious keyboard-contract evasions.
+
+A0B changes no template rule, parameter, seed/RNG sequence, modeled step, renderer, route, persistence behavior, runtime driver, or production scheduler. It does not implement I1, `ModelDefinition`, `RuntimePlan`, `CanonicalObservation`, SystemView runtime, research persistence, or a new model family.
+
+A0B final verification passed `npm run lint` with unused-symbol checks and `381` production TypeScript files scanned, standalone typecheck, `83 files / 717 tests`, a production build compiled in `3.4s` with `23` generated pages, and `git diff --check`. Performance and complete browser suites were not rerun because A0B changed documentation, static tooling, and tests only; it changed no simulation/runtime or rendered behavior.
 
 `/` is the task-centered Start Hub; `/worlds` is its eleven-entry runnable Starter World catalog; `/worlds/[slug]` is the source-backed detail experience; `/worlds/packs/local-rules-global-patterns` is the first flagship collection; `/worlds/guides/reading-a-flock` is the first optional guided investigation; `/world` is the live workbench; `/builder`, `/atlas`, and `/lab` retain their established behavior. `/world/immersive-prototype` is an unlinked, noindex I0/I0B comparison surface and is not production World or cross-template renderer support. Primary navigation remains Start, World, Workshop, and a keyboard-operated Research tools menu. Explore Worlds and the guide are Start-adjacent rather than equal global destinations. F1 remains paused under E3 Analytical Lenses.
 
@@ -103,11 +109,11 @@ Five matched production-browser samples found Worker is not universally faster. 
 
 Required three-minute Worker soaks completed 4,321 ticks at 100 (`23.985 ticks/s`, `59.999 FPS`) and 4,244 at 500 (`23.548`, `59.963`), with one Worker, zero long tasks/frames, and histories capped at 360. A separate 60-second post-GC main-page heap sample grew by 746,964 bytes and excludes Worker/native/GPU memory; it is not leak proof. Twenty-five runtime mount/dispose cycles, 25 host replacements, and 20 Back/Forward transitions held one Worker mounted and zero after disposal.
 
-PERF1B's verdict is `CONDITIONALLY READY FOR FUTURE I1 CONSUMPTION` only because broad browser/CPU/GPU/OS coverage, actual mobile devices, faithfully throttled background tabs, multi-hour and Worker-heap profiling, direct screen-reader/AT use, forced colors, user comprehension, and formal WCAG conformance remain unverified. I1 may eventually consume the audited runtime port/drivers, Flocking frame/UI/selected projections, generation/revision identity, bounded visual backpressure, ingress cap, and terminal lifecycle. I1 must not restore continuous full snapshots, React entity animation, renderer mutation/authority, camera-model coupling, RNG/scheduler changes, command/evidence coalescing, fake cross-template support, or `CanonicalObservation` conflation. A0 is complete, A0B is next, and I1 remains planned and unstarted.
+PERF1B's verdict is `CONDITIONALLY READY FOR FUTURE I1 CONSUMPTION` only because broad browser/CPU/GPU/OS coverage, actual mobile devices, faithfully throttled background tabs, multi-hour and Worker-heap profiling, direct screen-reader/AT use, forced colors, user comprehension, and formal WCAG conformance remain unverified. I1 may consume the audited runtime port/drivers, Flocking frame/UI/selected projections, generation/revision identity, bounded visual backpressure, ingress cap, and terminal lifecycle. I1 must not restore continuous full snapshot exports, React entity animation, renderer mutation/authority, camera-model coupling, RNG or model-step semantic changes, command/evidence coalescing, fake cross-template support, or `CanonicalObservation` conflation. A0 and A0B are complete; I1 is next and unstarted.
 
 PERF1B final verification passed focused runtime/immersive/roadmap coverage `6 files / 67 tests`, post-final-fix focused real-Worker Playwright `6/6 (2.6m)`, post-final-fix complete Playwright/Axe `189/189 (19.7m)` with zero failures/retries/skips, typecheck, `82 files / 703` unit tests in `70.74s`, and a `23`-page production build compiled in `10.7s`. Final smoke measured Flocking-100 `207.04` ticks/s, Flocking-500 `28.32`, Forest Fire `44.57`, Predator-Prey `126.47`, and bounded Atlas `2` runs / `10` work units / horizon `5` in `36.21ms`. Automatic pair checks remained exactly `316,971/7,721,264`; `npm run perf:runtime` passed exact corrected/reference exports, automatic medians `229.007/26.914`, and 2,300/11,500-byte packet reporting. `npm run lint: unavailable, package.json has no lint script.`
 
-PERF1B source, tests, records, and commit are complete. A0 followed and is complete; A0B is the required next audit before I1.
+PERF1B source, tests, records, and commit are complete. A0 and its required A0B audit followed and are complete; I1 is next and unstarted.
 
 R2's implementation record is `docs/ui/WORLD_LAYOUT_AND_INTERACTION_RECLAIM.md`; R2B's audit record is `docs/ui/WORLD_LAYOUT_AND_INTERACTION_RECLAIM_AUDIT.md`. World uses a stable `tasks + stage/playback + active tool` frame. Setup, Observe, Change, Compare, and Explain are direct tasks; More groups Experiment Runner and Diagnostics. The selected tool owns one bounded scroll, full model notes and technical run details use focus-contained modal surfaces, and desktop collapse/restore preserves local tool state.
 
@@ -121,7 +127,7 @@ R2B final verification passed `53` focused destination-shell tests in `6.3m`, `2
 
 ## Project Identity
 
-ORTUS is a browser-based complex-systems visual modeler backed by a deterministic TypeScript simulation engine. The app uses Next.js, React, and Zustand for UI state, while the simulation engine under `src/simulation` owns time, scheduling, seeded randomness, validation, metrics, snapshots, spaces, and template runtime behavior.
+ORTUS is a browser-based complex-systems simulation sandbox backed by a deterministic TypeScript engine. The app uses Next.js, React, and Zustand for UI state. The engine under `src/simulation` owns modeled time, per-step system order, mutation, seeded randomness, validation, metrics, snapshot projection/export, spaces, and template runtime behavior; production React currently owns external wall-clock cadence until a dedicated migration changes that boundary.
 
 The sharp ORTUS mark is the primary navigation brand. The soft ORTUS mark is a secondary presentation variant. The primary mark is paired with the text `ORTUS` wordmark in the global app shell, while Builder remains an ORTUS workspace rather than a separate branded product. Do not use either mark as a simulation-world or Builder-graph watermark. Favicon replacement remains future work until small-size legibility is deliberately optimized.
 
@@ -185,7 +191,7 @@ Prompt F0 adds a documentation-only Fractal and Multiscale Analysis Mini-Roadmap
 
 Prompt F0 required boundary language: Fractal and multiscale tools describe how measured structure changes across scale. They do not prove that a system is fundamentally fractal. A complex-looking, nested, branching, or irregular pattern is not automatically fractal. Power-law behavior may indicate scale-free structure, but a power-law fit alone does not establish fractality. Finite-resolution fractal dimensions are estimators over a chosen scale range, not intrinsic truths about the modeled system. Statistical self-similarity must be supported across an explicit scale range; it should not be inferred from visual resemblance alone. Scale-free distributional evidence is not identical to geometric fractality. Visual resemblance to a fractal is not evidence of scale invariance. Fractal metrics are structural summaries of simulation output. They are not proof of biological, ecological, social, meteorological, or empirical validity. Fractal spatial generators create synthetic structure. They do not reproduce real geography, ecology, urban form, climate, terrain, or weather without calibration and validation. Coarse-graining changes what is represented. Similar aggregate behavior does not mean the underlying microstates are equivalent. Scale Lens views are analytical projections, not separate validated models. A scale-free degree distribution is not the same as a fractal network. A hierarchical community structure is not automatically self-similar. Network fractality requires a defined network-scale method and evidence across a supported scale range. Hierarchical trajectory motifs describe repeated observable state-action sequences. They do not reveal thoughts, intentions, beliefs, personality, or subconscious mental states. Repeated motifs across time windows are not automatically evidence of temporal fractality. Fractal analysis requires a defined object, scale operation, and measurement. ORTUS must not apply one generic fractal score to unrelated spatial, network, temporal, and trajectory data. Clustering groups similar observations. Fractal analysis measures how structure changes across scale. One does not imply the other. Synthetic fractal generators create model inputs, not observed reality. Coarse-graining may discard information and alter apparent dynamics. Fractal and multiscale metrics are structural summaries, not causal explanations, forecasts, validation results, or proof of universal laws.
 
-Prompt P0 adds the docs-only ORTUS Product Philosophy and Learning Mission source of truth at `docs/PRODUCT_PHILOSOPHY_AND_LEARNING_MISSION.md`. ORTUS is a sandbox for exploring how interacting mechanisms, constraints, feedback, stochasticity, adaptation, selection, and history can produce complex, path-dependent, and sometimes chaotic system-level behavior. ORTUS models are representations for exploration and comparison, not direct copies of reality. Simulation output is evidence about the model’s behavior, not automatically evidence about the world. Complexity does not mean rulelessness, contingency does not mean arbitrariness, and adaptation does not imply progress, optimality, fairness, efficiency, or stability.
+Prompt P0 adds the historical ORTUS Product Philosophy and Learning Mission guidance record at `docs/PRODUCT_PHILOSOPHY_AND_LEARNING_MISSION.md`. ORTUS is a sandbox for exploring how interacting mechanisms, constraints, feedback, stochasticity, adaptation, selection, and history can produce complex, path-dependent, and sometimes chaotic system-level behavior. ORTUS models are representations for exploration and comparison, not direct copies of reality. Simulation output is evidence about the model’s behavior, not automatically evidence about the world. Complexity does not mean rulelessness, contingency does not mean arbitrariness, and adaptation does not imply progress, optimality, fairness, efficiency, or stability.
 
 Prompt P0 is documentation only. It records future Research World direction but does not implement GW0-GW7, progression, persistent model labs, discovery atlases, behavioral landscapes, contextual guidance, model composition frontiers, grand challenges, XP, streaks, grinding, missions, achievements, unlocks, scoring, persistence, accounts, social features, UI flows, templates, runtime behavior, or dependency changes. Research World progression should reward reusable understanding, comparison, reproducibility, and honest interpretation rather than arbitrary points.
 
@@ -281,13 +287,13 @@ I0B complete.
 PERF1 complete.
 PERF1B complete.
 A0: Canonical Architecture + Source-of-Truth Consolidation is complete.
-A0B: Canonical Architecture + Source-of-Truth Audit is next and has not started.
-I1: Production Runtime Migration + Immersive Shell Foundation is planned and has not started.
+A0B: Canonical Architecture + Source-of-Truth Audit is complete.
+I1: Production Runtime Migration + Immersive Shell Foundation is next and unstarted.
 I2 through I5B are not an unconditional contiguous sequence. C4 has no I5B dependency.
 
-Completed sequence: UX6B -> GW9 -> GW9B -> R1 -> R1B -> R2 -> R2B -> C1 -> C1B -> C2 -> C2B -> C3 -> C3B -> I0 -> I0B -> PERF1 -> PERF1B -> A0. A0B is next and unstarted; I1 remains planned and unstarted.
+Completed sequence: UX6B -> GW9 -> GW9B -> R1 -> R1B -> R2 -> R2B -> C1 -> C1B -> C2 -> C2B -> C3 -> C3B -> I0 -> I0B -> PERF1 -> PERF1B -> A0 -> A0B. I1 is next and unstarted.
 
-Do not start A0B, I1, C4, recipe-first Builder, composition, SystemView runtime, multiscale runtime, adaptive-controller generalization, Lab/Atlas persistence, E3, F1, or other roadmap capability without its dedicated prompt. Rendered Playwright/Axe evidence does not establish actual browser zoom, screen-reader, assistive-technology, forced-colors, full WCAG, complete touch workflow, browser/mobile diversity, or user-comprehension readiness.
+Do not start I1, C4, recipe-first Builder, composition, SystemView runtime, multiscale runtime, adaptive-controller generalization, Lab/Atlas persistence, E3, F1, or other roadmap capability without its dedicated prompt. Rendered Playwright/Axe evidence does not establish actual browser zoom, screen-reader, assistive-technology, forced-colors, full WCAG, complete touch workflow, browser/mobile diversity, or user-comprehension readiness.
 
 Implemented runtime foundations include scenarios, snapshots, template-defined behavior modes, agent composition, interventions, experiments, run summaries/comparison, seeded randomness, metrics, spaces, template metadata, and a narrow Opinion Dynamics `socialLearning` behavior mode audited in Prompt 33D.
 
@@ -400,7 +406,7 @@ Prompt 35 and Prompt 35B were committed together in `7696381 feat: Implement Mod
 
 ## Next Recommended Prompt
 
-Prompt I0, Prompt I0B, Prompt PERF1, Prompt PERF1B, and Prompt A0 are complete. Prompt A0B: Canonical Architecture + Source-of-Truth Audit is next and unstarted. Prompt I1: Production Runtime Migration + Immersive Shell Foundation remains planned and unstarted after A0B. Do not begin A0B, I1, C4, F1, or any later roadmap capability without its dedicated prompt. I2 through I5B are not an unconditional sequence; C4 has no I5B dependency; F1 remains paused under E3 Analytical Lenses.
+Prompt I0, Prompt I0B, Prompt PERF1, Prompt PERF1B, Prompt A0, and Prompt A0B are complete. Prompt I1: Production Runtime Migration + Immersive Shell Foundation is next and unstarted. Do not begin I1, C4, F1, or any later roadmap capability without its dedicated prompt. I2 through I5B are not an unconditional sequence; C4 has no I5B dependency; F1 remains paused under E3 Analytical Lenses.
 
 Next recommended UI/design-system prompt after UX2B: `UI-DESIGN-SYSTEM-1: Rendered Responsive, Typography + Visualization Accessibility Audit`.
 

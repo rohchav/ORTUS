@@ -1,6 +1,6 @@
 # ORTUS Canonical Roadmap
 
-Status: CURRENT future-sequencing source of truth after A0
+Status: CURRENT future-sequencing source of truth after A0B
 
 This roadmap controls milestone status and dependency order. It is not a capability claim. `CAPABILITIES.md` determines what exists now, and every implementation milestone requires its dedicated scope and audit.
 
@@ -10,8 +10,8 @@ This roadmap controls milestone status and dependency order. It is not a capabil
 | --- | --- | --- |
 | PERF1B - Runtime Performance Architecture Audit + Hardening | COMPLETE | Audited Flocking-only Local/Worker runtime and projection boundary; production World remains unchanged |
 | A0 - Canonical Architecture + Source-of-Truth Consolidation | COMPLETE | Four canonical documents and scoped static/source-of-truth gates established |
-| A0B - Canonical Architecture + Source-of-Truth Audit | NEXT / UNSTARTED | Independently attack contradictions, authority leaks, dependency cycles, false capability, SystemView leakage, tooling gaps, and roadmap drift |
-| I1 - Production Runtime Migration + Immersive Shell Foundation | PLANNED / UNSTARTED | May begin only after A0B and its own dedicated prompt |
+| A0B - Canonical Architecture + Source-of-Truth Audit | COMPLETE | Adversarial audit fixed authority, snapshot, source-hierarchy, lifecycle, scientific-language, and static-gate defects; see `CANONICAL_ARCHITECTURE_AUDIT.md` |
+| I1 - Production Runtime Migration + Immersive Shell Foundation | NEXT / UNSTARTED | May begin only through its dedicated prompt; A0B does not implement migration |
 | I1B - Production Runtime Migration Audit | PLANNED / UNSTARTED | Required audit gate after I1 |
 | UR0 - Product Leverage + Comprehension Gate | PLANNED / UNSTARTED | Decide which branches are justified by measured usability, capability leverage, and scientific honesty |
 
@@ -20,8 +20,8 @@ Canonical immediate dependency:
 ```text
 PERF1B COMPLETE
   -> A0 COMPLETE
-  -> A0B NEXT
-  -> I1
+  -> A0B COMPLETE
+  -> I1 NEXT
   -> I1B
   -> UR0
 ```
@@ -78,8 +78,8 @@ Branches may interleave when their explicit capability, evidence, and product ga
 
 | Map | Purpose | Current boundary |
 | --- | --- | --- |
-| A - Architecture consolidation | Canonical vocabulary, authority, dependency, capability, and source hierarchy | A0 complete; A0B next |
-| B - Production runtime / World | Adopt audited runtime ports and immersive shell without changing model semantics | I1/I1B planned; only isolated Flocking Worker support exists |
+| A - Architecture consolidation | Canonical vocabulary, authority, dependency, capability, and source hierarchy | A0 and A0B complete |
+| B - Production runtime / World | Adopt audited runtime ports and immersive shell without changing model semantics | I1 next and unstarted; only isolated Flocking Worker support exists |
 | C - Executable visual modeling | Move from constrained authoring toward narrowly executable composition | No generic compiler, interpreter, or executable graph exists |
 | D - SystemView / scale / lens / regime | Scientific representation graph and explicit mappings | Conceptual direction only; old multi-scale services remain structural |
 | E - Canonical observation | Evidence-bearing samples separate from snapshots and visual projections | Not implemented |
@@ -168,4 +168,4 @@ All future work must pass the relevant gates:
 
 ## Next Milestone
 
-`A0B - Canonical Architecture + Source-of-Truth Audit` is next and unstarted. It must independently test documentation contradictions, authority leakage, dependency cycles, current/future confusion, hierarchy leakage, architecture theater, static-analysis gaps, and roadmap drift. I1 remains planned and unstarted until A0B completes.
+`I1 - Production Runtime Migration + Immersive Shell Foundation` is next and unstarted. A0B is complete and does not itself migrate production World, add cross-template Worker support, or change simulation semantics. I1 requires its dedicated prompt; I1B remains the required adversarial audit after implementation.

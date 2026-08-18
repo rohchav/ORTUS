@@ -2,7 +2,7 @@
 
 Status: HISTORICAL product-direction record after A0. Use `ROADMAP.md` for current sequencing, `CAPABILITIES.md` for implemented behavior, and `SCIENTIFIC_MODEL.md` for evidence contracts.
 
-Status: historical GW0 source of truth, updated after R1 to record the active route and sequencing reset.
+Status: historical GW0 planning record, updated after R1 to preserve the route and sequencing reset at that milestone.
 
 GW0 is documentation, product architecture, information architecture, and roadmap planning only.
 

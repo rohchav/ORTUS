@@ -39,9 +39,9 @@ describe("simulation package architecture boundary", () => {
     expect(concepts).toContain("+ Scenario / RunConfig");
     expect(concepts).toContain("-> Fresh engine instance");
     expect(concepts).toContain("Uncertainty Config");
-    expect(concepts).toContain(
-      "ORTUS simulations are exploratory models. Scenarios define initial conditions and supported model variants; snapshots restore exact run state; run summaries compare outcomes. None of these should be treated as real-world prediction without validation, uncertainty analysis, and clear assumptions."
-    );
+    expect(concepts).toContain("validated `SnapshotExport` preserves exact continuation state for restore");
+    expect(concepts).toContain("`SimulationSnapshotView` does not");
+    expect(concepts).toContain("None of these should be treated as real-world prediction");
   });
 });
 

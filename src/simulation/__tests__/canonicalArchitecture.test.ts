@@ -1,7 +1,9 @@
-import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { mkdtempSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
+import { SimulationEngine } from "../kernel/SimulationEngine";
+import { flockingTemplate } from "../templates/flocking.template";
 import { productionTemplateIds } from "../templates/registry";
 
 const repoRoot = process.cwd();
@@ -26,10 +28,10 @@ describe("A0 canonical architecture and source hierarchy", () => {
     const scientificModel = source(canonicalPaths.scientificModel);
     const roadmap = source(canonicalPaths.roadmap);
 
-    expect(architecture).toContain("Status: CURRENT architectural source of truth after A0");
-    expect(capabilities).toContain("Status: CURRENT capability source of truth after A0");
-    expect(scientificModel).toContain("Status: CURRENT epistemic and scientific source of truth after A0");
-    expect(roadmap).toContain("Status: CURRENT future-sequencing source of truth after A0");
+    expect(architecture).toContain("Status: CURRENT architectural source of truth after A0B");
+    expect(capabilities).toContain("Status: CURRENT capability source of truth after A0B");
+    expect(scientificModel).toContain("Status: CURRENT epistemic and scientific source of truth after A0B");
+    expect(roadmap).toContain("Status: CURRENT future-sequencing source of truth after A0B");
 
     const precedence = [
       "Executable code and tests",
@@ -71,6 +73,7 @@ describe("A0 canonical architecture and source hierarchy", () => {
 
     expect(architecture).toContain("ModelDefinition != RuntimePlan");
     expect(architecture).toContain("SimulationSnapshot != RenderFramePacket != UIProjection != CanonicalObservation");
+    expect(architecture).toContain("SimulationSnapshotView != SnapshotExport");
     expect(architecture).toContain("representation != question != derivation != evidence != assessment");
     expect(architecture).toContain("`CanonicalObservation` | Provenance-bearing scientific sample");
     expect(architecture).toContain("PLANNED; deliberately absent");
@@ -83,8 +86,38 @@ describe("A0 canonical architecture and source hierarchy", () => {
     expect(architecture).toContain("The current engine is entity/component/system shaped.");
     expect(architecture).toContain("This is a useful computational substrate, not a universal claim");
     expect(architecture).toContain("renderer to model mutation");
-    expect(architecture).toContain("research to mutable engine internals");
+    expect(architecture).toContain("research to mutable engine/runtime internals");
     expect(architecture).toContain("candidate generator to its own validation authority");
+    expect(architecture).toContain("`ModelDefinition` must not import or expose concrete ECS kernel internals");
+    expect(architecture).toContain("`A -> B` means A may import B");
+  });
+
+  it("states the current production cadence coupling instead of pretending React is not scheduling it", () => {
+    const architecture = source(canonicalPaths.architecture);
+    const appShell = source(join(repoRoot, "src", "components", "AppShell.tsx"));
+
+    expect(appShell).toContain("requestAnimationFrame(loop)");
+    expect(appShell).toContain("state.runFrameSteps(cappedSteps)");
+    expect(architecture).toContain("Production World wall-clock cadence is currently owned by the mounted React `AppShell`");
+    expect(architecture).toContain("The engine still owns deterministic step semantics");
+  });
+
+  it("separates the detached snapshot read view from exact continuation state", () => {
+    const architecture = source(canonicalPaths.architecture);
+    const capabilities = source(canonicalPaths.capabilities);
+    const engine = new SimulationEngine(flockingTemplate, { seed: "a0b-snapshot-contract", parameters: { agentCount: 20 } });
+    const view = engine.createSnapshot();
+    const continuation = engine.snapshotExport();
+
+    expect("rng" in view).toBe(false);
+    expect("world" in view).toBe(false);
+    expect(continuation.rng.seed).toBe("a0b-snapshot-contract");
+    expect(continuation.world.events).toBeDefined();
+
+    view.globals.a0bDetachedMutation = true;
+    expect(engine.createSnapshot().globals.a0bDetachedMutation).toBeUndefined();
+    expect(architecture).toContain("`SimulationSnapshotView` is not exact continuation state");
+    expect(capabilities).toContain("Only `SnapshotExport` is accepted as exact continuation state");
   });
 
   it("freezes future SystemView direction without claiming a hierarchy or implementation", () => {
@@ -94,7 +127,8 @@ describe("A0 canonical architecture and source hierarchy", () => {
     expect(architecture).toContain("Future research representation is a SystemView graph");
     expect(architecture).toContain("not a universal micro-to-meso-to-macro hierarchy");
     expect(architecture).toContain("not a mandatory `Scale x Lens x Regime` Cartesian cube");
-    expect(architecture).toContain("No SystemView schema, runtime, mapping executor, or discovery algorithm is implemented by A0.");
+    expect(architecture).toContain("The isolated immersive prototype's “System view” control is a presentation camera reset");
+    expect(architecture).toContain("No SystemView schema, runtime, mapping executor, or discovery algorithm is implemented by A0 or A0B.");
     expect(roadmap).toContain("old hierarchy-first multi-scale roadmap is superseded");
   });
 
@@ -110,24 +144,49 @@ describe("A0 canonical architecture and source hierarchy", () => {
     expect(capabilities).toContain("Global service availability does not grant template support.");
   });
 
-  it("records the post-A0 handoff without restoring obsolete sequencing", () => {
+  it("records the post-A0B handoff without restoring obsolete sequencing", () => {
     const roadmap = source(canonicalPaths.roadmap);
     const activeStatus = [
       source(join(repoRoot, "README.md")),
       source(join(repoRoot, "docs", "codex", "CURRENT_CONTEXT.md")),
-      source(join(repoRoot, "planned_roadmap.md")),
       roadmap
     ].join("\n");
 
     expect(roadmap).toContain("A0 - Canonical Architecture + Source-of-Truth Consolidation | COMPLETE");
-    expect(roadmap).toContain("A0B - Canonical Architecture + Source-of-Truth Audit | NEXT / UNSTARTED");
-    expect(roadmap).toContain("I1 - Production Runtime Migration + Immersive Shell Foundation | PLANNED / UNSTARTED");
+    expect(roadmap).toContain("A0B - Canonical Architecture + Source-of-Truth Audit | COMPLETE");
+    expect(roadmap).toContain("I1 - Production Runtime Migration + Immersive Shell Foundation | NEXT / UNSTARTED");
     expect(roadmap).toContain("UR0 - Product Leverage + Comprehension Gate | PLANNED / UNSTARTED");
     expect(roadmap).toContain("C4 is not deferred until I5B.");
     expect(roadmap).toContain("MF-series milestones create reusable computational/scientific execution families");
     expect(activeStatus).not.toContain("A0 is next and unstarted");
     expect(activeStatus).not.toContain("A0: Canonical Architecture + Source-of-Truth Consolidation is next");
     expect(activeStatus).not.toContain("C4 is deferred until I5B");
+  });
+
+  it("does not let README or contributor instructions create competing current authorities", () => {
+    const readme = source(join(repoRoot, "README.md"));
+    const agents = source(join(repoRoot, "AGENTS.md"));
+
+    expect(readme).toContain("browser-based complex-systems simulation sandbox");
+    expect(readme).not.toContain("visual modeler backed");
+    expect(readme).not.toMatch(/The [^\n.]* source of truth is `docs\//);
+    expect(readme).not.toContain("The revised roadmap is in `docs/roadmap.md`");
+    expect(agents).not.toMatch(/(?:A0B|GW9) is next/);
+    expect(agents).not.toContain("GW9 remains paused");
+  });
+
+  it("reserves current source-of-truth status labels for the four canonical documents", () => {
+    const authorities = markdownFiles(join(repoRoot, "docs"))
+      .filter((path) => /^Status: .*source of truth/m.test(source(path)))
+      .map((path) => path.slice(repoRoot.length + 1))
+      .sort();
+
+    expect(authorities).toEqual([
+      "docs/ARCHITECTURE.md",
+      "docs/CAPABILITIES.md",
+      "docs/ROADMAP.md",
+      "docs/SCIENTIFIC_MODEL.md"
+    ]);
   });
 
   it("preserves scientific non-equivalence, identifiability, and safety contracts", () => {
@@ -140,6 +199,9 @@ describe("A0 canonical architecture and source hierarchy", () => {
     expect(scientificModel).toContain("Candidate generation is not validation.");
     expect(scientificModel).toContain("A generator must never certify its own output.");
     expect(scientificModel).toContain("`UNIDENTIFIABLE` is a legitimate result");
+    expect(scientificModel).toContain("`SUPPORTED_WITHIN_MODEL_SCOPE`");
+    expect(scientificModel).toContain("`REJECTED_WITHIN_MODEL_SCOPE`");
+    expect(scientificModel).toContain("`INCONCLUSIVE`");
     expect(scientificModel).toContain("protected-class inference");
     expect(scientificModel).toContain("persuasion optimization or microtargeting");
     expect(scientificModel).toContain("LLM-per-agent");
@@ -149,8 +211,12 @@ describe("A0 canonical architecture and source hierarchy", () => {
 describe("A0 scoped architecture lint", () => {
   it("passes a clean bounded fixture", async () => {
     const root = fixtureRoot();
-    write(root, "src/simulation/kernel/clean.ts", "export const deterministicValue = 1;\n");
-    write(root, "src/components/Clean.tsx", "export function Clean() { return <img alt=\"Model state\" />; }\n");
+    write(root, "src/simulation/kernel/clean.ts", "setTimeout(() => undefined, 0); export const deterministicValue = Math.max(1, 0);\n");
+    write(
+      root,
+      "src/components/Clean.tsx",
+      "export function Clean() { return <><img alt=\"Model state\" /><div role=\"button\" tabIndex={0} onClick={() => undefined} onKeyDown={() => undefined}>Open</div></>; }\n"
+    );
 
     const result = await runArchitectureLint(root);
 
@@ -195,13 +261,73 @@ describe("A0 scoped architecture lint", () => {
     expect(output).toContain("dynamic code execution is forbidden");
     expect(output).toContain("browser-storage globals");
     expect(output).toContain("imports private runtime authority");
-    expect(output).toContain("research code imports mutable simulation authority");
+    expect(output).toContain("research code imports simulation authority");
     expect(output).toContain("requires role, tabIndex, and a keyboard handler");
+  });
+
+  it("rejects realistic re-export, module-load, indirect-execution, randomness, platform, research, and focus bypasses", async () => {
+    const root = fixtureRoot();
+    write(root, "src/simulation/reexport.ts", 'export { AppShell } from "../components/AppShell.tsx";\n');
+    write(root, "src/simulation/required.ts", 'export const ui = require("../components/AppShell");\n');
+    write(
+      root,
+      "src/simulation/random.ts",
+      [
+        'export const bracketed = Math["random"]();',
+        "export const globalBracketed = globalThis.Math.random();",
+        "export const { random: aliasedRandom } = Math;",
+        "const mathAlias = Math; export const escapedRandom = mathAlias.random();",
+        'export const storage = globalThis["localStorage"];',
+        "export const { document: documentAlias } = globalThis;"
+      ].join("\n")
+    );
+    write(
+      root,
+      "src/components/Dynamic.ts",
+      [
+        'globalThis.eval("void 0");',
+        'globalThis["Function"]("return 1")();',
+        'const evalAlias = eval; evalAlias("void 0");',
+        'const functionAlias = globalThis.Function; functionAlias("return 1")();',
+        "const requireAlias = require; void requireAlias;",
+        'setTimeout("void 0", 0);',
+        'globalThis["setInterval"]("void 0", 0);',
+        'module["require"]("./legacy");',
+        'export const deferred = import("./payload");'
+      ].join("\n")
+    );
+    write(root, "src/research/barrel.ts", 'import { SimulationEngine } from "../simulation"; export { SimulationEngine };\n');
+    write(root, "src/research/runtime.ts", 'export * from "../simulation/runtime/RuntimeSession.ts";\n');
+    write(
+      root,
+      "src/components/BadFocus.tsx",
+      'export function BadFocus() { return <div role="presentation" tabIndex={-1} onClick={() => undefined} onKeyDown={() => undefined}>Open</div>; }\n'
+    );
+
+    const result = await runArchitectureLint(root);
+    const output = result.issues.join("\n");
+
+    expect(output).toContain("simulation implementation imports forbidden UI layer");
+    expect(output).toContain("CommonJS require is forbidden");
+    expect(output).toContain("runtime dynamic imports are forbidden");
+    expect(output.match(/seeded RandomService streams/g)?.length).toBeGreaterThanOrEqual(4);
+    expect(output).toContain("browser-storage globals");
+    expect(output.match(/dynamic code execution is forbidden/g)?.length).toBeGreaterThanOrEqual(6);
+    expect(output.match(/research code imports simulation authority/g)?.length).toBe(2);
+    expect(output).toContain("requires an interactive role");
+    expect(output).toContain("requires a non-negative tabIndex");
   });
 });
 
 function source(path: string): string {
   return readFileSync(path, "utf8");
+}
+
+function markdownFiles(root: string): string[] {
+  return readdirSync(root).flatMap((entry) => {
+    const path = join(root, entry);
+    return statSync(path).isDirectory() ? markdownFiles(path) : path.endsWith(".md") ? [path] : [];
+  });
 }
 
 function fixtureRoot(): string {

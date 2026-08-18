@@ -1,6 +1,6 @@
 # ORTUS Research World Destination Shell
 
-Status: Prompt GW1 implementation source of truth, audited by GW1B and updated through GW9. The canonical routes remain World `/`, Lab `/lab`, Atlas `/atlas`, and Workshop `/builder`. GW9 changes only Atlas content/capability: one bounded ephemeral Flocking preview is now available. The shell still adds no persistent research data, saved Lab/Atlas records, saved landscapes or probe plans, generic probe execution, progression, Builder execution, dependency, asset, font, or storage path.
+Status: HISTORICAL/SUBORDINATE Prompt GW1 implementation record, audited by GW1B and updated through GW9. R1 superseded its route hierarchy: Start is `/`, World is `/world`, Lab is `/lab`, Atlas is `/atlas`, and Workshop is `/builder`. Defer current architecture, capability, scientific, and sequencing claims to `../ARCHITECTURE.md`, `../CAPABILITIES.md`, `../SCIENTIFIC_MODEL.md`, and `../ROADMAP.md`. GW9 changes only Atlas content/capability: one bounded ephemeral Flocking preview is now available. The shell still adds no persistent research data, saved Lab/Atlas records, saved landscapes or probe plans, generic probe execution, progression, Builder execution, dependency, asset, font, or storage path.
 
 ## 1. Purpose And Scope
 

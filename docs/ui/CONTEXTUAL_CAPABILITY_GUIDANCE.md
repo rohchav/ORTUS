@@ -1,6 +1,6 @@
 # Contextual Capability Guidance
 
-Status: Prompt GW6 implementation source of truth, audited by GW6B and updated through GW9B. Guidance describes the bounded Atlas preview separately from planning-only probe artifacts and unimplemented persistence/analysis. Guidance itself still creates no runtime, record, persistence, validation, personalization, progression, or Builder behavior.
+Status: HISTORICAL/SUBORDINATE Prompt GW6 implementation record, audited by GW6B and updated through GW9B. Defer current architecture, capability, scientific, and sequencing claims to `../ARCHITECTURE.md`, `../CAPABILITIES.md`, `../SCIENTIFIC_MODEL.md`, and `../ROADMAP.md`. Guidance describes the bounded Atlas preview separately from planning-only probe artifacts and unimplemented persistence/analysis. Guidance itself still creates no runtime, record, persistence, validation, personalization, progression, or Builder behavior.
 
 ## 1. Boundary
 

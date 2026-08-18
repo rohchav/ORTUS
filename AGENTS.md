@@ -487,11 +487,10 @@
 - Preserve current validated workflows before reorganizing them further.
 - Use the existing Playwright/Axe harness for rendered destination-shell verification.
 - Do not claim screen-reader, AT, forced-colors, browser-zoom, or WCAG verification without evidence.
-- Do not start a Research World implementation slice from a prior shell prompt without the required audit; after UX3, GW9 is paused until the UX4/UX5/UX6 sandbox-theme and guided-comprehension track is complete or explicitly waived.
+- Do not start a Research World implementation slice from a prior shell prompt without a dedicated implementation prompt and its required audit.
 - UX3 is audit and planning only. Do not implement UX4, UX5, UX6, GW9, sandbox visual overhaul, beginner mode, advanced mode, guided builder, preferences, onboarding, persistence, Lab records, Atlas discoveries, probes, sweeps, sampling, regime detection, runtime behavior, template behavior, or Builder execution from UX3 alone.
-- Next recommended prompt after UX4 is UX4B: Sandbox Visual Language Audit and Hardening.
 - UX4 visual language is presentational only. Do not treat softer sandbox/workbench styling, rounded panels, route accents, or quieter caveat/status treatments as new runtime, template, Builder, Lab, Atlas, sampling, persistence, progression, or validation capability.
-- UX4 must be audited by UX4B before starting UX5, UX6, or GW9 unless the user explicitly waives that sequence.
+- Treat implementation/audit prompt pairs as gates; do not infer later capability from an unaudited presentation milestone.
 - UX5 changes route orientation, copy layering, disclosure, and component-local view state only. Do not treat progressive disclosure as runtime, template, Builder, Lab, Atlas, sampling, persistence, progression, validation, or calibration capability.
 - UX5 disclosure state must remain non-persistent. Do not store it in localStorage, sessionStorage, IndexedDB, cookies, Zustand persistence, panel persistence, user profiles, preferences, onboarding records, or analytics.
 - Keep plain-language orientation first and exact technical language visible or one explicit disclosure away. Do not delete runtime-honesty, model-vs-world, valid-vs-runnable, non-persistence, or no-execution boundaries to reduce density.
@@ -500,9 +499,8 @@
 - Lab and Atlas disclosures reorganize existing static conceptual semantics only. They must not create forms, records, timestamps, ids, notebooks, maps, samples, probe controls, sweep controls, queues, scores, regimes, discoveries, publication actions, or World transfer actions.
 - Preserve the exact visible Lab boundary: `Nothing on this route is a saved experiment, evidence record, notebook, or run history.`
 - Preserve the exact visible Atlas boundary: `No sampled landscape, saved map, probe execution, regime detection, or discovery record exists here yet.`
-- UX5 must be audited by UX5B before UX6 or GW9 unless the user explicitly waives that sequence. GW9 remains paused.
-- UX5B is complete as a source and rendered audit. It adds no production behavior, persistence, personalization, progression, runtime/template/Builder execution, Lab/Atlas behavior, sampling, probe execution, UX6 implementation, or GW9 implementation.
-- UX6 and UX6B are complete. GW9 is next but remains paused until UX6B is committed and remotely aligned and the user provides an explicit GW9 prompt.
+- UX5B adds no production behavior, persistence, personalization, progression, runtime/template/Builder execution, Lab/Atlas behavior, sampling, or probe execution.
+- UX6/UX6B add bounded structural authoring UX only; they do not activate runtime/template/Builder execution, Lab/Atlas behavior, sampling, persistence, or progression.
 - Guided Builder is the default local Workshop authoring view; Advanced Builder remains immediately available and retains Workspace Inspector, Author Schema, Graph View, import/export, validation assistance, repair suggestions, fit reports, scenario planning, exact metadata, and accessible graph outlines.
 - Guided Builder supports only a bounded subset of `ortus.modelSchema`: identity and description, limitation notes, entity types, state attributes, zero or one structural space, descriptive non-executable rules, parameter declarations, and one starting-condition assumption note. Components, metrics, artifact/scope references, exact metadata, multiple spaces, boundary references, update order, stochastic semantics, observability, and provenance remain Advanced-only or unsupported.
 - Guided Builder draft, current step, selected Guided/Advanced view, validation presentation, and handoff state are component-local page-session state. Do not persist them in localStorage, sessionStorage, IndexedDB, cookies, Zustand persistence, server storage, profiles, onboarding records, or analytics.
@@ -586,8 +584,8 @@
 - Keep Starter World browsing, filters, search, nudge dismissal, and launch context non-persistent. Do not add storage, progress, completion, XP, achievements, profiling, recommendations, or step locks.
 - Keep remix status explicit: runtime-now, current Advanced structural tools, or future capability. Do not expose fake Builder, generate, compile, apply, or run actions.
 - C1 portfolio candidates are documentation only. Tier A is not implemented content; Tier B and C do not become runtime support until dedicated implementation and audit prompts.
-- R1 through C3B, I0/I0B, PERF1/PERF1B, and A0 are complete. A0B is next and unstarted. I1 is planned and unstarted after A0B; I2 through I5B are not an unconditional sequence; C4 is not tied to I5B. Do not start A0B, I1, C4, or later I/C/S/E milestones without a dedicated prompt.
-- Complete and commit GW1 before starting GW1B.
+- Current milestone status and dependency order live only in `docs/ROADMAP.md`. Do not encode a competing current sequence in contributor guidance or infer an unconditional immersive chain; C4 has no I5B dependency.
+- Do not start or generalize a roadmap capability without its dedicated prompt and required audit.
 - Treat UX0 as documentation and design planning only.
 - Do not implement World/Lab/Atlas/Workshop without a dedicated prompt.
 - Preserve ORTUS as a living laboratory, not a tactical command interface.
@@ -667,7 +665,7 @@
 - Atlas preview results are component-memory-only exact sampled coordinates. Do not add storage, saved records, history, publication, interpolation, smoothing, contours, inferred unsampled values, regime/transition/tipping-point detection, confidence/coverage/evidence scores, or scientific-validation claims.
 - Keep cancellation language honest: `Cancel after current sample` means the current synchronous sample finishes before cancellation is effective. Unstarted runs remain unsampled and partial results remain visibly partial. Route unmount must cancel remaining cooperative work and suppress post-unmount UI updates.
 - Multiple preview seeds show selected deterministic model variation only; they are not confidence intervals, calibrated probabilities, or real-world uncertainty estimates.
-- GW9/GW9B do not generalize Atlas sampling, make the conceptual behavioral-landscape scaffold runtime-backed, make probe plans executable, or create Discovery Atlas/Lab persistence. GW9B, R1, R1B, R2, R2B, C1, C1B, C2, C2B, C3, C3B, I0, I0B, PERF1, PERF1B, and A0 are complete. A0B is next and unstarted; I1 is planned and unstarted; later immersive work is gated rather than contiguous; C4 has no I5B dependency; F1 is paused under E3 Analytical Lenses.
+- GW9/GW9B do not generalize Atlas sampling, make the conceptual behavioral-landscape scaffold runtime-backed, make probe plans executable, or create Discovery Atlas/Lab persistence.
 - A featured starter launch must create the documented fresh prepared run once per starter page mount. It must not silently resume modified parameters, an advanced tick, or a running state beneath baseline instructions.
 - Parameter controls that rebuild the run must remain drafts until explicit apply and state that apply produces a fresh paused tick-0 run; do not imply live mutation.
 - World visible task, `task` query, top-navigation current state, and task heading must remain coherent without resetting active runtime state.
@@ -737,8 +735,10 @@
 - Keep transferable frame buffers ownership-safe. Do not add `SharedArrayBuffer`, cross-origin-isolation requirements, `OffscreenCanvas`, or shared mutable engine state without a dedicated measured prompt and audit.
 - Treat transferred frame buffers as one-way ownership. Do not mutate source arrays in renderer/camera/lens code, recycle detached buffers, duplicate a buffer in one transfer list, or retain an unbounded packet history.
 - `RenderFramePacket` and `UIProjection` are not canonical engine state. Exact semantic UI values that matter for inspection must come from authoritative runtime projection, not rounded renderer arrays.
-- Keep full snapshots available for continuation, export, comparison, and authoritative consumers; do not construct or deep-clone them for every visual frame when a bounded projector is sufficient.
+- Keep `SimulationSnapshotView` and `SnapshotExport` distinct. The former is a detached broad read model and is not exact continuation state; only validated `SnapshotExport` preserves RNG and queued-event state for restore.
+- Keep exact snapshot exports available for continuation and explicit export; do not construct or deep-clone them for every visual frame when a bounded read view or projector is sufficient.
+- Distinguish external wall-clock cadence from engine-owned step semantics. Documentation must name the current cadence owner instead of granting UI code model-step, RNG, or mutation authority.
 - Flocking automatic neighbor execution preserves the pre-PERF1 spatial-hash threshold, nominal-cell behavior, and all-pairs fallback for deterministic compatibility. PERF1's corrected `uniformCoverage` index path is differential/benchmark-only because adopting it would migrate affected trajectories and it measured slower despite fewer candidate checks. Do not mark it automatic or call it an optimization without an explicit semantic migration, new repeatable benefit, and exact wrap/order/trajectory evidence.
 - Neighbor-index correctness must cover non-divisible world dimensions, wrap corners/edges, exact/inside/outside radii, same-position agents, duplicate/self behavior, stable pair order, 500-agent generated states, and full deterministic evolution before adoption.
 - PERF1 does not implement `CanonicalObservation`, evidence persistence, Arrow/Parquet, cross-template Worker support, production immersive World, `OffscreenCanvas`, WebGL/WebGPU, Wasm, or a user-facing Worker toggle.
-- I1 may consume the audited runtime port, drivers, Flocking frame/UI/selected projections, generation/revision identity, bounded visual backpressure, ingress cap, and terminal lifecycle. It must not reintroduce continuous full snapshots, React entity animation, renderer mutation, Canvas authority, camera-to-model coupling, RNG/scheduler changes, fake cross-template support, or `CanonicalObservation` conflation.
+- I1 may consume the audited runtime port, drivers, Flocking frame/UI/selected projections, generation/revision identity, bounded visual backpressure, ingress cap, and terminal lifecycle. It must not reintroduce continuous full snapshot exports, React entity animation, renderer mutation, Canvas authority, camera-to-model coupling, RNG/model-step semantic changes, fake cross-template support, or `CanonicalObservation` conflation.

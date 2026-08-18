@@ -1,6 +1,6 @@
 # ORTUS Scientific Model And Evidence Contracts
 
-Status: CURRENT epistemic and scientific source of truth after A0
+Status: CURRENT epistemic and scientific source of truth after A0B
 
 ORTUS is an exploratory complex-systems modeling sandbox. It can establish what specified mechanisms do inside a specified model under specified conditions. It does not automatically establish what caused, will cause, or should be done about a real system.
 
@@ -41,7 +41,8 @@ Template documentation and assumption profiles must state what is represented, w
 
 Current snapshots and projections have operational purposes:
 
-- A snapshot preserves continuation/export state.
+- A `SimulationSnapshotView` is a detached broad read model for rendering and inspection; it omits RNG and queued-event state.
+- A validated `SnapshotExport` preserves exact continuation/export state.
 - A `RenderFramePacket` supplies ephemeral Canvas data.
 - A `UIProjection` supplies coarse current semantic/UI data.
 - Runtime metrics are numeric model outputs.
@@ -100,15 +101,14 @@ Every evidence-bearing artifact needs stable identity, source versions, creation
 
 ## Identifiability And Alternatives
 
-ORTUS must preserve competing plausible explanations. Aggregate or visual similarity can be produced by different mechanisms; one fit does not identify the generating mechanism. Research tooling must support outcomes such as:
+ORTUS must preserve competing plausible explanations. Aggregate or visual similarity can be produced by different mechanisms; one fit does not identify the generating mechanism. Future research tooling must support at least these semantic assessment outcomes. These labels are contracts, not an implemented enum:
 
 - `SUPPORTED_WITHIN_MODEL_SCOPE`
-- `CONTRADICTED_WITHIN_MODEL_SCOPE`
-- `UNRESOLVED`
-- `UNSUPPORTED_BY_AVAILABLE_DATA`
+- `REJECTED_WITHIN_MODEL_SCOPE`
+- `INCONCLUSIVE`
 - `UNIDENTIFIABLE` or `NON_IDENTIFIABLE`
 
-`UNIDENTIFIABLE` is a legitimate result, not a UI failure to hide. Uncertainty, sparse support, incompatible alternatives, and sensitivity to assumptions should remain visible.
+Supported means the stated candidate survived a stated evaluation within model/evidence scope; rejected means it did not. Inconclusive means available evidence cannot decide under the stated method. `UNIDENTIFIABLE` is a legitimate result and a stronger statement: competing explanations cannot be distinguished from the available evidence and assumptions. None of these dispositions validates or rejects a real-world mechanism without an external empirical argument. Uncertainty, sparse support, incompatible alternatives, and sensitivity to assumptions should remain visible.
 
 ## Causality And Intervention
 
@@ -168,4 +168,4 @@ The System Discovery program is PLANNED research only. Its ordering preserves in
 12. SD12 joint SystemView search.
 13. SD13 explorer.
 
-No SD capability, discovery algorithm, research adapter, or CanonicalObservation implementation is created by A0.
+No SD capability, discovery algorithm, research adapter, or CanonicalObservation implementation is created by A0 or A0B.

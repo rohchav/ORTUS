@@ -1,6 +1,6 @@
 # Landscape Probe Planning Foundation
 
-Status: Prompt GW8 implementation source of truth, audited by GW8B and updated after GW9. GW8/GW8B define non-persistent conceptual probe planning and do not execute probes. GW9 uses a separate explicit preview request because the planning scaffold cannot map safely to runtime IDs and exact values. Probe plans remain non-executable and unsaved; no generic probe execution, regime detection, validation, Builder execution, persistence, dependency, asset, or font support was added.
+Status: HISTORICAL/SUBORDINATE Prompt GW8 implementation record, audited by GW8B and updated after GW9. Defer current architecture, capability, scientific, and sequencing claims to `../ARCHITECTURE.md`, `../CAPABILITIES.md`, `../SCIENTIFIC_MODEL.md`, and `../ROADMAP.md`. GW8/GW8B define non-persistent conceptual probe planning and do not execute probes. GW9 uses a separate explicit preview request because the planning scaffold cannot map safely to runtime IDs and exact values. Probe plans remain non-executable and unsaved; no generic probe execution, regime detection, validation, Builder execution, persistence, dependency, asset, or font support was added.
 
 ## 1. Purpose
 

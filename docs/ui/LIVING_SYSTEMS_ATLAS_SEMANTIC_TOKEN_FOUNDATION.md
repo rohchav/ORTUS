@@ -1,6 +1,6 @@
 # Living Systems Atlas Semantic Token Foundation
 
-Status: Prompt UX2 implementation source of truth, updated after Prompt GW1.
+Status: HISTORICAL/SUBORDINATE Prompt UX2 implementation record, updated after Prompt GW1. Defer current architecture, capability, scientific, and sequencing claims to `../ARCHITECTURE.md`, `../CAPABILITIES.md`, `../SCIENTIFIC_MODEL.md`, and `../ROADMAP.md`.
 
 UX2 establishes shared visual semantics.
 It does not perform the Research World shell transformation.

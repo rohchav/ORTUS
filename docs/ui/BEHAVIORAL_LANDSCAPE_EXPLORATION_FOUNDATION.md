@@ -1,6 +1,6 @@
 # Behavioral Landscape Exploration Foundation
 
-Status: Prompt GW7 implementation source of truth, audited by GW7B and updated through GW9B. GW7/GW7B define behavioral-landscape vocabulary and a conceptual zero-Tab-stop scaffold; GW8/GW8B add separate non-executable probe planning. GW9/GW9B add and audit a separate bounded ephemeral exact-coordinate preview but do not make the GW7 scaffold executable, complete, interpolated, saved, regime-aware, validated, or a Discovery Atlas record.
+Status: HISTORICAL/SUBORDINATE Prompt GW7 implementation record, audited by GW7B and updated through GW9B. Defer current architecture, capability, scientific, and sequencing claims to `../ARCHITECTURE.md`, `../CAPABILITIES.md`, `../SCIENTIFIC_MODEL.md`, and `../ROADMAP.md`. GW7/GW7B define behavioral-landscape vocabulary and a conceptual zero-Tab-stop scaffold; GW8/GW8B add separate non-executable probe planning. GW9/GW9B add and audit a separate bounded ephemeral exact-coordinate preview but do not make the GW7 scaffold executable, complete, interpolated, saved, regime-aware, validated, or a Discovery Atlas record.
 
 ## 1. Purpose
 

@@ -128,7 +128,8 @@ describe("R1 Start Hub and World-first product reset contracts", () => {
     expect(roadmap).toContain("I1 remains planned and unstarted after A0B.");
     expect(roadmap).toContain("C4 has no I5B dependency");
     expect(canonicalRoadmap).toContain("A0 - Canonical Architecture + Source-of-Truth Consolidation | COMPLETE");
-    expect(canonicalRoadmap).toContain("A0B - Canonical Architecture + Source-of-Truth Audit | NEXT / UNSTARTED");
+    expect(canonicalRoadmap).toContain("A0B - Canonical Architecture + Source-of-Truth Audit | COMPLETE");
+    expect(canonicalRoadmap).toContain("I1 - Production Runtime Migration + Immersive Shell Foundation | NEXT / UNSTARTED");
     expect(roadmap).toContain("F1 and the rest of the F branch are paused beneath E3 Analytical Lenses.");
   });
 });
