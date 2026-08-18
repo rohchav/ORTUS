@@ -3,7 +3,7 @@ import type { Command, SimulationRunConfig } from "../kernel/types";
 import { SimulationValidationError } from "../kernel/Errors";
 import { createEngineFromRunConfig } from "../runs/engineFromRunConfig";
 import { validateRunConfig } from "../runs/runConfig";
-import { createFlockingRenderFramePacket, decodeEntityId } from "./flockingProjection";
+import { createFlockingRenderFramePacket, createFlockingSelectedUIProjection } from "./flockingProjection";
 import {
   runtimeUiPublicationIntervalMs,
   type RenderFramePacket,
@@ -13,7 +13,6 @@ import {
   type RuntimePlaybackState,
   type RuntimePublicationStats,
   type RuntimeRunRequest,
-  type SelectedUIProjection,
   type UIProjection
 } from "./types";
 
@@ -33,7 +32,6 @@ export class RuntimeSession {
   private disposed = false;
   private lastUiAt = Number.NEGATIVE_INFINITY;
   private latestFrame: RenderFramePacket | undefined;
-  private latestSelected: SelectedUIProjection | null = null;
   private framePublicationId = 0;
   private uiRevision = 0;
   private readonly measures = new BoundedPerformanceRecorder({ enabled: false, maxSamples: 360 });
@@ -47,6 +45,7 @@ export class RuntimeSession {
   rebuild(request: RuntimeRunRequest, identity: RuntimeIdentity, kind: "initialization" | "replacement" | "restore"): RuntimePublicationBundle {
     this.assertNotDisposed();
     const runConfig = validateRunConfig(request.runConfig);
+    assertRuntimeTemplateSupport(runConfig);
     this.instrumentation = request.instrumentation ?? false;
     this.measures.setEnabled(this.instrumentation);
     this.measures.clear();
@@ -62,7 +61,6 @@ export class RuntimeSession {
     this.playback = "paused";
     this.lastAdvanceKind = kind;
     this.selectedEntityId = null;
-    this.latestSelected = null;
     this.lastUiAt = Number.NEGATIVE_INFINITY;
     this.framePublicationId = 0;
     this.uiRevision = 0;
@@ -70,6 +68,7 @@ export class RuntimeSession {
   }
 
   reset(identity: RuntimeIdentity): RuntimePublicationBundle {
+    this.assertNotDisposed();
     if (!this.runConfig) {
       throw new SimulationValidationError("Runtime cannot reset before initialization");
     }
@@ -119,7 +118,7 @@ export class RuntimeSession {
 
   setSelectedEntity(entityId: string | null): RuntimePublicationBundle {
     const engine = this.requireEngine();
-    if (entityId !== null && !engine.world.entityStore.has(entityId)) {
+    if (entityId !== null && !engine.world.entityStore.get(entityId)?.alive) {
       throw new SimulationValidationError(`Cannot select missing runtime entity ${entityId}`);
     }
     this.selectedEntityId = entityId;
@@ -195,6 +194,9 @@ export class RuntimeSession {
     this.engine?.pause();
     this.playback = "disposed";
     this.latestFrame = undefined;
+    this.engine = undefined;
+    this.runConfig = undefined;
+    this.selectedEntityId = null;
     this.disposed = true;
   }
 
@@ -223,14 +225,10 @@ export class RuntimeSession {
   private projectUI(frame: RenderFramePacket): UIProjection {
     const started = this.performanceMark();
     this.uiRevision += 1;
-    const selected = this.selectedEntityId
-      ? frame.entityIds.length === frame.entityCount
-        ? selectedProjection(frame, this.selectedEntityId)
-        : this.latestSelected
-      : null;
-    this.latestSelected = selected;
+    const selected = createFlockingSelectedUIProjection(this.requireEngine(), this.selectedEntityId, frame.selectedDetail);
     const ui: UIProjection = {
       schemaVersion: "1",
+      projectionKind: "flocking-v1",
       revision: this.uiRevision,
       templateId: frame.templateId,
       ...this.identity,
@@ -274,33 +272,12 @@ export class RuntimeSession {
   }
 }
 
-function selectedProjection(frame: RenderFramePacket, entityId: string): SelectedUIProjection | null {
-  for (let index = 0; index < frame.entityCount; index += 1) {
-    const encoded = frame.entityIds[index]!;
-    if (decodeEntityId(encoded) !== entityId) {
-      continue;
-    }
-    const vectorIndex = index * 2;
-    const velocityX = frame.velocities[vectorIndex] ?? 0;
-    const velocityY = frame.velocities[vectorIndex + 1] ?? 0;
-    const heading = Math.atan2(velocityY, velocityX) * 180 / Math.PI;
-    return {
-      entityId: encoded,
-      label: `Boid ${encoded}`,
-      x: frame.positions[vectorIndex] ?? 0,
-      y: frame.positions[vectorIndex + 1] ?? 0,
-      velocityX,
-      velocityY,
-      speed: Math.hypot(velocityX, velocityY),
-      headingDegrees: ((heading % 360) + 360) % 360,
-      neighborCount: frame.neighborCounts[index] ?? 0,
-      localDensity: frame.localDensities[index] ?? 0,
-      currentProximityCount: frame.selectedDetail?.entityId === encoded
-        ? frame.selectedDetail.neighborIds.length
-        : null
-    };
+function assertRuntimeTemplateSupport(runConfig: SimulationRunConfig): void {
+  if (runConfig.templateId !== "flocking-boids") {
+    throw new SimulationValidationError(
+      `PERF1 runtime projection support is explicit and currently limited to flocking-boids, not ${runConfig.templateId}`
+    );
   }
-  return null;
 }
 
 function emptyPublicationStats(): RuntimePublicationStats {

@@ -5,7 +5,9 @@ import {
   type PerformanceMeasureName,
   type PerformanceMeasureSummary,
   type RuntimeExecutionKind,
+  type RuntimePlaybackState,
   type RuntimePublication,
+  type SelectedUIProjection,
   type RuntimeWorkerLike,
   type SimulationRuntimePort,
   type UIProjection
@@ -30,6 +32,7 @@ export interface ImmersiveRuntimeView {
   time: number;
   isReady: boolean;
   isRunning: boolean;
+  playback: RuntimePlaybackState;
   executionKind: RuntimeExecutionKind;
   agentCount: ImmersiveAgentCount;
   alignment: number | null;
@@ -38,6 +41,7 @@ export interface ImmersiveRuntimeView {
   initializationPreset: string;
   runtimeSignature: string;
   lastAdvanceKind: ImmersiveAdvanceKind;
+  selected: SelectedUIProjection | null;
   error: string | null;
 }
 
@@ -56,7 +60,12 @@ export interface ImmersiveRuntimePerformanceSummary {
   sampleCount: number;
   executionKind: RuntimeExecutionKind;
   generation: number;
+  ticksSimulated: number;
+  framesProjected: number;
+  framesSent: number;
   framePublications: number;
+  uiProjected: number;
+  uiSent: number;
   uiPublications: number;
   framesCoalesced: number;
   uiCoalesced: number;
@@ -124,7 +133,7 @@ export class ImmersiveFlockingRuntime {
       runConfig: createImmersiveFlockingRunConfig(this.agentCount),
       instrumentation: true
     }).then(() => undefined).catch((error) => {
-      if (!this.error) {
+      if (!this.disposed && !this.error) {
         this.error = error instanceof Error ? error.message : String(error);
         this.refreshView();
         this.notify();
@@ -141,7 +150,17 @@ export class ImmersiveFlockingRuntime {
 
   whenReady(): Promise<void> {
     this.start();
-    return this.initialization;
+    return this.initialization.then(() => {
+      if (this.disposed) {
+        throw new Error("Immersive runtime was disposed before it became ready");
+      }
+      if (this.error) {
+        throw new Error(this.error);
+      }
+      if (!this.view.isReady) {
+        throw new Error(`Immersive runtime did not become ready; current state is ${this.view.playback}`);
+      }
+    });
   }
 
   getSceneAdapter(): WorldSceneAdapter {
@@ -160,10 +179,14 @@ export class ImmersiveFlockingRuntime {
   }
 
   pause(): void {
-    if (this.disposed) {
+    if (this.disposed || !this.view.isReady) {
       return;
     }
-    this.port?.pause();
+    try {
+      this.port?.pause();
+    } catch (error) {
+      this.handleRejectedOperation(error);
+    }
   }
 
   toggleRunning(): void {
@@ -188,7 +211,12 @@ export class ImmersiveFlockingRuntime {
     this.error = null;
     this.adapterSamples = [];
     this.presentationMeasures.clear();
-    return this.port.reset().then(() => undefined).catch((error) => this.handleRejectedOperation(error));
+    try {
+      return this.port.reset().then(() => undefined).catch((error) => this.handleRejectedOperation(error));
+    } catch (error) {
+      this.handleRejectedOperation(error);
+      return Promise.resolve();
+    }
   }
 
   setSelectedEntity(entityId: string | null): void {
@@ -242,7 +270,12 @@ export class ImmersiveFlockingRuntime {
       sampleCount: engineStep?.count ?? 0,
       executionKind: this.view.executionKind,
       generation: this.view.generation,
+      ticksSimulated: publications?.ticksSimulated ?? 0,
+      framesProjected: publications?.framesProjected ?? 0,
+      framesSent: publications?.framesPublished ?? 0,
       framePublications: this.framePublications - this.measurementStartFramePublications,
+      uiProjected: publications?.uiProjected ?? 0,
+      uiSent: publications?.uiPublished ?? 0,
       uiPublications: this.uiPublications - this.measurementStartUiPublications,
       framesCoalesced: publications?.framesCoalesced ?? 0,
       uiCoalesced: publications?.uiCoalesced ?? 0,
@@ -258,6 +291,7 @@ export class ImmersiveFlockingRuntime {
     this.unsubscribePort?.();
     this.unsubscribePort = null;
     this.port?.dispose();
+    this.refreshView();
     this.listeners.clear();
   }
 
@@ -294,21 +328,28 @@ export class ImmersiveFlockingRuntime {
 
   private buildView(executionKind = this.port?.executionKind ?? "worker"): ImmersiveRuntimeView {
     const ui = this.latestUI;
+    const playback: RuntimePlaybackState = this.disposed
+      ? "disposed"
+      : this.error
+        ? "failed"
+        : ui?.playback ?? "initializing";
     return {
       revision: this.revision,
       generation: ui?.generation ?? this.port?.generation ?? 0,
       tick: ui?.tick ?? 0,
       time: ui?.time ?? 0,
-      isReady: ui !== null && (ui.playback === "paused" || ui.playback === "running") && this.error === null,
-      isRunning: ui?.playback === "running",
+      isReady: playback === "paused" || playback === "running",
+      isRunning: playback === "running",
+      playback,
       executionKind,
       agentCount: this.agentCount,
       alignment: ui?.alignment ?? null,
       scenarioId: immersiveFlockingScenarioId,
       seed: immersiveFlockingSeed,
       initializationPreset: immersiveFlockingInitializationPreset,
-      runtimeSignature: this.adapter.getRuntimeSignature(),
+      runtimeSignature: ui?.runtimeSignature ?? this.adapter.getRuntimeSignature(),
       lastAdvanceKind: ui?.lastAdvanceKind ?? "initialization",
+      selected: ui?.selected ?? null,
       error: this.error
     };
   }

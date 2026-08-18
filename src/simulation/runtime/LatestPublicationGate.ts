@@ -1,6 +1,9 @@
+import { SimulationValidationError } from "../kernel/Errors";
+
 export class LatestPublicationGate<T> {
   private inFlight: { key: number; value: T } | undefined;
   private pending: { key: number; value: T } | undefined;
+  private lastOfferedKey = 0;
   private disposed = false;
 
   constructor(
@@ -15,12 +18,24 @@ export class LatestPublicationGate<T> {
       return;
     }
     const entry = { key: this.keyOf(value), value };
+    if (!Number.isSafeInteger(entry.key) || entry.key <= this.lastOfferedKey) {
+      throw new SimulationValidationError("Runtime publication keys must be positive and strictly increasing within a generation");
+    }
+    const previousKey = this.lastOfferedKey;
+    this.lastOfferedKey = entry.key;
     if (!this.inFlight) {
-      this.sendNow(entry);
+      try {
+        this.sendNow(entry);
+      } catch (error) {
+        this.lastOfferedKey = previousKey;
+        throw error;
+      }
       return;
     }
+    if (this.pending) {
+      this.onCoalesced();
+    }
     this.pending = entry;
-    this.onCoalesced();
   }
 
   acknowledge(key: number): void {
@@ -38,6 +53,7 @@ export class LatestPublicationGate<T> {
   reset(): void {
     this.inFlight = undefined;
     this.pending = undefined;
+    this.lastOfferedKey = 0;
   }
 
   dispose(): void {

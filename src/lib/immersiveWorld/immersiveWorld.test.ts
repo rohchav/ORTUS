@@ -233,7 +233,10 @@ describe("I0 immersive Flocking foundation", () => {
       sampleCount: 1,
       medianEngineStepMs: expect.any(Number),
       medianSnapshotMs: expect.any(Number),
-      medianAdapterMs: expect.any(Number)
+      medianAdapterMs: expect.any(Number),
+      ticksSimulated: 1,
+      framesProjected: expect.any(Number),
+      framesSent: expect.any(Number)
     });
     runtime.restore();
     expect(runtime.getView()).toMatchObject({ tick: 0, isRunning: false, lastAdvanceKind: "restore" });

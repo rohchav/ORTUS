@@ -13,10 +13,12 @@ import {
 
 const generationSchema = z.number().int().positive().max(Number.MAX_SAFE_INTEGER);
 const requestIdSchema = z.number().int().positive().max(Number.MAX_SAFE_INTEGER);
+const commandIdSchema = requestIdSchema;
 const publicationIdSchema = z.number().int().positive().max(Number.MAX_SAFE_INTEGER);
 const runIdSchema = z.string().min(1).max(128).regex(/^[a-zA-Z0-9._:-]+$/);
 const entityIdSchema = z.string().regex(/^e\d{1,10}$/).max(16);
 const finiteNonNegativeSchema = z.number().finite().nonnegative();
+const boundedCounterSchema = z.number().int().nonnegative().max(Number.MAX_SAFE_INTEGER);
 const typedArray = <T>(constructor: { new (...args: any[]): T }) => z.custom<T>((value) => value instanceof constructor);
 
 const identityShape = {
@@ -39,8 +41,8 @@ const resetSchema = z.object({
   ...identityShape
 }).strict();
 const generationCommandShape = { generation: generationSchema };
-const playSchema = z.object({ type: z.literal("runtime.play"), ...generationCommandShape }).strict();
-const pauseSchema = z.object({ type: z.literal("runtime.pause"), ...generationCommandShape }).strict();
+const playSchema = z.object({ type: z.literal("runtime.play"), commandId: commandIdSchema, ...generationCommandShape }).strict();
+const pauseSchema = z.object({ type: z.literal("runtime.pause"), commandId: commandIdSchema, ...generationCommandShape }).strict();
 const stepSchema = z.object({ type: z.literal("runtime.step"), requestId: requestIdSchema, ...generationCommandShape }).strict();
 const applyCommandsSchema = z.object({
   type: z.literal("runtime.applyCommands"),
@@ -50,10 +52,15 @@ const applyCommandsSchema = z.object({
 }).strict();
 const selectionSchema = z.object({
   type: z.literal("runtime.selection"),
+  commandId: commandIdSchema,
   ...generationCommandShape,
   entityId: entityIdSchema.nullable()
 }).strict();
-const resetPerformanceSchema = z.object({ type: z.literal("runtime.resetPerformance"), ...generationCommandShape }).strict();
+const resetPerformanceSchema = z.object({
+  type: z.literal("runtime.resetPerformance"),
+  commandId: commandIdSchema,
+  ...generationCommandShape
+}).strict();
 const frameConsumedSchema = z.object({
   type: z.literal("runtime.frameConsumed"),
   ...generationCommandShape,
@@ -84,10 +91,11 @@ const workerRequestSchema = z.discriminatedUnion("type", [
 export type RuntimeWorkerRequest =
   | { type: "runtime.initialize" | "runtime.replace"; requestId: number; generation: number; runId: string; runConfig: SimulationRunConfig; instrumentation?: boolean }
   | { type: "runtime.reset"; requestId: number; generation: number; runId: string }
-  | { type: "runtime.play" | "runtime.pause" | "runtime.resetPerformance" | "runtime.dispose"; generation: number }
+  | { type: "runtime.play" | "runtime.pause" | "runtime.resetPerformance"; commandId: number; generation: number }
+  | { type: "runtime.dispose"; generation: number }
   | { type: "runtime.step"; requestId: number; generation: number }
   | { type: "runtime.applyCommands"; requestId: number; generation: number; commands: readonly Command[] }
-  | { type: "runtime.selection"; generation: number; entityId: string | null }
+  | { type: "runtime.selection"; commandId: number; generation: number; entityId: string | null }
   | { type: "runtime.frameConsumed"; generation: number; publicationId: number }
   | { type: "runtime.uiConsumed"; generation: number; revision: number };
 
@@ -108,6 +116,33 @@ export function parseRuntimeWorkerRequest(value: unknown): RuntimeWorkerRequest 
   return parsed;
 }
 
+const workerRequestFailureContextSchema = z.object({
+  generation: generationSchema,
+  runId: runIdSchema.optional(),
+  requestId: requestIdSchema.optional(),
+  commandId: commandIdSchema.optional()
+}).passthrough();
+
+export function parseRuntimeWorkerRequestFailureContext(value: unknown): {
+  generation: number;
+  runId?: string;
+  requestId?: number;
+  messageId?: number;
+} | null {
+  const parsed = workerRequestFailureContextSchema.safeParse(value);
+  if (!parsed.success) {
+    return null;
+  }
+  return {
+    generation: parsed.data.generation,
+    ...(parsed.data.runId !== undefined ? { runId: parsed.data.runId } : {}),
+    ...(parsed.data.requestId !== undefined ? { requestId: parsed.data.requestId } : {}),
+    ...(parsed.data.requestId !== undefined || parsed.data.commandId !== undefined
+      ? { messageId: parsed.data.requestId ?? parsed.data.commandId }
+      : {})
+  };
+}
+
 const selectedDetailSchema = z.object({
   entityId: z.number().int().positive().max(0xffff_ffff),
   neighborIds: typedArray(Uint32Array),
@@ -117,6 +152,7 @@ const selectedDetailSchema = z.object({
 
 const renderFrameSchema = z.object({
   schemaVersion: z.literal("1"),
+  projectionKind: z.literal("flocking-v1"),
   publicationId: publicationIdSchema,
   templateId: z.string().min(1).max(100),
   ...identityShape,
@@ -127,7 +163,6 @@ const renderFrameSchema = z.object({
   positions: typedArray(Float32Array),
   velocities: typedArray(Float32Array),
   neighborCounts: typedArray(Uint16Array),
-  localDensities: typedArray(Float32Array),
   groupCodes: typedArray(Uint8Array),
   worldWidth: z.number().finite().positive(),
   worldHeight: z.number().finite().positive(),
@@ -143,7 +178,6 @@ const renderFrameSchema = z.object({
     ["positions", frame.positions.length, count * 2],
     ["velocities", frame.velocities.length, count * 2],
     ["neighborCounts", frame.neighborCounts.length, count],
-    ["localDensities", frame.localDensities.length, count],
     ["groupCodes", frame.groupCodes.length, count]
   ];
   for (const [field, actual, expected] of expectedLengths) {
@@ -172,13 +206,13 @@ const performanceMeasureSchema = z.object({
 }).strict();
 
 const publicationStatsSchema = z.object({
-  ticksSimulated: z.number().int().nonnegative(),
-  framesProjected: z.number().int().nonnegative(),
-  framesPublished: z.number().int().nonnegative(),
-  framesCoalesced: z.number().int().nonnegative(),
-  uiProjected: z.number().int().nonnegative(),
-  uiPublished: z.number().int().nonnegative(),
-  uiCoalesced: z.number().int().nonnegative()
+  ticksSimulated: boundedCounterSchema,
+  framesProjected: boundedCounterSchema,
+  framesPublished: boundedCounterSchema,
+  framesCoalesced: boundedCounterSchema,
+  uiProjected: boundedCounterSchema,
+  uiPublished: boundedCounterSchema,
+  uiCoalesced: boundedCounterSchema
 }).strict();
 
 const selectedUISchema = z.object({
@@ -197,6 +231,7 @@ const selectedUISchema = z.object({
 
 const uiProjectionSchema = z.object({
   schemaVersion: z.literal("1"),
+  projectionKind: z.literal("flocking-v1"),
   revision: publicationIdSchema,
   templateId: z.string().min(1).max(100),
   ...identityShape,
@@ -232,6 +267,11 @@ const workerResponseSchema = z.discriminatedUnion("type", [
     generation: generationSchema,
     ui: uiProjectionSchema
   }).strict(),
+  z.object({
+    type: z.literal("runtime.messageConsumed"),
+    messageId: requestIdSchema,
+    generation: generationSchema
+  }).strict(),
   z.object({ type: z.literal("runtime.failure"), failure: failureSchema }).strict()
 ]);
 
@@ -239,8 +279,13 @@ export type RuntimeWorkerResponse =
   | { type: "runtime.frame"; frame: RenderFramePacket }
   | { type: "runtime.ui"; ui: UIProjection }
   | { type: "runtime.complete"; requestId: number; generation: number; ui: UIProjection }
+  | { type: "runtime.messageConsumed"; messageId: number; generation: number }
   | { type: "runtime.failure"; failure: RuntimeFailure };
 
 export function parseRuntimeWorkerResponse(value: unknown): RuntimeWorkerResponse {
-  return workerResponseSchema.parse(value) as RuntimeWorkerResponse;
+  const parsed = workerResponseSchema.parse(value) as RuntimeWorkerResponse;
+  if (parsed.type === "runtime.complete" && parsed.ui.generation !== parsed.generation) {
+    throw new Error("Runtime completion generation must match its UI projection generation");
+  }
+  return parsed;
 }

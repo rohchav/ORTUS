@@ -251,6 +251,7 @@ function ImmersivePrototypeSession({
       data-tick={runtimeView.tick}
       data-runtime-signature={runtimeView.runtimeSignature}
       data-runtime-ready={runtimeView.isReady}
+      data-runtime-state={runtimeView.playback}
       data-runtime-kind={runtimeView.executionKind}
       data-runtime-generation={runtimeView.generation}
       data-reduced-motion={reducedMotion}
@@ -331,7 +332,7 @@ function ImmersivePrototypeSession({
 
         <div className="immersive-stage-readout" aria-label="Current prototype run">
           <span>{conceptLabels[concept]}</span>
-          <strong>{runtimeView.isReady ? runtimeView.isRunning ? "Running" : "Paused" : "Preparing"}</strong>
+          <strong>{runtimePlaybackLabel(runtimeView.playback)}</strong>
           <em>Tick {formatTick(runtimeView.tick)}</em>
         </div>
 
@@ -557,4 +558,12 @@ function browserQuery(): Record<string, string | string[] | undefined> {
 function boidNumber(label: string): number {
   const match = label.match(/(\d+)$/);
   return match ? Number(match[1]) : Number.MAX_SAFE_INTEGER;
+}
+
+function runtimePlaybackLabel(playback: "initializing" | "paused" | "running" | "failed" | "disposed"): string {
+  if (playback === "initializing") return "Preparing";
+  if (playback === "paused") return "Paused";
+  if (playback === "running") return "Running";
+  if (playback === "failed") return "Failed";
+  return "Disposed";
 }

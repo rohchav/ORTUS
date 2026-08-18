@@ -3,60 +3,73 @@ import type { PerformanceMeasureSummary } from "../kernel/Performance";
 
 export const maxRenderFrameEntities = 10_000;
 export const maxSelectedNeighborCount = 2_048;
+// This is a shared transport bound: promise-returning requests and acknowledged
+// fire-and-forget controls must not create an unbounded browser Worker queue.
+export const maxPendingRuntimeMessages = 128;
 export const runtimeUiPublicationIntervalMs = 250;
 
 export type RuntimeExecutionKind = "local" | "worker";
+export type RuntimeDriverState = "idle" | "initializing" | "ready" | "failed" | "disposed";
 export type RuntimePlaybackState = "initializing" | "paused" | "running" | "failed" | "disposed";
 export type RuntimeAdvanceKind = "initialization" | "run" | "step" | "command" | "restore" | "replacement";
+export type RuntimeProjectionKind = "flocking-v1";
 
 export interface RuntimeIdentity {
-  generation: number;
-  runId: string;
+  readonly generation: number;
+  readonly runId: string;
 }
 
 export interface SelectedRenderDetail {
-  entityId: number;
-  neighborIds: Uint32Array;
-  neighborOffsets: Float32Array;
-  neighborDistances: Float32Array;
+  readonly entityId: number;
+  readonly neighborIds: Readonly<Uint32Array>;
+  readonly neighborOffsets: Readonly<Float32Array>;
+  readonly neighborDistances: Readonly<Float32Array>;
 }
 
 // This packet is an ephemeral, renderer-only projection. It is not a snapshot,
 // observation record, persistence format, or source of simulation semantics.
-export interface RenderFramePacket extends RuntimeIdentity {
-  schemaVersion: "1";
-  publicationId: number;
-  templateId: string;
-  tick: number;
-  time: number;
-  entityCount: number;
-  entityIds: Uint32Array;
-  positions: Float32Array;
-  velocities: Float32Array;
-  neighborCounts: Uint16Array;
-  localDensities: Float32Array;
-  groupCodes: Uint8Array;
-  worldWidth: number;
-  worldHeight: number;
-  boundaryMode: "wrap" | "bounce" | "clamp";
-  perceptionRadius: number;
-  alignment: number | null;
-  runtimeSignature: string;
-  selectedDetail?: SelectedRenderDetail;
+export interface RuntimeFramePacketBase extends RuntimeIdentity {
+  readonly schemaVersion: "1";
+  readonly projectionKind: RuntimeProjectionKind;
+  readonly publicationId: number;
+  readonly templateId: string;
+  readonly tick: number;
+  readonly time: number;
+  readonly entityCount: number;
+  readonly runtimeSignature: string;
 }
 
+export interface FlockingRenderFramePacket extends RuntimeFramePacketBase {
+  readonly projectionKind: "flocking-v1";
+  readonly entityIds: Readonly<Uint32Array>;
+  readonly positions: Readonly<Float32Array>;
+  readonly velocities: Readonly<Float32Array>;
+  readonly neighborCounts: Readonly<Uint16Array>;
+  readonly groupCodes: Readonly<Uint8Array>;
+  readonly worldWidth: number;
+  readonly worldHeight: number;
+  readonly boundaryMode: "wrap" | "bounce" | "clamp";
+  readonly perceptionRadius: number;
+  readonly alignment: number | null;
+  readonly selectedDetail?: SelectedRenderDetail;
+}
+
+// The runtime protocol is an explicit projection union. PERF1/PERF1B register
+// only Flocking; this alias does not imply support for other templates.
+export type RenderFramePacket = FlockingRenderFramePacket;
+
 export interface SelectedUIProjection {
-  entityId: number;
-  label: string;
-  x: number;
-  y: number;
-  velocityX: number;
-  velocityY: number;
-  speed: number;
-  headingDegrees: number;
-  neighborCount: number;
-  localDensity: number;
-  currentProximityCount: number | null;
+  readonly entityId: number;
+  readonly label: string;
+  readonly x: number;
+  readonly y: number;
+  readonly velocityX: number;
+  readonly velocityY: number;
+  readonly speed: number;
+  readonly headingDegrees: number;
+  readonly neighborCount: number;
+  readonly localDensity: number;
+  readonly currentProximityCount: number | null;
 }
 
 export interface RuntimePublicationStats {
@@ -71,25 +84,32 @@ export interface RuntimePublicationStats {
 
 // React and accessibility consumers receive this coarse projection, never the
 // per-entity motion arrays used by Canvas.
-export interface UIProjection extends RuntimeIdentity {
-  schemaVersion: "1";
-  revision: number;
-  templateId: string;
-  executionKind: RuntimeExecutionKind;
-  tick: number;
-  time: number;
-  entityCount: number;
-  playback: RuntimePlaybackState;
-  lastAdvanceKind: RuntimeAdvanceKind;
-  alignment: number | null;
-  runtimeSignature: string;
-  selected: SelectedUIProjection | null;
-  warnings: readonly string[];
-  performance: {
+export interface RuntimeUIProjectionBase extends RuntimeIdentity {
+  readonly schemaVersion: "1";
+  readonly projectionKind: RuntimeProjectionKind;
+  readonly revision: number;
+  readonly templateId: string;
+  readonly executionKind: RuntimeExecutionKind;
+  readonly tick: number;
+  readonly time: number;
+  readonly entityCount: number;
+  readonly playback: RuntimePlaybackState;
+  readonly lastAdvanceKind: RuntimeAdvanceKind;
+  readonly runtimeSignature: string;
+  readonly warnings: readonly string[];
+  readonly performance: {
     measures: readonly PerformanceMeasureSummary[];
     publications: RuntimePublicationStats;
   };
 }
+
+export interface FlockingUIProjection extends RuntimeUIProjectionBase {
+  readonly projectionKind: "flocking-v1";
+  readonly alignment: number | null;
+  readonly selected: SelectedUIProjection | null;
+}
+
+export type UIProjection = FlockingUIProjection;
 
 export interface RuntimeFailure extends RuntimeIdentity {
   code: "initialization" | "runtime" | "protocol" | "worker" | "disposed";
@@ -111,6 +131,7 @@ export interface RuntimeRunRequest {
 export interface SimulationRuntimePort {
   readonly executionKind: RuntimeExecutionKind;
   readonly generation: number;
+  readonly state: RuntimeDriverState;
   initialize(request: RuntimeRunRequest): Promise<UIProjection>;
   replaceRun(request: RuntimeRunRequest): Promise<UIProjection>;
   reset(): Promise<UIProjection>;

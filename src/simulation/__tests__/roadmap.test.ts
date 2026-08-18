@@ -304,6 +304,12 @@ describe("roadmap alignment and missing pillar reservations", () => {
     const immersivePrototypesPath = join(repoRoot, "docs", "ui", "IMMERSIVE_WORLD_PROTOTYPES.md");
     const immersivePerformancePath = join(repoRoot, "docs", "performance", "IMMERSIVE_RENDERING_BASELINE.md");
     const runtimePerformanceArchitecturePath = join(repoRoot, "docs", "performance", "RUNTIME_PERFORMANCE_ARCHITECTURE.md");
+    const runtimePerformanceArchitectureAuditPath = join(
+      repoRoot,
+      "docs",
+      "performance",
+      "RUNTIME_PERFORMANCE_ARCHITECTURE_AUDIT.md"
+    );
     expect(existsSync(roadmapPath)).toBe(true);
     expect(existsSync(missingPillarsPath)).toBe(true);
     expect(existsSync(productPhilosophyPath)).toBe(true);
@@ -343,6 +349,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(existsSync(immersivePrototypesPath)).toBe(true);
     expect(existsSync(immersivePerformancePath)).toBe(true);
     expect(existsSync(runtimePerformanceArchitecturePath)).toBe(true);
+    expect(existsSync(runtimePerformanceArchitectureAuditPath)).toBe(true);
 
     const roadmap = readFileSync(roadmapPath, "utf8");
     const productPhilosophy = readFileSync(productPhilosophyPath, "utf8");
@@ -382,6 +389,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
     const immersivePrototypes = readFileSync(immersivePrototypesPath, "utf8");
     const immersivePerformance = readFileSync(immersivePerformancePath, "utf8");
     const runtimePerformanceArchitecture = readFileSync(runtimePerformanceArchitecturePath, "utf8");
+    const runtimePerformanceArchitectureAudit = readFileSync(runtimePerformanceArchitectureAuditPath, "utf8");
     expect(roadmap).toContain("completed through Prompt 39B");
     expect(roadmap).toContain("Post-30B stabilization");
     expect(roadmap).toContain(
@@ -405,10 +413,11 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(roadmap).toContain("UX6B complete.");
     expect(roadmap).toContain("GW9 complete.");
     expect(roadmap).toContain("GW9B complete.");
-    expect(roadmap).toContain("R1 through C3B, I0/I0B, and PERF1 are complete.");
-    expect(roadmap).toContain("PERF1B: Runtime Performance Architecture Audit is next and unstarted");
-    expect(roadmap).toContain("I1 through I5B are reserved and unstarted");
-    expect(roadmap).toContain("C4: Flagship Starter Pack Two is deferred until I5B.");
+    expect(roadmap).toContain("R1 through C3B, I0/I0B, and PERF1/PERF1B are complete.");
+    expect(roadmap).toContain("A0: Canonical Architecture + Source-of-Truth Consolidation is next and unstarted");
+    expect(roadmap).toContain("A0B is unstarted");
+    expect(roadmap).toContain("I1: Production Runtime Migration + Immersive Shell Foundation is planned and unstarted");
+    expect(roadmap).toContain("I2 through I5B and C4: Flagship Starter Pack Two remain unstarted");
     expect(roadmap).toContain("F1 and the fractal branch remain documented but are paused under E3 Analytical Lenses.");
     expect(startHubReset).toContain("/         -> Start Hub");
     expect(startHubReset).toContain("/world    -> live World workbench");
@@ -421,7 +430,7 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(worldLayoutReclaim).toContain("C1 is complete.");
     expect(worldLayoutReclaim).toContain("C1B");
     expect(productExperienceResetRoadmap).toContain(
-      "Status: active product sequence; R1 through C3B, I0/I0B, and PERF1 complete; PERF1B next; I1 unstarted; C4 deferred until I5B"
+      "Status: PERF1/PERF1B complete; A0 next and unstarted; A0B unstarted; I1 planned and unstarted; later sequencing pending architecture consolidation"
     );
     expect(productExperienceResetRoadmap).toContain("Every implementation milestone is followed by an audit milestone.");
     expect(productExperienceResetRoadmap).toContain("F1 and the rest of the F branch are paused beneath E3 Analytical Lenses.");
@@ -429,16 +438,21 @@ describe("roadmap alignment and missing pillar reservations", () => {
       "R1 -> R1B -> R2 -> R2B -> C1 -> C1B -> C2 -> C2B -> C3 -> C3B"
     );
     expect(productExperienceResetRoadmap).toContain(
-      "-> I0 -> I0B -> PERF1 -> PERF1B -> I1 -> I1B -> I2 -> I2B -> I3 -> I3B -> I4 -> I4B -> I5 -> I5B"
+      "-> I0 -> I0B -> PERF1 -> PERF1B -> A0 -> A0B -> I1 -> I1B"
     );
     expect(productExperienceResetRoadmap).toContain(
-      "-> S5 -> S5B -> E1 -> E1B -> E2 -> E2B -> E3 -> E3B"
+      "I2 through I5B, C4/C4B, S1-S5B, and E1-E3B remain planning labels"
     );
     expect(runtimePerformanceArchitecture).toContain("RenderFramePacket");
-    expect(runtimePerformanceArchitecture).toContain("PERF1B is the next required audit");
+    expect(runtimePerformanceArchitecture).toContain("PERF1B is complete. A0 - Canonical Architecture");
     expect(runtimePerformanceArchitecture).toContain(
       "Automatic Flocking retains the inherited threshold, nominal-cell index, fallback, ordering, and output behavior"
     );
+    expect(runtimePerformanceArchitectureAudit).toContain(
+      "Verdict: `CONDITIONALLY READY FOR FUTURE I1 CONSUMPTION`"
+    );
+    expect(runtimePerformanceArchitectureAudit).toContain("No known P0 or P1 remains.");
+    expect(runtimePerformanceArchitectureAudit).toContain("128 unconsumed transport messages");
     expect(starterWorldFramework).toContain("C2 is now complete.");
     expect(starterWorldFramework).toContain("C2B: Starter Pack One Audit is next and has not started.");
     expect(starterWorldFramework.match(/^## \d+\. /gm)).toHaveLength(17);

@@ -36,6 +36,9 @@ export class RuntimeAccumulatorScheduler {
     if (!Number.isFinite(this.targetTicksPerSecond) || this.targetTicksPerSecond <= 0) {
       throw new SimulationValidationError("Runtime scheduler target rate must be positive and finite");
     }
+    if (!Number.isFinite(this.maximumElapsedContributionMs) || this.maximumElapsedContributionMs <= 0) {
+      throw new SimulationValidationError("Runtime scheduler maximum elapsed contribution must be positive and finite");
+    }
   }
 
   play(): void {
@@ -73,10 +76,17 @@ export class RuntimeAccumulatorScheduler {
       this.lastCycleAt = at;
       this.accumulatedMs += Math.min(this.maximumElapsedContributionMs, Math.max(0, at - previous));
       const speed = this.callbacks.speedMultiplier();
+      if (!Number.isFinite(speed) || speed < 0) {
+        throw new SimulationValidationError("Runtime scheduler speed multiplier must be nonnegative and finite");
+      }
       if (speed > 0) {
         const intervalMs = 1000 / (this.targetTicksPerSecond * speed);
         const requestedSteps = Math.floor(this.accumulatedMs / intervalMs);
-        const steps = Math.min(requestedSteps, this.callbacks.maxStepsPerCycle());
+        const maxSteps = this.callbacks.maxStepsPerCycle();
+        if (!Number.isInteger(maxSteps) || maxSteps <= 0) {
+          throw new SimulationValidationError("Runtime scheduler max steps per cycle must be a positive integer");
+        }
+        const steps = Math.min(requestedSteps, maxSteps);
         if (steps > 0) {
           this.accumulatedMs -= steps * intervalMs;
           this.callbacks.advance(steps);

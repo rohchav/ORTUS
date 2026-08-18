@@ -102,12 +102,12 @@ describe("R1 Start Hub and World-first product reset contracts", () => {
     );
   });
 
-  it("records completed PERF1 with PERF1B next and preserves every implementation-audit pair", () => {
+  it("records completed PERF1B with A0/A0B next and preserves every implementation-audit pair", () => {
     const roadmap = source("docs/product/ORTUS_PRODUCT_EXPERIENCE_RESET_ROADMAP.md");
     const milestones = [
       "R1", "R1B", "R2", "R2B",
       "C1", "C1B", "C2", "C2B", "C3", "C3B",
-      "I0", "I0B", "PERF1", "PERF1B", "I1", "I1B", "I2", "I2B", "I3", "I3B", "I4", "I4B", "I5", "I5B",
+      "I0", "I0B", "PERF1", "PERF1B", "A0", "A0B", "I1", "I1B", "I2", "I2B", "I3", "I3B", "I4", "I4B", "I5", "I5B",
       "C4", "C4B",
       "S1", "S1B", "S2", "S2B", "S3", "S3B", "S4", "S4B", "S5", "S5B",
       "E1", "E1B", "E2", "E2B", "E3", "E3B"
@@ -116,15 +116,15 @@ describe("R1 Start Hub and World-first product reset contracts", () => {
 
     expect(positions.every((position) => position >= 0)).toBe(true);
     expect(positions).toEqual([...positions].sort((left, right) => left - right));
-    expect(roadmap).toContain("Status: active product sequence; R1 through C3B, I0/I0B, and PERF1 complete; PERF1B next; I1 unstarted; C4 deferred until I5B");
+    expect(roadmap).toContain("Status: PERF1/PERF1B complete; A0 next and unstarted; A0B unstarted; I1 planned and unstarted");
     expect(roadmap).toContain("`C1B: Starter World Content Framework Audit` is complete.");
     expect(roadmap).toContain("`C2: Flagship Starter Pack One` is complete.");
     expect(roadmap).toContain("`C2B: Flagship Starter Pack One Audit + Hardening` is complete.");
     expect(roadmap).toContain("`C3: Guided Investigation / Tutorial World` and `C3B: Guided Investigation Audit + Hardening` are complete.");
-    expect(roadmap).toContain("`I0: Immersive World Direction + Performance Baseline`, `I0B: Immersive World Direction Audit + Performance Hardening`, and `PERF1: Runtime Performance Architecture` are complete.");
-    expect(roadmap).toContain("`PERF1B: Runtime Performance Architecture Audit` is next and has not started.");
-    expect(roadmap).toContain("I1 through I5B are reserved and unstarted.");
-    expect(roadmap).toContain("`C4: Flagship Starter Pack Two` is deferred until I5B");
+    expect(roadmap).toContain("`I0: Immersive World Direction + Performance Baseline`, `I0B: Immersive World Direction Audit + Performance Hardening`, `PERF1: Runtime Performance Architecture`, and `PERF1B: Runtime Performance Architecture Audit + Hardening` are complete.");
+    expect(roadmap).toContain("A0 is next and unstarted; A0B is unstarted");
+    expect(roadmap).toContain("I1 remains planned and unstarted rather than immediate");
+    expect(roadmap).toContain("I2 through I5B and `C4: Flagship Starter Pack Two` remain unstarted");
     expect(roadmap).toContain("S1-S5 and E1-E3 have not started");
     expect(roadmap).toContain("F1 and the rest of the F branch are paused beneath E3 Analytical Lenses.");
   });

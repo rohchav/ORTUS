@@ -1,7 +1,7 @@
 # Immersive Rendering Baseline
 
 Date: 2026-08-11
-Prompts: I0 and I0B
+Prompts: I0, I0B, PERF1, and PERF1B
 Machine scope: local headless Chromium development-server measurements
 
 ## Purpose
@@ -196,6 +196,8 @@ The 500 checkpoints were non-monotonic and reclaimed transient allocation. Activ
 
 I0B found no unexplained simulation-semantic change and no unbounded renderer state. It did not establish acceptable universal 500-boid interactivity or a stable raw FPS improvement. Current main-thread Flocking is dominated by engine neighbor search, cloning/snapshot work, and allocation pressure, not Canvas drawing.
 
-PERF1 subsequently investigated worker/scheduler isolation and snapshot-publication cost in the dedicated measured scope recorded in `RUNTIME_PERFORMANCE_ARCHITECTURE.md`. I0B itself does not implement or authorize those systems, and this baseline remains the untouched main-thread reference rather than a claim about the post-PERF1 prototype.
+PERF1 subsequently investigated worker/scheduler isolation and snapshot-publication cost in the dedicated measured scope recorded in `RUNTIME_PERFORMANCE_ARCHITECTURE.md`. PERF1B's independent race, lifecycle, queue, ownership, and performance audit is recorded in `RUNTIME_PERFORMANCE_ARCHITECTURE_AUDIT.md`. I0B itself does not implement or authorize those systems, and this baseline remains the historical main-thread reference rather than a claim about the audited runtime prototype.
+
+PERF1B's five matched packet-runtime samples must not be spliced into the older I0/I0B snapshot-runtime table as if they were the same architecture. At 500 boids, audited Local packet runtime measured `55.191..57.747 FPS`, while Worker packet runtime measured `59.725..59.893 FPS`; Worker short-run model throughput was slightly lower and more variable. The credible result is reduced main-thread pressure after simulation and continuous snapshot work leave the interaction path, not a universal speed or 60 FPS guarantee.
 
 **The immersive renderer changes presentation only. Simulation semantics remain unchanged. Visual quality may degrade independently of model fidelity.**

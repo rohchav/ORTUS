@@ -4389,3 +4389,103 @@ Verification at this record point:
 - `git diff --check` passed. `npm run lint: unavailable, package.json has no lint script.`
 
 Commit target: `perf: add runtime performance architecture`; no push is authorized.
+
+### Prompt PERF1B: Runtime Performance Architecture Audit + Hardening
+
+Date: 2026-08-12
+
+Goal: independently try to break PERF1's runtime/Worker boundary, fix every P0/P1 and bounded I1-blocking P2, reproduce performance and lifecycle claims without favorable-run marketing, and freeze an I1 handoff without starting I1.
+
+Starting state and baseline:
+
+- After fetch, branch `main`, HEAD, and `origin/main` were clean and aligned at `64a03e1 perf: add runtime performance architecture`.
+- Untouched focused runtime coverage passed `6 files / 45 tests`; the existing real-Worker browser gate passed `2/2`; and `npm run perf:runtime` passed exact corrected-index/reference checks.
+- A separate complete untouched unit/UI rerun was not repeated before edits. PERF1's committed complete gates were treated as historical context, not PERF1B proof.
+
+Defects found and fixed:
+
+- P0: one unbounded-ingress family. Promise requests and fire-and-forget controls could accumulate independently without an authoritative accepted-message limit. Both now share a maximum of 128 unconsumed messages; host receipt acknowledgement releases capacity, old-generation messages remain accounted until consumed, and overflow rejects before command acceptance or generation change.
+- P1: twelve families covering same-generation stale frame/UI acceptance; weak completion generation/runtime/projection checks; completion-first UI readiness; nonterminal Worker failure; ambiguous pre-ready commands; rapid play-then-step outrunning playback acknowledgement; malformed stale-generation input pausing the current scheduler; divergent Local failure cleanup; public export of runtime authorities; projection of dead entities; swallowed readiness failure; and rounded Float32 selected semantics. All are fixed; no known P0/P1 remains.
+- P2: nine bounded families covering failure DOM truth, cross-publication UI signatures, coalescing overcount, scheduler-option validation, implicit generic/Flocking support, unused per-entity density transfer, ambiguous publication diagnostics, a 500-boid smoke startup race, and protocol-counter bounds.
+
+Hardened architecture:
+
+- `SimulationRuntimePort` exposes commands, explicit state, bounded projections, and disposal, but no engine, world, RNG, scheduler, protocol host, command buffer, or mutable simulation object. Runtime internals are no longer public barrel exports.
+- Both drivers require explicit `flocking-v1` projection support and reject unsupported templates. Generic base types do not imply cross-template support.
+- Lifecycle is idle, initializing, ready, failed, or disposed. Commands before first readiness reject. Worker failure is terminal, removes listeners, terminates the Worker, rejects pending work, releases latest references, and never falls back, restarts, fabricates completion, or changes seed.
+- Active generation/run/template/projection identity and strictly increasing positive same-generation revisions gate frame/UI acceptance. Completion identity and generation relationships are validated. Completion-first delivery explicitly publishes the matching UI state.
+- Frame/UI gates remain one in-flight plus one newest pending. Accepted commands and model steps never coalesce. Slow-consumer tests retain every ordered model step while replacing only obsolete visual publications.
+- Unselected/selected frame packets own five/eight unique transfer buffers, never reuse detached buffers, and occupy exactly 2,300/11,500 bytes unselected at 100/500. Maximum selected packets are 3,884/19,484 bytes; protocol maximum is 262,768 typed bytes. Dead entities are excluded; exact selected semantic values come from the engine rather than renderer Float32 arrays.
+
+Correctness and adversarial evidence:
+
+- Local, Worker, and direct-engine manual stepping match authoritative outcomes over multiple seeds at 100 and 500 boids, selected and unselected. Selection/presentation does not alter model output.
+- Deterministic fake/delayed transport covers rapid play/pause/step, play/reset/play, play/replace/pause, triple reset, replacement A/B/C, delayed step completion, stale generation after navigation/disposal, same-generation revisions `101 -> 102 -> 100`, completion/UI reorder, selection A/B/C/deselect/reset/replace/death/dispose, startup failure, malformed protocol, shared queue overflow, transfer detachment, slow consumers, pause/catch-up, and repeated disposal.
+- Automatic Flocking retains its inherited nominal-cell/index/fallback semantics and known non-divisible-wrap limitation. Corrected `uniformCoverage` remains opt-in differential/benchmark code, not user/query/Starter/production/Worker-selected behavior.
+
+Independent browser and performance evidence:
+
+- Five matched approximately eight-second production-browser samples measured Local/Worker 100 medians of `23.721/23.628 ticks/s` and `59.863/59.866 FPS`; Local/Worker 500 medians of `23.654/22.536 ticks/s` and `57.163/59.788 FPS`.
+- Worker 500 varied `21.773..23.033 ticks/s`; it was not universally faster. Its main-thread event-loop p95 median was `5.8 ms` versus Local `27.6 ms`, with zero observed long tasks versus Local median four. The credible claim is interaction-path pressure separation, not guaranteed 60 FPS or free compute.
+- Worker 500 sent 37..45 frame batches and 20..24 UI projections with zero gate coalesces. Fewer packets than ticks came from ordered scheduler catch-up batches, not dropped simulation steps.
+- Required three-minute Worker soaks completed 4,321 ticks at 100 (`23.985 ticks/s`, `59.999 FPS`) and 4,244 at 500 (`23.548`, `59.963`), with one Worker, zero long tasks/frames, and histories capped at 360.
+- A separate 60-second production-build main-page heap sample changed from 6,854,104 to 7,601,068 bytes after explicit GC. It excludes Worker, native Canvas, and GPU memory and is not leak proof. A missing CDP heap metric was rejected rather than replaced with invented evidence.
+- Twenty-five runtime mount/dispose cycles, 25 host replacements, and 20 Back/Forward transitions held one Worker while mounted and zero after disposal. Five startup samples attributed remaining cold long tasks primarily to route/module loading, React/Next hydration, and Canvas initialization; 500-agent engine rebuild itself measured `9.7..14.5 ms`.
+
+Production and UI boundary:
+
+- Production `/world` remains on its established main-thread engine/snapshot/Zustand path. Complete browser coverage exercises normal Flocking, all seven templates, Starter/recipe/guide launches, Setup, Observe, Change, Compare, Explain, Experiment Runner, playback, task history, Back/Forward, Atlas, Lab, and Builder.
+- The isolated Worker route passed reduced-motion, DPR 2, Axe, keyboard/focus, and six-view checks at `1440x900`, `1280x720`, `1024x768`, `900x700`, `1280x600`, and `390x844`. This is not direct screen-reader/AT, forced-colors, actual browser-zoom, actual-mobile, or WCAG-conformance evidence.
+- No new dependency, template, model rule, parameter, metric, intervention, seed/RNG behavior, persistence, production World migration, `CanonicalObservation`, `OffscreenCanvas`, shared memory, WebGL/WebGPU, Wasm, Arrow, or Parquet was added.
+
+Readiness and handoff:
+
+- Verdict: `CONDITIONALLY READY FOR I1`. Conditions are external evidence gaps only: broad browser/hardware diversity, actual mobile, faithful background-tab behavior, multi-hour/Worker-heap/native/GPU memory, direct screen-reader/AT and forced-colors use, user comprehension, and formal WCAG conformance.
+- I1 may consume the runtime port, Worker driver, Local reference driver, Flocking frame/UI/selected projections, generation/revision/projection identity, one-in-flight plus one-pending visual backpressure, 128-message ingress cap, and terminal lifecycle/failure.
+- I1 must not reintroduce continuous full snapshots, React entity animation, renderer/Canvas authority, engine mutation from presentation, camera/DPR/resize/reduced-motion model coupling, RNG/scheduler changes, command/model-step/evidence coalescing, fake cross-template support, `CanonicalObservation` conflation, hidden fallback, or corrected-index migration.
+- PERF1B implementation and audit scope is complete; its local milestone commit is still required. I1 is next but must remain unstarted; I1B through I5B are unstarted; C4 remains deferred until I5B.
+
+Verification at this record point:
+
+- Focused runtime/immersive/roadmap coverage passed `6 files / 67 tests`, including 25 new adversarial tests; the core runtime/immersive subset contains `3 files / 50 tests`.
+- Focused real-Worker Playwright passed `6/6` in approximately `2.6m`; complete Playwright/Axe passed `189/189 (18.5m)` with zero failures, retries, or skips after the primary hardening.
+- Final source review then found and fixed play-then-step intent lag and malformed stale-message scheduler contamination. Their deterministic tests are in the final unit suite. A requested post-fix Playwright rerun was blocked before test execution because localhost-server escalation hit the approval service usage limit.
+- Typecheck passed. Complete unit verification passed `82 files / 703 tests (56.26s)` after the final fixes.
+- The optimized production build compiled in `3.8s` and generated `23` pages after the final fixes.
+- Simulation smoke measured Flocking-100 `225.97` ticks/s, Flocking-500 `31.17`, Forest Fire `50.91`, and Predator-Prey `149.89`; bounded Atlas smoke completed `2` runs / `10` work units / horizon `5` in `28.72ms`.
+- Automatic Flocking pair checks remained exactly `316,971/7,721,264`; `npm run perf:runtime` passed exact corrected/reference exports and reported packet sizes `2,300/11,500` bytes at 100/500.
+- `git diff --check` passed before the final evidence update and is rerun at the staging gate. `npm run lint: unavailable, package.json has no lint script.`
+- PERF1B source, tests, and records are complete in the uncommitted worktree. Staging/commit require the same exhausted approval service; do not start I1 until the required local commit succeeds.
+
+Commit target: `test: audit runtime performance architecture`; no push is authorized.
+
+### PERF1B Continuation: Final Verification, Closure, And A0 Handoff
+
+Date: 2026-08-18
+
+Starting state:
+
+- Branch `main`, HEAD `64a03e1`, and `origin/main` `64a03e1` matched the expected published PERF1 commit.
+- The expected PERF1B worktree was preserved exactly at 32 modified files plus two untracked audit files, with no staged paths and a clean `git diff --check`.
+- Source and deterministic tests retained reset/replacement completion ordering, synchronous play/step intent, generation and same-generation revision rejection, stale malformed-message consumption, selected-detail non-resurrection, bounded request/control ingress, disposal safety, explicit initialization rejection, and terminal Worker failure.
+
+Final verification:
+
+- Post-final-fix focused real-Worker Playwright passed `6/6 (2.6m)`.
+- Post-final-fix complete Playwright/Axe passed `189/189 (19.7m)` with zero failures, retries, or skips.
+- Typecheck passed. Complete unit verification passed `82 files / 703 tests (70.74s)`.
+- The optimized production build compiled in `10.7s` and generated `23` pages.
+- `npm run perf:simulation` passed: Flocking-100 `207.04` ticks/s, Flocking-500 `28.32`, Forest Fire `44.57`, Predator-Prey `126.47`, and bounded Atlas `2` runs / `10` work units / horizon `5` in `36.21ms`.
+- Automatic Flocking pair checks remained exactly `316,971/7,721,264`, preserving historical production neighbor behavior.
+- `npm run perf:runtime` passed exact corrected/reference snapshot equivalence at 100 and 500, automatic medians `229.007/26.914` ticks/s, and `2,300/11,500`-byte unselected packets.
+- `git diff --check` passed before closure-record edits. `npm run lint: unavailable, package.json has no lint script.`
+- No new PERF1B defect was exposed and no continuation runtime-code change was required. Only final evidence, closure status, roadmap handoff, and matching roadmap assertions changed.
+
+Closure and handoff:
+
+- PERF1B: complete. Final counts remain P0 `1` fixed, P1 `12` fixed, P2 `9` fixed; no known P0/P1 remains.
+- Runtime verdict: `CONDITIONALLY READY FOR FUTURE I1 CONSUMPTION`. The Worker architecture isolates deterministic simulation cost from the main-thread interaction/rendering path; it is not universal engine acceleration.
+- Production World remains unmigrated. Only explicit `flocking-v1` projection support exists. `RenderFramePacket` and `UIProjection` remain presentation channels, not snapshots, canonical observations, or evidence.
+- A0: Canonical Architecture + Source-of-Truth Consolidation is next and unstarted. A0B is unstarted. I1 remains planned and unstarted rather than immediate.
+- I2 through I5B and C4 remain unstarted without an unconditional contiguous sequence. C4 is no longer documented as deferred until I5B.
+- Commit target remains `test: audit runtime performance architecture`; no push is authorized. A0 and I1 were not started.

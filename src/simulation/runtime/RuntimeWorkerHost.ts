@@ -1,7 +1,12 @@
 import { RuntimeAccumulatorScheduler, type RuntimeSchedulerOptions } from "./RuntimeScheduler";
 import { RuntimeSession, type RuntimePublicationBundle } from "./RuntimeSession";
 import { LatestPublicationGate } from "./LatestPublicationGate";
-import { parseRuntimeWorkerRequest, type RuntimeWorkerRequest, type RuntimeWorkerResponse } from "./protocol";
+import {
+  parseRuntimeWorkerRequest,
+  parseRuntimeWorkerRequestFailureContext,
+  type RuntimeWorkerRequest,
+  type RuntimeWorkerResponse
+} from "./protocol";
 import { renderFrameTransferables } from "./flockingProjection";
 import type { RenderFramePacket, RuntimeFailure, UIProjection } from "./types";
 
@@ -52,10 +57,22 @@ export class RuntimeWorkerHost {
     try {
       request = parseRuntimeWorkerRequest(value);
     } catch (error) {
-      this.reportFailure(error, "protocol");
+      const context = parseRuntimeWorkerRequestFailureContext(value);
+      if (context && this.generation > 0 && context.generation !== this.generation) {
+        if (context.messageId !== undefined) {
+          this.options.postMessage({
+            type: "runtime.messageConsumed",
+            messageId: context.messageId,
+            generation: context.generation
+          });
+        }
+        return;
+      }
+      this.reportFailure(error, "protocol", context?.requestId, context ?? undefined);
       return;
     }
     try {
+      this.acknowledgeMessageConsumption(request);
       this.handleRequest(request);
     } catch (error) {
       const code = request.type === "runtime.initialize" || request.type === "runtime.replace"
@@ -187,11 +204,31 @@ export class RuntimeWorkerHost {
     this.options.postMessage({ type: "runtime.complete", requestId, generation: this.generation, ui });
   }
 
-  private reportFailure(error: unknown, code: RuntimeFailure["code"], requestId?: number): void {
+  private acknowledgeMessageConsumption(request: RuntimeWorkerRequest): void {
+    const messageId = "requestId" in request
+      ? request.requestId
+      : "commandId" in request
+        ? request.commandId
+        : undefined;
+    if (messageId !== undefined) {
+      this.options.postMessage({
+        type: "runtime.messageConsumed",
+        messageId,
+        generation: request.generation
+      });
+    }
+  }
+
+  private reportFailure(
+    error: unknown,
+    code: RuntimeFailure["code"],
+    requestId?: number,
+    identity?: { generation: number; runId?: string }
+  ): void {
     this.scheduler.pause();
     const failure: RuntimeFailure = {
-      generation: this.generation || 1,
-      runId: this.runId,
+      generation: (identity?.generation ?? this.generation) || 1,
+      runId: identity?.runId ?? this.runId,
       code,
       message: boundedErrorMessage(error),
       ...(requestId !== undefined ? { requestId } : {})

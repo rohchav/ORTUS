@@ -180,7 +180,7 @@ test("runs bounded 500-boid performance smoke for each concept without runtime o
   const diagnostics = observePageDiagnostics(page);
   for (const concept of concepts) {
     await page.goto(`/world/immersive-prototype?concept=${concept.id}&agents=500`, { waitUntil: "domcontentloaded" });
-    await page.waitForFunction(() => Boolean((window as Window & { __ORTUS_IMMERSIVE_AUDIT__?: unknown }).__ORTUS_IMMERSIVE_AUDIT__));
+    await waitForPrototypeReady(page);
     await page.evaluate(() => (window as Window & { __ORTUS_IMMERSIVE_AUDIT__: { startMeasurement(): void } }).__ORTUS_IMMERSIVE_AUDIT__.startMeasurement());
     await activateByKeyboard(page.getByRole("button", { name: "Run immersive simulation" }));
     await page.waitForTimeout(1_800);

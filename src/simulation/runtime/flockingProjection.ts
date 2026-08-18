@@ -15,7 +15,8 @@ import {
   maxSelectedNeighborCount,
   type RenderFramePacket,
   type RuntimeIdentity,
-  type SelectedRenderDetail
+  type SelectedRenderDetail,
+  type SelectedUIProjection
 } from "./types";
 
 export function createFlockingRenderFramePacket(
@@ -27,7 +28,7 @@ export function createFlockingRenderFramePacket(
   if (engine.template.id !== "flocking-boids") {
     throw new SimulationValidationError(`No PERF1 frame projector is registered for template ${engine.template.id}`);
   }
-  const entityIds = engine.world.componentStore.entitiesWith([Position2D, Velocity2D, BoidState]);
+  const entityIds = engine.world.view().entitiesWith([Position2D, Velocity2D, BoidState]);
   if (entityIds.length > maxRenderFrameEntities) {
     throw new SimulationValidationError(`Render frame cannot contain more than ${maxRenderFrameEntities} entities`);
   }
@@ -41,7 +42,6 @@ export function createFlockingRenderFramePacket(
   const positions = new Float32Array(count * 2);
   const velocities = new Float32Array(count * 2);
   const neighborCounts = new Uint16Array(count);
-  const localDensities = new Float32Array(count);
   const groupCodes = new Uint8Array(count);
   let hash = mixHash(2166136261, engine.world.tick);
 
@@ -59,7 +59,6 @@ export function createFlockingRenderFramePacket(
     velocities[vectorIndex] = velocity.x;
     velocities[vectorIndex + 1] = velocity.y;
     neighborCounts[index] = boundedUint16(state?.neighborCount);
-    localDensities[index] = finiteNonNegative(state?.localDensity);
     groupCodes[index] = boundedGroupCode(group?.groupIndex);
     hash = mixHash(hash, Math.round(position.x * 10_000));
     hash = mixHash(hash, Math.round(position.y * 10_000));
@@ -75,6 +74,7 @@ export function createFlockingRenderFramePacket(
 
   return {
     schemaVersion: "1",
+    projectionKind: "flocking-v1",
     publicationId,
     templateId: engine.template.id,
     ...identity,
@@ -85,7 +85,6 @@ export function createFlockingRenderFramePacket(
     positions,
     velocities,
     neighborCounts,
-    localDensities,
     groupCodes,
     worldWidth: space.width,
     worldHeight: space.height,
@@ -97,13 +96,48 @@ export function createFlockingRenderFramePacket(
   };
 }
 
+export function createFlockingSelectedUIProjection(
+  engine: SimulationEngine,
+  selectedEntityId: string | null,
+  selectedDetail: SelectedRenderDetail | undefined
+): SelectedUIProjection | null {
+  if (!selectedEntityId) {
+    return null;
+  }
+  if (!engine.world.entityStore.get(selectedEntityId)?.alive) {
+    return null;
+  }
+  const position = engine.world.componentStore.get<Point2D>(selectedEntityId, Position2D);
+  const velocity = engine.world.componentStore.get<Point2D>(selectedEntityId, Velocity2D);
+  const state = engine.world.componentStore.get<BoidStateComponent>(selectedEntityId, BoidState);
+  if (!position || !velocity || !state) {
+    return null;
+  }
+  const encodedId = encodeEntityId(selectedEntityId);
+  const heading = Math.atan2(velocity.y, velocity.x) * 180 / Math.PI;
+  return {
+    entityId: encodedId,
+    label: `Boid ${encodedId}`,
+    x: position.x,
+    y: position.y,
+    velocityX: velocity.x,
+    velocityY: velocity.y,
+    speed: Math.hypot(velocity.x, velocity.y),
+    headingDegrees: ((heading % 360) + 360) % 360,
+    neighborCount: boundedUint16(state.neighborCount),
+    localDensity: finiteNonNegative(state.localDensity),
+    currentProximityCount: selectedDetail?.entityId === encodedId
+      ? selectedDetail.neighborIds.length
+      : null
+  };
+}
+
 export function renderFrameTransferables(frame: RenderFramePacket): Transferable[] {
   const transferables: Transferable[] = [
     frame.entityIds.buffer,
     frame.positions.buffer,
     frame.velocities.buffer,
     frame.neighborCounts.buffer,
-    frame.localDensities.buffer,
     frame.groupCodes.buffer
   ];
   if (frame.selectedDetail) {

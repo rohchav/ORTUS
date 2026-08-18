@@ -1,12 +1,12 @@
 # Runtime Performance Architecture
 
-Date: 2026-08-12
-Milestone: PERF1
-Status: implemented; PERF1B audit is next
+Date: 2026-08-18
+Milestones: PERF1 and PERF1B
+Status: implemented and independently audited; conditionally ready for future I1 consumption
 
 ## Decision
 
-PERF1 separates authoritative simulation execution from ephemeral rendering and coarse React state. The isolated Flocking prototype now runs a real ORTUS engine in a dedicated browser Worker and publishes bounded typed-array `RenderFramePacket` values plus lower-frequency `UIProjection` values. Production `/world` is unchanged.
+PERF1 separates authoritative simulation execution from ephemeral rendering and coarse React state. PERF1B then adversarially audited and hardened that boundary. The isolated Flocking prototype runs a real ORTUS engine in a dedicated browser Worker and publishes bounded typed-array `RenderFramePacket` values plus lower-frequency `UIProjection` values. Production `/world` is unchanged.
 
 This is a runtime architecture result, not a high-scale claim. The supported prototype remains one fixed Flocking scenario at 100 or 500 boids. No cross-template Worker support, production immersive shell, evidence persistence, `CanonicalObservation`, `OffscreenCanvas`, shared memory, WebGL, Wasm, or new simulation capability is implied.
 
@@ -61,7 +61,7 @@ Each enabled measure retains at most its configured sample bound and reports cou
 
 ## Runtime Port
 
-`SimulationRuntimePort` owns run generation, run id, initialization/replacement/reset, play/pause/manual step, validated deterministic commands, selected detail, frame/UI publication, and disposal. It exposes no engine or mutable world object.
+`SimulationRuntimePort` owns run generation, run id, explicit lifecycle state, initialization/replacement/reset, play/pause/manual step, validated deterministic commands, selected detail, frame/UI publication, and disposal. It exposes no engine or mutable world object. Runtime hosts, protocol schemas, schedulers, sessions, and publication gates are internal rather than public authorities.
 
 `LocalRuntimeDriver` and `WorkerRuntimeDriver` use the same `RuntimeSession`, template registry, validated `SimulationRunConfig`, engine construction path, scheduler contract, and frame/UI projectors. The local driver remains available for unit tests, scientific regression, differential tests, and headless profiling. There are not two model implementations.
 
@@ -77,7 +77,9 @@ Manual-step tests compare the same seed, scenario, command sequence, and step co
 
 Every request and publication carries generation and run identity. Replacement increments generation before sending work. Both host and driver reject or drop stale generations. Request ids separate concurrent completions; frame publication ids and UI revisions make acknowledgements unambiguous.
 
-Malformed messages terminate the driver. Initialization errors publish no fabricated frame. Worker runtime exceptions reject the responsible request and preserve the last complete frame. Worker error signals remove listeners and terminate without local fallback. Runtime failures remain visible in semantic DOM and do not get cleared by late UI publications.
+Malformed messages terminate the driver. Initialization errors publish no fabricated frame. Worker runtime exceptions make the driver terminally failed, reject pending work, remove listeners, release references, and terminate without local fallback, restart, or a new seed. Runtime failures remain visible in semantic DOM and do not get cleared by late UI publications. The lifecycle is explicit: `idle`, `initializing`, `ready`, `failed`, or `disposed`; commands before first readiness reject rather than disappearing into startup timing.
+
+PERF1B additionally requires active generation, run id, template id, projection kind, and strictly increasing same-generation revisions before a publication can become current. Completion messages are checked against request and runtime identity. A shared maximum of 128 unconsumed browser-to-Worker messages covers both promise requests and fire-and-forget controls; host consumption acknowledgements release capacity, and overflow rejects before a command or replacement is accepted.
 
 Worker creation occurs in the React mount lifecycle, not during render. This avoids development Strict Mode leaking discarded render-time Workers. The real-browser stress holds one Worker through ten run replacements, drops to zero on route disposal, and creates one fresh Worker after Back navigation.
 
@@ -90,19 +92,18 @@ Uint32Array entity ids
 Float32Array positions
 Float32Array velocities
 Uint16Array neighbor counts
-Float32Array local densities
 Uint8Array group codes
 ```
 
-It contains no entities, component map, spaces, event queue, RNG state, metric history, snapshot history, methods, or mutable engine references. At 100/500 boids the arrays occupy about `2.7/13.5 KB`, versus about `41.4/182.0 KB` for JSON-encoded full snapshots in the controlled headless comparison.
+It contains no entities, component map, spaces, event queue, RNG state, metric history, snapshot history, methods, or mutable engine references. After PERF1B removed the unused per-entity density array, unselected packets occupy exactly `2.3/11.5 KB` at 100/500 boids, versus about `41.4/182.0 KB` for JSON-encoded full snapshots in the controlled headless comparison. Maximum selected detail is `3.884/19.484 KB`; the protocol maximum is `262,768` typed bytes.
 
-Worker buffers transfer ownership rather than cloning nested world objects. One frame may be in flight and only one newest frame may wait. The same bound applies independently to UI publication. No `SharedArrayBuffer` or cross-origin isolation is required.
+Worker buffers transfer ownership rather than cloning nested world objects. One frame may be in flight and only one newest frame may wait. The same bound applies independently to UI publication. An unselected frame owns five unique buffers and selected detail raises that to at most eight. The host does not recycle or mutate detached transferred buffers. No `SharedArrayBuffer` or cross-origin isolation is required.
 
 ## UIProjection And Selection
 
 React receives generation/run identity, tick/time, playback, last advance kind, entity count, Alignment, runtime signature, warnings, selected summary, bounded performance summaries, and publication counts. Continuous positions never flow through React state. Default running UI projection is limited to roughly 250 ms intervals; explicit commands, selection, reset, and manual step publish immediately.
 
-The normal frame carries no per-agent neighborhood collections, trajectories, labels, or histories. Selecting one boid adds only that boid's bounded current neighbor ids, offsets, and distances. The selected semantic DOM summary remains exact model state plus a separately labelled current proximity calculation.
+The normal frame carries no per-agent neighborhood collections, trajectories, labels, or histories. Selecting one boid adds only that boid's bounded current neighbor ids, offsets, and distances. The selected semantic DOM summary uses authoritative engine doubles rather than rounded Float32 renderer values, plus a separately labelled current proximity calculation. Dead entities are omitted and cannot remain selected.
 
 ## Snapshot Audit
 
@@ -149,7 +150,7 @@ Independent 60-second Worker soaks completed without page errors or console erro
 | 100 | 1,445 | 23.98 | 59.99 | 16.7 ms | 0 | 215 | unchanged at 81.4 MB |
 | 500 | 1,444 | 23.96 | 60.00 | 16.8 ms | 0 | 223 | unchanged at 86.4 MB |
 
-Instrumentation remained capped at 360 samples per measure. Frame/UI gates remained one-in-flight plus one-pending. Visual packets were coalesced only when a consumer lagged; ordered model steps were not skipped. The Chromium heap API was coarse and quantized, so an unchanged reading is only evidence against obvious growth in this interval, not proof of leak freedom. Multi-hour, mobile-device, browser-diversity, and production-build memory profiling remain open.
+Instrumentation remained capped at 360 samples per measure. Frame/UI gates remained one-in-flight plus one-pending. Visual packets were coalesced only when a consumer lagged; ordered model steps were not skipped. PERF1B extends this evidence with two three-minute soaks, 25 mount/dispose cycles, 25 replacements, 20 Back/Forward transitions, and the shared 128-message ingress cap. The Chromium heap APIs remain partial, so this is evidence against obvious bounded-run growth rather than proof of leak freedom. Multi-hour, Worker-heap, mobile-device, and browser-diversity profiling remain open.
 
 ## Production And Scientific Boundaries
 
@@ -159,13 +160,21 @@ Instrumentation remained capped at 360 samples per measure. Frame/UI gates remai
 - The exact corrected wrap implementation is opt-in for differential tests only. The inherited automatic path remains unchanged; ORTUS does not falsely call its trajectories equivalent to the corrected experiment.
 - A frame is ephemeral presentation state, not empirical observation, evidence, validation, calibration, causality, or prediction.
 
-## I1 Handoff
+## PERF1B Audit Result
 
-I1 may consume `SimulationRuntimePort`, `RenderFramePacket`, `UIProjection`, generation-safe Worker execution, selected-only detail, and the existing Canvas frame adapter. It must keep the engine authoritative, keep React coarse, keep packet queues bounded, retain semantic DOM status/inspection, and add template adapters or rendering primitives only when their runtime support is real.
+The independent audit record is `RUNTIME_PERFORMANCE_ARCHITECTURE_AUDIT.md`. PERF1B found and fixed one P0 unbounded-ingress family, twelve P1 ordering/identity/lifecycle/authority families, and nine bounded P2 families. Deterministic fake-transport tests force stale generations, stale same-generation revisions, completion/UI reordering, command bursts including play-before-acknowledgement, stale malformed input, reset/replacement/selection races, startup failure, terminal Worker failure, malformed messages, transfer detachment, slow consumers, and repeated disposal. No known P0/P1 remains.
 
-I1 must not turn `RenderFramePacket` into `CanonicalObservation`, migrate production World implicitly, add a Worker toggle, hide Worker failure behind a different run, infer cross-template support, adopt the corrected spatial-hash experiment without a separate semantic migration and new performance evidence, or claim browser/mobile/high-scale readiness from these local measurements.
+Five matched eight-second browser runs show why the result must not be marketed as a blanket speedup. Local 100 was cheaper than Worker 100. At 500, Worker short-run model throughput had a median `22.536 ticks/s` and range `21.773..23.033`, slightly below Local's `23.654` median, while Worker Canvas cadence held `59.725..59.893 FPS`, main-thread event-loop p95 had a `5.8 ms` median, and no long task occurred. The architecture separates pressure; it does not make computation free or guarantee 60 FPS.
 
-PERF1B is the next required audit. I1 remains unstarted until that audit is complete.
+Three-minute Worker soaks completed `4,321` ordered ticks at 100 and `4,244` at 500, retained one Worker, kept all instrumentation histories at or below 360, and observed no long task or long frame. A separate explicitly collected 60-second main-page heap sample grew by `746,964` bytes after GC but excludes Worker/native/GPU memory. The readiness verdict is `CONDITIONALLY READY FOR FUTURE I1 CONSUMPTION` only because broad external platform, background-tab, multi-hour, and direct assistive-technology evidence remains absent.
+
+## Future I1 Handoff
+
+I1 may consume `SimulationRuntimePort`, `WorkerRuntimeDriver`, the Local reference driver, `RenderFramePacket`, `UIProjection`, selected-only detail, explicit projection kind, strict generation/revision identity, the 128-message ingress bound, one-in-flight plus one-pending visual gates, and explicit terminal lifecycle/failure. It must keep the engine authoritative, keep React coarse, retain semantic DOM status/inspection, and add template adapters or rendering primitives only when their runtime support is real.
+
+I1 must not reintroduce continuous full snapshots, animate entities through React, mutate simulation state from rendering, make Canvas authoritative, couple camera/DPR/resize/reduced-motion to model state, change RNG or scheduler semantics, coalesce commands/model steps/evidence, turn `RenderFramePacket` into `CanonicalObservation`, add a Worker toggle, hide Worker failure behind a different run, infer cross-template support, or adopt the corrected spatial-hash experiment without a separate semantic migration and new performance evidence.
+
+PERF1B is complete. A0 - Canonical Architecture + Source-of-Truth Consolidation is next and unstarted, followed by its A0B audit. I1 remains planned and unstarted until those architecture gates and its dedicated prompt.
 
 ## Final Verification
 
@@ -176,3 +185,4 @@ PERF1B is the next required audit. I1 remains unstarted until that audit is comp
 - Flocking automatic-path pair checks remained exactly `316,971` at 100 and `7,721,264` at 500, matching the untouched PERF1 baseline operation counts. This is stronger semantic evidence than volatile wall-clock timing.
 - `npm run perf:runtime` passed with exact corrected-index/reference snapshot equivalence at 100 and 500. `git diff --check` passed at the final commit gate.
 - `npm run lint: unavailable, package.json has no lint script.`
+- PERF1B post-final-fix gates passed real-Worker Playwright `6/6 (2.6m)`, complete Playwright/Axe `189/189 (19.7m)` with zero failures/retries/skips, typecheck, `82 files / 703` unit tests, and a `23`-page production build compiled in `10.7s`. Final smoke measured Flocking-100 `207.04` ticks/s, Flocking-500 `28.32`, Forest Fire `44.57`, Predator-Prey `126.47`, and bounded Atlas `2` runs / `10` work units / horizon `5` in `36.21 ms`. `npm run perf:runtime` retained exact 100/500 snapshot equivalence and `2,300/11,500`-byte unselected packets.

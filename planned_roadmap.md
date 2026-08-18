@@ -1,10 +1,10 @@
 # ORTUS Full Prompt Roadmap
 
-*Last updated after Prompt PERF1 Runtime Performance Architecture.*
+*Last updated after Prompt PERF1B Runtime Performance Architecture Audit + Hardening.*
 
 ## Current Status
 
-ORTUS has completed the core runtime/template and modeling-workbench foundations through Prompt 39B, the neural/runtime-lab side track, the Research World sequence through GW9B, the UX3 through UX6B track, RH1 source-of-truth hygiene, the product reset through C3B, I0/I0B immersive direction work, and PERF1 Runtime Performance Architecture.
+ORTUS has completed the core runtime/template and modeling-workbench foundations through Prompt 39B, the neural/runtime-lab side track, the Research World sequence through GW9B, the UX3 through UX6B track, RH1 source-of-truth hygiene, the product reset through C3B, I0/I0B immersive direction work, and PERF1/PERF1B Runtime Performance Architecture and Audit.
 
 Current project status:
 
@@ -63,6 +63,7 @@ Completed audit prompt: Prompt C3B — Guided Investigation Audit + Hardening; a
 Completed implementation prompt: Prompt I0 — Immersive World Direction + Performance Baseline; compares Living Diorama, God-Hand, and Field Scientist on one isolated route over the same real Flocking scenario, preserves production-equivalent scheduler/tick semantics, bounds visual state, measures 100/500 performance, and selects an explicit 50/20/30 hybrid without replacing production World or adding persistence
 Completed audit prompt: Prompt I0B — Immersive World Direction Audit + Performance Hardening; independently reproduces the volatile 100/500 baseline, profiles engine/snapshot/adapter/Canvas/React costs, localizes selected detail, adds bounded automatic presentation quality, removes misleading effects and the Hand metaphor, completes six one-minute soaks, and revises the hybrid into exact ownership without changing simulation semantics or production World
 Completed implementation prompt: Prompt PERF1 — Runtime Performance Architecture; adds a shared local/Worker runtime port, strict generation-safe Worker protocol, transferable renderer packets, coarse UI projection, selected-only detail, bounded backpressure/instrumentation, real-browser lifecycle and soak evidence, and an evidence-backed rejection of automatic spatial hashing at the current Flocking bound without migrating production World
+Completed audit prompt: Prompt PERF1B — Runtime Performance Architecture Audit + Hardening; fixes unbounded Worker ingress, stale same-generation publication acceptance, completion/identity/startup/failure/lifecycle/selection defects, freezes an explicit Flocking-only projection contract, and completes adversarial, five-run, three-minute-soak, lifecycle, production-isolation, and full-browser verification without starting I1
 Post-30B stabilization completed: repo hygiene, durable Codex context, dependency repair, generated-artifact cleanup, and runtime performance/scalability baseline
 UX6 complete.
 UX6B complete.
@@ -81,13 +82,15 @@ C3B complete.
 I0 complete.
 I0B complete.
 PERF1 complete.
-PERF1B: Runtime Performance Architecture Audit is next and has not started.
-I1: Immersive World Shell has not started.
-I2 through I5B have not started.
-C4: Flagship Starter Pack Two is deferred until I5B and has not started.
+PERF1B complete.
+A0: Canonical Architecture + Source-of-Truth Consolidation is next and has not started.
+A0B: Architecture/Boundary Audit has not started.
+I1: Production Runtime Migration + Immersive Shell Foundation is planned and has not started; it is not the immediate next milestone.
+I2 through I5B have not started and are not an unconditional contiguous sequence.
+C4: Flagship Starter Pack Two has not started and is no longer defined as deferred until I5B.
 F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, and trajectory motif analytics are paused under E3 Analytical Lenses.
 
-Completed sequence: UX6B -> GW9 -> GW9B -> R1 -> R1B -> R2 -> R2B -> C1 -> C1B -> C2 -> C2B -> C3 -> C3B -> I0 -> I0B -> PERF1. PERF1B is next and has not started; I1 is unstarted; C4 is deferred until I5B.
+Completed sequence: UX6B -> GW9 -> GW9B -> R1 -> R1B -> R2 -> R2B -> C1 -> C1B -> C2 -> C2B -> C3 -> C3B -> I0 -> I0B -> PERF1 -> PERF1B. A0 is next and unstarted; A0B and I1 are unstarted; later immersive and content sequencing remains to be consolidated.
 ```
 
 Critical global boundary:
@@ -111,8 +114,9 @@ C2 Flagship Starter Pack One -> C2B Starter Pack One Audit
 C3 Guided Investigation / Tutorial World -> C3B Guided Investigation Audit
 I0 Immersive World Direction + Performance Baseline -> I0B Immersive World Direction Audit
 PERF1 Runtime Performance Architecture -> PERF1B Runtime Performance Architecture Audit
-I1 -> I1B -> I2 -> I2B -> I3 -> I3B -> I4 -> I4B -> I5 -> I5B (reserved; scope only by dedicated prompt)
-C4 Flagship Starter Pack Two -> C4B Starter Pack Two Audit
+A0 Canonical Architecture + Source-of-Truth Consolidation -> A0B Architecture/Boundary Audit
+I1 Production Runtime Migration + Immersive Shell Foundation -> I1B audit (planned; scope only by dedicated prompt)
+I2-I5B and C4/C4B remain unstarted; their sequence is not unconditional.
 S1 Starter Remix and Builder Handoff -> S1B Remix Audit
 S2 Recipe-First Builder Reboot -> S2B Builder Reboot Audit
 S3 Core Composition Primitives -> S3B Composition Primitive Audit
@@ -123,7 +127,7 @@ E2 Atlas as Question Map -> E2B Atlas Question-Map Audit
 E3 Analytical Lenses -> E3B Analytical-Lens Audit
 ```
 
-R1, R1B, R2, R2B, C1, C1B, C2, C2B, C3, C3B, I0, I0B, and PERF1 are complete. PERF1B: Runtime Performance Architecture Audit is next and unstarted; I1 through I5B are reserved and unstarted; C4 is deferred until I5B. The prior post-GW9B sequence that named F1 next is superseded; F0 remains historical documentation and F1 is paused under E3. I0/I0B/PERF1 remain isolated presentation/runtime evidence and do not implement production I1-I5B, C4, or any S/E/F capability.
+R1, R1B, R2, R2B, C1, C1B, C2, C2B, C3, C3B, I0, I0B, PERF1, and PERF1B are complete. A0 is next and unstarted; A0B is unstarted. I1 remains planned and unstarted after those architecture gates. I2 through I5B and C4 are unstarted without an unconditional sequence. The prior post-GW9B sequence that named F1 next is superseded; F0 remains historical documentation and F1 is paused under E3. I0/I0B/PERF1/PERF1B remain isolated presentation/runtime evidence and do not implement A0/A0B, production I1-I5B, C4, or any S/E/F capability.
 
 Current production templates:
 
@@ -3743,9 +3747,10 @@ No global service availability treated as template runtime support.
 Recommended immediate next steps:
 
 ```text
-1. Prompt PERF1B: Runtime Performance Architecture Audit is next and has not started.
-2. Do not start PERF1B or I1 without its dedicated prompt, or start C4, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or later reset-roadmap capability without its dedicated prompt. C4 is deferred until I5B.
-3. Do not make mobile-readiness, WCAG, actual browser-zoom, screen-reader, assistive-technology, forced-colors, or user-comprehension claims without direct evidence.
+1. Prompt A0: Canonical Architecture + Source-of-Truth Consolidation is next and has not started.
+2. A0B: Architecture/Boundary Audit is unstarted and remains required after A0.
+3. Do not start A0, I1, C4, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or later reset-roadmap capability without its dedicated prompt. I1 remains planned rather than immediate; C4 is unstarted without a fixed I5B dependency.
+4. Do not make mobile-readiness, WCAG, actual browser-zoom, screen-reader, assistive-technology, forced-colors, or user-comprehension claims without direct evidence.
 ```
 
 Do not start graph editing, visual programming, or runtime-mapping prompts until the repo status and roadmap docs clearly reflect:
@@ -3818,11 +3823,12 @@ Prompt C3B Guided Investigation Audit + Hardening is complete.
 Prompt I0 Immersive World Direction + Performance Baseline is complete.
 Prompt I0B Immersive World Direction Audit + Performance Hardening is complete.
 Prompt PERF1 Runtime Performance Architecture is complete.
+Prompt PERF1B Runtime Performance Architecture Audit + Hardening is complete.
 R1 complete.
 R1B complete.
 R2 complete.
 R2B complete.
 C1 complete.
 C1B complete.
-C2 complete. C2B complete. C3 complete. C3B complete. I0 complete. I0B complete. PERF1 complete. PERF1B: Runtime Performance Architecture Audit is next and has not started. I1 through I5B have not started. C4 is deferred until I5B. F1 is paused under E3 Analytical Lenses.
+C2 complete. C2B complete. C3 complete. C3B complete. I0 complete. I0B complete. PERF1 complete. PERF1B complete. A0 is next and has not started. A0B has not started. I1 is planned and has not started. I2 through I5B and C4 have not started and are not an unconditional contiguous sequence. F1 is paused under E3 Analytical Lenses.
 ```

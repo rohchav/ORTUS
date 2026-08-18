@@ -8,7 +8,7 @@ import type {
 } from "./types";
 
 export function createFlockingFrameSceneAdapter(frame: RenderFramePacket): WorldSceneAdapter {
-  if (frame.templateId !== "flocking-boids") {
+  if (frame.projectionKind !== "flocking-v1" || frame.templateId !== "flocking-boids") {
     throw new Error(`Immersive Flocking frame adapter cannot read template ${frame.templateId}`);
   }
   const bounds = { width: frame.worldWidth, height: frame.worldHeight };
@@ -46,7 +46,7 @@ export function createFlockingFrameSceneAdapter(frame: RenderFramePacket): World
         headingRadians,
         headingDegrees: normalizeDegrees(headingRadians * 180 / Math.PI),
         neighborCount,
-        localDensity: frame.localDensities[index] ?? 0,
+        localDensity: frame.entityCount <= 1 ? 0 : neighborCount / (frame.entityCount - 1),
         fill: group.fill,
         stroke: neighborCount > 0 ? "#d8ff3e" : "#8b8f89",
         radius: 3.8 + Math.min(1.5, speed / 4)
@@ -179,6 +179,7 @@ export function createFlockingFrameSceneAdapter(frame: RenderFramePacket): World
 export function createEmptyFlockingFrameSceneAdapter(): WorldSceneAdapter {
   return createFlockingFrameSceneAdapter({
     schemaVersion: "1",
+    projectionKind: "flocking-v1",
     publicationId: 1,
     templateId: "flocking-boids",
     generation: 0,
@@ -190,7 +191,6 @@ export function createEmptyFlockingFrameSceneAdapter(): WorldSceneAdapter {
     positions: new Float32Array(),
     velocities: new Float32Array(),
     neighborCounts: new Uint16Array(),
-    localDensities: new Float32Array(),
     groupCodes: new Uint8Array(),
     worldWidth: 100,
     worldHeight: 100,

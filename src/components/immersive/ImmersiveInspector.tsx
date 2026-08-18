@@ -40,6 +40,9 @@ export function ImmersiveInspector({
 }: ImmersiveInspectorProps) {
   const entities = useMemo(() => orderedEntities(adapter), [adapter]);
   const selected = adapter.getInspectableState(selectedEntityId);
+  const authoritativeSelected = selected && runtimeView.selected?.label === selected.entity.label
+    ? runtimeView.selected
+    : null;
   const selectedNumber = selected
     ? entities.findIndex((entity) => entity.id === selected.entity.id) + 1
     : 0;
@@ -92,11 +95,11 @@ export function ImmersiveInspector({
 
       {selected ? (
         <dl className="immersive-inspector__values">
-          <div><dt>Position</dt><dd>{formatNumber(selected.entity.x, 2)}, {formatNumber(selected.entity.y, 2)}</dd></div>
-          <div><dt>Heading</dt><dd>{formatNumber(selected.entity.headingDegrees, 1)} deg</dd></div>
-          <div><dt>Speed</dt><dd>{formatNumber(selected.entity.speed, 3)} units/tick</dd></div>
-          <div><dt>Neighbor count</dt><dd>{selected.entity.neighborCount} in model state</dd></div>
-          <div><dt>Proximity check</dt><dd>{selected.relationshipCount} within {formatNumber(selected.perceptionRadius, 1)}</dd></div>
+          <div><dt>Position</dt><dd>{formatNumber(authoritativeSelected?.x ?? selected.entity.x, 2)}, {formatNumber(authoritativeSelected?.y ?? selected.entity.y, 2)}</dd></div>
+          <div><dt>Heading</dt><dd>{formatNumber(authoritativeSelected?.headingDegrees ?? selected.entity.headingDegrees, 1)} deg</dd></div>
+          <div><dt>Speed</dt><dd>{formatNumber(authoritativeSelected?.speed ?? selected.entity.speed, 3)} units/tick</dd></div>
+          <div><dt>Neighbor count</dt><dd>{authoritativeSelected?.neighborCount ?? selected.entity.neighborCount} in model state</dd></div>
+          <div><dt>Proximity check</dt><dd>{authoritativeSelected?.currentProximityCount ?? selected.relationshipCount} within {formatNumber(selected.perceptionRadius, 1)}</dd></div>
         </dl>
       ) : (
         <div className="immersive-inspector__empty" aria-live="polite">
@@ -120,13 +123,18 @@ export function ImmersiveInspector({
       </section>
 
       <dl className="immersive-inspector__status" aria-label="Prototype state" aria-live="polite">
-        <div><dt>Playback</dt><dd>{runtimeView.isReady ? runtimeView.isRunning ? "Running" : "Paused" : "Preparing"}</dd></div>
+        <div><dt>Playback</dt><dd>{runtimePlaybackLabel(runtimeView.playback)}</dd></div>
         <div><dt>Camera</dt><dd>{cameraModeLabel(cameraMode)}</dd></div>
         <div><dt>Tool</dt><dd>{toolLabel(concept, activeTool)}</dd></div>
         <div><dt>Lens</dt><dd>{lensActive ? "Alignment active" : "Off"}</dd></div>
       </dl>
     </aside>
   );
+}
+
+function runtimePlaybackLabel(playback: ImmersiveRuntimeView["playback"]): string {
+  if (playback === "initializing") return "Preparing";
+  return `${playback.slice(0, 1).toUpperCase()}${playback.slice(1)}`;
 }
 
 function orderedEntities(adapter: WorldSceneAdapter) {

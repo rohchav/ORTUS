@@ -1,16 +1,15 @@
 import { describe, expect, it } from "vitest";
 import {
   BoundedPerformanceRecorder,
-  LatestPublicationGate,
   LocalRuntimeDriver,
-  RuntimeWorkerHost,
   WorkerRuntimeDriver,
-  createFlockingRenderFramePacket,
-  parseRuntimeWorkerResponse,
   type RuntimePublication,
-  type RuntimeWorkerLike,
-  type RuntimeWorkerResponse
+  type RuntimeWorkerLike
 } from "..";
+import { LatestPublicationGate } from "../runtime/LatestPublicationGate";
+import { RuntimeWorkerHost } from "../runtime/RuntimeWorkerHost";
+import { createFlockingRenderFramePacket } from "../runtime/flockingProjection";
+import { parseRuntimeWorkerResponse, type RuntimeWorkerResponse } from "../runtime/protocol";
 import { createImmersiveFlockingEngine, createImmersiveFlockingRunConfig } from "../../lib/immersiveWorld";
 
 const runId = "perf1-runtime-test";
@@ -59,6 +58,7 @@ describe("PERF1 runtime performance architecture", () => {
 
     expect(frame).toMatchObject({
       schemaVersion: "1",
+      projectionKind: "flocking-v1",
       templateId: "flocking-boids",
       generation: 1,
       tick: 1,
@@ -69,7 +69,6 @@ describe("PERF1 runtime performance architecture", () => {
     expect(frame.positions).toBeInstanceOf(Float32Array);
     expect(frame.velocities).toBeInstanceOf(Float32Array);
     expect(frame.neighborCounts).toBeInstanceOf(Uint16Array);
-    expect(frame.localDensities).toBeInstanceOf(Float32Array);
     expect(frame.groupCodes).toBeInstanceOf(Uint8Array);
     expect(frame.positions).toHaveLength(1_000);
     expect(frame.selectedDetail?.entityId).toBe(1);
@@ -182,7 +181,7 @@ describe("PERF1 runtime performance architecture", () => {
     }
     expect(gate.counts()).toEqual({ inFlight: 1, pending: 1 });
     expect(sent).toEqual([1]);
-    expect(coalesced).toBe(99);
+    expect(coalesced).toBe(98);
     gate.acknowledge(1);
     expect(sent).toEqual([1, 100]);
     expect(gate.counts()).toEqual({ inFlight: 1, pending: 0 });
@@ -247,6 +246,8 @@ describe("PERF1 runtime performance architecture", () => {
     await expect(worker.initialize({ runId, runConfig: invalid })).rejects.toThrow(/unknown run config template/i);
     expect(worker.getLatestFrame()).toBeNull();
     expect(worker.getLatestUI()).toBeNull();
+    expect(worker.state).toBe("failed");
+    expect(fakeWorker.terminated).toBe(true);
     worker.dispose();
   });
 
@@ -264,6 +265,8 @@ describe("PERF1 runtime performance architecture", () => {
       failure: { code: "runtime", generation: 1, runId }
     });
     expect(worker.getLatestFrame()).toBe(frameBeforeFailure);
+    expect(worker.state).toBe("failed");
+    expect(fakeWorker.terminated).toBe(true);
     worker.dispose();
   });
 
@@ -362,7 +365,6 @@ function packetBytes(frame: ReturnType<typeof createFlockingRenderFramePacket>):
     + frame.positions.byteLength
     + frame.velocities.byteLength
     + frame.neighborCounts.byteLength
-    + frame.localDensities.byteLength
     + frame.groupCodes.byteLength
     + (frame.selectedDetail?.neighborIds.byteLength ?? 0)
     + (frame.selectedDetail?.neighborOffsets.byteLength ?? 0)

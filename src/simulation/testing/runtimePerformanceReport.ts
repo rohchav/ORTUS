@@ -3,7 +3,7 @@ import { isDeepStrictEqual } from "node:util";
 import { createImmersiveFlockingRunConfig, type ImmersiveAgentCount } from "../../lib/immersiveWorld";
 import { SimulationEngine } from "../kernel/SimulationEngine";
 import type { InitializationConfig, SimulationTemplate } from "../kernel/types";
-import { createFlockingRenderFramePacket } from "../runtime";
+import { createFlockingRenderFramePacket } from "../runtime/flockingProjection";
 import {
   flockingTemplate,
   registerFlockingSystemsWithNeighborStrategy,
@@ -176,7 +176,6 @@ function packetBytes(packet: ReturnType<typeof createFlockingRenderFramePacket>)
     + packet.positions.byteLength
     + packet.velocities.byteLength
     + packet.neighborCounts.byteLength
-    + packet.localDensities.byteLength
     + packet.groupCodes.byteLength
     + (packet.selectedDetail?.neighborIds.byteLength ?? 0)
     + (packet.selectedDetail?.neighborOffsets.byteLength ?? 0)
