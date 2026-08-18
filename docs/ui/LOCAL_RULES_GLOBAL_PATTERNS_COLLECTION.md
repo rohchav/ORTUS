@@ -2,7 +2,7 @@
 
 Prompt: C2 / C2B
 
-Status: C2, C2B, C3, and C3B complete; C4 next
+Status: C2, C2B, C3, and C3B complete; C4 unstarted. `../ROADMAP.md` owns current sequencing.
 
 ## 1. Catalog Integration
 

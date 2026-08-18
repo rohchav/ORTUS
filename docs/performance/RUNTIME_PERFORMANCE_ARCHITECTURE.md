@@ -1,5 +1,7 @@
 # Runtime Performance Architecture
 
+Historical milestone record. Its PERF1/PERF1B measurements and boundaries remain evidence; current architecture, capability, and milestone status live in `../ARCHITECTURE.md`, `../CAPABILITIES.md`, and `../ROADMAP.md`.
+
 Date: 2026-08-18
 Milestones: PERF1 and PERF1B
 Status: implemented and independently audited; conditionally ready for future I1 consumption

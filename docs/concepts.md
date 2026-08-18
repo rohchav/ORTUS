@@ -2,7 +2,7 @@
 
 ORTUS is organized around a small set of simulation concepts. Keeping these boundaries explicit prevents model-family definitions, live run state, exploratory comparisons, and UI workspace data from collapsing into one ambiguous artifact.
 
-Roadmap status: ORTUS has completed the current modeling foundation, the documented neural/runtime-lab side track, the Research World/UI sequence through GW9B, the world-first reset and first Starter World content sequence, and immersive direction through I0B. PERF1 establishes the bounded runtime performance architecture. PERF1B is next; I1-I5B remain unstarted, and C4 remains deferred until I5B. Do not start PERF1B, I1, C4, Scale Lens, fractal metrics, or further immersive/runtime expansion without explicit approval.
+This is a detailed implementation vocabulary, not the canonical architecture or capability ledger. Defer to `ARCHITECTURE.md`, `CAPABILITIES.md`, `SCIENTIFIC_MODEL.md`, and `ROADMAP.md` when status or terminology conflicts. A0 is complete; A0B is next and unstarted; I1 remains planned and unstarted; C4 has no I5B dependency.
 
 ## Product Philosophy And Learning Mission
 

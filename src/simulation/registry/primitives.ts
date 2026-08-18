@@ -1,7 +1,7 @@
 import type { PrimitiveId, SystemsPrimitiveEntry } from "./types";
 
-const foundationDocs = ["README.md", "docs/concepts.md", "src/simulation/README.md"];
-const roadmapDocs = ["docs/roadmap.md", "docs/missing-pillars.md"];
+const foundationDocs = ["docs/CAPABILITIES.md", "docs/ARCHITECTURE.md", "docs/SCIENTIFIC_MODEL.md", "src/simulation/README.md"];
+const roadmapDocs = ["docs/ROADMAP.md", "docs/missing-pillars.md"];
 
 function primitive(entry: SystemsPrimitiveEntry): SystemsPrimitiveEntry {
   return entry;
@@ -134,9 +134,13 @@ export const primitiveRegistry: readonly SystemsPrimitiveEntry[] = [
     description: "Headless relational primitives for network definitions, generation, query helpers, metrics, and serialization.",
     status: "serviceOnly",
     supportLevel: "service",
-    currentScope: "Network services exist, but no current production template runtime uses network topology.",
+    currentScope:
+      "Network services exist globally. Neural Excitation separately uses a template-owned runtime NetworkSpace; no template executes generic network artifacts.",
     futureScope: "Future network-capable templates and hybrid composition can attach topology behind explicit capabilities.",
-    limitations: ["Network edges are not causal links or real-world social-network evidence."],
+    limitations: [
+      "Global network artifacts are not activated by Neural Excitation's template-owned topology.",
+      "Network edges are not causal links or real-world social-network evidence."
+    ],
     docsRefs: foundationDocs,
     artifactTypes: ["ortus.networkDefinition", "ortus.networkMetrics"],
     relatedPrimitives: ["hybridComposition", "causalAssumptions", "spatialFields"],

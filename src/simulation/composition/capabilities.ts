@@ -1,5 +1,5 @@
 import { getPrimitive, getTemplateCapability } from "../registry/query";
-import type { PrimitiveCapabilityStatus, PrimitiveId, PrimitiveSupportLevel } from "../registry/types";
+import type { PrimitiveCapabilityStatus, PrimitiveSupportLevel } from "../registry/types";
 import { validateHybridComposition } from "./validation";
 import type { CompositionValidationReport, HybridModelComposition, MissingCapability, CapabilityRequirement, PrimitiveAttachment } from "./types";
 

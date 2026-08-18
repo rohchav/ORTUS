@@ -1886,7 +1886,7 @@ function emitSignalsForFiring(
   firingIds: readonly string[],
   synapses: readonly NeuralSynapse[],
   tick: number,
-  params: NeuralParams,
+  _params: NeuralParams,
   currentQueueSize: number,
   maxQueueSize: number,
   excitationScale = 1,

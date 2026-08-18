@@ -15,7 +15,6 @@ import {
   createNeuralRpsRound,
   createNeuralStrategyAdaptationConfig,
   deriveNeuralRuntimeEvents,
-  defaultNeuralStrategyAdaptationConfig,
   neuralDirectActions,
   neuralLabScenarioCards,
   neuralPlainEnglishControls,

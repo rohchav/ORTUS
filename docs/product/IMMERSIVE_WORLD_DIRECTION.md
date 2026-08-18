@@ -1,5 +1,7 @@
 # Immersive World Direction
 
+Historical I0/I0B milestone record. Its prototype decisions remain evidence; current architecture, capability, and milestone status live in `../ARCHITECTURE.md`, `../CAPABILITIES.md`, and `../ROADMAP.md`.
+
 Date: 2026-08-11
 Prompts: I0 and I0B
 Status: I0 and I0B complete; I1 Immersive World Shell next but unstarted

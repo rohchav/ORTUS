@@ -54,7 +54,10 @@
 - Leaving or hiding an active Experiment Runner must request cooperative cancellation and must not publish an abandoned result.
 - Existing Experiment Runner sweeps are bounded local World/Experiment model-comparison tooling; they are not Atlas landscape sampling, landscape probe execution, saved sampled regions, run queues, or regime detection.
 - Existing local World comparison storage may preserve bounded run summaries for comparison; it is not persistent Lab evidence, Atlas discovery storage, saved behavioral landscapes, saved probe plans, or real-world validation.
-- Lint is intentionally unavailable until a dedicated lint/tooling prompt adds it. Do not treat missing lint as a failing gate; report exactly `npm run lint: unavailable, package.json has no lint script.`
+- Run `npm run lint` for the scoped TypeScript, unused-symbol, architecture-boundary, seeded-randomness, dynamic-execution, and intrinsic-JSX accessibility baseline. Do not describe it as full ESLint, browser, screen-reader, assistive-technology, or WCAG coverage.
+- Treat `docs/CAPABILITIES.md`, `docs/ARCHITECTURE.md`, `docs/SCIENTIFIC_MODEL.md`, and `docs/ROADMAP.md` as the canonical capability, architecture, scientific-contract, and roadmap documents after code/tests. Audits and context/session files are historical evidence and continuity, not competing current authority.
+- Preserve `ModelDefinition != RuntimePlan` and `SimulationSnapshot != RenderFramePacket != UIProjection != CanonicalObservation`; the planned objects are not implemented by A0.
+- Future SystemView representation is a graph with explicit scale/lens/regime scope, not a universal micro/meso/macro hierarchy or mandatory Cartesian cube. Existing multi-scale services remain structural and non-executable.
 - Interventions must be template-defined, validated, and applied through the headless intervention executor or engine command buffer. UI and canvas code may report targets, but must not mutate agents, components, spaces, or engine internals.
 - User-facing intervention copy must not use validation language in a way that implies scientific validation, calibration, or real-world effectiveness. Prefer engine-checked or command-checked language for software command paths.
 - Current-run intervention entries/history are engine/snapshot state, not saved intervention plans, persistent Lab intervention records, Atlas discoveries, or validation evidence.
@@ -583,7 +586,7 @@
 - Keep Starter World browsing, filters, search, nudge dismissal, and launch context non-persistent. Do not add storage, progress, completion, XP, achievements, profiling, recommendations, or step locks.
 - Keep remix status explicit: runtime-now, current Advanced structural tools, or future capability. Do not expose fake Builder, generate, compile, apply, or run actions.
 - C1 portfolio candidates are documentation only. Tier A is not implemented content; Tier B and C do not become runtime support until dedicated implementation and audit prompts.
-- R1 through C3B, I0/I0B, and PERF1/PERF1B are complete. I1 is next and unstarted; I1B through I5B are reserved and unstarted; C4 is deferred until I5B. Do not start I1, C4, or later I/C/S/E milestones without a dedicated prompt.
+- R1 through C3B, I0/I0B, PERF1/PERF1B, and A0 are complete. A0B is next and unstarted. I1 is planned and unstarted after A0B; I2 through I5B are not an unconditional sequence; C4 is not tied to I5B. Do not start A0B, I1, C4, or later I/C/S/E milestones without a dedicated prompt.
 - Complete and commit GW1 before starting GW1B.
 - Treat UX0 as documentation and design planning only.
 - Do not implement World/Lab/Atlas/Workshop without a dedicated prompt.
@@ -664,7 +667,7 @@
 - Atlas preview results are component-memory-only exact sampled coordinates. Do not add storage, saved records, history, publication, interpolation, smoothing, contours, inferred unsampled values, regime/transition/tipping-point detection, confidence/coverage/evidence scores, or scientific-validation claims.
 - Keep cancellation language honest: `Cancel after current sample` means the current synchronous sample finishes before cancellation is effective. Unstarted runs remain unsampled and partial results remain visibly partial. Route unmount must cancel remaining cooperative work and suppress post-unmount UI updates.
 - Multiple preview seeds show selected deterministic model variation only; they are not confidence intervals, calibrated probabilities, or real-world uncertainty estimates.
-- GW9/GW9B do not generalize Atlas sampling, make the conceptual behavioral-landscape scaffold runtime-backed, make probe plans executable, or create Discovery Atlas/Lab persistence. GW9B, R1, R1B, R2, R2B, C1, C1B, C2, C2B, C3, C3B, I0, I0B, PERF1, and PERF1B are complete. I1 is next and unstarted; I1B through I5B are unstarted; C4 is deferred until I5B; F1 is paused under E3 Analytical Lenses.
+- GW9/GW9B do not generalize Atlas sampling, make the conceptual behavioral-landscape scaffold runtime-backed, make probe plans executable, or create Discovery Atlas/Lab persistence. GW9B, R1, R1B, R2, R2B, C1, C1B, C2, C2B, C3, C3B, I0, I0B, PERF1, PERF1B, and A0 are complete. A0B is next and unstarted; I1 is planned and unstarted; later immersive work is gated rather than contiguous; C4 has no I5B dependency; F1 is paused under E3 Analytical Lenses.
 - A featured starter launch must create the documented fresh prepared run once per starter page mount. It must not silently resume modified parameters, an advanced tick, or a running state beneath baseline instructions.
 - Parameter controls that rebuild the run must remain drafts until explicit apply and state that apply produces a fresh paused tick-0 run; do not imply live mutation.
 - World visible task, `task` query, top-navigation current state, and task heading must remain coherent without resetting active runtime state.

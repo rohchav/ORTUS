@@ -2,6 +2,15 @@
 
 ORTUS is a browser-based complex systems visual modeler backed by a deterministic TypeScript simulation engine.
 
+## Canonical Project Sources
+
+- [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) defines architectural planes, authority, ownership, and dependency direction.
+- [`docs/CAPABILITIES.md`](docs/CAPABILITIES.md) states what actually executes and persists today.
+- [`docs/SCIENTIFIC_MODEL.md`](docs/SCIENTIFIC_MODEL.md) defines evidence, interpretation, causality, identifiability, and safety contracts.
+- [`docs/ROADMAP.md`](docs/ROADMAP.md) owns milestone status and future sequencing.
+
+Code and tests remain authoritative for current behavior. Scoped product, UI, performance, audit, prompt-roadmap, and session documents preserve implementation detail and historical evidence; they do not override this hierarchy.
+
 ## What Exists Now
 
 - A deterministic TypeScript simulation engine with seeded randomness, templates, scenarios, snapshots, metrics, interventions, experiments, and bounded run-comparison summaries.
@@ -48,15 +57,16 @@ npm run test:ui
 npm run build
 npm run perf:runtime
 npm run perf:simulation
+npm run lint
 ```
 
-`npm run lint: unavailable, package.json has no lint script.` Lint is intentionally unavailable until a dedicated lint/tooling prompt adds it; do not treat missing lint as a failing gate.
+`npm run lint` runs TypeScript with unused-symbol checks plus a scoped AST-based architecture/accessibility smoke gate. It enforces the current simulation/UI boundary, seeded-randomness rule, dynamic-execution prohibition, selected import boundaries, and a narrow intrinsic-JSX accessibility baseline. It is not a full ESLint ruleset, browser audit, screen-reader test, or WCAG certification.
 
 `npm run test:ui` is a dev-only Playwright/Axe rendered audit harness for `/`, `/worlds`, `/worlds/[slug]`, `/worlds/packs/[slug]`, `/worlds/guides/[slug]`, `/world`, `/world/immersive-prototype`, `/builder`, `/lab`, and `/atlas`. R1/R1B cover the Start Hub and first-run handoff; R2/R2B cover the stable World stage and task architecture; C1/C1B cover the original seven-world framework; C2/C2B cover the first flagship collection and eight strict recipe handoffs; C3/C3B cover the optional `Reading a Flock` flow; I0/I0B cover the isolated real-Flocking concept comparison; PERF1/PERF1B cover real-Worker lifecycle, deterministic replay, generation/revision races, terminal failure, bounded transport/backpressure, six runtime viewports, and repeated replacement/disposal. These checks are not a beginner user study, educational-outcome test, screen-reader, assistive-technology, forced-colors, actual browser-zoom, complete touch-workflow, browser/mobile hardware survey, or WCAG conformance claim.
 
 ## Roadmap Status
 
-ORTUS has completed Prompt 39B plus the documented neural, Research World, and UI work through GW9B, followed by R1 through C3B, I0/I0B, and `PERF1/PERF1B: Runtime Performance Architecture and Audit`. `A0: Canonical Architecture + Source-of-Truth Consolidation` is next and unstarted; `A0B: Architecture/Boundary Audit` is unstarted. `I1: Production Runtime Migration + Immersive Shell Foundation` remains planned and unstarted, but it is not the immediate next milestone. I2 through I5B and `C4: Flagship Starter Pack Two` remain unstarted without an unconditional contiguous sequence. The active product sequence is documented in `docs/product/ORTUS_PRODUCT_EXPERIENCE_RESET_ROADMAP.md`. The F0 fractal branch remains documented but F1 is paused under the future E3 Analytical Lenses milestone.
+ORTUS has completed Prompt 39B plus the documented neural, Research World, and UI work through GW9B, followed by R1 through C3B, I0/I0B, PERF1/PERF1B, and `A0: Canonical Architecture + Source-of-Truth Consolidation`. `A0B: Canonical Architecture + Source-of-Truth Audit` is next and unstarted. `I1: Production Runtime Migration + Immersive Shell Foundation` remains planned and unstarted after A0B. I2 through I5B are not an unconditional sequence, and `C4: Flagship Starter Pack Two` is no longer tied to I5B. `docs/ROADMAP.md` is the canonical sequence. The F0 fractal branch remains historical planning, with F1 paused under future E3 analytical-lens prerequisites.
 
 ## Product Philosophy
 

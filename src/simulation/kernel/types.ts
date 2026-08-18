@@ -1,5 +1,4 @@
 import type { MetricsCollector } from "./Metrics";
-import type { EventQueue } from "./EventQueue";
 import type { RandomService } from "./Random";
 import type { SystemRegistry } from "./SystemRegistry";
 import type { World, WorldView } from "./World";

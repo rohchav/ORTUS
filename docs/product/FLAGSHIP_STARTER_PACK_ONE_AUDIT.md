@@ -2,7 +2,7 @@
 
 Prompt: C2B
 
-Status: C2B complete; C3 and C3B completed subsequently; C4 next
+Status: C2B complete; C3 and C3B completed subsequently; C4 unstarted. `../ROADMAP.md` owns current sequencing.
 
 ## 1. Scope
 

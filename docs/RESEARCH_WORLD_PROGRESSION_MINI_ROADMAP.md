@@ -1,5 +1,7 @@
 # ORTUS Research World Progression Mini-Roadmap
 
+Status: HISTORICAL product-direction record after A0. Use `ROADMAP.md` for current sequencing, `CAPABILITIES.md` for implemented behavior, and `SCIENTIFIC_MODEL.md` for evidence contracts.
+
 Status: historical GW0 source of truth, updated after R1 to record the active route and sequencing reset.
 
 GW0 is documentation, product architecture, information architecture, and roadmap planning only.

@@ -1,7 +1,7 @@
 # Explore Worlds Catalog
 
 Date: 2026-08-01
-Status: C1, C1B, C2, C2B, C3, and C3B complete; C4 next
+Status: C1, C1B, C2, C2B, C3, and C3B complete; C4 unstarted. `../ROADMAP.md` owns current sequencing.
 
 ## 1. Route Structure
 

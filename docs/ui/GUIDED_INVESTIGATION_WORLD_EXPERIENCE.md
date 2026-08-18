@@ -2,7 +2,7 @@
 
 Prompt: C3 / C3B
 
-Status: C3 and C3B complete; C4 Flagship Starter Pack Two next
+Status: C3 and C3B complete; C4 unstarted. `../ROADMAP.md` owns current sequencing.
 
 ## 1. Guide landing route
 

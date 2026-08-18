@@ -1,7 +1,6 @@
 import type { Command, ComponentValue, JsonValue, ParameterDefinition } from "../kernel/types";
 import type { WorldView } from "../kernel/World";
 import { SimulationValidationError } from "../kernel/Errors";
-import type { SimulationEngine } from "../kernel/SimulationEngine";
 import type { Point2D } from "../spaces/Space";
 import { EPIDEMIC_SPACE_ID, InfectionState, Position2D, Velocity2D, type InfectionStateComponent } from "../templates/epidemic.template";
 import { OPINION_SPACE_ID, OpinionState, type OpinionStateComponent } from "../templates/opinion.template";

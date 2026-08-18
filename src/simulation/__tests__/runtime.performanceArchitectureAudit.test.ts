@@ -8,8 +8,7 @@ import {
   maxPendingRuntimeMessages,
   type RenderFramePacket,
   type RuntimePublication,
-  type RuntimeWorkerLike,
-  type UIProjection
+  type RuntimeWorkerLike
 } from "..";
 import { createImmersiveFlockingRunConfig } from "../../lib/immersiveWorld";
 import { createFlockingFrameSceneAdapter } from "../../lib/immersiveWorld/frameSceneAdapter";

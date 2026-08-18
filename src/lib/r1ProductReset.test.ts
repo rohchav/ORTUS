@@ -102,8 +102,9 @@ describe("R1 Start Hub and World-first product reset contracts", () => {
     );
   });
 
-  it("records completed PERF1B with A0/A0B next and preserves every implementation-audit pair", () => {
+  it("preserves the product-reset record while deferring current status to the canonical roadmap", () => {
     const roadmap = source("docs/product/ORTUS_PRODUCT_EXPERIENCE_RESET_ROADMAP.md");
+    const canonicalRoadmap = source("docs/ROADMAP.md");
     const milestones = [
       "R1", "R1B", "R2", "R2B",
       "C1", "C1B", "C2", "C2B", "C3", "C3B",
@@ -116,16 +117,18 @@ describe("R1 Start Hub and World-first product reset contracts", () => {
 
     expect(positions.every((position) => position >= 0)).toBe(true);
     expect(positions).toEqual([...positions].sort((left, right) => left - right));
-    expect(roadmap).toContain("Status: PERF1/PERF1B complete; A0 next and unstarted; A0B unstarted; I1 planned and unstarted");
+    expect(roadmap).toContain("Status: DEPRECATED/HISTORICAL for forward sequencing after A0");
+    expect(roadmap).toContain("`../ROADMAP.md` is the canonical milestone/status source.");
     expect(roadmap).toContain("`C1B: Starter World Content Framework Audit` is complete.");
     expect(roadmap).toContain("`C2: Flagship Starter Pack One` is complete.");
     expect(roadmap).toContain("`C2B: Flagship Starter Pack One Audit + Hardening` is complete.");
     expect(roadmap).toContain("`C3: Guided Investigation / Tutorial World` and `C3B: Guided Investigation Audit + Hardening` are complete.");
-    expect(roadmap).toContain("`I0: Immersive World Direction + Performance Baseline`, `I0B: Immersive World Direction Audit + Performance Hardening`, `PERF1: Runtime Performance Architecture`, and `PERF1B: Runtime Performance Architecture Audit + Hardening` are complete.");
-    expect(roadmap).toContain("A0 is next and unstarted; A0B is unstarted");
-    expect(roadmap).toContain("I1 remains planned and unstarted rather than immediate");
-    expect(roadmap).toContain("I2 through I5B and `C4: Flagship Starter Pack Two` remain unstarted");
-    expect(roadmap).toContain("S1-S5 and E1-E3 have not started");
+    expect(roadmap).toContain("`PERF1B: Runtime Performance Architecture Audit + Hardening`, and A0 are complete.");
+    expect(roadmap).toContain("A0B is next and unstarted.");
+    expect(roadmap).toContain("I1 remains planned and unstarted after A0B.");
+    expect(roadmap).toContain("C4 has no I5B dependency");
+    expect(canonicalRoadmap).toContain("A0 - Canonical Architecture + Source-of-Truth Consolidation | COMPLETE");
+    expect(canonicalRoadmap).toContain("A0B - Canonical Architecture + Source-of-Truth Audit | NEXT / UNSTARTED");
     expect(roadmap).toContain("F1 and the rest of the F branch are paused beneath E3 Analytical Lenses.");
   });
 });

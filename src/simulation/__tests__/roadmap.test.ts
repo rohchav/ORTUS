@@ -413,11 +413,10 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(roadmap).toContain("UX6B complete.");
     expect(roadmap).toContain("GW9 complete.");
     expect(roadmap).toContain("GW9B complete.");
-    expect(roadmap).toContain("R1 through C3B, I0/I0B, and PERF1/PERF1B are complete.");
-    expect(roadmap).toContain("A0: Canonical Architecture + Source-of-Truth Consolidation is next and unstarted");
-    expect(roadmap).toContain("A0B is unstarted");
-    expect(roadmap).toContain("I1: Production Runtime Migration + Immersive Shell Foundation is planned and unstarted");
-    expect(roadmap).toContain("I2 through I5B and C4: Flagship Starter Pack Two remain unstarted");
+    expect(roadmap).toContain("R1 through C3B, I0/I0B, PERF1/PERF1B, and A0 are complete.");
+    expect(roadmap).toContain("A0B is next and unstarted.");
+    expect(roadmap).toContain("I1: Production Runtime Migration + Immersive Shell Foundation is planned and unstarted after A0B.");
+    expect(roadmap).toContain("C4: Flagship Starter Pack Two has no I5B dependency");
     expect(roadmap).toContain("F1 and the fractal branch remain documented but are paused under E3 Analytical Lenses.");
     expect(startHubReset).toContain("/         -> Start Hub");
     expect(startHubReset).toContain("/world    -> live World workbench");
@@ -429,9 +428,8 @@ describe("roadmap alignment and missing pillar reservations", () => {
     expect(worldLayoutReclaim).toContain("R2B complete.");
     expect(worldLayoutReclaim).toContain("C1 is complete.");
     expect(worldLayoutReclaim).toContain("C1B");
-    expect(productExperienceResetRoadmap).toContain(
-      "Status: PERF1/PERF1B complete; A0 next and unstarted; A0B unstarted; I1 planned and unstarted; later sequencing pending architecture consolidation"
-    );
+    expect(productExperienceResetRoadmap).toContain("Status: DEPRECATED/HISTORICAL for forward sequencing after A0");
+    expect(productExperienceResetRoadmap).toContain("`../ROADMAP.md` is the canonical milestone/status source.");
     expect(productExperienceResetRoadmap).toContain("Every implementation milestone is followed by an audit milestone.");
     expect(productExperienceResetRoadmap).toContain("F1 and the rest of the F branch are paused beneath E3 Analytical Lenses.");
     expect(productExperienceResetRoadmap).toContain(

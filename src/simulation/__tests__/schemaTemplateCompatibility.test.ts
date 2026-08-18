@@ -36,8 +36,7 @@ import {
   type HybridModelComposition,
   type ModelSchemaDefinition,
   type SchemaTemplateCompatibilityReport,
-  type TemplateCompatibilityResult,
-  type TemplateMappingProfile
+  type TemplateCompatibilityResult
 } from "../index";
 
 const repoRoot = process.cwd();

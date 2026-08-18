@@ -128,7 +128,7 @@ describe("R2 World layout and interaction reclaim contracts", () => {
     expect(shell).toContain('title="Technical run details"');
   });
 
-  it("records completed PERF1B after PERF1 with A0 next and I1 still planned", () => {
+  it("records completed A0 after PERF1B with A0B next and I1 still planned", () => {
     const roadmap = source("planned_roadmap.md");
     const context = source("docs/codex/CURRENT_CONTEXT.md");
 
@@ -151,10 +151,10 @@ describe("R2 World layout and interaction reclaim contracts", () => {
     expect(context).toContain("STARTER_WORLD_CONTENT_FRAMEWORK_AUDIT.md");
     expect(context).toContain("IMMERSIVE_WORLD_DIRECTION_AUDIT.md");
     expect(context).toContain("PERF1B complete.");
-    expect(context).toContain("A0: Canonical Architecture + Source-of-Truth Consolidation is next");
-    expect(context).toContain("A0B: Architecture/Boundary Audit has not started");
+    expect(context).toContain("A0: Canonical Architecture + Source-of-Truth Consolidation is complete");
+    expect(context).toContain("A0B: Canonical Architecture + Source-of-Truth Audit is next");
     expect(context).toContain("I1: Production Runtime Migration + Immersive Shell Foundation is planned");
-    expect(context).toContain("I2 through I5B and C4 have not started and are not an unconditional contiguous sequence");
+    expect(context).toContain("I2 through I5B are not an unconditional contiguous sequence; C4 has no I5B dependency");
     expect(context).not.toMatch(/F1 (?:is next|resumed|in progress)/i);
   });
 });

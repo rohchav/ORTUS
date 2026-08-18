@@ -13,7 +13,10 @@
     "test:ui:headed": "playwright test --headed",
     "test:ui:report": "playwright show-report",
     "test:watch": "vitest",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "lint": "npm run lint:types && npm run lint:architecture",
+    "lint:types": "tsc --noEmit --noUnusedLocals --noUnusedParameters",
+    "lint:architecture": "node scripts/lint-architecture.mjs"
   },
   "dependencies": {
     "next": "^15.1.0",

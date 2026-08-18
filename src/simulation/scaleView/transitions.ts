@@ -6,7 +6,6 @@ import {
   scaleViewModes,
   scaleViewStateArtifactType,
   type CreateScaleViewStateOptions,
-  type ScaleCameraState,
   type ScaleTransition,
   type ScaleViewMode,
   type ScaleViewState,

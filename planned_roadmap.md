@@ -1,6 +1,10 @@
 # ORTUS Full Prompt Roadmap
 
-*Last updated after Prompt PERF1B Runtime Performance Architecture Audit + Hardening.*
+Status: DEPRECATED/HISTORICAL prompt inventory for sequencing after A0
+
+`docs/ROADMAP.md` is the canonical milestone/status source. `docs/CAPABILITIES.md`, `docs/ARCHITECTURE.md`, and `docs/SCIENTIFIC_MODEL.md` own current capability, architecture, and scientific contracts. This file preserves detailed prompt history and must not be used to infer that a planned prompt is implemented.
+
+*Last updated for the A0 canonical handoff.*
 
 ## Current Status
 
@@ -83,14 +87,14 @@ I0 complete.
 I0B complete.
 PERF1 complete.
 PERF1B complete.
-A0: Canonical Architecture + Source-of-Truth Consolidation is next and has not started.
-A0B: Architecture/Boundary Audit has not started.
-I1: Production Runtime Migration + Immersive Shell Foundation is planned and has not started; it is not the immediate next milestone.
+A0: Canonical Architecture + Source-of-Truth Consolidation is complete.
+A0B: Canonical Architecture + Source-of-Truth Audit is next and has not started.
+I1: Production Runtime Migration + Immersive Shell Foundation is planned and has not started after A0B.
 I2 through I5B have not started and are not an unconditional contiguous sequence.
-C4: Flagship Starter Pack Two has not started and is no longer defined as deferred until I5B.
+C4: Flagship Starter Pack Two has not started and has no I5B dependency.
 F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, and trajectory motif analytics are paused under E3 Analytical Lenses.
 
-Completed sequence: UX6B -> GW9 -> GW9B -> R1 -> R1B -> R2 -> R2B -> C1 -> C1B -> C2 -> C2B -> C3 -> C3B -> I0 -> I0B -> PERF1 -> PERF1B. A0 is next and unstarted; A0B and I1 are unstarted; later immersive and content sequencing remains to be consolidated.
+Completed sequence: UX6B -> GW9 -> GW9B -> R1 -> R1B -> R2 -> R2B -> C1 -> C1B -> C2 -> C2B -> C3 -> C3B -> I0 -> I0B -> PERF1 -> PERF1B -> A0. A0B is next and unstarted; I1 remains planned and unstarted; later work follows canonical capability gates.
 ```
 
 Critical global boundary:
@@ -127,7 +131,7 @@ E2 Atlas as Question Map -> E2B Atlas Question-Map Audit
 E3 Analytical Lenses -> E3B Analytical-Lens Audit
 ```
 
-R1, R1B, R2, R2B, C1, C1B, C2, C2B, C3, C3B, I0, I0B, PERF1, and PERF1B are complete. A0 is next and unstarted; A0B is unstarted. I1 remains planned and unstarted after those architecture gates. I2 through I5B and C4 are unstarted without an unconditional sequence. The prior post-GW9B sequence that named F1 next is superseded; F0 remains historical documentation and F1 is paused under E3. I0/I0B/PERF1/PERF1B remain isolated presentation/runtime evidence and do not implement A0/A0B, production I1-I5B, C4, or any S/E/F capability.
+R1, R1B, R2, R2B, C1, C1B, C2, C2B, C3, C3B, I0, I0B, PERF1, PERF1B, and A0 are complete. A0B is next and unstarted. I1 remains planned and unstarted after A0B. I2 through I5B are unstarted without an unconditional sequence, and C4 has no I5B dependency. The prior post-GW9B sequence that named F1 next is superseded; F0 remains historical documentation and F1 is paused under E3. I0/I0B/PERF1/PERF1B remain isolated presentation/runtime evidence and do not implement production I1, C4, or any S/E/F capability.
 
 Current production templates:
 
@@ -3747,9 +3751,9 @@ No global service availability treated as template runtime support.
 Recommended immediate next steps:
 
 ```text
-1. Prompt A0: Canonical Architecture + Source-of-Truth Consolidation is next and has not started.
-2. A0B: Architecture/Boundary Audit is unstarted and remains required after A0.
-3. Do not start A0, I1, C4, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or later reset-roadmap capability without its dedicated prompt. I1 remains planned rather than immediate; C4 is unstarted without a fixed I5B dependency.
+1. Prompt A0 is complete.
+2. A0B: Canonical Architecture + Source-of-Truth Audit is next and unstarted.
+3. Do not start A0B, I1, C4, F1, Scale Lens, fractal metrics, fractal generators, network scaling analytics, trajectory motif analytics, or later capability without its dedicated prompt. I1 remains planned after A0B; C4 has no I5B dependency.
 4. Do not make mobile-readiness, WCAG, actual browser-zoom, screen-reader, assistive-technology, forced-colors, or user-comprehension claims without direct evidence.
 ```
 
@@ -3830,5 +3834,5 @@ R2 complete.
 R2B complete.
 C1 complete.
 C1B complete.
-C2 complete. C2B complete. C3 complete. C3B complete. I0 complete. I0B complete. PERF1 complete. PERF1B complete. A0 is next and has not started. A0B has not started. I1 is planned and has not started. I2 through I5B and C4 have not started and are not an unconditional contiguous sequence. F1 is paused under E3 Analytical Lenses.
+C2 complete. C2B complete. C3 complete. C3B complete. I0 complete. I0B complete. PERF1 complete. PERF1B complete. A0 complete. A0B is next and has not started. I1 is planned and has not started. I2 through I5B are not an unconditional contiguous sequence. C4 has no I5B dependency. F1 is paused under E3 Analytical Lenses.
 ```

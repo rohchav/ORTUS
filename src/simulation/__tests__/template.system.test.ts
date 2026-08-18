@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { SimulationEngine } from "../kernel/SimulationEngine";
-import type { ParameterValues, SimulationTemplate } from "../kernel/types";
+import type { ParameterValues } from "../kernel/types";
 import { validateTemplate } from "../kernel/Validation";
 import { createDefaultRunConfig, validateRunConfig } from "../runs/runConfig";
 import { productionTemplateIds, productionTemplateMap, productionTemplates } from "../templates/registry";

@@ -1,7 +1,6 @@
 import type {
   BehaviorModeDefinition,
   EntityTypeDefinition,
-  InitializationConfig,
   InitializationPresetDefinition,
   JsonValue,
   MetricDefinition,

@@ -4489,3 +4489,42 @@ Closure and handoff:
 - A0: Canonical Architecture + Source-of-Truth Consolidation is next and unstarted. A0B is unstarted. I1 remains planned and unstarted rather than immediate.
 - I2 through I5B and C4 remain unstarted without an unconditional contiguous sequence. C4 is no longer documented as deferred until I5B.
 - Commit target remains `test: audit runtime performance architecture`; no push is authorized. A0 and I1 were not started.
+
+### A0: Canonical Architecture + Source-of-Truth Consolidation
+
+Date: 2026-08-18
+
+Starting state:
+
+- Branch `main` was clean at `4a99d2ae15cda645f25e7032b6c90029e90357d3` (`test: audit runtime performance architecture`). Local `main` and the observed `origin/main` reference were aligned.
+- PERF1B was complete. A0B and I1 were unstarted.
+
+Canonical decisions:
+
+- Added `docs/ARCHITECTURE.md`, `docs/CAPABILITIES.md`, `docs/SCIENTIFIC_MODEL.md`, and `docs/ROADMAP.md` as the canonical architecture, current-capability, epistemic/scientific, and future-sequencing sources.
+- Defined the Model, Run/Observation, Research/Representation, and Experience planes; fundamental versus derived objects; authority, ownership, invalidation, current data flows, and target dependency direction.
+- Preserved `ModelDefinition != RuntimePlan` and `SimulationSnapshot != RenderFramePacket != UIProjection != CanonicalObservation`. Every future research object remains explicitly planned and absent.
+- Recorded the ECS-shaped engine as a computational substrate rather than a universal scientific ontology. Future representation direction is a SystemView graph, not a universal micro/meso/macro hierarchy or mandatory Scale/Lens/Regime cube.
+- Centralized scientific non-equivalence, provenance, independent assessment, identifiability, causal, uncertainty, social/cognitive, and safety contracts. No future scientific runtime or persistence was implemented.
+
+Consolidation and tooling:
+
+- Marked older roadmaps, philosophy, progression, performance, and continuity records as historical or subordinate where needed, while preserving their evidence. Updated active status to PERF1B/A0 complete, A0B next, I1 planned after A0B, and C4 independent of I5B.
+- Added `npm run lint`, combining TypeScript unused-symbol checks with a dependency/randomness/dynamic-execution/platform/accessibility AST smoke gate. No dependency or mass formatting was added.
+- Removed declarations exposed as unused by the new compiler gate. These are non-behavioral cleanups; no simulation rule, template parameter, RNG, scheduler, renderer, persistence, or product surface changed.
+- Added focused contracts for the canonical source hierarchy, capability honesty, future-object absence, SystemView direction, roadmap handoff, scientific/safety boundaries, and passing/failing static-lint fixtures.
+
+Verification:
+
+- Focused architecture/roadmap coverage passed `6 files / 36 tests`.
+- `npm run typecheck` passed.
+- `npm test` passed `83 files / 712 tests`.
+- `npm run build` passed, compiling in `5.1s` and generating `23` pages.
+- `npm run lint` passed, including `381` production TypeScript files checked by the architecture gate.
+- Performance and complete browser suites were not rerun because A0 changed documentation/tooling and unused declarations only, not simulation/runtime or rendered behavior.
+
+Handoff:
+
+- A0 is complete. A0B: Canonical Architecture + Source-of-Truth Audit is next and unstarted.
+- I1 remains planned and unstarted after A0B. I2 through I5B are not an unconditional sequence. C4 has no I5B dependency.
+- Commit target: `docs: consolidate canonical ORTUS architecture`; no push is authorized.

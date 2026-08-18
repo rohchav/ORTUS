@@ -1,6 +1,8 @@
 # ORTUS Current Context
 
-Last updated: 2026-08-18 after final PERF1B verification and roadmap handoff
+Last updated: 2026-08-18 for the A0 canonical architecture handoff
+
+This file is continuation context, not canonical project authority. Use `docs/CAPABILITIES.md`, `docs/ARCHITECTURE.md`, `docs/SCIENTIFIC_MODEL.md`, and `docs/ROADMAP.md` after code/tests when current status or terminology conflicts with historical detail below.
 
 ## Current Prompt Status
 
@@ -18,10 +20,14 @@ Last updated: 2026-08-18 after final PERF1B verification and roadmap handoff
 - I0B complete.
 - PERF1 complete.
 - PERF1B complete.
-- A0: Canonical Architecture + Source-of-Truth Consolidation is next and has not started.
-- A0B: Architecture/Boundary Audit has not started.
-- I1: Production Runtime Migration + Immersive Shell Foundation is planned and has not started; it is not the immediate next milestone.
-- I2 through I5B and C4 have not started and are not an unconditional contiguous sequence.
+- A0: Canonical Architecture + Source-of-Truth Consolidation is complete.
+- A0B: Canonical Architecture + Source-of-Truth Audit is next and has not started.
+- I1: Production Runtime Migration + Immersive Shell Foundation is planned and has not started after A0B.
+- I2 through I5B are not an unconditional contiguous sequence; C4 has no I5B dependency.
+
+A0 establishes four canonical sources, the Model/Run-Observation/Research-Representation/Experience planes, explicit fundamental-versus-derived objects, a strict authority map, SystemView graph direction, post-PERF1B branch gates, and a passing scoped lint/static architecture baseline. It implements no `ModelDefinition`, `RuntimePlan`, `CanonicalObservation`, SystemView runtime, research persistence, model family, or production Worker migration.
+
+A0 final verification passed typecheck, `83 files / 712 tests`, a production build with `23` generated pages, and the new scoped lint gate over `381` production TypeScript files. No simulation/runtime performance suite or complete browser suite was rerun because A0 changed documentation, source-of-truth contracts, static tooling, and unused declarations only; it did not change rendered behavior or simulation semantics.
 
 `/` is the task-centered Start Hub; `/worlds` is its eleven-entry runnable Starter World catalog; `/worlds/[slug]` is the source-backed detail experience; `/worlds/packs/local-rules-global-patterns` is the first flagship collection; `/worlds/guides/reading-a-flock` is the first optional guided investigation; `/world` is the live workbench; `/builder`, `/atlas`, and `/lab` retain their established behavior. `/world/immersive-prototype` is an unlinked, noindex I0/I0B comparison surface and is not production World or cross-template renderer support. Primary navigation remains Start, World, Workshop, and a keyboard-operated Research tools menu. Explore Worlds and the guide are Start-adjacent rather than equal global destinations. F1 remains paused under E3 Analytical Lenses.
 
@@ -97,11 +103,11 @@ Five matched production-browser samples found Worker is not universally faster. 
 
 Required three-minute Worker soaks completed 4,321 ticks at 100 (`23.985 ticks/s`, `59.999 FPS`) and 4,244 at 500 (`23.548`, `59.963`), with one Worker, zero long tasks/frames, and histories capped at 360. A separate 60-second post-GC main-page heap sample grew by 746,964 bytes and excludes Worker/native/GPU memory; it is not leak proof. Twenty-five runtime mount/dispose cycles, 25 host replacements, and 20 Back/Forward transitions held one Worker mounted and zero after disposal.
 
-PERF1B's verdict is `CONDITIONALLY READY FOR FUTURE I1 CONSUMPTION` only because broad browser/CPU/GPU/OS coverage, actual mobile devices, faithfully throttled background tabs, multi-hour and Worker-heap profiling, direct screen-reader/AT use, forced colors, user comprehension, and formal WCAG conformance remain unverified. I1 may eventually consume the audited runtime port/drivers, Flocking frame/UI/selected projections, generation/revision identity, bounded visual backpressure, ingress cap, and terminal lifecycle. I1 must not restore continuous full snapshots, React entity animation, renderer mutation/authority, camera-model coupling, RNG/scheduler changes, command/evidence coalescing, fake cross-template support, or `CanonicalObservation` conflation. A0/A0B are next; I1 remains planned and unstarted.
+PERF1B's verdict is `CONDITIONALLY READY FOR FUTURE I1 CONSUMPTION` only because broad browser/CPU/GPU/OS coverage, actual mobile devices, faithfully throttled background tabs, multi-hour and Worker-heap profiling, direct screen-reader/AT use, forced colors, user comprehension, and formal WCAG conformance remain unverified. I1 may eventually consume the audited runtime port/drivers, Flocking frame/UI/selected projections, generation/revision identity, bounded visual backpressure, ingress cap, and terminal lifecycle. I1 must not restore continuous full snapshots, React entity animation, renderer mutation/authority, camera-model coupling, RNG/scheduler changes, command/evidence coalescing, fake cross-template support, or `CanonicalObservation` conflation. A0 is complete, A0B is next, and I1 remains planned and unstarted.
 
 PERF1B final verification passed focused runtime/immersive/roadmap coverage `6 files / 67 tests`, post-final-fix focused real-Worker Playwright `6/6 (2.6m)`, post-final-fix complete Playwright/Axe `189/189 (19.7m)` with zero failures/retries/skips, typecheck, `82 files / 703` unit tests in `70.74s`, and a `23`-page production build compiled in `10.7s`. Final smoke measured Flocking-100 `207.04` ticks/s, Flocking-500 `28.32`, Forest Fire `44.57`, Predator-Prey `126.47`, and bounded Atlas `2` runs / `10` work units / horizon `5` in `36.21ms`. Automatic pair checks remained exactly `316,971/7,721,264`; `npm run perf:runtime` passed exact corrected/reference exports, automatic medians `229.007/26.914`, and 2,300/11,500-byte packet reporting. `npm run lint: unavailable, package.json has no lint script.`
 
-PERF1B source, tests, and records are complete. Its required local commit is the remaining repository operation; do not start A0 or I1 before that commit succeeds.
+PERF1B source, tests, records, and commit are complete. A0 followed and is complete; A0B is the required next audit before I1.
 
 R2's implementation record is `docs/ui/WORLD_LAYOUT_AND_INTERACTION_RECLAIM.md`; R2B's audit record is `docs/ui/WORLD_LAYOUT_AND_INTERACTION_RECLAIM_AUDIT.md`. World uses a stable `tasks + stage/playback + active tool` frame. Setup, Observe, Change, Compare, and Explain are direct tasks; More groups Experiment Runner and Diagnostics. The selected tool owns one bounded scroll, full model notes and technical run details use focus-contained modal surfaces, and desktop collapse/restore preserves local tool state.
 
@@ -274,14 +280,14 @@ I0 complete.
 I0B complete.
 PERF1 complete.
 PERF1B complete.
-A0: Canonical Architecture + Source-of-Truth Consolidation is next and has not started.
-A0B: Architecture/Boundary Audit has not started.
+A0: Canonical Architecture + Source-of-Truth Consolidation is complete.
+A0B: Canonical Architecture + Source-of-Truth Audit is next and has not started.
 I1: Production Runtime Migration + Immersive Shell Foundation is planned and has not started.
-I2 through I5B and C4 have not started and are not an unconditional contiguous sequence.
+I2 through I5B are not an unconditional contiguous sequence. C4 has no I5B dependency.
 
-Completed sequence: UX6B -> GW9 -> GW9B -> R1 -> R1B -> R2 -> R2B -> C1 -> C1B -> C2 -> C2B -> C3 -> C3B -> I0 -> I0B -> PERF1 -> PERF1B. A0 is next and unstarted; A0B and I1 remain unstarted.
+Completed sequence: UX6B -> GW9 -> GW9B -> R1 -> R1B -> R2 -> R2B -> C1 -> C1B -> C2 -> C2B -> C3 -> C3B -> I0 -> I0B -> PERF1 -> PERF1B -> A0. A0B is next and unstarted; I1 remains planned and unstarted.
 
-Do not start A0, I1, C4, recipe-first Builder, composition, multiscale runtime, adaptive-controller generalization, Lab/Atlas persistence, E3, F1, or other reset-roadmap capability without its dedicated prompt. Rendered Playwright/Axe evidence does not establish actual browser zoom, screen-reader, assistive-technology, forced-colors, full WCAG, complete touch workflow, browser/mobile diversity, or user-comprehension readiness.
+Do not start A0B, I1, C4, recipe-first Builder, composition, SystemView runtime, multiscale runtime, adaptive-controller generalization, Lab/Atlas persistence, E3, F1, or other roadmap capability without its dedicated prompt. Rendered Playwright/Axe evidence does not establish actual browser zoom, screen-reader, assistive-technology, forced-colors, full WCAG, complete touch workflow, browser/mobile diversity, or user-comprehension readiness.
 
 Implemented runtime foundations include scenarios, snapshots, template-defined behavior modes, agent composition, interventions, experiments, run summaries/comparison, seeded randomness, metrics, spaces, template metadata, and a narrow Opinion Dynamics `socialLearning` behavior mode audited in Prompt 33D.
 
@@ -345,7 +351,7 @@ Current local toolchain observed during stabilization:
 - Installed top-level packages include `next@15.5.19`, `react@19.2.7`, `react-dom@19.2.7`, `vitest@4.1.8`, `vite-node@6.0.0`, `@playwright/test@1.61.1`, and `@axe-core/playwright@4.12.1`.
 - `package.json` currently defines `next`, `react`, `react-dom`, `zod`, `zustand`, TypeScript, Vitest, `vite-node`, and dev-only Playwright/Axe UI audit tooling.
 - `npm install` completed cleanly after adding explicit `vite-node` support for `npm run perf:simulation`.
-- `npm run lint` is unavailable because `package.json` has no lint script.
+- `npm run lint` now runs TypeScript unused-symbol checks and the scoped AST architecture/accessibility smoke gate. It adds no dependency and is not full ESLint or WCAG coverage.
 
 Dependency audit note: npm reports two moderate vulnerabilities and recommends `npm audit fix --force`; that force repair is prohibited for this stabilization pass and was not run.
 
@@ -394,7 +400,7 @@ Prompt 35 and Prompt 35B were committed together in `7696381 feat: Implement Mod
 
 ## Next Recommended Prompt
 
-Prompt I0, Prompt I0B, Prompt PERF1, and Prompt PERF1B are complete. Prompt A0: Canonical Architecture + Source-of-Truth Consolidation is next and has not started; A0B is unstarted. Prompt I1: Production Runtime Migration + Immersive Shell Foundation remains planned and unstarted. Do not begin A0, I1, C4, F1, or any later reset-roadmap capability without its dedicated prompt. I2 through I5B and C4 remain unstarted without an unconditional sequence; F1 remains paused under E3 Analytical Lenses.
+Prompt I0, Prompt I0B, Prompt PERF1, Prompt PERF1B, and Prompt A0 are complete. Prompt A0B: Canonical Architecture + Source-of-Truth Audit is next and unstarted. Prompt I1: Production Runtime Migration + Immersive Shell Foundation remains planned and unstarted after A0B. Do not begin A0B, I1, C4, F1, or any later roadmap capability without its dedicated prompt. I2 through I5B are not an unconditional sequence; C4 has no I5B dependency; F1 remains paused under E3 Analytical Lenses.
 
 Next recommended UI/design-system prompt after UX2B: `UI-DESIGN-SYSTEM-1: Rendered Responsive, Typography + Visualization Accessibility Audit`.
 

@@ -1,4 +1,8 @@
-# ORTUS Roadmap
+# ORTUS Legacy Milestone Catalog
+
+Status: DEPRECATED/HISTORICAL for current sequencing after A0
+
+This file preserves the detailed pre-A0 primitive and prompt catalog. `ROADMAP.md` is the canonical milestone/status source, `CAPABILITIES.md` owns current capability, and `ARCHITECTURE.md` owns future architectural direction. Historical "next" statements below record their publication context and do not override those documents.
 
 This roadmap reserves the major complex-systems pillars that ORTUS must support before it can safely move into visual model authoring, calibration, control, or external framework adaptation. It is a planning document, not a claim that these capabilities already exist.
 
@@ -89,7 +93,7 @@ These foundations are deliberately service-first or metadata-first unless docume
 
 After Prompt 30B, ORTUS completed a repository hygiene, durable context, dependency stabilization, and performance/scalability pass. That pass added and validated performance instrumentation and spatial-indexing foundations, but it does not turn reserved structural primitives into runtime support and is not evidence for high-scale readiness by itself.
 
-Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 39B: Scenario Planning From Schema Audit are complete. The documented side-track and Research World/UI prompts through GW9B are complete. R1 through C3B, I0/I0B, and PERF1/PERF1B are complete. A0: Canonical Architecture + Source-of-Truth Consolidation is next and unstarted; A0B is unstarted. I1: Production Runtime Migration + Immersive Shell Foundation is planned and unstarted, but it is not next. I2 through I5B and C4: Flagship Starter Pack Two remain unstarted without an unconditional contiguous sequence. F1 and the fractal branch remain documented but are paused under E3 Analytical Lenses.
+Prompt 31: Model Schema + Interpreter Foundation V1 through Prompt 39B: Scenario Planning From Schema Audit are complete. The documented side-track and Research World/UI prompts through GW9B are complete. R1 through C3B, I0/I0B, PERF1/PERF1B, and A0 are complete. A0B is next and unstarted. I1: Production Runtime Migration + Immersive Shell Foundation is planned and unstarted after A0B. I2 through I5B are not an unconditional contiguous sequence, and C4: Flagship Starter Pack Two has no I5B dependency. F1 and the fractal branch remain documented but are paused under E3 Analytical Lenses.
 
 ## Active Product Experience Reset
 
@@ -102,7 +106,7 @@ I0 / I0B -> PERF1 / PERF1B -> A0 / A0B -> I1 / I1B
 Later I2-I5B, C4/C4B, S1-S5B, and E1-E3B sequencing requires explicit post-A0 capability gates.
 ```
 
-R1 is Start Hub and World-First Product Reset. R1B is its completed First-Run and World-First Shell Audit + Hardening gate. R2 World Layout and Interaction Reclaim and R2B World Layout and Interaction Audit + Hardening are complete. C1 through C3B, I0/I0B, and PERF1/PERF1B are complete. A0 is next and unstarted; A0B is unstarted. I1 is planned and unstarted after those architecture gates. I2 through I5B and C4 remain unstarted and are not asserted as one unconditional chain. The R/C/I/S/E/A labels describe planned milestones, not implemented capabilities. F0 remains a historical documentation branch; F1 is paused beneath E3 and must not start as the former immediate next milestone.
+R1 is Start Hub and World-First Product Reset. R1B is its completed First-Run and World-First Shell Audit + Hardening gate. R2 World Layout and Interaction Reclaim and R2B World Layout and Interaction Audit + Hardening are complete. C1 through C3B, I0/I0B, PERF1/PERF1B, and A0 are complete. A0B is next and unstarted. I1 is planned and unstarted after A0B. I2 through I5B are not one unconditional chain, and C4 has no I5B dependency. The R/C/I/S/E/A labels describe planned milestones, not implemented capabilities. F0 remains a historical documentation branch; F1 is paused beneath E3.
 
 ## Revised Prompt Sequence
 

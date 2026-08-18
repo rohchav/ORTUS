@@ -1,5 +1,7 @@
 # Runtime Performance Architecture Audit
 
+Historical PERF1B audit record. Its findings remain evidence; current architecture, capability, and milestone status live in `../ARCHITECTURE.md`, `../CAPABILITIES.md`, and `../ROADMAP.md`.
+
 Date: 2026-08-18
 Milestone: PERF1B
 Starting commit: `64a03e1 perf: add runtime performance architecture`

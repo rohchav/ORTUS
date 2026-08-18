@@ -9,8 +9,7 @@ import {
 } from "../../simulation";
 import {
   isSimulationWorkspaceModeId,
-  simulationWorkspaceModeFromQuery,
-  type SimulationWorkspaceModeId
+  simulationWorkspaceModeFromQuery
 } from "../workspaceModes";
 import { getStarterWorldById } from "./registry";
 import { assertSafeStarterWorldValue, validateRuntimeReferences } from "./validation";

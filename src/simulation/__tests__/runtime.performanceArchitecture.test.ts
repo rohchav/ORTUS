@@ -9,7 +9,7 @@ import {
 import { LatestPublicationGate } from "../runtime/LatestPublicationGate";
 import { RuntimeWorkerHost } from "../runtime/RuntimeWorkerHost";
 import { createFlockingRenderFramePacket } from "../runtime/flockingProjection";
-import { parseRuntimeWorkerResponse, type RuntimeWorkerResponse } from "../runtime/protocol";
+import { parseRuntimeWorkerResponse } from "../runtime/protocol";
 import { createImmersiveFlockingEngine, createImmersiveFlockingRunConfig } from "../../lib/immersiveWorld";
 
 const runId = "perf1-runtime-test";

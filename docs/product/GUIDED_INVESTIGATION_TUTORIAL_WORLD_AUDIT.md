@@ -2,7 +2,7 @@
 
 Prompt: C3B
 
-Status: C3B complete; C4 conditionally ready and not started
+Status: C3B complete; C4 unstarted. This audit's conditional-readiness finding is local evidence; `../ROADMAP.md` owns sequencing.
 
 ## 1. Scope
 
