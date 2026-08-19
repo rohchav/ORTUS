@@ -10,14 +10,14 @@ import { getTemplateDescriptor, metricLabel, metricNotes } from "../lib/template
 import { metricPresentationForTemplate, primaryMetricKeysForTemplate } from "../lib/worldPresentation";
 import { metricDefinitionsForTemplate } from "../simulation";
 import { useSimulationStore } from "../state/simulationStore";
+import { useActiveWorldRuntime } from "./runtime/ProductionRuntimeProvider";
 
 type ObserveView = "summary" | "all" | "visual";
 
 export function WorldObservePanel({ active = true }: { active?: boolean } = {}) {
   const selectedTemplateId = useSimulationStore((state) => state.selectedTemplateId);
-  const snapshot = useSimulationStore((state) => active ? state.latestSnapshot : null);
-  const isRunning = useSimulationStore((state) => active && state.isRunning);
-  const toggleRunning = useSimulationStore((state) => state.toggleRunning);
+  const runtime = useActiveWorldRuntime();
+  const history = active ? runtime.metricsHistory : [];
   const descriptor = getTemplateDescriptor(selectedTemplateId);
   const system = getSystemCatalogEntry(selectedTemplateId);
   const availableKeys = useMemo(
@@ -26,7 +26,7 @@ export function WorldObservePanel({ active = true }: { active?: boolean } = {}) 
   );
   const presentation = metricPresentationForTemplate(selectedTemplateId, availableKeys);
   const primaryKeys = primaryMetricKeysForTemplate(selectedTemplateId, availableKeys);
-  const latest = snapshot?.metricsHistory.at(-1);
+  const latest = history.at(-1);
   const [view, setView] = useState<ObserveView>("summary");
   const viewHeadingRef = useRef<HTMLHeadingElement>(null);
 
@@ -78,7 +78,7 @@ export function WorldObservePanel({ active = true }: { active?: boolean } = {}) 
         ) : (
           <div className="world-empty-state">
             <p>Run the world to create the first bounded metric record.</p>
-            <button type="button" onClick={toggleRunning}>{isRunning ? "Pause" : "Run"}</button>
+            <button type="button" onClick={runtime.toggleRunning} disabled={!runtime.isReady}>{runtime.isRunning ? "Pause" : "Run"}</button>
           </div>
         )}
       </section>

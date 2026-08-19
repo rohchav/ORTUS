@@ -1,15 +1,21 @@
 import { z } from "zod";
 import type { Command, SimulationRunConfig } from "../kernel/types";
 import { performanceMeasureNames } from "../kernel/Performance";
-import { validateCommand } from "../kernel/Validation";
+import { jsonValueSchema, validateCommand } from "../kernel/Validation";
+import type { InterventionRequest } from "../interventions/interventionTypes";
 import { validateRunConfig } from "../runs/runConfig";
 import {
   maxRenderFrameEntities,
+  maxRuntimeArtifactJsonLength,
+  maxRuntimeInterventionHistory,
+  maxRuntimeMetricHistory,
   maxSelectedNeighborCount,
   type RenderFramePacket,
+  type RuntimeArtifactKind,
   type RuntimeFailure,
   type UIProjection
 } from "./types";
+import { parseRuntimeArtifact } from "./artifacts";
 
 const generationSchema = z.number().int().positive().max(Number.MAX_SAFE_INTEGER);
 const requestIdSchema = z.number().int().positive().max(Number.MAX_SAFE_INTEGER);
@@ -19,6 +25,9 @@ const runIdSchema = z.string().min(1).max(128).regex(/^[a-zA-Z0-9._:-]+$/);
 const entityIdSchema = z.string().regex(/^e\d{1,10}$/).max(16);
 const finiteNonNegativeSchema = z.number().finite().nonnegative();
 const boundedCounterSchema = z.number().int().nonnegative().max(Number.MAX_SAFE_INTEGER);
+const speedMultiplierSchema = z.number().finite().min(0.25).max(8);
+const artifactKindSchema = z.enum(["scenario", "snapshot"]);
+const artifactJsonSchema = z.string().min(1).max(maxRuntimeArtifactJsonLength);
 const typedArray = <T>(constructor: { new (...args: any[]): T }) => z.custom<T>((value) => value instanceof constructor);
 
 const identityShape = {
@@ -49,6 +58,47 @@ const applyCommandsSchema = z.object({
   requestId: requestIdSchema,
   ...generationCommandShape,
   commands: z.array(z.unknown()).max(1_000)
+}).strict();
+const speedSchema = z.object({
+  type: z.literal("runtime.speed"),
+  commandId: commandIdSchema,
+  ...generationCommandShape,
+  value: speedMultiplierSchema
+}).strict();
+const interventionTargetSchema = z.object({
+  entityId: entityIdSchema.optional(),
+  point: z.object({ x: z.number().finite(), y: z.number().finite() }).strict().optional(),
+  gridCell: z.object({ row: z.number().int(), col: z.number().int() }).strict().optional()
+}).strict();
+const interventionRequestSchema = z.object({
+  templateId: z.string().min(1).max(100),
+  interventionId: z.string().min(1).max(100),
+  parameters: z.record(jsonValueSchema).optional(),
+  target: interventionTargetSchema.optional()
+}).strict();
+const applyInterventionSchema = z.object({
+  type: z.literal("runtime.applyIntervention"),
+  requestId: requestIdSchema,
+  ...generationCommandShape,
+  intervention: interventionRequestSchema
+}).strict();
+const clearInterventionsSchema = z.object({
+  type: z.literal("runtime.clearInterventions"),
+  requestId: requestIdSchema,
+  ...generationCommandShape
+}).strict();
+const exportArtifactSchema = z.object({
+  type: z.literal("runtime.exportArtifact"),
+  requestId: requestIdSchema,
+  ...generationCommandShape,
+  kind: artifactKindSchema
+}).strict();
+const importArtifactSchema = z.object({
+  type: z.literal("runtime.importArtifact"),
+  requestId: requestIdSchema,
+  ...identityShape,
+  kind: artifactKindSchema,
+  json: artifactJsonSchema
 }).strict();
 const selectionSchema = z.object({
   type: z.literal("runtime.selection"),
@@ -81,6 +131,11 @@ const workerRequestSchema = z.discriminatedUnion("type", [
   pauseSchema,
   stepSchema,
   applyCommandsSchema,
+  speedSchema,
+  applyInterventionSchema,
+  clearInterventionsSchema,
+  exportArtifactSchema,
+  importArtifactSchema,
   selectionSchema,
   resetPerformanceSchema,
   frameConsumedSchema,
@@ -92,9 +147,14 @@ export type RuntimeWorkerRequest =
   | { type: "runtime.initialize" | "runtime.replace"; requestId: number; generation: number; runId: string; runConfig: SimulationRunConfig; instrumentation?: boolean }
   | { type: "runtime.reset"; requestId: number; generation: number; runId: string }
   | { type: "runtime.play" | "runtime.pause" | "runtime.resetPerformance"; commandId: number; generation: number }
+  | { type: "runtime.speed"; commandId: number; generation: number; value: number }
   | { type: "runtime.dispose"; generation: number }
   | { type: "runtime.step"; requestId: number; generation: number }
   | { type: "runtime.applyCommands"; requestId: number; generation: number; commands: readonly Command[] }
+  | { type: "runtime.applyIntervention"; requestId: number; generation: number; intervention: InterventionRequest }
+  | { type: "runtime.clearInterventions"; requestId: number; generation: number }
+  | { type: "runtime.exportArtifact"; requestId: number; generation: number; kind: RuntimeArtifactKind }
+  | { type: "runtime.importArtifact"; requestId: number; generation: number; runId: string; kind: RuntimeArtifactKind; json: string }
   | { type: "runtime.selection"; commandId: number; generation: number; entityId: string | null }
   | { type: "runtime.frameConsumed"; generation: number; publicationId: number }
   | { type: "runtime.uiConsumed"; generation: number; revision: number };
@@ -113,7 +173,18 @@ export function parseRuntimeWorkerRequest(value: unknown): RuntimeWorkerRequest 
       commands: parsed.commands.map((command) => validateCommand(command as Command))
     };
   }
+  if (parsed.type === "runtime.importArtifact") {
+    validateRuntimeArtifactJson(parsed.kind, parsed.json);
+  }
   return parsed;
+}
+
+export function validateRuntimeArtifactJson(kind: RuntimeArtifactKind, json: string): void {
+  artifactJsonSchema.parse(json);
+  const artifact = parseRuntimeArtifact(kind, json);
+  if (artifact.templateId !== "flocking-boids") {
+    throw new Error(`Worker runtime artifact support is limited to flocking-boids, not ${artifact.templateId}`);
+  }
 }
 
 const workerRequestFailureContextSchema = z.object({
@@ -229,6 +300,26 @@ const selectedUISchema = z.object({
   currentProximityCount: z.number().int().nonnegative().max(maxSelectedNeighborCount).nullable()
 }).strict();
 
+const metricRecordSchema = z.object({
+  tick: z.number().int().nonnegative(),
+  time: finiteNonNegativeSchema,
+  values: z.record(z.number().finite()).superRefine((values, context) => {
+    if (Object.keys(values).length > 64) {
+      context.addIssue({ code: z.ZodIssueCode.custom, message: "Runtime metric records may contain at most 64 values" });
+    }
+  })
+}).strict();
+
+const interventionSummarySchema = z.object({
+  id: z.string().min(1).max(160),
+  interventionId: z.string().min(1).max(100),
+  label: z.string().min(1).max(160),
+  tickApplied: z.number().int().nonnegative(),
+  targetSummary: z.string().min(1).max(360),
+  status: z.enum(["applied", "failed"]),
+  error: z.string().min(1).max(360).optional()
+}).strict();
+
 const uiProjectionSchema = z.object({
   schemaVersion: z.literal("1"),
   projectionKind: z.literal("flocking-v1"),
@@ -241,15 +332,31 @@ const uiProjectionSchema = z.object({
   entityCount: z.number().int().nonnegative().max(maxRenderFrameEntities),
   playback: z.enum(["initializing", "paused", "running", "failed", "disposed"]),
   lastAdvanceKind: z.enum(["initialization", "run", "step", "command", "restore", "replacement"]),
+  speedMultiplier: speedMultiplierSchema,
   alignment: z.number().finite().nullable(),
   runtimeSignature: z.string().min(1).max(100),
   selected: selectedUISchema.nullable(),
   warnings: z.array(z.string().max(240)).max(16),
+  metricHistory: z.array(metricRecordSchema).max(maxRuntimeMetricHistory),
+  metricRecordCount: boundedCounterSchema,
+  interventions: z.array(interventionSummarySchema).max(maxRuntimeInterventionHistory),
+  interventionCount: boundedCounterSchema,
+  appliedInterventionCount: boundedCounterSchema,
   performance: z.object({
     measures: z.array(performanceMeasureSchema).max(performanceMeasureNames.length),
     publications: publicationStatsSchema
   }).strict()
-}).strict();
+}).strict().superRefine((projection, context) => {
+  if (projection.metricHistory.length > projection.metricRecordCount) {
+    context.addIssue({ code: z.ZodIssueCode.custom, message: "Runtime metric tail cannot exceed its total record count" });
+  }
+  if (projection.interventions.length > projection.interventionCount) {
+    context.addIssue({ code: z.ZodIssueCode.custom, message: "Runtime intervention tail cannot exceed its total record count" });
+  }
+  if (projection.appliedInterventionCount > projection.interventionCount) {
+    context.addIssue({ code: z.ZodIssueCode.custom, message: "Applied intervention count cannot exceed total intervention count" });
+  }
+});
 
 const failureSchema: z.ZodType<RuntimeFailure> = z.object({
   ...identityShape,
@@ -268,6 +375,13 @@ const workerResponseSchema = z.discriminatedUnion("type", [
     ui: uiProjectionSchema
   }).strict(),
   z.object({
+    type: z.literal("runtime.artifact"),
+    requestId: requestIdSchema,
+    generation: generationSchema,
+    kind: artifactKindSchema,
+    json: artifactJsonSchema
+  }).strict(),
+  z.object({
     type: z.literal("runtime.messageConsumed"),
     messageId: requestIdSchema,
     generation: generationSchema
@@ -279,6 +393,7 @@ export type RuntimeWorkerResponse =
   | { type: "runtime.frame"; frame: RenderFramePacket }
   | { type: "runtime.ui"; ui: UIProjection }
   | { type: "runtime.complete"; requestId: number; generation: number; ui: UIProjection }
+  | { type: "runtime.artifact"; requestId: number; generation: number; kind: RuntimeArtifactKind; json: string }
   | { type: "runtime.messageConsumed"; messageId: number; generation: number }
   | { type: "runtime.failure"; failure: RuntimeFailure };
 

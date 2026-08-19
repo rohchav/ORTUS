@@ -1,5 +1,3 @@
-import type { ImmersiveAgentCount } from "./types";
-
 export const immersiveRenderQualityLevels = ["high", "balanced", "performance"] as const;
 export type ImmersiveRenderQuality = (typeof immersiveRenderQualityLevels)[number];
 
@@ -58,12 +56,12 @@ export class AdaptiveRenderQualityController {
   private samplesSinceDecision = 0;
   private stableRecoverySamples = 0;
 
-  constructor(agentCount: ImmersiveAgentCount) {
+  constructor(agentCount: number) {
     this.reset(agentCount);
   }
 
-  reset(agentCount: ImmersiveAgentCount): void {
-    this.quality = agentCount === 500 ? "balanced" : "high";
+  reset(agentCount: number): void {
+    this.quality = agentCount >= 500 ? "balanced" : "high";
     this.samples = [];
     this.samplesSinceDecision = 0;
     this.stableRecoverySamples = 0;

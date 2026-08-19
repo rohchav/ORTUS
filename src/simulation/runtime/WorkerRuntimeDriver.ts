@@ -1,8 +1,11 @@
 import type { Command } from "../kernel/types";
-import { parseRuntimeWorkerResponse, type RuntimeWorkerRequest } from "./protocol";
+import type { InterventionRequest } from "../interventions/interventionTypes";
+import { parseRuntimeWorkerResponse, validateRuntimeArtifactJson, type RuntimeWorkerRequest } from "./protocol";
 import {
   maxPendingRuntimeMessages,
   type RenderFramePacket,
+  type RuntimeArtifactImportRequest,
+  type RuntimeArtifactKind,
   type RuntimeDriverState,
   type RuntimeFailure,
   type RuntimePublication,
@@ -21,13 +24,20 @@ interface PendingRequest {
   reject(error: Error): void;
 }
 
+interface PendingArtifactRequest {
+  generation: number;
+  kind: RuntimeArtifactKind;
+  resolve(json: string): void;
+  reject(error: Error): void;
+}
+
 interface OutstandingTransportMessage {
   generation: number;
   kind: "request" | "control";
 }
 
 type RuntimeControlRequest = Extract<RuntimeWorkerRequest, {
-  type: "runtime.play" | "runtime.pause" | "runtime.selection" | "runtime.resetPerformance";
+  type: "runtime.play" | "runtime.pause" | "runtime.speed" | "runtime.selection" | "runtime.resetPerformance";
 }>;
 
 export class WorkerRuntimeDriver implements SimulationRuntimePort {
@@ -41,9 +51,9 @@ export class WorkerRuntimeDriver implements SimulationRuntimePort {
   private latestFramePublicationId = 0;
   private latestUiRevision = 0;
   private intendedPlayback: "paused" | "running" | null = null;
-  private runRequest: RuntimeRunRequest | null = null;
   private readonly listeners = new Set<(publication: RuntimePublication) => void>();
   private readonly pending = new Map<number, PendingRequest>();
+  private readonly pendingArtifacts = new Map<number, PendingArtifactRequest>();
   private readonly outstandingTransport = new Map<number, OutstandingTransportMessage>();
   private lifecycle: RuntimeDriverState = "idle";
   private hasReadyRun = false;
@@ -90,7 +100,7 @@ export class WorkerRuntimeDriver implements SimulationRuntimePort {
 
   reset(): Promise<UIProjection> {
     this.assertCommandable("reset");
-    if (!this.runRequest || !this.activeRunId) {
+    if (!this.activeRunId) {
       return Promise.reject(new Error("Worker runtime cannot reset before initialization"));
     }
     if (!this.hasTransportCapacity()) {
@@ -151,6 +161,66 @@ export class WorkerRuntimeDriver implements SimulationRuntimePort {
     }, "operation");
   }
 
+  setSpeedMultiplier(value: number): void {
+    this.assertCommandable("change speed");
+    this.sendControl({
+      type: "runtime.speed",
+      commandId: this.reserveTransport("control"),
+      generation: this.activeGeneration,
+      value
+    });
+  }
+
+  applyIntervention(intervention: InterventionRequest): Promise<UIProjection> {
+    this.assertCommandable("apply an intervention");
+    return this.request({
+      type: "runtime.applyIntervention",
+      requestId: this.nextRequestId(),
+      generation: this.activeGeneration,
+      intervention
+    }, "operation");
+  }
+
+  clearInterventions(): Promise<UIProjection> {
+    this.assertCommandable("clear intervention entries");
+    return this.request({
+      type: "runtime.clearInterventions",
+      requestId: this.nextRequestId(),
+      generation: this.activeGeneration
+    }, "operation");
+  }
+
+  exportArtifact(kind: RuntimeArtifactKind): Promise<string> {
+    this.assertCommandable(`export a ${kind}`);
+    return this.requestArtifact({
+      type: "runtime.exportArtifact",
+      requestId: this.nextRequestId(),
+      generation: this.activeGeneration,
+      kind
+    });
+  }
+
+  importArtifact(request: RuntimeArtifactImportRequest): Promise<UIProjection> {
+    this.assertCommandable(`import a ${request.kind}`);
+    validateRuntimeArtifactJson(request.kind, request.json);
+    if (!this.hasTransportCapacity()) {
+      return Promise.reject(this.transportCapacityError());
+    }
+    this.advanceGeneration();
+    this.lifecycle = "initializing";
+    this.intendedPlayback = "paused";
+    this.activeRunId = request.runId;
+    this.activeTemplateId = "flocking-boids";
+    return this.request({
+      type: "runtime.importArtifact",
+      requestId: this.nextRequestId(),
+      generation: this.activeGeneration,
+      runId: request.runId,
+      kind: request.kind,
+      json: request.json
+    }, "replace");
+  }
+
   setSelectedEntity(entityId: string | null): void {
     this.assertCommandable("change selection");
     this.sendControl({
@@ -204,7 +274,6 @@ export class WorkerRuntimeDriver implements SimulationRuntimePort {
     this.latestFrame = null;
     this.latestUI = null;
     this.intendedPlayback = null;
-    this.runRequest = null;
     this.activeRunId = null;
     this.activeTemplateId = null;
   }
@@ -217,7 +286,6 @@ export class WorkerRuntimeDriver implements SimulationRuntimePort {
     this.advanceGeneration();
     this.lifecycle = "initializing";
     this.intendedPlayback = "paused";
-    this.runRequest = request;
     this.activeRunId = request.runId;
     this.activeTemplateId = request.runConfig.templateId;
     return this.request({
@@ -244,6 +312,30 @@ export class WorkerRuntimeDriver implements SimulationRuntimePort {
         this.send(message);
       } catch (error) {
         this.pending.delete(message.requestId);
+        this.outstandingTransport.delete(message.requestId);
+        reject(error instanceof Error ? error : new Error(String(error)));
+      }
+    });
+  }
+
+  private requestArtifact(
+    message: Extract<RuntimeWorkerRequest, { type: "runtime.exportArtifact" }>
+  ): Promise<string> {
+    if (this.pendingArtifacts.size >= maxPendingRuntimeMessages || !this.hasTransportCapacity()) {
+      return Promise.reject(this.transportCapacityError());
+    }
+    return new Promise((resolve, reject) => {
+      this.pendingArtifacts.set(message.requestId, {
+        generation: message.generation,
+        kind: message.kind,
+        resolve,
+        reject
+      });
+      this.outstandingTransport.set(message.requestId, { generation: message.generation, kind: "request" });
+      try {
+        this.send(message);
+      } catch (error) {
+        this.pendingArtifacts.delete(message.requestId);
         this.outstandingTransport.delete(message.requestId);
         reject(error instanceof Error ? error : new Error(String(error)));
       }
@@ -340,6 +432,26 @@ export class WorkerRuntimeDriver implements SimulationRuntimePort {
       this.consumeTransport(message.messageId, message.generation);
       return;
     }
+    if (message.type === "runtime.artifact") {
+      this.consumeTransport(message.requestId, message.generation);
+      const pending = this.pendingArtifacts.get(message.requestId);
+      if (!pending || pending.generation !== message.generation || message.generation !== this.activeGeneration) {
+        return;
+      }
+      if (pending.kind !== message.kind) {
+        this.failDriver("Runtime artifact kind did not match the active export request", "protocol");
+        return;
+      }
+      try {
+        validateRuntimeArtifactJson(message.kind, message.json);
+      } catch (error) {
+        this.failDriver(error instanceof Error ? error.message : String(error), "protocol");
+        return;
+      }
+      this.pendingArtifacts.delete(message.requestId);
+      pending.resolve(message.json);
+      return;
+    }
     if (message.type === "runtime.complete") {
       this.consumeTransport(message.requestId, message.generation);
       const pending = this.pending.get(message.requestId);
@@ -433,7 +545,6 @@ export class WorkerRuntimeDriver implements SimulationRuntimePort {
     this.intendedPlayback = null;
     this.removeWorkerListeners();
     this.worker.terminate();
-    this.runRequest = null;
   }
 
   private advanceGeneration(): void {
@@ -490,6 +601,10 @@ export class WorkerRuntimeDriver implements SimulationRuntimePort {
       pending.reject(error);
     }
     this.pending.clear();
+    for (const pending of this.pendingArtifacts.values()) {
+      pending.reject(error);
+    }
+    this.pendingArtifacts.clear();
   }
 
   private emit(publication: RuntimePublication): void {

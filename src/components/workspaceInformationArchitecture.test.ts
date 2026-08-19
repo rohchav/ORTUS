@@ -151,7 +151,8 @@ describe("simulation workspace information architecture", () => {
     expect(timeline).toContain('label="Step"');
     expect(timeline).toContain('label={resetArmed ? "Confirm Reset" : "Reset"}');
     expect(timeline).toContain("const resetIsDestructive");
-    expect(timeline).toContain("interventionHistory.length");
+    expect(timeline).toContain("runtime.interventionCount");
+    expect(timeline).toContain("runtime.metricRecordCount");
     expect(timeline).toContain("Confirm reset and discard current run state");
     expect(timeline).toContain("Confirm Reset to rebuild a fresh tick-0 run");
     expect(timeline).toContain("ariaLabel");

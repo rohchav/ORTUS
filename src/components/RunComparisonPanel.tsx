@@ -7,6 +7,7 @@ import { formatNumber, formatTick } from "../lib/format";
 import { getTemplateDescriptor, metricLabel } from "../lib/templateVisuals";
 import { useSimulationStore } from "../state/simulationStore";
 import { CornerFramePanel } from "./ui/CornerFramePanel";
+import { useActiveWorldRuntime } from "./runtime/ProductionRuntimeProvider";
 
 interface RunComparisonPanelProps {
   collapsed?: boolean;
@@ -19,15 +20,13 @@ const traceColors = ["#d8ff3e", "#ff4a2e", "#f3f1e8", "#6c72ff", "#c34dff", "#9a
 
 export function RunComparisonPanel({ collapsed = false, onToggle, embedded = false, active = true }: RunComparisonPanelProps) {
   const selectedTemplateId = useSimulationStore((state) => state.selectedTemplateId);
-  const snapshot = useSimulationStore((state) => active ? state.latestSnapshot : null);
+  const runtime = useActiveWorldRuntime();
   const seed = useSimulationStore((state) => state.seed);
-  const isRunning = useSimulationStore((state) => active && state.isRunning);
   const savedRuns = useSimulationStore((state) => state.savedRuns);
   const runLibraryWarning = useSimulationStore((state) => state.runLibraryWarning);
   const selectedRunIds = useSimulationStore((state) => state.selectedComparisonRunIds);
   const baselineRunId = useSimulationStore((state) => state.baselineRunId);
   const latestExperimentResultSet = useSimulationStore((state) => state.latestExperimentResultSet);
-  const captureCurrentRun = useSimulationStore((state) => state.captureCurrentRun);
   const importLatestExperimentRuns = useSimulationStore((state) => state.importLatestExperimentRuns);
   const toggleComparisonRun = useSimulationStore((state) => state.toggleComparisonRun);
   const setComparisonBaseline = useSimulationStore((state) => state.setComparisonBaseline);
@@ -52,7 +51,7 @@ export function RunComparisonPanel({ collapsed = false, onToggle, embedded = fal
   }, [metricKeys, traceMetricKey]);
 
   function captureRun() {
-    captureCurrentRun({
+    void runtime.captureCurrentRun({
       label: captureLabel,
       notes: captureNotes,
       tags: splitTags(captureTags)
@@ -81,13 +80,13 @@ export function RunComparisonPanel({ collapsed = false, onToggle, embedded = fal
         <section className="world-tool-section" aria-labelledby="comparison-current-run-title">
           <div className="world-tool-section__head">
             <h3 id="comparison-current-run-title" tabIndex={-1}>Current run</h3>
-            <span>{isRunning ? "Running" : "Paused"}</span>
+            <span>{active && runtime.isRunning ? "Running" : "Paused"}</span>
           </div>
           <dl className="world-current-run-summary">
             <div><dt>World</dt><dd>{getTemplateDescriptor(selectedTemplateId).template.name}</dd></div>
-            <div><dt>Tick</dt><dd>{formatTick(snapshot?.tick ?? 0)}</dd></div>
+            <div><dt>Tick</dt><dd>{formatTick(active ? runtime.tick : 0)}</dd></div>
             <div><dt>Seed</dt><dd>{seed}</dd></div>
-            <div><dt>Metric records</dt><dd>{snapshot?.metricsHistory.length ?? 0}</dd></div>
+            <div><dt>Metric records</dt><dd>{active ? runtime.metricRecordCount : 0}</dd></div>
           </dl>
         </section>
         <p className="run-comparison-note">
@@ -116,7 +115,7 @@ export function RunComparisonPanel({ collapsed = false, onToggle, embedded = fal
           </label>
         </div>
         <div className="run-comparison-actions">
-          <button type="button" onClick={captureRun} suppressHydrationWarning>
+          <button type="button" onClick={captureRun} disabled={!runtime.isReady} suppressHydrationWarning>
             Capture Run
           </button>
           <button type="button" onClick={importLatestExperimentRuns} disabled={!latestExperimentResultSet} suppressHydrationWarning>

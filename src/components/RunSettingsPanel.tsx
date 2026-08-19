@@ -10,6 +10,7 @@ import { generateUiSeed } from "../lib/uiSeed";
 import { parameterPresentationForTemplate } from "../lib/worldPresentation";
 import { getInterventionDefinitions, validateTemplateParameters, type JsonValue, type ParameterValues } from "../simulation";
 import { useSimulationStore } from "../state/simulationStore";
+import { useActiveWorldRuntime } from "./runtime/ProductionRuntimeProvider";
 
 type SetupView = "quick" | "parameters" | "recipes" | "neural";
 
@@ -20,14 +21,14 @@ export function RunSettingsPanel({ active = true }: { active?: boolean } = {}) {
   const setSeed = useSimulationStore((state) => state.setSeed);
   const parameterValues = useSimulationStore((state) => state.parameterValues);
   const setParameters = useSimulationStore((state) => state.setParameters);
-  const engine = useSimulationStore((state) => state.engine);
+  const runtime = useActiveWorldRuntime();
   const descriptor = getTemplateDescriptor(selectedTemplateId);
   const system = getSystemCatalogEntry(selectedTemplateId);
   const parameterPresentation = parameterPresentationForTemplate(selectedTemplateId);
   const quickParameterKeys = parameterPresentation.filter((item) => item.priority === "primary").map((item) => item.key);
   const interventionCount = getInterventionDefinitions(selectedTemplateId).length;
-  const scenarioName = typeof engine?.metadata.scenarioName === "string" && engine.metadata.scenarioName.trim()
-    ? engine.metadata.scenarioName
+  const scenarioName = typeof runtime.metadata.scenarioName === "string" && runtime.metadata.scenarioName.trim()
+    ? runtime.metadata.scenarioName
     : "Default run";
   const [seedDraft, setSeedDraft] = useState(seed);
   const [parameterDraft, setParameterDraft] = useState<ParameterValues>(parameterValues);

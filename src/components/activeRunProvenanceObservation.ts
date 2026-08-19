@@ -94,8 +94,18 @@ export interface ActiveRunProvenanceInput {
   scenario?: ScenarioVariantConfig;
   metadata?: Record<string, JsonValue>;
   snapshot?: SimulationSnapshotView | null;
+  projection?: {
+    templateId: string;
+    tick: number;
+    time: number;
+    entityCount: number;
+    metricsHistory: readonly { tick: number; time: number; values: Record<string, number> }[];
+    metricRecordCount: number;
+  } | null;
   isRunning: boolean;
   hasActiveEngine: boolean;
+  hasActiveRuntime?: boolean;
+  runtimeModeLabel?: string;
   lastError?: string | null;
   speedMultiplier?: number;
   interventionCount?: number;
@@ -112,7 +122,7 @@ export function deriveActiveRunProvenanceObservation(input: ActiveRunProvenanceI
 }
 
 export function deriveRunProvenanceSummary(input: ActiveRunProvenanceInput): RunProvenanceSummary {
-  const templateId = input.template?.id ?? input.snapshot?.templateId ?? input.selectedTemplateId;
+  const templateId = input.template?.id ?? input.snapshot?.templateId ?? input.projection?.templateId ?? input.selectedTemplateId;
   const templateLabel = input.templateLabel ?? input.template?.name ?? templateId;
   const parameterKeys = Object.keys(input.parameters ?? {}).sort((left, right) => left.localeCompare(right));
   const parameterCount = parameterKeys.length;
@@ -122,13 +132,14 @@ export function deriveRunProvenanceSummary(input: ActiveRunProvenanceInput): Run
   const agentCompositionCount = countRecordKeys(input.scenario?.agentComposition);
   const environmentOptionCount = countRecordKeys(input.scenario?.environmentOptions);
   const speed = Number.isFinite(input.speedMultiplier) ? Number(input.speedMultiplier) : 1;
-  const hasRunnableSurface = input.hasActiveEngine && Boolean(input.snapshot);
+  const hasActiveRuntime = input.hasActiveRuntime ?? input.hasActiveEngine;
+  const hasRunnableSurface = hasActiveRuntime && Boolean(input.snapshot || input.projection);
 
   return {
     templateId,
     templateLabel,
     scenarioLabel,
-    runtimeModeLabel: input.hasActiveEngine ? "Active World engine" : "No active World engine",
+    runtimeModeLabel: input.runtimeModeLabel ?? (hasActiveRuntime ? "Active World engine" : "No active World engine"),
     behaviorModeLabel,
     seedLabel: input.seed === undefined || input.seed === null || input.seed === "" ? "No seed exposed" : String(input.seed),
     parameterCount,
@@ -140,21 +151,25 @@ export function deriveRunProvenanceSummary(input: ActiveRunProvenanceInput): Run
       agentCompositionCount === 0 ? "Default composition" : `${agentCompositionCount} composition field${agentCompositionCount === 1 ? "" : "s"}`,
     environmentOptionsLabel:
       environmentOptionCount === 0 ? "Default environment options" : `${environmentOptionCount} environment option${environmentOptionCount === 1 ? "" : "s"}`,
-    speedLabel: `${formatDecimal(speed, 2)}x local playback`,
+    speedLabel: `${formatDecimal(speed, 2)}x ${input.runtimeModeLabel?.startsWith("Worker") ? "Worker" : "local"} playback`,
     runConfigurationStatus: hasRunnableSurface
       ? {
           label: "Live run",
           tone: "neutral",
           category: "operational",
           state: "ready",
-          description: "An active engine and current snapshot are mounted in World."
+          description: input.projection
+            ? "An active runtime and bounded semantic projection are mounted in World."
+            : "An active engine and current snapshot are mounted in World."
         }
       : {
           label: "Incomplete",
           tone: "neutral",
           category: "operational",
           state: "idle",
-          description: "World does not currently expose both an active engine and a snapshot."
+          description: input.projection
+            ? "World does not currently expose both an active runtime and bounded semantic projection."
+            : "World does not currently expose both an active engine and a snapshot."
         },
     liveNonPersistent: true,
     configurationFingerprint: null,
@@ -164,17 +179,19 @@ export function deriveRunProvenanceSummary(input: ActiveRunProvenanceInput): Run
 
 export function deriveRunObservationSummary(input: ActiveRunProvenanceInput): RunObservationSummary {
   const snapshot = input.snapshot ?? null;
-  const latestMetricRecord = snapshot?.metricsHistory.at(-1);
+  const projection = input.projection ?? null;
+  const metricsHistory = snapshot?.metricsHistory ?? projection?.metricsHistory ?? [];
+  const latestMetricRecord = metricsHistory.at(-1);
   const metricLabelForKey = input.metricLabelForKey ?? humanizeKey;
   const maxMetricRows = Math.max(0, Math.min(input.maxMetricRows ?? 5, 8));
-  const aliveEntityCount = snapshot?.entities.filter((entity) => entity.alive).length ?? 0;
-  const metricRecordCount = snapshot?.metricsHistory.length ?? 0;
+  const aliveEntityCount = snapshot?.entities.filter((entity) => entity.alive).length ?? projection?.entityCount ?? 0;
+  const metricRecordCount = snapshot?.metricsHistory.length ?? projection?.metricRecordCount ?? 0;
   const latestMetricRows = Object.entries(latestMetricRecord?.values ?? {})
     .sort(([left], [right]) => left.localeCompare(right))
     .slice(0, maxMetricRows)
     .map(([key, value]) => ({
       key,
-      label: metricLabelForKey(snapshot?.templateId ?? input.selectedTemplateId, key),
+      label: metricLabelForKey(snapshot?.templateId ?? projection?.templateId ?? input.selectedTemplateId, key),
       value,
       valueLabel: formatDecimal(value, 3)
     }));
@@ -183,13 +200,13 @@ export function deriveRunObservationSummary(input: ActiveRunProvenanceInput): Ru
     runStatus: getRunStatusPillModel(input.isRunning),
     lifecycleStatus: deriveLifecycleStatus(input),
     runtimeStatusLabel: deriveRuntimeStatusLabel(input),
-    tickLabel: snapshot ? formatInteger(snapshot.tick) : "No snapshot",
-    timeLabel: snapshot ? formatDecimal(snapshot.time, 2) : "No snapshot",
+    tickLabel: snapshot || projection ? formatInteger(snapshot?.tick ?? projection?.tick ?? 0) : "No snapshot",
+    timeLabel: snapshot || projection ? formatDecimal(snapshot?.time ?? projection?.time ?? 0, 2) : "No snapshot",
     advancingLabel: input.isRunning ? "Advancing" : "Not advancing",
     aliveEntityCount,
-    aliveEntityCountLabel: snapshot ? formatInteger(aliveEntityCount) : "No snapshot",
+    aliveEntityCountLabel: snapshot || projection ? formatInteger(aliveEntityCount) : "No snapshot",
     metricRecordCount,
-    metricRecordCountLabel: snapshot ? formatInteger(metricRecordCount) : "No snapshot",
+    metricRecordCountLabel: snapshot || projection ? formatInteger(metricRecordCount) : "No snapshot",
     latestMetricRows,
     interventionCount: input.interventionCount ?? 0,
     boundaryCopy: RUN_OBSERVATION_MODEL_STATE_COPY
@@ -234,16 +251,20 @@ function deriveLifecycleStatus(input: ActiveRunProvenanceInput): RunStatusModel 
       description: "The active World run is advancing ticks."
     };
   }
-  if (!input.hasActiveEngine || !input.snapshot) {
+  const hasActiveRuntime = input.hasActiveRuntime ?? input.hasActiveEngine;
+  const tick = input.snapshot?.tick ?? input.projection?.tick;
+  if (!hasActiveRuntime || tick === undefined) {
     return {
       label: "Not initialized",
       tone: "neutral",
       category: "operational",
       state: "idle",
-      description: "No active engine and snapshot pair is mounted in World."
+      description: input.projection
+        ? "No active runtime and semantic projection pair is mounted in World."
+        : "No active engine and snapshot pair is mounted in World."
     };
   }
-  if (input.snapshot.tick === 0) {
+  if (tick === 0) {
     return {
       label: "Initialized",
       tone: "neutral",
@@ -265,13 +286,14 @@ function deriveRuntimeStatusLabel(input: ActiveRunProvenanceInput): string {
   if (input.lastError) {
     return "Failed with a runtime error";
   }
-  if (!input.hasActiveEngine) {
+  const hasActiveRuntime = input.hasActiveRuntime ?? input.hasActiveEngine;
+  if (!hasActiveRuntime) {
     return "No active run mounted";
   }
-  if (!input.snapshot) {
+  if (!input.snapshot && !input.projection) {
     return "Engine mounted without a current snapshot";
   }
-  return "Active run mounted in World";
+  return input.projection ? "Active Worker run mounted through bounded projections" : "Active run mounted in World";
 }
 
 function resolveBehaviorModeLabel(

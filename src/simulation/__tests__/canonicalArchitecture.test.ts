@@ -28,10 +28,10 @@ describe("A0 canonical architecture and source hierarchy", () => {
     const scientificModel = source(canonicalPaths.scientificModel);
     const roadmap = source(canonicalPaths.roadmap);
 
-    expect(architecture).toContain("Status: CURRENT architectural source of truth after A0B");
-    expect(capabilities).toContain("Status: CURRENT capability source of truth after A0B");
+    expect(architecture).toContain("Status: CURRENT architectural source of truth after I1");
+    expect(capabilities).toContain("Status: CURRENT capability source of truth after I1");
     expect(scientificModel).toContain("Status: CURRENT epistemic and scientific source of truth after A0B");
-    expect(roadmap).toContain("Status: CURRENT future-sequencing source of truth after A0B");
+    expect(roadmap).toContain("Status: CURRENT future-sequencing source of truth after I1");
 
     const precedence = [
       "Executable code and tests",
@@ -92,14 +92,16 @@ describe("A0 canonical architecture and source hierarchy", () => {
     expect(architecture).toContain("`A -> B` means A may import B");
   });
 
-  it("states the current production cadence coupling instead of pretending React is not scheduling it", () => {
+  it("states the split production cadence authority without pretending every template is migrated", () => {
     const architecture = source(canonicalPaths.architecture);
     const appShell = source(join(repoRoot, "src", "components", "AppShell.tsx"));
 
     expect(appShell).toContain("requestAnimationFrame(loop)");
     expect(appShell).toContain("state.runFrameSteps(cappedSteps)");
-    expect(architecture).toContain("Production World wall-clock cadence is currently owned by the mounted React `AppShell`");
-    expect(architecture).toContain("The engine still owns deterministic step semantics");
+    expect(appShell).toContain("ProductionRuntimeProvider");
+    expect(architecture).toContain("Production React no longer owns Flocking cadence");
+    expect(architecture).toContain("six legacy template paths");
+    expect(architecture).toContain("Dedicated Worker `RuntimeSession` and runtime scheduler");
   });
 
   it("separates the detached snapshot read view from exact continuation state", () => {
@@ -127,8 +129,8 @@ describe("A0 canonical architecture and source hierarchy", () => {
     expect(architecture).toContain("Future research representation is a SystemView graph");
     expect(architecture).toContain("not a universal micro-to-meso-to-macro hierarchy");
     expect(architecture).toContain("not a mandatory `Scale x Lens x Regime` Cartesian cube");
-    expect(architecture).toContain("The isolated immersive prototype's “System view” control is a presentation camera reset");
-    expect(architecture).toContain("No SystemView schema, runtime, mapping executor, or discovery algorithm is implemented by A0 or A0B.");
+    expect(architecture).toContain("Production Flocking's System camera mode and Alignment lens are presentation controls");
+    expect(architecture).toContain("No SystemView schema, runtime, mapping executor, or discovery algorithm is implemented by I1.");
     expect(roadmap).toContain("old hierarchy-first multi-scale roadmap is superseded");
   });
 
@@ -138,13 +140,14 @@ describe("A0 canonical architecture and source hierarchy", () => {
     for (const templateId of productionTemplateIds) {
       expect(capabilities).toContain(`\`${templateId}\``);
     }
-    expect(capabilities).toContain("restricted to projection kind `flocking-v1` and template `flocking-boids`");
+    expect(capabilities).toContain("only for template `flocking-boids` and projection kind `flocking-v1`");
+    expect(capabilities).toContain("does not grant Worker support to another template");
     expect(capabilities).toContain("Only template with registry-recognized runtime network topology");
     expect(capabilities).toContain("Opinion's narrow template-owned mode does not implement a generic social/cognitive runtime.");
     expect(capabilities).toContain("Global service availability does not grant template support.");
   });
 
-  it("records the post-A0B handoff without restoring obsolete sequencing", () => {
+  it("records the post-I1 handoff without restoring obsolete sequencing", () => {
     const roadmap = source(canonicalPaths.roadmap);
     const activeStatus = [
       source(join(repoRoot, "README.md")),
@@ -154,7 +157,8 @@ describe("A0 canonical architecture and source hierarchy", () => {
 
     expect(roadmap).toContain("A0 - Canonical Architecture + Source-of-Truth Consolidation | COMPLETE");
     expect(roadmap).toContain("A0B - Canonical Architecture + Source-of-Truth Audit | COMPLETE");
-    expect(roadmap).toContain("I1 - Production Runtime Migration + Immersive Shell Foundation | NEXT / UNSTARTED");
+    expect(roadmap).toContain("I1 - Production Runtime Migration + Immersive Shell Foundation | COMPLETE");
+    expect(roadmap).toContain("I1B - Production Runtime Migration Audit | NEXT / UNSTARTED");
     expect(roadmap).toContain("UR0 - Product Leverage + Comprehension Gate | PLANNED / UNSTARTED");
     expect(roadmap).toContain("C4 is not deferred until I5B.");
     expect(roadmap).toContain("MF-series milestones create reusable computational/scientific execution families");

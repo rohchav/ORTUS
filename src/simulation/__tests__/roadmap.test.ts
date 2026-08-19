@@ -442,7 +442,8 @@ describe("roadmap alignment and missing pillar reservations", () => {
       "I2 through I5B, C4/C4B, S1-S5B, and E1-E3B remain planning labels"
     );
     expect(runtimePerformanceArchitecture).toContain("RenderFramePacket");
-    expect(runtimePerformanceArchitecture).toContain("PERF1B is complete. A0 - Canonical Architecture");
+    expect(runtimePerformanceArchitecture).toContain("PERF1B, A0, A0B, and I1 are complete.");
+    expect(runtimePerformanceArchitecture).toContain("I1B - Production Runtime Migration Audit is next and unstarted.");
     expect(runtimePerformanceArchitecture).toContain(
       "Automatic Flocking retains the inherited threshold, nominal-cell index, fallback, ordering, and output behavior"
     );

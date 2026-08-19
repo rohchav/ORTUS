@@ -3,6 +3,7 @@
 import { CornerFramePanel } from "./ui/CornerFramePanel";
 import { metricLabel } from "../lib/templateVisuals";
 import { useSimulationStore } from "../state/simulationStore";
+import { useActiveWorldRuntime } from "./runtime/ProductionRuntimeProvider";
 
 interface PanelProps {
   collapsed?: boolean;
@@ -16,8 +17,8 @@ const colors = ["#d8ff3e", "#ff4a2e", "#f3f1e8", "#6c72ff", "#c34dff"];
 
 export function MetricGraphPanel({ collapsed = false, onToggle, embedded = false, metricKeys, active = true }: PanelProps) {
   const selectedTemplateId = useSimulationStore((state) => state.selectedTemplateId);
-  const snapshot = useSimulationStore((state) => active ? state.latestSnapshot : null);
-  const history = snapshot?.metricsHistory ?? EMPTY_HISTORY;
+  const runtime = useActiveWorldRuntime();
+  const history = active ? runtime.metricsHistory : EMPTY_HISTORY;
   const sample = history.slice(-120);
   const availableKeys = Object.keys(sample.at(-1)?.values ?? {});
   const keys = (metricKeys ? metricKeys.filter((key) => availableKeys.includes(key)) : availableKeys).slice(0, 4);
@@ -63,9 +64,9 @@ export function MetricGraphPanel({ collapsed = false, onToggle, embedded = false
   );
 }
 
-const EMPTY_HISTORY: NonNullable<ReturnType<typeof useSimulationStore.getState>["latestSnapshot"]>["metricsHistory"] = [];
+const EMPTY_HISTORY: readonly { tick: number; time: number; values: Record<string, number> }[] = [];
 
-function pointsFor(history: Array<{ values: Record<string, number> }>, key: string): string {
+function pointsFor(history: readonly { values: Record<string, number> }[], key: string): string {
   const values = history.map((record) => record.values[key] ?? 0);
   const min = Math.min(...values);
   const max = Math.max(...values);

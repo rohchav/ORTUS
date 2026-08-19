@@ -1,6 +1,6 @@
 # ORTUS Canonical Architecture
 
-Status: CURRENT architectural source of truth after A0B
+Status: CURRENT architectural source of truth after I1; production integration awaits the I1B audit
 
 This document defines ORTUS architectural vocabulary, authority, ownership, and dependency direction. It describes current implementation where it exists and labels future contracts explicitly. It does not make a planned type, service, or model family real.
 
@@ -87,23 +87,36 @@ representation != question != derivation != evidence != assessment
 | Modeled entities, state, spaces, clock, events, and globals | `SimulationEngine` and template runtime | UI, renderer, and research code read snapshots/projections only |
 | Seed interpretation and RNG streams | Simulation runtime `RandomService` | No UI, renderer, or research mutation; no `Math.random` in authoritative simulation code |
 | Model-step semantics, fixed modeled time, system order, and command application | `SimulationEngine` and kernel scheduler | Callers may request steps but cannot redefine a step, phase order, RNG use, or mutation semantics |
-| Production World wall-clock cadence | CURRENTLY the mounted React `AppShell` animation-frame accumulator plus Zustand-held run controls | This UI/runtime coupling decides when and how many engine steps are requested; it is explicit debt for I1, not the target boundary |
-| Isolated prototype wall-clock cadence and runtime lifecycle | `RuntimeSession` plus Local/Worker runtime schedulers | React requests lifecycle operations through `SimulationRuntimePort`; it does not run the accumulator |
+| Production Flocking wall-clock cadence and runtime lifecycle | Dedicated Worker `RuntimeSession` and runtime scheduler | React requests bounded lifecycle operations through `SimulationRuntimePort`; it does not own the engine, RNG, scheduler, or tick accumulator |
+| Legacy production template wall-clock cadence | Mounted React `AppShell` animation-frame accumulator plus Zustand-held run controls | This explicit coupling remains for the six templates not migrated in I1; it does not imply Worker support |
 | Model mutation | Validated commands and template-defined interventions | Canvas and components may report targets; they do not mutate engine internals |
 | Snapshot read view | Engine snapshot projection | `SimulationSnapshotView` is detached broad state for consumers, not exact continuation or evidence |
 | Snapshot export/restore | Engine serialization and validation | `SnapshotExport` is exact continuation state, not a visual frame or empirical evidence |
-| Render data | Read-only snapshot or `RenderFramePacket` projection | Renderers may drop/coalesce only audited ephemeral publications, never model steps or accepted commands |
+| Render data | `RenderFramePacket` for production Flocking; read-only snapshot projections for legacy templates | Renderers may drop/coalesce only bounded ephemeral publications, never model steps or accepted commands |
 | Camera, hover, visual selection, DPR, effects, and view mode | World/experience state | Presentation only; no model or scientific-scale authority |
 | UI panels, drafts, filters, and task navigation | UI state | May request validated actions; cannot silently become engine state |
 | Scientific observation | Future observation layer | Must define sampling, omission, noise, loss, timing, identity, and provenance; not implemented |
 | Scientific representation | Future research/representation layer | Derives from observations; cannot rewrite the run being studied |
 | Scientific assessment | Future research/evidence layer | Assesses candidates independently; cannot certify its own generator |
 
-No lower-authority consumer may silently acquire higher-layer authority. Renderers do not mutate modeled state. Research adapters do not alter RNG or engine state. Discovery methods do not rewrite the model they study. Presentation data does not masquerade as evidence. Production React currently owns wall-clock cadence, but it does not own model-step semantics; extending or duplicating that coupling would deepen a known boundary defect rather than establish the target architecture.
+No lower-authority consumer may silently acquire higher-layer authority. Renderers do not mutate modeled state. Research adapters do not alter RNG or engine state. Discovery methods do not rewrite the model they study. Presentation data does not masquerade as evidence. Production React no longer owns Flocking cadence, but it still owns cadence for the six legacy template paths. That remaining coupling is explicit and must not be mistaken for generic Worker migration.
 
 ## Current Runtime Flows
 
-Production World currently uses:
+Production Flocking currently uses:
+
+```text
+validated Flocking RunConfig
+  -> SimulationRuntimePort
+  -> dedicated WorkerRuntimeDriver
+  -> Worker RuntimeSession + authoritative SimulationEngine/RNG/scheduler
+  -> RenderFramePacket -> read-only scene adapter -> batched Canvas
+  -> bounded UIProjection/selected detail -> React semantic UI
+```
+
+The migrated visual path does not continuously construct or publish `SimulationSnapshotView`. Full validated scenario or snapshot artifacts cross the runtime boundary only for explicit semantic operations such as import, export, restore, or comparison capture. Visual and UI publications may coalesce obsolete values; accepted commands and ordered model steps may not. Terminal Worker failure is visible and does not switch to `LocalRuntimeDriver` or fabricate continued execution.
+
+The other six production templates retain the legacy path:
 
 ```text
 validated template + RunConfig + seeded RNG
@@ -113,20 +126,7 @@ validated template + RunConfig + seeded RNG
   -> React controls/semantic state + batched Canvas rendering
 ```
 
-Production World wall-clock cadence is currently owned by the mounted React `AppShell`, which computes elapsed-time catch-up and calls the Zustand store's `runFrameSteps`. The engine still owns deterministic step semantics, modeled time increments, system ordering, command application, and seeded randomness. A0B records this as current coupling; it does not bless it as the target or perform I1 migration.
-
-The isolated Flocking immersive prototype currently uses:
-
-```text
-validated flocking RunConfig
-  -> SimulationRuntimePort
-  -> LocalRuntimeDriver or dedicated WorkerRuntimeDriver
-  -> shared RuntimeSession + authoritative SimulationEngine
-  -> RenderFramePacket (ephemeral Canvas channel)
-  -> UIProjection (coarse React/accessibility channel)
-```
-
-The second flow supports only the explicit `flocking-v1` projection and does not mean production World, other templates, or research observation use the Worker runtime.
+`LocalRuntimeDriver` remains a reference/test implementation. The production migration supports only template `flocking-boids` with projection kind `flocking-v1`; it does not establish cross-template Worker support or a scientific observation channel.
 
 ## Computational Substrate Is Not Scientific Ontology
 
@@ -147,7 +147,7 @@ Future research representation is a SystemView graph:
 - `ViewMapping`: an explicit relation between views, eventually recording restriction, lifting, information loss, uncertainty, and intervention realization.
 - `RepresentationArtifact`: a concrete result derived from identified evidence by an identified method.
 
-This is not a universal micro-to-meso-to-macro hierarchy and not a mandatory `Scale x Lens x Regime` Cartesian cube. The isolated immersive prototype's “System view” control is a presentation camera reset, not a `SystemViewSpec`. No SystemView schema, runtime, mapping executor, or discovery algorithm is implemented by A0 or A0B.
+This is not a universal micro-to-meso-to-macro hierarchy and not a mandatory `Scale x Lens x Regime` Cartesian cube. Production Flocking's System camera mode and Alignment lens are presentation controls, not `SystemViewSpec`, `ScaleSpec`, or `LensSpec` implementations. No SystemView schema, runtime, mapping executor, or discovery algorithm is implemented by I1.
 
 ## Dependency Direction
 
@@ -180,8 +180,8 @@ Allowed dependencies follow the explicit arrows or public ports. Forbidden direc
 The canonical architecture records rather than disguises these risks:
 
 - The target `simulation/model`, `simulation/observation`, and `research/*` namespaces do not exist yet. Structural scientific services currently live beside runtime code under `src/simulation`, which can invite false execution claims.
-- Production World still publishes broad snapshot views through Zustand and UI code knows concrete simulation contracts. I1 may narrow that boundary, but A0B does not migrate it.
-- Production World cadence is computed in a mounted React animation-frame effect and executed through Zustand's engine reference. This is real current scheduler coupling even though model-step semantics remain engine-owned; I1 must migrate rather than deny it.
+- The six non-Flocking production paths still publish broad snapshot views through Zustand, and their cadence remains computed in a mounted React animation-frame effect. I1 deliberately did not claim or simulate cross-template Worker support.
+- Production Flocking uses a product integration controller around the public runtime port, while the underlying browser transport remains template-specific. I1B still needs to attack lifecycle, failure, ordering, and product-boundary assumptions independently.
 - `src/simulation/runtime` includes browser Worker transport types. This is intentional for the audited runtime port but means the runtime package is not yet a platform-neutral package boundary.
 - `SimulationRun` ownership is real but distributed across engine, runtime session, and UI/store lifecycle. A future explicit run record must not duplicate or compete with those authorities.
 - Current local experiments and Atlas preview produce model-output summaries, not the planned observation/evidence architecture.

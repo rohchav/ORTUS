@@ -3,6 +3,7 @@
 import { CornerFramePanel } from "./ui/CornerFramePanel";
 import { formatNumber } from "../lib/format";
 import { useSimulationStore } from "../state/simulationStore";
+import { useActiveWorldRuntime } from "./runtime/ProductionRuntimeProvider";
 
 interface DebugPanelProps {
   collapsed?: boolean;
@@ -34,32 +35,42 @@ export function DebugPanel({ collapsed, floating = false, onToggle, embedded = f
 
 function DebugPanelBody({ active }: { active: boolean }) {
   const engine = useSimulationStore((state) => state.engine);
-  const snapshot = useSimulationStore((state) => active ? state.latestSnapshot : null);
-  const isRunning = useSimulationStore((state) => active && state.isRunning);
-  const lastError = useSimulationStore((state) => state.lastError);
+  const seed = useSimulationStore((state) => state.seed);
+  const runtime = useActiveWorldRuntime();
   const debug = engine?.debugData();
   const performance = engine?.performanceData();
   const latestTickSample = performance?.tickSamples.at(-1);
+  const runtimeStep = runtime.uiProjection?.performance.measures.find((measure) => measure.name === "ortus.sim.step");
 
   return (
     <>
       <div className="debug-grid">
         <span>Template</span>
-        <strong>{debug?.templateId ?? "none"}</strong>
+        <strong>{debug?.templateId ?? runtime.uiProjection?.templateId ?? "none"}</strong>
         <span>Seed</span>
-        <strong>{debug?.seed ?? "none"}</strong>
+        <strong>{debug?.seed ?? seed}</strong>
         <span>Tick</span>
-        <strong>{snapshot?.tick ?? 0}</strong>
+        <strong>{active ? runtime.tick : 0}</strong>
         <span>Time</span>
-        <strong>{formatNumber(snapshot?.time ?? 0, 2)}</strong>
+        <strong>{formatNumber(active ? runtime.time : 0, 2)}</strong>
         <span>State</span>
-        <strong>{isRunning ? "running" : "paused"}</strong>
+        <strong>{active ? runtime.playback : "inactive"}</strong>
+        <span>Execution</span>
+        <strong>{runtime.executionKind}</strong>
+        <span>Generation</span>
+        <strong>{runtime.uiProjection?.generation ?? "legacy"}</strong>
         <span>Entities</span>
-        <strong>{snapshot?.entities.filter((entity) => entity.alive).length ?? 0}</strong>
+        <strong>{active ? runtime.entityCount : 0}</strong>
         <span>Last commands</span>
-        <strong>{debug?.lastCommands.length ?? 0}</strong>
+        <strong>{runtime.workerManaged ? "Not projected" : debug?.lastCommands.length ?? 0}</strong>
         <span>Last events</span>
-        <strong>{debug?.lastEvents.length ?? 0}</strong>
+        <strong>{runtime.workerManaged ? "Not projected" : debug?.lastEvents.length ?? 0}</strong>
+        {runtimeStep ? (
+          <>
+            <span>Worker step p95 ms</span>
+            <strong>{formatNumber(runtimeStep.p95Ms, 3)}</strong>
+          </>
+        ) : null}
         {performance?.enabled ? (
           <>
             <span>Step ms</span>
@@ -69,7 +80,7 @@ function DebugPanelBody({ active }: { active: boolean }) {
           </>
         ) : null}
       </div>
-      {lastError ? <p className="debug-error">{lastError}</p> : null}
+      {runtime.error ? <p className="debug-error">{runtime.error}</p> : null}
     </>
   );
 }

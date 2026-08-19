@@ -6,6 +6,7 @@ import { StatusPill } from "./ui/StatusPill";
 import { formatTick } from "../lib/format";
 import { getTemplateDescriptor } from "../lib/templateVisuals";
 import { useSimulationStore } from "../state/simulationStore";
+import { useActiveWorldRuntime } from "./runtime/ProductionRuntimeProvider";
 
 interface TopStatusBarProps {
   onOpenRunDetails: () => void;
@@ -14,14 +15,12 @@ interface TopStatusBarProps {
 
 export function TopStatusBar({ onOpenRunDetails, runDetailsTriggerRef }: TopStatusBarProps) {
   const selectedTemplateId = useSimulationStore((state) => state.selectedTemplateId);
-  const engine = useSimulationStore((state) => state.engine);
-  const snapshot = useSimulationStore((state) => state.latestSnapshot);
   const seed = useSimulationStore((state) => state.seed);
-  const isRunning = useSimulationStore((state) => state.isRunning);
   const lastError = useSimulationStore((state) => state.lastError);
+  const runtime = useActiveWorldRuntime();
   const descriptor = getTemplateDescriptor(selectedTemplateId);
-  const scenarioName = metadataText(engine?.metadata.scenarioName) ?? "Default run";
-  const runStatus = getRunStatusPillModel(isRunning);
+  const scenarioName = metadataText(runtime.metadata.scenarioName) ?? "Default run";
+  const runStatus = getRunStatusPillModel(runtime.isRunning);
 
   return (
     <header className="top-status">
@@ -33,13 +32,18 @@ export function TopStatusBar({ onOpenRunDetails, runDetailsTriggerRef }: TopStat
         </div>
       </div>
       <div className="top-status__run" aria-label="Current run status">
-        <StatusPill label={runStatus.label} tone={runStatus.tone} category={runStatus.category} state={runStatus.state} />
-        <span className="top-status__fact">Tick <strong>{formatTick(snapshot?.tick ?? 0)}</strong></span>
-        <span className="top-status__fact">Seed <strong>{engine?.seed ?? seed}</strong></span>
+        {runtime.state === "initializing"
+          ? <StatusPill label="Initializing" tone="neutral" category="operational" state="idle" />
+          : runtime.state === "failed"
+            ? <StatusPill label="Stopped" tone="danger" category="operational" state="failed" />
+            : <StatusPill label={runStatus.label} tone={runStatus.tone} category={runStatus.category} state={runStatus.state} />}
+        <span className="top-status__fact">Tick <strong>{formatTick(runtime.tick)}</strong></span>
+        <span className="top-status__fact">Seed <strong>{seed}</strong></span>
+        <span className="top-status__fact">Runtime <strong>{runtime.workerManaged ? "Worker" : "Main thread"}</strong></span>
         <button ref={runDetailsTriggerRef} type="button" className="top-status__details" onClick={onOpenRunDetails}>
           Run details
         </button>
-        {lastError ? <StatusPill label="Warning" tone="danger" /> : null}
+        {lastError || runtime.error ? <StatusPill label="Warning" tone="danger" /> : null}
       </div>
     </header>
   );

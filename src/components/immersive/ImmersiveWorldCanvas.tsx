@@ -20,7 +20,12 @@ import {
   type ImmersiveWorldBounds,
   type WorldSceneAdapter
 } from "../../lib/immersiveWorld";
-import type { ImmersiveFlockingRuntime } from "./ImmersiveFlockingRuntime";
+
+export interface ImmersiveCanvasRuntime {
+  readonly agentCount: number;
+  getSceneAdapter(): WorldSceneAdapter;
+  recordPresentationDuration(name: "ortus.render.draw", durationMs: number): void;
+}
 
 export interface ImmersiveCanvasAuditHandle {
   reset(at?: number): void;
@@ -28,12 +33,13 @@ export interface ImmersiveCanvasAuditHandle {
 }
 
 interface ImmersiveWorldCanvasProps {
-  runtime: ImmersiveFlockingRuntime;
+  runtime: ImmersiveCanvasRuntime;
   concept: ImmersiveConceptId;
   camera: ImmersiveCameraState;
   onCameraChange: (camera: ImmersiveCameraState) => void;
   selectedEntityId: string | null;
   onSelectEntity: (entityId: string | null) => void;
+  onSelectWorldPoint?: (point: { x: number; y: number }) => void;
   onCycleSelection: (direction: -1 | 1) => void;
   lensActive: boolean;
   godHandTool: ImmersiveGodHandTool;
@@ -79,6 +85,7 @@ export const ImmersiveWorldCanvas = memo(function ImmersiveWorldCanvas({
   onCameraChange,
   selectedEntityId,
   onSelectEntity,
+  onSelectWorldPoint,
   onCycleSelection,
   lensActive,
   godHandTool,
@@ -136,7 +143,7 @@ export const ImmersiveWorldCanvas = memo(function ImmersiveWorldCanvas({
     lastTickRef.current = -1;
     lastFrameAtRef.current = null;
     displayCameraRef.current = null;
-  }, [concept, runtime]);
+  }, [concept, runtime, runtime.agentCount]);
 
   useEffect(() => {
     const element = shellRef.current;
@@ -355,6 +362,9 @@ export const ImmersiveWorldCanvas = memo(function ImmersiveWorldCanvas({
     const pointer = pointerRef.current;
     if (!pointer.moved) {
       onSelectEntity(pointer.hoveredEntityId);
+      if (!pointer.hoveredEntityId) {
+        onSelectWorldPoint?.({ x: pointer.worldX, y: pointer.worldY });
+      }
     }
     pointerRef.current = { ...pointer, pressed: false, moved: false };
   }

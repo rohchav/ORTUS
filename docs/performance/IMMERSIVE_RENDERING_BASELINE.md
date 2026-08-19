@@ -1,7 +1,7 @@
 # Immersive Rendering Baseline
 
 Date: 2026-08-11
-Prompts: I0, I0B, PERF1, and PERF1B
+Prompts: I0, I0B, PERF1, PERF1B, and I1 production adoption
 Machine scope: local headless Chromium development-server measurements
 
 ## Purpose
@@ -199,5 +199,11 @@ I0B found no unexplained simulation-semantic change and no unbounded renderer st
 PERF1 subsequently investigated worker/scheduler isolation and snapshot-publication cost in the dedicated measured scope recorded in `RUNTIME_PERFORMANCE_ARCHITECTURE.md`. PERF1B's independent race, lifecycle, queue, ownership, and performance audit is recorded in `RUNTIME_PERFORMANCE_ARCHITECTURE_AUDIT.md`. I0B itself does not implement or authorize those systems, and this baseline remains the historical main-thread reference rather than a claim about the audited runtime prototype.
 
 PERF1B's five matched packet-runtime samples must not be spliced into the older I0/I0B snapshot-runtime table as if they were the same architecture. At 500 boids, audited Local packet runtime measured `55.191..57.747 FPS`, while Worker packet runtime measured `59.725..59.893 FPS`; Worker short-run model throughput was slightly lower and more variable. The credible result is reduced main-thread pressure after simulation and continuous snapshot work leave the interaction path, not a universal speed or 60 FPS guarantee.
+
+## I1 Production Adoption
+
+I1 reuses the existing immersive Canvas and scene-adapter work for the production Flocking World instead of creating another prototype surface. The minimum shell combines a world-dominant Living Diorama with Field Scientist readouts, bounded selection detail, System/Local/Follow presentation cameras, and an Alignment presentation lens. Camera and lens state do not mutate the model and are not scientific scale, observation, or evidence.
+
+The production path now receives transferable frame packets rather than continuous broad snapshots and keeps coarse semantic publication separate from Canvas cadence. The final I1 local development-Chromium characterization measured `56.75 FPS` at 100 boids and `57.15 FPS` at 500, while the 500-agent Worker achieved only about `20.7` model ticks/s. Median Canvas draw cost was `0.7 ms` and `0.9 ms`, versus median engine-step cost of `5.3 ms` and `33.2 ms`. That is evidence of main-thread isolation under this bounded workload, not a faster engine or a universal frame-rate claim. Exact measurements and limitations are recorded in `RUNTIME_PERFORMANCE_ARCHITECTURE.md`; the I0/I0B tables above remain historical main-thread baselines.
 
 **The immersive renderer changes presentation only. Simulation semantics remain unchanged. Visual quality may degrade independently of model fidelity.**

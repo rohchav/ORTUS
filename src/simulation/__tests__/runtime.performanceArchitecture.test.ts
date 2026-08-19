@@ -3,8 +3,11 @@ import {
   BoundedPerformanceRecorder,
   LocalRuntimeDriver,
   WorkerRuntimeDriver,
+  runConfigFromArtifact,
+  validateRunConfig,
   type RuntimePublication,
-  type RuntimeWorkerLike
+  type RuntimeWorkerLike,
+  type ScenarioExport
 } from "..";
 import { LatestPublicationGate } from "../runtime/LatestPublicationGate";
 import { RuntimeWorkerHost } from "../runtime/RuntimeWorkerHost";
@@ -292,6 +295,149 @@ describe("PERF1 runtime performance architecture", () => {
     const frame = createFlockingRenderFramePacket(engine, { generation: 1, runId }, null);
     const malformed = { ...frame, positions: new Float32Array(1) };
     expect(() => parseRuntimeWorkerResponse({ type: "runtime.frame", frame: malformed })).toThrow(/positions length/i);
+  });
+
+  it("keeps production semantic histories bounded while preserving total counters", async () => {
+    const port = new LocalRuntimeDriver();
+    await port.initialize({ runId: "production-bounds", runConfig: createImmersiveFlockingRunConfig(100) });
+
+    for (let tick = 0; tick < 125; tick += 1) {
+      await port.step();
+    }
+    expect(port.getLatestUI()).toMatchObject({
+      tick: 125,
+      metricRecordCount: 125,
+      interventionCount: 0,
+      appliedInterventionCount: 0
+    });
+    expect(port.getLatestUI()?.metricHistory).toHaveLength(120);
+    expect(port.getLatestUI()?.metricHistory[0]?.tick).toBe(6);
+    expect(() => parseRuntimeWorkerResponse({
+      type: "runtime.ui",
+      ui: { ...port.getLatestUI()!, metricRecordCount: 0 }
+    })).toThrow(/metric tail cannot exceed/i);
+
+    port.setSpeedMultiplier(2.5);
+    expect(port.getLatestUI()?.speedMultiplier).toBe(2.5);
+    await port.applyIntervention({
+      templateId: "flocking-boids",
+      interventionId: "flocking.applyImpulse",
+      parameters: { impulseX: 1, impulseY: 0, strength: 1 },
+      target: { entityId: "e000001" }
+    });
+    expect(port.getLatestUI()).toMatchObject({
+      interventionCount: 1,
+      appliedInterventionCount: 1,
+      interventions: [{ interventionId: "flocking.applyImpulse", status: "applied", tickApplied: 125 }]
+    });
+
+    await port.clearInterventions();
+    expect(port.getLatestUI()).toMatchObject({ interventionCount: 0, appliedInterventionCount: 0, interventions: [] });
+    port.dispose();
+  });
+
+  it("keeps Worker and local explicit artifact operations exact without continuous snapshots", async () => {
+    const transport = new HostBackedWorker();
+    const worker = new WorkerRuntimeDriver(transport);
+    const local = new LocalRuntimeDriver();
+    const runConfig = validateRunConfig({
+      ...createImmersiveFlockingRunConfig(100),
+      scenarioId: "runtime-artifact-recipe",
+      scenarioName: "Runtime artifact recipe",
+      initializationPreset: "aligned-flock",
+      initializationOptions: {},
+      metadata: {
+        behaviorMode: "display-only metadata",
+        source: "runtime-artifact-test",
+        ortusRuntimeRunConfigV1: { owner: "user-metadata" }
+      }
+    });
+    const request = { runId: "production-artifact-source", runConfig };
+    await Promise.all([worker.initialize(request), local.initialize(request)]);
+    const initialSignature = worker.getLatestFrame()?.runtimeSignature;
+
+    for (let tick = 0; tick < 5; tick += 1) {
+      await Promise.all([worker.step(), local.step()]);
+    }
+    await Promise.all([
+      worker.applyIntervention({
+        templateId: "flocking-boids",
+        interventionId: "flocking.scatterRadius",
+        parameters: { radius: 16, strength: 1.4 },
+        target: { point: { x: 50, y: 50 } }
+      }),
+      local.applyIntervention({
+        templateId: "flocking-boids",
+        interventionId: "flocking.scatterRadius",
+        parameters: { radius: 16, strength: 1.4 },
+        target: { point: { x: 50, y: 50 } }
+      })
+    ]);
+
+    const [workerSnapshot, localSnapshot, workerScenario] = await Promise.all([
+      worker.exportArtifact("snapshot"),
+      local.exportArtifact("snapshot"),
+      worker.exportArtifact("scenario")
+    ]);
+    expect(workerSnapshot).toBe(localSnapshot);
+    expect(JSON.parse(workerScenario)).toMatchObject({ templateId: "flocking-boids", seed: request.runConfig.seed });
+    const exportedRunConfig = runConfigFromArtifact(JSON.parse(workerScenario) as ScenarioExport);
+    expect(exportedRunConfig).toMatchObject({
+      scenarioId: "runtime-artifact-recipe",
+      scenarioName: "Runtime artifact recipe",
+      initializationPreset: "aligned-flock",
+      behaviorMode: runConfig.behaviorMode,
+      metadata: {
+        behaviorMode: "display-only metadata",
+        source: "runtime-artifact-test",
+        ortusRuntimeRunConfigV1: { owner: "user-metadata" }
+      }
+    });
+
+    const externalArtifact = JSON.parse(workerScenario) as ScenarioExport;
+    externalArtifact.metadata.ortusRuntimeRunConfigV1 = { owner: "external-artifact" };
+    expect(runConfigFromArtifact(externalArtifact).metadata).toMatchObject({
+      ortusRuntimeRunConfigV1: { owner: "external-artifact" }
+    });
+
+    await Promise.all([worker.step(), local.step()]);
+    await Promise.all([
+      worker.importArtifact({ runId: "production-artifact-restored", kind: "snapshot", json: workerSnapshot }),
+      local.importArtifact({ runId: "production-artifact-restored", kind: "snapshot", json: localSnapshot })
+    ]);
+    await settleMessages();
+    expect(worker.getLatestFrame()?.runtimeSignature).toBe(local.getLatestFrame()?.runtimeSignature);
+    expect(worker.getLatestUI()).toMatchObject({ generation: 2, tick: 5, interventionCount: 1 });
+    expect(local.getLatestUI()).toMatchObject({ generation: 2, tick: 5, interventionCount: 1 });
+
+    await Promise.all([worker.reset(), local.reset()]);
+    expect(worker.getLatestFrame()?.runtimeSignature).toBe(local.getLatestFrame()?.runtimeSignature);
+    expect(worker.getLatestFrame()?.runtimeSignature).toBe(initialSignature);
+    expect(worker.getLatestUI()).toMatchObject({ generation: 3, tick: 0, interventionCount: 0 });
+    worker.dispose();
+    local.dispose();
+  });
+
+  it("rejects malformed explicit imports before changing an active Worker generation", async () => {
+    const transport = new HostBackedWorker();
+    const worker = new WorkerRuntimeDriver(transport);
+    const local = new LocalRuntimeDriver();
+    await worker.initialize({ runId: "production-import-guard", runConfig: createImmersiveFlockingRunConfig(100) });
+    await local.initialize({ runId: "local-import-guard", runConfig: createImmersiveFlockingRunConfig(100) });
+    const frame = worker.getLatestFrame();
+    const localFrame = local.getLatestFrame();
+
+    expect(() => worker.importArtifact({ runId: "must-not-start", kind: "snapshot", json: "{}" })).toThrow();
+    await expect(local.importArtifact({ runId: "local-must-not-start", kind: "snapshot", json: "{}" })).rejects.toThrow();
+    expect(worker.generation).toBe(1);
+    expect(worker.state).toBe("ready");
+    expect(worker.getLatestFrame()).toBe(frame);
+    expect(local.generation).toBe(1);
+    expect(local.state).toBe("ready");
+    expect(local.getLatestFrame()).toBe(localFrame);
+    expect(transport.terminated).toBe(false);
+    worker.dispose();
+    local.dispose();
   });
 });
 

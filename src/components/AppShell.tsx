@@ -11,6 +11,7 @@ import { WorldStage } from "./WorldStage";
 import { OrtusBrand } from "./branding";
 import { CapabilityGuidancePanel } from "./researchWorld/CapabilityGuidancePanel";
 import { ModalSurface } from "./ui/ModalSurface";
+import { ProductionRuntimeProvider } from "./runtime/ProductionRuntimeProvider";
 import {
   defaultSimulationWorkspaceModeId,
   simulationWorkspaceModeFromQuery,
@@ -36,6 +37,18 @@ interface AppShellProps {
 }
 
 export function AppShell({ initialTemplateId, initialWorkspaceMode, starterLaunch }: AppShellProps) {
+  return (
+    <ProductionRuntimeProvider>
+      <AppShellContent
+        initialTemplateId={initialTemplateId}
+        initialWorkspaceMode={initialWorkspaceMode}
+        starterLaunch={starterLaunch}
+      />
+    </ProductionRuntimeProvider>
+  );
+}
+
+function AppShellContent({ initialTemplateId, initialWorkspaceMode, starterLaunch }: AppShellProps) {
   const hydratePreferences = useSimulationStore((state) => state.hydratePreferences);
   const applyScenario = useSimulationStore((state) => state.applyScenario);
   const isRunning = useSimulationStore((state) => state.isRunning);

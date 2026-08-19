@@ -2,20 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { formatNumber, formatTick } from "../lib/format";
-import { useSimulationStore } from "../state/simulationStore";
+import { useActiveWorldRuntime } from "./runtime/ProductionRuntimeProvider";
 
 export function TimelineControlStrip() {
-  const isRunning = useSimulationStore((state) => state.isRunning);
-  const toggleRunning = useSimulationStore((state) => state.toggleRunning);
-  const stepOnce = useSimulationStore((state) => state.stepOnce);
-  const reset = useSimulationStore((state) => state.reset);
-  const speedMultiplier = useSimulationStore((state) => state.speedMultiplier);
-  const setSpeedMultiplier = useSimulationStore((state) => state.setSpeedMultiplier);
-  const snapshot = useSimulationStore((state) => state.latestSnapshot);
-  const interventionHistoryCount = useSimulationStore((state) => state.interventionHistory.length);
+  const runtime = useActiveWorldRuntime();
+  const { isRunning, speedMultiplier } = runtime;
   const [resetArmed, setResetArmed] = useState(false);
-  const metricHistoryCount = snapshot?.metricsHistory.length ?? 0;
-  const resetIsDestructive = (snapshot?.tick ?? 0) > 0 || metricHistoryCount > 1 || interventionHistoryCount > 0;
+  const resetIsDestructive = runtime.tick > 0 || runtime.metricRecordCount > 1 || runtime.interventionCount > 0;
 
   useEffect(() => {
     if (!resetIsDestructive) {
@@ -28,7 +21,7 @@ export function TimelineControlStrip() {
       setResetArmed(true);
       return;
     }
-    reset();
+    void runtime.reset();
     setResetArmed(false);
   }
 
@@ -36,7 +29,7 @@ export function TimelineControlStrip() {
     <section className="timeline-strip" aria-label="Persistent simulation playback controls" data-workspace-region="runControlDock">
       <div className="timeline-strip__label">
         <span>Run Control</span>
-        <strong>{isRunning ? "Running" : "Paused"}</strong>
+        <strong>{runtime.state === "initializing" ? "Initializing" : runtime.state === "failed" ? "Stopped" : isRunning ? "Running" : "Paused"}</strong>
       </div>
       <div className="timeline-strip__buttons">
         <RunControlButton
@@ -44,9 +37,10 @@ export function TimelineControlStrip() {
           icon={isRunning ? "Ⅱ" : "▶"}
           ariaLabel={isRunning ? "Pause simulation" : "Run simulation"}
           active={isRunning}
-          onClick={toggleRunning}
+          onClick={runtime.toggleRunning}
+          disabled={!runtime.isReady}
         />
-        <RunControlButton label="Step" icon="→" ariaLabel="Step exactly one tick" onClick={stepOnce} />
+        <RunControlButton label="Step" icon="→" ariaLabel="Step exactly one tick" onClick={() => void runtime.step()} disabled={!runtime.isReady || isRunning} />
         <RunControlButton
           label={resetArmed ? "Confirm Reset" : "Reset"}
           icon="↻"
@@ -59,12 +53,13 @@ export function TimelineControlStrip() {
           }
           active={resetArmed}
           onClick={handleReset}
+          disabled={!runtime.isReady}
         />
       </div>
       <div className="timeline-strip__readout">
-        <strong>{formatTick(snapshot?.tick ?? 0)}</strong>
+        <strong>{formatTick(runtime.tick)}</strong>
         <span>tick</span>
-        <strong>{formatNumber(snapshot?.time ?? 0, 1)}</strong>
+        <strong>{formatNumber(runtime.time, 1)}</strong>
         <span>time</span>
       </div>
       <label className="speed-control">
@@ -75,7 +70,8 @@ export function TimelineControlStrip() {
           max="8"
           step="0.25"
           value={speedMultiplier}
-          onChange={(event) => setSpeedMultiplier(Number(event.target.value))}
+          onChange={(event) => runtime.setSpeedMultiplier(Number(event.target.value))}
+          disabled={!runtime.isReady}
           suppressHydrationWarning
         />
       </label>
@@ -94,12 +90,14 @@ function RunControlButton({
   icon,
   ariaLabel,
   active = false,
+  disabled = false,
   onClick
 }: {
   label: string;
   icon: string;
   ariaLabel: string;
   active?: boolean;
+  disabled?: boolean;
   onClick: () => void;
 }) {
   return (
@@ -109,6 +107,7 @@ function RunControlButton({
       aria-label={ariaLabel}
       aria-pressed={active || undefined}
       onClick={onClick}
+      disabled={disabled}
       suppressHydrationWarning
     >
       <span aria-hidden="true">{icon}</span>

@@ -1,19 +1,18 @@
 "use client";
 
 import { useSimulationStore } from "../state/simulationStore";
+import { useActiveWorldRuntime } from "./runtime/ProductionRuntimeProvider";
 
 interface FileActionsProps {
   compact?: boolean;
 }
 
 export function FileActions({ compact = false }: FileActionsProps) {
-  const exportScenario = useSimulationStore((state) => state.exportScenario);
-  const exportSnapshot = useSimulationStore((state) => state.exportSnapshot);
+  const runtime = useActiveWorldRuntime();
   const importMode = useSimulationStore((state) => state.importMode);
   const setImportMode = useSimulationStore((state) => state.setImportMode);
   const importText = useSimulationStore((state) => state.importText);
   const setImportText = useSimulationStore((state) => state.setImportText);
-  const importJson = useSimulationStore((state) => state.importJson);
   const exportText = useSimulationStore((state) => state.exportText);
   const clearExchangeText = useSimulationStore((state) => state.clearExchangeText);
   const lastNotice = useSimulationStore((state) => state.lastNotice);
@@ -23,10 +22,10 @@ export function FileActions({ compact = false }: FileActionsProps) {
   if (compact) {
     return (
       <div className="file-actions file-actions--compact">
-        <button type="button" onClick={exportScenario} suppressHydrationWarning>
+        <button type="button" onClick={() => void runtime.exportArtifact("scenario")} disabled={!runtime.isReady} suppressHydrationWarning>
           Export Scenario
         </button>
-        <button type="button" onClick={exportSnapshot} suppressHydrationWarning>
+        <button type="button" onClick={() => void runtime.exportArtifact("snapshot")} disabled={!runtime.isReady} suppressHydrationWarning>
           Export Snapshot
         </button>
         <button type="button" onClick={() => togglePanel("file")} aria-expanded={panelState.file} suppressHydrationWarning>
@@ -39,10 +38,10 @@ export function FileActions({ compact = false }: FileActionsProps) {
   return (
     <div className="file-actions">
       <div className="file-actions__row">
-        <button type="button" onClick={exportScenario} suppressHydrationWarning>
+        <button type="button" onClick={() => void runtime.exportArtifact("scenario")} disabled={!runtime.isReady} suppressHydrationWarning>
           Export Scenario
         </button>
-        <button type="button" onClick={exportSnapshot} suppressHydrationWarning>
+        <button type="button" onClick={() => void runtime.exportArtifact("snapshot")} disabled={!runtime.isReady} suppressHydrationWarning>
           Export Snapshot
         </button>
         <button type="button" onClick={clearExchangeText} suppressHydrationWarning>
@@ -82,7 +81,7 @@ export function FileActions({ compact = false }: FileActionsProps) {
         />
       </label>
       <div className="file-actions__row">
-        <button type="button" onClick={importJson} suppressHydrationWarning>
+        <button type="button" onClick={() => void runtime.importArtifact(importMode, importText.trim())} disabled={!runtime.isReady} suppressHydrationWarning>
           {importMode === "scenario" ? "Import Scenario" : "Import Snapshot"}
         </button>
         <button

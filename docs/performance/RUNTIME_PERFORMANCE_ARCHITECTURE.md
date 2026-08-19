@@ -2,15 +2,28 @@
 
 Historical milestone record. Its PERF1/PERF1B measurements and boundaries remain evidence; current architecture, capability, and milestone status live in `../ARCHITECTURE.md`, `../CAPABILITIES.md`, and `../ROADMAP.md`.
 
-Date: 2026-08-18
-Milestones: PERF1 and PERF1B
-Status: implemented and independently audited; conditionally ready for future I1 consumption
+Date: 2026-08-19
+Milestones: PERF1, PERF1B, and I1 production adoption
+Status: PERF1/PERF1B implemented and independently audited; consumed by production Flocking in I1, with I1B audit pending
 
 ## Decision
 
-PERF1 separates authoritative simulation execution from ephemeral rendering and coarse React state. PERF1B then adversarially audited and hardened that boundary. The isolated Flocking prototype runs a real ORTUS engine in a dedicated browser Worker and publishes bounded typed-array `RenderFramePacket` values plus lower-frequency `UIProjection` values. Production `/world` is unchanged.
+PERF1 separated authoritative simulation execution from ephemeral rendering and coarse React state. PERF1B then adversarially audited and hardened that boundary. At completion of those milestones, the isolated Flocking prototype ran a real ORTUS engine in a dedicated browser Worker and published bounded typed-array `RenderFramePacket` values plus lower-frequency `UIProjection` values. Production `/world` was unchanged at that historical point.
 
-This is a runtime architecture result, not a high-scale claim. The supported prototype remains one fixed Flocking scenario at 100 or 500 boids. No cross-template Worker support, production immersive shell, evidence persistence, `CanonicalObservation`, `OffscreenCanvas`, shared memory, WebGL, Wasm, or new simulation capability is implied.
+I1 adopts that boundary in the production World for Flocking only. This remains a runtime architecture result, not a high-scale claim. No cross-template Worker support, evidence persistence, `CanonicalObservation`, `OffscreenCanvas`, shared memory, WebGL, Wasm, or new simulation capability is implied.
+
+## I1 Production Adoption Evidence
+
+Production Flocking now uses the dedicated Worker runtime as its only execution path. The runtime owns engine state, RNG, scheduling, and ordered commands; Canvas consumes `RenderFramePacket`, while React consumes bounded `UIProjection` and selected-detail data. The production controller does not import or instantiate `LocalRuntimeDriver`; a terminal Worker failure produces an explicit failed state, performs no fallback, and cannot advance any accepted frame. The six other templates retain their existing main-thread path.
+
+A single local development-Chromium characterization used the same production shell and Flocking configuration at each load, requested an intentionally aggressive `8x` playback rate, and measured after readiness:
+
+| Agents | Rebuild to ready | Achieved model ticks/s | Engine step median / p95 | Canvas FPS | Draw median / p95 | Main-thread timer lag median / p95 / max |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| 100 | 243 ms | 83.1 | 5.3 / 9.7 ms | 56.75 | 0.7 / 1.3 ms | 0.5 / 32.5 / 52.2 ms |
+| 500 | 267 ms | 20.7 | 33.2 / 65.5 ms | 57.15 | 0.9 / 1.5 ms | 0.4 / 11.5 / 25.6 ms |
+
+The 100-agent scene used high visual quality; the 500-agent scene used the deterministic balanced presentation tier. The samples advanced `183` ticks over about `2.20 s` at 100 and `53` ticks over about `2.55 s` at 500. Frame publications outnumbered coarse UI publications (`37/10` at 100 and `11/7` at 500), demonstrating distinct channels rather than React updates for entity motion. Each sample recorded one long render frame, and the 100-agent timer-lag tail was noisier than its median. These short, machine-specific development measurements are not portable throughput, latency, startup, or 60 FPS guarantees. The 500-agent runtime is visibly compute-limited: the useful result is that the main-thread scene remained near 57 FPS with low median timer delay while Worker model throughput fell to about 21 ticks/s. Worker isolation did not make the engine faster.
 
 ## Representation Boundaries
 
@@ -154,9 +167,9 @@ Independent 60-second Worker soaks completed without page errors or console erro
 
 Instrumentation remained capped at 360 samples per measure. Frame/UI gates remained one-in-flight plus one-pending. Visual packets were coalesced only when a consumer lagged; ordered model steps were not skipped. PERF1B extends this evidence with two three-minute soaks, 25 mount/dispose cycles, 25 replacements, 20 Back/Forward transitions, and the shared 128-message ingress cap. The Chromium heap APIs remain partial, so this is evidence against obvious bounded-run growth rather than proof of leak freedom. Multi-hour, Worker-heap, mobile-device, and browser-diversity profiling remain open.
 
-## Production And Scientific Boundaries
+## PERF1 Production And Scientific Boundaries
 
-- Production `/world`, its stage, tasks, setup/rebuild, Observe, Compare, Experiment Runner, playback, history, starter/recipe/guide handoffs, and persistence are not migrated to the Worker in PERF1.
+- Production `/world`, its stage, tasks, setup/rebuild, Observe, Compare, Experiment Runner, playback, history, starter/recipe/guide handoffs, and persistence were not migrated to the Worker in PERF1. I1 later migrated the active Flocking World path only.
 - Forest Fire and Predator-Prey retain their existing runtime behavior. Their existing performance smoke remains required.
 - No automatic neighbor policy, seed interpretation, random stream, draw order, initialization randomization, metric definition, intervention, scenario field, or agent-count bound was changed.
 - The exact corrected wrap implementation is opt-in for differential tests only. The inherited automatic path remains unchanged; ORTUS does not falsely call its trajectories equivalent to the corrected experiment.
@@ -170,13 +183,13 @@ Five matched eight-second browser runs show why the result must not be marketed 
 
 Three-minute Worker soaks completed `4,321` ordered ticks at 100 and `4,244` at 500, retained one Worker, kept all instrumentation histories at or below 360, and observed no long task or long frame. A separate explicitly collected 60-second main-page heap sample grew by `746,964` bytes after GC but excludes Worker/native/GPU memory. The readiness verdict is `CONDITIONALLY READY FOR FUTURE I1 CONSUMPTION` only because broad external platform, background-tab, multi-hour, and direct assistive-technology evidence remains absent.
 
-## Future I1 Handoff
+## I1 Adoption Contract
 
-I1 may consume `SimulationRuntimePort`, `WorkerRuntimeDriver`, the Local reference driver, `RenderFramePacket`, `UIProjection`, selected-only detail, explicit projection kind, strict generation/revision identity, the 128-message ingress bound, one-in-flight plus one-pending visual gates, and explicit terminal lifecycle/failure. It must keep the engine authoritative, keep React coarse, retain semantic DOM status/inspection, and add template adapters or rendering primitives only when their runtime support is real.
+I1 consumed `SimulationRuntimePort`, `WorkerRuntimeDriver`, `RenderFramePacket`, `UIProjection`, selected-only detail, explicit projection kind, strict generation/revision identity, the 128-message ingress bound, one-in-flight plus one-pending visual gates, and explicit terminal lifecycle/failure. `LocalRuntimeDriver` remains a reference and differential-test implementation, not a production fallback. The production integration keeps the engine authoritative, React coarse, semantic DOM status/inspection present, and support restricted to Flocking.
 
-I1 must not reintroduce continuous full snapshots, animate entities through React, mutate simulation state from rendering, make Canvas authoritative, couple camera/DPR/resize/reduced-motion to model state, change RNG or scheduler semantics, coalesce commands/model steps/evidence, turn `RenderFramePacket` into `CanonicalObservation`, add a Worker toggle, hide Worker failure behind a different run, infer cross-template support, or adopt the corrected spatial-hash experiment without a separate semantic migration and new performance evidence.
+I1 does not reintroduce continuous full snapshots, animate entities through React, mutate simulation state from rendering, make Canvas authoritative, couple camera/DPR/resize/reduced-motion to model state, change RNG or scheduler semantics, coalesce commands/model steps, turn `RenderFramePacket` into `CanonicalObservation`, add a Worker toggle, hide Worker failure behind a different run, infer cross-template support, or adopt the corrected spatial-hash experiment.
 
-PERF1B is complete. A0 - Canonical Architecture + Source-of-Truth Consolidation is next and unstarted, followed by its A0B audit. I1 remains planned and unstarted until those architecture gates and its dedicated prompt.
+PERF1B, A0, A0B, and I1 are complete. I1B - Production Runtime Migration Audit is next and unstarted. I2 is not the current handoff.
 
 ## Final Verification
 
@@ -188,3 +201,13 @@ PERF1B is complete. A0 - Canonical Architecture + Source-of-Truth Consolidation 
 - `npm run perf:runtime` passed with exact corrected-index/reference snapshot equivalence at 100 and 500. `git diff --check` passed at the final commit gate.
 - `npm run lint: unavailable, package.json has no lint script.`
 - PERF1B post-final-fix gates passed real-Worker Playwright `6/6 (2.6m)`, complete Playwright/Axe `189/189 (19.7m)` with zero failures/retries/skips, typecheck, `82 files / 703` unit tests, and a `23`-page production build compiled in `10.7s`. Final smoke measured Flocking-100 `207.04` ticks/s, Flocking-500 `28.32`, Forest Fire `44.57`, Predator-Prey `126.47`, and bounded Atlas `2` runs / `10` work units / horizon `5` in `36.21 ms`. `npm run perf:runtime` retained exact 100/500 snapshot equivalence and `2,300/11,500`-byte unselected packets.
+
+### I1 Production Adoption Verification
+
+- Lint passed TypeScript unused-symbol checks and the architecture boundary scan over `385` production TypeScript files. Typecheck passed. Unit verification passed `84 files / 730 tests`.
+- The production build compiled successfully and generated `23` pages. The `/world` route measured `62.4 kB` with `395 kB` first-load JavaScript in this build report.
+- The first complete Playwright run found two migration regressions: generic Flocking Reset incorrectly retained prepared-recipe provenance, and the older R2 pixel audit still targeted the retired snapshot-canvas accessible name. It ended `180 passed / 2 failed / 11 did not run`; both defects were fixed, focused replay passed `2/2`, and a complete rerun passed `193/193` in `30.7m` with no skips. After the final replacement, artifact, and capture-provenance hardening, the commit-candidate Playwright/Axe gate passed `193/193` in `29.9m` with zero failures, skips, or retries.
+- Late authority review also fixed rejected replacements leaving desired configuration presented as accepted state, generic Reset adoption before Worker acceptance, collision loss at the internal runtime-artifact metadata key, and comparison captures mixing an exported Worker snapshot with mutable UI seed/parameters. Focused adoption/runtime coverage passed `28/28` after these fixes.
+- Final production-browser characterization measured the table above. At 500 agents, the Worker simulated about `20.7` ticks/s while Canvas held `57.15 FPS`; this supports main-thread isolation under the measured workload, not a throughput or universal frame-rate claim.
+- Final headless simulation smoke preserved exact Flocking pair-check counts of `316,971` at 100 and `7,721,264` at 500. It measured Flocking-100 `244.17` ticks/s, Flocking-500 `30.82`, Forest Fire `49.39`, Predator-Prey `146.76`, and bounded Atlas `2` runs / `10` work units / horizon `5` in `28.25 ms`; substantial timing variation between same-work runs remains a local-machine limitation.
+- `npm run perf:runtime` passed with exact corrected-index/reference snapshot equivalence at 100 and 500. Automatic-path medians were `154.848` ticks/s at 100 and `19.848` at 500; all-pairs reference measured `181.020` and `27.504`, while corrected spatial hash measured `139.532` and `18.983`. Unselected frame packets remained `2,300/11,500` bytes versus `41,406/182,027`-byte JSON snapshot artifacts and contained no metric history.

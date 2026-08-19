@@ -1,8 +1,11 @@
 import type { Command } from "../kernel/types";
+import type { InterventionRequest } from "../interventions/interventionTypes";
 import { RuntimeAccumulatorScheduler, type RuntimeSchedulerOptions } from "./RuntimeScheduler";
 import { RuntimeSession, type RuntimePublicationBundle } from "./RuntimeSession";
 import type {
   RenderFramePacket,
+  RuntimeArtifactImportRequest,
+  RuntimeArtifactKind,
   RuntimeDriverState,
   RuntimeFailure,
   RuntimePublication,
@@ -10,6 +13,7 @@ import type {
   SimulationRuntimePort,
   UIProjection
 } from "./types";
+import { validateRuntimeArtifactJson } from "./protocol";
 
 export class LocalRuntimeDriver implements SimulationRuntimePort {
   readonly executionKind = "local" as const;
@@ -19,7 +23,6 @@ export class LocalRuntimeDriver implements SimulationRuntimePort {
   private activeGeneration = 0;
   private latestFrame: RenderFramePacket | null = null;
   private latestUI: UIProjection | null = null;
-  private runRequest: RuntimeRunRequest | null = null;
   private lifecycle: RuntimeDriverState = "idle";
 
   constructor(options: RuntimeSchedulerOptions = {}) {
@@ -56,18 +59,19 @@ export class LocalRuntimeDriver implements SimulationRuntimePort {
 
   async reset(): Promise<UIProjection> {
     this.assertCommandable("reset");
-    if (!this.runRequest) {
+    const runId = this.latestUI?.runId;
+    if (!runId) {
       throw new Error("Local runtime cannot reset before initialization");
     }
     this.scheduler.pause();
     this.beginGeneration();
     this.lifecycle = "initializing";
     try {
-      this.publishBundle(this.session.reset(this.identity(this.runRequest.runId)));
+      this.publishBundle(this.session.reset(this.identity(runId)));
       this.lifecycle = "ready";
       return this.requireLatestUI();
     } catch (error) {
-      this.fail(error, "runtime", this.runRequest.runId);
+      this.fail(error, "runtime", runId);
       throw error;
     }
   }
@@ -119,6 +123,59 @@ export class LocalRuntimeDriver implements SimulationRuntimePort {
     }
   }
 
+  setSpeedMultiplier(value: number): void {
+    this.assertCommandable("change speed");
+    try {
+      this.publishUI(this.session.setSpeedMultiplier(value));
+    } catch (error) {
+      this.fail(error, "runtime");
+      throw error;
+    }
+  }
+
+  async applyIntervention(request: InterventionRequest): Promise<UIProjection> {
+    this.assertCommandable("apply an intervention");
+    try {
+      this.publishBundle(this.session.applyIntervention(request));
+      return this.requireLatestUI();
+    } catch (error) {
+      this.fail(error, "runtime");
+      throw error;
+    }
+  }
+
+  async clearInterventions(): Promise<UIProjection> {
+    this.assertCommandable("clear intervention entries");
+    try {
+      this.publishBundle(this.session.clearInterventions());
+      return this.requireLatestUI();
+    } catch (error) {
+      this.fail(error, "runtime");
+      throw error;
+    }
+  }
+
+  async exportArtifact(kind: RuntimeArtifactKind): Promise<string> {
+    this.assertCommandable(`export a ${kind}`);
+    return this.session.exportArtifact(kind);
+  }
+
+  async importArtifact(request: RuntimeArtifactImportRequest): Promise<UIProjection> {
+    this.assertCommandable(`import a ${request.kind}`);
+    validateRuntimeArtifactJson(request.kind, request.json);
+    this.scheduler.pause();
+    this.beginGeneration();
+    this.lifecycle = "initializing";
+    try {
+      this.publishBundle(this.session.importArtifact(request, this.identity(request.runId)));
+      this.lifecycle = "ready";
+      return this.requireLatestUI();
+    } catch (error) {
+      this.fail(error, "initialization", request.runId);
+      throw error;
+    }
+  }
+
   setSelectedEntity(entityId: string | null): void {
     this.assertCommandable("change selection");
     try {
@@ -158,13 +215,11 @@ export class LocalRuntimeDriver implements SimulationRuntimePort {
     this.listeners.clear();
     this.latestFrame = null;
     this.latestUI = null;
-    this.runRequest = null;
   }
 
   private rebuild(request: RuntimeRunRequest, kind: "initialization" | "replacement"): UIProjection {
     this.beginGeneration();
     this.lifecycle = "initializing";
-    this.runRequest = request;
     try {
       const bundle = this.session.rebuild(request, this.identity(request.runId), kind);
       this.publishBundle(bundle);
@@ -219,7 +274,7 @@ export class LocalRuntimeDriver implements SimulationRuntimePort {
     const identity = this.session.currentIdentity();
     const failure: RuntimeFailure = {
       generation: Math.max(1, this.activeGeneration),
-      runId: runId ?? (identity.generation === this.activeGeneration ? identity.runId : this.runRequest?.runId ?? "uninitialized"),
+      runId: runId ?? (identity.generation === this.activeGeneration ? identity.runId : "uninitialized"),
       code,
       message: boundedErrorMessage(error)
     };
@@ -228,7 +283,6 @@ export class LocalRuntimeDriver implements SimulationRuntimePort {
       this.publishUI({ ...ui, playback: "failed" });
     }
     this.emit({ type: "failure", failure });
-    this.runRequest = null;
   }
 
   private emit(publication: RuntimePublication): void {

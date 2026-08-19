@@ -5,6 +5,7 @@ import { formatNumber, jsonPreview, truncateId } from "../lib/format";
 import { getEntityComponents, getGridCell, getPosition, getVelocity } from "../lib/templateVisuals";
 import { NeuralNeuronStateComponent } from "../simulation/templates/neuralExcitation.template";
 import { useSimulationStore } from "../state/simulationStore";
+import { useActiveWorldRuntime } from "./runtime/ProductionRuntimeProvider";
 
 interface AgentInspectorProps {
   placement?: "floating" | "drawer";
@@ -14,6 +15,19 @@ export function AgentInspector({ placement = "floating" }: AgentInspectorProps) 
   const snapshot = useSimulationStore((state) => state.latestSnapshot);
   const selectedEntityId = useSimulationStore((state) => state.selectedEntityId);
   const selectEntity = useSimulationStore((state) => state.selectEntity);
+  const runtime = useActiveWorldRuntime();
+
+  if (runtime.workerManaged && selectedEntityId) {
+    return (
+      <WorkerFlockingInspector
+        placement={placement}
+        entityId={selectedEntityId}
+        selected={runtime.selected}
+        tick={runtime.tick}
+        onClose={() => selectEntity(null)}
+      />
+    );
+  }
 
   if (!snapshot || !selectedEntityId) {
     return null;
@@ -96,6 +110,51 @@ export function AgentInspector({ placement = "floating" }: AgentInspectorProps) 
             {jsonPreview(components)}
           </pre>
         </details>
+      </CornerFramePanel>
+    </div>
+  );
+}
+
+function WorkerFlockingInspector({
+  placement,
+  entityId,
+  selected,
+  tick,
+  onClose
+}: {
+  placement: "floating" | "drawer";
+  entityId: string;
+  selected: ReturnType<typeof useActiveWorldRuntime>["selected"];
+  tick: number;
+  onClose: () => void;
+}) {
+  return (
+    <div className={`agent-inspector agent-inspector--${placement}`}>
+      <CornerFramePanel
+        title="Boid Inspector"
+        eyebrow={truncateId(entityId)}
+        variant="floating"
+        actions={<button type="button" onClick={onClose}>Close</button>}
+      >
+        {selected ? (
+          <>
+            <div className="inspector-grid">
+              <div><span>ID</span><strong>{entityId}</strong></div>
+              <div><span>Model entity</span><strong>{selected.label}</strong></div>
+              <div><span>Tick</span><strong>{tick}</strong></div>
+              <div><span>Position</span><strong>{formatNumber(selected.x, 2)}, {formatNumber(selected.y, 2)}</strong></div>
+              <div><span>Velocity</span><strong>{formatNumber(selected.velocityX, 2)}, {formatNumber(selected.velocityY, 2)}</strong></div>
+              <div><span>Speed</span><strong>{formatNumber(selected.speed, 3)}</strong></div>
+              <div><span>Heading</span><strong>{formatNumber(selected.headingDegrees, 1)} deg</strong></div>
+              <div><span>Modeled neighbors</span><strong>{selected.neighborCount}</strong></div>
+              <div><span>Local density</span><strong>{formatNumber(selected.localDensity, 3)}</strong></div>
+              <div><span>Current proximity</span><strong>{selected.currentProximityCount ?? "Not projected"}</strong></div>
+            </div>
+            <p className="microcopy">Exact bounded detail for the selected simulated boid. It is model state, not an empirical animal observation.</p>
+          </>
+        ) : (
+          <p className="microcopy">Selected detail is being resolved by the active Worker generation.</p>
+        )}
       </CornerFramePanel>
     </div>
   );

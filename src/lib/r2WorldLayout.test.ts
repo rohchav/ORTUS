@@ -83,7 +83,7 @@ describe("R2 World layout and interaction reclaim contracts", () => {
     expect(tasks).toContain("Focus world");
     expect(tasks).toContain("Show tools");
     expect(tasks).toContain("renderWorkspaceMode(activeMode, chooseMode, !toolsHidden)");
-    expect(source("src/components/WorldObservePanel.tsx")).toContain("active ? state.latestSnapshot : null");
+    expect(source("src/components/WorldObservePanel.tsx")).toContain("active ? runtime.metricsHistory : []");
     expect(source("src/components/NeuralRuntimeLabPanel.tsx")).toContain("if (!active)");
     expect(tasks).not.toContain("localStorage");
     expect(tasks).not.toContain("sessionStorage");

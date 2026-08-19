@@ -1,5 +1,6 @@
-import type { Command, SimulationRunConfig } from "../kernel/types";
+import type { Command, MetricRecord, SimulationRunConfig } from "../kernel/types";
 import type { PerformanceMeasureSummary } from "../kernel/Performance";
+import type { InterventionRequest, InterventionStatus } from "../interventions/interventionTypes";
 
 export const maxRenderFrameEntities = 10_000;
 export const maxSelectedNeighborCount = 2_048;
@@ -7,6 +8,14 @@ export const maxSelectedNeighborCount = 2_048;
 // fire-and-forget controls must not create an unbounded browser Worker queue.
 export const maxPendingRuntimeMessages = 128;
 export const runtimeUiPublicationIntervalMs = 250;
+export const maxRuntimeMetricHistory = 120;
+export const maxRuntimeInterventionHistory = 6;
+export const maxRuntimeArtifactJsonLength = 16_000_000;
+export const workerRuntimeTemplateIds = ["flocking-boids"] as const;
+
+export function supportsWorkerRuntime(templateId: string): templateId is (typeof workerRuntimeTemplateIds)[number] {
+  return workerRuntimeTemplateIds.includes(templateId as (typeof workerRuntimeTemplateIds)[number]);
+}
 
 export type RuntimeExecutionKind = "local" | "worker";
 export type RuntimeDriverState = "idle" | "initializing" | "ready" | "failed" | "disposed";
@@ -82,6 +91,16 @@ export interface RuntimePublicationStats {
   uiCoalesced: number;
 }
 
+export interface RuntimeInterventionSummary {
+  readonly id: string;
+  readonly interventionId: string;
+  readonly label: string;
+  readonly tickApplied: number;
+  readonly targetSummary: string;
+  readonly status: InterventionStatus;
+  readonly error?: string;
+}
+
 // React and accessibility consumers receive this coarse projection, never the
 // per-entity motion arrays used by Canvas.
 export interface RuntimeUIProjectionBase extends RuntimeIdentity {
@@ -95,8 +114,14 @@ export interface RuntimeUIProjectionBase extends RuntimeIdentity {
   readonly entityCount: number;
   readonly playback: RuntimePlaybackState;
   readonly lastAdvanceKind: RuntimeAdvanceKind;
+  readonly speedMultiplier: number;
   readonly runtimeSignature: string;
   readonly warnings: readonly string[];
+  readonly metricHistory: readonly MetricRecord[];
+  readonly metricRecordCount: number;
+  readonly interventions: readonly RuntimeInterventionSummary[];
+  readonly interventionCount: number;
+  readonly appliedInterventionCount: number;
   readonly performance: {
     measures: readonly PerformanceMeasureSummary[];
     publications: RuntimePublicationStats;
@@ -128,6 +153,14 @@ export interface RuntimeRunRequest {
   instrumentation?: boolean;
 }
 
+export type RuntimeArtifactKind = "scenario" | "snapshot";
+
+export interface RuntimeArtifactImportRequest {
+  runId: string;
+  kind: RuntimeArtifactKind;
+  json: string;
+}
+
 export interface SimulationRuntimePort {
   readonly executionKind: RuntimeExecutionKind;
   readonly generation: number;
@@ -139,6 +172,11 @@ export interface SimulationRuntimePort {
   pause(): void;
   step(): Promise<UIProjection>;
   applyCommands(commands: readonly Command[]): Promise<UIProjection>;
+  setSpeedMultiplier(value: number): void;
+  applyIntervention(request: InterventionRequest): Promise<UIProjection>;
+  clearInterventions(): Promise<UIProjection>;
+  exportArtifact(kind: RuntimeArtifactKind): Promise<string>;
+  importArtifact(request: RuntimeArtifactImportRequest): Promise<UIProjection>;
   setSelectedEntity(entityId: string | null): void;
   resetPerformance(): void;
   getLatestFrame(): RenderFramePacket | null;

@@ -526,7 +526,11 @@ for (const templateId of templateIds) {
   test(`${templateId} renders a nonblank bounded World stage`, async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 720 });
     await openWorld(page, `/world?template=${templateId}`);
-    const canvas = page.getByRole("img", { name: "Simulation world. Agents are rendered from the latest engine snapshot." });
+    const canvas = page.getByRole("img", {
+      name: templateId === "flocking-boids"
+        ? "Immersive Flocking world rendered from the current runtime frame"
+        : "Simulation world. Agents are rendered from the latest engine snapshot."
+    });
     const pixels = await canvas.evaluate((element) => {
       const target = element as HTMLCanvasElement;
       const context = target.getContext("2d");

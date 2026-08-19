@@ -1,13 +1,28 @@
 import { BoundedPerformanceRecorder, type PerformanceMeasureName, type PerformanceMeasureSummary } from "../kernel/Performance";
 import type { Command, SimulationRunConfig } from "../kernel/types";
 import { SimulationValidationError } from "../kernel/Errors";
-import { createEngineFromRunConfig } from "../runs/engineFromRunConfig";
+import {
+  clearInterventionHistory,
+  executeIntervention,
+  readInterventionHistory,
+  type InterventionRequest
+} from "../interventions";
+import {
+  createEngineFromRunConfig,
+  runConfigFromArtifact,
+  withRuntimeArtifactMetadata
+} from "../runs/engineFromRunConfig";
 import { validateRunConfig } from "../runs/runConfig";
 import { createFlockingRenderFramePacket, createFlockingSelectedUIProjection } from "./flockingProjection";
+import { parseRuntimeArtifact } from "./artifacts";
 import {
+  maxRuntimeInterventionHistory,
+  maxRuntimeMetricHistory,
   runtimeUiPublicationIntervalMs,
   type RenderFramePacket,
   type RuntimeAdvanceKind,
+  type RuntimeArtifactImportRequest,
+  type RuntimeArtifactKind,
   type RuntimeExecutionKind,
   type RuntimeIdentity,
   type RuntimePlaybackState,
@@ -23,7 +38,6 @@ export interface RuntimePublicationBundle {
 
 export class RuntimeSession {
   private engine: ReturnType<typeof createEngineFromRunConfig> | undefined;
-  private runConfig: SimulationRunConfig | undefined;
   private identity: RuntimeIdentity = { generation: 0, runId: "uninitialized" };
   private playback: RuntimePlaybackState = "initializing";
   private lastAdvanceKind: RuntimeAdvanceKind = "initialization";
@@ -51,12 +65,11 @@ export class RuntimeSession {
     this.measures.clear();
     this.publicationStats = emptyPublicationStats();
     const started = this.performanceMark();
-    const engine = createEngineFromRunConfig(runConfig);
+    const engine = createEngineFromRunConfig(withRuntimeArtifactMetadata(runConfig));
     engine.enablePerformanceInstrumentation({ enabled: this.instrumentation, maxSamples: 360 });
     this.recordElapsed("ortus.run.rebuild", started);
     this.engine?.pause();
     this.engine = engine;
-    this.runConfig = runConfig;
     this.identity = identity;
     this.playback = "paused";
     this.lastAdvanceKind = kind;
@@ -69,14 +82,20 @@ export class RuntimeSession {
 
   reset(identity: RuntimeIdentity): RuntimePublicationBundle {
     this.assertNotDisposed();
-    if (!this.runConfig) {
-      throw new SimulationValidationError("Runtime cannot reset before initialization");
-    }
-    return this.rebuild(
-      { runId: identity.runId, runConfig: this.runConfig, instrumentation: this.instrumentation },
-      identity,
-      "restore"
-    );
+    const engine = this.requireEngine();
+    engine.pause();
+    engine.reset();
+    engine.performanceMonitor.clear();
+    this.measures.clear();
+    this.publicationStats = emptyPublicationStats();
+    this.identity = identity;
+    this.playback = "paused";
+    this.lastAdvanceKind = "restore";
+    this.selectedEntityId = null;
+    this.lastUiAt = Number.NEGATIVE_INFINITY;
+    this.framePublicationId = 0;
+    this.uiRevision = 0;
+    return this.project(true);
   }
 
   play(): UIProjection {
@@ -113,6 +132,64 @@ export class RuntimeSession {
     const engine = this.requireEngine();
     engine.applyCommands(commands, { sourceSystemId: "runtime-port", reason: "validated runtime-port command" });
     this.lastAdvanceKind = "command";
+    return this.project(true);
+  }
+
+  setSpeedMultiplier(value: number): UIProjection {
+    const engine = this.requireEngine();
+    if (!Number.isFinite(value) || value < 0.25 || value > 8) {
+      throw new SimulationValidationError("Runtime speed multiplier must be between 0.25 and 8");
+    }
+    engine.setSpeed(value);
+    return this.projectUI(this.latestFrame ?? this.projectFrame());
+  }
+
+  applyIntervention(request: InterventionRequest): RuntimePublicationBundle {
+    const engine = this.requireEngine();
+    executeIntervention(engine, request);
+    this.lastAdvanceKind = "command";
+    return this.project(true);
+  }
+
+  clearInterventions(): RuntimePublicationBundle {
+    clearInterventionHistory(this.requireEngine());
+    this.lastAdvanceKind = "command";
+    return this.project(true);
+  }
+
+  exportArtifact(kind: RuntimeArtifactKind): string {
+    const engine = this.requireEngine();
+    return kind === "scenario" ? engine.exportScenario() : engine.exportSnapshot();
+  }
+
+  importArtifact(request: RuntimeArtifactImportRequest, identity: RuntimeIdentity): RuntimePublicationBundle {
+    this.assertNotDisposed();
+    const snapshot = request.kind === "snapshot" ? parseRuntimeArtifact("snapshot", request.json) : null;
+    const parsed = snapshot ?? parseRuntimeArtifact("scenario", request.json);
+    const runConfig = runConfigFromArtifact(parsed);
+    assertRuntimeTemplateSupport(runConfig);
+    const speedMultiplier = this.engine?.clock.speedMultiplier ?? 1;
+    const engine = createEngineFromRunConfig(withRuntimeArtifactMetadata(runConfig));
+    if (snapshot) {
+      const initialization = engine.initialization;
+      const scenario = engine.scenario;
+      engine.restoreSnapshot(snapshot);
+      engine.initialization = initialization;
+      engine.scenario = scenario;
+    }
+    engine.enablePerformanceInstrumentation({ enabled: this.instrumentation, maxSamples: 360 });
+    engine.setSpeed(speedMultiplier);
+    this.engine?.pause();
+    this.engine = engine;
+    this.identity = identity;
+    this.playback = "paused";
+    this.lastAdvanceKind = "restore";
+    this.selectedEntityId = null;
+    this.measures.clear();
+    this.publicationStats = emptyPublicationStats();
+    this.lastUiAt = Number.NEGATIVE_INFINITY;
+    this.framePublicationId = 0;
+    this.uiRevision = 0;
     return this.project(true);
   }
 
@@ -195,7 +272,6 @@ export class RuntimeSession {
     this.playback = "disposed";
     this.latestFrame = undefined;
     this.engine = undefined;
-    this.runConfig = undefined;
     this.selectedEntityId = null;
     this.disposed = true;
   }
@@ -226,6 +302,9 @@ export class RuntimeSession {
     const started = this.performanceMark();
     this.uiRevision += 1;
     const selected = createFlockingSelectedUIProjection(this.requireEngine(), this.selectedEntityId, frame.selectedDetail);
+    const engine = this.requireEngine();
+    const metricHistory = engine.metrics.historyRecords();
+    const interventions = readInterventionHistory(engine);
     const ui: UIProjection = {
       schemaVersion: "1",
       projectionKind: "flocking-v1",
@@ -238,10 +317,28 @@ export class RuntimeSession {
       entityCount: frame.entityCount,
       playback: this.playback,
       lastAdvanceKind: this.lastAdvanceKind,
+      speedMultiplier: engine.clock.speedMultiplier,
       alignment: frame.alignment,
       runtimeSignature: frame.runtimeSignature,
       selected,
       warnings: [],
+      metricHistory: metricHistory.slice(-maxRuntimeMetricHistory).map((record) => ({
+        tick: record.tick,
+        time: record.time,
+        values: { ...record.values }
+      })),
+      metricRecordCount: metricHistory.length,
+      interventions: interventions.slice(-maxRuntimeInterventionHistory).map((record) => ({
+        id: record.id,
+        interventionId: record.interventionId,
+        label: record.label,
+        tickApplied: record.tickApplied,
+        targetSummary: record.targetSummary,
+        status: record.status,
+        ...(record.error ? { error: record.error } : {})
+      })),
+      interventionCount: interventions.length,
+      appliedInterventionCount: interventions.filter((record) => record.status === "applied").length,
       performance: {
         measures: this.performanceSummaries(),
         publications: { ...this.publicationStats, uiProjected: this.publicationStats.uiProjected + 1 }
@@ -272,7 +369,7 @@ export class RuntimeSession {
   }
 }
 
-function assertRuntimeTemplateSupport(runConfig: SimulationRunConfig): void {
+function assertRuntimeTemplateSupport(runConfig: Pick<SimulationRunConfig, "templateId">): void {
   if (runConfig.templateId !== "flocking-boids") {
     throw new SimulationValidationError(
       `PERF1 runtime projection support is explicit and currently limited to flocking-boids, not ${runConfig.templateId}`

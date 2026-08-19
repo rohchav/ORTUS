@@ -10,6 +10,8 @@ import {
 import type { SimulationWorkspaceModeId } from "../../lib/workspaceModes";
 import type { SavedRunSummary } from "../../simulation";
 import { useSimulationStore } from "../../state/simulationStore";
+import { getTemplateDescriptor } from "../../lib/templateVisuals";
+import { useActiveWorldRuntime } from "../runtime/ProductionRuntimeProvider";
 
 interface GuidedInvestigationPanelProps {
   authority: GuidedInvestigationAuthority;
@@ -30,15 +32,11 @@ export function GuidedInvestigationPanel({
   onExitGuide,
   onRestorePreparedRecipe
 }: GuidedInvestigationPanelProps) {
-  const snapshot = useSimulationStore((state) => state.latestSnapshot);
-  const isRunning = useSimulationStore((state) => state.isRunning);
+  const runtime = useActiveWorldRuntime();
   const selectedTemplateId = useSimulationStore((state) => state.selectedTemplateId);
-  const engine = useSimulationStore((state) => state.engine);
   const seed = useSimulationStore((state) => state.seed);
   const activeParameters = useSimulationStore((state) => state.parameterValues);
-  const interventionCount = useSimulationStore(
-    (state) => state.interventionHistory.filter((record) => record.status === "applied").length
-  );
+  const interventionCount = runtime.appliedInterventionCount;
   const savedRuns = useSimulationStore((state) => state.savedRuns);
   const savedRunCount = savedRuns.length;
   const phase = phaseForGuidedRecipe(authority, launch.recipeId ?? "");
@@ -64,25 +62,25 @@ export function GuidedInvestigationPanel({
       authority,
       reference: preparedRunReference,
       activeTemplateId: selectedTemplateId,
-      activeMetadata: engine?.metadata ?? {},
+      activeMetadata: runtime.metadata,
       activeSeed: seed,
       activeParameters,
       interventionCount
     }),
-    [activeParameters, authority, engine?.metadata, interventionCount, preparedRunReference, seed, selectedTemplateId]
+    [activeParameters, authority, interventionCount, preparedRunReference, runtime.metadata, seed, selectedTemplateId]
   );
   const activeRecipeMatches = preparedRunDifferences.length === 0;
-  const metricRecord = snapshot?.metricsHistory.at(-1);
+  const metricRecord = runtime.metricsHistory.at(-1);
   const metricsAvailable = authority.focusOutputs.every((output) =>
     Number.isFinite(metricRecord?.values[output.metricId])
   );
   const openTask = step.actions.find((action) => action.type === "open-task");
   const taskVisible = !openTask || activeMode === openTask.task;
-  const horizonReached = (snapshot?.tick ?? 0) >= authority.suggestedRunHorizon;
+  const horizonReached = runtime.tick >= authority.suggestedRunHorizon;
   const checkState = {
     activeRecipeMatches,
-    isPaused: !isRunning,
-    tickIsZero: (snapshot?.tick ?? 0) === 0,
+    isPaused: !runtime.isRunning,
+    tickIsZero: runtime.tick === 0,
     horizonReached,
     taskVisible,
     metricsAvailable,
@@ -209,7 +207,7 @@ export function GuidedInvestigationPanel({
                 This active run no longer matches {recipe.title}. The controlled-pair claim no longer applies to this active run.
               </p>
               <dl>
-                <div><dt>Active world</dt><dd>{engine?.template.name ?? "Unavailable"}</dd></div>
+                <div><dt>Active world</dt><dd>{getTemplateDescriptor(selectedTemplateId).template.name}</dd></div>
                 <div><dt>Active {authority.controlledDifference.label}</dt><dd>{formatValue(activeParameters.noise as string | number | boolean | null)}</dd></div>
                 <div><dt>Active seed</dt><dd>{seed}</dd></div>
                 <div><dt>Changed context</dt><dd>{preparedRunDifferences.join(", ")}</dd></div>
@@ -255,9 +253,9 @@ export function GuidedInvestigationPanel({
               isBaseline={isBaseline}
               stepIndex={stepIndex}
               recipeTitle={recipe.title}
-              currentTick={snapshot?.tick ?? 0}
-              entityCount={snapshot?.entities.length ?? 0}
-              isRunning={isRunning}
+              currentTick={runtime.tick}
+              entityCount={runtime.entityCount}
+              isRunning={runtime.isRunning}
               activeRecipeMatches={activeRecipeMatches}
               savedRuns={savedRuns}
               prompts={step.prompts ?? []}

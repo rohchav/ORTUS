@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import type { JsonValue, ParameterDefinition, ParameterValues } from "../simulation";
+import type { JsonValue, ParameterDefinition, ParameterValues, RuntimeInterventionSummary } from "../simulation";
 import { getInterventionDefinitions } from "../simulation";
 import { formatNumber } from "../lib/format";
 import { getTemplateDescriptor } from "../lib/templateVisuals";
@@ -14,6 +14,7 @@ import {
 } from "./activeInterventionReadiness";
 import { Disclosure } from "./ui/Disclosure";
 import { StatusPill } from "./ui/StatusPill";
+import { useActiveWorldRuntime } from "./runtime/ProductionRuntimeProvider";
 
 interface InterventionPanelProps {
   collapsed?: boolean;
@@ -23,13 +24,11 @@ interface InterventionPanelProps {
 
 export function InterventionPanel({ onOpenSetup }: InterventionPanelProps) {
   const selectedTemplateId = useSimulationStore((state) => state.selectedTemplateId);
-  const engine = useSimulationStore((state) => state.engine);
   const selectedEntityId = useSimulationStore((state) => state.selectedEntityId);
   const targetPoint = useSimulationStore((state) => state.interventionTargetPoint);
   const targetCell = useSimulationStore((state) => state.interventionTargetCell);
-  const history = useSimulationStore((state) => state.interventionHistory);
-  const applyIntervention = useSimulationStore((state) => state.applyIntervention);
-  const clearInterventions = useSimulationStore((state) => state.clearInterventions);
+  const runtime = useActiveWorldRuntime();
+  const history = runtime.interventions;
   const definitions = useMemo(() => getInterventionDefinitions(selectedTemplateId), [selectedTemplateId]);
   const [selectedInterventionId, setSelectedInterventionId] = useState(definitions[0]?.id ?? "");
   const selectedDefinition = definitions.find((definition) => definition.id === selectedInterventionId) ?? definitions[0];
@@ -57,10 +56,10 @@ export function InterventionPanel({ onOpenSetup }: InterventionPanelProps) {
         selectedEntityId,
         targetPoint,
         targetCell,
-        hasActiveEngine: Boolean(engine),
-        activeInterventionCount: history.length
+        hasActiveEngine: runtime.hasActiveRun,
+        activeInterventionCount: runtime.interventionCount
       }),
-    [definitions, descriptor.template, engine, history.length, selectedDefinition?.id, selectedEntityId, selectedTemplateId, targetCell, targetPoint]
+    [definitions, descriptor.template, runtime.hasActiveRun, runtime.interventionCount, selectedDefinition?.id, selectedEntityId, selectedTemplateId, targetCell, targetPoint]
   );
   const targetStatus = readiness.selectedTarget?.targetStatusLabel ?? describeInterventionTarget(selectedDefinition?.targetType, selectedEntityId, targetPoint, targetCell);
   const targetReady = readiness.selectedTarget?.targetReady ?? isInterventionTargetReady(selectedDefinition?.targetType, selectedEntityId, targetPoint, targetCell);
@@ -115,8 +114,8 @@ export function InterventionPanel({ onOpenSetup }: InterventionPanelProps) {
             <button
               type="button"
               className="intervention-apply"
-              onClick={() => applyIntervention(selectedDefinition.id, parameters)}
-              disabled={!targetReady || parameterError !== null}
+              onClick={() => void runtime.applyIntervention(selectedDefinition.id, parameters)}
+              disabled={!runtime.isReady || !targetReady || parameterError !== null}
               suppressHydrationWarning
             >
               Apply {selectedDefinition.label}
@@ -151,7 +150,7 @@ export function InterventionPanel({ onOpenSetup }: InterventionPanelProps) {
       <Disclosure expandLabel="Intervention details" collapseLabel="Hide intervention details" className="world-technical-disclosure">
         <InterventionReadinessView context={readiness} />
       </Disclosure>
-      <InterventionHistory history={history} onClear={clearInterventions} />
+      <InterventionHistory history={history} onClear={() => void runtime.clearInterventions()} />
     </div>
   );
 }
@@ -302,7 +301,7 @@ function InterventionHistory({
   history,
   onClear
 }: {
-  history: ReturnType<typeof useSimulationStore.getState>["interventionHistory"];
+  history: readonly RuntimeInterventionSummary[];
   onClear: () => void;
 }) {
   return (

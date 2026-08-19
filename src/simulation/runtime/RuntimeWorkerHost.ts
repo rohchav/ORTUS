@@ -75,7 +75,7 @@ export class RuntimeWorkerHost {
       this.acknowledgeMessageConsumption(request);
       this.handleRequest(request);
     } catch (error) {
-      const code = request.type === "runtime.initialize" || request.type === "runtime.replace"
+      const code = request.type === "runtime.initialize" || request.type === "runtime.replace" || request.type === "runtime.importArtifact"
         ? "initialization"
         : "runtime";
       const requestId = "requestId" in request ? request.requestId : undefined;
@@ -135,6 +135,23 @@ export class RuntimeWorkerHost {
       this.complete(request.requestId, bundle.ui!);
       return;
     }
+    if (request.type === "runtime.importArtifact") {
+      if (request.generation <= this.generation) {
+        return;
+      }
+      this.scheduler.pause();
+      this.generation = request.generation;
+      this.runId = request.runId;
+      this.frameGate.reset();
+      this.uiGate.reset();
+      const bundle = this.session.importArtifact(
+        { runId: request.runId, kind: request.kind, json: request.json },
+        { generation: request.generation, runId: request.runId }
+      );
+      this.publishBundle(bundle);
+      this.complete(request.requestId, bundle.ui!);
+      return;
+    }
     if (request.generation !== this.generation) {
       return;
     }
@@ -146,6 +163,9 @@ export class RuntimeWorkerHost {
       case "runtime.pause":
         this.scheduler.pause();
         this.publishUI(this.session.pause());
+        break;
+      case "runtime.speed":
+        this.publishUI(this.session.setSpeedMultiplier(request.value));
         break;
       case "runtime.step": {
         const bundle = this.session.advance(1, "step");
@@ -159,6 +179,27 @@ export class RuntimeWorkerHost {
         this.complete(request.requestId, bundle.ui!);
         break;
       }
+      case "runtime.applyIntervention": {
+        const bundle = this.session.applyIntervention(request.intervention);
+        this.publishBundle(bundle);
+        this.complete(request.requestId, bundle.ui!);
+        break;
+      }
+      case "runtime.clearInterventions": {
+        const bundle = this.session.clearInterventions();
+        this.publishBundle(bundle);
+        this.complete(request.requestId, bundle.ui!);
+        break;
+      }
+      case "runtime.exportArtifact":
+        this.options.postMessage({
+          type: "runtime.artifact",
+          requestId: request.requestId,
+          generation: this.generation,
+          kind: request.kind,
+          json: this.session.exportArtifact(request.kind)
+        });
+        break;
       case "runtime.selection":
         this.publishBundle(this.session.setSelectedEntity(request.entityId));
         break;

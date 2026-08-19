@@ -10,6 +10,7 @@ import {
 } from "./activeRunProvenanceObservation";
 import { CornerFramePanel } from "./ui/CornerFramePanel";
 import { StatusPill } from "./ui/StatusPill";
+import { useActiveWorldRuntime } from "./runtime/ProductionRuntimeProvider";
 
 export function RunProvenanceObservationPanel({ embedded = false }: { embedded?: boolean } = {}) {
   const selectedTemplateId = useSimulationStore((state) => state.selectedTemplateId);
@@ -17,10 +18,7 @@ export function RunProvenanceObservationPanel({ embedded = false }: { embedded?:
   const snapshot = useSimulationStore((state) => state.latestSnapshot);
   const seed = useSimulationStore((state) => state.seed);
   const parameters = useSimulationStore((state) => state.parameterValues);
-  const isRunning = useSimulationStore((state) => state.isRunning);
-  const lastError = useSimulationStore((state) => state.lastError);
-  const speedMultiplier = useSimulationStore((state) => state.speedMultiplier);
-  const interventionCount = useSimulationStore((state) => state.interventionHistory.length);
+  const runtime = useActiveWorldRuntime();
   const descriptor = getTemplateDescriptor(selectedTemplateId);
 
   const context = useMemo(
@@ -29,20 +27,30 @@ export function RunProvenanceObservationPanel({ embedded = false }: { embedded?:
         selectedTemplateId,
         template: descriptor.template,
         templateLabel: descriptor.template.name,
-        seed: engine?.seed ?? seed,
-        parameters: engine?.parameters ?? parameters,
-        initialization: engine?.initialization,
-        scenario: engine?.scenario,
-        metadata: engine?.metadata,
-        snapshot,
-        isRunning,
+        seed,
+        parameters,
+        initialization: runtime.initialization,
+        scenario: runtime.scenario,
+        metadata: runtime.metadata,
+        snapshot: runtime.workerManaged ? null : snapshot,
+        projection: runtime.workerManaged && runtime.uiProjection ? {
+          templateId: runtime.uiProjection.templateId,
+          tick: runtime.tick,
+          time: runtime.time,
+          entityCount: runtime.entityCount,
+          metricsHistory: runtime.metricsHistory,
+          metricRecordCount: runtime.metricRecordCount
+        } : null,
+        isRunning: runtime.isRunning,
         hasActiveEngine: Boolean(engine),
-        lastError,
-        speedMultiplier,
-        interventionCount,
+        hasActiveRuntime: runtime.hasActiveRun,
+        runtimeModeLabel: runtime.workerManaged ? "WorkerRuntimeDriver / flocking-v1" : undefined,
+        lastError: runtime.state === "failed" ? runtime.error : null,
+        speedMultiplier: runtime.speedMultiplier,
+        interventionCount: runtime.interventionCount,
         metricLabelForKey: metricLabel
       }),
-    [descriptor.template, engine, interventionCount, isRunning, lastError, parameters, seed, selectedTemplateId, snapshot, speedMultiplier]
+    [descriptor.template, engine, parameters, runtime, seed, selectedTemplateId, snapshot]
   );
 
   const content = <RunProvenanceObservationView context={context} />;

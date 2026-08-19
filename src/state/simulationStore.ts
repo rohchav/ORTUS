@@ -19,7 +19,12 @@ import {
   type ParameterValues,
   type SavedRunSummary,
   type Point2D,
-  type SimulationSnapshotView
+  runConfigFromScenario,
+  type SimulationRunConfig,
+  type SimulationSnapshotView,
+  supportsWorkerRuntime,
+  validateRunConfig,
+  validateScenario
 } from "../simulation";
 import { defaultParameters, getTemplateDescriptor, requireTemplateDescriptor, templateDescriptors, type TemplateId } from "../lib/templateVisuals";
 import { loadPanelState, savePanelState, type PanelState } from "../lib/panelPersistence";
@@ -47,6 +52,8 @@ interface SimulationUiState {
   selectedTemplateId: TemplateId;
   engine: SimulationEngine | null;
   latestSnapshot: SimulationSnapshotView | null;
+  flockingRuntimeConfig: SimulationRunConfig | null;
+  flockingRuntimeRevision: number;
   isRunning: boolean;
   speedMultiplier: number;
   selectedEntityId: string | null;
@@ -87,6 +94,19 @@ interface SimulationUiState {
   clearInterventions: () => void;
   applyScenario: (scenario: AuthoredScenario) => void;
   captureCurrentRun: (options?: { label?: string; notes?: string; tags?: string[] }) => void;
+  captureRuntimeRun: (
+    input: {
+      snapshot: SimulationSnapshotView;
+      seed: string;
+      parameters: ParameterValues;
+      metadata: Record<string, JsonValue>;
+      interventionHistory: AppliedInterventionRecord[];
+    },
+    options?: { label?: string; notes?: string; tags?: string[] }
+  ) => void;
+  adoptFlockingRuntimeConfig: (runConfig: SimulationRunConfig, notice: string) => void;
+  setRuntimeFeedback: (feedback: { error?: string | null; notice?: string | null }) => void;
+  setRuntimeExport: (text: string, mode: "scenario" | "snapshot", notice: string) => void;
   importLatestExperimentRuns: () => void;
   setLatestExperimentResultSet: (result: ExperimentResultSet | null) => void;
   toggleComparisonRun: (runId: string) => void;
@@ -116,6 +136,8 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
   selectedTemplateId: initialTemplate.id,
   engine: null,
   latestSnapshot: null,
+  flockingRuntimeConfig: null,
+  flockingRuntimeRevision: 0,
   isRunning: false,
   speedMultiplier: 1,
   selectedEntityId: null,
@@ -152,7 +174,7 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
   },
 
   initialize() {
-    if (get().engine) {
+    if (get().engine || get().flockingRuntimeConfig) {
       return;
     }
     replaceEngine(set, get, {
@@ -353,6 +375,32 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
 
   applyScenario(scenario) {
     try {
+      const scenarioValidation = validateScenario(scenario);
+      if (supportsWorkerRuntime(scenarioValidation.scenario.templateId)) {
+        const descriptor = requireTemplateDescriptor(scenarioValidation.scenario.templateId);
+        const runConfig = runConfigFromScenario(scenarioValidation.scenario);
+        get().engine?.pause();
+        set({
+          selectedTemplateId: descriptor.id,
+          engine: null,
+          latestSnapshot: null,
+          flockingRuntimeConfig: runConfig,
+          flockingRuntimeRevision: get().flockingRuntimeRevision + 1,
+          parameterValues: runConfig.parameters,
+          seed: runConfig.seed,
+          selectedEntityId: null,
+          interventionTargetPoint: null,
+          interventionTargetCell: null,
+          interventionHistory: [],
+          isRunning: false,
+          lastError: null,
+          lastNotice: `Applied scenario "${scenarioValidation.scenario.name}". A fresh Worker-owned run is ready at tick 0.`
+        });
+        if (scenarioValidation.warnings.length > 0) {
+          set({ lastNotice: `Applied scenario "${scenarioValidation.scenario.name}" with warning: ${scenarioValidation.warnings[0]}` });
+        }
+        return;
+      }
       const { engine, validation } = createEngineFromScenario(scenario);
       const descriptor = requireTemplateDescriptor(validation.scenario.templateId);
       configurePerformanceInstrumentation(engine);
@@ -361,6 +409,7 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
         selectedTemplateId: descriptor.id,
         engine,
         latestSnapshot: engine.createSnapshot(),
+        flockingRuntimeConfig: null,
         parameterValues: engine.parameters,
         seed: engine.seed,
         selectedEntityId: null,
@@ -416,6 +465,82 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
     } catch (error) {
       set({ lastError: `Run capture failed: ${errorMessage(error)}`, lastNotice: null });
     }
+  },
+
+  captureRuntimeRun(input, options = {}) {
+    try {
+      const descriptor = requireTemplateDescriptor(input.snapshot.templateId);
+      const run = buildRunSummaryFromSnapshot({
+        runId: generateUiId("manual"),
+        label: options.label,
+        template: descriptor.template,
+        seed: input.seed,
+        parameters: input.parameters,
+        snapshot: input.snapshot,
+        interventionHistory: input.interventionHistory,
+        capturedAt: new Date().toISOString(),
+        notes: options.notes,
+        tags: options.tags,
+        source: "manual",
+        metadata: input.metadata
+      });
+      const savedRuns = [run, ...get().savedRuns.filter((candidate) => candidate.runId !== run.runId)].slice(0, maxSavedRunSummaries);
+      saveRunLibrary(savedRuns);
+      const selectedComparisonRunIds = nextSelectedRunIds(get().selectedComparisonRunIds, run.runId);
+      set({
+        savedRuns,
+        runLibraryWarning: null,
+        selectedComparisonRunIds,
+        baselineRunId: get().baselineRunId ?? selectedComparisonRunIds[0] ?? run.runId,
+        lastNotice: `Captured "${run.label}" for comparison from an explicit Worker snapshot.`,
+        lastError: null
+      });
+    } catch (error) {
+      set({ lastError: `Run capture failed: ${errorMessage(error)}`, lastNotice: null });
+    }
+  },
+
+  adoptFlockingRuntimeConfig(runConfig, notice) {
+    try {
+      const validated = validateRunConfig(runConfig);
+      if (!supportsWorkerRuntime(validated.templateId)) {
+        throw new Error(`Runtime configuration ${validated.templateId} is not Worker-supported`);
+      }
+      set({
+        selectedTemplateId: validated.templateId,
+        engine: null,
+        latestSnapshot: null,
+        flockingRuntimeConfig: validated,
+        parameterValues: validated.parameters,
+        seed: validated.seed,
+        selectedEntityId: null,
+        interventionTargetPoint: null,
+        interventionTargetCell: null,
+        interventionHistory: [],
+        isRunning: false,
+        lastError: null,
+        lastNotice: notice
+      });
+    } catch (error) {
+      set({ lastError: errorMessage(error), lastNotice: null });
+    }
+  },
+
+  setRuntimeFeedback(feedback) {
+    set({
+      ...(feedback.error !== undefined ? { lastError: feedback.error } : {}),
+      ...(feedback.notice !== undefined ? { lastNotice: feedback.notice } : {})
+    });
+  },
+
+  setRuntimeExport(text, mode, notice) {
+    set({
+      exportText: text,
+      importMode: mode,
+      lastNotice: notice,
+      lastError: null,
+      panelState: persistPanel(get().panelState, "file", true)
+    });
   },
 
   importLatestExperimentRuns() {
@@ -574,6 +699,9 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
     try {
       const raw = JSON.parse(text) as { templateId?: string };
       const descriptor = requireTemplateDescriptor(raw.templateId ?? get().selectedTemplateId);
+      if (supportsWorkerRuntime(descriptor.id)) {
+        throw new Error("Flocking artifacts must be imported through the active Worker runtime.");
+      }
       const engine =
         get().importMode === "scenario"
           ? SimulationEngine.fromScenario(descriptor.template, text, { performance: performanceInstrumentationOptions() })
@@ -651,6 +779,33 @@ function replaceEngine(
 ): void {
   try {
     const descriptor = requireTemplateDescriptor(options.templateId);
+    if (supportsWorkerRuntime(descriptor.id)) {
+      const runConfig = validateRunConfig({
+        schemaVersion: "1",
+        templateId: descriptor.id,
+        seed: options.seed,
+        parameters: options.parameters,
+        metadata: {}
+      }, descriptor.template);
+      get().engine?.pause();
+      set({
+        selectedTemplateId: descriptor.id,
+        engine: null,
+        latestSnapshot: null,
+        flockingRuntimeConfig: runConfig,
+        flockingRuntimeRevision: get().flockingRuntimeRevision + 1,
+        parameterValues: runConfig.parameters,
+        seed: runConfig.seed,
+        selectedEntityId: options.keepSelection ? get().selectedEntityId : null,
+        interventionTargetPoint: null,
+        interventionTargetCell: null,
+        interventionHistory: [],
+        isRunning: false,
+        lastError: null,
+        lastNotice: null
+      });
+      return;
+    }
     const engine = new SimulationEngine(descriptor.template, {
       seed: options.seed,
       parameters: options.parameters,
@@ -661,6 +816,7 @@ function replaceEngine(
       selectedTemplateId: descriptor.id,
       engine,
       latestSnapshot: engine.createSnapshot(),
+      flockingRuntimeConfig: null,
       parameterValues: engine.parameters,
       seed: options.seed,
       selectedEntityId: options.keepSelection ? get().selectedEntityId : null,
