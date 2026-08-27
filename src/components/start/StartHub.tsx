@@ -14,13 +14,13 @@ const pathways = [
     href: "/world"
   },
   {
-    label: "Build a system",
-    description: "Describe a model step by step or inspect its exact structure in Workshop.",
+    label: "Draft a model structure",
+    description: "Describe a non-runnable model structure step by step or inspect exact structural artifacts in Workshop.",
     href: "/builder"
   },
   {
-    label: "Open advanced tools",
-    description: "Sample a bounded model space in Atlas or see what Lab can record today.",
+    label: "Open research tools",
+    description: "Run a bounded Flocking sample in Atlas or inspect Lab's non-persistent evidence-record foundation.",
     href: "/atlas"
   }
 ] as const;

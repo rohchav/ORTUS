@@ -34,6 +34,11 @@ describe("R1 Start Hub and World-first product reset contracts", () => {
     expect(startSource).toContain("runnableStarterWorlds.map");
     expect(startSource).toContain("world.investigationPrompts.map");
     expect(startSource).toContain("world.sources.map");
+    expect(startSource).toContain('label: "Draft a model structure"');
+    expect(startSource).toContain("Describe a non-runnable model structure");
+    expect(startSource).toContain("Lab's non-persistent evidence-record foundation");
+    expect(startSource).not.toContain('label: "Build a system"');
+    expect(startSource).not.toContain("what Lab can record today");
     expect(startSource).not.toMatch(
       /localStorage|sessionStorage|indexedDB|document\.cookie|createJSONStorage|persist\(|Date\.now|Math\.random|crypto\.randomUUID/i
     );
@@ -131,7 +136,7 @@ describe("R1 Start Hub and World-first product reset contracts", () => {
     expect(canonicalRoadmap).toContain("A0B - Canonical Architecture + Source-of-Truth Audit | COMPLETE");
     expect(canonicalRoadmap).toContain("I1 - Production Runtime Migration + Immersive Shell Foundation | COMPLETE");
     expect(canonicalRoadmap).toContain("I1B - Production Runtime Migration Audit | COMPLETE");
-    expect(canonicalRoadmap).toContain("UR0 - Product Leverage + Comprehension Gate | NEXT / UNSTARTED");
+    expect(canonicalRoadmap).toContain("UR0 - Product Leverage + Comprehension Gate | TECHNICAL/EXPERT COMPLETE; HUMAN PENDING");
     expect(roadmap).toContain("F1 and the rest of the F branch are paused beneath E3 Analytical Lenses.");
   });
 });

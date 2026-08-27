@@ -66,7 +66,7 @@ npm run lint
 
 ## Roadmap Status
 
-ORTUS has completed Prompt 39B plus the documented neural, Research World, and UI work through GW9B, followed by R1 through C3B, I0/I0B, PERF1/PERF1B, A0/A0B, and `I1/I1B: Production Runtime Migration + Audit`. `UR0: Product Leverage + Comprehension Gate` is next and unstarted. I2 through I5B are not an unconditional sequence, and `C4: Flagship Starter Pack Two` is not tied to I5B. `docs/ROADMAP.md` is the canonical sequence. The F0 fractal branch remains historical planning, with F1 paused under future E3 analytical-lens prerequisites.
+ORTUS has completed Prompt 39B plus the documented neural, Research World, and UI work through GW9B, followed by R1 through C3B, I0/I0B, PERF1/PERF1B, A0/A0B, and `I1/I1B: Production Runtime Migration + Audit`. The `UR0: Product Leverage + Comprehension Gate` technical/expert layer is complete, but its human comprehension gate is pending and its roadmap decision is provisional. The exact next action is the formative human study; no feature branch is authorized automatically. The expert evidence keeps I2 deferred and provisionally favors O1/O1B followed by E1/E1B if participant evidence confirms the investigation-continuity gap. `docs/ROADMAP.md` is the canonical sequence and `docs/product/PRODUCT_LEVERAGE_COMPREHENSION_GATE.md` is the UR0 evidence record. The F0 fractal branch remains historical planning, with F1 paused under future E3 analytical-lens prerequisites.
 
 ## Product Philosophy
 

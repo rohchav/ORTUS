@@ -1,6 +1,6 @@
 # ORTUS Canonical Roadmap
 
-Status: CURRENT future-sequencing source of truth after I1B
+Status: CURRENT future-sequencing source of truth after the UR0 technical/expert audit
 
 This roadmap controls milestone status and dependency order. It is not a capability claim. `CAPABILITIES.md` determines what exists now, and every implementation milestone requires its dedicated scope and audit.
 
@@ -13,7 +13,7 @@ This roadmap controls milestone status and dependency order. It is not a capabil
 | A0B - Canonical Architecture + Source-of-Truth Audit | COMPLETE | Adversarial audit fixed authority, snapshot, source-hierarchy, lifecycle, scientific-language, and static-gate defects; see `CANONICAL_ARCHITECTURE_AUDIT.md` |
 | I1 - Production Runtime Migration + Immersive Shell Foundation | COMPLETE | Production Flocking now uses Worker-owned execution, bounded frame/UI projections, and the minimum immersive shell; legacy templates remain explicit |
 | I1B - Production Runtime Migration Audit | COMPLETE | Adversarial audit fixed authority, replacement, rejection, reset, provenance, and ordering defects; see `performance/PRODUCTION_RUNTIME_ADOPTION_AUDIT.md` |
-| UR0 - Product Leverage + Comprehension Gate | NEXT / UNSTARTED | Decide which branches are justified by measured usability, capability leverage, and scientific honesty |
+| UR0 - Product Leverage + Comprehension Gate | TECHNICAL/EXPERT COMPLETE; HUMAN PENDING | Expert/source/rendered audit is complete; no participant evidence exists, so the roadmap decision remains provisional; see `product/PRODUCT_LEVERAGE_COMPREHENSION_GATE.md` |
 
 Canonical immediate dependency:
 
@@ -23,14 +23,17 @@ PERF1B COMPLETE
   -> A0B COMPLETE
   -> I1 COMPLETE
   -> I1B COMPLETE
-  -> UR0 NEXT
+  -> UR0 TECHNICAL/EXPERT COMPLETE
+  -> UR0 HUMAN COMPREHENSION PENDING
+  -> FINAL BRANCH DECISION NOT YET AUTHORIZED
 ```
 
-I1 does not automatically trigger I2, I3, I4, or I5. The former unconditional immersive sequence is superseded. C4 is not deferred until I5B.
+I1 does not automatically trigger I2, I3, I4, or I5. The former unconditional immersive sequence is superseded. C4 is not deferred until I5B. No feature milestone is next while the UR0 human gate remains pending.
 
 ## Status Vocabulary
 
 - **COMPLETE**: implementation/audit is committed and required gates passed.
+- **TECHNICAL/EXPERT COMPLETE; HUMAN PENDING**: source, rendered, and expert work is complete, but no final comprehension or roadmap claim is allowed until actual participant evidence exists.
 - **NEXT / UNSTARTED**: authorized next planning handoff but no implementation exists.
 - **PLANNED / UNSTARTED**: named direction requiring a dedicated prompt and prerequisites.
 - **PROPOSED**: candidate direction not yet accepted into a dependency path.
@@ -39,26 +42,21 @@ I1 does not automatically trigger I2, I3, I4, or I5. The former unconditional im
 
 ## Near-Term Dependency Map
 
-This is an approximate dependency order, not a promise of one uninterrupted serial chain:
+UR0 has not selected a feature branch. The immediate dependency is:
 
 ```text
 A0/A0B
   -> I1/I1B
-  -> UR0
-  -> S1/S1B
-  -> S2/S2B
-  -> SA0/SA0B
-  -> S3/S3B
-  -> C4/C4B
-  -> S4/S4B
-  -> O1/O1B
-  -> E1/E1B
-  -> UQ1/UQ1B
-  -> E2/E2B
-  -> E3/E3B
+  -> UR0 technical/expert audit
+  -> UR0 formative human study
+  -> final evidence-based branch decision
+       -> Path A: I2 only if immersion is the demonstrated blocker
+       -> Path B: S1/S2 for bounded remix/workflow agency
+       -> Path C: O1/E1 for observation and investigation continuity
+       -> Path D: bounded product repair before expansion
 ```
 
-Branches may interleave when their explicit capability, evidence, and product gates are satisfied. Labels after UR0 remain planning handles; their dedicated prompts must define final names and scope.
+The expert layer provisionally favors Path C after the human gate and defers I2. It found Path B valuable but correctly limited: S1/S2 do not themselves establish executable custom-model authoring. This is not a final roadmap selection. Branches may interleave when their explicit capability, evidence, and product gates are satisfied, and every planning label still requires its dedicated prompt.
 
 | Pair | Planning purpose | Required gate |
 | --- | --- | --- |
@@ -166,6 +164,6 @@ All future work must pass the relevant gates:
 - The old hierarchy-first multi-scale roadmap is superseded for future representation architecture by the SystemView graph direction.
 - Old prompt numbers 40-102 and earlier product mini-roadmaps are historical inventories, not the canonical execution order.
 
-## Next Milestone
+## Next Action
 
-`UR0 - Product Leverage + Comprehension Gate` is next and unstarted. I1/I1B establish and audit production Worker execution for Flocking only; they do not add cross-template Worker support, scientific observations, SystemView semantics, new simulation behavior, or later immersive capability. UR0 must evaluate product leverage and comprehension through its own dedicated prompt. I2 is not the current handoff.
+Conduct the UR0 formative human study using `product/PRODUCT_LEVERAGE_COMPREHENSION_GATE.md` and `product/UR0_STUDY_OBSERVATION_TEMPLATE.md`. The technical/expert layer is complete, but the human comprehension gate is pending and the roadmap decision is provisional. Do not start I2, S1, S2, O1, E1, C4, or another feature branch automatically. The provisional expert recommendation is to keep I2 deferred and favor O1/O1B followed by E1/E1B if participant evidence confirms the investigation-continuity gap.

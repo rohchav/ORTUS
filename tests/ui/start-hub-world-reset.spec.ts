@@ -27,6 +27,8 @@ for (const viewport of viewports) {
     await expect(page.locator(".start-world-index > a")).toHaveCount(11);
     await expect(page.locator("[data-capability-guidance-destination]")).toHaveCount(0);
     await expect(page.getByText("Pick a system. Run it. Change something. See what happens. Then go deeper.")).toBeVisible();
+    await expect(page.getByRole("link", { name: /Draft a model structure/ })).toBeVisible();
+    await expect(page.getByText("Run a bounded Flocking sample in Atlas or inspect Lab's non-persistent evidence-record foundation.")).toBeVisible();
 
     const featuredImage = page.getByRole("img", { name: /ORTUS Flocking runtime/i });
     await expect(featuredImage).toBeVisible();

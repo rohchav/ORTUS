@@ -4621,3 +4621,53 @@ Limits and handoff:
 - `CanonicalObservation`, SystemView, research persistence, later immersive capability, additional Worker templates, UR0 outcomes, and I2 remain unimplemented.
 - I1 complete. I1B complete pending the local milestone commit. UR0 is next and unstarted; I2 is not next.
 - Commit target: `test: audit production runtime adoption`; no push is authorized.
+
+### UR0: Product Leverage And Comprehension Gate
+
+Date: 2026-08-27
+
+Starting state:
+
+- Branch `main` was clean at `2bd9d275db08367864d48a6e5caa58aee83402c6` (`test: audit production runtime adoption`). The observed `origin/main` reference matched.
+- I1/I1B were complete. UR0 was unstarted. I2, S1/S2, O1/E1, and C4 were not started.
+- No human-study observations were supplied or conducted.
+
+Expert audit result:
+
+- The current Start -> World -> observe/change/compare loop is technically coherent. Rendered World keeps the active model dominant, exposes persistent playback and accepted run state, distinguishes Setup rebuilds from current-run interventions, and supports bounded comparisons and one honest guided prepared pair.
+- The product does not have a provenance-bearing investigation lifecycle. Questions, comparison rationale, evidence/counterevidence, and assessment are not durable records. Lab saves nothing, Atlas results are page-local, and World comparison summaries are bounded browser-local aids rather than scientific observations or evidence.
+- Starter Worlds and Guides have no runnable remix handoff. Workshop drafts and validates structural model artifacts only; it does not compile, execute, generate a runtime template, or mutate World.
+- Further immersive scene treatment would not repair those gaps. The expert layer provisionally defers I2 and favors O1/O1B followed by E1/E1B if participant evidence confirms the investigation-continuity diagnosis. S1/S2 remain a meaningful agency candidate but do not themselves establish executable custom-model authoring.
+
+Findings and bounded fixes:
+
+- P0: none.
+- P1: Start advertised `Build a system` despite Workshop's non-runnable boundary and implied Lab could record something today despite Lab having no records. Start now names a non-runnable model-structure draft and a non-persistent Lab foundation; destination-purpose copy matches.
+- P1: investigation continuity and runnable remix continuity remain open roadmap gaps. UR0 does not implement O1, E1, S1, S2, or another runtime.
+- P2: generic comparison remains manually coordinated; Worker/runtime vocabulary adds cognitive cost; Atlas is dense and isolated; Lab has little current task value; ordinary `field` wording can collide with reserved spatial-field semantics; Guide evidence is one Flocking pair only.
+- Compare free text now says `Run notes` rather than `Observation notes`, preserving the scientific-observation distinction.
+- No simulation, template, RNG, scheduler, runtime protocol, renderer behavior, persistence, model output, or workflow semantics changed.
+
+Evidence package:
+
+- Added `docs/product/PRODUCT_LEVERAGE_COMPREHENSION_GATE.md` with the task map, hypothesis and cohort analysis, surface leverage, findings, scientific-comprehension audit, accessibility limits, human protocol, and provisional decision.
+- Added `docs/product/UR0_STUDY_OBSERVATION_TEMPLATE.md` as a local, non-identifying participant observation sheet.
+- Updated canonical roadmap and continuity records to state `UR0 TECHNICAL/EXPERT GATE: COMPLETE`, `UR0 HUMAN COMPREHENSION GATE: PENDING`, and `ROADMAP DECISION: PROVISIONAL`. No feature branch is next automatically.
+
+Verification:
+
+- Focused UR0/Start/World-layout/destination/canonical unit contracts passed `5 files / 34 tests`.
+- `npm run lint` passed unused-symbol checks and the architecture/accessibility smoke scan over `385` production TypeScript files.
+- `npm run typecheck` passed.
+- Focused core-task browser verification passed `6/6 (34.6s)` before the copy fix.
+- Post-fix six-viewport Start, Compare, and Start/default-World Axe verification passed `8/8 (21.7s)`.
+- `git diff --check` passed before final continuity edits and is rerun at the commit gate.
+- Complete unit, build, performance, and full browser suites were not rerun because no runtime, simulation, persistence, renderer, or interaction behavior changed.
+
+Closure and handoff:
+
+- UR0 technical/expert gate: complete.
+- UR0 human comprehension gate: pending.
+- Roadmap decision: provisional.
+- Exact next action: conduct the UR0 formative human study.
+- Commit target: `research: evaluate product leverage and comprehension`; no push is authorized.

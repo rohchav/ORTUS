@@ -32,7 +32,7 @@ export const researchDestinations: readonly ResearchDestinationDefinition[] = Ob
     id: "lab",
     label: "Lab",
     route: "/lab",
-    purpose: "Structure future evidence records and experiment ledgers without saving Lab data in GW5.",
+    purpose: "Inspect a non-persistent evidence-record foundation; Lab does not save records.",
     availability: "foundation",
     navigationOrder: 2,
     status: {
@@ -54,7 +54,7 @@ export const researchDestinations: readonly ResearchDestinationDefinition[] = Ob
     id: "workshop",
     label: "Workshop",
     route: "/builder",
-    purpose: "Construct and inspect model structure.",
+    purpose: "Draft and inspect non-runnable model structure.",
     availability: "available",
     navigationOrder: 4
   }

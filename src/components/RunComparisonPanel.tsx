@@ -110,7 +110,7 @@ export function RunComparisonPanel({ collapsed = false, onToggle, embedded = fal
           </label>
           <label className="run-capture-grid__wide">
             <span>Notes</span>
-            <textarea value={captureNotes} onChange={(event) => setCaptureNotes(event.target.value)} placeholder="Observation notes" suppressHydrationWarning />
+            <textarea value={captureNotes} onChange={(event) => setCaptureNotes(event.target.value)} placeholder="Run notes" suppressHydrationWarning />
           </label>
         </div>
         <div className="run-comparison-actions">
