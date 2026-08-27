@@ -16,8 +16,6 @@ export function RunProvenanceObservationPanel({ embedded = false }: { embedded?:
   const selectedTemplateId = useSimulationStore((state) => state.selectedTemplateId);
   const engine = useSimulationStore((state) => state.engine);
   const snapshot = useSimulationStore((state) => state.latestSnapshot);
-  const seed = useSimulationStore((state) => state.seed);
-  const parameters = useSimulationStore((state) => state.parameterValues);
   const runtime = useActiveWorldRuntime();
   const descriptor = getTemplateDescriptor(selectedTemplateId);
 
@@ -27,8 +25,8 @@ export function RunProvenanceObservationPanel({ embedded = false }: { embedded?:
         selectedTemplateId,
         template: descriptor.template,
         templateLabel: descriptor.template.name,
-        seed,
-        parameters,
+        seed: runtime.seed,
+        parameters: runtime.parameters,
         initialization: runtime.initialization,
         scenario: runtime.scenario,
         metadata: runtime.metadata,
@@ -50,7 +48,7 @@ export function RunProvenanceObservationPanel({ embedded = false }: { embedded?:
         interventionCount: runtime.interventionCount,
         metricLabelForKey: metricLabel
       }),
-    [descriptor.template, engine, parameters, runtime, seed, selectedTemplateId, snapshot]
+    [descriptor.template, engine, runtime, selectedTemplateId, snapshot]
   );
 
   const content = <RunProvenanceObservationView context={context} />;

@@ -4564,3 +4564,60 @@ Handoff:
 - A0 complete. A0B complete. I1 is next and unstarted.
 - I2 through I5B are not an unconditional sequence. C4 has no I5B dependency.
 - Commit target: `test: audit canonical ORTUS architecture`; no push is authorized.
+
+### I1B: Production Runtime And Immersive Shell Audit
+
+Date: 2026-08-27
+
+Starting state:
+
+- Branch `main` was clean at `bda117e73f705082cbe86e833221bf1c0416617f` (`feat: adopt runtime architecture in production world`). The observed `origin/main` reference was allowed to remain one commit behind.
+- I1 was complete. I1B was unstarted. UR0 and I2 were not started.
+- The audit read the canonical architecture/capability/scientific/roadmap sources, the PERF1/PERF1B architecture and audit, and current I1 production/runtime evidence before changing source.
+
+Adversarial findings and fixes:
+
+- Found and fixed one P0 authority family, eight P1 replacement/order/rejection/reset/provenance/control families, and three bounded P2 presentation/evidence/documentation families. No known I1B P0/P1 remains.
+- P0: comparison capture reconstructed a temporary main-thread Flocking `SimulationEngine` from a Worker snapshot export. Capture now parses the validated artifact and creates a detached snapshot read view with a pure data projector; intervention history comes from artifact globals. Production capture no longer imports or constructs an engine.
+- P1: rapid accepted-A/rejected-B replacement could infer acceptance from lifecycle state and overwrite the accepted request/config. Acceptance now requires generation advance, only accepted lifecycle work replaces `whenReady`, and Provider reconciliation waits for the accepted lifecycle before restoring accepted configuration.
+- P1: a divergent completion at an already accepted revision could resolve with inconsistent UI. Driver completion now resolves from the already accepted projection; runtime and product consumers require active identity and strictly newer same-generation revisions.
+- P1: malformed stale Worker output could terminate the current generation. A bounded loose parser may ignore only output proved older; malformed current, future, or unidentifiable messages remain terminal.
+- P1: invalid intervention, speed, and selection requests could terminally fail healthy Local or Worker runtimes. Strict identified `runtime.rejected` responses now preserve the ready run while rejecting the operation; actual runtime/protocol failure remains terminal.
+- P1: generic Reset discarded executable initialization/behavior/composition/environment semantics. A shared validated reset constructor now preserves accepted executable variant fields while clearing scenario/prepared provenance and metadata the generic constructor did not earn.
+- P1: active status, setup, provenance, guide, comparison, and diagnostics could read mutable desired seed/parameters as accepted Worker state. `ActiveWorldRuntime` now exposes accepted runtime values for active-run consumers.
+- P1: speed synchronization duplicated one requested control, and post-lifecycle desired speed/selection requests could turn backpressure into apparent lifecycle failure. One effect now sends the control, and desired presentation requests use recoverable handling.
+- P2: healthy operation rejection now has explicit semantic UI distinct from terminal failure; production Worker coverage now directly checks high DPR, reduced motion, constrained viewports, horizontal containment, Axe, and nonblank Canvas; stale public README/current status prose was corrected without rewriting historical milestone records.
+
+Authority and semantic result:
+
+- Production Flocking has one executing authority in the dedicated Worker. The Worker owns engine state, RNG, runtime scheduling, tick accumulation, and ordered modeled operations. Production React does not step Flocking, construct a Local fallback, or mirror full entity state through Zustand.
+- Canvas consumes identified bounded `RenderFramePacket` values. React consumes identified bounded `UIProjection` and one selected-detail projection. Camera, DPR, hover, and quality remain presentation-only.
+- Snapshot/comparison capture remains request-driven and derives seed/config/provenance from the validated exported artifact, not mutable UI state at asynchronous completion. No presentation product became `CanonicalObservation` or scientific evidence.
+- Direct/Local/Worker equivalence remained intact. Added invalid-intervention coverage proves healthy Local and Worker paths produce exact matching exports after rejection and a subsequent step. No template rule, RNG stream, parameter default/bound, initialization algorithm, scheduler semantic, or modeled ordering changed.
+- The six non-Flocking templates remain on the explicit legacy main-thread engine/snapshot path. No unsupported template creates a Worker and no cross-template runtime claim was added.
+- Generic Reset from the prepared noisy Flocking recipe retains executable Noise `0.01` and seed `c2-coordination-001`, clears prepared provenance, returns to tick zero, and makes the guide disclose that prepared-pair context changed.
+
+Performance evidence:
+
+- The final complete-browser 8x characterization measured about `125.7/31.3` modeled ticks/s and `59.42/59.71 FPS` at 100/500. Median model steps were `2.3/21.0ms`; median Canvas draws were `0.4/0.6ms`; p95 main-thread timer lag was `8.7/3.1ms`.
+- A preceding valid focused run was materially slower at about `80.0/20.1` ticks/s and `57.66/58.60 FPS`. The audit records both rather than marketing the favorable sample. The credible result remains inexpensive Canvas presentation and main-thread pressure isolation while 500-agent simulation computation remains expensive.
+- Headless simulation smoke preserved exact automatic Flocking pair checks `316,971/7,721,264` and measured Flocking `124.13/19.19` ticks/s, Forest Fire `36.13`, Predator-Prey `102.48`, and bounded Atlas `2` runs / `10` work units / horizon `5` in `40.33ms`.
+- Runtime performance passed exact corrected/reference 100/500 exports, automatic medians `137.530/22.892` ticks/s, and unchanged `2,300/11,500`-byte unselected packets without metric history.
+
+Final verification:
+
+- Focused adoption/runtime unit coverage passed `2 files / 39 tests`; canonical/roadmap contracts passed `3 files / 24 tests`; the corrected R2 continuity contract passed `1 file / 7 tests`.
+- `npm run lint` passed unused-symbol checks and the architecture/accessibility smoke gate over `385` production TypeScript files. Standalone typecheck passed.
+- The first complete unit run exposed one stale handoff assertion requiring I1 to remain unstarted. After correcting that documentation contract, complete unit verification passed `84 files / 734 tests (78.86s)`.
+- The production build compiled in `9.3s` and generated `23` pages.
+- `npm run perf:simulation` and `npm run perf:runtime` passed with the evidence above.
+- Focused real-Worker production Playwright passed `5/5 (about 1.1m)`. Complete Playwright/Axe passed `194/194 (21.2m)` with zero product retries and zero skips.
+- One earlier complete-browser invocation was terminated after its first passing test when the chat interruption dropped the PTY. It produced no completed result and is recorded as an infrastructure interruption, not a product retry or pass.
+- `git diff --check` passed throughout and is rerun at the staging gate.
+
+Limits and handoff:
+
+- Production Worker execution remains `flocking-v1` only. The evidence is local Chromium and bounded viewport/DPR/motion coverage, not browser/hardware certification, direct screen-reader/AT testing, forced-colors testing, actual zoom/device testing, multi-hour leak proof, user-comprehension evidence, formal WCAG conformance, scalability proof, or scientific validation.
+- `CanonicalObservation`, SystemView, research persistence, later immersive capability, additional Worker templates, UR0 outcomes, and I2 remain unimplemented.
+- I1 complete. I1B complete pending the local milestone commit. UR0 is next and unstarted; I2 is not next.
+- Commit target: `test: audit production runtime adoption`; no push is authorized.

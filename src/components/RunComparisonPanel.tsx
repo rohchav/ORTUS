@@ -21,7 +21,6 @@ const traceColors = ["#d8ff3e", "#ff4a2e", "#f3f1e8", "#6c72ff", "#c34dff", "#9a
 export function RunComparisonPanel({ collapsed = false, onToggle, embedded = false, active = true }: RunComparisonPanelProps) {
   const selectedTemplateId = useSimulationStore((state) => state.selectedTemplateId);
   const runtime = useActiveWorldRuntime();
-  const seed = useSimulationStore((state) => state.seed);
   const savedRuns = useSimulationStore((state) => state.savedRuns);
   const runLibraryWarning = useSimulationStore((state) => state.runLibraryWarning);
   const selectedRunIds = useSimulationStore((state) => state.selectedComparisonRunIds);
@@ -85,7 +84,7 @@ export function RunComparisonPanel({ collapsed = false, onToggle, embedded = fal
           <dl className="world-current-run-summary">
             <div><dt>World</dt><dd>{getTemplateDescriptor(selectedTemplateId).template.name}</dd></div>
             <div><dt>Tick</dt><dd>{formatTick(active ? runtime.tick : 0)}</dd></div>
-            <div><dt>Seed</dt><dd>{seed}</dd></div>
+            <div><dt>Seed</dt><dd>{runtime.seed}</dd></div>
             <div><dt>Metric records</dt><dd>{active ? runtime.metricRecordCount : 0}</dd></div>
           </dl>
         </section>

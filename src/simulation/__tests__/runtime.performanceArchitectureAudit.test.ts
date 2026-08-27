@@ -239,6 +239,32 @@ describe("PERF1B adversarial runtime audit", () => {
     session.dispose();
   });
 
+  it("resolves a same-revision completion with the already accepted UI projection", async () => {
+    const transport = new PassiveWorker();
+    const worker = new WorkerRuntimeDriver(transport);
+    const request = runRequest("same-revision-completion", 100);
+    const initialization = worker.initialize(request);
+    const initializeMessage = transport.messages[0] as { requestId: number };
+    const session = new RuntimeSession("worker");
+    const accepted = session.rebuild(request, { generation: 1, runId: request.runId }, "initialization").ui!;
+    const divergent = { ...accepted, tick: 17, time: 17 };
+
+    transport.emit({ type: "runtime.ui", ui: accepted });
+    transport.emit({
+      type: "runtime.complete",
+      requestId: initializeMessage.requestId,
+      generation: 1,
+      ui: divergent
+    });
+
+    await expect(initialization).resolves.toStrictEqual(accepted);
+    expect(worker.getLatestUI()).toStrictEqual(accepted);
+    expect(worker.getLatestUI()?.tick).toBe(0);
+    expect(worker.state).toBe("ready");
+    worker.dispose();
+    session.dispose();
+  });
+
   it("keeps rapid control, reset, replacement, and delayed-step sequences generation-safe", async () => {
     const transport = new HostBackedWorker();
     const worker = new WorkerRuntimeDriver(transport);
@@ -394,6 +420,79 @@ describe("PERF1B adversarial runtime audit", () => {
     expect(responses.some((message) => message.type === "runtime.failure")).toBe(false);
     expect(responses.some((message) => message.type === "runtime.complete" && message.requestId === 4)).toBe(true);
     host.dispose();
+  });
+
+  it("ignores a malformed stale-generation Worker response without terminating the current run", async () => {
+    const transport = new PassiveWorker();
+    const worker = new WorkerRuntimeDriver(transport);
+    const first = runRequest("stale-response-a", 100);
+    const second = runRequest("stale-response-b", 100);
+    const session = new RuntimeSession("worker");
+    const initialization = worker.initialize(first);
+    const firstMessage = transport.messages[0] as { requestId: number };
+    transport.emit({
+      type: "runtime.complete",
+      requestId: firstMessage.requestId,
+      generation: 1,
+      ui: session.rebuild(first, { generation: 1, runId: first.runId }, "initialization").ui!
+    });
+    await initialization;
+
+    const replacement = worker.replaceRun(second);
+    const secondMessage = transport.messages.at(-1) as { requestId: number };
+    const accepted = session.rebuild(second, { generation: 2, runId: second.runId }, "replacement").ui!;
+    transport.emit({
+      type: "runtime.complete",
+      requestId: secondMessage.requestId,
+      generation: 2,
+      ui: accepted
+    });
+    await replacement;
+
+    transport.emit({
+      type: "runtime.frame",
+      frame: { generation: 1, runId: first.runId, positions: "not-a-typed-array" }
+    });
+    expect(worker.state).toBe("ready");
+    expect(worker.getLatestUI()).toStrictEqual(accepted);
+    expect(transport.terminated).toBe(false);
+    worker.dispose();
+    session.dispose();
+  });
+
+  it("rejects invalid interventions without terminating either healthy runtime", async () => {
+    const request = runRequest("recoverable-intervention", 100);
+    const local = new LocalRuntimeDriver();
+    const transport = new HostBackedWorker();
+    const worker = new WorkerRuntimeDriver(transport);
+    await Promise.all([local.initialize(request), worker.initialize(request)]);
+    const invalidRequest = {
+      templateId: "flocking-boids",
+      interventionId: "missing-intervention",
+      parameters: {}
+    };
+
+    await expect(local.applyIntervention(invalidRequest)).rejects.toThrow(/unsupported intervention/i);
+    await expect(worker.applyIntervention(invalidRequest)).rejects.toThrow(/unsupported intervention/i);
+    expect(local.state).toBe("ready");
+    expect(worker.state).toBe("ready");
+    expect(local.getLatestUI()).toMatchObject({ playback: "paused", interventionCount: 1 });
+    expect(worker.getLatestUI()).toMatchObject({ playback: "paused", interventionCount: 1 });
+    expect(() => local.setSpeedMultiplier(99)).toThrow(/between 0.25 and 8/i);
+    expect(() => worker.setSpeedMultiplier(99)).toThrow(/between 0.25 and 8/i);
+    expect(() => local.setSelectedEntity("e999999")).toThrow(/missing runtime entity/i);
+    const rejectedSelection = nextPublication(worker, "rejection");
+    worker.setSelectedEntity("e999999");
+    await expect(rejectedSelection).resolves.toMatchObject({
+      rejection: { code: "invalid-request", message: expect.stringMatching(/missing runtime entity/i) }
+    });
+    expect(local.state).toBe("ready");
+    expect(worker.state).toBe("ready");
+    await expect(local.step()).resolves.toMatchObject({ tick: 1 });
+    await expect(worker.step()).resolves.toMatchObject({ tick: 1 });
+    await expect(worker.exportArtifact("snapshot")).resolves.toBe(await local.exportArtifact("snapshot"));
+    local.dispose();
+    worker.dispose();
   });
 
   it("uses one-shot unique transfer buffers and keeps presentation adaptation non-mutating", () => {

@@ -15,7 +15,6 @@ interface TopStatusBarProps {
 
 export function TopStatusBar({ onOpenRunDetails, runDetailsTriggerRef }: TopStatusBarProps) {
   const selectedTemplateId = useSimulationStore((state) => state.selectedTemplateId);
-  const seed = useSimulationStore((state) => state.seed);
   const lastError = useSimulationStore((state) => state.lastError);
   const runtime = useActiveWorldRuntime();
   const descriptor = getTemplateDescriptor(selectedTemplateId);
@@ -38,7 +37,7 @@ export function TopStatusBar({ onOpenRunDetails, runDetailsTriggerRef }: TopStat
             ? <StatusPill label="Stopped" tone="danger" category="operational" state="failed" />
             : <StatusPill label={runStatus.label} tone={runStatus.tone} category={runStatus.category} state={runStatus.state} />}
         <span className="top-status__fact">Tick <strong>{formatTick(runtime.tick)}</strong></span>
-        <span className="top-status__fact">Seed <strong>{seed}</strong></span>
+        <span className="top-status__fact">Seed <strong>{runtime.seed}</strong></span>
         <span className="top-status__fact">Runtime <strong>{runtime.workerManaged ? "Worker" : "Main thread"}</strong></span>
         <button ref={runDetailsTriggerRef} type="button" className="top-status__details" onClick={onOpenRunDetails}>
           Run details

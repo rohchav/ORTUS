@@ -2,8 +2,10 @@ import { readFileSync } from "node:fs";
 import { afterEach, describe, expect, it } from "vitest";
 import {
   createEngineFromRunConfig,
+  createSnapshotViewFromRuntimeArtifact,
   createDefaultScenario,
   flockingTemplate,
+  parseRuntimeArtifact,
   supportsWorkerRuntime,
   type RuntimeDriverState,
   type SimulationRuntimePort,
@@ -70,7 +72,7 @@ describe("I1 production runtime adoption", () => {
     expect(state.lastNotice).toMatch(/Worker-owned run/i);
   });
 
-  it("clears prepared-recipe provenance when the generic reset rebuilds Worker configuration", () => {
+  it("clears prepared-recipe provenance without changing executable variant semantics on generic reset", () => {
     const resolved = resolveStarterWorldLaunch({
       starterId: "coordination-under-sensor-noise",
       recipeId: "coordination-clear-signals",
@@ -80,7 +82,8 @@ describe("I1 production runtime adoption", () => {
       throw new Error(resolved.message);
     }
     useSimulationStore.getState().applyScenario(createStarterWorldScenario(resolved.launch));
-    expect(useSimulationStore.getState().flockingRuntimeConfig?.metadata).toMatchObject({
+    const preparedConfig = useSimulationStore.getState().flockingRuntimeConfig!;
+    expect(preparedConfig.metadata).toMatchObject({
       starterWorldId: "coordination-under-sensor-noise",
       starterWorldRecipeId: "coordination-clear-signals"
     });
@@ -92,7 +95,16 @@ describe("I1 production runtime adoption", () => {
     expect(state.latestSnapshot).toBeNull();
     expect(state.flockingRuntimeConfig?.metadata).toEqual({});
     expect(state.flockingRuntimeConfig).not.toHaveProperty("scenarioId");
-    expect(state.flockingRuntimeConfig).not.toHaveProperty("initializationPreset");
+    expect(state.flockingRuntimeConfig).not.toHaveProperty("scenarioName");
+    expect(state.flockingRuntimeConfig).toMatchObject({
+      seed: preparedConfig.seed,
+      parameters: preparedConfig.parameters,
+      initializationPreset: preparedConfig.initializationPreset,
+      initializationOptions: preparedConfig.initializationOptions,
+      behaviorMode: preparedConfig.behaviorMode,
+      agentComposition: preparedConfig.agentComposition,
+      environmentOptions: preparedConfig.environmentOptions
+    });
   });
 
   it("rejects the legacy store import path for Worker-owned Flocking artifacts", () => {
@@ -112,10 +124,15 @@ describe("I1 production runtime adoption", () => {
     const acceptedConfig = useSimulationStore.getState().flockingRuntimeConfig!;
     const engine = createEngineFromRunConfig(acceptedConfig);
     engine.step();
+    const artifact = parseRuntimeArtifact("snapshot", engine.exportSnapshot());
+    const detachedSnapshot = createSnapshotViewFromRuntimeArtifact(artifact);
+
+    expect(detachedSnapshot).toStrictEqual(engine.createSnapshot());
+    expect(detachedSnapshot).not.toBe(artifact.world);
 
     useSimulationStore.getState().setSeed("new-ui-seed-before-capture-completes");
     useSimulationStore.getState().captureRuntimeRun({
-      snapshot: engine.createSnapshot(),
+      snapshot: detachedSnapshot,
       seed: acceptedConfig.seed,
       parameters: acceptedConfig.parameters,
       metadata: { source: "accepted-worker-artifact" },
@@ -286,6 +303,64 @@ describe("I1 production runtime adoption", () => {
     runtime.dispose();
   });
 
+  it("does not adopt a rejected rapid replacement while an accepted replacement is still initializing", async () => {
+    useSimulationStore.getState().selectTemplate("flocking-boids");
+    const runConfig = useSimulationStore.getState().flockingRuntimeConfig!;
+    let lifecycle: RuntimeDriverState = "idle";
+    let generation = 0;
+    let completeAcceptedReplacement: ((ui: UIProjection) => void) | undefined;
+    const port = {
+      executionKind: "worker",
+      get generation() {
+        return generation;
+      },
+      get state() {
+        return lifecycle;
+      },
+      initialize(request: { runId: string }) {
+        generation = 1;
+        lifecycle = "ready";
+        return Promise.resolve(emptyProjection(request.runId));
+      },
+      replaceRun(request: { runId: string }) {
+        if (request.runId === "i1-accepted-a") {
+          generation = 2;
+          lifecycle = "initializing";
+          return new Promise<UIProjection>((resolve) => {
+            completeAcceptedReplacement = (ui) => {
+              lifecycle = "ready";
+              resolve(ui);
+            };
+          });
+        }
+        return Promise.reject(new Error("runtime transport is full"));
+      },
+      subscribe() {
+        return () => undefined;
+      },
+      setSpeedMultiplier() {},
+      setSelectedEntity() {},
+      dispose() {
+        lifecycle = "disposed";
+      }
+    } as unknown as SimulationRuntimePort;
+    const runtime = new ProductionFlockingRuntime({ port });
+    await runtime.start({ runId: "i1-rapid-base", runConfig });
+    const acceptedConfig = { ...runConfig, seed: "i1-accepted-a" };
+    const rejectedConfig = { ...runConfig, seed: "i1-rejected-b" };
+
+    const accepted = runtime.replaceRun({ runId: "i1-accepted-a", runConfig: acceptedConfig });
+    await expect(runtime.replaceRun({ runId: "i1-rejected-b", runConfig: rejectedConfig })).rejects.toThrow(/transport is full/i);
+    expect(runtime.getView().state).toBe("initializing");
+    expect(runtime.getActiveRunConfig()).toBe(acceptedConfig);
+
+    completeAcceptedReplacement?.(emptyProjection("i1-accepted-a", { generation: 2 }));
+    await accepted;
+    expect(runtime.getView()).toMatchObject({ state: "ready", error: null, ui: { runId: "i1-accepted-a" } });
+    expect(runtime.getActiveRunConfig()).toBe(acceptedConfig);
+    runtime.dispose();
+  });
+
   it("uses one production Worker controller and the existing packet scene adapter without a Local fallback", () => {
     const appShell = source("../AppShell.tsx");
     const controller = source("./ProductionFlockingRuntime.ts");
@@ -297,6 +372,7 @@ describe("I1 production runtime adoption", () => {
     expect(controller).toContain("ortus-production-flocking-runtime");
     expect(controller).not.toContain("LocalRuntimeDriver");
     expect(controller).toContain("no implicit local fallback was started");
+    expect(provider).not.toContain("SimulationEngine");
     expect(provider).not.toContain("runFrameSteps");
     expect(world).toContain("ImmersiveWorldCanvas");
     expect(world).toContain("Camera and lens are presentation only");

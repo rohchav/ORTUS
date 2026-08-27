@@ -13,6 +13,7 @@ import {
   type RenderFramePacket,
   type RuntimeArtifactKind,
   type RuntimeFailure,
+  type RuntimeRejection,
   type UIProjection
 } from "./types";
 import { parseRuntimeArtifact } from "./artifacts";
@@ -365,6 +366,13 @@ const failureSchema: z.ZodType<RuntimeFailure> = z.object({
   requestId: requestIdSchema.optional()
 }).strict();
 
+const rejectionSchema: z.ZodType<RuntimeRejection> = z.object({
+  ...identityShape,
+  code: z.literal("invalid-request"),
+  message: z.string().min(1).max(2_000),
+  messageId: requestIdSchema
+}).strict();
+
 const workerResponseSchema = z.discriminatedUnion("type", [
   z.object({ type: z.literal("runtime.frame"), frame: renderFrameSchema }).strict(),
   z.object({ type: z.literal("runtime.ui"), ui: uiProjectionSchema }).strict(),
@@ -386,6 +394,11 @@ const workerResponseSchema = z.discriminatedUnion("type", [
     messageId: requestIdSchema,
     generation: generationSchema
   }).strict(),
+  z.object({
+    type: z.literal("runtime.rejected"),
+    rejection: rejectionSchema,
+    ui: uiProjectionSchema
+  }).strict(),
   z.object({ type: z.literal("runtime.failure"), failure: failureSchema }).strict()
 ]);
 
@@ -395,6 +408,7 @@ export type RuntimeWorkerResponse =
   | { type: "runtime.complete"; requestId: number; generation: number; ui: UIProjection }
   | { type: "runtime.artifact"; requestId: number; generation: number; kind: RuntimeArtifactKind; json: string }
   | { type: "runtime.messageConsumed"; messageId: number; generation: number }
+  | { type: "runtime.rejected"; rejection: RuntimeRejection; ui: UIProjection }
   | { type: "runtime.failure"; failure: RuntimeFailure };
 
 export function parseRuntimeWorkerResponse(value: unknown): RuntimeWorkerResponse {
@@ -402,5 +416,44 @@ export function parseRuntimeWorkerResponse(value: unknown): RuntimeWorkerRespons
   if (parsed.type === "runtime.complete" && parsed.ui.generation !== parsed.generation) {
     throw new Error("Runtime completion generation must match its UI projection generation");
   }
+  if (
+    parsed.type === "runtime.rejected"
+    && (
+      parsed.ui.generation !== parsed.rejection.generation
+      || parsed.ui.runId !== parsed.rejection.runId
+    )
+  ) {
+    throw new Error("Runtime rejection identity must match its UI projection identity");
+  }
   return parsed;
+}
+
+const workerResponseFailureContextSchema = z.discriminatedUnion("type", [
+  z.object({ type: z.literal("runtime.frame"), frame: z.object({ generation: generationSchema }).passthrough() }).passthrough(),
+  z.object({ type: z.literal("runtime.ui"), ui: z.object({ generation: generationSchema }).passthrough() }).passthrough(),
+  z.object({ type: z.literal("runtime.complete"), generation: generationSchema }).passthrough(),
+  z.object({ type: z.literal("runtime.artifact"), generation: generationSchema }).passthrough(),
+  z.object({ type: z.literal("runtime.messageConsumed"), generation: generationSchema }).passthrough(),
+  z.object({ type: z.literal("runtime.rejected"), rejection: z.object({ generation: generationSchema }).passthrough() }).passthrough(),
+  z.object({ type: z.literal("runtime.failure"), failure: z.object({ generation: generationSchema }).passthrough() }).passthrough()
+]);
+
+export function parseRuntimeWorkerResponseFailureContext(value: unknown): { generation: number } | null {
+  const parsed = workerResponseFailureContextSchema.safeParse(value);
+  if (!parsed.success) {
+    return null;
+  }
+  if (parsed.data.type === "runtime.frame") {
+    return { generation: parsed.data.frame.generation };
+  }
+  if (parsed.data.type === "runtime.ui") {
+    return { generation: parsed.data.ui.generation };
+  }
+  if (parsed.data.type === "runtime.rejected") {
+    return { generation: parsed.data.rejection.generation };
+  }
+  if (parsed.data.type === "runtime.failure") {
+    return { generation: parsed.data.failure.generation };
+  }
+  return { generation: parsed.data.generation };
 }

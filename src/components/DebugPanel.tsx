@@ -35,7 +35,6 @@ export function DebugPanel({ collapsed, floating = false, onToggle, embedded = f
 
 function DebugPanelBody({ active }: { active: boolean }) {
   const engine = useSimulationStore((state) => state.engine);
-  const seed = useSimulationStore((state) => state.seed);
   const runtime = useActiveWorldRuntime();
   const debug = engine?.debugData();
   const performance = engine?.performanceData();
@@ -48,7 +47,7 @@ function DebugPanelBody({ active }: { active: boolean }) {
         <span>Template</span>
         <strong>{debug?.templateId ?? runtime.uiProjection?.templateId ?? "none"}</strong>
         <span>Seed</span>
-        <strong>{debug?.seed ?? seed}</strong>
+        <strong>{debug?.seed ?? runtime.seed}</strong>
         <span>Tick</span>
         <strong>{active ? runtime.tick : 0}</strong>
         <span>Time</span>

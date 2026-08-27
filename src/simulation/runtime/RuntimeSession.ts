@@ -157,6 +157,10 @@ export class RuntimeSession {
     return this.project(true);
   }
 
+  projectRejectedRequest(): RuntimePublicationBundle {
+    return this.project(true);
+  }
+
   exportArtifact(kind: RuntimeArtifactKind): string {
     const engine = this.requireEngine();
     return kind === "scenario" ? engine.exportScenario() : engine.exportSnapshot();

@@ -5,6 +5,7 @@ import {
   clearInterventionHistory,
   buildRunSummaryFromSnapshot,
   createEngineFromScenario,
+  createGenericResetRunConfig,
   executeIntervention,
   experimentRunToSummary,
   readInterventionHistory,
@@ -307,6 +308,26 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
   },
 
   reset() {
+    const workerConfig = get().flockingRuntimeConfig;
+    if (workerConfig && supportsWorkerRuntime(get().selectedTemplateId)) {
+      const resetConfig = createGenericResetRunConfig(workerConfig);
+      set({
+        engine: null,
+        latestSnapshot: null,
+        flockingRuntimeConfig: resetConfig,
+        flockingRuntimeRevision: get().flockingRuntimeRevision + 1,
+        parameterValues: resetConfig.parameters,
+        seed: resetConfig.seed,
+        selectedEntityId: null,
+        interventionTargetPoint: null,
+        interventionTargetCell: null,
+        interventionHistory: [],
+        isRunning: false,
+        lastError: null,
+        lastNotice: null
+      });
+      return;
+    }
     replaceEngine(set, get, {
       templateId: get().selectedTemplateId,
       parameters: get().parameterValues,

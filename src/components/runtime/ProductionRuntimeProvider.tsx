@@ -11,13 +11,12 @@ import {
   type ReactNode
 } from "react";
 import {
-  SimulationEngine,
-  getProductionTemplate,
+  createGenericResetRunConfig,
+  createSnapshotViewFromRuntimeArtifact,
   parseRuntimeArtifact,
   readInterventionHistory,
   runConfigFromArtifact,
   supportsWorkerRuntime,
-  validateRunConfig,
   type InitializationConfig,
   type JsonValue,
   type MetricRecord,
@@ -102,7 +101,15 @@ export function ProductionRuntimeProvider({ children }: { children: ReactNode })
       instrumentation: true
     };
     const operation = runtime.getView().state === "idle" ? runtime.start(request) : runtime.replaceRun(request);
-    void operation.catch((error) => {
+    void operation.catch(async (error) => {
+      if (appliedRevisionRef.current !== configRevision) {
+        return;
+      }
+      try {
+        await runtime.whenReady();
+      } catch {
+        return;
+      }
       if (appliedRevisionRef.current !== configRevision || runtime.getView().state !== "ready") {
         return;
       }
@@ -157,18 +164,13 @@ export function ProductionRuntimeProvider({ children }: { children: ReactNode })
       return;
     }
     const state = useSimulationStore.getState();
-    if (!state.flockingRuntimeConfig || !supportsWorkerRuntime(state.selectedTemplateId)) {
+    const activeConfig = runtime.getActiveRunConfig();
+    if (!activeConfig || !supportsWorkerRuntime(activeConfig.templateId)) {
       return;
     }
     let resetConfig: SimulationRunConfig;
     try {
-      resetConfig = validateRunConfig({
-        schemaVersion: "1",
-        templateId: state.selectedTemplateId,
-        seed: state.seed,
-        parameters: state.parameterValues,
-        metadata: {}
-      });
+      resetConfig = createGenericResetRunConfig(activeConfig);
     } catch (error) {
       state.setRuntimeFeedback({ error: `Reset failed: ${messageFor(error)}`, notice: null });
       return;
@@ -212,8 +214,7 @@ export function ProductionRuntimeProvider({ children }: { children: ReactNode })
 
   const setSpeedMultiplier = useCallback((value: number) => {
     useSimulationStore.getState().setSpeedMultiplier(value);
-    runtime?.setSpeedMultiplier(Math.max(0.25, Math.min(8, value)));
-  }, [runtime]);
+  }, []);
 
   const applyIntervention = useCallback(async (interventionId: string, parameters: ParameterValues) => {
     if (!runtime) {
@@ -308,9 +309,7 @@ export function ProductionRuntimeProvider({ children }: { children: ReactNode })
     }
   }, [runtime]);
 
-  const activeConfig = view.state === "ready"
-    ? runtime?.getActiveRunConfig() ?? config
-    : config;
+  const activeConfig = runtime?.getActiveRunConfig() ?? config;
 
   const captureCurrentRun = useCallback(async (options: { label?: string; notes?: string; tags?: string[] } = {}) => {
     if (!runtime) {
@@ -319,18 +318,14 @@ export function ProductionRuntimeProvider({ children }: { children: ReactNode })
     const state = useSimulationStore.getState();
     try {
       const json = await runtime.exportArtifact("snapshot");
-      const template = getProductionTemplate("flocking-boids");
-      if (!template) {
-        throw new Error("Flocking template is unavailable");
-      }
-      const capturedConfig = runConfigFromArtifact(parseRuntimeArtifact("snapshot", json));
-      const engine = SimulationEngine.fromSnapshot(template, json);
+      const artifact = parseRuntimeArtifact("snapshot", json);
+      const capturedConfig = runConfigFromArtifact(artifact);
       state.captureRuntimeRun({
-        snapshot: engine.createSnapshot(),
+        snapshot: createSnapshotViewFromRuntimeArtifact(artifact),
         seed: capturedConfig.seed,
         parameters: capturedConfig.parameters,
         metadata: runtimeMetadata(capturedConfig),
-        interventionHistory: readInterventionHistory(engine)
+        interventionHistory: readInterventionHistory({ metadata: artifact.world.globals })
       }, options);
     } catch (error) {
       state.setRuntimeFeedback({ error: `Run capture failed: ${messageFor(error)}`, notice: null });
@@ -388,6 +383,8 @@ export interface ActiveWorldRuntime {
   appliedInterventionCount: number;
   runtimeSignature: string | null;
   error: string | null;
+  seed: string;
+  parameters: ParameterValues;
   metadata: Record<string, JsonValue>;
   initialization: InitializationConfig | undefined;
   scenario: ScenarioVariantConfig | undefined;
@@ -410,6 +407,8 @@ export function useActiveWorldRuntime(): ActiveWorldRuntime {
   const engine = useSimulationStore((state) => state.engine);
   const snapshot = useSimulationStore((state) => state.latestSnapshot);
   const legacyRunning = useSimulationStore((state) => state.isRunning);
+  const seed = useSimulationStore((state) => state.seed);
+  const parameterValues = useSimulationStore((state) => state.parameterValues);
   const speedMultiplier = useSimulationStore((state) => state.speedMultiplier);
   const legacyInterventions = useSimulationStore((state) => state.interventionHistory);
   const lastError = useSimulationStore((state) => state.lastError);
@@ -449,6 +448,8 @@ export function useActiveWorldRuntime(): ActiveWorldRuntime {
       appliedInterventionCount: ui?.appliedInterventionCount ?? 0,
       runtimeSignature: ui?.runtimeSignature ?? null,
       error: production?.view.error ?? lastError,
+      seed: config?.seed ?? seed,
+      parameters: config?.parameters ?? parameterValues,
       metadata: runtimeMetadata(config),
       initialization: runtimeInitialization(config),
       scenario: runtimeScenario(config),
@@ -486,6 +487,8 @@ export function useActiveWorldRuntime(): ActiveWorldRuntime {
     appliedInterventionCount: legacyInterventions.filter((record) => record.status === "applied").length,
     runtimeSignature: null,
     error: lastError,
+    seed: engine?.seed ?? seed,
+    parameters: engine?.parameters ?? parameterValues,
     metadata: engine?.metadata ?? {},
     initialization: engine?.initialization,
     scenario: engine?.scenario,

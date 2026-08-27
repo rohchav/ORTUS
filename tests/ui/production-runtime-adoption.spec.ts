@@ -77,6 +77,14 @@ test.describe("I1 production runtime adoption", () => {
     await expect(guideRoot).toHaveAttribute("data-runtime-tick", "1");
     await expect.poll(() => page.workers().length).toBe(1);
 
+    await page.getByRole("button", { name: /Prepare reset/ }).click();
+    await page.getByRole("button", { name: "Confirm reset and discard current run state" }).click();
+    await expect(guideRoot).toHaveAttribute("data-runtime-tick", "0");
+    await expect(guide).toContainText("Prepared-pair context changed");
+    await expect(guide).toContainText("Active Noise0.01");
+    await expect(guide).toContainText("Active seedc2-coordination-001");
+    await expect(page.getByLabel("Current simulation context")).toContainText("Default run");
+
     await page.goto("/world?template=epidemic-spread", { waitUntil: "domcontentloaded" });
     await expect(page.locator(".production-flocking-world")).toHaveCount(0);
     await expect(page.locator("canvas.simulation-canvas")).toBeVisible();
@@ -86,6 +94,10 @@ test.describe("I1 production runtime adoption", () => {
     await page.getByRole("button", { name: "Run simulation" }).click();
     await expect.poll(async () => Number(await tick.textContent())).toBeGreaterThan(0);
     await page.getByRole("button", { name: "Pause simulation" }).click();
+
+    await page.goBack();
+    await expectProductionReady(page, 160);
+    await expect.poll(() => page.workers().length).toBe(1);
   });
 
   test("stops visibly when Worker startup is unavailable and never starts a local fallback", async ({ page }) => {
@@ -154,6 +166,49 @@ test.describe("I1 production runtime adoption", () => {
       body: JSON.stringify(evidence, null, 2),
       contentType: "application/json"
     });
+  });
+
+  test("keeps the Worker shell bounded at high DPR across constrained viewports and reduced motion", async ({ browser }) => {
+    const context = await browser.newContext({
+      baseURL: "http://127.0.0.1:3000",
+      deviceScaleFactor: 2,
+      reducedMotion: "reduce",
+      viewport: { width: 1440, height: 900 }
+    });
+    const page = await context.newPage();
+    try {
+      await page.goto(flockingPath, { waitUntil: "domcontentloaded" });
+      await expectProductionReady(page, 160);
+      await expect.poll(() => page.workers().length).toBe(1);
+      expect(await page.evaluate(() => matchMedia("(prefers-reduced-motion: reduce)").matches)).toBe(true);
+
+      for (const viewport of [
+        { width: 1440, height: 900 },
+        { width: 1180, height: 640 },
+        { width: 820, height: 1024 },
+        { width: 390, height: 844 }
+      ]) {
+        await page.setViewportSize(viewport);
+        await expect(page.getByLabel("Simulation world stage")).toBeVisible();
+        await expect(page.getByLabel("Persistent simulation playback controls")).toBeVisible();
+        const dimensions = await page.evaluate(() => ({
+          documentWidth: document.documentElement.scrollWidth,
+          viewportWidth: innerWidth
+        }));
+        expect(dimensions.documentWidth).toBeLessThanOrEqual(dimensions.viewportWidth);
+      }
+
+      const pixelRatio = await page.locator("canvas.immersive-world-canvas").evaluate((canvas: HTMLCanvasElement) => {
+        const width = canvas.getBoundingClientRect().width;
+        return width > 0 ? canvas.width / width : 0;
+      });
+      expect(pixelRatio).toBeGreaterThanOrEqual(1.5);
+      await expectCanvasPixels(page);
+      const axe = await new AxeBuilder({ page }).analyze();
+      expect(axe.violations.map((violation) => violation.id)).toEqual([]);
+    } finally {
+      await context.close();
+    }
   });
 });
 

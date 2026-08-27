@@ -34,8 +34,6 @@ export function GuidedInvestigationPanel({
 }: GuidedInvestigationPanelProps) {
   const runtime = useActiveWorldRuntime();
   const selectedTemplateId = useSimulationStore((state) => state.selectedTemplateId);
-  const seed = useSimulationStore((state) => state.seed);
-  const activeParameters = useSimulationStore((state) => state.parameterValues);
   const interventionCount = runtime.appliedInterventionCount;
   const savedRuns = useSimulationStore((state) => state.savedRuns);
   const savedRunCount = savedRuns.length;
@@ -63,11 +61,11 @@ export function GuidedInvestigationPanel({
       reference: preparedRunReference,
       activeTemplateId: selectedTemplateId,
       activeMetadata: runtime.metadata,
-      activeSeed: seed,
-      activeParameters,
+      activeSeed: runtime.seed,
+      activeParameters: runtime.parameters,
       interventionCount
     }),
-    [activeParameters, authority, interventionCount, preparedRunReference, runtime.metadata, seed, selectedTemplateId]
+    [authority, interventionCount, preparedRunReference, runtime.metadata, runtime.parameters, runtime.seed, selectedTemplateId]
   );
   const activeRecipeMatches = preparedRunDifferences.length === 0;
   const metricRecord = runtime.metricsHistory.at(-1);
@@ -208,8 +206,8 @@ export function GuidedInvestigationPanel({
               </p>
               <dl>
                 <div><dt>Active world</dt><dd>{getTemplateDescriptor(selectedTemplateId).template.name}</dd></div>
-                <div><dt>Active {authority.controlledDifference.label}</dt><dd>{formatValue(activeParameters.noise as string | number | boolean | null)}</dd></div>
-                <div><dt>Active seed</dt><dd>{seed}</dd></div>
+                <div><dt>Active {authority.controlledDifference.label}</dt><dd>{formatValue(runtime.parameters.noise as string | number | boolean | null)}</dd></div>
+                <div><dt>Active seed</dt><dd>{runtime.seed}</dd></div>
                 <div><dt>Changed context</dt><dd>{preparedRunDifferences.join(", ")}</dd></div>
               </dl>
               <p>Continue exploring this modified run without the controlled-pair claim, restore the prepared reference, or exit the guide.</p>

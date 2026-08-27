@@ -4,7 +4,7 @@ Historical milestone record. Its PERF1/PERF1B measurements and boundaries remain
 
 Date: 2026-08-19
 Milestones: PERF1, PERF1B, and I1 production adoption
-Status: PERF1/PERF1B implemented and independently audited; consumed by production Flocking in I1, with I1B audit pending
+Status: PERF1/PERF1B implemented and independently audited; consumed by production Flocking in I1 and hardened by I1B
 
 ## Decision
 
@@ -189,7 +189,19 @@ I1 consumed `SimulationRuntimePort`, `WorkerRuntimeDriver`, `RenderFramePacket`,
 
 I1 does not reintroduce continuous full snapshots, animate entities through React, mutate simulation state from rendering, make Canvas authoritative, couple camera/DPR/resize/reduced-motion to model state, change RNG or scheduler semantics, coalesce commands/model steps, turn `RenderFramePacket` into `CanonicalObservation`, add a Worker toggle, hide Worker failure behind a different run, infer cross-template support, or adopt the corrected spatial-hash experiment.
 
-PERF1B, A0, A0B, and I1 are complete. I1B - Production Runtime Migration Audit is next and unstarted. I2 is not the current handoff.
+PERF1B, A0, A0B, I1, and I1B are complete. UR0 - Product Leverage + Comprehension Gate is next and unstarted. I2 is not the current handoff.
+
+## I1B Production Adoption Audit Result
+
+The independent production integration audit is recorded in `PRODUCTION_RUNTIME_ADOPTION_AUDIT.md`. I1B found and fixed one P0 authority family, eight P1 replacement/order/rejection/reset/provenance/control families, and three bounded P2 presentation/evidence/documentation families. No known I1B P0/P1 remains.
+
+The P0 path reconstructed a temporary main-thread `SimulationEngine` from the Worker snapshot export for comparison capture. Production capture now parses the validated artifact and creates a detached read view with a pure data projector. It does not step, construct, or retain a shadow engine.
+
+Lifecycle acceptance now requires a generation change. A rejected operation cannot overwrite the accepted request/config/readiness promise, and same-generation UI requires a strictly newer revision with active generation/run/template identity. A malformed response may be ignored only when a bounded loose parser proves it belongs to an older generation; malformed current, future, or unidentifiable output remains terminal.
+
+Validation errors now use an explicit bounded recoverable rejection path instead of failing a healthy runtime. Terminal Worker/protocol failure remains terminal and never falls back. Generic Reset preserves the accepted executable variant while clearing scenario/prepared provenance. Active World consumers use accepted runtime seed/parameters rather than mutable desired store values, and comparison provenance comes from the authoritative export rather than completion-time UI state.
+
+Focused commit-candidate coverage passed `2 files / 39 tests`; focused real-Worker production Playwright passed `5/5` with zero failures, retries, or skips. Final complete gate evidence is recorded below.
 
 ## Final Verification
 
@@ -211,3 +223,11 @@ PERF1B, A0, A0B, and I1 are complete. I1B - Production Runtime Migration Audit i
 - Final production-browser characterization measured the table above. At 500 agents, the Worker simulated about `20.7` ticks/s while Canvas held `57.15 FPS`; this supports main-thread isolation under the measured workload, not a throughput or universal frame-rate claim.
 - Final headless simulation smoke preserved exact Flocking pair-check counts of `316,971` at 100 and `7,721,264` at 500. It measured Flocking-100 `244.17` ticks/s, Flocking-500 `30.82`, Forest Fire `49.39`, Predator-Prey `146.76`, and bounded Atlas `2` runs / `10` work units / horizon `5` in `28.25 ms`; substantial timing variation between same-work runs remains a local-machine limitation.
 - `npm run perf:runtime` passed with exact corrected-index/reference snapshot equivalence at 100 and 500. Automatic-path medians were `154.848` ticks/s at 100 and `19.848` at 500; all-pairs reference measured `181.020` and `27.504`, while corrected spatial hash measured `139.532` and `18.983`. Unselected frame packets remained `2,300/11,500` bytes versus `41,406/182,027`-byte JSON snapshot artifacts and contained no metric history.
+
+### I1B Production Adoption Audit Verification
+
+- Lint passed unused-symbol checks and the architecture/accessibility smoke scan over `385` production TypeScript files. Typecheck passed. Final unit verification passed `84 files / 734 tests`; an earlier run exposed and then closed one stale handoff assertion rather than a runtime defect.
+- The production build compiled in `9.3s` and generated `23` pages. Complete Playwright/Axe passed `194/194 (21.2m)` with zero product retries or skips. One separate invocation was terminated after one passing test by an interrupted PTY and produced no result.
+- Final complete-browser characterization measured about `125.7/31.3` modeled ticks/s, `59.42/59.71 FPS`, `2.3/21.0ms` median model step, and `0.4/0.6ms` median Canvas draw at 100/500. A preceding valid focused run measured only `80.0/20.1` ticks/s and `57.66/58.60 FPS`; local wall-clock variance remains material.
+- Simulation smoke preserved exact automatic-path pair checks of `316,971/7,721,264` and measured Flocking `124.13/19.19` ticks/s, Forest Fire `36.13`, Predator-Prey `102.48`, and bounded Atlas `2` runs / `10` work units / horizon `5` in `40.33ms`.
+- Runtime performance passed exact 100/500 corrected-index/reference exports, automatic medians `137.530/22.892` ticks/s, and unchanged `2,300/11,500`-byte unselected packets with no metric history. `git diff --check` passed at closure.

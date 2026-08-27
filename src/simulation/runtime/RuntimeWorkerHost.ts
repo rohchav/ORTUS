@@ -1,6 +1,7 @@
 import { RuntimeAccumulatorScheduler, type RuntimeSchedulerOptions } from "./RuntimeScheduler";
 import { RuntimeSession, type RuntimePublicationBundle } from "./RuntimeSession";
 import { LatestPublicationGate } from "./LatestPublicationGate";
+import { SimulationValidationError } from "../kernel/Errors";
 import {
   parseRuntimeWorkerRequest,
   parseRuntimeWorkerRequestFailureContext,
@@ -15,6 +16,11 @@ export interface RuntimeWorkerHostOptions {
   now?: () => number;
   scheduler?: RuntimeSchedulerOptions;
 }
+
+type RecoverableRuntimeRequest =
+  | Extract<RuntimeWorkerRequest, { type: "runtime.step" }>
+  | Extract<RuntimeWorkerRequest, { type: "runtime.applyIntervention" }>
+  | Extract<RuntimeWorkerRequest, { type: "runtime.selection" }>;
 
 export class RuntimeWorkerHost {
   private readonly session: RuntimeSession;
@@ -75,6 +81,10 @@ export class RuntimeWorkerHost {
       this.acknowledgeMessageConsumption(request);
       this.handleRequest(request);
     } catch (error) {
+      if (error instanceof SimulationValidationError && isRecoverableRequest(request)) {
+        this.reportRejection(request, error);
+        return;
+      }
       const code = request.type === "runtime.initialize" || request.type === "runtime.replace" || request.type === "runtime.importArtifact"
         ? "initialization"
         : "runtime";
@@ -280,6 +290,29 @@ export class RuntimeWorkerHost {
     }
     this.options.postMessage({ type: "runtime.failure", failure });
   }
+
+  private reportRejection(request: RecoverableRuntimeRequest, error: SimulationValidationError): void {
+    const messageId = "requestId" in request ? request.requestId : request.commandId;
+    const bundle = this.session.projectRejectedRequest();
+    this.publishBundle(bundle);
+    this.options.postMessage({
+      type: "runtime.rejected",
+      rejection: {
+        generation: this.generation,
+        runId: this.runId,
+        code: "invalid-request",
+        message: boundedErrorMessage(error),
+        messageId
+      },
+      ui: bundle.ui!
+    });
+  }
+}
+
+function isRecoverableRequest(request: RuntimeWorkerRequest): request is RecoverableRuntimeRequest {
+  return request.type === "runtime.step"
+    || request.type === "runtime.applyIntervention"
+    || request.type === "runtime.selection";
 }
 
 function boundedErrorMessage(error: unknown): string {

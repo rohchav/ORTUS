@@ -28,10 +28,10 @@ describe("A0 canonical architecture and source hierarchy", () => {
     const scientificModel = source(canonicalPaths.scientificModel);
     const roadmap = source(canonicalPaths.roadmap);
 
-    expect(architecture).toContain("Status: CURRENT architectural source of truth after I1");
-    expect(capabilities).toContain("Status: CURRENT capability source of truth after I1");
+    expect(architecture).toContain("Status: CURRENT architectural source of truth after I1B");
+    expect(capabilities).toContain("Status: CURRENT capability source of truth after I1B");
     expect(scientificModel).toContain("Status: CURRENT epistemic and scientific source of truth after A0B");
-    expect(roadmap).toContain("Status: CURRENT future-sequencing source of truth after I1");
+    expect(roadmap).toContain("Status: CURRENT future-sequencing source of truth after I1B");
 
     const precedence = [
       "Executable code and tests",
@@ -147,7 +147,7 @@ describe("A0 canonical architecture and source hierarchy", () => {
     expect(capabilities).toContain("Global service availability does not grant template support.");
   });
 
-  it("records the post-I1 handoff without restoring obsolete sequencing", () => {
+  it("records the post-I1B handoff without restoring obsolete sequencing", () => {
     const roadmap = source(canonicalPaths.roadmap);
     const activeStatus = [
       source(join(repoRoot, "README.md")),
@@ -158,8 +158,8 @@ describe("A0 canonical architecture and source hierarchy", () => {
     expect(roadmap).toContain("A0 - Canonical Architecture + Source-of-Truth Consolidation | COMPLETE");
     expect(roadmap).toContain("A0B - Canonical Architecture + Source-of-Truth Audit | COMPLETE");
     expect(roadmap).toContain("I1 - Production Runtime Migration + Immersive Shell Foundation | COMPLETE");
-    expect(roadmap).toContain("I1B - Production Runtime Migration Audit | NEXT / UNSTARTED");
-    expect(roadmap).toContain("UR0 - Product Leverage + Comprehension Gate | PLANNED / UNSTARTED");
+    expect(roadmap).toContain("I1B - Production Runtime Migration Audit | COMPLETE");
+    expect(roadmap).toContain("UR0 - Product Leverage + Comprehension Gate | NEXT / UNSTARTED");
     expect(roadmap).toContain("C4 is not deferred until I5B.");
     expect(roadmap).toContain("MF-series milestones create reusable computational/scientific execution families");
     expect(activeStatus).not.toContain("A0 is next and unstarted");

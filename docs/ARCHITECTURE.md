@@ -1,6 +1,6 @@
 # ORTUS Canonical Architecture
 
-Status: CURRENT architectural source of truth after I1; production integration awaits the I1B audit
+Status: CURRENT architectural source of truth after I1B
 
 This document defines ORTUS architectural vocabulary, authority, ownership, and dependency direction. It describes current implementation where it exists and labels future contracts explicitly. It does not make a planned type, service, or model family real.
 
@@ -114,7 +114,9 @@ validated Flocking RunConfig
   -> bounded UIProjection/selected detail -> React semantic UI
 ```
 
-The migrated visual path does not continuously construct or publish `SimulationSnapshotView`. Full validated scenario or snapshot artifacts cross the runtime boundary only for explicit semantic operations such as import, export, restore, or comparison capture. Visual and UI publications may coalesce obsolete values; accepted commands and ordered model steps may not. Terminal Worker failure is visible and does not switch to `LocalRuntimeDriver` or fabricate continued execution.
+The migrated visual path does not continuously construct or publish `SimulationSnapshotView`. Full validated scenario or snapshot artifacts cross the runtime boundary only for explicit semantic operations such as import, export, restore, or comparison capture. Comparison capture projects the validated export into a detached read view with a pure data helper; it does not reconstruct a main-thread engine. Visual and UI publications may coalesce obsolete values; accepted commands and ordered model steps may not. Terminal Worker failure is visible and does not switch to `LocalRuntimeDriver` or fabricate continued execution. Recoverable validation rejection remains identified and bounded without relabeling the healthy runtime as failed.
+
+Replacement/reset/import configuration becomes active only after the runtime port advances generation. A rejected concurrent operation cannot replace the accepted request, config, readiness promise, or provenance. Generic Reset preserves accepted executable variant fields but clears scenario/prepared metadata because the generic constructor did not execute that prepared handoff.
 
 The other six production templates retain the legacy path:
 
@@ -181,7 +183,7 @@ The canonical architecture records rather than disguises these risks:
 
 - The target `simulation/model`, `simulation/observation`, and `research/*` namespaces do not exist yet. Structural scientific services currently live beside runtime code under `src/simulation`, which can invite false execution claims.
 - The six non-Flocking production paths still publish broad snapshot views through Zustand, and their cadence remains computed in a mounted React animation-frame effect. I1 deliberately did not claim or simulate cross-template Worker support.
-- Production Flocking uses a product integration controller around the public runtime port, while the underlying browser transport remains template-specific. I1B still needs to attack lifecycle, failure, ordering, and product-boundary assumptions independently.
+- Production Flocking uses an I1B-audited product integration controller around the public runtime port, while the underlying browser transport remains template-specific. Generation-based lifecycle acceptance, strict same-generation revision ordering, recoverable rejection, pure artifact projection, and accepted-config provenance are covered, but the boundary remains Flocking-specific.
 - `src/simulation/runtime` includes browser Worker transport types. This is intentional for the audited runtime port but means the runtime package is not yet a platform-neutral package boundary.
 - `SimulationRun` ownership is real but distributed across engine, runtime session, and UI/store lifecycle. A future explicit run record must not duplicate or compete with those authorities.
 - Current local experiments and Atlas preview produce model-output summaries, not the planned observation/evidence architecture.

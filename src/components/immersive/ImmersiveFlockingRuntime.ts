@@ -315,6 +315,12 @@ export class ImmersiveFlockingRuntime {
       this.notify();
       return;
     }
+    if (publication.type === "rejection") {
+      this.error = publication.rejection.message;
+      this.refreshView();
+      this.notify();
+      return;
+    }
     this.error = publication.failure.message;
     this.refreshView();
     this.notify();

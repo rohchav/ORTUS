@@ -142,9 +142,16 @@ export interface RuntimeFailure extends RuntimeIdentity {
   requestId?: number;
 }
 
+export interface RuntimeRejection extends RuntimeIdentity {
+  code: "invalid-request";
+  message: string;
+  messageId: number;
+}
+
 export type RuntimePublication =
   | { type: "frame"; frame: RenderFramePacket }
   | { type: "ui"; ui: UIProjection }
+  | { type: "rejection"; rejection: RuntimeRejection }
   | { type: "failure"; failure: RuntimeFailure };
 
 export interface RuntimeRunRequest {

@@ -1,6 +1,11 @@
 import type { Command } from "../kernel/types";
 import type { InterventionRequest } from "../interventions/interventionTypes";
-import { parseRuntimeWorkerResponse, validateRuntimeArtifactJson, type RuntimeWorkerRequest } from "./protocol";
+import {
+  parseRuntimeWorkerResponse,
+  parseRuntimeWorkerResponseFailureContext,
+  validateRuntimeArtifactJson,
+  type RuntimeWorkerRequest
+} from "./protocol";
 import {
   maxPendingRuntimeMessages,
   type RenderFramePacket,
@@ -163,6 +168,9 @@ export class WorkerRuntimeDriver implements SimulationRuntimePort {
 
   setSpeedMultiplier(value: number): void {
     this.assertCommandable("change speed");
+    if (!Number.isFinite(value) || value < 0.25 || value > 8) {
+      throw new Error("Runtime speed multiplier must be between 0.25 and 8");
+    }
     this.sendControl({
       type: "runtime.speed",
       commandId: this.reserveTransport("control"),
@@ -223,6 +231,9 @@ export class WorkerRuntimeDriver implements SimulationRuntimePort {
 
   setSelectedEntity(entityId: string | null): void {
     this.assertCommandable("change selection");
+    if (entityId !== null && !/^e\d{1,10}$/.test(entityId)) {
+      throw new Error("Runtime selection must be a bounded entity id or null");
+    }
     this.sendControl({
       type: "runtime.selection",
       commandId: this.reserveTransport("control"),
@@ -373,6 +384,10 @@ export class WorkerRuntimeDriver implements SimulationRuntimePort {
     try {
       message = parseRuntimeWorkerResponse(value);
     } catch (error) {
+      const context = parseRuntimeWorkerResponseFailureContext(value);
+      if (context && this.activeGeneration > 0 && context.generation < this.activeGeneration) {
+        return;
+      }
       this.failDriver(error instanceof Error ? error.message : String(error), "protocol");
       return;
     }
@@ -413,19 +428,7 @@ export class WorkerRuntimeDriver implements SimulationRuntimePort {
       if (message.ui.generation !== this.activeGeneration) {
         return;
       }
-      if (!this.validateActiveProjection(message.ui)) {
-        return;
-      }
-      if (message.ui.revision <= this.latestUiRevision) {
-        return;
-      }
-      if (this.latestUI && message.ui.tick < this.latestUI.tick) {
-        this.failDriver("Runtime UI tick regressed within the active generation", "protocol");
-        return;
-      }
-      this.latestUiRevision = message.ui.revision;
-      this.latestUI = message.ui;
-      this.emit({ type: "ui", ui: message.ui });
+      this.acceptActiveUI(message.ui);
       return;
     }
     if (message.type === "runtime.messageConsumed") {
@@ -461,26 +464,47 @@ export class WorkerRuntimeDriver implements SimulationRuntimePort {
       if (!this.validateActiveProjection(message.ui)) {
         return;
       }
-      let shouldEmitUI = false;
       if (message.ui.revision > this.latestUiRevision) {
-        if (this.latestUI && message.ui.tick < this.latestUI.tick) {
-          this.failDriver("Runtime completion UI tick regressed within the active generation", "protocol");
+        if (!this.acceptActiveUI(message.ui)) {
           return;
         }
-        this.latestUiRevision = message.ui.revision;
-        this.latestUI = message.ui;
-        shouldEmitUI = true;
+      }
+      const acceptedUI = this.latestUI;
+      if (!acceptedUI) {
+        this.failDriver("Runtime completion did not provide an accepted UI projection", "protocol");
+        return;
       }
       this.pending.delete(message.requestId);
       if (pending.kind === "initialize" || pending.kind === "replace" || pending.kind === "reset") {
         this.lifecycle = "ready";
         this.hasReadyRun = true;
-        this.intendedPlayback = message.ui.playback === "running" ? "running" : "paused";
+        this.intendedPlayback = acceptedUI.playback === "running" ? "running" : "paused";
       }
-      if (shouldEmitUI) {
-        this.emit({ type: "ui", ui: message.ui });
+      pending.resolve(acceptedUI);
+      return;
+    }
+    if (message.type === "runtime.rejected") {
+      const rejection = message.rejection;
+      this.consumeTransport(rejection.messageId, rejection.generation);
+      if (rejection.generation !== this.activeGeneration) {
+        return;
       }
-      pending.resolve(message.ui);
+      if (rejection.runId !== this.activeRunId) {
+        this.failDriver("Runtime rejection identity did not match the active run", "protocol");
+        return;
+      }
+      if (!this.validateActiveProjection(message.ui)) {
+        return;
+      }
+      if (message.ui.revision > this.latestUiRevision && !this.acceptActiveUI(message.ui)) {
+        return;
+      }
+      const pending = this.pending.get(rejection.messageId);
+      if (pending && pending.generation === rejection.generation) {
+        this.pending.delete(rejection.messageId);
+        pending.reject(new Error(rejection.message));
+      }
+      this.emit({ type: "rejection", rejection });
       return;
     }
     const failure = message.failure;
@@ -515,6 +539,23 @@ export class WorkerRuntimeDriver implements SimulationRuntimePort {
       this.failDriver("Runtime projection identity or kind did not match the active Worker run", "protocol");
       return false;
     }
+    return true;
+  }
+
+  private acceptActiveUI(ui: UIProjection): boolean {
+    if (!this.validateActiveProjection(ui)) {
+      return false;
+    }
+    if (ui.revision <= this.latestUiRevision) {
+      return false;
+    }
+    if (this.latestUI && ui.tick < this.latestUI.tick) {
+      this.failDriver("Runtime UI tick regressed within the active generation", "protocol");
+      return false;
+    }
+    this.latestUiRevision = ui.revision;
+    this.latestUI = ui;
+    this.emit({ type: "ui", ui });
     return true;
   }
 

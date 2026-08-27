@@ -130,7 +130,8 @@ describe("R1 Start Hub and World-first product reset contracts", () => {
     expect(canonicalRoadmap).toContain("A0 - Canonical Architecture + Source-of-Truth Consolidation | COMPLETE");
     expect(canonicalRoadmap).toContain("A0B - Canonical Architecture + Source-of-Truth Audit | COMPLETE");
     expect(canonicalRoadmap).toContain("I1 - Production Runtime Migration + Immersive Shell Foundation | COMPLETE");
-    expect(canonicalRoadmap).toContain("I1B - Production Runtime Migration Audit | NEXT / UNSTARTED");
+    expect(canonicalRoadmap).toContain("I1B - Production Runtime Migration Audit | COMPLETE");
+    expect(canonicalRoadmap).toContain("UR0 - Product Leverage + Comprehension Gate | NEXT / UNSTARTED");
     expect(roadmap).toContain("F1 and the rest of the F branch are paused beneath E3 Analytical Lenses.");
   });
 });

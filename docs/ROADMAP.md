@@ -1,6 +1,6 @@
 # ORTUS Canonical Roadmap
 
-Status: CURRENT future-sequencing source of truth after I1
+Status: CURRENT future-sequencing source of truth after I1B
 
 This roadmap controls milestone status and dependency order. It is not a capability claim. `CAPABILITIES.md` determines what exists now, and every implementation milestone requires its dedicated scope and audit.
 
@@ -12,8 +12,8 @@ This roadmap controls milestone status and dependency order. It is not a capabil
 | A0 - Canonical Architecture + Source-of-Truth Consolidation | COMPLETE | Four canonical documents and scoped static/source-of-truth gates established |
 | A0B - Canonical Architecture + Source-of-Truth Audit | COMPLETE | Adversarial audit fixed authority, snapshot, source-hierarchy, lifecycle, scientific-language, and static-gate defects; see `CANONICAL_ARCHITECTURE_AUDIT.md` |
 | I1 - Production Runtime Migration + Immersive Shell Foundation | COMPLETE | Production Flocking now uses Worker-owned execution, bounded frame/UI projections, and the minimum immersive shell; legacy templates remain explicit |
-| I1B - Production Runtime Migration Audit | NEXT / UNSTARTED | Required independent audit gate for the I1 production integration |
-| UR0 - Product Leverage + Comprehension Gate | PLANNED / UNSTARTED | Decide which branches are justified by measured usability, capability leverage, and scientific honesty |
+| I1B - Production Runtime Migration Audit | COMPLETE | Adversarial audit fixed authority, replacement, rejection, reset, provenance, and ordering defects; see `performance/PRODUCTION_RUNTIME_ADOPTION_AUDIT.md` |
+| UR0 - Product Leverage + Comprehension Gate | NEXT / UNSTARTED | Decide which branches are justified by measured usability, capability leverage, and scientific honesty |
 
 Canonical immediate dependency:
 
@@ -22,8 +22,8 @@ PERF1B COMPLETE
   -> A0 COMPLETE
   -> A0B COMPLETE
   -> I1 COMPLETE
-  -> I1B NEXT
-  -> UR0
+  -> I1B COMPLETE
+  -> UR0 NEXT
 ```
 
 I1 does not automatically trigger I2, I3, I4, or I5. The former unconditional immersive sequence is superseded. C4 is not deferred until I5B.
@@ -79,7 +79,7 @@ Branches may interleave when their explicit capability, evidence, and product ga
 | Map | Purpose | Current boundary |
 | --- | --- | --- |
 | A - Architecture consolidation | Canonical vocabulary, authority, dependency, capability, and source hierarchy | A0 and A0B complete |
-| B - Production runtime / World | Adopt audited runtime ports and immersive shell without changing model semantics | I1 complete for production Flocking; I1B is the next unstarted audit, and other templates remain on the legacy path |
+| B - Production runtime / World | Adopt audited runtime ports and immersive shell without changing model semantics | I1/I1B complete for production Flocking; other templates remain on the explicit legacy path |
 | C - Executable visual modeling | Move from constrained authoring toward narrowly executable composition | No generic compiler, interpreter, or executable graph exists |
 | D - SystemView / scale / lens / regime | Scientific representation graph and explicit mappings | Conceptual direction only; old multi-scale services remain structural |
 | E - Canonical observation | Evidence-bearing samples separate from snapshots and visual projections | Not implemented |
@@ -168,4 +168,4 @@ All future work must pass the relevant gates:
 
 ## Next Milestone
 
-`I1B - Production Runtime Migration Audit` is next and unstarted. I1 migrates production Flocking only; it does not add cross-template Worker support, scientific observations, SystemView semantics, or new simulation behavior. I1B must independently attack the production lifecycle, ordering, failure, authority, accessibility, performance, and workflow claims before any later immersive milestone is considered.
+`UR0 - Product Leverage + Comprehension Gate` is next and unstarted. I1/I1B establish and audit production Worker execution for Flocking only; they do not add cross-template Worker support, scientific observations, SystemView semantics, new simulation behavior, or later immersive capability. UR0 must evaluate product leverage and comprehension through its own dedicated prompt. I2 is not the current handoff.

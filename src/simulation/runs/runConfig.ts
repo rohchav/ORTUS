@@ -66,6 +66,26 @@ export function runConfigFromScenario(scenario: AuthoredScenario): SimulationRun
   });
 }
 
+export function createGenericResetRunConfig(config: SimulationRunConfig): SimulationRunConfig {
+  const source = validateRunConfig(config);
+  return validateRunConfig({
+    schemaVersion: "1",
+    templateId: source.templateId,
+    seed: source.seed,
+    parameters: source.parameters,
+    ...(source.initializationPreset
+      ? {
+          initializationPreset: source.initializationPreset,
+          initializationOptions: source.initializationOptions ?? {}
+        }
+      : {}),
+    agentComposition: source.agentComposition ?? {},
+    behaviorMode: source.behaviorMode,
+    environmentOptions: source.environmentOptions ?? {},
+    metadata: {}
+  });
+}
+
 export function validateRunConfig(config: SimulationRunConfig, template?: SimulationTemplate): SimulationRunConfig {
   assertKnownRunConfigFields(config);
   const resolvedTemplate = template ?? getProductionTemplate(config.templateId);

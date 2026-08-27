@@ -1,5 +1,6 @@
 import type { Command } from "../kernel/types";
 import type { InterventionRequest } from "../interventions/interventionTypes";
+import { SimulationValidationError } from "../kernel/Errors";
 import { RuntimeAccumulatorScheduler, type RuntimeSchedulerOptions } from "./RuntimeScheduler";
 import { RuntimeSession, type RuntimePublicationBundle } from "./RuntimeSession";
 import type {
@@ -128,6 +129,9 @@ export class LocalRuntimeDriver implements SimulationRuntimePort {
     try {
       this.publishUI(this.session.setSpeedMultiplier(value));
     } catch (error) {
+      if (error instanceof SimulationValidationError) {
+        throw error;
+      }
       this.fail(error, "runtime");
       throw error;
     }
@@ -139,6 +143,10 @@ export class LocalRuntimeDriver implements SimulationRuntimePort {
       this.publishBundle(this.session.applyIntervention(request));
       return this.requireLatestUI();
     } catch (error) {
+      if (error instanceof SimulationValidationError) {
+        this.publishBundle(this.session.projectRejectedRequest());
+        throw error;
+      }
       this.fail(error, "runtime");
       throw error;
     }
@@ -181,6 +189,10 @@ export class LocalRuntimeDriver implements SimulationRuntimePort {
     try {
       this.publishBundle(this.session.setSelectedEntity(entityId));
     } catch (error) {
+      if (error instanceof SimulationValidationError) {
+        this.publishBundle(this.session.projectRejectedRequest());
+        throw error;
+      }
       this.fail(error, "runtime");
       throw error;
     }

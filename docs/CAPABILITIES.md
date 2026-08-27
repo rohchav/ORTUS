@@ -1,6 +1,6 @@
 # ORTUS Current Capabilities
 
-Status: CURRENT capability source of truth after I1; production integration awaits the I1B audit
+Status: CURRENT capability source of truth after I1B
 
 This document answers what ORTUS actually supports now. Code and tests remain authoritative for behavior. `src/simulation/registry` is the machine-readable authority for systems primitives, artifact families, and per-template capability summaries. This document summarizes that evidence for contributors and product language.
 
@@ -30,7 +30,7 @@ All seven registered production templates support current scenario construction,
 | `opinion-dynamics` | Bounded numeric opinion interaction | Continuous 2D | Template-owned `socialLearning` mode with bounded numeric/symbolic state | Not human cognition, measured belief, truth scoring, profiling, or generic social-learning runtime |
 | `predator-prey` | Spatial interacting populations with energy/reproduction/death rules | Continuous 2D | Template-owned ecological interactions and interventions | Not an empirically calibrated ecology |
 | `schelling-segregation` | Grid relocation from local similarity rules | Grid 2D | Template-owned initialization and relocation behavior | Model output is not evidence about protected classes or real neighborhoods |
-| `flocking-boids` | Mobile local-interaction agents | Continuous 2D | Classic/group-aware modes; only template with production `flocking-v1` Worker execution and bounded frame/UI projection | Production adoption is Flocking-only and has not yet passed the dedicated I1B audit |
+| `flocking-boids` | Mobile local-interaction agents | Continuous 2D | Classic/group-aware modes; only template with audited production `flocking-v1` Worker execution and bounded frame/UI projection | Production adoption remains Flocking-only; tested scale/platform evidence is bounded and not scientific validation |
 | `forest-fire` | Cellular local spread, burnout, and optional stylized regrowth | Grid 2D | Deterministic presets including the bounded firebreak corridor | Not wildfire prediction, GIS, weather, field runtime, or boundary-model runtime |
 | `neural-excitation-network` | Bounded stylized excitation over a template-owned directed graph | Hybrid continuous layout + runtime network | Only template with registry-recognized runtime network topology; optional bounded decision readout | Not a biological brain, cognition, diagnosis, learning/plasticity, or generic graph runtime |
 
@@ -45,6 +45,8 @@ The registry deliberately keeps the global `socialLearningRuntime` primitive res
 - Canvas consumes transferable typed-array `RenderFramePacket` values through a read-only scene adapter. React consumes bounded `UIProjection` values and one selected-detail projection.
 - The visual path constructs no continuous full snapshot. Validated scenario/snapshot artifacts cross the boundary only for explicit import, export, restore, or comparison capture.
 - Terminal Worker failure is visible, stops execution, and has no hidden Local fallback.
+- Recoverable validation rejection is identified separately, leaves the accepted run ready, and does not advance accepted configuration or provenance.
+- Generic Reset preserves accepted executable variant fields while removing scenario/prepared provenance that the generic constructor did not earn.
 
 **CURRENT legacy production path and runtime references**
 

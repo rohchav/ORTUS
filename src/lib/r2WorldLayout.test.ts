@@ -153,7 +153,9 @@ describe("R2 World layout and interaction reclaim contracts", () => {
     expect(context).toContain("PERF1B complete.");
     expect(context).toContain("A0: Canonical Architecture + Source-of-Truth Consolidation is complete");
     expect(context).toContain("A0B: Canonical Architecture + Source-of-Truth Audit is complete");
-    expect(context).toContain("I1: Production Runtime Migration + Immersive Shell Foundation is next and unstarted");
+    expect(context).toContain("I1: Production Runtime Migration + Immersive Shell Foundation is complete");
+    expect(context).toContain("I1B: Production Runtime + Immersive Shell Audit is complete");
+    expect(context).toContain("UR0: Product Leverage + Comprehension Gate is next and unstarted");
     expect(context).toContain("I2 through I5B are not an unconditional contiguous sequence; C4 has no I5B dependency");
     expect(context).not.toMatch(/F1 (?:is next|resumed|in progress)/i);
   });

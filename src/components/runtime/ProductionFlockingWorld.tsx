@@ -221,6 +221,13 @@ export function ProductionFlockingWorld() {
           <small>No local fallback was started. Any visible frame is the last accepted presentation, not continued execution.</small>
         </div>
       ) : null}
+      {activeRuntime.state === "ready" && activeRuntime.error ? (
+        <div className="production-flocking-state" role="alert">
+          <strong>Runtime request not accepted</strong>
+          <span>{activeRuntime.error}</span>
+          <small>The accepted Worker run and its last valid scene remain active.</small>
+        </div>
+      ) : null}
     </div>
   );
 }

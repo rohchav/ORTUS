@@ -69,11 +69,7 @@ export class ProductionFlockingRuntime {
       revision: this.revision,
       state: this.disposed
         ? "disposed"
-        : portState === "ready"
-          ? "ready"
-          : this.error
-            ? "failed"
-            : portState ?? "idle",
+        : portState ?? (this.error ? "failed" : "idle"),
       ui: this.latestUI,
       error: this.error
     };
@@ -110,7 +106,7 @@ export class ProductionFlockingRuntime {
       return Promise.reject(error);
     }
     this.unsubscribePort = this.port.subscribe((publication) => this.handlePublication(publication));
-    this.initialization = this.runLifecycleOperation(
+    return this.runLifecycleOperation(
       () => this.port!.initialize(request),
       () => {
         this.currentRequest = request;
@@ -119,7 +115,6 @@ export class ProductionFlockingRuntime {
         this.error = null;
       }
     );
-    return this.initialization;
   }
 
   replaceRun(request: RuntimeRunRequest): Promise<void> {
@@ -127,7 +122,7 @@ export class ProductionFlockingRuntime {
     if (!this.port) {
       return this.start(request);
     }
-    this.initialization = this.runLifecycleOperation(
+    return this.runLifecycleOperation(
       () => this.port!.replaceRun(request),
       () => {
         this.currentRequest = request;
@@ -137,7 +132,6 @@ export class ProductionFlockingRuntime {
         this.error = null;
       }
     );
-    return this.initialization;
   }
 
   whenReady(): Promise<void> {
@@ -166,7 +160,7 @@ export class ProductionFlockingRuntime {
   }
 
   reset(): Promise<void> {
-    this.initialization = this.runLifecycleOperation(
+    return this.runLifecycleOperation(
       () => this.requirePort().reset(),
       () => {
         this.desiredSelection = null;
@@ -175,7 +169,6 @@ export class ProductionFlockingRuntime {
         this.error = null;
       }
     );
-    return this.initialization;
   }
 
   setSpeedMultiplier(value: number): void {
@@ -216,7 +209,7 @@ export class ProductionFlockingRuntime {
       this.recordError(error);
       return Promise.reject(error);
     }
-    this.initialization = this.runLifecycleOperation(
+    return this.runLifecycleOperation(
       () => this.requirePort().importArtifact(request),
       () => {
         this.currentRequest = {
@@ -230,7 +223,6 @@ export class ProductionFlockingRuntime {
         this.error = null;
       }
     );
-    return this.initialization;
   }
 
   recordPresentationDuration(name: "ortus.render.draw", durationMs: number): void {
@@ -256,38 +248,40 @@ export class ProductionFlockingRuntime {
     operation: () => Promise<UIProjection>,
     onAccepted: () => void
   ): Promise<void> {
-    const previousState = this.port?.state;
+    const previousGeneration = this.port?.generation ?? 0;
     let pending: Promise<UIProjection>;
     try {
       pending = operation();
-      const accepted = this.port?.executionKind === "local"
-        || this.port?.state === "initializing"
-        || previousState === "idle";
+      const accepted = (this.port?.generation ?? previousGeneration) !== previousGeneration;
       if (accepted) {
         onAccepted();
         this.operationSequence += 1;
       }
       this.notify();
+      const sequence = this.operationSequence;
+      const lifecycle = pending.then((ui) => {
+        if (this.disposed || sequence !== this.operationSequence) {
+          return;
+        }
+        this.acceptUI(ui);
+        this.error = null;
+        this.applyDesiredPresentationRequests();
+        this.notify();
+      }).catch((error) => {
+        if (this.disposed || sequence !== this.operationSequence) {
+          return;
+        }
+        this.recordError(error);
+        throw error;
+      });
+      if (accepted) {
+        this.initialization = lifecycle;
+      }
+      return lifecycle;
     } catch (error) {
       this.recordError(error);
       return Promise.reject(error);
     }
-    const sequence = this.operationSequence;
-    return pending.then((ui) => {
-      if (this.disposed || sequence !== this.operationSequence) {
-        return;
-      }
-      this.acceptUI(ui);
-      this.error = null;
-      this.applyDesiredPresentationRequests();
-      this.notify();
-    }).catch((error) => {
-      if (this.disposed || sequence !== this.operationSequence) {
-        return;
-      }
-      this.recordError(error);
-      throw error;
-    });
   }
 
   private runOperation(operation: () => Promise<UIProjection>): Promise<void> {
@@ -329,8 +323,8 @@ export class ProductionFlockingRuntime {
     if (this.port?.state !== "ready") {
       return;
     }
-    this.port.setSpeedMultiplier(this.desiredSpeed);
-    this.port.setSelectedEntity(this.desiredSelection);
+    this.runControl(() => this.requirePort().setSpeedMultiplier(this.desiredSpeed));
+    this.runControl(() => this.requirePort().setSelectedEntity(this.desiredSelection));
   }
 
   private handlePublication(publication: RuntimePublication): void {
@@ -348,6 +342,10 @@ export class ProductionFlockingRuntime {
       }
       return;
     }
+    if (publication.type === "rejection") {
+      this.recordError(publication.rejection.message);
+      return;
+    }
     this.recordError(publication.failure.message);
   }
 
@@ -358,10 +356,17 @@ export class ProductionFlockingRuntime {
 
   private acceptUI(ui: UIProjection): boolean {
     if (
+      ui.generation !== this.port?.generation
+      || ui.runId !== this.currentRequest?.runId
+      || ui.templateId !== this.currentRequest?.runConfig.templateId
+    ) {
+      return false;
+    }
+    if (
       this.latestUI
       && (
         ui.generation < this.latestUI.generation
-        || (ui.generation === this.latestUI.generation && ui.revision < this.latestUI.revision)
+        || (ui.generation === this.latestUI.generation && ui.revision <= this.latestUI.revision)
       )
     ) {
       return false;

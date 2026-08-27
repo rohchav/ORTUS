@@ -17,9 +17,7 @@ type SetupView = "quick" | "parameters" | "recipes" | "neural";
 export function RunSettingsPanel({ active = true }: { active?: boolean } = {}) {
   const selectedTemplateId = useSimulationStore((state) => state.selectedTemplateId);
   const selectTemplate = useSimulationStore((state) => state.selectTemplate);
-  const seed = useSimulationStore((state) => state.seed);
   const setSeed = useSimulationStore((state) => state.setSeed);
-  const parameterValues = useSimulationStore((state) => state.parameterValues);
   const setParameters = useSimulationStore((state) => state.setParameters);
   const runtime = useActiveWorldRuntime();
   const descriptor = getTemplateDescriptor(selectedTemplateId);
@@ -30,32 +28,32 @@ export function RunSettingsPanel({ active = true }: { active?: boolean } = {}) {
   const scenarioName = typeof runtime.metadata.scenarioName === "string" && runtime.metadata.scenarioName.trim()
     ? runtime.metadata.scenarioName
     : "Default run";
-  const [seedDraft, setSeedDraft] = useState(seed);
-  const [parameterDraft, setParameterDraft] = useState<ParameterValues>(parameterValues);
+  const [seedDraft, setSeedDraft] = useState(runtime.seed);
+  const [parameterDraft, setParameterDraft] = useState<ParameterValues>(runtime.parameters);
   const [parameterError, setParameterError] = useState<string | null>(null);
-  const previousActiveParametersRef = useRef(parameterValues);
+  const previousActiveParametersRef = useRef(runtime.parameters);
   const parameterDraftTemplateRef = useRef(selectedTemplateId);
   const [view, setView] = useState<SetupView>("quick");
   const [parameterSearch, setParameterSearch] = useState("");
   const pendingParameterKeys = descriptor.template.parameterDefinitions
-    .filter((definition) => !Object.is(parameterDraft[definition.key], parameterValues[definition.key]))
+    .filter((definition) => !Object.is(parameterDraft[definition.key], runtime.parameters[definition.key]))
     .map((definition) => definition.key);
-  const seedDraftDiffers = seedDraft.trim() !== seed;
+  const seedDraftDiffers = seedDraft.trim() !== runtime.seed;
 
   useEffect(() => {
-    setSeedDraft(seed);
-  }, [seed]);
+    setSeedDraft(runtime.seed);
+  }, [runtime.seed]);
 
   useEffect(() => {
     const previousActive = previousActiveParametersRef.current;
     const templateChanged = parameterDraftTemplateRef.current !== selectedTemplateId;
     setParameterDraft((currentDraft) =>
-      templateChanged ? parameterValues : preservePendingParameterDrafts(currentDraft, previousActive, parameterValues)
+      templateChanged ? runtime.parameters : preservePendingParameterDrafts(currentDraft, previousActive, runtime.parameters)
     );
-    previousActiveParametersRef.current = parameterValues;
+    previousActiveParametersRef.current = runtime.parameters;
     parameterDraftTemplateRef.current = selectedTemplateId;
     setParameterError(null);
-  }, [parameterValues, selectedTemplateId]);
+  }, [runtime.parameters, selectedTemplateId]);
 
   useEffect(() => {
     setView("quick");
@@ -93,7 +91,7 @@ export function RunSettingsPanel({ active = true }: { active?: boolean } = {}) {
   }
 
   function discardParameterDraft() {
-    setParameterDraft(parameterValues);
+    setParameterDraft(runtime.parameters);
     setParameterError(null);
   }
 
@@ -170,7 +168,7 @@ export function RunSettingsPanel({ active = true }: { active?: boolean } = {}) {
             highlightedKey={system.highlightedParameterKey}
             ariaLabel="Key model parameters"
             values={parameterDraft}
-            activeValues={parameterValues}
+            activeValues={runtime.parameters}
             onDraftChange={updateParameterDraft}
           />
         </section>
@@ -227,7 +225,7 @@ export function RunSettingsPanel({ active = true }: { active?: boolean } = {}) {
             searchQuery={parameterSearch}
             ariaLabel="Quick setup parameters"
             values={parameterDraft}
-            activeValues={parameterValues}
+            activeValues={runtime.parameters}
             onDraftChange={updateParameterDraft}
           />
         </section>
@@ -239,7 +237,7 @@ export function RunSettingsPanel({ active = true }: { active?: boolean } = {}) {
             showNote
             ariaLabel="Additional model parameters"
             values={parameterDraft}
-            activeValues={parameterValues}
+            activeValues={runtime.parameters}
             onDraftChange={updateParameterDraft}
           />
         </section>
