@@ -1,6 +1,6 @@
 # ORTUS Canonical Roadmap
 
-Status: CURRENT future-sequencing source of truth after the UR0 technical/expert audit
+Status: CURRENT future-sequencing source of truth after the UR0R product repair
 
 This roadmap controls milestone status and dependency order. It is not a capability claim. `CAPABILITIES.md` determines what exists now, and every implementation milestone requires its dedicated scope and audit.
 
@@ -13,7 +13,10 @@ This roadmap controls milestone status and dependency order. It is not a capabil
 | A0B - Canonical Architecture + Source-of-Truth Audit | COMPLETE | Adversarial audit fixed authority, snapshot, source-hierarchy, lifecycle, scientific-language, and static-gate defects; see `CANONICAL_ARCHITECTURE_AUDIT.md` |
 | I1 - Production Runtime Migration + Immersive Shell Foundation | COMPLETE | Production Flocking now uses Worker-owned execution, bounded frame/UI projections, and the minimum immersive shell; legacy templates remain explicit |
 | I1B - Production Runtime Migration Audit | COMPLETE | Adversarial audit fixed authority, replacement, rejection, reset, provenance, and ordering defects; see `performance/PRODUCTION_RUNTIME_ADOPTION_AUDIT.md` |
-| UR0 - Product Leverage + Comprehension Gate | TECHNICAL/EXPERT COMPLETE; HUMAN PENDING | Expert/source/rendered audit is complete; no participant evidence exists, so the roadmap decision remains provisional; see `product/PRODUCT_LEVERAGE_COMPREHENSION_GATE.md` |
+| UR0 - Product Leverage + Comprehension Gate | TECHNICAL/EXPERT COMPLETE; HUMAN PENDING | Expert/source/rendered audit plus one highly informed formative pilot exist; the pilot supports defect discovery but not unbiased comprehension validation; see `product/PRODUCT_LEVERAGE_COMPREHENSION_GATE.md` |
+| UR0R - Product Comprehension + Exploration Repair | COMPLETE | Repaired supported Flocking exploration, domain framing, observation context, bounded keyboard inspection, and Workshop/Lab/Atlas identity without changing simulation semantics; see `product/PRODUCT_COMPREHENSION_EXPLORATION_REPAIR.md` |
+| S1 - Starter -> Remix Bridge | NEXT / UNSTARTED | Next bounded agency milestone; must begin from supported examples/questions and must not imply generic schema, graph, or custom-model execution |
+| S2 - Recipe-First Builder / Workflow Reboot | PLANNED / UNSTARTED | Follows a dedicated S1 implementation/audit decision and preserves structural-validity versus runtime-support boundaries |
 
 Canonical immediate dependency:
 
@@ -25,15 +28,16 @@ PERF1B COMPLETE
   -> I1B COMPLETE
   -> UR0 TECHNICAL/EXPERT COMPLETE
   -> UR0 HUMAN COMPREHENSION PENDING
-  -> FINAL BRANCH DECISION NOT YET AUTHORIZED
+  -> UR0R PRODUCT REPAIR COMPLETE
+  -> S1 NEXT / UNSTARTED
 ```
 
-I1 does not automatically trigger I2, I3, I4, or I5. The former unconditional immersive sequence is superseded. C4 is not deferred until I5B. No feature milestone is next while the UR0 human gate remains pending.
+I1 does not automatically trigger I2, I3, I4, or I5. The former unconditional immersive sequence is superseded. C4 is not deferred until I5B. The human gate remains pending, but UR0R's explicit product handoff authorizes S1 as the next bounded milestone; this does not validate beginner comprehension or authorize generic executable authoring.
 
 ## Status Vocabulary
 
 - **COMPLETE**: implementation/audit is committed and required gates passed.
-- **TECHNICAL/EXPERT COMPLETE; HUMAN PENDING**: source, rendered, and expert work is complete, but no final comprehension or roadmap claim is allowed until actual participant evidence exists.
+- **TECHNICAL/EXPERT COMPLETE; HUMAN PENDING**: source, rendered, and expert work is complete, but no claim of validated human comprehension is allowed until broader participant evidence exists.
 - **NEXT / UNSTARTED**: authorized next planning handoff but no implementation exists.
 - **PLANNED / UNSTARTED**: named direction requiring a dedicated prompt and prerequisites.
 - **PROPOSED**: candidate direction not yet accepted into a dependency path.
@@ -42,25 +46,28 @@ I1 does not automatically trigger I2, I3, I4, or I5. The former unconditional im
 
 ## Near-Term Dependency Map
 
-UR0 has not selected a feature branch. The immediate dependency is:
+UR0R selects one bounded product branch while leaving the human gate open:
 
 ```text
 A0/A0B
   -> I1/I1B
   -> UR0 technical/expert audit
-  -> UR0 formative human study
-  -> final evidence-based branch decision
-       -> Path A: I2 only if immersion is the demonstrated blocker
-       -> Path B: S1/S2 for bounded remix/workflow agency
-       -> Path C: O1/E1 for observation and investigation continuity
-       -> Path D: bounded product repair before expansion
+  -> informed formative pilot + UR0R bounded repair
+  -> S1/S1B Starter-to-Remix bridge
+  -> S2/S2B only after its dedicated scope
+
+parallel evidence obligation:
+  UR0 broader formative study -> human comprehension gate decision
+
+retained high-priority infrastructure:
+  O1/O1B -> E1/E1B when explicitly authorized
 ```
 
-The expert layer provisionally favors Path C after the human gate and defers I2. It found Path B valuable but correctly limited: S1/S2 do not themselves establish executable custom-model authoring. This is not a final roadmap selection. Branches may interleave when their explicit capability, evidence, and product gates are satisfied, and every planning label still requires its dedicated prompt.
+The informed pilot makes the example-to-decomposition-to-remix break concrete enough to place S1 next. This is a sequencing decision, not proof that S1 already exists or that human comprehension is validated. S1/S2 do not themselves establish generic executable custom-model authoring. O1/E1 remain high-priority scientific infrastructure, I2 remains deferred, and every planning label still requires its dedicated prompt and audit.
 
 | Pair | Planning purpose | Required gate |
 | --- | --- | --- |
-| S1/S1B | Starter remix and bounded Workshop handoff | Existing template-backed recipe remains authoritative; no generic execution claim |
+| S1/S1B | Starter remix and bounded Workshop handoff; next authorized pair | Existing template-backed recipe remains authoritative; no generic execution claim |
 | S2/S2B | Recipe-first Builder/workflow reboot | Comprehension evidence and preserved structural-only boundary |
 | SA0/SA0B | Scientific architecture contract pass for model/run/research artifacts | No implementation by taxonomy alone; align with canonical planes |
 | S3/S3B | First bounded executable composition primitive | Explicit runtime vocabulary, capability checks, determinism, and no arbitrary code |
@@ -166,4 +173,4 @@ All future work must pass the relevant gates:
 
 ## Next Action
 
-Conduct the UR0 formative human study using `product/PRODUCT_LEVERAGE_COMPREHENSION_GATE.md` and `product/UR0_STUDY_OBSERVATION_TEMPLATE.md`. The technical/expert layer is complete, but the human comprehension gate is pending and the roadmap decision is provisional. Do not start I2, S1, S2, O1, E1, C4, or another feature branch automatically. The provisional expert recommendation is to keep I2 deferred and favor O1/O1B followed by E1/E1B if participant evidence confirms the investigation-continuity gap.
+Begin the dedicated S1 prompt for the bounded Starter-to-Remix bridge. S1 is next and unstarted; it must preserve existing template-backed authority, begin from supported examples or questions, keep structural validity distinct from runtime support, and avoid generic schema/graph execution claims. Continue the broader UR0 formative study as a separate evidence obligation; the human comprehension gate remains pending. S2 is planned, O1/E1 remain high-priority scientific infrastructure but are not automatically next, and I2 remains deferred.

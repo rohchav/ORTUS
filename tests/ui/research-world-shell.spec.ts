@@ -33,13 +33,13 @@ const orientationContracts = {
   },
   Lab: {
     id: "lab",
-    purpose: "Understand how future investigation records would organize evidence about model behavior.",
+    purpose: "See how future durable scientific memory will connect questions, runs, evidence, and unresolved findings.",
     boundary: "Nothing on this route is a saved experiment, evidence record, notebook, or run history.",
     technicalTerm: "Model-behavior evidence state, not empirical validation."
   },
   Atlas: {
     id: "atlas",
-    purpose: "Sample a small supported slice of model behavior while preserving strict evidence and persistence boundaries.",
+    purpose: "Orient among future questions, representations, evidence, alternatives, findings, and their relationships.",
     boundary: "A sparse ephemeral preview is not a complete landscape, detected regime, saved discovery, or real-world claim.",
     technicalTerm: "One- or two-axis exact parameter grid with isolated deterministic sample runs and final-tick numeric observation."
   }
@@ -198,9 +198,15 @@ async function expectRouteOrientation(page: Page, destination: (typeof destinati
     await expect(tasks.getByRole("button", { name: "More", exact: true })).toBeVisible();
   } else if (destination.path === "/atlas") {
     const intro = page.locator(".destination-intro--atlas");
+    const identity = page.locator(".atlas-identity");
     const preview = page.locator("[data-ephemeral-landscape-preview]");
-    await expect(intro).toContainText("Sample a small, explicit region");
+    await expect(intro).toContainText("Map questions, representations, evidence, findings, alternatives");
+    await expect(identity.getByRole("heading", { name: "A scientific map, not another experiment surface" })).toBeVisible();
+    await expect(identity).toContainText("It does not populate the future map.");
     await expect(preview).toBeVisible();
+    expect(
+      await identity.evaluate((element) => Boolean(element.compareDocumentPosition(document.querySelector("[data-ephemeral-landscape-preview]")) & Node.DOCUMENT_POSITION_FOLLOWING))
+    ).toBe(true);
     expect(
       await preview.evaluate((element) => Boolean(element.compareDocumentPosition(document.querySelector(".route-orientation-disclosure")) & Node.DOCUMENT_POSITION_FOLLOWING))
     ).toBe(true);

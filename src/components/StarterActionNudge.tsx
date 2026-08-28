@@ -84,11 +84,26 @@ export function StarterActionNudge({ launch, activeGuideId }: StarterActionNudge
             </nav>
           </>
         ) : (
-          <ol>
-            <li>{world.firstRun.action}</li>
-            <li>{world.firstChange.action}</li>
-            <li>Watch {world.whatToWatch.map((item) => item.label).join(" and ")}.</li>
-          </ol>
+          <>
+            <p className="starter-nudge__question">Question: {world.hookQuestion}</p>
+            <div className="starter-nudge__investigation">
+              <section>
+                <span>Entities and mechanism</span>
+                <strong>{world.anatomy.entities?.[0] ?? world.oneSentencePremise}</strong>
+                <small>{world.firstRun.action}</small>
+              </section>
+              <section>
+                <span>Relevant change</span>
+                <strong>{world.firstChange.targetLabel}</strong>
+                <small>{world.firstChange.action}</small>
+              </section>
+              <section>
+                <span>Watch</span>
+                <strong>{world.whatToWatch.map((item) => item.label).join(" and ")}</strong>
+                <small>{world.firstChange.differenceToLookFor}</small>
+              </section>
+            </div>
+          </>
         )}
       </div>
       <button type="button" onClick={dismiss} aria-label={`Dismiss ${world.title} starter steps`}>

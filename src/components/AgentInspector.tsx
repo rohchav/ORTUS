@@ -17,6 +17,16 @@ export function AgentInspector({ placement = "floating" }: AgentInspectorProps) 
   const selectEntity = useSimulationStore((state) => state.selectEntity);
   const runtime = useActiveWorldRuntime();
 
+  function closeInspector() {
+    selectEntity(null);
+    window.requestAnimationFrame(() => {
+      const returnTarget = document.querySelector<HTMLElement>("[data-boid-inspect-control]")
+        ?? document.querySelector<HTMLElement>(".immersive-world-canvas")
+        ?? document.querySelector<HTMLElement>(".simulation-canvas");
+      returnTarget?.focus();
+    });
+  }
+
   if (runtime.workerManaged && selectedEntityId) {
     return (
       <WorkerFlockingInspector
@@ -24,7 +34,7 @@ export function AgentInspector({ placement = "floating" }: AgentInspectorProps) 
         entityId={selectedEntityId}
         selected={runtime.selected}
         tick={runtime.tick}
-        onClose={() => selectEntity(null)}
+        onClose={closeInspector}
       />
     );
   }
@@ -47,7 +57,7 @@ export function AgentInspector({ placement = "floating" }: AgentInspectorProps) 
         eyebrow={truncateId(selectedEntityId)}
         variant="floating"
         actions={
-          <button type="button" onClick={() => selectEntity(null)} suppressHydrationWarning>
+          <button type="button" onClick={closeInspector} suppressHydrationWarning>
             Close
           </button>
         }

@@ -9,22 +9,25 @@ function source(path: string): string {
 }
 
 describe("UR0 product leverage and comprehension gate", () => {
-  it("keeps the expert result separate from the uncollected human gate", () => {
+  it("keeps the informed formative pilot separate from the unclosed human gate", () => {
     const report = source("docs/product/PRODUCT_LEVERAGE_COMPREHENSION_GATE.md");
+    const repair = source("docs/product/PRODUCT_COMPREHENSION_EXPLORATION_REPAIR.md");
     const roadmap = source("docs/ROADMAP.md");
     const readme = source("README.md");
 
-    for (const record of [report, roadmap, readme]) {
+    for (const record of [report, repair, roadmap, readme]) {
       expect(record).toMatch(/technical\/expert/i);
       expect(record).toMatch(/human comprehension gate.*pending|human pending/i);
-      expect(record).toMatch(/roadmap decision.*provisional|decision is provisional/i);
     }
-    expect(report).toContain("No participant session was conducted or supplied.");
+    expect(report).toContain("participant who is highly familiar with ORTUS");
+    expect(report).toContain("not unbiased first-time-user validation");
+    expect(repair).toContain("not an unbiased first-time-user test");
+    expect(repair).toContain("Sustained milling/circular motion is therefore not advertised as supported behavior.");
     expect(report).toContain("UR0 TECHNICAL/EXPERT GATE: COMPLETE");
     expect(report).toContain("UR0 HUMAN COMPREHENSION GATE: PENDING");
-    expect(report).toContain("ROADMAP DECISION: PROVISIONAL");
-    expect(roadmap).toContain("FINAL BRANCH DECISION NOT YET AUTHORIZED");
-    expect(roadmap).toContain("No feature milestone is next while the UR0 human gate remains pending.");
+    expect(roadmap).toContain("UR0R - Product Comprehension + Exploration Repair | COMPLETE");
+    expect(roadmap).toContain("S1 - Starter -> Remix Bridge | NEXT / UNSTARTED");
+    expect(roadmap).toContain("O1/E1 remain high-priority scientific infrastructure");
   });
 
   it("does not advertise runnable Workshop authoring or nonexistent Lab records from Start", () => {
@@ -63,5 +66,22 @@ describe("UR0 product leverage and comprehension gate", () => {
     expect(template).toContain("Do not record a participant name");
     expect(template).toContain("Do not mark UR0 complete");
     expect(template).not.toMatch(/participantName|emailAddress|accountId|protectedClass/i);
+  });
+
+  it("records the example-first S1 handoff without pretending Workshop already executes", () => {
+    const repair = source("docs/product/PRODUCT_COMPREHENSION_EXPLORATION_REPAIR.md");
+    const roadmap = source("docs/ROADMAP.md");
+
+    for (const phrase of [
+      "Entry must support a question, phenomenon, example, or existing system",
+      "How it works",
+      "structural draft",
+      "runnable derivative",
+      "S1 must not execute `ModelSchemaDefinition`"
+    ]) {
+      expect(repair).toContain(phrase);
+    }
+    expect(roadmap).toContain("structural validity distinct from runtime support");
+    expect(repair).toContain("UR0 HUMAN COMPREHENSION GATE: PENDING");
   });
 });

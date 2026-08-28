@@ -14,6 +14,7 @@ import { BuilderValidationPanel } from "./BuilderValidationPanel";
 import { BuilderViewport } from "./BuilderViewport";
 import { ModelSchemaAuthoringShell } from "./ModelSchemaAuthoringShell";
 import { GuidedBuilder, type GuidedBuilderHandoffResolution } from "./guided/GuidedBuilder";
+import { WorkshopModelExample } from "./WorkshopModelExample";
 import type { ModelSchemaDefinition } from "../../simulation/modelSchema";
 import { BuilderGraphView } from "./graph";
 import {
@@ -221,8 +222,9 @@ export function BuilderShell({ initialWorkspace }: BuilderShellProps) {
           <p>Structural authoring</p>
           <h1>Workshop</h1>
         </div>
-        <p>Describe a model step by step or inspect exact structural artifacts. Workshop drafts do not execute.</p>
+        <p>Begin from an example or describe a model step by step. Workshop drafts do not execute. They are structural artifacts.</p>
       </header>
+      <WorkshopModelExample />
       <BuilderExperienceTabs activeExperience={activeExperience} onExperienceChange={setActiveExperience} />
       <section
         id="builder-experience-panel-guided"

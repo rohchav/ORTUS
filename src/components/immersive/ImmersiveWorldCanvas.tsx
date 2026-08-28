@@ -395,6 +395,7 @@ export const ImmersiveWorldCanvas = memo(function ImmersiveWorldCanvas({
         role="img"
         tabIndex={0}
         aria-label="Immersive Flocking world rendered from the current runtime frame"
+        aria-describedby="flocking-canvas-description"
         onPointerMove={handlePointerMove}
         onPointerDown={handlePointerDown}
         onPointerUp={handlePointerUp}
@@ -535,8 +536,20 @@ function createProjection(
   height: number
 ): Projection {
   const bounds = adapter.getBounds();
-  const yScale = concept === "living-diorama" ? 0.7 : concept === "field-scientist" ? 0.88 : 0.82;
-  const skew = concept === "living-diorama" ? 0.12 : 0;
+  if (concept === "living-diorama") {
+    const padding = Math.max(12, Math.min(width, height) * 0.025);
+    const horizontalScale = (width - padding * 2) / bounds.width;
+    const verticalScale = (height - padding * 2) / bounds.height;
+    return {
+      centerX: width / 2,
+      centerY: height / 2,
+      scale: horizontalScale * camera.zoom,
+      yScale: verticalScale / horizontalScale,
+      skew: 0
+    };
+  }
+  const yScale = concept === "field-scientist" ? 0.88 : 0.82;
+  const skew = 0;
   const padding = Math.max(36, Math.min(width, height) * 0.075);
   const scale = Math.min(
     (width - padding * 2) / bounds.width,
@@ -730,7 +743,7 @@ function drawEntity(
 ): void {
   const screen = worldToScreen(entity.x, entity.y, projection, camera);
   const depth = concept === "living-diorama" ? 0.82 + (entity.y / bounds.height) * 0.32 : 1;
-  const radius = Math.max(3.4, entity.radius * 1.25 * depth);
+  const radius = Math.max(4.2, entity.radius * 1.35 * depth);
   const selectedDetail = selected || hovered;
   const drawShadow = concept === "living-diorama"
     && (quality.shadowDetail === "all" || (quality.shadowDetail === "selected" && selectedDetail));
@@ -746,10 +759,10 @@ function drawEntity(
   ctx.translate(screen.x, screen.y);
   ctx.rotate(entity.headingRadians);
   ctx.beginPath();
-  ctx.moveTo(radius + 4, 0);
-  ctx.lineTo(-radius * 0.72, -radius * 0.68);
-  ctx.lineTo(-radius * 0.3, 0);
-  ctx.lineTo(-radius * 0.72, radius * 0.68);
+  ctx.moveTo(radius * 1.9, 0);
+  ctx.lineTo(-radius * 0.78, -radius * 0.72);
+  ctx.lineTo(-radius * 0.18, 0);
+  ctx.lineTo(-radius * 0.78, radius * 0.72);
   ctx.closePath();
   ctx.fillStyle = entity.fill;
   ctx.strokeStyle = selected ? "#f3f1e8" : hovered ? "#7bd7c7" : entity.stroke;

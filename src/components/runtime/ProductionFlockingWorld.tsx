@@ -177,8 +177,8 @@ export function ProductionFlockingWorld() {
 
       <div className="production-flocking-world__instrument" aria-label="Flocking scene presentation controls">
         <div className="production-flocking-world__runtime">
-          <span>Living Diorama</span>
-          <strong>{activeRuntime.state === "ready" ? "Worker runtime" : runtimeStateLabel(activeRuntime.state)}</strong>
+          <span>Model view</span>
+          <strong>{activeRuntime.state === "ready" ? "Directional boids" : runtimeStateLabel(activeRuntime.state)}</strong>
           <small>Camera and lens are presentation only</small>
         </div>
         <div className="production-camera-modes" role="group" aria-label="Camera presentation mode">
@@ -195,13 +195,26 @@ export function ProductionFlockingWorld() {
             Alignment lens
           </label>
         </div>
+        <div className="production-entity-controls" role="group" aria-label="Boid inspection controls">
+          <IconButton label="Previous boid" icon="<" disabled={!selectedEntityId} onClick={() => cycleSelection(-1)} />
+          <button type="button" data-boid-inspect-control onClick={() => cycleSelection(1)}>
+            {selectedEntityId ? "Next boid" : "Inspect a boid"}
+          </button>
+          <IconButton label="Clear boid selection" icon="x" disabled={!selectedEntityId} onClick={() => selectEntity(null)} />
+          <span aria-live="polite">{activeRuntime.selected?.label ?? "No boid selected"}</span>
+        </div>
       </div>
 
       <div className="production-flocking-world__readout" aria-label="Flocking model-output readout">
         <span>Tick <strong>{formatTick(activeRuntime.tick)}</strong></span>
         <span>Boids <strong>{activeRuntime.entityCount}</strong></span>
         <span>Alignment <strong>{activeRuntime.uiProjection?.alignment === null || activeRuntime.uiProjection?.alignment === undefined ? "Not recorded" : formatNumber(activeRuntime.uiProjection.alignment, 3)}</strong></span>
+        <span>Edges <strong>{boundaryLabel(activeRuntime.parameters.boundaryMode)}</strong></span>
       </div>
+
+      <p id="flocking-canvas-description" className="sr-only">
+        The canvas presents a bounded 100 by 100 model domain. Use the adjacent boid inspection controls for a keyboard-operable semantic alternative to pointer selection.
+      </p>
 
       <p className="sr-only" aria-live="polite" aria-atomic="true">
         Flocking model at tick {activeRuntime.tick} with {activeRuntime.entityCount} simulated boids.
@@ -244,6 +257,13 @@ type ActiveWorldRuntimeState = ReturnType<typeof useActiveWorldRuntime>["state"]
 function boidNumber(label: string): number {
   const match = /Boid\s+(\d+)/i.exec(label);
   return match ? Number(match[1]) : Number.MAX_SAFE_INTEGER;
+}
+
+function boundaryLabel(value: unknown): string {
+  if (value === "wrap") return "Wrap";
+  if (value === "bounce") return "Bounce";
+  if (value === "clamp") return "Clamp";
+  return "Unknown";
 }
 
 function useReducedMotion(): boolean {

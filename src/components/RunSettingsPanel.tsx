@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { NeuralRuntimeLabPanel } from "./NeuralRuntimeLabPanel";
+import { FlockingExplorationPanel } from "./FlockingExplorationPanel";
 import { ParameterPanel } from "./ParameterPanel";
 import { ScenarioBuilderPanel } from "./ScenarioBuilderPanel";
 import { getSystemCatalogEntry } from "../lib/systemCatalog";
@@ -12,7 +13,7 @@ import { getInterventionDefinitions, validateTemplateParameters, type JsonValue,
 import { useSimulationStore } from "../state/simulationStore";
 import { useActiveWorldRuntime } from "./runtime/ProductionRuntimeProvider";
 
-type SetupView = "quick" | "parameters" | "recipes" | "neural";
+type SetupView = "quick" | "explore" | "parameters" | "recipes" | "neural";
 
 export function RunSettingsPanel({ active = true }: { active?: boolean } = {}) {
   const selectedTemplateId = useSimulationStore((state) => state.selectedTemplateId);
@@ -120,6 +121,17 @@ export function RunSettingsPanel({ active = true }: { active?: boolean } = {}) {
           <p>Choosing another template immediately discards the current trajectory and prepares that template paused at tick 0.</p>
         </section>
 
+        {selectedTemplateId === "flocking-boids" ? (
+          <section className="world-tool-entry world-exploration-entry" aria-labelledby="flocking-exploration-entry-title">
+            <div>
+              <span>What you are looking at</span>
+              <h3 id="flocking-exploration-entry-title">Boids use three local steering rules</h3>
+              <p>See the entities, translate the rule names, and load only behavior setups reproduced in the current runtime.</p>
+            </div>
+            <button type="button" onClick={() => openView("explore")}>Explore behavior</button>
+          </section>
+        ) : null}
+
         <section className="run-settings-quick world-tool-section" aria-labelledby="quick-controls-title">
           <div className="run-settings-quick__head">
             <div className="world-tool-section__head">
@@ -197,6 +209,13 @@ export function RunSettingsPanel({ active = true }: { active?: boolean } = {}) {
             ) : null}
           </div>
         </section>
+      </div>
+
+      <div className="world-task-subview" hidden={view !== "explore"}>
+        <TaskViewBack onClick={() => openView("quick")} />
+        <h3 id="setup-explore-title" tabIndex={-1}>Explore Flocking behavior</h3>
+        <p className="world-task-view__intro">Intuition first, exact configuration second. Every setup below replaces the run only after a separate confirmation.</p>
+        <FlockingExplorationPanel />
       </div>
 
       <div className="world-task-subview" hidden={view !== "parameters"}>
@@ -312,6 +331,7 @@ function TaskViewBack({ onClick }: { onClick: () => void }) {
 function focusSetupView(view: SetupView): void {
   const targetId = {
     quick: "current-world-title",
+    explore: "setup-explore-title",
     parameters: "setup-parameters-title",
     recipes: "setup-recipes-title",
     neural: "setup-neural-title"

@@ -77,7 +77,7 @@ export const routeOrientations: readonly RouteOrientationDefinition[] = [
   {
     destinationId: "lab",
     routeName: "Lab",
-    purpose: "Understand how future investigation records would organize evidence about model behavior.",
+    purpose: "See how future durable scientific memory will connect questions, runs, evidence, and unresolved findings.",
     startLabel: "Current state",
     startHere: "conceptual, non-persistent evidence-record and experiment-ledger foundation.",
     boundary: "Nothing on this route is a saved experiment, evidence record, notebook, or run history.",
@@ -101,9 +101,9 @@ export const routeOrientations: readonly RouteOrientationDefinition[] = [
   {
     destinationId: "atlas",
     routeName: "Atlas",
-    purpose: "Sample a small supported slice of model behavior while preserving strict evidence and persistence boundaries.",
-    startLabel: "Start here",
-    startHere: "configure and explicitly run a bounded deterministic preview over one implemented template and scenario.",
+    purpose: "Orient among future questions, representations, evidence, alternatives, findings, and their relationships.",
+    startLabel: "Current state",
+    startHere: "map records are not implemented; one bounded deterministic preview remains available as a page-local inspection tool.",
     boundary: "A sparse ephemeral preview is not a complete landscape, detected regime, saved discovery, or real-world claim.",
     technicalDetails: [
       {

@@ -8,6 +8,7 @@ import { ModelExplanationPanel } from "./ModelExplanationPanel";
 import { RunSettingsPanel } from "./RunSettingsPanel";
 import { WorldComparePanel } from "./WorldComparePanel";
 import { WorldObservePanel } from "./WorldObservePanel";
+import { WorldObservationDock } from "./WorldObservationDock";
 import { GuidedInvestigationPanel } from "./starterWorlds/GuidedInvestigationPanel";
 import { getWorkspacePanelDefinition } from "../lib/workspacePanels";
 import { getSimulationWorkspaceMode, type SimulationWorkspaceModeId } from "../lib/workspaceModes";
@@ -314,6 +315,7 @@ export function LeftInstrumentStack({
               Focus world
             </button>
           </header>
+          <WorldObservationDock activeMode={activeMode} onOpenObserve={() => chooseMode("observe")} />
           <div ref={panelScrollRef} className="workspace-context-panel__scroll" data-intentional-scroll-region="workspace-context">
             {guidedInvestigation && onExitGuide && onFocusPlayback && onRestorePreparedRecipe ? (
               <GuidedInvestigationPanel

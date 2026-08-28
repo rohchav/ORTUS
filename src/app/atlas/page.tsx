@@ -17,7 +17,7 @@ import { EphemeralLandscapePreview } from "../../components/atlas/EphemeralLands
 
 export const metadata: Metadata = {
   title: "Atlas | ORTUS",
-  description: "Bounded ephemeral Atlas sampling preview with explicit model-behavior evidence boundaries."
+  description: "Atlas orientation for questions, representations, evidence, alternatives, and a bounded ephemeral sampling preview."
 };
 
 export default function AtlasPage() {
@@ -28,8 +28,23 @@ export default function AtlasPage() {
           <p>Research tool</p>
           <h1>Atlas</h1>
         </div>
-        <p>Sample a small, explicit region of an implemented model and inspect how one model-output metric changes.</p>
+        <p>Map questions, representations, evidence, findings, alternatives, and the relationships among them.</p>
       </header>
+
+      <section className="atlas-identity" aria-labelledby="atlas-identity-title">
+        <div>
+          <span>Long-term identity</span>
+          <h2 id="atlas-identity-title">A scientific map, not another experiment surface</h2>
+          <p>The map, saved relationships, evidence-linked regions, and SystemViews are future capabilities. No discovery record is created here today.</p>
+        </div>
+        <ol aria-label="Future Atlas map layers">
+          <li><span>1</span><strong>Questions</strong></li>
+          <li><span>2</span><strong>Representations</strong></li>
+          <li><span>3</span><strong>Evidence + alternatives</strong></li>
+          <li><span>4</span><strong>Findings + open gaps</strong></li>
+        </ol>
+        <p><strong>Available now:</strong> one bounded, page-local Flocking sampler for inspecting exact model-output changes. It does not populate the future map.</p>
+      </section>
 
       <EphemeralLandscapePreview />
 

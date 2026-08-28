@@ -116,6 +116,12 @@ test("a key parameter edit remains a draft until an explicit paused tick-0 rebui
   await page.getByRole("button", { name: "Run simulation" }).click();
   await expect.poll(() => numericText(tick)).toBeGreaterThan(0);
   await page.getByRole("button", { name: "Pause simulation" }).click();
+  await expect(page.locator(".timeline-strip__label strong")).toHaveText("Paused");
+  await expect.poll(async () => {
+    const before = await numericText(tick);
+    await page.waitForTimeout(200);
+    return (await numericText(tick)) - before;
+  }).toBe(0);
   const tickBeforeDraft = await numericText(tick);
   await page.getByRole("spinbutton", { name: "Alignment weight numeric value" }).fill("0.51");
 
@@ -227,17 +233,21 @@ test("every production Explain summary stays concise and Neural prioritizes a mo
   }
 });
 
-test("Atlas keeps its real preview action in the first short desktop viewport", async ({ page }) => {
+test("Atlas leads with map identity while keeping its bounded preview reachable", async ({ page }) => {
   for (const viewport of [
     { width: 1280, height: 720 },
     { width: 1280, height: 600 }
   ]) {
     await page.setViewportSize(viewport);
     await page.goto("/atlas", { waitUntil: "domcontentloaded" });
+    const identity = page.locator(".atlas-identity");
+    await expect(identity.getByRole("heading", { name: "A scientific map, not another experiment surface" })).toBeVisible();
+    await expectWithinViewport(page, identity);
     const runButton = page.getByRole("button", { name: "Run ephemeral preview" });
     await expect(
       runButton.locator("xpath=ancestor::*[contains(concat(' ', normalize-space(@class), ' '), ' corner-panel ')][1]")
     ).toContainText("Execution Status");
+    await runButton.scrollIntoViewIfNeeded();
     await expectWithinViewport(page, runButton);
     await expectNoHorizontalOverflow(page);
   }

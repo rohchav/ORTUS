@@ -13,7 +13,7 @@ import {
 
 export const metadata: Metadata = {
   title: "Lab | ORTUS",
-  description: "Non-persistent Lab foundation for model investigation evidence records and experiment ledger semantics."
+  description: "Current non-persistent Lab orientation toward durable scientific memory and investigation records."
 };
 
 export default function LabPage() {
@@ -24,14 +24,24 @@ export default function LabPage() {
           <p>Research record foundation</p>
           <h1>Lab</h1>
         </div>
-        <p>Persistent Lab evidence records are not implemented. Use World for active runs and bounded local comparisons today.</p>
+        <p>World is the live experimental surface. Lab is intended to become durable scientific memory, but persistent Lab evidence records are not implemented.</p>
       </header>
 
       <section className="lab-now" aria-labelledby="lab-now-title">
         <div>
-          <p>Useful now</p>
-          <h2 id="lab-now-title">Run and compare before recording</h2>
-          <span>World can run implemented templates, capture bounded local summaries, and compare model outputs. Those summaries are not persistent Lab evidence.</span>
+          <p>Current boundary</p>
+          <h2 id="lab-now-title">Orientation today, scientific memory later</h2>
+          <span>World can run implemented templates and compare bounded local summaries. Nothing on this Lab route saves, receives, or assesses those summaries.</span>
+        </div>
+        <div className="lab-memory-scope">
+          <span>Intended future record</span>
+          <ul>
+            <li>questions and hypotheses</li>
+            <li>experiments, runs, and comparisons</li>
+            <li>evidence and counterevidence</li>
+            <li>interpretations, failures, and contradictions</li>
+            <li>SystemViews, assessments, and open questions</li>
+          </ul>
         </div>
         <nav aria-label="Available research actions">
           <Link href="/world">Open World</Link>
