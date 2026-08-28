@@ -1,5 +1,50 @@
 # ORTUS Codex Session Log
 
+## 2026-08-28 - UR0R Product Comprehension + Exploration Repair And Research Capability Map
+
+Goal: repair high-confidence comprehension, supported-exploration, keyboard, context-loss, and destination-identity defects found by the UR0 expert audit plus one highly informed formative pilot, while creating a subordinate conceptual research reference and changing no simulation semantics.
+
+Starting state:
+
+- Clean aligned `main` and `origin/main` at `a146ec3` (`research: evaluate product leverage and comprehension`).
+- UR0 technical/expert work complete; UR0 human-comprehension gate pending.
+- S1, S2, O1/E1, and I2 unstarted in this worktree.
+- The pilot participant was highly familiar with ORTUS. Findings were accepted for workflow-defect discovery, not representative first-time-user validation.
+
+Implemented:
+
+- Added exact validated Flocking exploration targets for coordinated, noisy, locally fragmented, and initially opposing trajectories, plus question-to-mechanism-to-change-to-watch guidance. Sustained milling remains explicitly unsupported.
+- Added a compact persistent current-model-output dock without creating observations, Lab records, Atlas persistence, or a second runtime authority.
+- Added bounded previous/next/inspect/clear semantic boid controls, focus return, and stronger read-only directional glyphs without rendering agents as React nodes or mutating engine state.
+- Diagnosed the nested parallelogram as both a real bounded `100 x 100` wrapped domain and misleading presentation mapping. Corrected only the projection/framing; model geometry and dynamics remain unchanged.
+- Added a read-only Flocking decomposition to Workshop while preserving structural/non-runnable status, explicit future durable-memory identity to Lab while persisting nothing, and identity-first Atlas hierarchy while retaining the sampler as page-local and subordinate.
+- Fixed Atlas constrained-height scroll ownership and hardened short-height Workshop layout so all focused controls remain visible.
+- Recorded S1 requirements for an example/question-first Starter-to-Remix bridge without implementing S1 or generic schema/graph execution.
+
+Research reference:
+
+- Added `docs/research/ORTUS_RESEARCH_CAPABILITY_MAP.md`, covering sections A through AI from model construction and model families through uncertainty, investigation/evidence, scale/lens/regime/SystemViews, scientific analysis, ML discovery, interoperability, persistence, product surfaces, and epistemic/safety boundaries.
+- The map explicitly defers current capability, architecture, scientific contracts, and sequencing to `docs/CAPABILITIES.md`, `docs/ARCHITECTURE.md`, `docs/SCIENTIFIC_MODEL.md`, and `docs/ROADMAP.md`. It is not a fifth roadmap or an implementation claim.
+
+Audit findings and hardening:
+
+- The first complete browser attempt exposed five concrete integration failures: an ambiguous Observe button name, an over-tall mobile observation header, a stale four-row short-height Builder grid, Worker pause-settling test timing, and constrained Workshop focus visibility. Each was fixed at its actual source.
+- A later full run found the short-height Workspace Inspector textarea ending `0.28125px` outside the existing viewport tolerance. Its short-desktop-only height was reduced by one pixel; the exact regression and final full matrix then passed.
+- No Flocking update rule, parameter bound, RNG sequence, metric, intervention, boundary behavior, runtime scheduler/protocol, persistence contract, or render loop changed.
+
+Final verification:
+
+- `npm run lint`: passed, including `389` production TypeScript files in the scoped architecture baseline.
+- `npm run typecheck`: passed.
+- `npm test`: `87` files / `744` tests passed.
+- `npm run build`: passed with `23` generated pages; `/world` remains dynamic.
+- Focused UR0R Playwright/Axe: `3/3` passed.
+- Final complete Playwright/Axe: `197/197` passed in `20.7m`, with no retries or skips.
+- `git diff --check`: passed at closure.
+- Standalone performance suites were intentionally not rerun because simulation/runtime/render-loop semantics did not change. The complete browser suite retained its inherited bounded runtime characterization.
+
+Decision: UR0 technical/expert gate complete; UR0 human-comprehension gate remains pending broader formative evidence; UR0R complete; S1 Starter -> Remix Bridge is next/unstarted. S2 remains planned, O1/E1 remain high-priority but not automatically next, and I2 remains deferred. Closure uses the planned separate product-repair and research-reference commits; no push is performed.
+
 ## 2026-07-27 - Prompt C1 Starter World Content Framework + Explore-Worlds Catalog
 
 Goal: turn the seven current production templates into a strict, source-backed, explorable Starter World library without changing simulation behavior, adding persistence, or implying unsupported runtime capability.

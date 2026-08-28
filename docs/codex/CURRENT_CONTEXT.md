@@ -1,6 +1,6 @@
 # ORTUS Current Context
 
-Last updated: 2026-08-27 for the UR0 technical/expert product gate handoff
+Last updated: 2026-08-28 for UR0R product comprehension, exploration repair, and research-capability-map closure
 
 This file is continuation context, not canonical project authority. Use `docs/CAPABILITIES.md`, `docs/ARCHITECTURE.md`, `docs/SCIENTIFIC_MODEL.md`, and `docs/ROADMAP.md` after code/tests when current status or terminology conflicts with historical detail below.
 
@@ -24,7 +24,9 @@ This file is continuation context, not canonical project authority. Use `docs/CA
 - A0B: Canonical Architecture + Source-of-Truth Audit is complete.
 - I1: Production Runtime Migration + Immersive Shell Foundation is complete.
 - I1B: Production Runtime + Immersive Shell Audit is complete.
-- UR0 technical/expert gate is complete; the human comprehension gate is pending and the roadmap decision is provisional.
+- UR0 technical/expert gate is complete; the human comprehension gate remains pending broader formative evidence.
+- UR0R Product Comprehension + Exploration Repair is complete.
+- S1 Starter -> Remix Bridge is next / unstarted. S2 is planned; O1/E1 remain high-priority scientific infrastructure but are not automatically next.
 - I2 through I5B are not an unconditional contiguous sequence; C4 has no I5B dependency.
 
 A0 establishes four canonical sources, the Model/Run-Observation/Research-Representation/Experience planes, explicit fundamental-versus-derived objects, a strict authority map, SystemView graph direction, post-PERF1B branch gates, and a passing scoped lint/static architecture baseline. It implements no `ModelDefinition`, `RuntimePlan`, `CanonicalObservation`, SystemView runtime, research persistence, model family, or production Worker migration.
@@ -43,9 +45,17 @@ I1B's audit record is `docs/performance/PRODUCTION_RUNTIME_ADOPTION_AUDIT.md`. I
 
 I1B final verification passed lint over `385` production TypeScript files, typecheck, `84 files / 734 tests`, a `23`-page production build, simulation/runtime performance reports with exact 100/500 equivalence and unchanged pair counts, focused real-Worker Playwright `5/5`, and complete Playwright/Axe `194/194 (21.2m)` with zero product retries or skips. One separate full-browser invocation was terminated after its first passing test by an interrupted PTY and produced no result. Browser/hardware evidence remains bounded; this is not screen-reader/AT, forced-colors, actual zoom/device, multi-hour leak, user-comprehension, formal WCAG, scalability, or scientific-validity proof.
 
-UR0's expert evidence record is `docs/product/PRODUCT_LEVERAGE_COMPREHENSION_GATE.md`; the participant sheet is `docs/product/UR0_STUDY_OBSERVATION_TEMPLATE.md`. Source, rendered, and focused browser review found a technically coherent Start -> World -> observe/change/compare loop, but no provenance-bearing question/evidence/assessment lifecycle and no runnable Starter/Guide -> Workshop remix path. Lab remains a non-persistent foundation, Atlas remains an isolated ephemeral Flocking sampler, and Workshop remains structural and non-runnable. Two false Start branch claims and one comparison-note terminology collision were corrected without changing simulation, runtime, persistence, or workflow behavior.
+UR0's evidence record is `docs/product/PRODUCT_LEVERAGE_COMPREHENSION_GATE.md`; the participant sheet is `docs/product/UR0_STUDY_OBSERVATION_TEMPLATE.md`. Source, rendered, and focused browser review found a technically coherent Start -> World -> observe/change/compare loop, but no provenance-bearing question/evidence/assessment lifecycle and no runnable Starter/Guide -> Workshop remix path. Two false Start branch claims and one comparison-note terminology collision were corrected without changing simulation, runtime, persistence, or workflow behavior.
 
-No participant evidence exists. Do not call UR0 complete, usability validated, beginner comprehension validated, scientific comprehension validated, or AT validated. The roadmap decision is provisional: conduct the UR0 formative human study next, keep I2 deferred, and favor O1/O1B followed by E1/E1B only if participant evidence confirms the investigation-continuity gap. S1/S2 remain a valuable agency candidate but do not themselves establish executable custom-model authoring.
+UR0R adds one real formative pilot from a participant highly familiar with ORTUS. This is useful workflow-defect evidence but is not unbiased first-time-user validation, representative research, or statistical evidence. Do not call the human gate complete, usability validated, beginner comprehension validated, scientific comprehension validated, or AT validated.
+
+UR0R's implementation/evidence record is `docs/product/PRODUCT_COMPREHENSION_EXPLORATION_REPAIR.md`. It adds four exact deterministic Flocking exploration scenarios, question-to-mechanism-to-change-to-watch cues, a compact persistent observation dock, semantic previous/next/inspect/clear boid controls, focus return, stronger read-only directional glyphs, and a coherent Living Diorama domain projection. The actual `100 x 100` wrapped Flocking domain and all simulation semantics remain unchanged. Coordinated, noisy, locally fragmented, and initially opposing targets are regression-protected; sustained milling is explicitly unsupported.
+
+Workshop now begins with a read-only Flocking decomposition while remaining structural and non-runnable. Lab names its intended future role as durable scientific memory and states that it persists nothing today. Atlas leads with its future question/representation/evidence map identity, keeps the bounded page-local sampler subordinate, and uses one destination scroll owner at constrained desktop heights. No S1/S2, O1/E1, SystemView, persistence, generic execution, or new model family is implemented.
+
+The conceptual research reference is `docs/research/ORTUS_RESEARCH_CAPABILITY_MAP.md`. It covers model construction through scientific infrastructure and epistemic/safety boundaries, but it is not a fifth roadmap or a current-capability source.
+
+UR0R final verification passed lint over `389` production TypeScript files, standalone typecheck, `87` files / `744` unit tests, a production build with `23` generated pages, complete Playwright/Axe `197/197 (20.7m)` with no retries or skips, and `git diff --check`. Standalone performance suites were not rerun because no simulation semantics, runtime scheduler/protocol, or render-loop behavior changed. Browser automation does not close the pending human-comprehension, screen-reader/AT, actual-zoom, hardware, or WCAG evidence gaps.
 
 UR0 verification passed focused unit contracts `5 files / 34 tests`, lint over `385` production TypeScript files, standalone typecheck, a pre-fix/core-task Playwright pass `6/6 (34.6s)`, and post-fix Start/Compare/Axe Playwright `8/8 (21.7s)`. The complete unit suite, production build, performance suites, and full browser suite were not rerun because UR0 changed bounded product copy, documentation, and source/browser assertions only.
 
@@ -304,12 +314,14 @@ A0: Canonical Architecture + Source-of-Truth Consolidation is complete.
 A0B: Canonical Architecture + Source-of-Truth Audit is complete.
 I1: Production Runtime Migration + Immersive Shell Foundation is complete.
 I1B: Production Runtime + Immersive Shell Audit is complete.
-UR0 technical/expert gate: complete. UR0 human comprehension gate: pending. Roadmap decision: provisional.
+UR0 technical/expert gate: complete. UR0 human comprehension gate: pending.
+UR0R: complete.
+S1 Starter -> Remix Bridge: next / unstarted.
 I2 through I5B are not an unconditional contiguous sequence. C4 has no I5B dependency.
 
-Completed implementation/audit sequence: UX6B -> GW9 -> GW9B -> R1 -> R1B -> R2 -> R2B -> C1 -> C1B -> C2 -> C2B -> C3 -> C3B -> I0 -> I0B -> PERF1 -> PERF1B -> A0 -> A0B -> I1 -> I1B. UR0 Layer A is complete; Layer B remains pending.
+Completed implementation/audit sequence: UX6B -> GW9 -> GW9B -> R1 -> R1B -> R2 -> R2B -> C1 -> C1B -> C2 -> C2B -> C3 -> C3B -> I0 -> I0B -> PERF1 -> PERF1B -> A0 -> A0B -> I1 -> I1B -> UR0 technical/expert -> UR0R. The broader UR0 human gate remains pending.
 
-Do not start I2, C4, S1/S2, O1/E1, recipe-first Builder, composition, SystemView runtime, multiscale runtime, adaptive-controller generalization, Lab/Atlas persistence, E3, F1, or another roadmap capability automatically. Rendered Playwright/Axe evidence does not establish actual browser zoom, screen-reader, assistive-technology, forced-colors, full WCAG, complete touch workflow, browser/mobile diversity, or user-comprehension readiness.
+S1 is the exact next unstarted milestone but requires its dedicated prompt. Do not start I2, C4, S2, O1/E1, composition, SystemView runtime, multiscale runtime, adaptive-controller generalization, Lab/Atlas persistence, E3, F1, or another roadmap capability automatically. Rendered Playwright/Axe evidence does not establish actual browser zoom, screen-reader, assistive-technology, forced-colors, full WCAG, complete touch workflow, browser/mobile diversity, or user-comprehension readiness.
 
 Implemented runtime foundations include scenarios, snapshots, template-defined behavior modes, agent composition, interventions, experiments, run summaries/comparison, seeded randomness, metrics, spaces, template metadata, and a narrow Opinion Dynamics `socialLearning` behavior mode audited in Prompt 33D.
 
@@ -422,7 +434,7 @@ Prompt 35 and Prompt 35B were committed together in `7696381 feat: Implement Mod
 
 ## Next Recommended Prompt
 
-Prompt I0/I0B, PERF1/PERF1B, A0/A0B, and I1/I1B are complete. UR0's technical/expert layer is complete, its human comprehension gate is pending, and its roadmap decision is provisional. The exact next action is to conduct the UR0 formative human study. Do not begin I2, S1/S2, O1/E1, C4, F1, or another roadmap capability automatically. I2 through I5B are not an unconditional sequence; C4 has no I5B dependency; F1 remains paused under E3 Analytical Lenses.
+Prompt I0/I0B, PERF1/PERF1B, A0/A0B, I1/I1B, and UR0R are complete. UR0's technical/expert layer is complete and its human comprehension gate remains pending. The exact next milestone is S1: Starter -> Remix Bridge, next / unstarted. Continue broader formative study separately. Do not begin I2, S2, O1/E1, C4, F1, or another roadmap capability automatically. I2 through I5B are not an unconditional sequence; C4 has no I5B dependency; F1 remains paused under E3 Analytical Lenses.
 
 Next recommended UI/design-system prompt after UX2B: `UI-DESIGN-SYSTEM-1: Rendered Responsive, Typography + Visualization Accessibility Audit`.
 
