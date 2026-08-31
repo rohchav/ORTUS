@@ -257,7 +257,7 @@ test("guided World baseline, direct contrast, collapsed, exited, and invalid sta
     await expectNoHorizontalOverflow(page);
 
     await page.goto(`${baselinePath}&step=2`, { waitUntil: "domcontentloaded" });
-    await expect(page.getByRole("alert")).toContainText("This world could not be prepared safely");
+    await expect(page.locator("[data-starter-launch-error]")).toContainText("This world could not be prepared safely");
     await expect(page.locator(".ortus-shell")).toHaveCount(0);
     await expectNoHorizontalOverflow(page);
     await page.waitForLoadState("networkidle");
@@ -284,7 +284,7 @@ test("invalid guided URLs are announced before AppShell or World construction", 
   for (const path of invalidPaths) {
     await page.goto(path, { waitUntil: "domcontentloaded" });
     await expect(page.locator("[data-starter-launch-error]")).toBeVisible();
-    await expect(page.getByRole("alert")).toContainText("This world could not be prepared safely");
+    await expect(page.locator("[data-starter-launch-error]")).toContainText("This world could not be prepared safely");
     await expect(page.getByRole("link", { name: "Back to Explore Worlds" })).toHaveAttribute("href", "/worlds");
     await expect(page.locator(".ortus-shell")).toHaveCount(0);
     await expect(page.locator(".world-stage")).toHaveCount(0);

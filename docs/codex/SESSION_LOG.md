@@ -1,5 +1,45 @@
 # ORTUS Codex Session Log
 
+## 2026-08-31 - S1 Starter -> Remix Bridge
+
+Goal: bridge eligible immutable Starter World definitions into bounded, unsaved configuration derivatives that launch through existing runtime authority, without making default Workshop authoring executable or implementing S2/S3 composition.
+
+Starting state:
+
+- `main` at `452ff22` with UR0R complete and the UR0 human-comprehension gate pending.
+- S1B, S2, S3, O1/E1, and I2 unstarted.
+- Existing Flocking production authority remained Worker-owned; six legacy templates remained on their established main-thread path.
+
+Implemented:
+
+- Added strict Zod-validated, ID-only Starter Remix source and lineage contracts over all eleven current runnable Starter definitions. The four flagship worlds retain their authoritative recipe requirement.
+- Added Starter detail, prepared-recipe, and accepted active-World entry paths. Source definitions remain recursively frozen; Remix state is an unsaved derivative scenario, never a mutation of canonical Starter content.
+- Added a separate Workshop Starter Remix experience that reuses authoritative template parameter, initialization, behavior, composition, environment, scenario-validation, and scenario-application contracts. Model entities, state, rules, metrics, schemas, graphs, and code remain fixed.
+- Kept invalid values draft-only, blocked launch until valid, and launched accepted derivatives through the existing runtime path. `flocking-boids` remains the sole Worker-capable template; legacy templates retain main-thread execution.
+- Added source Starter -> unsaved remix -> resulting-run provenance, remix-aware Reset semantics, strict reload expiry, one-use accepted-config active-World handoff, and Back/Forward/source-switch isolation.
+- Added responsive and keyboard coverage without adding persistence, backend state, arbitrary formulas/code, generic schema execution, graph execution, reusable block composition, or a new model family.
+
+Closure review and hardening:
+
+- Removed a live simulation-store subscription from the presentation-only Starter nudge and constrained World handoff to matching accepted configuration.
+- Rejected empty/duplicate/stale Remix query identity instead of silently falling back to a source run.
+- Preserved a blank-seed validation error across behavior/preset remounts so an invalid visible draft cannot launch with an older accepted seed.
+- Updated pre-existing browser assertions to target the product-owned launch error, current structural-Workshop copy, and the unified Guided/Remix leave-confirmation contract. The underlying product surfaces were present; these were stale or ambiguous test locators.
+
+Final verification:
+
+- `npm run lint`: passed, including `391` production TypeScript files in the scoped architecture baseline.
+- `npm run typecheck`: passed.
+- `npm test`: `88` files / `757` tests passed.
+- `npm run build`: passed with `23` generated pages.
+- `npm run perf:runtime`: passed exact 100/500 snapshot-export equivalence and bounded packet checks.
+- `npm run perf:simulation`: passed unchanged exact Flocking pair counts and the bounded Atlas smoke.
+- Focused post-failure Playwright: Guided `13/13` and Research World shell `53/53` passed.
+- Final complete Playwright/Axe: `204/204` passed in `32.3m`, with no retries or skips.
+- `git diff --check`: passed at closure.
+
+Decision: S1 complete. S1B is next / unstarted. S2 cannot become next until S1B closes. The UR0 human-comprehension gate remains pending broader formative evidence. Browser automation is not screen-reader/AT, actual-zoom, hardware-diversity, formal WCAG, participant-comprehension, or scientific-validation evidence. No push is performed.
+
 ## 2026-08-28 - UR0R Product Comprehension + Exploration Repair And Research Capability Map
 
 Goal: repair high-confidence comprehension, supported-exploration, keyboard, context-loss, and destination-identity defects found by the UR0 expert audit plus one highly informed formative pilot, while creating a subordinate conceptual research reference and changing no simulation semantics.

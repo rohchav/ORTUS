@@ -77,6 +77,12 @@ function RunProvenanceObservationView({ context }: { context: ActiveRunProvenanc
         <dl className="active-run-context__facts">
           <Fact label="Model" value={provenance.templateLabel} />
           <Fact label="Template ID" value={provenance.templateId} />
+          {provenance.starterRemixLineage ? (
+            <>
+              <Fact label="Source Starter" value={provenance.starterRemixLineage.sourceStarterLabel} />
+              <Fact label="Derivative" value={provenance.starterRemixLineage.derivativeLabel} />
+            </>
+          ) : null}
           <Fact label="Scenario" value={provenance.scenarioLabel} />
           <Fact label="Runtime" value={provenance.runtimeModeLabel} />
           <Fact label="Behavior" value={provenance.behaviorModeLabel} />

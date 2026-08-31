@@ -215,7 +215,7 @@ async function expectRouteOrientation(page: Page, destination: (typeof destinati
     await expect(page.getByRole("link", { name: "Open World" })).toHaveAttribute("href", "/world");
     await expect(page.getByRole("link", { name: "Compare runs" })).toHaveAttribute("href", "/world?task=compare");
   } else {
-    await expect(page.getByText("Workshop drafts do not execute.", { exact: false })).toBeVisible();
+    await expect(page.getByText("These Workshop drafts do not execute; they are structural artifacts.", { exact: false })).toBeVisible();
     await expect(page.getByRole("tab", { name: /Guided Builder/i })).toBeVisible();
     await expect(page.getByRole("tab", { name: /Advanced Builder/i })).toBeVisible();
   }
@@ -1846,7 +1846,7 @@ test("Guided and Advanced authoring states remain reachable across the required 
     await page.getByRole("textbox", { name: /Model name/i }).fill(`${viewport.label} local draft`);
     const worldLink = page.getByRole("navigation", { name: "Primary navigation" }).getByRole("link", { name: "World" });
     await worldLink.click();
-    const leaveDialog = page.getByRole("alertdialog", { name: "Leave Workshop and discard the local Guided draft?" });
+    const leaveDialog = page.getByRole("alertdialog", { name: "Leave Workshop and discard the local draft?" });
     await expectElementWithinViewport(page, leaveDialog);
     await leaveDialog.getByRole("button", { name: "Cancel" }).click();
     await expect(worldLink).toBeFocused();
@@ -1922,7 +1922,7 @@ test("Guided steps, dialogs, handoff, and Advanced modes are Axe-clean with quie
   await page.getByRole("textbox", { name: /Model name/i }).fill("Axe dialog draft");
   const worldLink = page.getByRole("navigation", { name: "Primary navigation" }).getByRole("link", { name: "World" });
   await worldLink.click();
-  const leaveDialog = page.getByRole("alertdialog", { name: "Leave Workshop and discard the local Guided draft?" });
+  const leaveDialog = page.getByRole("alertdialog", { name: "Leave Workshop and discard the local draft?" });
   await expectAxeClean(page);
   await leaveDialog.getByRole("button", { name: "Cancel" }).click();
 
@@ -1974,7 +1974,7 @@ test("Guided authoring and Advanced handoff leave the active World context and s
     .poll(() => page.evaluate(() => Boolean((window.history.state as Record<string, unknown> | null)?.__ortusGuidedDraftGuard)))
     .toBe(true);
   await page.evaluate(() => window.history.back());
-  const leaveDialog = page.getByRole("alertdialog", { name: "Leave Workshop and discard the local Guided draft?" });
+  const leaveDialog = page.getByRole("alertdialog", { name: "Leave Workshop and discard the local draft?" });
   await expect(leaveDialog).toBeVisible();
   await leaveDialog.getByRole("button", { name: "Cancel" }).click();
   await expect(page).toHaveURL(/\/builder$/);

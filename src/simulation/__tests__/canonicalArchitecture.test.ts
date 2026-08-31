@@ -28,10 +28,10 @@ describe("A0 canonical architecture and source hierarchy", () => {
     const scientificModel = source(canonicalPaths.scientificModel);
     const roadmap = source(canonicalPaths.roadmap);
 
-    expect(architecture).toContain("Status: CURRENT architectural source of truth after I1B");
-    expect(capabilities).toContain("Status: CURRENT capability source of truth after I1B");
+    expect(architecture).toContain("Status: CURRENT architectural source of truth after S1");
+    expect(capabilities).toContain("Status: CURRENT capability source of truth after S1");
     expect(scientificModel).toContain("Status: CURRENT epistemic and scientific source of truth after A0B");
-    expect(roadmap).toContain("Status: CURRENT future-sequencing source of truth after the UR0R product repair");
+    expect(roadmap).toContain("Status: CURRENT future-sequencing source of truth after S1");
 
     const precedence = [
       "Executable code and tests",
@@ -147,7 +147,7 @@ describe("A0 canonical architecture and source hierarchy", () => {
     expect(capabilities).toContain("Global service availability does not grant template support.");
   });
 
-  it("records the human-pending UR0R to S1 handoff without restoring obsolete sequencing", () => {
+  it("records the human-pending S1 to S1B handoff without restoring obsolete sequencing", () => {
     const roadmap = source(canonicalPaths.roadmap);
     const activeStatus = [
       source(join(repoRoot, "README.md")),
@@ -161,9 +161,11 @@ describe("A0 canonical architecture and source hierarchy", () => {
     expect(roadmap).toContain("I1B - Production Runtime Migration Audit | COMPLETE");
     expect(roadmap).toContain("UR0 - Product Leverage + Comprehension Gate | TECHNICAL/EXPERT COMPLETE; HUMAN PENDING");
     expect(roadmap).toContain("UR0R - Product Comprehension + Exploration Repair | COMPLETE");
-    expect(roadmap).toContain("S1 - Starter -> Remix Bridge | NEXT / UNSTARTED");
+    expect(roadmap).toContain("S1 - Starter -> Remix Bridge | COMPLETE");
+    expect(roadmap).toContain("S1B - Starter -> Remix Bridge Audit | NEXT / UNSTARTED");
     expect(roadmap).toContain("UR0 HUMAN COMPREHENSION PENDING");
-    expect(roadmap).toContain("S1 NEXT / UNSTARTED");
+    expect(roadmap).toContain("S1B NEXT / UNSTARTED");
+    expect(roadmap).toContain("Do not mark S2 next until S1B closes");
     expect(roadmap).toContain("C4 is not deferred until I5B.");
     expect(roadmap).toContain("MF-series milestones create reusable computational/scientific execution families");
     expect(activeStatus).not.toContain("A0 is next and unstarted");

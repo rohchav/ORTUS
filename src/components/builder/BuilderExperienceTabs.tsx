@@ -15,38 +15,49 @@ export const builderExperiences = [
   }
 ] as const;
 
-export type BuilderExperienceId = (typeof builderExperiences)[number]["id"];
+const starterRemixExperience = {
+  id: "remix",
+  label: "Starter Remix",
+  description: "Fork one runnable Starter through its existing template controls."
+} as const;
+
+export type BuilderExperienceId = (typeof builderExperiences)[number]["id"] | typeof starterRemixExperience.id;
 
 interface BuilderExperienceTabsProps {
   activeExperience: BuilderExperienceId;
+  hasStarterRemix?: boolean;
   onExperienceChange: (experience: BuilderExperienceId) => void;
 }
 
-export function BuilderExperienceTabs({ activeExperience, onExperienceChange }: BuilderExperienceTabsProps) {
+export function BuilderExperienceTabs({ activeExperience, hasStarterRemix = false, onExperienceChange }: BuilderExperienceTabsProps) {
+  const availableExperiences = hasStarterRemix
+    ? [starterRemixExperience, ...builderExperiences]
+    : builderExperiences;
+
   function handleKeyDown(event: KeyboardEvent<HTMLButtonElement>, experienceId: BuilderExperienceId) {
-    const currentIndex = builderExperiences.findIndex((experience) => experience.id === experienceId);
+    const currentIndex = availableExperiences.findIndex((experience) => experience.id === experienceId);
     const nextIndex =
       event.key === "ArrowRight" || event.key === "ArrowDown"
-        ? (currentIndex + 1) % builderExperiences.length
+        ? (currentIndex + 1) % availableExperiences.length
         : event.key === "ArrowLeft" || event.key === "ArrowUp"
-          ? (currentIndex - 1 + builderExperiences.length) % builderExperiences.length
+          ? (currentIndex - 1 + availableExperiences.length) % availableExperiences.length
           : event.key === "Home"
             ? 0
             : event.key === "End"
-              ? builderExperiences.length - 1
+              ? availableExperiences.length - 1
               : null;
     if (nextIndex === null) {
       return;
     }
     event.preventDefault();
-    const nextExperience = builderExperiences[nextIndex]!;
+    const nextExperience = availableExperiences[nextIndex]!;
     onExperienceChange(nextExperience.id);
     focusExperience(nextExperience.id);
   }
 
   return (
     <nav className="builder-experience-tabs" aria-label="Workshop authoring views" role="tablist">
-      {builderExperiences.map((experience) => (
+      {availableExperiences.map((experience) => (
         <button
           key={experience.id}
           id={`builder-experience-tab-${experience.id}`}

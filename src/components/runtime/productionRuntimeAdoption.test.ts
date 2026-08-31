@@ -11,7 +11,12 @@ import {
   type SimulationRuntimePort,
   type UIProjection
 } from "../../simulation";
-import { createStarterWorldScenario, resolveStarterWorldLaunch } from "../../lib/starterWorlds";
+import {
+  createStarterWorldScenario,
+  readStarterRemixLineage,
+  resolveStarterRemixRequest,
+  resolveStarterWorldLaunch
+} from "../../lib/starterWorlds";
 import { useSimulationStore } from "../../state/simulationStore";
 import { ProductionFlockingRuntime } from "./ProductionFlockingRuntime";
 
@@ -105,6 +110,53 @@ describe("I1 production runtime adoption", () => {
       agentComposition: preparedConfig.agentComposition,
       environmentOptions: preparedConfig.environmentOptions
     });
+  });
+
+  it("keeps Flocking remix configuration Worker-owned and preserves its derivative lineage on reset", () => {
+    const resolved = resolveStarterRemixRequest(
+      { starterId: "flocking" },
+      { now: "2026-08-29T12:00:00.000Z" }
+    );
+    if (!resolved.ok) {
+      throw new Error(resolved.message);
+    }
+    useSimulationStore.getState().applyScenario(resolved.source.draft);
+    const accepted = useSimulationStore.getState();
+    expect(accepted.engine).toBeNull();
+    expect(accepted.latestSnapshot).toBeNull();
+    expect(readStarterRemixLineage(accepted.flockingRuntimeConfig?.metadata)?.draftId).toBe(
+      resolved.source.draft.scenarioId
+    );
+
+    useSimulationStore.getState().reset();
+    const reset = useSimulationStore.getState();
+    expect(reset.engine).toBeNull();
+    expect(reset.latestSnapshot).toBeNull();
+    expect(reset.flockingRuntimeConfig?.scenarioId).toBe(resolved.source.draft.scenarioId);
+    expect(readStarterRemixLineage(reset.flockingRuntimeConfig?.metadata)?.source.starterWorldId).toBe("flocking");
+    expect(reset.lastNotice).toMatch(/source lineage was preserved/i);
+  });
+
+  it("keeps legacy remixes on the existing main-thread path and preserves lineage on reset", () => {
+    const resolved = resolveStarterRemixRequest(
+      { starterId: "epidemic" },
+      { now: "2026-08-29T12:00:00.000Z" }
+    );
+    if (!resolved.ok) {
+      throw new Error(resolved.message);
+    }
+    useSimulationStore.getState().applyScenario(resolved.source.draft);
+    useSimulationStore.getState().stepOnce();
+    expect(useSimulationStore.getState().latestSnapshot?.tick).toBe(1);
+    expect(useSimulationStore.getState().flockingRuntimeConfig).toBeNull();
+
+    useSimulationStore.getState().reset();
+    const reset = useSimulationStore.getState();
+    expect(reset.engine).not.toBeNull();
+    expect(reset.flockingRuntimeConfig).toBeNull();
+    expect(reset.latestSnapshot?.tick).toBe(0);
+    expect(readStarterRemixLineage(reset.engine?.metadata)?.draftId).toBe(resolved.source.draft.scenarioId);
+    expect(reset.lastNotice).toMatch(/source lineage was preserved/i);
   });
 
   it("rejects the legacy store import path for Worker-owned Flocking artifacts", () => {

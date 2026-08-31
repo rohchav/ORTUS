@@ -14,8 +14,10 @@ import { BuilderValidationPanel } from "./BuilderValidationPanel";
 import { BuilderViewport } from "./BuilderViewport";
 import { ModelSchemaAuthoringShell } from "./ModelSchemaAuthoringShell";
 import { GuidedBuilder, type GuidedBuilderHandoffResolution } from "./guided/GuidedBuilder";
+import { StarterRemixWorkspace } from "./remix/StarterRemixWorkspace";
 import { WorkshopModelExample } from "./WorkshopModelExample";
 import type { ModelSchemaDefinition } from "../../simulation/modelSchema";
+import type { StarterRemixSource } from "../../lib/starterWorlds";
 import { BuilderGraphView } from "./graph";
 import {
   createBuilderWorkspaceViewModel,
@@ -28,11 +30,12 @@ import {
 
 interface BuilderShellProps {
   initialWorkspace?: VisualBuilderWorkspaceDefinition;
+  remixSource?: StarterRemixSource;
 }
 
-export function BuilderShell({ initialWorkspace }: BuilderShellProps) {
+export function BuilderShell({ initialWorkspace, remixSource }: BuilderShellProps) {
   const router = useRouter();
-  const [activeExperience, setActiveExperience] = useState<BuilderExperienceId>("guided");
+  const [activeExperience, setActiveExperience] = useState<BuilderExperienceId>(remixSource ? "remix" : "guided");
   const [activeMode, setActiveMode] = useState<BuilderModeId>("workspace");
   const [workspace, setWorkspace] = useState<VisualBuilderWorkspaceDefinition | null>(() =>
     initialWorkspace ? validateVisualBuilderWorkspaceDefinition(initialWorkspace) : null
@@ -51,6 +54,7 @@ export function BuilderShell({ initialWorkspace }: BuilderShellProps) {
   const [showWarnings, setShowWarnings] = useState(true);
   const [viewport, setViewport] = useState({ x: 0, y: 0, zoom: 1 });
   const [guidedDraftMeaningful, setGuidedDraftMeaningful] = useState(false);
+  const [remixDraftMeaningful, setRemixDraftMeaningful] = useState(false);
   const [guidedHandoffRequest, setGuidedHandoffRequest] = useState<{ requestId: number; artifact: ModelSchemaDefinition } | null>(null);
   const [guidedHandoffResolution, setGuidedHandoffResolution] = useState<GuidedBuilderHandoffResolution | null>(null);
   const [pendingNavigationHref, setPendingNavigationHref] = useState<string | null>(null);
@@ -62,6 +66,7 @@ export function BuilderShell({ initialWorkspace }: BuilderShellProps) {
   const restoringGuidedHistoryGuardRef = useRef(false);
   const allowGuidedHistoryLeaveRef = useRef(false);
   const viewModel = useMemo(() => (workspace ? createBuilderWorkspaceViewModel(workspace) : null), [workspace]);
+  const localDraftMeaningful = guidedDraftMeaningful || remixDraftMeaningful;
 
   const handleGuidedMeaningfulChange = useCallback((meaningful: boolean) => {
     setGuidedDraftMeaningful(meaningful);
@@ -96,7 +101,7 @@ export function BuilderShell({ initialWorkspace }: BuilderShellProps) {
   }, [activeExperience, guidedHandoffResolution]);
 
   useEffect(() => {
-    if (!guidedDraftMeaningful) {
+    if (!localDraftMeaningful) {
       return;
     }
     const historyGuardKey = "__ortusGuidedDraftGuard";
@@ -121,7 +126,11 @@ export function BuilderShell({ initialWorkspace }: BuilderShellProps) {
         return;
       }
       const targetUrl = new URL(anchor.href, window.location.href);
-      if (targetUrl.origin !== window.location.origin || targetUrl.pathname === window.location.pathname) {
+      const currentUrl = new URL(window.location.href);
+      if (
+        targetUrl.origin !== window.location.origin ||
+        (targetUrl.pathname === currentUrl.pathname && targetUrl.search === currentUrl.search && targetUrl.hash === currentUrl.hash)
+      ) {
         return;
       }
       event.preventDefault();
@@ -151,7 +160,7 @@ export function BuilderShell({ initialWorkspace }: BuilderShellProps) {
       window.removeEventListener("popstate", interceptHistoryBack);
       document.removeEventListener("click", interceptRouteLink, true);
     };
-  }, [guidedDraftMeaningful]);
+  }, [localDraftMeaningful]);
 
   useEffect(() => {
     if (pendingNavigationHref || pendingHistoryBack) {
@@ -216,16 +225,39 @@ export function BuilderShell({ initialWorkspace }: BuilderShellProps) {
   }
 
   return (
-    <section className="builder-shell" aria-label="Builder structural shell" data-product-context="ORTUS structural Builder">
+    <section
+      className={`builder-shell${activeExperience === "remix" ? " builder-shell--remix-active" : ""}`}
+      aria-label={activeExperience === "remix" ? "Starter remix Workshop" : "Builder structural shell"}
+      data-product-context={activeExperience === "remix" ? "ORTUS executable Starter remix" : "ORTUS structural Builder"}
+    >
       <header className="destination-intro destination-intro--workshop">
         <div>
-          <p>Structural authoring</p>
+          <p>{activeExperience === "remix" ? "Bounded executable derivative" : "Structural authoring"}</p>
           <h1>Workshop</h1>
         </div>
-        <p>Begin from an example or describe a model step by step. Workshop drafts do not execute. They are structural artifacts.</p>
+        <p>
+          {activeExperience === "remix"
+            ? "Change supported run configuration for one existing Starter template. Model structure remains fixed."
+            : "Begin from an example or describe a model step by step. These Workshop drafts do not execute; they are structural artifacts."}
+        </p>
       </header>
-      <WorkshopModelExample />
-      <BuilderExperienceTabs activeExperience={activeExperience} onExperienceChange={setActiveExperience} />
+      {activeExperience === "remix" ? null : <WorkshopModelExample />}
+      <BuilderExperienceTabs
+        activeExperience={activeExperience}
+        hasStarterRemix={Boolean(remixSource)}
+        onExperienceChange={setActiveExperience}
+      />
+      {remixSource ? (
+        <section
+          id="builder-experience-panel-remix"
+          className="builder-experience-panel builder-experience-panel--remix"
+          role="tabpanel"
+          aria-labelledby="builder-experience-tab-remix"
+          hidden={activeExperience !== "remix"}
+        >
+          <StarterRemixWorkspace source={remixSource} onMeaningfulChange={setRemixDraftMeaningful} />
+        </section>
+      ) : null}
       <section
         id="builder-experience-panel-guided"
         className="builder-experience-panel builder-experience-panel--guided"
@@ -332,9 +364,9 @@ export function BuilderShell({ initialWorkspace }: BuilderShellProps) {
             aria-describedby="builder-leave-confirmation-description"
             onKeyDown={handleLeaveConfirmationKeyDown}
           >
-            <h2 id="builder-leave-confirmation-title">Leave Workshop and discard the local Guided draft?</h2>
+            <h2 id="builder-leave-confirmation-title">Leave Workshop and discard the local draft?</h2>
             <p id="builder-leave-confirmation-description">
-              Guided Builder data exists only in this page session. Leaving now discards it. Cancel keeps the draft and returns focus to the prior control.
+              Unsaved Workshop data exists only in this page session. Leaving now discards it. Cancel keeps the draft and returns focus to the prior control.
             </p>
             <div>
               <button ref={leaveConfirmButtonRef} type="button" onClick={confirmPendingNavigation} suppressHydrationWarning>

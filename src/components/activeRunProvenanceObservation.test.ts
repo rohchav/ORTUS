@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { productionTemplateMap, type ParameterValues, type SimulationSnapshotView } from "../simulation";
+import { resolveStarterRemixRequest } from "../lib/starterWorlds";
 import {
   deriveActiveRunProvenanceObservation,
   RUN_INTERPRETATION_VISUAL_PATTERN_COPY,
@@ -104,6 +105,37 @@ describe("active run provenance observation", () => {
       label: "Paused",
       category: "operational",
       state: "paused"
+    });
+  });
+
+  it("separates source Starter, unsaved derivative, and resulting scenario provenance", () => {
+    const resolved = resolveStarterRemixRequest(
+      { starterId: "epidemic" },
+      { now: "2026-08-29T12:00:00.000Z" }
+    );
+    if (!resolved.ok) {
+      throw new Error(resolved.message);
+    }
+    const summary = deriveActiveRunProvenanceObservation({
+      selectedTemplateId: template.id,
+      template,
+      seed: resolved.source.draft.seed,
+      parameters: resolved.source.draft.parameters,
+      metadata: {
+        ...resolved.source.draft.metadata,
+        scenarioName: resolved.source.draft.name
+      },
+      snapshot: snapshot(0),
+      isRunning: false,
+      hasActiveEngine: true
+    });
+
+    expect(summary.provenance.scenarioLabel).toBe("Unsaved remix of Epidemic Spread baseline");
+    expect(summary.provenance.starterRemixLineage).toMatchObject({
+      sourceStarterId: "epidemic",
+      sourceStarterLabel: "Local Contact Outbreaks",
+      draftId: resolved.source.draft.scenarioId,
+      derivativeLabel: "Unsaved remix"
     });
   });
 

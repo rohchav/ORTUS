@@ -1,6 +1,6 @@
 # ORTUS Current Capabilities
 
-Status: CURRENT capability source of truth after I1B
+Status: CURRENT capability source of truth after S1
 
 This document answers what ORTUS actually supports now. Code and tests remain authoritative for behavior. `src/simulation/registry` is the machine-readable authority for systems primitives, artifact families, and per-template capability summaries. This document summarizes that evidence for contributors and product language.
 
@@ -47,6 +47,7 @@ The registry deliberately keeps the global `socialLearningRuntime` primitive res
 - Terminal Worker failure is visible, stops execution, and has no hidden Local fallback.
 - Recoverable validation rejection is identified separately, leaves the accepted run ready, and does not advance accepted configuration or provenance.
 - Generic Reset preserves accepted executable variant fields while removing scenario/prepared provenance that the generic constructor did not earn.
+- Reset of an accepted S1 remix preserves that derivative's exact executable configuration and Starter lineage while discarding run progress.
 
 **CURRENT legacy production path and runtime references**
 
@@ -70,8 +71,19 @@ Default entity counts and local performance reports are not engine limits, high-
 | Scenario library | At most 50 validated browser-local authored scenarios | Accounts, cloud persistence, model definitions, or run history |
 | Panel/avatar preferences | Narrow browser-local presentation preferences | Research or learner profiles |
 | Atlas preview | In-memory, deterministic, exact-coordinate Flocking preview with one/two axes, bounded seeds/points/ticks/work, sequential fresh engines, and cancellation | Saved landscape, interpolation, regime detection, general probe execution, or evidence certification |
+| Starter remix | Unsaved derivative scenario built from one strict Starter/recipe identity, edited through existing template configuration definitions, and launched through the established runtime path | Mutation of canonical Starter content, durable model storage, generic model construction, schema/graph execution, or a new runtime |
 
 Lab and Atlas foundations do not persist research records. Guided investigations do not persist progress, score learning, or infer comprehension. Workshop drafts are local UI state unless explicitly exported or saved through an existing bounded scenario facility.
+
+## Starter Remix Boundary
+
+All eleven current runnable Starter World definitions classify as cleanly remixable through their existing executable contracts. The four flagship collection worlds still require one of their eight strict recipe identities; this does not create a second scenario or parameter registry.
+
+S1 derives an unsaved scenario from the immutable source Starter. Workshop may edit the seed, template-defined numeric parameters, and supported initialization, behavior, composition, or environment options exposed by the authoritative template contract. Template identity, entity/state/process/space structure, rules, metrics, graph topology, schemas, and code remain fixed. Invalid draft values remain local and cannot replace the accepted World run.
+
+`Run Remix` applies the derivative through the existing scenario validation and launch path. `flocking-boids` remains the sole Worker-capable runtime template, including Starter recipes backed by that template; every other template stays on its established main-thread path. Source Starter, unsaved derivative, and resulting run remain distinct provenance identities.
+
+Remix state is page-session only. Strict URLs carry source and draft IDs rather than configuration payloads. A current World may transfer its matching accepted configuration through a bounded one-use in-memory handoff; reload expires an unsaved World derivative instead of substituting its source or a generic run. This is not model persistence.
 
 ## Structural And Service-Only Capability
 
@@ -106,8 +118,8 @@ These services do not execute attached declarations, generate a runtime, prove a
 | --- | --- | --- |
 | Start `/` | Task-centered entry and featured paths | Progression engine or account state |
 | Explore Worlds `/worlds` | Eleven validated runnable content definitions over existing templates | Eleven distinct runtime families |
-| World `/world` | Setup, playback, observation, template perturbation, compare, explain, bounded experiments, scenario/snapshot exchange; Flocking uses the production Worker-backed immersive shell while other templates retain the legacy path | Cross-template Worker support, scientific observation records, Lab persistence, or model authoring |
-| Workshop `/builder` | Guided structural schema draft, advanced schema forms, read-only workspace/graph inspection, validation repair assistance, structural fit and scenario planning | Compile, run, preview simulation, generate template/RunConfig, executable graph, arbitrary formula/code, or active World mutation |
+| World `/world` | Setup, playback, observation, template perturbation, compare, explain, bounded experiments, scenario/snapshot exchange, and a Remix route for an identified Starter-backed run; Flocking uses the production Worker-backed immersive shell while other templates retain the legacy path | Cross-template Worker support, scientific observation records, Lab persistence, or model authoring inside World |
+| Workshop `/builder` | Default Guided/Advanced structural authoring remains non-executable; Starter entry adds a bounded Remix workspace that inspects fixed structure, edits only supported executable configuration, validates a derivative scenario, and explicitly launches it | General model composition, executable schemas/graphs, arbitrary entities/processes/relations/formulas/code, or silent active-World mutation |
 | Lab `/lab` | Non-persistent information architecture and evidence vocabulary | Saved investigations, evidence records, notebooks, or validation |
 | Atlas `/atlas` | Non-persistent evidence/landscape/probe vocabulary plus one bounded ephemeral Flocking preview | Saved maps, general sampling, discovery, regime inference, or real-world certification |
 | Guides | One optional `Reading a Flock` workflow over existing recipes/tasks | Auto-run, hard gates, learner profile, scoring, or educational-outcome evidence |
@@ -115,6 +127,7 @@ These services do not execute attached declarations, generate a runtime, prove a
 ## Explicitly Unsupported Or Future
 
 - Generic `ModelDefinition -> RuntimePlan` compilation or interpretation.
+- Durable remix drafts, reusable composition blocks, arbitrary structural editing, or question-to-model generation.
 - Executable model schemas, hybrid compositions, visual-builder graphs, or rule descriptions.
 - Arbitrary formulas, scripts, dynamic code, `eval`, or user-provided runtime modules.
 - `CanonicalObservation`, persistent `Investigation`, `EvidenceReport`, `CandidateAssessment`, `ClaimRecord`, or research provenance graph.

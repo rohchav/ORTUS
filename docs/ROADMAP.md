@@ -1,6 +1,6 @@
 # ORTUS Canonical Roadmap
 
-Status: CURRENT future-sequencing source of truth after the UR0R product repair
+Status: CURRENT future-sequencing source of truth after S1
 
 This roadmap controls milestone status and dependency order. It is not a capability claim. `CAPABILITIES.md` determines what exists now, and every implementation milestone requires its dedicated scope and audit.
 
@@ -15,8 +15,9 @@ This roadmap controls milestone status and dependency order. It is not a capabil
 | I1B - Production Runtime Migration Audit | COMPLETE | Adversarial audit fixed authority, replacement, rejection, reset, provenance, and ordering defects; see `performance/PRODUCTION_RUNTIME_ADOPTION_AUDIT.md` |
 | UR0 - Product Leverage + Comprehension Gate | TECHNICAL/EXPERT COMPLETE; HUMAN PENDING | Expert/source/rendered audit plus one highly informed formative pilot exist; the pilot supports defect discovery but not unbiased comprehension validation; see `product/PRODUCT_LEVERAGE_COMPREHENSION_GATE.md` |
 | UR0R - Product Comprehension + Exploration Repair | COMPLETE | Repaired supported Flocking exploration, domain framing, observation context, bounded keyboard inspection, and Workshop/Lab/Atlas identity without changing simulation semantics; see `product/PRODUCT_COMPREHENSION_EXPLORATION_REPAIR.md` |
-| S1 - Starter -> Remix Bridge | NEXT / UNSTARTED | Next bounded agency milestone; must begin from supported examples/questions and must not imply generic schema, graph, or custom-model execution |
-| S2 - Recipe-First Builder / Workflow Reboot | PLANNED / UNSTARTED | Follows a dedicated S1 implementation/audit decision and preserves structural-validity versus runtime-support boundaries |
+| S1 - Starter -> Remix Bridge | COMPLETE | Existing Starter-backed scenarios can be forked into unsaved, configuration-only derivatives and launched through established runtime authority without generic model execution; see `product/STARTER_REMIX_BRIDGE.md` |
+| S1B - Starter -> Remix Bridge Audit | NEXT / UNSTARTED | Independently audit lineage, runtime authority, draft isolation, navigation, accessibility, capability truth, and unsupported composition boundaries before S2 |
+| S2 - Recipe-First Builder / Workflow Reboot | PLANNED / UNSTARTED | Cannot become next until S1B closes; must preserve structural-validity versus runtime-support boundaries |
 
 Canonical immediate dependency:
 
@@ -29,10 +30,11 @@ PERF1B COMPLETE
   -> UR0 TECHNICAL/EXPERT COMPLETE
   -> UR0 HUMAN COMPREHENSION PENDING
   -> UR0R PRODUCT REPAIR COMPLETE
-  -> S1 NEXT / UNSTARTED
+  -> S1 COMPLETE
+  -> S1B NEXT / UNSTARTED
 ```
 
-I1 does not automatically trigger I2, I3, I4, or I5. The former unconditional immersive sequence is superseded. C4 is not deferred until I5B. The human gate remains pending, but UR0R's explicit product handoff authorizes S1 as the next bounded milestone; this does not validate beginner comprehension or authorize generic executable authoring.
+I1 does not automatically trigger I2, I3, I4, or I5. The former unconditional immersive sequence is superseded. C4 is not deferred until I5B. The human gate remains pending. S1 implements only the bounded Starter derivative bridge; it does not validate beginner comprehension or authorize generic executable authoring. S1B must close before S2 can become next.
 
 ## Status Vocabulary
 
@@ -63,11 +65,11 @@ retained high-priority infrastructure:
   O1/O1B -> E1/E1B when explicitly authorized
 ```
 
-The informed pilot makes the example-to-decomposition-to-remix break concrete enough to place S1 next. This is a sequencing decision, not proof that S1 already exists or that human comprehension is validated. S1/S2 do not themselves establish generic executable custom-model authoring. O1/E1 remain high-priority scientific infrastructure, I2 remains deferred, and every planning label still requires its dedicated prompt and audit.
+The informed pilot identified the example-to-decomposition-to-remix break; S1 now repairs that bounded break for existing Starter-backed templates. This is not proof that human comprehension is validated. S1 does not establish generic executable custom-model authoring, and S2 remains blocked on S1B. O1/E1 remain high-priority scientific infrastructure, I2 remains deferred, and every planning label still requires its dedicated prompt and audit.
 
 | Pair | Planning purpose | Required gate |
 | --- | --- | --- |
-| S1/S1B | Starter remix and bounded Workshop handoff; next authorized pair | Existing template-backed recipe remains authoritative; no generic execution claim |
+| S1/S1B | S1 bounded Starter remix is complete; S1B is the next independent audit | Existing template-backed recipe remains authoritative; no generic execution claim; S1B must close before S2 |
 | S2/S2B | Recipe-first Builder/workflow reboot | Comprehension evidence and preserved structural-only boundary |
 | SA0/SA0B | Scientific architecture contract pass for model/run/research artifacts | No implementation by taxonomy alone; align with canonical planes |
 | S3/S3B | First bounded executable composition primitive | Explicit runtime vocabulary, capability checks, determinism, and no arbitrary code |
@@ -85,7 +87,7 @@ The informed pilot makes the example-to-decomposition-to-remix break concrete en
 | --- | --- | --- |
 | A - Architecture consolidation | Canonical vocabulary, authority, dependency, capability, and source hierarchy | A0 and A0B complete |
 | B - Production runtime / World | Adopt audited runtime ports and immersive shell without changing model semantics | I1/I1B complete for production Flocking; other templates remain on the explicit legacy path |
-| C - Executable visual modeling | Move from constrained authoring toward narrowly executable composition | No generic compiler, interpreter, or executable graph exists |
+| C - Executable visual modeling | Move from constrained authoring toward narrowly executable composition | S1 can launch configuration-only derivatives of existing Starter templates; no generic compiler, interpreter, composition system, or executable graph exists |
 | D - SystemView / scale / lens / regime | Scientific representation graph and explicit mappings | Conceptual direction only; old multi-scale services remain structural |
 | E - Canonical observation | Evidence-bearing samples separate from snapshots and visual projections | Not implemented |
 | F - Lab / investigations / uncertainty | Reproducible investigations, evidence, uncertainty, and identifiability | Current Lab is non-persistent information architecture |
@@ -173,4 +175,4 @@ All future work must pass the relevant gates:
 
 ## Next Action
 
-Begin the dedicated S1 prompt for the bounded Starter-to-Remix bridge. S1 is next and unstarted; it must preserve existing template-backed authority, begin from supported examples or questions, keep structural validity distinct from runtime support, and avoid generic schema/graph execution claims. Continue the broader UR0 formative study as a separate evidence obligation; the human comprehension gate remains pending. S2 is planned, O1/E1 remain high-priority scientific infrastructure but are not automatically next, and I2 remains deferred.
+Begin S1B, the independent Starter-to-Remix Bridge audit. Audit source immutability, derivative lineage, accepted-run isolation, Flocking Worker authority, legacy runtime isolation, history/reload behavior, keyboard/responsive access, and product-language limits without widening S1 into composition. Preserve structural validity distinct from runtime support. Continue the broader UR0 formative study separately; the human comprehension gate remains pending. Do not mark S2 next until S1B closes. O1/E1 remain high-priority scientific infrastructure but are not automatically next, and I2 remains deferred.

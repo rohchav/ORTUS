@@ -1,6 +1,6 @@
 # ORTUS Canonical Architecture
 
-Status: CURRENT architectural source of truth after I1B
+Status: CURRENT architectural source of truth after S1
 
 This document defines ORTUS architectural vocabulary, authority, ownership, and dependency direction. It describes current implementation where it exists and labels future contracts explicitly. It does not make a planned type, service, or model family real.
 
@@ -32,7 +32,7 @@ Architecture prose cannot override behavior. A mismatch is a defect to expose, n
 | Model | What dynamics are declared and executable? | Hand-built `SimulationTemplate` definitions, template-owned systems, parameters, spaces, metrics, and validated run configuration | Declarative `ModelDefinition` compiled or mapped into a validated executable `RuntimePlan` |
 | Run / Observation | What happened during execution, and what was sampled? | `SimulationRunConfig`, engine/session run identity, exact `SnapshotExport` continuation artifacts, detached `SimulationSnapshotView` read models, metrics, events, interventions, `RenderFramePacket`, and `UIProjection` | `InterventionSchedule` as a first-class run input and scientific `CanonicalObservation` records |
 | Research / Representation | How is modeled evidence represented, analyzed, compared, and assessed? | Bounded experiments, run summaries, uncertainty result services, and non-persistent planning/UI foundations | `ResearchContext`, `SystemViewSpec`, `ScaleSpec`, `LensSpec`, `RegimeSpec`, `ViewDerivation`, `RepresentationArtifact`, `ViewMapping`, `EvidenceReport`, `CandidateAssessment`, `ExperimentSpec`, `Investigation`, and `ClaimRecord` |
-| Experience | How does a person work with ORTUS? | Start, World, Workshop, Lab foundation, Atlas foundation, Explore Worlds, and Guides | Deeper evidence, representation, and research workflows only after their lower-plane contracts exist |
+| Experience | How does a person work with ORTUS? | Start, World, Workshop, Lab foundation, Atlas foundation, Explore Worlds, Guides, and bounded Starter-to-Remix derivatives | General executable composition and deeper evidence, representation, and research workflows only after their lower-plane contracts exist |
 
 Experience metaphors never define scientific ontology:
 
@@ -130,6 +130,20 @@ validated template + RunConfig + seeded RNG
 
 `LocalRuntimeDriver` remains a reference/test implementation. The production migration supports only template `flocking-boids` with projection kind `flocking-v1`; it does not establish cross-template Worker support or a scientific observation channel.
 
+S1 adds a bounded product handoff above those runtime authorities:
+
+```text
+immutable Starter/recipe identity
+  -> authoritative Starter launch + scenario construction
+  -> unsaved derivative scenario with explicit source lineage
+  -> Workshop edits through existing template configuration definitions
+  -> explicit validation and Run Remix
+  -> existing scenario application path
+  -> flocking-boids Worker authority OR established legacy main-thread authority
+```
+
+The derivative is not a `ModelDefinition` or `RuntimePlan`, and Workshop does not compile schemas, execute graphs, or own simulation state. Candidate edits remain local until explicit launch. A bounded one-use page-session handoff may copy the matching accepted active World configuration into a derivative; it is not persistence or a second runtime authority. Strict source/draft IDs and accepted metadata prevent reload, history, or source changes from silently substituting a different run.
+
 ## Computational Substrate Is Not Scientific Ontology
 
 The current engine is entity/component/system shaped. Entities have stable identity, components hold serializable data, systems execute in deterministic phases, and spaces provide continuous, grid, or network relations. This is a useful computational substrate, not a universal claim that every scientific system fundamentally consists of agents.
@@ -168,7 +182,7 @@ research/inference      -> representation/evidence contracts; proposes candidate
 research/validation     -> representation/evidence contracts; evaluates independently
 
 ui/world                -> public runtime ports + read models
-ui/workshop             -> model-authoring services, not runtime internals
+ui/workshop             -> model-authoring + public scenario/launch services, not runtime internals
 ui/lab                  -> research workflow/evidence services
 ui/atlas                -> representation/evidence query services
 ```
@@ -187,6 +201,7 @@ The canonical architecture records rather than disguises these risks:
 - `src/simulation/runtime` includes browser Worker transport types. This is intentional for the audited runtime port but means the runtime package is not yet a platform-neutral package boundary.
 - `SimulationRun` ownership is real but distributed across engine, runtime session, and UI/store lifecycle. A future explicit run record must not duplicate or compete with those authorities.
 - Current local experiments and Atlas preview produce model-output summaries, not the planned observation/evidence architecture.
+- S1 remixing is configuration editing over existing hand-built templates. It does not remove the missing generic `ModelDefinition -> RuntimePlan` boundary, add composition, or make structural Workshop artifacts executable.
 
 The A0B static gate enforces current truths only: simulation implementation cannot import or re-export React/Zustand/UI/state/app modules or use browser rendering/storage globals; authoritative simulation code cannot reference direct or bracketed `Math.random`; runtime dynamic imports, CommonJS `require`, `eval`, `Function`, and string-evaluated timers are forbidden; future research code may import only public observation/experiment contracts from simulation; product/UI code cannot import private runtime internals; and the intrinsic-JSX accessibility check rejects obvious missing keyboard contracts, inert click roles, and negative tab order. Existing focused simulation canvases retain an explicit `role="img"` smoke-gate exception; that exception is not keyboard-equivalence or accessibility evidence. The gate remains scoped AST analysis, not full dependency resolution, data-flow analysis, ESLint, browser verification, or accessibility conformance.
 
@@ -195,6 +210,8 @@ The A0B static gate enforces current truths only: simulation implementation cann
 | Object | Creator/owner | Lifetime | Invalidated by |
 | --- | --- | --- | --- |
 | Template definition | Template registry | Application version | Registry/version change |
+| Starter definition | Starter registry | Immutable application-version content | Registry/version change; remixing always creates a derivative |
+| S1 remix draft | Workshop over authoritative Starter/scenario/template services | Unsaved current page session until launched, reset, source change, or navigation | Invalid edit remains a draft; reload or source/draft identity change discards it; no durable persistence |
 | RunConfig | Scenario/setup services | Until replaced or discarded | Explicit rebuild/replacement |
 | Active run | Engine/runtime session | Initialization to disposal | Replacement, terminal failure, disposal |
 | `SimulationSnapshotView` | Engine snapshot projector | Detached value for a particular tick; consumers must treat it as read-only, but it is not deep-frozen | Becomes stale when the run advances; never persisted implicitly |

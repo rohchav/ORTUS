@@ -334,7 +334,8 @@ describe("Guided Builder UI and integration boundaries", () => {
     const shell = source("src/components/builder/BuilderShell.tsx");
     const tabs = source("src/components/builder/BuilderExperienceTabs.tsx");
 
-    expect(shell).toContain('useState<BuilderExperienceId>("guided")');
+    expect(shell).toContain('useState<BuilderExperienceId>(remixSource ? "remix" : "guided")');
+    expect(shell).toContain('hasStarterRemix={Boolean(remixSource)}');
     expect(tabs).toContain("Guided Builder");
     expect(tabs).toContain("Advanced Builder");
     expect(tabs).toContain('role="tablist"');

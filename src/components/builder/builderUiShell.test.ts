@@ -320,7 +320,8 @@ describe("safe builder UI shell", () => {
   it("keeps accessibility hooks text-readable without pointer-only or color-only semantics", () => {
     const componentSource = readBuilderSource();
     const viewModel = createBuilderWorkspaceViewModel(workspaceFixture());
-    expect(componentSource).toContain('aria-label="Builder structural shell"');
+    expect(componentSource).toContain('"Builder structural shell"');
+    expect(componentSource).toContain('"Starter remix Workshop"');
     expect(componentSource).toContain('aria-label="Builder navigation and import"');
     expect(componentSource).toContain('aria-label="Read-only visual workspace descriptors"');
     expect(componentSource).toContain('aria-label="Selected workspace item inspector"');
@@ -334,16 +335,25 @@ describe("safe builder UI shell", () => {
     expect(getVisibleWorkspaceNodes(viewModel, defaultBuilderWorkspaceFilters)).toHaveLength(5);
   });
 
-  it("does not wire builder components into simulation runtime, graph execution, schema execution, or unsafe rendering", () => {
+  it("isolates the explicit Starter Remix runtime handoff from structural Builder tools", () => {
     const builderSource = readBuilderSource();
+    const remixSource = readFileSync(
+      join(repoRoot, "src", "components", "builder", "remix", "StarterRemixWorkspace.tsx"),
+      "utf8"
+    );
+    const structuralBuilderSource = builderSource.replace(remixSource, "");
     const packageJson = readFileSync(join(repoRoot, "package.json"), "utf8");
 
-    expect(builderSource).not.toMatch(/from ["'][^"']*simulationStore["']/);
-    expect(builderSource).not.toContain("useSimulationStore");
+    expect(structuralBuilderSource).not.toMatch(/from ["'][^"']*simulationStore["']/);
+    expect(structuralBuilderSource).not.toContain("useSimulationStore");
+    expect(remixSource).toContain("useSimulationStore");
+    expect(remixSource).toContain("applyScenario(acceptedDraft)");
+    expect(remixSource).toContain("starterRemixLaunchMatchesMetadata");
     expect(builderSource).not.toContain("SimulationEngine");
     expect(builderSource).not.toContain("latestSnapshot");
     expect(builderSource).not.toContain("runFrameSteps");
-    expect(builderSource).not.toContain("selectedTemplateId");
+    expect(structuralBuilderSource).not.toContain("selectedTemplateId");
+    expect(remixSource).toContain("selectedTemplateId");
     expect(builderSource).not.toContain("dangerouslySetInnerHTML");
     expect(builderSource).not.toContain("eval(");
     expect(builderSource).not.toContain("new Function");

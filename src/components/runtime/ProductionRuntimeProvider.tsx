@@ -11,7 +11,6 @@ import {
   type ReactNode
 } from "react";
 import {
-  createGenericResetRunConfig,
   createSnapshotViewFromRuntimeArtifact,
   parseRuntimeArtifact,
   readInterventionHistory,
@@ -32,6 +31,10 @@ import {
   type SimulationRunConfig,
   type UIProjection
 } from "../../simulation";
+import {
+  createRemixAwareResetRunConfig,
+  readStarterRemixLineage
+} from "../../lib/starterWorlds";
 import { useSimulationStore } from "../../state/simulationStore";
 import { ProductionFlockingRuntime, type ProductionFlockingRuntimeView } from "./ProductionFlockingRuntime";
 
@@ -58,6 +61,7 @@ const idleView: ProductionFlockingRuntimeView = {
 };
 
 const ProductionRuntimeContext = createContext<ProductionRuntimeContextValue | null>(null);
+const AcceptedWorkerRunConfigContext = createContext<() => SimulationRunConfig | null>(() => null);
 
 export function ProductionRuntimeProvider({ children }: { children: ReactNode }) {
   const selectedTemplateId = useSimulationStore((state) => state.selectedTemplateId);
@@ -170,7 +174,7 @@ export function ProductionRuntimeProvider({ children }: { children: ReactNode })
     }
     let resetConfig: SimulationRunConfig;
     try {
-      resetConfig = createGenericResetRunConfig(activeConfig);
+      resetConfig = createRemixAwareResetRunConfig(activeConfig);
     } catch (error) {
       state.setRuntimeFeedback({ error: `Reset failed: ${messageFor(error)}`, notice: null });
       return;
@@ -193,7 +197,9 @@ export function ProductionRuntimeProvider({ children }: { children: ReactNode })
       appliedRevisionRef.current = sourceRevision;
       latestState.adoptFlockingRuntimeConfig(
         resetConfig,
-        "Run reset in the Worker runtime. Prepared recipe provenance was discarded."
+        readStarterRemixLineage(resetConfig.metadata)
+          ? "Run reset in the Worker runtime. The accepted unsaved remix configuration and source lineage were preserved; run progress was discarded."
+          : "Run reset in the Worker runtime. Prepared recipe provenance was discarded."
       );
     } catch (error) {
       const latestState = useSimulationStore.getState();
@@ -360,7 +366,22 @@ export function ProductionRuntimeProvider({ children }: { children: ReactNode })
     view
   ]);
 
-  return <ProductionRuntimeContext.Provider value={value}>{children}</ProductionRuntimeContext.Provider>;
+  const getAcceptedWorkerRunConfig = useCallback(() => {
+    if (!runtime || runtime.getView().state !== "ready") {
+      return null;
+    }
+    return runtime.getActiveRunConfig();
+  }, [runtime]);
+
+  return (
+    <AcceptedWorkerRunConfigContext.Provider value={getAcceptedWorkerRunConfig}>
+      <ProductionRuntimeContext.Provider value={value}>{children}</ProductionRuntimeContext.Provider>
+    </AcceptedWorkerRunConfigContext.Provider>
+  );
+}
+
+export function useAcceptedWorkerRunConfigAccessor(): () => SimulationRunConfig | null {
+  return useContext(AcceptedWorkerRunConfigContext);
 }
 
 export interface ActiveWorldRuntime {

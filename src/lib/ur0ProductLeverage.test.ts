@@ -26,7 +26,8 @@ describe("UR0 product leverage and comprehension gate", () => {
     expect(report).toContain("UR0 TECHNICAL/EXPERT GATE: COMPLETE");
     expect(report).toContain("UR0 HUMAN COMPREHENSION GATE: PENDING");
     expect(roadmap).toContain("UR0R - Product Comprehension + Exploration Repair | COMPLETE");
-    expect(roadmap).toContain("S1 - Starter -> Remix Bridge | NEXT / UNSTARTED");
+    expect(roadmap).toContain("S1 - Starter -> Remix Bridge | COMPLETE");
+    expect(roadmap).toContain("S1B - Starter -> Remix Bridge Audit | NEXT / UNSTARTED");
     expect(roadmap).toContain("O1/E1 remain high-priority scientific infrastructure");
   });
 
@@ -68,9 +69,10 @@ describe("UR0 product leverage and comprehension gate", () => {
     expect(template).not.toMatch(/participantName|emailAddress|accountId|protectedClass/i);
   });
 
-  it("records the example-first S1 handoff without pretending Workshop already executes", () => {
+  it("keeps the example-first S1 boundary narrow while the human gate remains open", () => {
     const repair = source("docs/product/PRODUCT_COMPREHENSION_EXPLORATION_REPAIR.md");
     const roadmap = source("docs/ROADMAP.md");
+    const capabilities = source("docs/CAPABILITIES.md");
 
     for (const phrase of [
       "Entry must support a question, phenomenon, example, or existing system",
@@ -82,6 +84,8 @@ describe("UR0 product leverage and comprehension gate", () => {
       expect(repair).toContain(phrase);
     }
     expect(roadmap).toContain("structural validity distinct from runtime support");
+    expect(capabilities).toContain("S1 derives an unsaved scenario from the immutable source Starter");
+    expect(capabilities).toContain("does not create a second scenario or parameter registry");
     expect(repair).toContain("UR0 HUMAN COMPREHENSION GATE: PENDING");
   });
 });

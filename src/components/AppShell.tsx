@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import Link from "next/link";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { LeftInstrumentStack } from "./LeftInstrumentStack";
 import { RightContextDrawer } from "./RightContextDrawer";
 import { RunProvenanceObservationPanel } from "./RunProvenanceObservationPanel";
@@ -11,7 +12,10 @@ import { WorldStage } from "./WorldStage";
 import { OrtusBrand } from "./branding";
 import { CapabilityGuidancePanel } from "./researchWorld/CapabilityGuidancePanel";
 import { ModalSurface } from "./ui/ModalSurface";
-import { ProductionRuntimeProvider } from "./runtime/ProductionRuntimeProvider";
+import {
+  ProductionRuntimeProvider,
+  useAcceptedWorkerRunConfigAccessor
+} from "./runtime/ProductionRuntimeProvider";
 import {
   defaultSimulationWorkspaceModeId,
   simulationWorkspaceModeFromQuery,
@@ -19,13 +23,18 @@ import {
   type SimulationWorkspaceModeId
 } from "../lib/workspaceModes";
 import {
+  createAcceptedLegacyRunConfig,
   createStarterWorldScenario,
   deriveGuidedInvestigationAuthority,
   getStarterWorldLaunchRecipeById,
+  prepareStarterRemixActiveWorldHandoff,
   requireStarterWorldById,
+  starterRemixLaunchMatchesMetadata,
+  type StarterRemixWorldLaunch,
   type StarterWorldLaunch
 } from "../lib/starterWorlds";
 import type { TemplateId } from "../lib/templateVisuals";
+import { supportsWorkerRuntime } from "../simulation";
 import { useSimulationStore } from "../state/simulationStore";
 
 const baseTicksPerSecond = 24;
@@ -34,27 +43,33 @@ interface AppShellProps {
   initialTemplateId?: TemplateId;
   initialWorkspaceMode?: SimulationWorkspaceModeId;
   starterLaunch?: StarterWorldLaunch;
+  starterRemixLaunch?: StarterRemixWorldLaunch;
 }
 
-export function AppShell({ initialTemplateId, initialWorkspaceMode, starterLaunch }: AppShellProps) {
+export function AppShell({ initialTemplateId, initialWorkspaceMode, starterLaunch, starterRemixLaunch }: AppShellProps) {
   return (
     <ProductionRuntimeProvider>
       <AppShellContent
         initialTemplateId={initialTemplateId}
         initialWorkspaceMode={initialWorkspaceMode}
         starterLaunch={starterLaunch}
+        starterRemixLaunch={starterRemixLaunch}
       />
     </ProductionRuntimeProvider>
   );
 }
 
-function AppShellContent({ initialTemplateId, initialWorkspaceMode, starterLaunch }: AppShellProps) {
+function AppShellContent({ initialTemplateId, initialWorkspaceMode, starterLaunch, starterRemixLaunch }: AppShellProps) {
   const hydratePreferences = useSimulationStore((state) => state.hydratePreferences);
   const applyScenario = useSimulationStore((state) => state.applyScenario);
   const isRunning = useSimulationStore((state) => state.isRunning);
   const speedMultiplier = useSimulationStore((state) => state.speedMultiplier);
   const engine = useSimulationStore((state) => state.engine);
+  const getAcceptedWorkerRunConfig = useAcceptedWorkerRunConfigAccessor();
   const [mounted, setMounted] = useState(false);
+  const [remixLaunchState, setRemixLaunchState] = useState<"checking" | "ready" | "missing">(
+    starterRemixLaunch ? "checking" : "ready"
+  );
   const [activeWorkspaceMode, setActiveWorkspaceMode] = useState<SimulationWorkspaceModeId>(
     initialWorkspaceMode ?? defaultSimulationWorkspaceModeId
   );
@@ -79,6 +94,34 @@ function AppShellContent({ initialTemplateId, initialWorkspaceMode, starterLaunc
     [starterLaunch?.guideId]
   );
 
+  const prepareActiveWorldRemix = useCallback((launch: StarterWorldLaunch): string | null => {
+    const state = useSimulationStore.getState();
+    if (state.selectedTemplateId !== launch.templateId) {
+      return "Wait for the matching active World run to finish rebuilding before opening Workshop.";
+    }
+    try {
+      const acceptedConfig = supportsWorkerRuntime(launch.templateId)
+        ? getAcceptedWorkerRunConfig()
+        : state.engine?.template.id === launch.templateId
+          ? createAcceptedLegacyRunConfig({
+              templateId: state.engine.template.id,
+              seed: state.engine.seed,
+              parameters: state.engine.parameters,
+              metadata: state.engine.metadata
+            })
+          : null;
+      if (!acceptedConfig) {
+        return "Wait for the matching active World run to finish rebuilding before opening Workshop.";
+      }
+      prepareStarterRemixActiveWorldHandoff(launch, acceptedConfig);
+      return null;
+    } catch (error) {
+      return error instanceof Error
+        ? error.message
+        : "The active World configuration could not be transferred.";
+    }
+  }, [getAcceptedWorkerRunConfig]);
+
   useEffect(() => {
     if (previousGuideLaunchIdentityRef.current === guideLaunchIdentity) {
       return;
@@ -91,6 +134,15 @@ function AppShellContent({ initialTemplateId, initialWorkspaceMode, starterLaunc
     setMounted(true);
     hydratePreferences();
     const state = useSimulationStore.getState();
+    if (starterRemixLaunch) {
+      const acceptedMetadata = state.flockingRuntimeConfig?.metadata ?? state.engine?.metadata;
+      const accepted =
+        state.selectedTemplateId === starterRemixLaunch.templateId &&
+        starterRemixLaunchMatchesMetadata(acceptedMetadata, starterRemixLaunch);
+      setRemixLaunchState(accepted ? "ready" : "missing");
+      return;
+    }
+    setRemixLaunchState("ready");
     const starterIdentity = starterLaunch
       ? `${starterLaunch.starterWorldId}:${starterLaunch.recipeId ?? "default"}`
       : null;
@@ -102,7 +154,7 @@ function AppShellContent({ initialTemplateId, initialWorkspaceMode, starterLaunc
     } else {
       state.initialize();
     }
-  }, [hydratePreferences, initialTemplateId, starterLaunch]);
+  }, [hydratePreferences, initialTemplateId, starterLaunch, starterRemixLaunch]);
 
   useEffect(() => {
     const mode = workspaceModeFromLocation(initialWorkspaceMode);
@@ -190,12 +242,29 @@ function AppShellContent({ initialTemplateId, initialWorkspaceMode, starterLaunc
     };
   }, [isRunning, speedMultiplier, engine]);
 
-  if (!mounted) {
+  if (!mounted || remixLaunchState === "checking") {
     return (
       <section className="ortus-shell ortus-shell--hydrating" aria-busy="true" aria-label="World simulation workbench">
         <div className="ortus-hydration-shell">
           <OrtusBrand variant="soft" showDescriptor />
           <span>Initializing simulation instrument</span>
+        </div>
+      </section>
+    );
+  }
+
+  if (remixLaunchState === "missing" && starterRemixLaunch && starterLaunch) {
+    const sourceWorld = requireStarterWorldById(starterLaunch.starterWorldId);
+    return (
+      <section className="starter-launch-error" data-starter-remix-resume-error role="alert">
+        <p>Unsaved remix unavailable</p>
+        <h1>This derivative is no longer in the current page session</h1>
+        <span>
+          ORTUS did not substitute the source Starter or a generic run. Return to {sourceWorld.title} to create a new derivative.
+        </span>
+        <div>
+          <Link href={`/worlds/${sourceWorld.slug}`}>Review source Starter</Link>
+          <Link href="/worlds">Explore Worlds</Link>
         </div>
       </section>
     );
@@ -215,6 +284,7 @@ function AppShellContent({ initialTemplateId, initialWorkspaceMode, starterLaunc
               <StarterActionNudge
                 launch={starterLaunch}
                 activeGuideId={guideVisible ? starterLaunch.guideId : undefined}
+                onPrepareRemix={prepareActiveWorldRemix}
               />
             ) : null}
             <WorldStage />

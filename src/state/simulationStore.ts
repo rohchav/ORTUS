@@ -5,7 +5,7 @@ import {
   clearInterventionHistory,
   buildRunSummaryFromSnapshot,
   createEngineFromScenario,
-  createGenericResetRunConfig,
+  createEngineFromRunConfig,
   executeIntervention,
   experimentRunToSummary,
   readInterventionHistory,
@@ -27,6 +27,11 @@ import {
   validateRunConfig,
   validateScenario
 } from "../simulation";
+import {
+  createAcceptedLegacyRunConfig,
+  createRemixAwareResetRunConfig,
+  readStarterRemixLineage
+} from "../lib/starterWorlds";
 import { defaultParameters, getTemplateDescriptor, requireTemplateDescriptor, templateDescriptors, type TemplateId } from "../lib/templateVisuals";
 import { loadPanelState, savePanelState, type PanelState } from "../lib/panelPersistence";
 import { clearRunLibraryStorage, loadRunLibrary, saveRunLibrary } from "../lib/localRunStorage";
@@ -310,7 +315,8 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
   reset() {
     const workerConfig = get().flockingRuntimeConfig;
     if (workerConfig && supportsWorkerRuntime(get().selectedTemplateId)) {
-      const resetConfig = createGenericResetRunConfig(workerConfig);
+      const resetConfig = createRemixAwareResetRunConfig(workerConfig);
+      const remixLineage = readStarterRemixLineage(resetConfig.metadata);
       set({
         engine: null,
         latestSnapshot: null,
@@ -324,9 +330,47 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
         interventionHistory: [],
         isRunning: false,
         lastError: null,
-        lastNotice: null
+        lastNotice: remixLineage
+          ? "Run reset to the accepted unsaved remix configuration. Source lineage was preserved; run progress was discarded."
+          : null
       });
       return;
+    }
+    const activeEngine = get().engine;
+    if (activeEngine) {
+      try {
+        const activeConfig = createAcceptedLegacyRunConfig({
+          templateId: get().selectedTemplateId,
+          seed: activeEngine.seed,
+          parameters: activeEngine.parameters,
+          metadata: activeEngine.metadata
+        });
+        const resetConfig = createRemixAwareResetRunConfig(activeConfig);
+        const remixLineage = readStarterRemixLineage(resetConfig.metadata);
+        if (remixLineage) {
+          const engine = createEngineFromRunConfig(resetConfig);
+          configurePerformanceInstrumentation(engine);
+          engine.setSpeed(get().speedMultiplier);
+          set({
+            engine,
+            latestSnapshot: engine.createSnapshot(),
+            flockingRuntimeConfig: null,
+            parameterValues: engine.parameters,
+            seed: engine.seed,
+            selectedEntityId: null,
+            interventionTargetPoint: null,
+            interventionTargetCell: null,
+            interventionHistory: [],
+            isRunning: false,
+            lastError: null,
+            lastNotice: "Run reset to the accepted unsaved remix configuration. Source lineage was preserved; run progress was discarded."
+          });
+          return;
+        }
+      } catch (error) {
+        set({ lastError: `Reset failed: ${errorMessage(error)}`, lastNotice: null });
+        return;
+      }
     }
     replaceEngine(set, get, {
       templateId: get().selectedTemplateId,

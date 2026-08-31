@@ -6,6 +6,7 @@ import type {
   SimulationSnapshotView,
   SimulationTemplate
 } from "../simulation";
+import { getStarterWorldById, readStarterRemixLineage } from "../lib/starterWorlds";
 import { getRunStatusPillModel, type RunStatusPillModel } from "./runStatusSemantics";
 import type { StatusPillCategory, StatusPillState, StatusPillTone } from "./ui/statusPillSemantics";
 
@@ -50,6 +51,13 @@ export interface RunProvenanceSummary {
   runConfigurationStatus: RunStatusModel;
   liveNonPersistent: true;
   configurationFingerprint: null;
+  starterRemixLineage: {
+    sourceStarterId: string;
+    sourceStarterLabel: string;
+    sourceRecipeId?: string;
+    draftId: string;
+    derivativeLabel: "Unsaved remix";
+  } | null;
   boundaryCopy: string;
 }
 
@@ -134,6 +142,8 @@ export function deriveRunProvenanceSummary(input: ActiveRunProvenanceInput): Run
   const speed = Number.isFinite(input.speedMultiplier) ? Number(input.speedMultiplier) : 1;
   const hasActiveRuntime = input.hasActiveRuntime ?? input.hasActiveEngine;
   const hasRunnableSurface = hasActiveRuntime && Boolean(input.snapshot || input.projection);
+  const remixLineage = readStarterRemixLineage(input.metadata);
+  const sourceStarter = remixLineage ? getStarterWorldById(remixLineage.source.starterWorldId) : undefined;
 
   return {
     templateId,
@@ -173,6 +183,15 @@ export function deriveRunProvenanceSummary(input: ActiveRunProvenanceInput): Run
         },
     liveNonPersistent: true,
     configurationFingerprint: null,
+    starterRemixLineage: remixLineage
+      ? {
+          sourceStarterId: remixLineage.source.starterWorldId,
+          sourceStarterLabel: sourceStarter?.title ?? remixLineage.source.starterWorldId,
+          ...(remixLineage.source.recipeId ? { sourceRecipeId: remixLineage.source.recipeId } : {}),
+          draftId: remixLineage.draftId,
+          derivativeLabel: "Unsaved remix"
+        }
+      : null,
     boundaryCopy: RUN_PROVENANCE_NON_PERSISTENT_COPY
   };
 }

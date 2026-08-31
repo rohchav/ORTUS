@@ -11,6 +11,7 @@ import {
   starterWorldLaunchRecipesForWorld,
   starterWorldMechanismLabels,
   starterWorldRemixStatusLabels,
+  starterRemixWorkshopHref,
   starterWorldSourceRelationshipLabels,
   starterWorldSourceTypeLabels,
   type PreparedStarterComparison,
@@ -89,9 +90,20 @@ export function StarterWorldDetail({ world }: StarterWorldDetailProps) {
             <strong>{baselineRecipe?.title ?? world.firstRun.action}</strong>
             {contrastRecipe ? <small>Paired contrast available: {contrastRecipe.title}</small> : null}
           </div>
-          <Link className="world-detail__launch" href={launch.href}>
-            {baselineRecipe ? `Launch baseline: ${baselineRecipe.title}` : "Launch this world"}
-          </Link>
+          <div className="world-detail__hero-actions">
+            <Link className="world-detail__launch" href={launch.href}>
+              {baselineRecipe ? `Launch baseline: ${baselineRecipe.title}` : "Launch this world"}
+            </Link>
+            <Link
+              className="world-detail__remix-action"
+              href={starterRemixWorkshopHref(world.id, {
+                ...(baselineRecipe ? { recipeId: baselineRecipe.id } : {}),
+                ...(world.firstChange.targetType === "parameter" ? { focusParameterId: world.firstChange.targetId } : {})
+              })}
+            >
+              Remix this system
+            </Link>
+          </div>
         </div>
         <div className="world-detail__hero-visual">
           <StarterWorldVisual kind={world.visualKind} />
@@ -215,7 +227,17 @@ export function StarterWorldDetail({ world }: StarterWorldDetailProps) {
                 <p>{world.whatToWatch[0]!.description}</p>
               </li>
             </ol>
-            <Link className="world-detail__launch world-detail__launch--inline" href={launch.href}>Launch fresh at tick 0</Link>
+            <div className="world-detail__inline-actions">
+              <Link className="world-detail__launch world-detail__launch--inline" href={launch.href}>Launch fresh at tick 0</Link>
+              <Link
+                className="world-detail__remix-action"
+                href={starterRemixWorkshopHref(world.id, {
+                  ...(world.firstChange.targetType === "parameter" ? { focusParameterId: world.firstChange.targetId } : {})
+                })}
+              >
+                Remix this change
+              </Link>
+            </div>
           </section>
         )}
 
@@ -343,9 +365,20 @@ function RecipeCard({
         <div><dt>Outputs</dt><dd>{outputs.join(" and ")}</dd></div>
       </dl>
       {recipe.visualCue ? <p className="world-recipe__cue">{recipe.visualCue}</p> : null}
-      <Link href={launch.href} aria-label={`Launch ${role.toLowerCase()}: ${recipe.title}`}>
-        Launch {role.toLowerCase()}
-      </Link>
+      <div className="world-recipe__actions">
+        <Link href={launch.href} aria-label={`Launch ${role.toLowerCase()}: ${recipe.title}`}>
+          Launch {role.toLowerCase()}
+        </Link>
+        <Link
+          href={starterRemixWorkshopHref(world.id, {
+            recipeId: recipe.id,
+            ...(world.firstChange.targetType === "parameter" ? { focusParameterId: world.firstChange.targetId } : {})
+          })}
+          aria-label={`Remix ${role.toLowerCase()}: ${recipe.title}`}
+        >
+          Remix {role.toLowerCase()}
+        </Link>
+      </div>
     </article>
   );
 }
