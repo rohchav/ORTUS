@@ -33,7 +33,8 @@ import {
 } from "../../simulation";
 import {
   createRemixAwareResetRunConfig,
-  readStarterRemixLineage
+  readStarterRemixLineage,
+  readStarterWorldOrigin
 } from "../../lib/starterWorlds";
 import { useSimulationStore } from "../../state/simulationStore";
 import { ProductionFlockingRuntime, type ProductionFlockingRuntimeView } from "./ProductionFlockingRuntime";
@@ -199,6 +200,8 @@ export function ProductionRuntimeProvider({ children }: { children: ReactNode })
         resetConfig,
         readStarterRemixLineage(resetConfig.metadata)
           ? "Run reset in the Worker runtime. The accepted unsaved remix configuration and source lineage were preserved; run progress was discarded."
+          : readStarterWorldOrigin(resetConfig.metadata)
+            ? "Run reset in the Worker runtime. The active configuration and Starter origin were preserved; prepared-recipe identity and run progress were discarded."
           : "Run reset in the Worker runtime. Prepared recipe provenance was discarded."
       );
     } catch (error) {

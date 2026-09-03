@@ -145,6 +145,12 @@ test("strict remix URLs reject payload overrides, stale IDs, and duplicate sourc
   await page.goto("/builder?starter=flocking&starter=epidemic", { waitUntil: "domcontentloaded" });
   await expect(page.locator("[data-starter-remix-error]")).toContainText("duplicate values");
 
+  await page.goto("/builder?starter=flocking&__proto__=polluted", { waitUntil: "domcontentloaded" });
+  await expect(page.locator("[data-starter-remix-error]")).toContainText("unsafe query key");
+
+  await page.goto("/builder?starter=", { waitUntil: "domcontentloaded" });
+  await expect(page.locator("[data-starter-remix-error]")).toContainText("identify its source Starter World");
+
   await page.goto("/world?starter=flocking&remix=", { waitUntil: "domcontentloaded" });
   await expect(page.locator("[data-starter-launch-error]")).toContainText("remix identifier is malformed");
   await expect(page.locator(".ortus-shell:not(.ortus-shell--hydrating)")).toHaveCount(0);

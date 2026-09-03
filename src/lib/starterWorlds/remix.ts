@@ -28,6 +28,7 @@ import { assertSafeStarterWorldValue, validateRuntimeReferences } from "./valida
 
 export const starterRemixMetadataKey = "ortusStarterRemixV1" as const;
 export const starterRemixSchemaVersion = "1" as const;
+export const starterWorldOriginMetadataKey = "ortusStarterWorldOriginV1" as const;
 
 const idSchema = z.string().trim().min(2).max(160).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/);
 const runtimeKeySchema = z.string().trim().min(1).max(120).regex(/^[A-Za-z][A-Za-z0-9]*(?:[-_.][A-Za-z0-9]+)*$/);
@@ -94,6 +95,25 @@ export const starterRemixLineageSchema = z
 export type StarterRemixLineage = z.infer<typeof starterRemixLineageSchema>;
 export type StarterRemixEntry = StarterRemixLineage["entry"];
 export type StarterRemixCoverageCategory = "A" | "B" | "C";
+
+const starterWorldOriginSchema = z
+  .object({
+    kind: z.literal("ortus-starter-world-origin"),
+    schemaVersion: z.literal("1"),
+    relationship: z.literal("derived-active-configuration"),
+    source: z
+      .object({
+        starterWorldId: idSchema,
+        starterWorldVersion: z.literal("1"),
+        starterWorldSlug: idSchema,
+        recipeId: idSchema.optional(),
+        templateId: idSchema
+      })
+      .strict()
+  })
+  .strict();
+
+export type StarterWorldOrigin = z.infer<typeof starterWorldOriginSchema>;
 
 const activeWorldHandoffSourceSchema = z
   .object({
@@ -366,7 +386,7 @@ export function createStarterRemixDraftFromActiveRun(
   acceptedRunConfig: SimulationRunConfig
 ): AuthoredScenario {
   const accepted = validateRunConfig(acceptedRunConfig);
-  if (!starterSourceMatchesMetadata(accepted.metadata, source.launch)) {
+  if (!starterSourceMatchesRunConfig(accepted, source.launch)) {
     throw new Error("The active run no longer carries the requested Starter World lineage.");
   }
   return createStarterRemixDraft({
@@ -384,6 +404,7 @@ export function prepareStarterRemixActiveWorldHandoff(
   launch: StarterWorldLaunch,
   acceptedRunConfig: SimulationRunConfig
 ): void {
+  pendingActiveWorldHandoff = null;
   const source = activeWorldHandoffSourceSchema.parse({
     starterWorldId: launch.starterWorldId,
     starterWorldVersion: launch.starterWorldVersion,
@@ -391,8 +412,8 @@ export function prepareStarterRemixActiveWorldHandoff(
     templateId: launch.templateId
   });
   const runConfig = validateRunConfig(acceptedRunConfig);
-  if (runConfig.templateId !== source.templateId) {
-    throw new Error("The accepted active run does not match the Starter template.");
+  if (!starterSourceMatchesRunConfig(runConfig, launch)) {
+    throw new Error("The accepted active run does not carry the requested Starter World lineage.");
   }
   pendingActiveWorldHandoff = { source, runConfig };
 }
@@ -403,15 +424,7 @@ export function consumeStarterRemixActiveWorldHandoff(source: StarterRemixSource
   if (!handoff || !sameActiveWorldHandoffSource(handoff.source, source.launch)) {
     return null;
   }
-  const matchedConfig = validateRunConfig({
-    ...handoff.runConfig,
-    metadata: {
-      starterWorldId: source.launch.starterWorldId,
-      starterWorldVersion: source.launch.starterWorldVersion,
-      ...(source.launch.recipeId ? { starterWorldRecipeId: source.launch.recipeId } : {})
-    }
-  });
-  return createStarterRemixDraftFromActiveRun(source, matchedConfig);
+  return createStarterRemixDraftFromActiveRun(source, handoff.runConfig);
 }
 
 export function starterRemixWorkshopHref(
@@ -515,22 +528,29 @@ export function readStarterRemixLineage(metadata: Record<string, JsonValue> | un
   if (!parsed.success) {
     return null;
   }
-  try {
-    const sourceConfig = parsed.data.source.configuration;
-    const validatedSource = validateRunConfig({
-      ...sourceConfig,
-      metadata: {}
-    });
-    if (
-      validatedSource.templateId !== parsed.data.source.templateId ||
-      parsed.data.source.templateId !== sourceConfig.templateId
-    ) {
-      return null;
-    }
-  } catch {
+  if (!starterRemixLineageMatchesCanonicalSource(parsed.data)) {
     return null;
   }
   return parsed.data;
+}
+
+export function starterRemixLaunchMatchesRunConfig(
+  config: SimulationRunConfig | null | undefined,
+  launch: StarterRemixWorldLaunch
+): boolean {
+  if (!config) {
+    return false;
+  }
+  try {
+    const accepted = validateRunConfig(config);
+    return (
+      accepted.scenarioId === launch.draftId &&
+      accepted.templateId === launch.templateId &&
+      starterRemixLaunchMatchesMetadata(accepted.metadata, launch)
+    );
+  } catch {
+    return false;
+  }
 }
 
 export function starterRemixLaunchMatchesMetadata(
@@ -548,24 +568,47 @@ export function starterRemixLaunchMatchesMetadata(
   );
 }
 
-export function starterSourceMatchesMetadata(
-  metadata: Record<string, JsonValue> | undefined,
+export function starterSourceMatchesRunConfig(
+  config: SimulationRunConfig,
   launch: StarterWorldLaunch
 ): boolean {
-  const remix = readStarterRemixLineage(metadata);
-  if (remix) {
-    return (
-      remix.source.starterWorldId === launch.starterWorldId &&
-      remix.source.starterWorldVersion === launch.starterWorldVersion &&
-      remix.source.recipeId === launch.recipeId &&
-      remix.source.templateId === launch.templateId
+  try {
+    const accepted = validateRunConfig(config);
+    if (accepted.templateId !== launch.templateId) {
+      return false;
+    }
+    const remix = readStarterRemixLineage(accepted.metadata);
+    if (remix) {
+      return accepted.scenarioId === remix.draftId && starterSourceIdentityMatchesLaunch({
+        starterWorldId: remix.source.starterWorldId,
+        starterWorldVersion: remix.source.starterWorldVersion,
+        starterWorldSlug: remix.source.starterWorldSlug,
+        ...(remix.source.recipeId ? { recipeId: remix.source.recipeId } : {}),
+        templateId: remix.source.templateId
+      }, launch);
+    }
+    const origin = readStarterWorldOrigin(accepted.metadata);
+    if (origin) {
+      return starterSourceIdentityMatchesLaunch(origin.source, launch);
+    }
+    const directSource = directStarterSourceIdentityFromMetadata(accepted.metadata);
+    return Boolean(
+      directSource &&
+      starterSourceIdentityMatchesLaunch(directSource, launch) &&
+      directStarterRunConfigMatchesCanonical(accepted, launch)
     );
+  } catch {
+    return false;
   }
-  return (
-    metadataString(metadata?.starterWorldId) === launch.starterWorldId &&
-    metadataString(metadata?.starterWorldVersion) === launch.starterWorldVersion &&
-    metadataString(metadata?.starterWorldRecipeId) === launch.recipeId
-  );
+}
+
+export function readStarterWorldOrigin(
+  metadata: Record<string, JsonValue> | undefined
+): StarterWorldOrigin | null {
+  const parsed = starterWorldOriginSchema.safeParse(metadata?.[starterWorldOriginMetadataKey]);
+  return parsed.success && canonicalStarterSourceIdentity(parsed.data.source)
+    ? parsed.data
+    : null;
 }
 
 export function createAcceptedLegacyRunConfig(input: {
@@ -601,7 +644,22 @@ export function createRemixAwareResetRunConfig(config: SimulationRunConfig): Sim
   const accepted = validateRunConfig(config);
   const lineage = readStarterRemixLineage(accepted.metadata);
   if (!lineage || accepted.scenarioId !== lineage.draftId) {
-    return createGenericResetRunConfig(accepted);
+    const generic = createGenericResetRunConfig(accepted);
+    const existingOrigin = readStarterWorldOrigin(accepted.metadata);
+    const directSource = directStarterSourceIdentityFromMetadata(accepted.metadata);
+    const source = existingOrigin?.source ?? (
+      directSource && directStarterRunConfigMatchesCanonical(accepted, directSource)
+        ? directSource
+        : null
+    );
+    return source
+      ? validateRunConfig({
+          ...generic,
+          metadata: {
+            [starterWorldOriginMetadataKey]: createStarterWorldOrigin(source) as unknown as JsonValue
+          }
+        })
+      : generic;
   }
   const generic = createGenericResetRunConfig(accepted);
   return validateRunConfig({
@@ -628,6 +686,161 @@ function sourceConfigurationFromRunConfig(config: SimulationRunConfig): z.infer<
     agentComposition: validated.agentComposition ?? {},
     environmentOptions: validated.environmentOptions ?? {}
   });
+}
+
+function starterRemixLineageMatchesCanonicalSource(lineage: StarterRemixLineage): boolean {
+  try {
+    const launchResult = resolveStarterWorldLaunch({
+      starterId: lineage.source.starterWorldId,
+      ...(lineage.source.recipeId ? { recipeId: lineage.source.recipeId } : {})
+    });
+    if (!launchResult.ok) {
+      return false;
+    }
+    const world = getStarterWorldById(lineage.source.starterWorldId);
+    const template = getProductionTemplate(lineage.source.templateId);
+    if (!world || !template || launchResult.launch.templateId !== template.id) {
+      return false;
+    }
+    const pack = getStarterWorldPackForWorld(world.id);
+    const sourceScenario = createStarterWorldScenario(launchResult.launch);
+    const canonicalConfiguration = sourceConfigurationFromRunConfig(runConfigFromScenario(sourceScenario));
+    return (
+      lineage.source.starterWorldVersion === world.version &&
+      lineage.source.starterWorldSlug === world.slug &&
+      lineage.source.recipeId === launchResult.launch.recipeId &&
+      lineage.source.collectionId === pack?.id &&
+      lineage.source.collectionVersion === pack?.version &&
+      lineage.source.templateId === template.id &&
+      lineage.source.templateVersion === template.version &&
+      lineage.source.scenarioId === sourceScenario.scenarioId &&
+      lineage.source.scenarioName === sourceScenario.name &&
+      sameSourceConfiguration(lineage.source.configuration, canonicalConfiguration)
+    );
+  } catch {
+    return false;
+  }
+}
+
+type StarterSourceIdentity = StarterWorldOrigin["source"];
+
+function directStarterSourceIdentityFromMetadata(
+  metadata: Record<string, JsonValue> | undefined
+): StarterSourceIdentity | null {
+  const starterWorldId = metadataString(metadata?.starterWorldId);
+  const starterWorldVersion = metadataString(metadata?.starterWorldVersion);
+  const starterWorldSlug = metadataString(metadata?.starterWorldSlug);
+  const recipeId = metadataString(metadata?.starterWorldRecipeId);
+  if (!starterWorldId || starterWorldVersion !== "1" || !starterWorldSlug) {
+    return null;
+  }
+  const launchResult = resolveStarterWorldLaunch({
+    starterId: starterWorldId,
+    ...(recipeId ? { recipeId } : {})
+  });
+  if (!launchResult.ok) {
+    return null;
+  }
+  return canonicalStarterSourceIdentity({
+    starterWorldId,
+    starterWorldVersion,
+    starterWorldSlug,
+    ...(recipeId ? { recipeId } : {}),
+    templateId: launchResult.launch.templateId
+  });
+}
+
+function directStarterRunConfigMatchesCanonical(
+  config: SimulationRunConfig,
+  source: StarterWorldLaunch | StarterSourceIdentity
+): boolean {
+  try {
+    const launchResult = resolveStarterWorldLaunch({
+      starterId: source.starterWorldId,
+      ...(source.recipeId ? { recipeId: source.recipeId } : {})
+    });
+    if (!launchResult.ok) {
+      return false;
+    }
+    const accepted = validateRunConfig(config);
+    const canonical = runConfigFromScenario(createStarterWorldScenario(launchResult.launch));
+    return (
+      accepted.scenarioId === canonical.scenarioId &&
+      accepted.scenarioName === canonical.scenarioName &&
+      sameSourceConfiguration(
+        sourceConfigurationFromRunConfig(accepted),
+        sourceConfigurationFromRunConfig(canonical)
+      )
+    );
+  } catch {
+    return false;
+  }
+}
+
+function canonicalStarterSourceIdentity(source: StarterSourceIdentity): StarterSourceIdentity | null {
+  const launchResult = resolveStarterWorldLaunch({
+    starterId: source.starterWorldId,
+    ...(source.recipeId ? { recipeId: source.recipeId } : {})
+  });
+  if (!launchResult.ok || !starterSourceIdentityMatchesLaunch(source, launchResult.launch)) {
+    return null;
+  }
+  return starterWorldOriginSchema.parse({
+    kind: "ortus-starter-world-origin",
+    schemaVersion: "1",
+    relationship: "derived-active-configuration",
+    source
+  }).source;
+}
+
+function starterSourceIdentityMatchesLaunch(
+  source: StarterSourceIdentity,
+  launch: StarterWorldLaunch
+): boolean {
+  return (
+    source.starterWorldId === launch.starterWorldId &&
+    source.starterWorldVersion === launch.starterWorldVersion &&
+    source.starterWorldSlug === launch.slug &&
+    source.recipeId === launch.recipeId &&
+    source.templateId === launch.templateId
+  );
+}
+
+function createStarterWorldOrigin(source: StarterSourceIdentity): StarterWorldOrigin {
+  return starterWorldOriginSchema.parse({
+    kind: "ortus-starter-world-origin",
+    schemaVersion: "1",
+    relationship: "derived-active-configuration",
+    source
+  });
+}
+
+function sameSourceConfiguration(
+  left: z.infer<typeof starterRemixSourceConfigurationSchema>,
+  right: z.infer<typeof starterRemixSourceConfigurationSchema>
+): boolean {
+  return (
+    left.schemaVersion === right.schemaVersion &&
+    left.templateId === right.templateId &&
+    left.seed === right.seed &&
+    left.initializationPreset === right.initializationPreset &&
+    left.behaviorMode === right.behaviorMode &&
+    sameBoundedValues(left.parameters, right.parameters) &&
+    sameBoundedValues(left.initializationOptions, right.initializationOptions) &&
+    sameBoundedValues(left.agentComposition, right.agentComposition) &&
+    sameBoundedValues(left.environmentOptions, right.environmentOptions)
+  );
+}
+
+function sameBoundedValues(
+  left: Record<string, string | number | boolean>,
+  right: Record<string, string | number | boolean>
+): boolean {
+  const leftKeys = Object.keys(left);
+  const rightKeys = Object.keys(right);
+  return leftKeys.length === rightKeys.length && leftKeys.every(
+    (key) => Object.prototype.hasOwnProperty.call(right, key) && Object.is(left[key], right[key])
+  );
 }
 
 function buildStarterRemixWorldLaunch(input: {

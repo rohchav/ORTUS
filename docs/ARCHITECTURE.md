@@ -1,6 +1,6 @@
 # ORTUS Canonical Architecture
 
-Status: CURRENT architectural source of truth after S1
+Status: CURRENT architectural source of truth after S1B
 
 This document defines ORTUS architectural vocabulary, authority, ownership, and dependency direction. It describes current implementation where it exists and labels future contracts explicitly. It does not make a planned type, service, or model family real.
 
@@ -116,7 +116,7 @@ validated Flocking RunConfig
 
 The migrated visual path does not continuously construct or publish `SimulationSnapshotView`. Full validated scenario or snapshot artifacts cross the runtime boundary only for explicit semantic operations such as import, export, restore, or comparison capture. Comparison capture projects the validated export into a detached read view with a pure data helper; it does not reconstruct a main-thread engine. Visual and UI publications may coalesce obsolete values; accepted commands and ordered model steps may not. Terminal Worker failure is visible and does not switch to `LocalRuntimeDriver` or fabricate continued execution. Recoverable validation rejection remains identified and bounded without relabeling the healthy runtime as failed.
 
-Replacement/reset/import configuration becomes active only after the runtime port advances generation. A rejected concurrent operation cannot replace the accepted request, config, readiness promise, or provenance. Generic Reset preserves accepted executable variant fields but clears scenario/prepared metadata because the generic constructor did not execute that prepared handoff.
+Replacement/reset/import configuration becomes active only after the runtime port advances generation. A rejected concurrent operation cannot replace the accepted request, config, readiness promise, or provenance. Generic Reset preserves accepted executable variant fields but clears scenario/prepared identity because the generic constructor did not execute that prepared handoff. S1B permits only a validated `derived-active-configuration` Starter-origin marker after a direct Starter setup is rebuilt; this does not claim the active configuration is the untouched source recipe.
 
 The other six production templates retain the legacy path:
 
@@ -201,7 +201,7 @@ The canonical architecture records rather than disguises these risks:
 - `src/simulation/runtime` includes browser Worker transport types. This is intentional for the audited runtime port but means the runtime package is not yet a platform-neutral package boundary.
 - `SimulationRun` ownership is real but distributed across engine, runtime session, and UI/store lifecycle. A future explicit run record must not duplicate or compete with those authorities.
 - Current local experiments and Atlas preview produce model-output summaries, not the planned observation/evidence architecture.
-- S1 remixing is configuration editing over existing hand-built templates. It does not remove the missing generic `ModelDefinition -> RuntimePlan` boundary, add composition, or make structural Workshop artifacts executable.
+- S1/S1B remixing is audited configuration editing over existing hand-built templates. It does not remove the missing generic `ModelDefinition -> RuntimePlan` boundary, add composition, make structural Workshop artifacts executable, or validate the current form-first Workshop as the intended future modeling UX.
 
 The A0B static gate enforces current truths only: simulation implementation cannot import or re-export React/Zustand/UI/state/app modules or use browser rendering/storage globals; authoritative simulation code cannot reference direct or bracketed `Math.random`; runtime dynamic imports, CommonJS `require`, `eval`, `Function`, and string-evaluated timers are forbidden; future research code may import only public observation/experiment contracts from simulation; product/UI code cannot import private runtime internals; and the intrinsic-JSX accessibility check rejects obvious missing keyboard contracts, inert click roles, and negative tab order. Existing focused simulation canvases retain an explicit `role="img"` smoke-gate exception; that exception is not keyboard-equivalence or accessibility evidence. The gate remains scoped AST analysis, not full dependency resolution, data-flow analysis, ESLint, browser verification, or accessibility conformance.
 
@@ -212,6 +212,7 @@ The A0B static gate enforces current truths only: simulation implementation cann
 | Template definition | Template registry | Application version | Registry/version change |
 | Starter definition | Starter registry | Immutable application-version content | Registry/version change; remixing always creates a derivative |
 | S1 remix draft | Workshop over authoritative Starter/scenario/template services | Unsaved current page session until launched, reset, source change, or navigation | Invalid edit remains a draft; reload or source/draft identity change discards it; no durable persistence |
+| Derived Starter origin | S1B reset/rebuild service from an exact canonical source or an existing validated origin | Active configuration only | Source mismatch, invalid metadata, template change, generic non-Starter replacement, or explicit source restoration |
 | RunConfig | Scenario/setup services | Until replaced or discarded | Explicit rebuild/replacement |
 | Active run | Engine/runtime session | Initialization to disposal | Replacement, terminal failure, disposal |
 | `SimulationSnapshotView` | Engine snapshot projector | Detached value for a particular tick; consumers must treat it as read-only, but it is not deep-frozen | Becomes stale when the run advances; never persisted implicitly |

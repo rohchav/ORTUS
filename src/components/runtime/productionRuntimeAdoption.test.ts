@@ -14,6 +14,7 @@ import {
 import {
   createStarterWorldScenario,
   readStarterRemixLineage,
+  readStarterWorldOrigin,
   resolveStarterRemixRequest,
   resolveStarterWorldLaunch
 } from "../../lib/starterWorlds";
@@ -74,10 +75,10 @@ describe("I1 production runtime adoption", () => {
       scenarioName: "I1 prepared flock",
       seed: "i1-prepared-seed"
     });
-    expect(state.lastNotice).toMatch(/Worker-owned run/i);
+    expect(state.lastNotice).toMatch(/queued for the Worker-owned runtime; readiness follows Worker acceptance/i);
   });
 
-  it("clears prepared-recipe provenance without changing executable variant semantics on generic reset", () => {
+  it("preserves canonical Starter origin without retaining prepared-recipe identity across Flocking rebuild and reset", () => {
     const resolved = resolveStarterWorldLaunch({
       starterId: "coordination-under-sensor-noise",
       recipeId: "coordination-clear-signals",
@@ -93,23 +94,46 @@ describe("I1 production runtime adoption", () => {
       starterWorldRecipeId: "coordination-clear-signals"
     });
 
+    useSimulationStore.getState().setParameters({
+      ...preparedConfig.parameters,
+      alignmentWeight: 0.2
+    }, "Rebuild accepted Flocking configuration");
+    const rebuiltConfig = useSimulationStore.getState().flockingRuntimeConfig!;
+    expect(rebuiltConfig.parameters.alignmentWeight).toBe(0.2);
+    expect(rebuiltConfig.metadata).not.toHaveProperty("starterWorldId");
+    expect(rebuiltConfig.metadata).not.toHaveProperty("starterWorldRecipeId");
+    expect(readStarterWorldOrigin(rebuiltConfig.metadata)?.source).toMatchObject({
+      starterWorldId: "coordination-under-sensor-noise",
+      recipeId: "coordination-clear-signals",
+      templateId: "flocking-boids"
+    });
+    expect(rebuiltConfig).toMatchObject({
+      initializationPreset: preparedConfig.initializationPreset,
+      initializationOptions: preparedConfig.initializationOptions,
+      behaviorMode: preparedConfig.behaviorMode
+    });
+
     useSimulationStore.getState().reset();
     const state = useSimulationStore.getState();
 
     expect(state.engine).toBeNull();
     expect(state.latestSnapshot).toBeNull();
-    expect(state.flockingRuntimeConfig?.metadata).toEqual({});
+    expect(readStarterWorldOrigin(state.flockingRuntimeConfig?.metadata)?.source).toMatchObject({
+      starterWorldId: "coordination-under-sensor-noise",
+      recipeId: "coordination-clear-signals"
+    });
     expect(state.flockingRuntimeConfig).not.toHaveProperty("scenarioId");
     expect(state.flockingRuntimeConfig).not.toHaveProperty("scenarioName");
     expect(state.flockingRuntimeConfig).toMatchObject({
       seed: preparedConfig.seed,
-      parameters: preparedConfig.parameters,
+      parameters: rebuiltConfig.parameters,
       initializationPreset: preparedConfig.initializationPreset,
       initializationOptions: preparedConfig.initializationOptions,
       behaviorMode: preparedConfig.behaviorMode,
       agentComposition: preparedConfig.agentComposition,
       environmentOptions: preparedConfig.environmentOptions
     });
+    expect(state.lastNotice).toMatch(/Starter origin was preserved; prepared-recipe identity and run progress were discarded/i);
   });
 
   it("keeps Flocking remix configuration Worker-owned and preserves its derivative lineage on reset", () => {
@@ -157,6 +181,51 @@ describe("I1 production runtime adoption", () => {
     expect(reset.latestSnapshot?.tick).toBe(0);
     expect(readStarterRemixLineage(reset.engine?.metadata)?.draftId).toBe(resolved.source.draft.scenarioId);
     expect(reset.lastNotice).toMatch(/source lineage was preserved/i);
+
+    useSimulationStore.getState().setParameters({
+      ...reset.parameterValues,
+      infectionProbability: 0.2
+    }, "Rebuild accepted legacy remix");
+    const rebuilt = useSimulationStore.getState();
+    expect(rebuilt.engine).not.toBeNull();
+    expect(rebuilt.latestSnapshot?.tick).toBe(0);
+    expect(rebuilt.parameterValues.infectionProbability).toBe(0.2);
+    expect(readStarterRemixLineage(rebuilt.engine?.metadata)?.draftId).toBe(resolved.source.draft.scenarioId);
+  });
+
+  it.each([
+    ["epidemic", "infectionProbability", 0.2],
+    ["predator-prey", "preyReproductionProbability", 0.02]
+  ])("keeps %s Starter origin and accepted variant structure on main-thread parameter rebuild", (
+    starterWorldId,
+    parameterId,
+    value
+  ) => {
+    const resolved = resolveStarterWorldLaunch({ starterId: starterWorldId });
+    if (!resolved.ok) {
+      throw new Error(resolved.message);
+    }
+    useSimulationStore.getState().applyScenario(createStarterWorldScenario(resolved.launch));
+    const accepted = useSimulationStore.getState();
+    expect(accepted.engine).not.toBeNull();
+    const beforeMetadata = accepted.engine!.metadata;
+
+    useSimulationStore.getState().setParameters({
+      ...accepted.parameterValues,
+      [parameterId]: value
+    }, `Rebuild ${starterWorldId} configuration`);
+    const rebuilt = useSimulationStore.getState();
+
+    expect(rebuilt.engine).not.toBeNull();
+    expect(rebuilt.flockingRuntimeConfig).toBeNull();
+    expect(rebuilt.latestSnapshot?.tick).toBe(0);
+    expect(rebuilt.parameterValues[parameterId]).toBe(value);
+    expect(rebuilt.engine?.metadata).not.toHaveProperty("starterWorldId");
+    expect(readStarterWorldOrigin(rebuilt.engine?.metadata)?.source.starterWorldId).toBe(starterWorldId);
+    expect(rebuilt.engine?.metadata).toMatchObject({
+      initializationPreset: beforeMetadata.initializationPreset,
+      behaviorMode: beforeMetadata.behaviorMode
+    });
   });
 
   it("rejects the legacy store import path for Worker-owned Flocking artifacts", () => {
@@ -424,6 +493,8 @@ describe("I1 production runtime adoption", () => {
     expect(controller).toContain("ortus-production-flocking-runtime");
     expect(controller).not.toContain("LocalRuntimeDriver");
     expect(controller).toContain("no implicit local fallback was started");
+    expect(provider).toContain("readStarterWorldOrigin");
+    expect(provider).toContain("Starter origin were preserved; prepared-recipe identity and run progress were discarded");
     expect(provider).not.toContain("SimulationEngine");
     expect(provider).not.toContain("runFrameSteps");
     expect(world).toContain("ImmersiveWorldCanvas");

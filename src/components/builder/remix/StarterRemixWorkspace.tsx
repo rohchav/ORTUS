@@ -23,9 +23,10 @@ import {
 } from "../../../simulation";
 import {
   consumeStarterRemixActiveWorldHandoff,
+  createAcceptedLegacyRunConfig,
   createStarterRemixWorldLaunch,
   requireStarterWorldById,
-  starterRemixLaunchMatchesMetadata,
+  starterRemixLaunchMatchesRunConfig,
   type StarterRemixSource
 } from "../../../lib/starterWorlds";
 import { useSimulationStore } from "../../../state/simulationStore";
@@ -187,11 +188,20 @@ export function StarterRemixWorkspace({ source, onMeaningfulChange }: StarterRem
       const launch = createStarterRemixWorldLaunch(acceptedDraft);
       useSimulationStore.getState().applyScenario(acceptedDraft);
       const acceptedState = useSimulationStore.getState();
-      const acceptedMetadata = acceptedState.flockingRuntimeConfig?.metadata ?? acceptedState.engine?.metadata;
+      const acceptedConfig = acceptedState.flockingRuntimeConfig ?? (
+        acceptedState.engine?.template.id === launch.templateId
+          ? createAcceptedLegacyRunConfig({
+              templateId: acceptedState.engine.template.id,
+              seed: acceptedState.engine.seed,
+              parameters: acceptedState.engine.parameters,
+              metadata: acceptedState.engine.metadata
+            })
+          : null
+      );
       if (
         acceptedState.lastError ||
         acceptedState.selectedTemplateId !== launch.templateId ||
-        !starterRemixLaunchMatchesMetadata(acceptedMetadata, launch)
+        !starterRemixLaunchMatchesRunConfig(acceptedConfig, launch)
       ) {
         throw new Error(acceptedState.lastError ?? "The established runtime path did not accept this derivative.");
       }

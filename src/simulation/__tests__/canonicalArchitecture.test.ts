@@ -147,7 +147,7 @@ describe("A0 canonical architecture and source hierarchy", () => {
     expect(capabilities).toContain("Global service availability does not grant template support.");
   });
 
-  it("records the human-pending S1 to S1B handoff without restoring obsolete sequencing", () => {
+  it("records the human-pending S1B to Visual Systems Workbench handoff without restoring obsolete sequencing", () => {
     const roadmap = source(canonicalPaths.roadmap);
     const activeStatus = [
       source(join(repoRoot, "README.md")),
@@ -162,10 +162,12 @@ describe("A0 canonical architecture and source hierarchy", () => {
     expect(roadmap).toContain("UR0 - Product Leverage + Comprehension Gate | TECHNICAL/EXPERT COMPLETE; HUMAN PENDING");
     expect(roadmap).toContain("UR0R - Product Comprehension + Exploration Repair | COMPLETE");
     expect(roadmap).toContain("S1 - Starter -> Remix Bridge | COMPLETE");
-    expect(roadmap).toContain("S1B - Starter -> Remix Bridge Audit | NEXT / UNSTARTED");
+    expect(roadmap).toContain("S1B - Starter -> Remix Bridge Audit | COMPLETE");
+    expect(roadmap).toContain("S2 - Visual Systems Workbench | NEXT / UNSTARTED");
     expect(roadmap).toContain("UR0 HUMAN COMPREHENSION PENDING");
-    expect(roadmap).toContain("S1B NEXT / UNSTARTED");
-    expect(roadmap).toContain("Do not mark S2 next until S1B closes");
+    expect(roadmap).toContain("S1B COMPLETE");
+    expect(roadmap).toContain("S2 NEXT / UNSTARTED");
+    expect(roadmap).toContain("S1B adds no S2 components, controls, runtime, persistence, or capability status");
     expect(roadmap).toContain("C4 is not deferred until I5B.");
     expect(roadmap).toContain("MF-series milestones create reusable computational/scientific execution families");
     expect(activeStatus).not.toContain("A0 is next and unstarted");

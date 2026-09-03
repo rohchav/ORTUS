@@ -14,9 +14,11 @@ import {
   createStarterRemixWorldLaunch,
   prepareStarterRemixActiveWorldHandoff,
   readStarterRemixLineage,
+  readStarterWorldOrigin,
   resolveStarterRemixRequest,
   resolveStarterRemixWorldLaunch,
   starterRemixLaunchMatchesMetadata,
+  starterRemixLaunchMatchesRunConfig,
   starterRemixMetadataKey,
   starterRemixWorkshopHref,
   starterRemixWorldHref
@@ -132,6 +134,45 @@ describe("Starter to Remix contract", () => {
     });
   });
 
+  it("rejects structurally valid lineage that disagrees with the canonical Starter source", () => {
+    const result = resolveStarterRemixRequest(
+      { starterId: "flocking" },
+      { now: fixedNow }
+    );
+    expect(result.ok).toBe(true);
+    if (!result.ok) {
+      throw new Error(result.message);
+    }
+
+    const forgedSourceConfiguration = {
+      [starterRemixMetadataKey]: {
+        ...result.source.lineage,
+        source: {
+          ...result.source.lineage.source,
+          configuration: {
+            ...result.source.lineage.source.configuration,
+            parameters: {
+              ...result.source.lineage.source.configuration.parameters,
+              alignmentWeight: 0.2
+            }
+          }
+        }
+      }
+    };
+    const forgedSourceIdentity = {
+      [starterRemixMetadataKey]: {
+        ...result.source.lineage,
+        source: {
+          ...result.source.lineage.source,
+          starterWorldSlug: "forged-source"
+        }
+      }
+    };
+
+    expect(readStarterRemixLineage(forgedSourceConfiguration)).toBeNull();
+    expect(readStarterRemixLineage(forgedSourceIdentity)).toBeNull();
+  });
+
   it("loads a matching accepted World configuration while retaining canonical source configuration", () => {
     const result = resolveStarterRemixRequest(
       { starterId: "flocking", entry: "world" },
@@ -143,7 +184,7 @@ describe("Starter to Remix contract", () => {
     }
     const sourceConfig = runConfigFromScenario(result.source.sourceScenario);
     const activeConfig = validateRunConfig({
-      ...sourceConfig,
+      ...createRemixAwareResetRunConfig(sourceConfig),
       parameters: {
         ...sourceConfig.parameters,
         alignmentWeight: 0.2
@@ -154,7 +195,7 @@ describe("Starter to Remix contract", () => {
 
     expect(draft.parameters.alignmentWeight).toBe(0.2);
     expect(lineage?.entry).toBe("world");
-    expect(lineage?.parentScenarioId).toBe(sourceConfig.scenarioId);
+    expect(lineage?.parentScenarioId).toBeUndefined();
     expect(lineage?.source.configuration.parameters.alignmentWeight).toBe(
       result.source.sourceScenario.parameters.alignmentWeight
     );
@@ -175,13 +216,13 @@ describe("Starter to Remix contract", () => {
     if (!result.ok) {
       throw new Error(result.message);
     }
+    const sourceConfig = runConfigFromScenario(result.source.sourceScenario);
     const activeConfig = validateRunConfig({
-      ...runConfigFromScenario(result.source.sourceScenario),
+      ...createRemixAwareResetRunConfig(sourceConfig),
       parameters: {
         ...result.source.sourceScenario.parameters,
         alignmentWeight: 0.2
-      },
-      metadata: {}
+      }
     });
 
     prepareStarterRemixActiveWorldHandoff(result.source.launch, activeConfig);
@@ -201,6 +242,49 @@ describe("Starter to Remix contract", () => {
     prepareStarterRemixActiveWorldHandoff(result.source.launch, activeConfig);
     expect(consumeStarterRemixActiveWorldHandoff(epidemic.source)).toBeNull();
     expect(consumeStarterRemixActiveWorldHandoff(result.source)).toBeNull();
+  });
+
+  it("rejects cross-Starter accepted configuration and invalidates an older pending handoff", () => {
+    const flocking = resolveStarterRemixRequest(
+      { starterId: "flocking", entry: "world" },
+      { now: fixedNow }
+    );
+    const coordination = resolveStarterRemixRequest(
+      {
+        starterId: "coordination-under-sensor-noise",
+        recipeId: "coordination-clear-signals",
+        entry: "world"
+      },
+      { now: fixedNow }
+    );
+    expect(flocking.ok).toBe(true);
+    expect(coordination.ok).toBe(true);
+    if (!flocking.ok || !coordination.ok) {
+      throw new Error("Expected both Flocking Starter sources to resolve.");
+    }
+
+    const flockingConfig = runConfigFromScenario(flocking.source.sourceScenario);
+    const coordinationConfig = runConfigFromScenario(coordination.source.sourceScenario);
+    prepareStarterRemixActiveWorldHandoff(flocking.source.launch, flockingConfig);
+
+    expect(() => prepareStarterRemixActiveWorldHandoff(
+      flocking.source.launch,
+      coordinationConfig
+    )).toThrow(/lineage/i);
+    expect(consumeStarterRemixActiveWorldHandoff(flocking.source)).toBeNull();
+
+    const forgedDirectConfig = validateRunConfig({
+      ...flockingConfig,
+      parameters: {
+        ...flockingConfig.parameters,
+        alignmentWeight: 0.2
+      }
+    });
+    expect(() => prepareStarterRemixActiveWorldHandoff(
+      flocking.source.launch,
+      forgedDirectConfig
+    )).toThrow(/lineage/i);
+    expect(readStarterWorldOrigin(createRemixAwareResetRunConfig(forgedDirectConfig).metadata)).toBeNull();
   });
 
   it("builds strict ID-only Workshop and resulting World launch URLs", () => {
@@ -223,6 +307,10 @@ describe("Starter to Remix contract", () => {
     expect(resolveStarterRemixRequest({
       starterId: "coordination-under-sensor-noise"
     })).toMatchObject({ ok: false, code: "source-mismatch" });
+    expect(resolveStarterRemixRequest(JSON.parse(
+      '{"starterId":"flocking","__proto__":{"polluted":true}}'
+    ))).toMatchObject({ ok: false, code: "invalid-request" });
+    expect(({} as { polluted?: boolean }).polluted).toBeUndefined();
   });
 
   it("requires active derivative metadata before accepting the unsaved World URL", () => {
@@ -241,6 +329,12 @@ describe("Starter to Remix contract", () => {
     expect(resolved).toEqual({ ok: true, launch });
     expect(starterRemixLaunchMatchesMetadata(result.source.draft.metadata, launch)).toBe(true);
     expect(starterRemixLaunchMatchesMetadata({}, launch)).toBe(false);
+    const acceptedConfig = runConfigFromScenario(result.source.draft);
+    expect(starterRemixLaunchMatchesRunConfig(acceptedConfig, launch)).toBe(true);
+    expect(starterRemixLaunchMatchesRunConfig({
+      ...acceptedConfig,
+      scenarioId: "remix-flocking-other"
+    }, launch)).toBe(false);
     expect(resolveStarterRemixWorldLaunch({
       starterId: "flocking",
       draftId: result.source.draft.scenarioId,
@@ -248,7 +342,7 @@ describe("Starter to Remix contract", () => {
     })).toEqual({ ok: false, message: "The remix launch request is malformed." });
   });
 
-  it("preserves derivative provenance on Reset but retains generic prepared-source Reset semantics", () => {
+  it("preserves derivative provenance on Reset and retains only canonical Starter origin for prepared sources", () => {
     const result = resolveStarterRemixRequest({ starterId: "flocking" }, { now: fixedNow });
     expect(result.ok).toBe(true);
     if (!result.ok) {
@@ -266,7 +360,19 @@ describe("Starter to Remix contract", () => {
     const preparedReset = createRemixAwareResetRunConfig(preparedConfig);
     expect(preparedReset.scenarioId).toBeUndefined();
     expect(preparedReset.scenarioName).toBeUndefined();
-    expect(preparedReset.metadata).toEqual({});
+    expect(preparedReset.metadata).not.toHaveProperty("starterWorldId");
+    expect(preparedReset.metadata).not.toHaveProperty("starterWorldRecipeId");
+    expect(readStarterWorldOrigin(preparedReset.metadata)?.source).toMatchObject({
+      starterWorldId: "flocking",
+      starterWorldVersion: "1",
+      starterWorldSlug: "collective-motion",
+      templateId: "flocking-boids"
+    });
+
+    prepareStarterRemixActiveWorldHandoff(result.source.launch, preparedReset);
+    const resetDerivative = consumeStarterRemixActiveWorldHandoff(result.source);
+    expect(resetDerivative?.scenarioId).not.toBe(result.source.sourceScenario.scenarioId);
+    expect(readStarterRemixLineage(resetDerivative?.metadata)?.source.starterWorldId).toBe("flocking");
   });
 
   it("reconstructs accepted legacy configuration fields without live state", () => {

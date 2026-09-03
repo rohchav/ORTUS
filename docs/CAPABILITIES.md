@@ -1,6 +1,6 @@
 # ORTUS Current Capabilities
 
-Status: CURRENT capability source of truth after S1
+Status: CURRENT capability source of truth after S1B
 
 This document answers what ORTUS actually supports now. Code and tests remain authoritative for behavior. `src/simulation/registry` is the machine-readable authority for systems primitives, artifact families, and per-template capability summaries. This document summarizes that evidence for contributors and product language.
 
@@ -46,7 +46,7 @@ The registry deliberately keeps the global `socialLearningRuntime` primitive res
 - The visual path constructs no continuous full snapshot. Validated scenario/snapshot artifacts cross the boundary only for explicit import, export, restore, or comparison capture.
 - Terminal Worker failure is visible, stops execution, and has no hidden Local fallback.
 - Recoverable validation rejection is identified separately, leaves the accepted run ready, and does not advance accepted configuration or provenance.
-- Generic Reset preserves accepted executable variant fields while removing scenario/prepared provenance that the generic constructor did not earn.
+- Generic Reset preserves accepted executable variant fields while removing scenario/prepared identity that the generic constructor did not earn. A rebuilt direct Starter configuration may retain only its validated `derived-active-configuration` origin.
 - Reset of an accepted S1 remix preserves that derivative's exact executable configuration and Starter lineage while discarding run progress.
 
 **CURRENT legacy production path and runtime references**
@@ -71,7 +71,7 @@ Default entity counts and local performance reports are not engine limits, high-
 | Scenario library | At most 50 validated browser-local authored scenarios | Accounts, cloud persistence, model definitions, or run history |
 | Panel/avatar preferences | Narrow browser-local presentation preferences | Research or learner profiles |
 | Atlas preview | In-memory, deterministic, exact-coordinate Flocking preview with one/two axes, bounded seeds/points/ticks/work, sequential fresh engines, and cancellation | Saved landscape, interpolation, regime detection, general probe execution, or evidence certification |
-| Starter remix | Unsaved derivative scenario built from one strict Starter/recipe identity, edited through existing template configuration definitions, and launched through the established runtime path | Mutation of canonical Starter content, durable model storage, generic model construction, schema/graph execution, or a new runtime |
+| Starter remix | S1B-audited unsaved derivative scenario built from one strict Starter/recipe identity, edited through existing template configuration definitions, and launched through the established runtime path | Mutation of canonical Starter content, durable model storage, generic model construction, schema/graph execution, or a new runtime |
 
 Lab and Atlas foundations do not persist research records. Guided investigations do not persist progress, score learning, or infer comprehension. Workshop drafts are local UI state unless explicitly exported or saved through an existing bounded scenario facility.
 
@@ -79,11 +79,13 @@ Lab and Atlas foundations do not persist research records. Guided investigations
 
 All eleven current runnable Starter World definitions classify as cleanly remixable through their existing executable contracts. The four flagship collection worlds still require one of their eight strict recipe identities; this does not create a second scenario or parameter registry.
 
-S1 derives an unsaved scenario from the immutable source Starter. Workshop may edit the seed, template-defined numeric parameters, and supported initialization, behavior, composition, or environment options exposed by the authoritative template contract. Template identity, entity/state/process/space structure, rules, metrics, graph topology, schemas, and code remain fixed. Invalid draft values remain local and cannot replace the accepted World run.
+S1 derives an unsaved scenario from the immutable source Starter; S1B independently audits and hardens that bridge. Workshop may edit the seed, template-defined numeric parameters, and supported initialization, behavior, composition, or environment options exposed by the authoritative template contract. Template identity, entity/state/process/space structure, rules, metrics, graph topology, schemas, and code remain fixed. Invalid draft values remain local and cannot replace the accepted World run.
 
 `Run Remix` applies the derivative through the existing scenario validation and launch path. `flocking-boids` remains the sole Worker-capable runtime template, including Starter recipes backed by that template; every other template stays on its established main-thread path. Source Starter, unsaved derivative, and resulting run remain distinct provenance identities.
 
-Remix state is page-session only. Strict URLs carry source and draft IDs rather than configuration payloads. A current World may transfer its matching accepted configuration through a bounded one-use in-memory handoff; reload expires an unsaved World derivative instead of substituting its source or a generic run. This is not model persistence.
+Remix state is page-session only. Strict URLs carry source and draft IDs rather than configuration payloads. A current World may transfer only a full accepted configuration whose validated canonical source matches the requested Starter/recipe, through a bounded one-use in-memory handoff. A failed preparation clears an older handoff. Reload expires an unsaved World derivative instead of substituting its source or a generic run. This is not model persistence.
+
+S1B validates this narrow plumbing, not the current form-first Workshop as the intended future product direction. The default Guided/Advanced forms remain structural and non-executable. S2 is next and unstarted as a proposed example-first Visual Systems Workbench; no S2 visual decomposition, composition, or runtime capability exists yet.
 
 ## Structural And Service-Only Capability
 
@@ -119,7 +121,7 @@ These services do not execute attached declarations, generate a runtime, prove a
 | Start `/` | Task-centered entry and featured paths | Progression engine or account state |
 | Explore Worlds `/worlds` | Eleven validated runnable content definitions over existing templates | Eleven distinct runtime families |
 | World `/world` | Setup, playback, observation, template perturbation, compare, explain, bounded experiments, scenario/snapshot exchange, and a Remix route for an identified Starter-backed run; Flocking uses the production Worker-backed immersive shell while other templates retain the legacy path | Cross-template Worker support, scientific observation records, Lab persistence, or model authoring inside World |
-| Workshop `/builder` | Default Guided/Advanced structural authoring remains non-executable; Starter entry adds a bounded Remix workspace that inspects fixed structure, edits only supported executable configuration, validates a derivative scenario, and explicitly launches it | General model composition, executable schemas/graphs, arbitrary entities/processes/relations/formulas/code, or silent active-World mutation |
+| Workshop `/builder` | Default Guided/Advanced structural form authoring remains non-executable; Starter entry adds an S1B-audited bounded Remix workspace that inspects fixed structure, edits only supported executable configuration, validates a derivative scenario, and explicitly launches it | Validation of the form-first UX as the future Workshop, general model composition, executable schemas/graphs, arbitrary entities/processes/relations/formulas/code, or silent active-World mutation |
 | Lab `/lab` | Non-persistent information architecture and evidence vocabulary | Saved investigations, evidence records, notebooks, or validation |
 | Atlas `/atlas` | Non-persistent evidence/landscape/probe vocabulary plus one bounded ephemeral Flocking preview | Saved maps, general sampling, discovery, regime inference, or real-world certification |
 | Guides | One optional `Reading a Flock` workflow over existing recipes/tasks | Auto-run, hard gates, learner profile, scoring, or educational-outcome evidence |

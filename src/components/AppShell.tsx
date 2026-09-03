@@ -29,7 +29,7 @@ import {
   getStarterWorldLaunchRecipeById,
   prepareStarterRemixActiveWorldHandoff,
   requireStarterWorldById,
-  starterRemixLaunchMatchesMetadata,
+  starterRemixLaunchMatchesRunConfig,
   type StarterRemixWorldLaunch,
   type StarterWorldLaunch
 } from "../lib/starterWorlds";
@@ -135,10 +135,19 @@ function AppShellContent({ initialTemplateId, initialWorkspaceMode, starterLaunc
     hydratePreferences();
     const state = useSimulationStore.getState();
     if (starterRemixLaunch) {
-      const acceptedMetadata = state.flockingRuntimeConfig?.metadata ?? state.engine?.metadata;
+      const acceptedConfig = state.flockingRuntimeConfig ?? (
+        state.engine?.template.id === starterRemixLaunch.templateId
+          ? createAcceptedLegacyRunConfig({
+              templateId: state.engine.template.id,
+              seed: state.engine.seed,
+              parameters: state.engine.parameters,
+              metadata: state.engine.metadata
+            })
+          : null
+      );
       const accepted =
         state.selectedTemplateId === starterRemixLaunch.templateId &&
-        starterRemixLaunchMatchesMetadata(acceptedMetadata, starterRemixLaunch);
+        starterRemixLaunchMatchesRunConfig(acceptedConfig, starterRemixLaunch);
       setRemixLaunchState(accepted ? "ready" : "missing");
       return;
     }

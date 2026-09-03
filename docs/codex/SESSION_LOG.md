@@ -1,5 +1,51 @@
 # ORTUS Codex Session Log
 
+## 2026-09-03 - S1B Starter -> Remix Bridge Audit And Visual Systems Workbench Handoff
+
+Goal: independently audit and harden the bounded S1 Starter-to-Remix plumbing, preserve runtime and provenance authority, reject capability inflation, and hand the roadmap to an unstarted example-first Visual Systems Workbench without implementing S2 UI.
+
+Starting state:
+
+- `main` was clean at `b400795` (`feat: bridge starter worlds into remix`), aligned with the observed `origin/main` reference.
+- S1 was complete. S1B and S2 were unstarted. The UR0 human-comprehension gate remained pending.
+- Flocking remained the sole Worker-backed production template; six non-Flocking templates retained their main-thread engines.
+
+Adversarial findings and fixes:
+
+- P0: none.
+- P1: fixed four families. Structurally valid lineage now must exactly match the canonical Starter/recipe/template/source scenario and configuration. Active-World handoff can no longer relabel another same-template source, always invalidates an older pending handoff before preparation, and consumes accepted metadata without rewriting it. Resulting-World acceptance now requires the full validated accepted `RunConfig`, including derivative scenario identity. Setup rebuild/reset now preserves authoritative executable variant fields while distinguishing exact Remix lineage from a direct Starter's narrow validated `derived-active-configuration` origin.
+- P2: fixed two bounded presentation families. Worker scenario application no longer claims readiness before Worker acceptance, and Worker/legacy reset notices both distinguish retained Starter origin from discarded prepared-recipe identity and run progress.
+- The built production app returned the explicit unsafe-query stop state for crafted `constructor` input in `0.084s`. The earlier development-stream hang did not reproduce in production.
+
+Authority and behavior result:
+
+- Canonical Starter, recipe, pack, and guide definitions remain recursively frozen. Remix drafts are derivative data and never mutations of source content.
+- Workshop Remix continues to derive controls from production templates plus existing initialization, behavior, composition, environment, scenario-validation, and scenario-application contracts. No parallel parameter registry, arbitrary formula/code path, schema interpreter, or Builder graph execution was added.
+- Invalid candidates remain local and cannot replace an accepted run. Source -> derivative -> accepted run identity is strict and fail-closed.
+- Production Flocking retains one Worker-owned engine, RNG, scheduler, tick accumulator, and modeled-state authority. The other six templates retain their established main-thread runtime paths.
+- Active-World transfer is one-use, accepted-config-only, source-matched, stale-safe, and in-memory. Accepted Remix Reset, direct-Starter rebuild/reset, Reset to source, reload, Back/Forward, source switching, empty/duplicate/unsupported/stale/payload/prototype-like query input, and keyboard operation have focused coverage.
+
+Product verdict:
+
+- S1 plumbing is technically accepted after hardening.
+- The current form-first Guided/Advanced Workshop is not validated as the intended future Workshop. Passing S1B does not prove comprehension, generativity, or product fit.
+- S2 is next and unstarted as **Visual Systems Workbench**: example-first visual decomposition of worked systems, explicit agents/cells/nodes/edges/fields/spaces/processes/interactions, expand/collapse and relationship inspection, bounded split/duplicate/substitute/merge concepts where supported, curiosity-driven Remix, and forms as secondary inspector/advanced candidates.
+- S2 must distinguish `EXECUTABLE NOW`, `STRUCTURALLY REPRESENTABLE`, `REFERENCE`, and `FUTURE`. S1B implements no S2 UI or generic composition/runtime capability.
+
+Final verification:
+
+- Focused post-fix contracts passed `7 files / 60 tests`.
+- `npm run lint` passed, including `391` production TypeScript files in the scoped architecture/accessibility baseline.
+- `npm run typecheck` passed.
+- `npm test` passed `89 files / 764 tests` in `104.29s`.
+- `npm run build` compiled in `35.1s` and generated `23` pages.
+- `npm run perf:runtime` passed exact 100/500 exports, automatic medians `141.724/20.251` ticks/s, and unchanged bounded packet checks.
+- `npm run perf:simulation` passed exact Flocking pair counts `316,971/7,721,264` and the bounded Atlas smoke.
+- Complete Playwright/Axe passed `204/204 (34.5m)` with no failures, retries, or skips.
+- `git diff --check` passed at closure.
+
+Decision: S1B complete. S2 Visual Systems Workbench is next / unstarted. The UR0 human-comprehension gate remains pending. No S2 UI was implemented and no push is authorized.
+
 ## 2026-08-31 - S1 Starter -> Remix Bridge
 
 Goal: bridge eligible immutable Starter World definitions into bounded, unsaved configuration derivatives that launch through existing runtime authority, without making default Workshop authoring executable or implementing S2/S3 composition.

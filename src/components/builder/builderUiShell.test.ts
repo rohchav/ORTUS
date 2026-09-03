@@ -348,7 +348,7 @@ describe("safe builder UI shell", () => {
     expect(structuralBuilderSource).not.toContain("useSimulationStore");
     expect(remixSource).toContain("useSimulationStore");
     expect(remixSource).toContain("applyScenario(acceptedDraft)");
-    expect(remixSource).toContain("starterRemixLaunchMatchesMetadata");
+    expect(remixSource).toContain("starterRemixLaunchMatchesRunConfig");
     expect(builderSource).not.toContain("SimulationEngine");
     expect(builderSource).not.toContain("latestSnapshot");
     expect(builderSource).not.toContain("runFrameSteps");

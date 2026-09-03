@@ -1,8 +1,8 @@
 # Starter Remix Bridge
 
-Status: S1 COMPLETE; S1B NEXT / UNSTARTED
+Status: S1 COMPLETE; S1B COMPLETE; S2 NEXT / UNSTARTED
 
-This record documents the bounded executable-authoring bridge implemented by S1. It is subordinate to `../CAPABILITIES.md`, `../ARCHITECTURE.md`, `../SCIENTIFIC_MODEL.md`, and `../ROADMAP.md`.
+This record documents the bounded executable-authoring bridge implemented by S1 and hardened by S1B. The independent audit is `STARTER_REMIX_BRIDGE_AUDIT.md`. Both records are subordinate to `../CAPABILITIES.md`, `../ARCHITECTURE.md`, `../SCIENTIFIC_MODEL.md`, and `../ROADMAP.md`.
 
 ## Implemented Flow
 
@@ -44,7 +44,7 @@ S1 keeps these fixed:
 - metrics and interventions;
 - schemas, Builder graphs, formulas, scripts, and code.
 
-The default Guided and Advanced Workshop experiences remain structural and non-executable. S1 does not create a parallel parameter registry, compile `ModelSchemaDefinition`, execute visual-builder edges, or implement S2/S3 composition.
+The default Guided and Advanced Workshop experiences remain structural and non-executable. S1/S1B do not create a parallel parameter registry, compile `ModelSchemaDefinition`, execute visual-builder edges, or implement S2/S3 composition. S1B's technical pass does not validate those form-first surfaces as the intended future Workshop experience.
 
 ## Draft, Launch, And Authority
 
@@ -60,7 +60,7 @@ Run details distinguish:
 Source Starter -> Unsaved remix -> active run
 ```
 
-The derivative never claims to be the untouched prepared source. Reset of an accepted Remix rebuilds the same seed, supported configuration, scenario identity, and source lineage at tick zero while discarding run progress. Generic prepared-source Reset retains its established rule of dropping prepared provenance.
+The derivative never claims to be the untouched prepared source. Reset of an accepted Remix rebuilds the same seed, supported configuration, scenario identity, and source lineage at tick zero while discarding run progress. Rebuilding or resetting a direct Starter run drops untouched prepared identity and retains only a narrow validated Starter-origin marker for its derived active configuration. Workshop's explicit Reset to source restores the canonical source draft.
 
 Drafts are page-session state, not durable models. Strict URLs contain source and derivative IDs, never editable payloads. An active World transfer uses one bounded, matching, accepted-config-only in-memory handoff. Back/Forward and source changes create fresh draft identity; reload of an unsaved World derivative fails closed instead of substituting the source Starter or a generic run.
 
@@ -70,6 +70,6 @@ The core flow is keyboard-operable without drag-only or hover-only steps. Contro
 
 ## S2 Handoff Gaps
 
-Current Remix remains field-oriented and tied to existing templates. It cannot add or remove entities, state, processes, relations, spaces, rules, metrics, or reusable blocks; manipulate structure visually; compose model parts; define a new model family; or construct a model from an open question. S2 must inherit these observed constraints, preserve the executable-versus-structural boundary, and wait for S1B before becoming next.
+Current Remix remains form-oriented and tied to existing templates. It cannot add or remove entities, state, processes, relations, spaces, rules, metrics, or reusable blocks; manipulate structure visually; compose model parts; define a new model family; or construct a model from an open question. This is an observed product limit, not an endorsed future UX.
 
-S1B must independently audit source immutability, lineage, candidate/accepted isolation, both runtime paths, reset and navigation semantics, keyboard/responsive behavior, and capability language before S2 begins.
+S1B is complete. S2 is next and unstarted as the **Visual Systems Workbench**: an example-first direction for taking working systems apart visually, inspecting explicit primitives and relationships, and supporting bounded decomposition/remix operations only where real contracts exist. Starter examples are intended as worked examples; current form editors are secondary inspector/advanced candidates. S1B implements none of that S2 UI.

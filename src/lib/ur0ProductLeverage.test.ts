@@ -27,7 +27,8 @@ describe("UR0 product leverage and comprehension gate", () => {
     expect(report).toContain("UR0 HUMAN COMPREHENSION GATE: PENDING");
     expect(roadmap).toContain("UR0R - Product Comprehension + Exploration Repair | COMPLETE");
     expect(roadmap).toContain("S1 - Starter -> Remix Bridge | COMPLETE");
-    expect(roadmap).toContain("S1B - Starter -> Remix Bridge Audit | NEXT / UNSTARTED");
+    expect(roadmap).toContain("S1B - Starter -> Remix Bridge Audit | COMPLETE");
+    expect(roadmap).toContain("S2 - Visual Systems Workbench | NEXT / UNSTARTED");
     expect(roadmap).toContain("O1/E1 remain high-priority scientific infrastructure");
   });
 

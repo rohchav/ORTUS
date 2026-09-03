@@ -23,14 +23,17 @@ import {
   runConfigFromScenario,
   type SimulationRunConfig,
   type SimulationSnapshotView,
+  type SimulationTemplate,
   supportsWorkerRuntime,
+  synchronizeVariantOptionsWithParameters,
   validateRunConfig,
   validateScenario
 } from "../simulation";
 import {
   createAcceptedLegacyRunConfig,
   createRemixAwareResetRunConfig,
-  readStarterRemixLineage
+  readStarterRemixLineage,
+  readStarterWorldOrigin
 } from "../lib/starterWorlds";
 import { defaultParameters, getTemplateDescriptor, requireTemplateDescriptor, templateDescriptors, type TemplateId } from "../lib/templateVisuals";
 import { loadPanelState, savePanelState, type PanelState } from "../lib/panelPersistence";
@@ -211,7 +214,8 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
       templateId: get().selectedTemplateId,
       parameters: get().parameterValues,
       seed: trimmed,
-      keepSelection: false
+      keepSelection: false,
+      baseRunConfig: currentAcceptedRunConfig(get())
     });
   },
 
@@ -226,7 +230,8 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
       parameters: nextParameters,
       seed: get().seed,
       keepSelection: false,
-      errorPrefix: `Parameter ${key}`
+      errorPrefix: `Parameter ${key}`,
+      baseRunConfig: currentAcceptedRunConfig(get())
     });
   },
 
@@ -237,7 +242,8 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
       parameters: nextParameters,
       seed: get().seed,
       keepSelection: false,
-      errorPrefix: reason
+      errorPrefix: reason,
+      baseRunConfig: currentAcceptedRunConfig(get())
     });
   },
 
@@ -317,6 +323,7 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
     if (workerConfig && supportsWorkerRuntime(get().selectedTemplateId)) {
       const resetConfig = createRemixAwareResetRunConfig(workerConfig);
       const remixLineage = readStarterRemixLineage(resetConfig.metadata);
+      const starterOrigin = readStarterWorldOrigin(resetConfig.metadata);
       set({
         engine: null,
         latestSnapshot: null,
@@ -332,7 +339,9 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
         lastError: null,
         lastNotice: remixLineage
           ? "Run reset to the accepted unsaved remix configuration. Source lineage was preserved; run progress was discarded."
-          : null
+          : starterOrigin
+            ? "Run reset to its active configuration. Starter origin was preserved; prepared-recipe identity and run progress were discarded."
+            : null
       });
       return;
     }
@@ -347,8 +356,9 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
         });
         const resetConfig = createRemixAwareResetRunConfig(activeConfig);
         const remixLineage = readStarterRemixLineage(resetConfig.metadata);
-        if (remixLineage) {
-          const engine = createEngineFromRunConfig(resetConfig);
+        const starterOrigin = readStarterWorldOrigin(resetConfig.metadata);
+        if (remixLineage || starterOrigin) {
+          const engine = createLegacyUiEngine(resetConfig);
           configurePerformanceInstrumentation(engine);
           engine.setSpeed(get().speedMultiplier);
           set({
@@ -363,7 +373,9 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
             interventionHistory: [],
             isRunning: false,
             lastError: null,
-            lastNotice: "Run reset to the accepted unsaved remix configuration. Source lineage was preserved; run progress was discarded."
+            lastNotice: remixLineage
+              ? "Run reset to the accepted unsaved remix configuration. Source lineage was preserved; run progress was discarded."
+              : "Run reset to its active configuration. Starter origin was preserved; prepared-recipe identity and run progress were discarded."
           });
           return;
         }
@@ -459,10 +471,12 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
           interventionHistory: [],
           isRunning: false,
           lastError: null,
-          lastNotice: `Applied scenario "${scenarioValidation.scenario.name}". A fresh Worker-owned run is ready at tick 0.`
+          lastNotice: `Accepted scenario "${scenarioValidation.scenario.name}". Its tick-0 configuration is queued for the Worker-owned runtime; readiness follows Worker acceptance.`
         });
         if (scenarioValidation.warnings.length > 0) {
-          set({ lastNotice: `Applied scenario "${scenarioValidation.scenario.name}" with warning: ${scenarioValidation.warnings[0]}` });
+          set({
+            lastNotice: `Accepted scenario "${scenarioValidation.scenario.name}" for the Worker-owned runtime with warning: ${scenarioValidation.warnings[0]} Worker readiness remains pending.`
+          });
         }
         return;
       }
@@ -840,18 +854,25 @@ function replaceEngine(
     seed: string;
     keepSelection: boolean;
     errorPrefix?: string;
+    baseRunConfig?: SimulationRunConfig | null;
   }
 ): void {
   try {
     const descriptor = requireTemplateDescriptor(options.templateId);
+    const rebuildConfig = options.baseRunConfig?.templateId === descriptor.id
+      ? createRebuildRunConfig(options.baseRunConfig, options.parameters, options.seed, descriptor.template)
+      : null;
     if (supportsWorkerRuntime(descriptor.id)) {
-      const runConfig = validateRunConfig({
-        schemaVersion: "1",
-        templateId: descriptor.id,
-        seed: options.seed,
-        parameters: options.parameters,
-        metadata: {}
-      }, descriptor.template);
+      const runConfig = rebuildConfig ?? validateRunConfig(
+        {
+          schemaVersion: "1",
+          templateId: descriptor.id,
+          seed: options.seed,
+          parameters: options.parameters,
+          metadata: {}
+        },
+        descriptor.template
+      );
       get().engine?.pause();
       set({
         selectedTemplateId: descriptor.id,
@@ -871,11 +892,16 @@ function replaceEngine(
       });
       return;
     }
-    const engine = new SimulationEngine(descriptor.template, {
-      seed: options.seed,
-      parameters: options.parameters,
-      performance: performanceInstrumentationOptions()
-    });
+    const engine = rebuildConfig
+      ? createLegacyUiEngine(rebuildConfig)
+      : new SimulationEngine(descriptor.template, {
+          seed: options.seed,
+          parameters: options.parameters,
+          performance: performanceInstrumentationOptions()
+        });
+    if (rebuildConfig) {
+      configurePerformanceInstrumentation(engine);
+    }
     engine.setSpeed(get().speedMultiplier);
     set({
       selectedTemplateId: descriptor.id,
@@ -883,7 +909,7 @@ function replaceEngine(
       latestSnapshot: engine.createSnapshot(),
       flockingRuntimeConfig: null,
       parameterValues: engine.parameters,
-      seed: options.seed,
+      seed: engine.seed,
       selectedEntityId: options.keepSelection ? get().selectedEntityId : null,
       interventionTargetPoint: null,
       interventionTargetCell: null,
@@ -896,6 +922,62 @@ function replaceEngine(
     const prefix = options.errorPrefix ? `${options.errorPrefix}: ` : "";
     set({ lastError: `${prefix}${errorMessage(error)}`, lastNotice: null });
   }
+}
+
+function currentAcceptedRunConfig(state: SimulationUiState): SimulationRunConfig | null {
+  if (state.flockingRuntimeConfig?.templateId === state.selectedTemplateId) {
+    return validateRunConfig(state.flockingRuntimeConfig);
+  }
+  if (state.engine?.template.id !== state.selectedTemplateId) {
+    return null;
+  }
+  return createAcceptedLegacyRunConfig({
+    templateId: state.engine.template.id,
+    seed: state.engine.seed,
+    parameters: state.engine.parameters,
+    metadata: state.engine.metadata
+  });
+}
+
+function createRebuildRunConfig(
+  activeConfig: SimulationRunConfig,
+  parameters: ParameterValues,
+  seed: string,
+  template: SimulationTemplate
+): SimulationRunConfig {
+  const base = createRemixAwareResetRunConfig(activeConfig);
+  const synchronized = synchronizeVariantOptionsWithParameters(
+    template,
+    {
+      agentComposition: base.agentComposition ?? {},
+      environmentOptions: base.environmentOptions ?? {}
+    },
+    parameters
+  );
+  return validateRunConfig({
+    ...base,
+    seed,
+    parameters,
+    agentComposition: synchronized.agentComposition,
+    environmentOptions: synchronized.environmentOptions
+  }, template);
+}
+
+function createLegacyUiEngine(config: SimulationRunConfig): SimulationEngine {
+  const accepted = validateRunConfig(config);
+  return createEngineFromRunConfig({
+    ...accepted,
+    metadata: {
+      ...accepted.metadata,
+      ...(accepted.scenarioId ? { scenarioId: accepted.scenarioId } : {}),
+      ...(accepted.scenarioName ? { scenarioName: accepted.scenarioName } : {}),
+      ...(accepted.initializationPreset ? { initializationPreset: accepted.initializationPreset } : {}),
+      ...(accepted.initializationOptions ? { initializationOptions: accepted.initializationOptions } : {}),
+      ...(accepted.behaviorMode ? { behaviorMode: accepted.behaviorMode } : {}),
+      ...(accepted.agentComposition ? { agentComposition: accepted.agentComposition } : {}),
+      ...(accepted.environmentOptions ? { environmentOptions: accepted.environmentOptions } : {})
+    }
+  });
 }
 
 function configurePerformanceInstrumentation(engine: SimulationEngine): void {
