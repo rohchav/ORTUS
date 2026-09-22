@@ -155,11 +155,13 @@ test("Workshop, Lab, and Atlas state their bounded roles and Atlas owns one vert
   await page.setViewportSize({ width: 900, height: 700 });
 
   await page.goto("/builder", { waitUntil: "domcontentloaded" });
-  const decomposition = page.locator('[data-workshop-decomposition="flocking"]');
-  await expect(decomposition).toContainText("Flocking, decomposed into model pieces");
-  await expect(decomposition).toContainText("Current structural drafting");
-  await expect(decomposition).toContainText("Not yet runnable visual composition");
-  await expect(decomposition).toContainText("does not load a workspace, generate a template, rewire rules, or execute a model");
+  const workbench = page.locator('[data-visual-workbench]');
+  await expect(workbench).toHaveAttribute("data-workbench-template", "flocking-boids");
+  await expect(page.getByRole("tab", { name: /Workbench/ })).toHaveAttribute("aria-selected", "true");
+  await expect(workbench).toContainText("Immutable Starter");
+  await expect(workbench).toContainText("General executable composition is not implemented.");
+  await expect(page.locator("[data-workshop-decomposition]")).toHaveCount(0);
+  await expect(page.getByRole("form", { name: "Model purpose" })).toHaveCount(0);
   expect((await new AxeBuilder({ page }).analyze()).violations.map((violation) => violation.id)).toEqual([]);
 
   await page.goto("/lab", { waitUntil: "domcontentloaded" });

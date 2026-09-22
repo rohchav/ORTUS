@@ -14,8 +14,8 @@ const pathways = [
     href: "/world"
   },
   {
-    label: "Draft a model structure",
-    description: "Describe a non-runnable model structure step by step or inspect exact structural artifacts in Workshop.",
+    label: "Take apart a system",
+    description: "Open a worked example, inspect its pieces, and remix supported properties in Workshop.",
     href: "/builder"
   },
   {

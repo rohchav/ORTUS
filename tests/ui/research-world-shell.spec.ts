@@ -27,7 +27,7 @@ const orientationContracts = {
   },
   Workshop: {
     id: "workshop",
-    purpose: "Describe, author, and inspect model structure through Guided or Advanced Builder tools.",
+    purpose: "Take apart working systems and remix supported pieces.",
     boundary: "A valid structure is not automatically runnable.",
     technicalTerm: "ortus.modelSchema structural artifact."
   },
@@ -90,6 +90,11 @@ async function openDestination(page: Page, destination: (typeof destinations)[nu
   await page.waitForLoadState("networkidle", { timeout: 5_000 }).catch(() => undefined);
   await expect(page.locator(destination.readySelector), `${destination.path} should render the destination surface`).toBeVisible();
   await expectShellStructure(page, destination.label);
+}
+
+async function openGuidedWorkshop(page: Page) {
+  await openDestination(page, destinations[3]);
+  await page.getByRole("tab", { name: /Structural Draft/i }).click();
 }
 
 async function configureAtlasPreview(
@@ -215,8 +220,9 @@ async function expectRouteOrientation(page: Page, destination: (typeof destinati
     await expect(page.getByRole("link", { name: "Open World" })).toHaveAttribute("href", "/world");
     await expect(page.getByRole("link", { name: "Compare runs" })).toHaveAttribute("href", "/world?task=compare");
   } else {
-    await expect(page.getByText("These Workshop drafts do not execute; they are structural artifacts.", { exact: false })).toBeVisible();
-    await expect(page.getByRole("tab", { name: /Guided Builder/i })).toBeVisible();
+    await expect(page.locator("[data-visual-workbench]")).toBeVisible();
+    await expect(page.locator(".workbench-footer").getByText("General executable composition is not implemented.", { exact: false })).toBeVisible();
+    await expect(page.getByRole("tab", { name: /Structural Draft/i })).toBeVisible();
     await expect(page.getByRole("tab", { name: /Advanced Builder/i })).toBeVisible();
   }
 }
@@ -249,7 +255,7 @@ async function expectCapabilityGuidance(page: Page, destination: (typeof destina
     destinationId === "world"
       ? "World output is simulated model state. A runnable model is not automatically calibrated or validated against the real world."
       : destinationId === "workshop"
-        ? "Workshop artifacts describe model structure. They do not compile or execute a custom model."
+        ? "Workbench pieces explain existing models. Remix edits supported properties; structural drafts and graphs do not execute a custom model."
         : destinationId === "lab"
           ? "Lab currently provides a non-persistent evidence-record foundation; it does not save research records."
           : "Atlas preview results stay page-local and describe model output, not certified real-world discoveries.";
@@ -264,7 +270,7 @@ async function expectCapabilityGuidance(page: Page, destination: (typeof destina
     destinationId === "world"
       ? "World hosts the active simulation surface, run controls, snapshots, metrics, and template-defined command paths for the current local run."
       : destinationId === "workshop"
-        ? "Workshop supports bounded Guided drafting and the complete Advanced structural authoring, import, export, validation-assistance, and inspection surfaces."
+        ? "Workshop opens worked systems as an inspectable Workbench. Starter Remix changes only supported template properties through the existing scenario path. Guided and Advanced structural authoring remain available as secondary tools."
         : destinationId === "lab"
           ? "Lab exposes non-persistent lifecycle semantics, model-only evidence boundaries, and a conceptual experiment-ledger scaffold."
           : "Configure one- or two-axis supported numeric grids and explicitly run bounded local previews over the implemented Flocking runtime and bundled scenario.";
@@ -551,12 +557,16 @@ async function navigateToResearchTool(page: Page, label: "Atlas" | "Lab") {
 }
 
 async function expectWorkshopPreserved(page: Page) {
-  await expect(page.getByRole("region", { name: "Builder structural shell" })).toBeVisible();
-  const guidedTab = page.getByRole("tab", { name: /Guided Builder/i });
+  await expect(page.getByRole("region", { name: "Visual Systems Workbench", exact: true })).toBeVisible();
+  const workbenchTab = page.getByRole("tab", { name: /Workbench/i });
+  const guidedTab = page.getByRole("tab", { name: /Structural Draft/i });
   const advancedTab = page.getByRole("tab", { name: /Advanced Builder/i });
+  await expect(workbenchTab).toHaveAttribute("aria-selected", "true");
+  await expect(page.locator("[data-visual-workbench]")).toBeVisible();
   await expect(guidedTab).toBeVisible();
-  await expect(guidedTab).toHaveAttribute("aria-selected", "true");
+  await expect(guidedTab).toHaveAttribute("aria-selected", "false");
   await expect(advancedTab).toHaveAttribute("aria-selected", "false");
+  await guidedTab.click();
   await expect(page.getByRole("heading", { name: "Model purpose", level: 3 })).toBeVisible();
   await expect(page.getByRole("form", { name: "Model purpose" })).toBeVisible();
   await expect(page.getByText("Guided Builder supports a bounded subset of the structural artifact.")).toBeHidden();
@@ -586,6 +596,7 @@ async function expectWorkshopPreserved(page: Page) {
 }
 
 async function fillMinimalGuidedDraft(page: Page, modelName = "Exchange Commons") {
+  await page.getByRole("tab", { name: /Structural Draft/i }).click();
   await page.getByRole("textbox", { name: /Model name/i }).fill(modelName);
   await page.getByRole("textbox", { name: /Short description/i }).fill("A bounded structural draft for local exchange.");
   await page.getByRole("textbox", { name: /Explicit limitation/i }).fill("This stylized structure does not represent or predict real people.");
@@ -1045,6 +1056,8 @@ for (const destination of destinations) {
 
     if (destination.path === "/world") {
       await page.getByRole("button", { name: "Run details" }).click();
+    } else if (destination.path === "/builder") {
+      await page.getByRole("tab", { name: /Structural Draft/i }).click();
     }
 
     for (const label of disclosureLabels) {
@@ -1066,6 +1079,9 @@ for (const destination of destinations) {
     await expect(page.locator(destination.readySelector)).toBeVisible();
     if (destination.path === "/world") {
       await page.getByRole("button", { name: "Run details" }).click();
+    } else if (destination.path === "/builder") {
+      await expect(page.getByRole("tab", { name: /Workbench/i })).toHaveAttribute("aria-selected", "true");
+      await page.getByRole("tab", { name: /Structural Draft/i }).click();
     }
     for (const label of disclosureLabels) {
       await expect(page.getByRole("button", { name: label, exact: true })).toHaveAttribute("aria-expanded", "false");
@@ -1629,15 +1645,22 @@ test.describe("Atlas preview reduced motion", () => {
   });
 });
 
-test("Guided Builder is the default semantic authoring view and Advanced remains one keyboard action away", async ({ page }) => {
+test("Workbench is primary and secondary Guided and Advanced remain keyboard reachable", async ({ page }) => {
   const diagnostics = observePageDiagnostics(page);
   await page.setViewportSize({ width: 1280, height: 720 });
   await openDestination(page, destinations[3]);
 
   const viewTabs = page.getByRole("tablist", { name: "Workshop authoring views" });
-  const guidedTab = viewTabs.getByRole("tab", { name: /Guided Builder/i });
+  const workbenchTab = viewTabs.getByRole("tab", { name: /Workbench/i });
+  const guidedTab = viewTabs.getByRole("tab", { name: /Structural Draft/i });
   const advancedTab = viewTabs.getByRole("tab", { name: /Advanced Builder/i });
-  await expect(viewTabs.getByRole("tab")).toHaveCount(2);
+  await expect(viewTabs.getByRole("tab")).toHaveCount(3);
+  await expect(workbenchTab).toHaveAttribute("aria-selected", "true");
+  await expect(page.locator("[data-visual-workbench]")).toBeVisible();
+  await expect(page.getByRole("form", { name: "Model purpose" })).toHaveCount(0);
+  await workbenchTab.focus();
+  await page.keyboard.press("ArrowRight");
+  await expect(guidedTab).toBeFocused();
   await expect(guidedTab).toHaveAttribute("aria-selected", "true");
   await expect(page.getByRole("form", { name: "Model purpose" })).toBeVisible();
 
@@ -1663,6 +1686,9 @@ test("Guided Builder is the default semantic authoring view and Advanced remains
   await expect(advancedTab).toBeFocused();
   await expect(advancedTab).toHaveAttribute("aria-selected", "true");
   await page.keyboard.press("Home");
+  await expect(workbenchTab).toBeFocused();
+  await expect(workbenchTab).toHaveAttribute("aria-selected", "true");
+  await page.keyboard.press("ArrowRight");
   await expect(guidedTab).toBeFocused();
   await expect(guidedTab).toHaveAttribute("aria-selected", "true");
 
@@ -1683,7 +1709,7 @@ test("Guided Builder is the default semantic authoring view and Advanced remains
 test("Guided step validation focuses errors and Back preserves exact entered values", async ({ page }) => {
   const diagnostics = observePageDiagnostics(page);
   await page.setViewportSize({ width: 1280, height: 720 });
-  await openDestination(page, destinations[3]);
+  await openGuidedWorkshop(page);
 
   await page.getByRole("button", { name: "Continue", exact: true }).click();
   const errorSummary = page.locator("#guided-error-summary-purpose");
@@ -1721,7 +1747,7 @@ test("Guided step validation focuses errors and Back preserves exact entered val
 test("Start over requires keyboard-safe confirmation and Cancel preserves the local draft", async ({ page }) => {
   const diagnostics = observePageDiagnostics(page);
   await page.setViewportSize({ width: 1280, height: 720 });
-  await openDestination(page, destinations[3]);
+  await openGuidedWorkshop(page);
 
   const modelName = page.getByRole("textbox", { name: /Model name/i });
   const startOver = page.getByRole("button", { name: "Start over", exact: true });
@@ -1751,18 +1777,19 @@ test("Start over requires keyboard-safe confirmation and Cancel preserves the lo
 test("Guided draft, step, and selected view reset on reload without adding storage keys", async ({ page }) => {
   const diagnostics = observePageDiagnostics(page);
   await page.setViewportSize({ width: 1280, height: 720 });
-  await openDestination(page, destinations[3]);
+  await openGuidedWorkshop(page);
   const storageBefore = await readStorageKeys(page);
 
   await page.getByRole("textbox", { name: /Model name/i }).fill("Ephemeral Draft");
   await page.getByRole("tab", { name: /Advanced Builder/i }).click();
-  await page.getByRole("tab", { name: /Guided Builder/i }).click();
+  await page.getByRole("tab", { name: /Structural Draft/i }).click();
   await expect(page.getByRole("textbox", { name: /Model name/i })).toHaveValue("Ephemeral Draft");
 
   page.once("dialog", (dialog) => void dialog.accept());
   await page.reload({ waitUntil: "domcontentloaded" });
   await page.waitForLoadState("networkidle", { timeout: 5_000 }).catch(() => undefined);
-  await expect(page.getByRole("tab", { name: /Guided Builder/i })).toHaveAttribute("aria-selected", "true");
+  await expect(page.getByRole("tab", { name: /Workbench/i })).toHaveAttribute("aria-selected", "true");
+  await page.getByRole("tab", { name: /Structural Draft/i }).click();
   await expect(page.getByRole("textbox", { name: /Model name/i })).toHaveValue("");
   await expect(page.getByRole("heading", { name: "Model purpose", level: 3 })).toBeVisible();
   expect(await readStorageKeys(page)).toEqual(storageBefore);
@@ -1775,7 +1802,7 @@ test("Guided draft, step, and selected view reset on reload without adding stora
 test("explicit handoff opens the exact Advanced draft and protects an existing Advanced draft", async ({ page }) => {
   const diagnostics = observePageDiagnostics(page);
   await page.setViewportSize({ width: 1440, height: 900 });
-  await openDestination(page, destinations[3]);
+  await openGuidedWorkshop(page);
 
   await fillMinimalGuidedDraft(page, "First Guided Draft");
   await page.getByRole("button", { name: "Open draft in Advanced Builder" }).click();
@@ -1785,7 +1812,7 @@ test("explicit handoff opens the exact Advanced draft and protects an existing A
   await expect(advancedName).toHaveValue("First Guided Draft");
   await expect(page.getByText("Guided structural draft opened in Advanced Author Schema. It remains local, unsaved, and not runnable.")).toBeVisible();
 
-  await page.getByRole("tab", { name: /Guided Builder/i }).click();
+  await page.getByRole("tab", { name: /Structural Draft/i }).click();
   await page.getByRole("navigation", { name: "Guided structural authoring steps" }).getByRole("button", { name: /Model purpose/i }).click();
   await page.getByRole("textbox", { name: /Model name/i }).fill("Second Guided Draft");
   await page.getByRole("button", { name: "Review", exact: true }).click();
@@ -1795,7 +1822,7 @@ test("explicit handoff opens the exact Advanced draft and protects an existing A
   await expect(overwriteDialog).toContainText("First Guided Draft");
   await expect(overwriteDialog).toContainText("Second Guided Draft");
   await overwriteDialog.getByRole("button", { name: "Cancel" }).click();
-  await expect(page.getByRole("tab", { name: /Guided Builder/i })).toHaveAttribute("aria-selected", "true");
+  await expect(page.getByRole("tab", { name: /Structural Draft/i })).toHaveAttribute("aria-selected", "true");
   await expect(page.getByText("Second Guided Draft", { exact: true }).first()).toBeVisible();
   await expect(page.getByRole("button", { name: "Open draft in Advanced Builder" })).toBeFocused();
 
@@ -1803,7 +1830,7 @@ test("explicit handoff opens the exact Advanced draft and protects an existing A
   await expect(advancedName).toHaveValue("First Guided Draft");
   await expect(page.getByText("Guided handoff canceled. The current Advanced Author Schema draft was preserved.")).toBeVisible();
   await expect(page.getByText("Guided handoff staged. Confirm before replacing the current Advanced Author Schema draft.")).toHaveCount(0);
-  await page.getByRole("tab", { name: /Guided Builder/i }).click();
+  await page.getByRole("tab", { name: /Structural Draft/i }).click();
 
   await page.getByRole("button", { name: "Open draft in Advanced Builder" }).click();
   await overwriteDialog.getByRole("button", { name: "Confirm" }).click();
@@ -1827,7 +1854,7 @@ test("Guided and Advanced authoring states remain reachable across the required 
 
   for (const viewport of viewports) {
     await page.setViewportSize({ width: viewport.width, height: viewport.height });
-    await openDestination(page, destinations[3]);
+    await openGuidedWorkshop(page);
     const stepNavigation = page.getByRole("navigation", { name: "Guided structural authoring steps" });
 
     for (const step of steps) {
@@ -1879,7 +1906,7 @@ test("Guided and Advanced authoring states remain reachable across the required 
     await expect(page.getByRole("tabpanel", { name: /Graph View/i })).toBeVisible();
     await expectNoDocumentHorizontalOverflow(page);
 
-    await page.getByRole("tab", { name: /Guided Builder/i }).click();
+    await page.getByRole("tab", { name: /Structural Draft/i }).click();
     await stepNavigation.getByRole("button", { name: /Model purpose/i }).click();
     await page.getByRole("textbox", { name: /Model name/i }).fill(`${viewport.label} replacement draft`);
     await page.getByRole("button", { name: "Review", exact: true }).click();
@@ -1898,7 +1925,7 @@ test("Guided steps, dialogs, handoff, and Advanced modes are Axe-clean with quie
   test.setTimeout(90_000);
   const diagnostics = observePageDiagnostics(page);
   await page.setViewportSize({ width: 1280, height: 720 });
-  await openDestination(page, destinations[3]);
+  await openGuidedWorkshop(page);
   const stepNavigation = page.getByRole("navigation", { name: "Guided structural authoring steps" });
   const steps = [
     "Model purpose",
@@ -1943,7 +1970,7 @@ test("Guided steps, dialogs, handoff, and Advanced modes are Axe-clean with quie
   await page.getByRole("tab", { name: /Graph View/i }).click();
   await expectAxeClean(page);
 
-  await page.getByRole("tab", { name: /Guided Builder/i }).click();
+  await page.getByRole("tab", { name: /Structural Draft/i }).click();
   await stepNavigation.getByRole("button", { name: /Model purpose/i }).click();
   await page.getByRole("textbox", { name: /Model name/i }).fill("Axe replacement draft");
   await page.getByRole("button", { name: "Review", exact: true }).click();
@@ -2012,7 +2039,7 @@ test.describe("Guided Builder reduced motion and review accessibility", () => {
     const diagnostics = observePageDiagnostics(page);
     await page.setViewportSize({ width: 1280, height: 600 });
     await page.emulateMedia({ reducedMotion: "reduce" });
-    await openDestination(page, destinations[3]);
+    await openGuidedWorkshop(page);
     await fillMinimalGuidedDraft(page, "Reduced Motion Draft");
 
     await expect(page.getByText("Structural validity does not mean runtime support or real-world validity.")).toBeVisible();

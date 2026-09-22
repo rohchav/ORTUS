@@ -54,7 +54,7 @@ export const researchDestinations: readonly ResearchDestinationDefinition[] = Ob
     id: "workshop",
     label: "Workshop",
     route: "/builder",
-    purpose: "Draft and inspect non-runnable model structure.",
+    purpose: "Take apart working systems and remix supported pieces.",
     availability: "available",
     navigationOrder: 4
   }

@@ -22,7 +22,7 @@ const routes = [
     label: "builder",
     path: "/builder",
     readySelector: "section.builder-shell",
-    routeRegionName: "Builder structural shell"
+    routeRegionName: "Visual Systems Workbench"
   }
 ] as const;
 

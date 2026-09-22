@@ -1,6 +1,6 @@
 # ORTUS Current Capabilities
 
-Status: CURRENT capability source of truth after S1B
+Status: CURRENT capability source of truth after S2
 
 This document answers what ORTUS actually supports now. Code and tests remain authoritative for behavior. `src/simulation/registry` is the machine-readable authority for systems primitives, artifact families, and per-template capability summaries. This document summarizes that evidence for contributors and product language.
 
@@ -85,7 +85,7 @@ S1 derives an unsaved scenario from the immutable source Starter; S1B independen
 
 Remix state is page-session only. Strict URLs carry source and draft IDs rather than configuration payloads. A current World may transfer only a full accepted configuration whose validated canonical source matches the requested Starter/recipe, through a bounded one-use in-memory handoff. A failed preparation clears an older handoff. Reload expires an unsaved World derivative instead of substituting its source or a generic run. This is not model persistence.
 
-S1B validates this narrow plumbing, not the current form-first Workshop as the intended future product direction. The default Guided/Advanced forms remain structural and non-executable. S2 is next and unstarted as a proposed example-first Visual Systems Workbench; no S2 visual decomposition, composition, or runtime capability exists yet.
+S1B validates the narrow derivative plumbing. S2 makes the Visual Systems Workbench the primary `/builder` surface: worked examples, expandable pieces, relationship inspection, shared materials, curated questions, and contextual S1 controls. Guided Builder remains available as Structural Draft, with Advanced Builder alongside it; both remain secondary, structural, and non-executable. S2 is complete; its rendered product review is accepted. This presentation change adds no composition or runtime capability. S2B is next and unstarted. See `product/VISUAL_SYSTEMS_WORKBENCH.md` for the verification record.
 
 ## Structural And Service-Only Capability
 
@@ -121,7 +121,7 @@ These services do not execute attached declarations, generate a runtime, prove a
 | Start `/` | Task-centered entry and featured paths | Progression engine or account state |
 | Explore Worlds `/worlds` | Eleven validated runnable content definitions over existing templates | Eleven distinct runtime families |
 | World `/world` | Setup, playback, observation, template perturbation, compare, explain, bounded experiments, scenario/snapshot exchange, and a Remix route for an identified Starter-backed run; Flocking uses the production Worker-backed immersive shell while other templates retain the legacy path | Cross-template Worker support, scientific observation records, Lab persistence, or model authoring inside World |
-| Workshop `/builder` | Default Guided/Advanced structural form authoring remains non-executable; Starter entry adds an S1B-audited bounded Remix workspace that inspects fixed structure, edits only supported executable configuration, validates a derivative scenario, and explicitly launches it | Validation of the form-first UX as the future Workshop, general model composition, executable schemas/graphs, arbitrary entities/processes/relations/formulas/code, or silent active-World mutation |
+| Workshop `/builder` | Primary Visual Systems Workbench with worked systems, decomposition, relationship inspection, shared materials, curated questions, and contextual edits through the S1B-audited derivative bridge; Structural Draft/Advanced remain secondary | General executable composition, executable schemas/graphs, arbitrary entities/processes/relations/formulas/code, live Workshop simulation, or silent active-World mutation |
 | Lab `/lab` | Non-persistent information architecture and evidence vocabulary | Saved investigations, evidence records, notebooks, or validation |
 | Atlas `/atlas` | Non-persistent evidence/landscape/probe vocabulary plus one bounded ephemeral Flocking preview | Saved maps, general sampling, discovery, regime inference, or real-world certification |
 | Guides | One optional `Reading a Flock` workflow over existing recipes/tasks | Auto-run, hard gates, learner profile, scoring, or educational-outcome evidence |

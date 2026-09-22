@@ -1,6 +1,6 @@
 # ORTUS Canonical Architecture
 
-Status: CURRENT architectural source of truth after S1B
+Status: CURRENT architectural source of truth after S2
 
 This document defines ORTUS architectural vocabulary, authority, ownership, and dependency direction. It describes current implementation where it exists and labels future contracts explicitly. It does not make a planned type, service, or model family real.
 
@@ -32,7 +32,7 @@ Architecture prose cannot override behavior. A mismatch is a defect to expose, n
 | Model | What dynamics are declared and executable? | Hand-built `SimulationTemplate` definitions, template-owned systems, parameters, spaces, metrics, and validated run configuration | Declarative `ModelDefinition` compiled or mapped into a validated executable `RuntimePlan` |
 | Run / Observation | What happened during execution, and what was sampled? | `SimulationRunConfig`, engine/session run identity, exact `SnapshotExport` continuation artifacts, detached `SimulationSnapshotView` read models, metrics, events, interventions, `RenderFramePacket`, and `UIProjection` | `InterventionSchedule` as a first-class run input and scientific `CanonicalObservation` records |
 | Research / Representation | How is modeled evidence represented, analyzed, compared, and assessed? | Bounded experiments, run summaries, uncertainty result services, and non-persistent planning/UI foundations | `ResearchContext`, `SystemViewSpec`, `ScaleSpec`, `LensSpec`, `RegimeSpec`, `ViewDerivation`, `RepresentationArtifact`, `ViewMapping`, `EvidenceReport`, `CandidateAssessment`, `ExperimentSpec`, `Investigation`, and `ClaimRecord` |
-| Experience | How does a person work with ORTUS? | Start, World, Workshop, Lab foundation, Atlas foundation, Explore Worlds, Guides, and bounded Starter-to-Remix derivatives | General executable composition and deeper evidence, representation, and research workflows only after their lower-plane contracts exist |
+| Experience | How does a person work with ORTUS? | Start, World, Workshop, Lab foundation, Atlas foundation, Explore Worlds, Guides, deterministic Visual Systems Workbench presentation, and bounded Starter-to-Remix derivatives | General executable composition and deeper evidence, representation, and research workflows only after their lower-plane contracts exist |
 
 Experience metaphors never define scientific ontology:
 
@@ -41,6 +41,8 @@ camera zoom != ScaleSpec
 Follow mode != scientific scale transition
 Atlas layout != representation topology
 UI selection != model intervention
+Workbench representation != ModelDefinition != RuntimePlan != SystemViewSpec
+Workbench decomposition != scientific scale
 ```
 
 ## Fundamental And Derived Objects
@@ -143,6 +145,14 @@ immutable Starter/recipe identity
 ```
 
 The derivative is not a `ModelDefinition` or `RuntimePlan`, and Workshop does not compile schemas, execute graphs, or own simulation state. Candidate edits remain local until explicit launch. A bounded one-use page-session handoff may copy the matching accepted active World configuration into a derivative; it is not persistence or a second runtime authority. Strict source/draft IDs and accepted metadata prevent reload, history, or source changes from silently substituting a different run.
+
+## Workbench Presentation Boundary
+
+S2 adds a deterministic Experience-plane representation in `src/lib/workbench`: `WorkbenchModel`, pieces, parent/child hierarchy, explanatory relationships, capability labels, and references to existing controls. Normal `/builder` opens the Visual Systems Workbench; existing Guided/Advanced tooling is secondary. Starter Remix supplies its existing derivative and contextual control rendering to the same bench.
+
+This representation is neither `ModelDefinition`, `RuntimePlan`, nor `SystemViewSpec`. It contains no executable rules, ports, runtime state, parameter ranges, simulation authority, or scientific verdict. Descriptions explain the seven existing templates; they are not a second executable ontology. Parameter and variant control references resolve against authoritative template/scenario definitions at inspection time. Primitive-backed materials derive service/runtime distinctions from the existing registry and per-template capability entries.
+
+Selection, expand/collapse, layout, glyphs, and relationship navigation are local presentation state. The Workbench does not subscribe to live ticks or create a preview engine. S1/S1B remains the only derivative acceptance/launch bridge; Flocking's Worker and the six legacy runtime paths remain unchanged. No new import/export artifact family or generic executable composition is created. See `product/VISUAL_SYSTEMS_WORKBENCH.md` for the implementation, rendered acceptance and verification record.
 
 ## Computational Substrate Is Not Scientific Ontology
 

@@ -396,10 +396,10 @@ export const rawStarterWorldDefinitions = [
       recommendedParameterId: "predatorEnergyLoss"
     },
     anatomy: {
-      entities: ["Moving prey agents and predators with bounded model energy."],
+      entities: ["Moving prey agents and predators; only predators carry bounded model energy."],
       environment: ["A continuous two-dimensional encounter field."],
       resources: ["Prey act as a consumable energy source for predators; there is no separate vegetation stock."],
-      boundaries: ["Agents bounce within the template's fixed field."],
+      boundaries: ["Agents wrap at the edges of the template's fixed field."],
       feedbackLoops: ["Predation reduces prey, prey availability affects predator energy, and predator abundance changes future predation pressure."],
       selection: ["Predators reproduce only above the configured energy threshold and die at zero energy."],
       stochasticity: ["Seeded movement and prey reproduction trials."],

@@ -16,17 +16,20 @@ describe("S1B Starter Remix audit handoff", () => {
     expect(audit).toContain("S1 plumbing: technically accepted after hardening");
     expect(audit).toContain("Current form-first Workshop UX: not validated as the intended future Workshop");
     expect(audit).toContain("The UR0 human comprehension gate remains pending");
-    expect(capabilities).toContain("S1B validates this narrow plumbing, not the current form-first Workshop");
-    expect(capabilities).toContain("The default Guided/Advanced forms remain structural and non-executable");
+    expect(capabilities).toContain("S1B validates the narrow derivative plumbing.");
+    expect(capabilities).toContain("Guided Builder remains available as Structural Draft, with Advanced Builder alongside it");
+    expect(capabilities).toContain("secondary");
+    expect(capabilities).toContain("secondary, structural, and non-executable");
   });
 
-  it("records S2 as an unimplemented example-first Visual Systems Workbench", () => {
+  it("preserves the S1B handoff while recording the implemented S2 Workbench and pending audit", () => {
     const roadmap = source("docs/ROADMAP.md");
     const audit = source("docs/product/STARTER_REMIX_BRIDGE_AUDIT.md");
     const combined = `${roadmap}\n${audit}`;
 
     expect(roadmap).toContain("S1B - Starter -> Remix Bridge Audit | COMPLETE");
-    expect(roadmap).toContain("S2 - Visual Systems Workbench | NEXT / UNSTARTED");
+    expect(roadmap).toContain("S2 - Visual Systems Workbench | COMPLETE");
+    expect(roadmap).toContain("S2B - Visual Systems Workbench Audit | NEXT / UNSTARTED");
     for (const phrase of [
       "taking working systems apart visually",
       "agents, cells, nodes, edges, fields, spaces, processes, and interactions",

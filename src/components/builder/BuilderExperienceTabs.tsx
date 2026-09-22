@@ -4,9 +4,14 @@ import type { KeyboardEvent } from "react";
 
 export const builderExperiences = [
   {
+    id: "workbench",
+    label: "Workbench",
+    description: "Take apart examples and remix supported pieces."
+  },
+  {
     id: "guided",
-    label: "Guided Builder",
-    description: "Create a bounded model-structure draft step by step."
+    label: "Structural Draft",
+    description: "Guided Builder · non-runnable structure."
   },
   {
     id: "advanced",
@@ -15,24 +20,15 @@ export const builderExperiences = [
   }
 ] as const;
 
-const starterRemixExperience = {
-  id: "remix",
-  label: "Starter Remix",
-  description: "Fork one runnable Starter through its existing template controls."
-} as const;
-
-export type BuilderExperienceId = (typeof builderExperiences)[number]["id"] | typeof starterRemixExperience.id;
+export type BuilderExperienceId = (typeof builderExperiences)[number]["id"];
 
 interface BuilderExperienceTabsProps {
   activeExperience: BuilderExperienceId;
-  hasStarterRemix?: boolean;
   onExperienceChange: (experience: BuilderExperienceId) => void;
 }
 
-export function BuilderExperienceTabs({ activeExperience, hasStarterRemix = false, onExperienceChange }: BuilderExperienceTabsProps) {
-  const availableExperiences = hasStarterRemix
-    ? [starterRemixExperience, ...builderExperiences]
-    : builderExperiences;
+export function BuilderExperienceTabs({ activeExperience, onExperienceChange }: BuilderExperienceTabsProps) {
+  const availableExperiences = builderExperiences;
 
   function handleKeyDown(event: KeyboardEvent<HTMLButtonElement>, experienceId: BuilderExperienceId) {
     const currentIndex = availableExperiences.findIndex((experience) => experience.id === experienceId);

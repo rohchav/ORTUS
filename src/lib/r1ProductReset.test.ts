@@ -34,8 +34,8 @@ describe("R1 Start Hub and World-first product reset contracts", () => {
     expect(startSource).toContain("runnableStarterWorlds.map");
     expect(startSource).toContain("world.investigationPrompts.map");
     expect(startSource).toContain("world.sources.map");
-    expect(startSource).toContain('label: "Draft a model structure"');
-    expect(startSource).toContain("Describe a non-runnable model structure");
+    expect(startSource).toContain('label: "Take apart a system"');
+    expect(startSource).toContain("Open a worked example, inspect its pieces, and remix supported properties in Workshop.");
     expect(startSource).toContain("Lab's non-persistent evidence-record foundation");
     expect(startSource).not.toContain('label: "Build a system"');
     expect(startSource).not.toContain("what Lab can record today");

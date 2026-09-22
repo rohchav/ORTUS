@@ -1,5 +1,40 @@
 # ORTUS Codex Session Log
 
+## 2026-09-22 — S2 Visual Systems Workbench closure
+
+Continued the preserved S2 worktree on `main` from `fbc0622274df59a7472b042478ad33e8fe0e5831`. Resume checks found all intentional changes unstaged, no partial S2 commit, and no unrelated work. No reset, restore, stash, clean or milestone restart was performed. Normal `/builder` now opens the assembled Visual Systems Workbench, and Starter → Remix uses the same surface. Guided/Advanced remain secondary structural tooling. Seven template explanations share deterministic pieces, hierarchy, relationships and reusable materials. Contextual property references resolve existing authoritative template/scenario contracts; the original S1/S1B bridge owns derivative acceptance and launch. Workshop owns no simulation state, engine/RNG/scheduler, generic composition, executable graph, compiler or persistence. Flocking retains one Worker authority and legacy template paths remain unchanged.
+
+Rendered review covered normal Workshop, browser Starter detail → Remix, Flocking, Predator–Prey, Epidemic, Forest Fire's grid and Neural Excitation Network, at `1440 × 900`, `1280 × 600`, `900 × 700` and `390 × 844`. Three iterations moved the product from the form-first baseline to a dominant assembly with compact headers/tabs, distinct steering tiles/glyphs, meaningful relationship navigation, collapsed secondary groups, a short-height example picker, and mobile overview → group → piece → inspector navigation. The implementation owner accepted the third pass as materially different from the pre-S2 forms. Direct keyboard secondary-tab operation, mobile drill-in/edit/return, reduced-motion and DPR-2 exercises passed on 2026-09-14. The product thesis is explicitly verified in `docs/product/VISUAL_SYSTEMS_WORKBENCH.md`; participant comprehension, screen-reader/AT, actual browser zoom and formal WCAG conformance remain unproven.
+
+Findings and fixes:
+
+- **P0:** none found.
+- **P1:** fixed relationship focus into hidden ancestry, duplicate responsive piece IDs and implicit mobile property focus bypassing the assembly. The resumed browser matrix also exposed Advanced Builder header overlap at `1024 × 768`. Secondary editors below `1120px` now use natural-height `max-content` rows. Direct rendered/click checks passed at `1024 × 768`, `900 × 700` and `390 × 844`; the complete affected viewport matrix passed on 2026-09-22.
+- **P2:** corrected Predator–Prey wrapping/energy copy, primary-action contrast, first-viewport density and glyph differentiation.
+- **Test maintenance:** scoped the composition-boundary locator to the footer, updated stale form/capability/status assertions, and waited for the existing hydration-ready signal before switching a secondary tab. No unresolved S2 product defect remains known.
+
+Final gate evidence:
+
+- Lint passed the scoped baseline over `397` production TypeScript files; standalone typecheck passed after the final test repair.
+- Build passed after the secondary-editor CSS repair: `17.5s` compilation, `23` generated pages.
+- Complete unit verification passed `90 files / 773 tests` in `84.64s` against the final closure documentation; focused Workbench model `9` and acceptance `27` tests also passed.
+- Full UI inventory has `213` distinct passing cases across resumed runs: `86` preserved from 2026-09-15, `111` from the 2026-09-21 `127`-case continuation (`22.3m`, two failures and `14` serial skips), then the remaining `16/16` in `3.3m` on 2026-09-22 with no retries or skips. Current inventory exactly matches the three disjoint pass sets. The earlier failures were repaired and their skipped cases completed; no failed/skipped/unconfirmed case remains. This is not a claim of a single uninterrupted clean run.
+- Focused Workbench `9/9` and S1 Remix `7/7` browser checks also passed, including in the resumed inventory. `git diff --check` passed; the final status/stat/staging review covers only intentional S2 implementation, tests and documentation.
+
+Verification logs/manifests live under ignored `blob-report/s2-verification/`; they and generated screenshots/reports/build artifacts are not staged. No simulation/runtime production code changed and no concrete regression concern was identified, so the conditional standalone performance suites were not run. The requested local commit is `feat: build visual systems workbench`; no push is performed.
+
+Blocked split/duplicate/merge/remove/connect/field-substitution operations require reusable executable primitives, compatibility contracts, typed ports/interfaces, composition validation, runtime capability dispatch and generic compilation. These gaps are recorded only. S3 stays blocked; no S2B/SA0/S3/O1/E1/I2 work began.
+
+```text
+S2: COMPLETE
+S2B: NEXT / UNSTARTED
+PRIMARY WORKSHOP: VISUAL SYSTEMS WORKBENCH
+FORM-FIRST GUIDED/ADVANCED: SECONDARY STRUCTURAL TOOLING
+GENERAL EXECUTABLE COMPOSITION: NOT IMPLEMENTED
+UR0 HUMAN COMPREHENSION GATE: PENDING
+```
+
+
 ## 2026-09-03 - S1B Starter -> Remix Bridge Audit And Visual Systems Workbench Handoff
 
 Goal: independently audit and harden the bounded S1 Starter-to-Remix plumbing, preserve runtime and provenance authority, reject capability inflation, and hand the roadmap to an unstarted example-first Visual Systems Workbench without implementing S2 UI.

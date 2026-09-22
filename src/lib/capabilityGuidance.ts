@@ -219,14 +219,14 @@ export const capabilityGuidanceSummaries: readonly CapabilityGuidanceSummary[] =
   summary(
     "workshop",
     "authoring",
-    "Structural authoring surface",
+    "Visual Systems Workbench",
     [
       item(
         "workshop-authoring",
-        "Guided and Advanced structural authoring",
+        "Workbench and secondary structural authoring",
         "available",
         availableStatus,
-        "Workshop supports bounded Guided drafting and the complete Advanced structural authoring, import, export, validation-assistance, and inspection surfaces."
+        "Workshop opens worked systems as an inspectable Workbench. Starter Remix changes only supported template properties through the existing scenario path. Guided and Advanced structural authoring remain available as secondary tools."
       ),
       item(
         "workshop-guided-handoff",
@@ -258,7 +258,7 @@ export const capabilityGuidanceSummaries: readonly CapabilityGuidanceSummary[] =
         "Execution and generation",
         "not-implemented",
         notImplementedStatus,
-        "Workshop does not compile schemas, execute builder graphs, create runtime templates, produce scenarios or RunConfigs, preview simulations, mutate World, or establish scientific validation."
+        "Workshop does not compile schemas, execute builder graphs, create runtime templates, preview simulations, or establish scientific validation. Only explicit Run Remix accepts a supported Starter derivative through the existing scenario path. General executable composition is not implemented."
       )
     ],
     [

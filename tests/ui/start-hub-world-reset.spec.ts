@@ -27,7 +27,7 @@ for (const viewport of viewports) {
     await expect(page.locator(".start-world-index > a")).toHaveCount(11);
     await expect(page.locator("[data-capability-guidance-destination]")).toHaveCount(0);
     await expect(page.getByText("Pick a system. Run it. Change something. See what happens. Then go deeper.")).toBeVisible();
-    await expect(page.getByRole("link", { name: /Draft a model structure/ })).toBeVisible();
+    await expect(page.getByRole("link", { name: /Take apart a system/ })).toBeVisible();
     await expect(page.getByText("Run a bounded Flocking sample in Atlas or inspect Lab's non-persistent evidence-record foundation.")).toBeVisible();
 
     const featuredImage = page.getByRole("img", { name: /ORTUS Flocking runtime/i });
@@ -316,9 +316,16 @@ test("World task query links open existing Experiment and Compare surfaces witho
   await expect(page.getByText("Capture the current run", { exact: false })).toBeVisible();
 });
 
-test("Workshop starts quietly with guidance and support matrices disclosed on demand", async ({ page }) => {
+test("Workshop starts with the Workbench and secondary Guided tooling stays quiet", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 720 });
   await page.goto("/builder", { waitUntil: "domcontentloaded" });
+  await expect(page.locator("[data-visual-workbench]")).toBeVisible();
+  await expect(page.locator("[data-visual-workbench]")).toHaveAttribute("data-workbench-ready", "true");
+  await expect(page.getByRole("tab", { name: /Workbench/i })).toHaveAttribute("aria-selected", "true");
+  await expect(page.getByRole("textbox", { name: /Model name/i })).toHaveCount(0);
+  const structuralDraftTab = page.getByRole("tab", { name: /Structural Draft/i });
+  await structuralDraftTab.click();
+  await expect(structuralDraftTab).toHaveAttribute("aria-selected", "true");
   await expect(page.locator(".guided-builder__field-error")).toHaveCount(0);
   await expect(page.locator(".guided-builder__steps em", { hasText: /error/i })).toHaveCount(0);
   await expect(page.getByText("Guided Builder supports a bounded subset of the structural artifact.")).toBeHidden();

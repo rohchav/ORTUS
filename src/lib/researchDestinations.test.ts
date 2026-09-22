@@ -49,7 +49,7 @@ describe("Research World destination registry", () => {
     });
     expect(byId.atlas).toMatchObject({ availability: "available" });
     expect(byId.atlas?.status).toBeUndefined();
-    expect(byId.workshop?.purpose).toBe("Draft and inspect non-runnable model structure.");
+    expect(byId.workshop?.purpose).toBe("Take apart working systems and remix supported pieces.");
     expect(JSON.stringify(researchDestinations)).not.toMatch(/\b(locked|disabled|unlock|xp|level|achievement|progress)\b/i);
   });
 

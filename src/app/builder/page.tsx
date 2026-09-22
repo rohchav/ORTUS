@@ -5,7 +5,7 @@ import { resolveStarterRemixRequest } from "../../lib/starterWorlds";
 
 export const metadata: Metadata = {
   title: "Workshop | ORTUS",
-  description: "Construct and inspect model structure."
+  description: "Take apart working systems and remix supported pieces in the Visual Systems Workbench."
 };
 
 interface BuilderPageProps {
@@ -68,7 +68,7 @@ function StarterRemixError({ message }: { message: string }) {
       <span>{message}</span>
       <div>
         <Link href="/worlds">Back to Explore Worlds</Link>
-        <Link href="/builder">Open structural Workshop</Link>
+        <Link href="/builder">Open Workshop</Link>
       </div>
     </section>
   );

@@ -28,22 +28,23 @@ describe("UR0 product leverage and comprehension gate", () => {
     expect(roadmap).toContain("UR0R - Product Comprehension + Exploration Repair | COMPLETE");
     expect(roadmap).toContain("S1 - Starter -> Remix Bridge | COMPLETE");
     expect(roadmap).toContain("S1B - Starter -> Remix Bridge Audit | COMPLETE");
-    expect(roadmap).toContain("S2 - Visual Systems Workbench | NEXT / UNSTARTED");
+    expect(roadmap).toContain("S2 - Visual Systems Workbench | COMPLETE");
+    expect(roadmap).toContain("S2B - Visual Systems Workbench Audit | NEXT / UNSTARTED");
     expect(roadmap).toContain("O1/E1 remain high-priority scientific infrastructure");
   });
 
-  it("does not advertise runnable Workshop authoring or nonexistent Lab records from Start", () => {
+  it("introduces Workbench examples and supported Remix without custom authoring or nonexistent Lab records", () => {
     const start = source("src/components/start/StartHub.tsx");
     const destinations = source("src/lib/researchDestinations.ts");
     const comparison = source("src/components/RunComparisonPanel.tsx");
 
-    expect(start).toContain('label: "Draft a model structure"');
-    expect(start).toContain("Describe a non-runnable model structure");
+    expect(start).toContain('label: "Take apart a system"');
+    expect(start).toContain("Open a worked example, inspect its pieces, and remix supported properties in Workshop.");
     expect(start).toContain("Lab's non-persistent evidence-record foundation");
     expect(start).not.toContain('label: "Build a system"');
     expect(start).not.toContain("what Lab can record today");
     expect(destinations).toContain("Lab does not save records");
-    expect(destinations).toContain("Draft and inspect non-runnable model structure");
+    expect(destinations).toContain("Take apart working systems and remix supported pieces.");
     expect(comparison).toContain('placeholder="Run notes"');
     expect(comparison).not.toContain('placeholder="Observation notes"');
   });

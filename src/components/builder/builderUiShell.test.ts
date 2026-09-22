@@ -321,7 +321,7 @@ describe("safe builder UI shell", () => {
     const componentSource = readBuilderSource();
     const viewModel = createBuilderWorkspaceViewModel(workspaceFixture());
     expect(componentSource).toContain('"Builder structural shell"');
-    expect(componentSource).toContain('"Starter remix Workshop"');
+    expect(componentSource).toContain('"Visual Systems Workbench"');
     expect(componentSource).toContain('aria-label="Builder navigation and import"');
     expect(componentSource).toContain('aria-label="Read-only visual workspace descriptors"');
     expect(componentSource).toContain('aria-label="Selected workspace item inspector"');

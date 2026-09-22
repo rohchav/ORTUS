@@ -15,7 +15,7 @@ import { BuilderViewport } from "./BuilderViewport";
 import { ModelSchemaAuthoringShell } from "./ModelSchemaAuthoringShell";
 import { GuidedBuilder, type GuidedBuilderHandoffResolution } from "./guided/GuidedBuilder";
 import { StarterRemixWorkspace } from "./remix/StarterRemixWorkspace";
-import { WorkshopModelExample } from "./WorkshopModelExample";
+import { WorkbenchLanding } from "./workbench/VisualSystemsWorkbench";
 import type { ModelSchemaDefinition } from "../../simulation/modelSchema";
 import type { StarterRemixSource } from "../../lib/starterWorlds";
 import { BuilderGraphView } from "./graph";
@@ -35,7 +35,7 @@ interface BuilderShellProps {
 
 export function BuilderShell({ initialWorkspace, remixSource }: BuilderShellProps) {
   const router = useRouter();
-  const [activeExperience, setActiveExperience] = useState<BuilderExperienceId>(remixSource ? "remix" : "guided");
+  const [activeExperience, setActiveExperience] = useState<BuilderExperienceId>("workbench");
   const [activeMode, setActiveMode] = useState<BuilderModeId>("workspace");
   const [workspace, setWorkspace] = useState<VisualBuilderWorkspaceDefinition | null>(() =>
     initialWorkspace ? validateVisualBuilderWorkspaceDefinition(initialWorkspace) : null
@@ -226,38 +226,34 @@ export function BuilderShell({ initialWorkspace, remixSource }: BuilderShellProp
 
   return (
     <section
-      className={`builder-shell${activeExperience === "remix" ? " builder-shell--remix-active" : ""}`}
-      aria-label={activeExperience === "remix" ? "Starter remix Workshop" : "Builder structural shell"}
-      data-product-context={activeExperience === "remix" ? "ORTUS executable Starter remix" : "ORTUS structural Builder"}
+      className={`builder-shell builder-shell--s2${activeExperience === "workbench" ? " builder-shell--workbench-active" : ""}`}
+      aria-label={activeExperience === "workbench" ? "Visual Systems Workbench" : "Builder structural shell"}
+      data-product-context={activeExperience === "workbench" ? "ORTUS Visual Systems Workbench" : "ORTUS structural Builder"}
     >
       <header className="destination-intro destination-intro--workshop">
         <div>
-          <p>{activeExperience === "remix" ? "Bounded executable derivative" : "Structural authoring"}</p>
+          <p>{activeExperience === "workbench" ? "Visual Systems Workbench" : "Secondary structural tooling"}</p>
           <h1>Workshop</h1>
         </div>
         <p>
-          {activeExperience === "remix"
-            ? "Change supported run configuration for one existing Starter template. Model structure remains fixed."
-            : "Begin from an example or describe a model step by step. These Workshop drafts do not execute; they are structural artifacts."}
+          {activeExperience === "workbench"
+            ? "Open a working system. Discover its pieces. Change what it can do."
+            : "Describe and inspect non-runnable model structure. A valid structure is not automatically runnable."}
         </p>
       </header>
-      {activeExperience === "remix" ? null : <WorkshopModelExample />}
       <BuilderExperienceTabs
         activeExperience={activeExperience}
-        hasStarterRemix={Boolean(remixSource)}
         onExperienceChange={setActiveExperience}
       />
-      {remixSource ? (
-        <section
-          id="builder-experience-panel-remix"
-          className="builder-experience-panel builder-experience-panel--remix"
-          role="tabpanel"
-          aria-labelledby="builder-experience-tab-remix"
-          hidden={activeExperience !== "remix"}
-        >
-          <StarterRemixWorkspace source={remixSource} onMeaningfulChange={setRemixDraftMeaningful} />
-        </section>
-      ) : null}
+      <section
+        id="builder-experience-panel-workbench"
+        className="builder-experience-panel builder-experience-panel--workbench"
+        role="tabpanel"
+        aria-labelledby="builder-experience-tab-workbench"
+        hidden={activeExperience !== "workbench"}
+      >
+        {remixSource ? <StarterRemixWorkspace source={remixSource} onMeaningfulChange={setRemixDraftMeaningful} /> : <WorkbenchLanding />}
+      </section>
       <section
         id="builder-experience-panel-guided"
         className="builder-experience-panel builder-experience-panel--guided"

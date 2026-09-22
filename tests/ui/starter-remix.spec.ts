@@ -3,7 +3,7 @@ import { expect, test, type Page } from "@playwright/test";
 
 test.describe.configure({ mode: "serial" });
 
-test("Starter detail and prepared recipe links open a strict immutable Remix workspace", async ({ page }) => {
+test("Starter detail and prepared recipe links open a strict Remix workspace with an immutable source", async ({ page }) => {
   await page.goto("/worlds/collective-motion", { waitUntil: "domcontentloaded" });
   const remixLink = page.getByRole("link", { name: "Remix this system", exact: true });
   await expect(remixLink).toHaveAttribute("href", "/builder?starter=flocking&focus=alignmentWeight");
@@ -13,12 +13,12 @@ test("Starter detail and prepared recipe links open a strict immutable Remix wor
   await page.waitForLoadState("networkidle");
   const workspace = page.locator("[data-starter-remix-workspace]");
   await expect(workspace).toBeVisible();
-  await expect(page.getByRole("tab", { name: /Starter Remix/ })).toHaveAttribute("aria-selected", "true");
+  await expect(page.getByRole("tab", { name: /Workbench/ })).toHaveAttribute("aria-selected", "true");
   await expect(workspace).toContainText("Source Starter: Flocking baseline");
   await expect(workspace).toContainText("Unsaved remix");
   await expect(workspace).toContainText("Fixed in this remix");
-  await expect(workspace).toContainText("Future composition");
-  await expect(workspace).toContainText("Executing schemas, formulas, scripts, or custom code");
+  await expect(workspace).toContainText("This piece cannot be rewired or replaced with arbitrary behavior.");
+  await expect(workspace).toContainText("This Workbench piece is explanatory and does not execute.");
   const desktopAxe = await new AxeBuilder({ page }).analyze();
   expect(desktopAxe.violations, JSON.stringify(desktopAxe.violations, null, 2)).toEqual([]);
 
@@ -29,20 +29,20 @@ test("Starter detail and prepared recipe links open a strict immutable Remix wor
   await expect(page.locator('[role="alert"]').filter({ hasText: "Alignment weight must be at most" }).first()).toBeVisible();
   await expect(page.getByRole("button", { name: "Run Remix" })).toBeDisabled();
 
-  await page.getByRole("button", { name: "Reset to source" }).click();
+  await resetRemixToSource(page);
   await expect(primary).toHaveValue(sourceValue);
   await expect(primary).toHaveAttribute("aria-invalid", "false");
   await expect(page.getByRole("button", { name: "Run Remix" })).toBeEnabled();
 
   await page.getByRole("button", { name: "Edit exact run configuration" }).click();
-  const seed = page.getByLabel(/Seed/);
+  const seed = page.getByRole("textbox", { name: /^Seed/ });
   await seed.fill("");
   await expect(seed).toHaveAttribute("aria-invalid", "true");
   await page.getByLabel("Behavior mode").selectOption({ index: 1 });
   await expect(seed).toHaveValue("");
   await expect(seed).toHaveAttribute("aria-invalid", "true");
   await expect(page.getByRole("button", { name: "Run Remix" })).toBeDisabled();
-  await page.getByRole("button", { name: "Reset to source" }).click();
+  await resetRemixToSource(page);
 
   await page.goto("/worlds/coordination-under-sensor-noise", { waitUntil: "domcontentloaded" });
   const recipeRemix = page.getByRole("link", { name: "Remix baseline: Clear local signals" });
@@ -123,7 +123,7 @@ test("active World entry copies only a matching accepted configuration and Reset
   const remixParameter = page.getByRole("spinbutton", { name: "Alignment weight numeric value" });
   await expect(remixParameter).toHaveValue("0.2");
   await expect(page.getByText(/Drafted from the accepted active World configuration/i)).toBeVisible();
-  await page.getByRole("button", { name: "Reset to source" }).click();
+  await resetRemixToSource(page);
   await expect(remixParameter).toHaveValue(sourceValue);
   await expect(page.getByText(/No active run was changed/i)).toBeVisible();
 
@@ -188,7 +188,7 @@ test("core Remix workflow is keyboard-operable and responsive without critical A
   await expect(page.locator("[data-starter-remix-workspace]")).toBeVisible();
   await expectNoHorizontalOverflow(page);
 
-  await page.getByRole("tab", { name: /Starter Remix/ }).focus();
+  await page.getByRole("tab", { name: /Workbench/ }).focus();
   await tabUntilFocused(page, "starter-remix-primary-control");
   await page.keyboard.press(process.platform === "darwin" ? "Meta+A" : "Control+A");
   await page.keyboard.type("0.2");
@@ -211,6 +211,17 @@ async function tabUntilFocused(page: Page, id: string): Promise<void> {
     }
   }
   throw new Error(`Keyboard focus did not reach #${id}.`);
+}
+
+async function resetRemixToSource(page: Page): Promise<void> {
+  const reset = page.getByRole("button", { name: "Reset to source", exact: true });
+  await reset.click();
+  const confirmation = page.getByRole("dialog", { name: "Reset this remix to its source?" });
+  await expect(confirmation).toBeVisible();
+  await expect(confirmation).toContainText("discards all unsaved");
+  await confirmation.getByRole("button", { name: "Discard draft changes and reset to source" }).click();
+  await expect(confirmation).toBeHidden();
+  await expect(reset).toBeFocused();
 }
 
 async function tabUntilButton(page: Page, name: string): Promise<void> {

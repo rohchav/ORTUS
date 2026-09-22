@@ -330,18 +330,20 @@ describe("Guided Builder draft model", () => {
 });
 
 describe("Guided Builder UI and integration boundaries", () => {
-  it("defaults to Guided while preserving direct, keyboard-operable access to Advanced", () => {
+  it("makes Workbench primary while preserving keyboard-operable secondary structural authoring", () => {
     const shell = source("src/components/builder/BuilderShell.tsx");
     const tabs = source("src/components/builder/BuilderExperienceTabs.tsx");
 
-    expect(shell).toContain('useState<BuilderExperienceId>(remixSource ? "remix" : "guided")');
-    expect(shell).toContain('hasStarterRemix={Boolean(remixSource)}');
+    expect(shell).toContain('useState<BuilderExperienceId>("workbench")');
+    expect(tabs).toContain("Workbench");
+    expect(tabs).toContain("Structural Draft");
     expect(tabs).toContain("Guided Builder");
     expect(tabs).toContain("Advanced Builder");
     expect(tabs).toContain('role="tablist"');
     expect(tabs).toContain('role="tab"');
     expect(tabs).toContain("ArrowRight");
     expect(tabs).toContain("ArrowLeft");
+    expect(shell).toContain('id="builder-experience-panel-workbench"');
     expect(shell).toContain('id="builder-experience-panel-guided"');
     expect(shell).toContain('id="builder-experience-panel-advanced"');
   });

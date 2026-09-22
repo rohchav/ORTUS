@@ -63,7 +63,7 @@ export function CapabilityGuidancePanel({ destinationId, className = "", maxItem
 
 const contextualBoundary: Record<ResearchDestinationId, string> = {
   world: "World output is simulated model state. A runnable model is not automatically calibrated or validated against the real world.",
-  workshop: "Workshop artifacts describe model structure. They do not compile or execute a custom model.",
+  workshop: "Workbench pieces explain existing models. Remix edits supported properties; structural drafts and graphs do not execute a custom model.",
   lab: "Lab currently provides a non-persistent evidence-record foundation; it does not save research records.",
   atlas: "Atlas preview results stay page-local and describe model output, not certified real-world discoveries."
 };

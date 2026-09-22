@@ -1,6 +1,6 @@
 # ORTUS Canonical Roadmap
 
-Status: CURRENT future-sequencing source of truth after S1B
+Status: CURRENT future-sequencing source of truth after S2
 
 This roadmap controls milestone status and dependency order. It is not a capability claim. `CAPABILITIES.md` determines what exists now, and every implementation milestone requires its dedicated scope and audit.
 
@@ -17,7 +17,8 @@ This roadmap controls milestone status and dependency order. It is not a capabil
 | UR0R - Product Comprehension + Exploration Repair | COMPLETE | Repaired supported Flocking exploration, domain framing, observation context, bounded keyboard inspection, and Workshop/Lab/Atlas identity without changing simulation semantics; see `product/PRODUCT_COMPREHENSION_EXPLORATION_REPAIR.md` |
 | S1 - Starter -> Remix Bridge | COMPLETE | Existing Starter-backed scenarios can be forked into unsaved, configuration-only derivatives and launched through established runtime authority without generic model execution; see `product/STARTER_REMIX_BRIDGE.md` |
 | S1B - Starter -> Remix Bridge Audit | COMPLETE | Hardened canonical lineage, accepted-run isolation, one-use active-World transfer, reset/rebuild semantics, runtime authority, query rejection, accessibility evidence, and capability truth; see `product/STARTER_REMIX_BRIDGE_AUDIT.md` |
-| S2 - Visual Systems Workbench | NEXT / UNSTARTED | Dedicated future example-first visual workbench scope; S1B implements no S2 UI and grants no generic execution capability |
+| S2 - Visual Systems Workbench | COMPLETE | Primary assembled-system Workshop with accepted rendered product review, contextual S1 controls and explicit capability states; no generic executable composition; see `product/VISUAL_SYSTEMS_WORKBENCH.md` |
+| S2B - Visual Systems Workbench Audit | NEXT / UNSTARTED | Independent audit is the next handoff; not begun |
 
 Canonical immediate dependency:
 
@@ -32,10 +33,11 @@ PERF1B COMPLETE
   -> UR0R PRODUCT REPAIR COMPLETE
   -> S1 COMPLETE
   -> S1B COMPLETE
-  -> S2 NEXT / UNSTARTED
+  -> S2 COMPLETE
+  -> S2B NEXT / UNSTARTED
 ```
 
-I1 does not automatically trigger I2, I3, I4, or I5. The former unconditional immersive sequence is superseded. C4 is not deferred until I5B. The human gate remains pending. S1/S1B establish only the bounded audited Starter derivative bridge; they do not validate beginner comprehension, endorse the current form-first Workshop as the future product, or authorize generic executable authoring. S2 is next but remains unstarted.
+I1 does not automatically trigger I2, I3, I4, or I5. The former unconditional immersive sequence is superseded. C4 is not deferred until I5B. The human gate remains pending. S1/S1B establish only the bounded audited Starter derivative bridge; they do not validate beginner comprehension, endorse the former form-first Workshop as the future product, or authorize generic executable authoring. S2 is complete and makes the Visual Systems Workbench primary; S2B is next and remains unstarted. S3 remains blocked on explicit executable-composition foundations.
 
 ## Status Vocabulary
 
@@ -101,15 +103,15 @@ The informed pilot identified the example-to-decomposition-to-remix break; S1 re
 
 ## S2 - Visual Systems Workbench
 
-S2 is the next unstarted product milestone. Its dedicated prompt must investigate an example-first visual workbench centered on:
+S2 is complete. The Workbench is the primary Workshop surface, with accepted rendered product review and verification recorded in `product/VISUAL_SYSTEMS_WORKBENCH.md`. Its example-first interaction architecture provides:
 
 - taking working systems apart visually;
 - explicit agents, cells, nodes, edges, fields, spaces, processes, and interactions;
 - expand/collapse decomposition and relationship inspection;
-- split, duplicate, substitute, and merge concepts only where an explicit supported contract exists;
+- contextual parameter edits and bounded existing variant substitution; split, duplicate, substitute, and merge concepts remain limited by explicit contracts, with broader structural operations blocked;
 - Starter Worlds as worked modeling examples;
 - curiosity-driven Remix;
-- existing form editors as secondary inspector or advanced surfaces rather than presumed primary product direction.
+- existing S1 controls in the selected-piece inspector, with Guided/Advanced as secondary structural tooling.
 
 Every represented object and available operation must state one of four capability levels in text, not color alone:
 
@@ -118,7 +120,7 @@ Every represented object and available operation must state one of four capabili
 - `REFERENCE`: contextual or explanatory material with no runtime effect;
 - `FUTURE`: planned direction with no current implementation.
 
-S2 must preserve structural validity distinct from runtime support. It must not treat diagrams as executable behavior, convert service availability into template support, execute visual-builder edges, compile model schemas, invent arbitrary formulas/code, or imply generic composition. S1B adds no S2 components, controls, runtime, persistence, or capability status.
+S2 preserves structural validity distinct from runtime support. Diagrams do not execute behavior, service availability does not grant template support, and neither Builder edges nor schemas are compiled or executed. General executable composition is not implemented. The blocked-operation record in `product/VISUAL_SYSTEMS_WORKBENCH.md` identifies missing reusable primitives, compatibility contracts, typed ports/interfaces, composition validation, runtime capability dispatch, and generic compilation. Recording these gaps does not start SA0 or S3. The earlier S1B milestone remains plumbing-only: S1B adds no S2 components, controls, runtime, persistence, or capability status.
 
 ## Model-Family Strategy
 
@@ -197,4 +199,4 @@ All future work must pass the relevant gates:
 
 ## Next Action
 
-Begin the dedicated S2 scope for **Visual Systems Workbench**. Treat it as next / unstarted, not partially implemented by S1B. Preserve the audited Starter-to-Remix runtime boundary while exploring example-first visual decomposition and capability-labeled relationships; do not infer executable behavior from representation. Continue the broader UR0 formative study separately because the human comprehension gate remains pending. O1/E1 remain high-priority scientific infrastructure but are not automatically next, and I2 remains deferred.
+S2B — Visual Systems Workbench Audit is next and unstarted. Its dedicated prompt should independently review the completed S2 product and authority boundaries. Do not begin S2B, SA0, S3, O1/E1, or I2 automatically. S3 remains blocked; general executable composition remains unimplemented. Continue broader UR0 formative study separately because the human comprehension gate remains pending.
