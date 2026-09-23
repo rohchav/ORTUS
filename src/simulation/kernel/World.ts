@@ -122,6 +122,15 @@ export class WorldView {
     return deepClone(this.world.globals);
   }
 
+  // A private copy of one global, for callers that need a single key rather than all globals.
+  getGlobal(key: string): JsonValue | undefined {
+    if (!Object.hasOwn(this.world.globals, key)) {
+      return undefined;
+    }
+    const value = this.world.globals[key];
+    return value === undefined ? undefined : deepClone(value);
+  }
+
   getEntity(entityId: EntityId): Entity | undefined {
     return this.world.entityStore.get(entityId);
   }
@@ -149,7 +158,7 @@ export class WorldView {
   entitiesWith(componentTypes: readonly ComponentType[]): EntityId[] {
     return this.world.componentStore
       .entitiesWith(componentTypes)
-      .filter((entityId) => this.world.entityStore.get(entityId)?.alive)
+      .filter((entityId) => this.world.entityStore.isAlive(entityId))
       .sort((left, right) => left.localeCompare(right));
   }
 

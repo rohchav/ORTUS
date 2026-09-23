@@ -42,6 +42,17 @@ import { generateUiSeed } from "../lib/uiSeed";
 
 export type AvatarMode = "glyph" | "arrow" | "initials" | "head";
 
+// The part of the World workspace an error belongs to. A successful action clears only an error from
+// its own area, and a rebuilt run also clears run and intervention errors because they referred to the
+// discarded run. One panel's success therefore cannot silently dismiss another panel's unread error.
+// Export failures report on the current run and use "run"; "file" is for import input problems.
+export type StoreErrorArea = "run" | "setup" | "intervention" | "comparison" | "file";
+
+export interface StoreError {
+  area: StoreErrorArea;
+  text: string;
+}
+
 const panelDefaults: PanelState = {
   micro: true,
   macro: true,
@@ -68,7 +79,7 @@ interface SimulationUiState {
   selectedEntityId: string | null;
   parameterValues: ParameterValues;
   seed: string;
-  lastError: string | null;
+  lastError: StoreError | null;
   lastNotice: string | null;
   exportText: string;
   importText: string;
@@ -113,8 +124,8 @@ interface SimulationUiState {
     },
     options?: { label?: string; notes?: string; tags?: string[] }
   ) => void;
-  adoptFlockingRuntimeConfig: (runConfig: SimulationRunConfig, notice: string) => void;
-  setRuntimeFeedback: (feedback: { error?: string | null; notice?: string | null }) => void;
+  adoptFlockingRuntimeConfig: (runConfig: SimulationRunConfig, notice: string, area: StoreErrorArea) => void;
+  setRuntimeFeedback: (feedback: { area: StoreErrorArea; error?: string | null; notice?: string | null }) => void;
   setRuntimeExport: (text: string, mode: "scenario" | "snapshot", notice: string) => void;
   importLatestExperimentRuns: () => void;
   setLatestExperimentResultSet: (result: ExperimentResultSet | null) => void;
@@ -190,7 +201,8 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
       templateId: get().selectedTemplateId,
       parameters: get().parameterValues,
       seed: get().seed,
-      keepSelection: false
+      keepSelection: false,
+      area: "setup"
     });
   },
 
@@ -200,14 +212,15 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
       templateId: descriptor.id,
       parameters: defaultParameters(descriptor.template) as ParameterValues,
       seed: get().seed,
-      keepSelection: false
+      keepSelection: false,
+      area: "setup"
     });
   },
 
   setSeed(seed) {
     const trimmed = seed.trim();
     if (!trimmed) {
-      set({ lastError: "Seed cannot be empty.", lastNotice: null });
+      set({ lastError: errorIn("setup", "Seed cannot be empty."), lastNotice: null });
       return;
     }
     replaceEngine(set, get, {
@@ -215,6 +228,7 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
       parameters: get().parameterValues,
       seed: trimmed,
       keepSelection: false,
+      area: "setup",
       baseRunConfig: currentAcceptedRunConfig(get())
     });
   },
@@ -230,6 +244,7 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
       parameters: nextParameters,
       seed: get().seed,
       keepSelection: false,
+      area: "setup",
       errorPrefix: `Parameter ${key}`,
       baseRunConfig: currentAcceptedRunConfig(get())
     });
@@ -242,6 +257,7 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
       parameters: nextParameters,
       seed: get().seed,
       keepSelection: false,
+      area: "setup",
       errorPrefix: reason,
       baseRunConfig: currentAcceptedRunConfig(get())
     });
@@ -251,11 +267,16 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
     const speedMultiplier = Math.max(0.25, Math.min(8, value));
     const engine = get().engine;
     engine?.setSpeed(speedMultiplier);
-    set({ speedMultiplier, lastError: null });
+    set({ speedMultiplier });
   },
 
   play() {
-    get().engine?.play();
+    try {
+      get().engine?.play();
+    } catch (error) {
+      set({ isRunning: false, lastError: errorIn("run", errorMessage(error)), lastNotice: null });
+      return;
+    }
     set({ isRunning: true });
   },
 
@@ -280,10 +301,10 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
     }
     try {
       engine.step();
-      set({ latestSnapshot: engine.createSnapshot(), lastError: null });
+      set({ latestSnapshot: engine.createSnapshot(), lastError: withoutErrorsIn(get().lastError, "run") });
       clearStaleSelection(set, get);
     } catch (error) {
-      set({ isRunning: false, lastError: errorMessage(error) });
+      set({ isRunning: false, lastError: errorIn("run", errorMessage(error)) });
     }
   },
 
@@ -302,7 +323,7 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
       }
       engine.runSteps(steps);
       const snapshot = engine.createSnapshot();
-      set({ latestSnapshot: snapshot, lastError: null });
+      set({ latestSnapshot: snapshot, lastError: withoutErrorsIn(get().lastError, "run") });
       if (performanceEnabled) {
         engine.recordFramePerformance({
           steps,
@@ -314,7 +335,7 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
     } catch (error) {
       engine.pause();
       lastPerformanceFrameMark = null;
-      set({ isRunning: false, lastError: errorMessage(error) });
+      set({ isRunning: false, lastError: errorIn("run", errorMessage(error)) });
     }
   },
 
@@ -336,7 +357,7 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
         interventionTargetCell: null,
         interventionHistory: [],
         isRunning: false,
-        lastError: null,
+        lastError: withoutErrorsIn(get().lastError, "run", "intervention"),
         lastNotice: remixLineage
           ? "Run reset to the accepted unsaved remix configuration. Source lineage was preserved; run progress was discarded."
           : starterOrigin
@@ -372,7 +393,7 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
             interventionTargetCell: null,
             interventionHistory: [],
             isRunning: false,
-            lastError: null,
+            lastError: withoutErrorsIn(get().lastError, "run", "intervention"),
             lastNotice: remixLineage
               ? "Run reset to the accepted unsaved remix configuration. Source lineage was preserved; run progress was discarded."
               : "Run reset to its active configuration. Starter origin was preserved; prepared-recipe identity and run progress were discarded."
@@ -380,7 +401,7 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
           return;
         }
       } catch (error) {
-        set({ lastError: `Reset failed: ${errorMessage(error)}`, lastNotice: null });
+        set({ lastError: errorIn("run", `Reset failed: ${errorMessage(error)}`), lastNotice: null });
         return;
       }
     }
@@ -388,7 +409,8 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
       templateId: get().selectedTemplateId,
       parameters: get().parameterValues,
       seed: get().seed,
-      keepSelection: false
+      keepSelection: false,
+      area: "run"
     });
   },
 
@@ -406,7 +428,7 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
   applyIntervention(interventionId, parameters) {
     const engine = get().engine;
     if (!engine) {
-      set({ lastError: "Start or import a run before applying an intervention.", lastNotice: null });
+      set({ lastError: errorIn("intervention", "Start or import a run before applying an intervention."), lastNotice: null });
       return;
     }
     try {
@@ -427,14 +449,14 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
       set({
         latestSnapshot: engine.createSnapshot(),
         interventionHistory: readInterventionHistory(engine),
-        lastError: null,
+        lastError: withoutErrorsIn(get().lastError, "intervention"),
         lastNotice: `${result.record.label} applied at tick ${result.record.tickApplied}. It does not advance simulation time.`
       });
       clearStaleSelection(set, get);
     } catch (error) {
       set({
         interventionHistory: readInterventionHistory(engine),
-        lastError: `Intervention failed: ${errorMessage(error)}`,
+        lastError: errorIn("intervention", `Intervention failed: ${errorMessage(error)}`),
         lastNotice: null
       });
     }
@@ -446,8 +468,17 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
       set({ interventionHistory: [] });
       return;
     }
-    clearInterventionHistory(engine);
-    set({ interventionHistory: [], lastNotice: "Current-run intervention entries cleared.", lastError: null });
+    try {
+      clearInterventionHistory(engine);
+    } catch (error) {
+      set({ lastError: errorIn("intervention", errorMessage(error)), lastNotice: null });
+      return;
+    }
+    set({
+      interventionHistory: [],
+      lastNotice: "Current-run intervention entries cleared.",
+      lastError: withoutErrorsIn(get().lastError, "intervention")
+    });
   },
 
   applyScenario(scenario) {
@@ -470,7 +501,7 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
           interventionTargetCell: null,
           interventionHistory: [],
           isRunning: false,
-          lastError: null,
+          lastError: withoutErrorsIn(get().lastError, "setup", "run", "intervention"),
           lastNotice: `Accepted scenario "${scenarioValidation.scenario.name}". Its tick-0 configuration is queued for the Worker-owned runtime; readiness follows Worker acceptance.`
         });
         if (scenarioValidation.warnings.length > 0) {
@@ -496,14 +527,14 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
         interventionTargetCell: null,
         interventionHistory: readInterventionHistory(engine),
         isRunning: false,
-        lastError: null,
+        lastError: withoutErrorsIn(get().lastError, "setup", "run", "intervention"),
         lastNotice: `Applied scenario "${validation.scenario.name}". A fresh run is ready at tick 0.`
       });
       if (validation.warnings.length > 0) {
         set({ lastNotice: `Applied scenario "${validation.scenario.name}" with warning: ${validation.warnings[0]}` });
       }
     } catch (error) {
-      set({ lastError: `Apply scenario failed: ${errorMessage(error)}`, lastNotice: null });
+      set({ lastError: errorIn("setup", `Apply scenario failed: ${errorMessage(error)}`), lastNotice: null });
     }
   },
 
@@ -511,7 +542,7 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
     const engine = get().engine;
     const snapshot = get().latestSnapshot;
     if (!engine || !snapshot) {
-      set({ lastError: "Run comparison needs an active snapshot before capture.", lastNotice: null });
+      set({ lastError: errorIn("comparison", "Run comparison needs an active snapshot before capture."), lastNotice: null });
       return;
     }
     try {
@@ -539,10 +570,10 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
         selectedComparisonRunIds,
         baselineRunId: get().baselineRunId ?? selectedComparisonRunIds[0] ?? run.runId,
         lastNotice: `Captured "${run.label}" for comparison.`,
-        lastError: null
+        lastError: withoutErrorsIn(get().lastError, "comparison")
       });
     } catch (error) {
-      set({ lastError: `Run capture failed: ${errorMessage(error)}`, lastNotice: null });
+      set({ lastError: errorIn("comparison", `Run capture failed: ${errorMessage(error)}`), lastNotice: null });
     }
   },
 
@@ -572,14 +603,14 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
         selectedComparisonRunIds,
         baselineRunId: get().baselineRunId ?? selectedComparisonRunIds[0] ?? run.runId,
         lastNotice: `Captured "${run.label}" for comparison from an explicit Worker snapshot.`,
-        lastError: null
+        lastError: withoutErrorsIn(get().lastError, "comparison")
       });
     } catch (error) {
-      set({ lastError: `Run capture failed: ${errorMessage(error)}`, lastNotice: null });
+      set({ lastError: errorIn("comparison", `Run capture failed: ${errorMessage(error)}`), lastNotice: null });
     }
   },
 
-  adoptFlockingRuntimeConfig(runConfig, notice) {
+  adoptFlockingRuntimeConfig(runConfig, notice, area) {
     try {
       const validated = validateRunConfig(runConfig);
       if (!supportsWorkerRuntime(validated.templateId)) {
@@ -597,17 +628,19 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
         interventionTargetCell: null,
         interventionHistory: [],
         isRunning: false,
-        lastError: null,
+        lastError: withoutErrorsIn(get().lastError, area, "run", "intervention"),
         lastNotice: notice
       });
     } catch (error) {
-      set({ lastError: errorMessage(error), lastNotice: null });
+      set({ lastError: errorIn(area, errorMessage(error)), lastNotice: null });
     }
   },
 
   setRuntimeFeedback(feedback) {
     set({
-      ...(feedback.error !== undefined ? { lastError: feedback.error } : {}),
+      ...(feedback.error !== undefined
+        ? { lastError: feedback.error === null ? withoutErrorsIn(get().lastError, feedback.area) : errorIn(feedback.area, feedback.error) }
+        : {}),
       ...(feedback.notice !== undefined ? { lastNotice: feedback.notice } : {})
     });
   },
@@ -617,7 +650,7 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
       exportText: text,
       importMode: mode,
       lastNotice: notice,
-      lastError: null,
+      lastError: withoutErrorsIn(get().lastError, "file"),
       panelState: persistPanel(get().panelState, "file", true)
     });
   },
@@ -625,7 +658,7 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
   importLatestExperimentRuns() {
     const resultSet = get().latestExperimentResultSet;
     if (!resultSet) {
-      set({ lastError: "Run a parameter sweep before importing experiment runs for comparison.", lastNotice: null });
+      set({ lastError: errorIn("comparison", "Run a parameter sweep before importing experiment runs for comparison."), lastNotice: null });
       return;
     }
     try {
@@ -644,7 +677,7 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
           })
         );
       if (imported.length === 0) {
-        set({ lastError: "The latest experiment has no successful runs to compare.", lastNotice: null });
+        set({ lastError: errorIn("comparison", "The latest experiment has no successful runs to compare."), lastNotice: null });
         return;
       }
       let savedRuns = get().savedRuns;
@@ -661,11 +694,11 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
         runLibraryWarning: null,
         selectedComparisonRunIds,
         baselineRunId: get().baselineRunId ?? selectedComparisonRunIds[0] ?? imported[0]?.runId ?? null,
-        lastNotice: `Imported ${imported.length} experiment run summaries for comparison.`,
-        lastError: null
+        lastNotice: `Imported ${imported.length} ${descriptor.shortName} experiment run summaries for comparison.`,
+        lastError: withoutErrorsIn(get().lastError, "comparison")
       });
     } catch (error) {
-      set({ lastError: `Experiment import failed: ${errorMessage(error)}`, lastNotice: null });
+      set({ lastError: errorIn("comparison", `Experiment import failed: ${errorMessage(error)}`), lastNotice: null });
     }
   },
 
@@ -712,7 +745,7 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
       selectedComparisonRunIds,
       baselineRunId: get().baselineRunId === runId ? (selectedComparisonRunIds[0] ?? null) : get().baselineRunId,
       lastNotice: "Run summary deleted.",
-      lastError: null
+      lastError: withoutErrorsIn(get().lastError, "comparison")
     });
   },
 
@@ -724,7 +757,7 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
       selectedComparisonRunIds: [],
       baselineRunId: null,
       lastNotice: "Run comparison library cleared.",
-      lastError: null
+      lastError: withoutErrorsIn(get().lastError, "comparison")
     });
   },
 
@@ -742,7 +775,7 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
       exportText: engine.exportScenario(),
       importMode: "scenario",
       lastNotice: "Scenario export ready. It will restart from the current template, parameters, and seed.",
-      lastError: null,
+      lastError: withoutErrorsIn(get().lastError, "file"),
       panelState: persistPanel(get().panelState, "file", true)
     });
   },
@@ -752,11 +785,18 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
     if (!engine) {
       return;
     }
+    let exportText: string;
+    try {
+      exportText = engine.exportSnapshot();
+    } catch (error) {
+      set({ lastError: errorIn("run", `Snapshot export failed: ${errorMessage(error)}`), lastNotice: null });
+      return;
+    }
     set({
-      exportText: engine.exportSnapshot(),
+      exportText,
       importMode: "snapshot",
       lastNotice: "Snapshot export ready. It includes tick, world state, events, RNG streams, metrics, and applied intervention history.",
-      lastError: null,
+      lastError: withoutErrorsIn(get().lastError, "file"),
       panelState: persistPanel(get().panelState, "file", true)
     });
   },
@@ -772,12 +812,14 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
   importJson() {
     const text = get().importText.trim();
     if (!text) {
-      set({ lastError: "Paste scenario or snapshot JSON before importing.", lastNotice: null });
+      set({ lastError: errorIn("file", "Paste scenario or snapshot JSON before importing."), lastNotice: null });
       return;
     }
     try {
-      const raw = JSON.parse(text) as { templateId?: string };
-      const descriptor = requireTemplateDescriptor(raw.templateId ?? get().selectedTemplateId);
+      const raw: unknown = JSON.parse(text);
+      const importedTemplateId =
+        typeof raw === "object" && raw !== null && "templateId" in raw && typeof raw.templateId === "string" ? raw.templateId : undefined;
+      const descriptor = requireTemplateDescriptor(importedTemplateId ?? get().selectedTemplateId);
       if (supportsWorkerRuntime(descriptor.id)) {
         throw new Error("Flocking artifacts must be imported through the active Worker runtime.");
       }
@@ -797,14 +839,14 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
         interventionTargetCell: null,
         interventionHistory: readInterventionHistory(engine),
         isRunning: false,
-        lastError: null,
+        lastError: withoutErrorsIn(get().lastError, "file", "run", "intervention"),
         lastNotice:
           get().importMode === "scenario"
             ? "Scenario imported. The run restarted from initial conditions."
             : "Snapshot imported. Tick, world state, RNG streams, events, metrics, and applied intervention history were restored."
       });
     } catch (error) {
-      set({ lastError: `Import failed: ${importErrorMessage(error)}`, lastNotice: null });
+      set({ lastError: errorIn("file", `Import failed: ${importErrorMessage(error)}`), lastNotice: null });
     }
   },
 
@@ -853,6 +895,7 @@ function replaceEngine(
     parameters: ParameterValues;
     seed: string;
     keepSelection: boolean;
+    area: "setup" | "run";
     errorPrefix?: string;
     baseRunConfig?: SimulationRunConfig | null;
   }
@@ -887,7 +930,7 @@ function replaceEngine(
         interventionTargetCell: null,
         interventionHistory: [],
         isRunning: false,
-        lastError: null,
+        lastError: withoutErrorsIn(get().lastError, options.area, "run", "intervention"),
         lastNotice: null
       });
       return;
@@ -915,12 +958,12 @@ function replaceEngine(
       interventionTargetCell: null,
       interventionHistory: readInterventionHistory(engine),
       isRunning: false,
-      lastError: null,
+      lastError: withoutErrorsIn(get().lastError, options.area, "run", "intervention"),
       lastNotice: null
     });
   } catch (error) {
     const prefix = options.errorPrefix ? `${options.errorPrefix}: ` : "";
-    set({ lastError: `${prefix}${errorMessage(error)}`, lastNotice: null });
+    set({ lastError: errorIn(options.area, `${prefix}${errorMessage(error)}`), lastNotice: null });
   }
 }
 
@@ -1053,6 +1096,15 @@ function hashString(value: string): string {
     hash = Math.imul(hash, 16777619);
   }
   return (hash >>> 0).toString(36);
+}
+
+function errorIn(area: StoreErrorArea, text: string): StoreError {
+  return { area, text };
+}
+
+// A success clears the current error only when one of the given areas owns it.
+function withoutErrorsIn(current: StoreError | null, ...areas: StoreErrorArea[]): StoreError | null {
+  return current && areas.includes(current.area) ? null : current;
 }
 
 function errorMessage(error: unknown): string {

@@ -1027,11 +1027,13 @@ export function createNeuralExcitationSystem(): System {
         return;
       }
 
-      const synapses = readNeuralSynapses(ctx.world.globals);
-      const signalQueue = readSignalQueue(ctx.world.globals);
-      const excitationScale = finiteGlobal(ctx.world.globals[neuralExcitationScaleGlobalKey], 1);
-      const inhibitionScale = finiteGlobal(ctx.world.globals[neuralInhibitionScaleGlobalKey], 1);
-      const externalStimulusEnabled = ctx.world.globals[neuralExternalStimulusGlobalKey] !== false;
+      // One private copy of globals for this update; each read below uses a different key.
+      const globals = ctx.world.globals;
+      const synapses = readNeuralSynapses(globals);
+      const signalQueue = readSignalQueue(globals);
+      const excitationScale = finiteGlobal(globals[neuralExcitationScaleGlobalKey], 1);
+      const inhibitionScale = finiteGlobal(globals[neuralInhibitionScaleGlobalKey], 1);
+      const externalStimulusEnabled = globals[neuralExternalStimulusGlobalKey] !== false;
       const dueSignals = signalQueue
         .filter((signal) => signal.arrivalTick <= ctx.tick)
         .sort((left, right) => left.arrivalTick - right.arrivalTick || left.id.localeCompare(right.id));
@@ -1177,11 +1179,11 @@ export function createNeuralExcitationSystem(): System {
       );
       const boundedQueue = queued.slice(0, params.maxSignalQueueSize);
       const droppedSignalCount = emitted.dropped + Math.max(0, queued.length - boundedQueue.length);
-      const recent = nextRecentFiring(ctx.world.globals, ctx.tick, firingCount);
+      const recent = nextRecentFiring(globals, ctx.tick, firingCount);
       const nextLargestComponent = largestActiveComponent(stateUpdates, synapses);
       const saturation = (firingCount + refractoryCount) / entityIds.length;
       const balance = excitationInhibitionBalance(totalExcitatory, totalInhibitory);
-      const previousDecisionReadout = readNeuralDecisionReadout(ctx.world.globals);
+      const previousDecisionReadout = readNeuralDecisionReadout(globals);
       const decisionAssemblies =
         previousDecisionReadout.choices.length > 0 ? previousDecisionReadout.choices : createDecisionAssemblies(entityIds, params);
       const decisionReadout = computeDecisionReadout(params, decisionAssemblies, nextStates, previousDecisionReadout, ctx.tick);
@@ -1190,7 +1192,7 @@ export function createNeuralExcitationSystem(): System {
         isDecisionChoice(decisionReadout.selected) &&
         previousDecisionReadout.selected !== decisionReadout.selected;
       const decisionSwitchCount =
-        Math.max(0, Math.floor(finiteGlobal(ctx.world.globals[neuralDecisionSwitchCountGlobalKey], 0))) + (choiceSwitched ? 1 : 0);
+        Math.max(0, Math.floor(finiteGlobal(globals[neuralDecisionSwitchCountGlobalKey], 0))) + (choiceSwitched ? 1 : 0);
       const rpsReadout = computeRpsReadout(params, decisionReadout, ctx.rng.fork("neural:rpsOpponent"));
       const decisionActivationByChoice = decisionActivationsByChoice(decisionReadout.choices);
 
@@ -1246,7 +1248,7 @@ function neuralExcitationMetrics(): MetricDefinition[] {
       precision: 0,
       displayFormat: "integer",
       collect(world) {
-        return Number(world.globals.neuralActiveNeuronCount ?? countNeuralStates(world, (state) => state.state !== "resting"));
+        return Number(world.getGlobal("neuralActiveNeuronCount") ?? countNeuralStates(world, (state) => state.state !== "resting"));
       }
     },
     {
@@ -1263,7 +1265,7 @@ function neuralExcitationMetrics(): MetricDefinition[] {
       displayFormat: "percent",
       collect(world) {
         const total = world.entitiesWith([NeuralNeuronStateComponent]).length;
-        const firing = Number(world.globals.neuralFiringCount ?? countNeuralStates(world, (state) => state.state === "firing"));
+        const firing = Number(world.getGlobal("neuralFiringCount") ?? countNeuralStates(world, (state) => state.state === "firing"));
         return total === 0 ? 0 : firing / total;
       }
     },
@@ -1402,7 +1404,7 @@ function numberGlobalMetric(
     precision: displayFormat === "integer" ? 0 : 3,
     displayFormat,
     collect(world) {
-      const value = world.globals[globalKey];
+      const value = world.getGlobal(globalKey);
       return typeof value === "number" && Number.isFinite(value) ? value : 0;
     }
   };
@@ -2040,13 +2042,14 @@ function validateNeuralExcitationWorld(world: WorldView): void {
       throw new SimulationValidationError(`Neural neuron ${entityId} is missing from runtime network`);
     }
   }
-  validateSynapses(readNeuralSynapses(world.globals), new Set(entityIds));
-  const queue = readSignalQueue(world.globals);
-  const maxQueue = finiteGlobal(world.globals[neuralMaxSignalQueueSizeGlobalKey], 5000);
+  const globals = world.globals;
+  validateSynapses(readNeuralSynapses(globals), new Set(entityIds));
+  const queue = readSignalQueue(globals);
+  const maxQueue = finiteGlobal(globals[neuralMaxSignalQueueSizeGlobalKey], 5000);
   if (queue.length > maxQueue || queue.length > 5000) {
     throw new SimulationValidationError("Neural signal queue exceeds its bounded V1 limit");
   }
-  validateDecisionReadoutGlobal(world.globals[neuralDecisionReadoutGlobalKey], new Set(entityIds));
+  validateDecisionReadoutGlobal(globals[neuralDecisionReadoutGlobalKey], new Set(entityIds));
 }
 
 function validateDecisionReadoutGlobal(value: JsonValue | undefined, entityIds: ReadonlySet<string>): void {

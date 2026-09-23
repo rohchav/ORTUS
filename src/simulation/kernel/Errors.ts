@@ -56,3 +56,22 @@ export class SimulationSerializationError extends SimulationError {
     this.name = "SimulationSerializationError";
   }
 }
+
+export interface SimulationFailure {
+  readonly operation: "step" | "applyCommands";
+  readonly tick: number;
+  readonly error: unknown;
+}
+
+// Thrown when an operation is attempted on an engine whose run has failed. The original failure
+// is the cause; only reset, restoreSnapshot, or importScenario can leave the failed state.
+export class SimulationEngineFailedError extends SimulationError {
+  constructor(attempted: string, failure: SimulationFailure) {
+    const reason = failure.error instanceof Error ? failure.error.message : String(failure.error);
+    super(
+      `Cannot ${attempted}: the run failed at tick ${failure.tick} during ${failure.operation} (${reason}). Reset or rebuild the run to continue.`,
+      { tick: failure.tick, cause: failure.error }
+    );
+    this.name = "SimulationEngineFailedError";
+  }
+}

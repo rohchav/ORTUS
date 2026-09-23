@@ -8,6 +8,7 @@
     "build": "next build",
     "perf:runtime": "vite-node src/simulation/testing/runtimePerformanceReport.ts",
     "perf:simulation": "vite-node src/simulation/testing/simulationPerformanceReport.ts",
+    "perf:clone": "vite-node src/simulation/testing/clonePerformanceReport.ts",
     "test": "vitest run",
     "test:ui": "playwright test",
     "test:ui:headed": "playwright test --headed",
@@ -16,10 +17,11 @@
     "typecheck": "tsc --noEmit",
     "lint": "npm run lint:types && npm run lint:architecture",
     "lint:types": "tsc --noEmit --noUnusedLocals --noUnusedParameters",
-    "lint:architecture": "node scripts/lint-architecture.mjs"
+    "lint:architecture": "node scripts/lint-architecture.mjs",
+    "verify": "npm run typecheck && npm run lint && npm test && npm run build"
   },
   "dependencies": {
-    "next": "^15.1.0",
+    "next": "^15.5.26",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "zod": "^3.23.8",
@@ -33,6 +35,11 @@
     "@types/react-dom": "^19.0.3",
     "typescript": "^5.5.3",
     "vite-node": "^6.0.0",
-    "vitest": "^4.1.8"
+    "vitest": "^4.1.11"
+  },
+  "overrides": {
+    "next": {
+      "postcss": "^8.5.28"
+    }
   }
 }

@@ -125,9 +125,11 @@ export function ProductionRuntimeProvider({ children }: { children: ReactNode })
       const state = useSimulationStore.getState();
       state.adoptFlockingRuntimeConfig(
         activeConfig,
-        "The requested Worker run was not accepted; the previous run remains active."
+        "The requested Worker run was not accepted; the previous run remains active.",
+        "run"
       );
       state.setRuntimeFeedback({
+        area: "run",
         error: `Run replacement failed: ${messageFor(error)}`,
         notice: "The requested Worker run was not accepted; the previous run remains active."
       });
@@ -160,7 +162,7 @@ export function ProductionRuntimeProvider({ children }: { children: ReactNode })
     try {
       await runtime.step();
     } catch (error) {
-      useSimulationStore.getState().setRuntimeFeedback({ error: `Step failed: ${messageFor(error)}`, notice: null });
+      useSimulationStore.getState().setRuntimeFeedback({ area: "run", error: `Step failed: ${messageFor(error)}`, notice: null });
     }
   }, [runtime]);
 
@@ -177,7 +179,7 @@ export function ProductionRuntimeProvider({ children }: { children: ReactNode })
     try {
       resetConfig = createRemixAwareResetRunConfig(activeConfig);
     } catch (error) {
-      state.setRuntimeFeedback({ error: `Reset failed: ${messageFor(error)}`, notice: null });
+      state.setRuntimeFeedback({ area: "run", error: `Reset failed: ${messageFor(error)}`, notice: null });
       return;
     }
     const sourceRevision = state.flockingRuntimeRevision;
@@ -202,7 +204,8 @@ export function ProductionRuntimeProvider({ children }: { children: ReactNode })
           ? "Run reset in the Worker runtime. The accepted unsaved remix configuration and source lineage were preserved; run progress was discarded."
           : readStarterWorldOrigin(resetConfig.metadata)
             ? "Run reset in the Worker runtime. The active configuration and Starter origin were preserved; prepared-recipe identity and run progress were discarded."
-          : "Run reset in the Worker runtime. Prepared recipe provenance was discarded."
+          : "Run reset in the Worker runtime. Prepared recipe provenance was discarded.",
+        "run"
       );
     } catch (error) {
       const latestState = useSimulationStore.getState();
@@ -215,6 +218,7 @@ export function ProductionRuntimeProvider({ children }: { children: ReactNode })
         latestState.setInterventionTarget({ point: previousPoint, gridCell: previousCell });
       }
       latestState.setRuntimeFeedback({
+        area: "run",
         error: `Reset failed: ${messageFor(error)}`,
         notice: runtime.getView().state === "ready" ? "The previous Worker run remains active." : null
       });
@@ -244,13 +248,14 @@ export function ProductionRuntimeProvider({ children }: { children: ReactNode })
       });
       const latest = runtime.getView().ui?.interventions.at(-1);
       state.setRuntimeFeedback({
+        area: "intervention",
         error: null,
         notice: latest
           ? `${latest.label} applied at tick ${latest.tickApplied}. It does not advance simulation time.`
           : "Intervention applied through the Worker runtime."
       });
     } catch (error) {
-      state.setRuntimeFeedback({ error: `Intervention failed: ${messageFor(error)}`, notice: null });
+      state.setRuntimeFeedback({ area: "intervention", error: `Intervention failed: ${messageFor(error)}`, notice: null });
     }
   }, [runtime]);
 
@@ -260,9 +265,9 @@ export function ProductionRuntimeProvider({ children }: { children: ReactNode })
     }
     try {
       await runtime.clearInterventions();
-      useSimulationStore.getState().setRuntimeFeedback({ error: null, notice: "Current-run intervention entries cleared." });
+      useSimulationStore.getState().setRuntimeFeedback({ area: "intervention", error: null, notice: "Current-run intervention entries cleared." });
     } catch (error) {
-      useSimulationStore.getState().setRuntimeFeedback({ error: messageFor(error), notice: null });
+      useSimulationStore.getState().setRuntimeFeedback({ area: "intervention", error: messageFor(error), notice: null });
     }
   }, [runtime]);
 
@@ -280,7 +285,7 @@ export function ProductionRuntimeProvider({ children }: { children: ReactNode })
           : "Snapshot export ready from the Worker-owned run. It includes tick, world state, events, RNG streams, metrics, and intervention history."
       );
     } catch (error) {
-      useSimulationStore.getState().setRuntimeFeedback({ error: `${capitalize(kind)} export failed: ${messageFor(error)}`, notice: null });
+      useSimulationStore.getState().setRuntimeFeedback({ area: "run", error: `${capitalize(kind)} export failed: ${messageFor(error)}`, notice: null });
     }
   }, [runtime]);
 
@@ -310,11 +315,12 @@ export function ProductionRuntimeProvider({ children }: { children: ReactNode })
         importedConfig,
         kind === "scenario"
           ? "Scenario imported into the Worker runtime. The run restarted from initial conditions."
-          : "Snapshot imported into the Worker runtime. Tick, world state, RNG streams, events, metrics, and intervention history were restored."
+          : "Snapshot imported into the Worker runtime. Tick, world state, RNG streams, events, metrics, and intervention history were restored.",
+        "file"
       );
       runtime.setSpeedMultiplier(state.speedMultiplier);
     } catch (error) {
-      state.setRuntimeFeedback({ error: `Import failed: ${messageFor(error)}`, notice: null });
+      state.setRuntimeFeedback({ area: "file", error: `Import failed: ${messageFor(error)}`, notice: null });
     }
   }, [runtime]);
 
@@ -337,7 +343,7 @@ export function ProductionRuntimeProvider({ children }: { children: ReactNode })
         interventionHistory: readInterventionHistory({ metadata: artifact.world.globals })
       }, options);
     } catch (error) {
-      state.setRuntimeFeedback({ error: `Run capture failed: ${messageFor(error)}`, notice: null });
+      state.setRuntimeFeedback({ area: "comparison", error: `Run capture failed: ${messageFor(error)}`, notice: null });
     }
   }, [runtime]);
 
@@ -471,7 +477,7 @@ export function useActiveWorldRuntime(): ActiveWorldRuntime {
       interventionCount: ui?.interventionCount ?? 0,
       appliedInterventionCount: ui?.appliedInterventionCount ?? 0,
       runtimeSignature: ui?.runtimeSignature ?? null,
-      error: production?.view.error ?? lastError,
+      error: production?.view.error ?? lastError?.text ?? null,
       seed: config?.seed ?? seed,
       parameters: config?.parameters ?? parameterValues,
       metadata: runtimeMetadata(config),
@@ -510,7 +516,7 @@ export function useActiveWorldRuntime(): ActiveWorldRuntime {
     interventionCount: legacyInterventions.length,
     appliedInterventionCount: legacyInterventions.filter((record) => record.status === "applied").length,
     runtimeSignature: null,
-    error: lastError,
+    error: lastError?.text ?? null,
     seed: engine?.seed ?? seed,
     parameters: engine?.parameters ?? parameterValues,
     metadata: engine?.metadata ?? {},

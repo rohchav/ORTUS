@@ -11,9 +11,15 @@ import type {
 import type { World } from "./World";
 import { SimulationInvariantError, SimulationValidationError } from "./Errors";
 import { assertSerializableValue, deepClone, validateCommand } from "./Validation";
-import { isGridCell, isPoint2D, type SpaceLocation } from "../spaces/Space";
+import { isLocationForSpaceKind, type Space, type SpaceLocation } from "../spaces/Space";
 import { NetworkSpace } from "../spaces/NetworkSpace";
 
+// Entry ownership: add() makes the one copy of a command, so a caller mutating its payload after
+// queueing cannot change what is applied. Entries are never mutated after that, and every write into
+// the world copies what it keeps (component and entity stores, event queue, globals, and spaces, which
+// normalize locations into new objects). drain(), history, and the scheduler's debug log therefore
+// hand over and retain the queued entries without copying; recent(), debugData(), and
+// SimulationEngine.applyCommands copy them on the way out.
 export class CommandBuffer {
   private readonly pending: BufferedCommand[] = [];
   private readonly history: BufferedCommand[] = [];
@@ -30,15 +36,14 @@ export class CommandBuffer {
   }
 
   drain(): BufferedCommand[] {
-    const commands = this.pending.splice(0, this.pending.length);
-    return commands.map((entry) => deepClone(entry));
+    return this.pending.splice(0, this.pending.length);
   }
 
   apply(world: World): BufferedCommand[] {
     const commands = this.drain();
     for (const entry of commands) {
       this.applyOne(world, entry);
-      this.history.push(deepClone(entry));
+      this.history.push(entry);
       while (this.history.length > this.maxHistory) {
         this.history.shift();
       }
@@ -58,6 +63,14 @@ export class CommandBuffer {
     const command = entry.command;
     switch (command.type) {
       case "createEntity": {
+        // Resolve every placement first so a bad space or location cannot leave a half-created entity.
+        const placements = Object.entries(command.spaceLocations ?? {})
+          .sort(([left], [right]) => left.localeCompare(right))
+          .map(([spaceId, location]) => {
+            const space = requireSpace(world, spaceId, command);
+            assertLocationFits(space, location, command);
+            return { space, location };
+          });
         const entity = world.entityStore.create(command.archetype, {
           id: command.entityId,
           label: command.label,
@@ -66,14 +79,7 @@ export class CommandBuffer {
         for (const [componentType, value] of Object.entries(command.components ?? {}).sort(([left], [right]) => left.localeCompare(right))) {
           world.componentStore.add(entity.id, componentType, value);
         }
-        for (const [spaceId, location] of Object.entries(command.spaceLocations ?? {}).sort(([left], [right]) => left.localeCompare(right))) {
-          const space = world.getSpace(spaceId);
-          if (!space) {
-            throw new SimulationInvariantError(`Cannot place entity in missing space ${spaceId}`, {
-              entityId: entity.id,
-              command
-            });
-          }
+        for (const { space, location } of placements) {
           space.addEntity(entity.id, location);
         }
         return;
@@ -136,22 +142,20 @@ export class CommandBuffer {
         if (!this.requireAlive(world, command.entityId, command.allowMissing, command)) {
           return;
         }
-        const space = world.getSpace(command.spaceId);
-        if (!space) {
-          throw new SimulationInvariantError(`Missing space ${command.spaceId}`, { entityId: command.entityId, command });
-        }
+        const space = requireSpace(world, command.spaceId, command);
+        assertLocationFits(space, command.location, command);
         space.moveEntity(command.entityId, command.location);
         return;
       }
       case "moveEntities": {
-        const space = world.getSpace(command.spaceId);
-        if (!space) {
-          throw new SimulationInvariantError(`Missing space ${command.spaceId}`, { command });
+        const space = requireSpace(world, command.spaceId, command);
+        const moves = Object.entries(command.locations)
+          .sort(([left], [right]) => left.localeCompare(right))
+          .filter(([entityId]) => this.requireAlive(world, entityId, command.allowMissing, command));
+        for (const [, location] of moves) {
+          assertLocationFits(space, location, command);
         }
-        for (const [entityId, location] of Object.entries(command.locations).sort(([left], [right]) => left.localeCompare(right))) {
-          if (!this.requireAlive(world, entityId, command.allowMissing, command)) {
-            continue;
-          }
+        for (const [entityId, location] of moves) {
           space.moveEntity(entityId, location);
         }
         return;
@@ -198,8 +202,7 @@ export class CommandBuffer {
   }
 
   private requireAlive(world: World, entityId: EntityId, allowMissing: boolean | undefined, command: Command): boolean {
-    const entity = world.entityStore.get(entityId);
-    if (!entity || !entity.alive) {
+    if (!world.entityStore.isAlive(entityId)) {
       if (allowMissing) {
         return false;
       }
@@ -248,18 +251,10 @@ export class SystemCommandSink implements CommandSink {
   }
 
   moveEntity(spaceId: string, entityId: EntityId, location: SpaceLocation, reason?: string): void {
-    if (!isPoint2D(location) && !isGridCell(location)) {
-      throw new SimulationValidationError("moveEntity location must be a supported space location");
-    }
     this.add({ type: "moveEntity", spaceId, entityId, location }, reason);
   }
 
   moveEntities(spaceId: string, locations: Record<EntityId, SpaceLocation>, reason?: string): void {
-    for (const location of Object.values(locations)) {
-      if (!isPoint2D(location) && !isGridCell(location)) {
-        throw new SimulationValidationError("moveEntities locations must be supported space locations");
-      }
-    }
     this.add({ type: "moveEntities", spaceId, locations }, reason);
   }
 
@@ -284,5 +279,26 @@ export class SystemCommandSink implements CommandSink {
       ...this.metadata,
       ...(reason !== undefined ? { reason } : {})
     };
+  }
+}
+
+function requireSpace(world: World, spaceId: string, command: Command): Space<any> {
+  const space = world.getSpace(spaceId);
+  if (!space) {
+    throw new SimulationInvariantError(`Missing space ${spaceId}`, { command });
+  }
+  return space;
+}
+
+// Command validation checks location shape without knowing the target space; this checks the shape
+// against the resolved space's kind before any mutation. Network membership is never a location.
+function assertLocationFits(space: Space<any>, location: SpaceLocation, command: Command): void {
+  if (!isLocationForSpaceKind(space.kind, location)) {
+    throw new SimulationValidationError(
+      space.kind === "network"
+        ? `Space ${space.id} is a network; network membership is not a spatial location and cannot be set by placement or movement commands`
+        : `${space.kind} space ${space.id} requires ${space.kind === "continuous2d" ? "a finite {x, y} point" : "an integer {row, col} cell"}`,
+      { command }
+    );
   }
 }

@@ -518,6 +518,30 @@ describe("PERF1B adversarial runtime audit", () => {
     expect(Array.from(presentationFrame.selectedDetail?.neighborIds ?? [])).toEqual(neighborsBefore);
   });
 
+  it("keeps the selected proximity count exact in UI updates published after the frame was transferred", async () => {
+    const transport = new HostBackedWorker();
+    const worker = new WorkerRuntimeDriver(transport);
+    await worker.initialize(runRequest("detached-frame", 500));
+    const selectedFrame = nextPublication(worker, "frame", (publication) => publication.frame.selectedDetail?.entityId === 1);
+
+    worker.setSelectedEntity("e000001");
+    const expected = (await selectedFrame).frame.selectedDetail?.neighborIds.length ?? 0;
+    await settleMessages();
+    expect(expected).toBeGreaterThan(0);
+    expect(worker.getLatestUI()?.selected?.currentProximityCount).toBe(expected);
+
+    // pause and speed changes publish a UI projection without projecting a new frame; the most
+    // recent frame's buffers were already transferred (detached) by the host-backed transport.
+    for (const change of [() => worker.pause(), () => worker.setSpeedMultiplier(2)]) {
+      const revisionBefore = worker.getLatestUI()?.revision ?? 0;
+      change();
+      await settleMessages();
+      expect(worker.getLatestUI()?.revision).toBeGreaterThan(revisionBefore);
+      expect(worker.getLatestUI()?.selected?.currentProximityCount).toBe(expected);
+    }
+    worker.dispose();
+  });
+
   it("keeps visual backpressure at one in-flight plus one pending without dropping model steps", () => {
     let now = 0;
     let timer: (() => void) | undefined;

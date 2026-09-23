@@ -16,16 +16,46 @@ import { validateAssumptionProfile } from "../assumptions/validation";
 
 const finiteNumberSchema = z.number().finite();
 
-export const jsonValueSchema: z.ZodType<JsonValue> = z.lazy(() =>
+// Maximum array/object nesting accepted in any JSON-valued field of an imported or validated artifact.
+// Legitimate artifacts are shallow (the deepest JSON-valued snapshot field, the globals event log, nests
+// 4 levels). Zod validates the recursive union below with one call chain per level, and deepClone and
+// structuredClone recurse too, so unbounded hostile nesting would overflow the stack instead of failing
+// validation.
+export const maxJsonValueDepth = 64;
+
+const unboundedJsonValueSchema: z.ZodType<JsonValue> = z.lazy(() =>
   z.union([
     z.string(),
     finiteNumberSchema,
     z.boolean(),
     z.null(),
-    z.array(jsonValueSchema),
-    z.record(jsonValueSchema)
+    z.array(unboundedJsonValueSchema),
+    z.record(unboundedJsonValueSchema)
   ])
 );
+
+// The depth check runs first; a failing check stops the pipe before the recursive schema runs.
+export const jsonValueSchema: z.ZodType<JsonValue> = z
+  .custom<JsonValue>((value) => isWithinJsonDepth(value, maxJsonValueDepth), {
+    message: `JSON value nesting exceeds ${maxJsonValueDepth} levels`
+  })
+  .pipe(unboundedJsonValueSchema);
+
+// Recursion is bounded by remainingDepth, so this never exceeds maxJsonValueDepth + 1 frames.
+function isWithinJsonDepth(value: unknown, remainingDepth: number): boolean {
+  if (typeof value !== "object" || value === null) {
+    return true;
+  }
+  if (remainingDepth === 0) {
+    return false;
+  }
+  for (const child of Array.isArray(value) ? value : Object.values(value)) {
+    if (!isWithinJsonDepth(child, remainingDepth - 1)) {
+      return false;
+    }
+  }
+  return true;
+}
 
 export const componentValueSchema: z.ZodType<ComponentValue> = z.record(jsonValueSchema);
 
@@ -51,8 +81,7 @@ export const eventSchema: z.ZodType<SimulationEvent> = z.object({
 
 const spaceLocationSchema = z.union([
   z.object({ x: finiteNumberSchema, y: finiteNumberSchema }),
-  z.object({ row: z.number().int(), col: z.number().int() }),
-  z.record(jsonValueSchema)
+  z.object({ row: z.number().int(), col: z.number().int() })
 ]);
 
 const commandSchema: z.ZodType<Command> = z.discriminatedUnion("type", [
@@ -421,16 +450,19 @@ export function assertComponentValue(value: unknown, label = "component"): asser
   }
 }
 
-function serializableIssue(value: unknown, path = "value"): string | undefined {
+function serializableIssue(value: unknown, path = "value", depth = 0): string | undefined {
   if (value === null || typeof value === "string" || typeof value === "boolean") {
     return undefined;
   }
   if (typeof value === "number") {
     return Number.isFinite(value) ? undefined : `${path} is not finite`;
   }
+  if (typeof value === "object" && depth >= maxJsonValueDepth) {
+    return `${path} nests deeper than ${maxJsonValueDepth} levels`;
+  }
   if (Array.isArray(value)) {
     for (let index = 0; index < value.length; index += 1) {
-      const issue = serializableIssue(value[index], `${path}[${index}]`);
+      const issue = serializableIssue(value[index], `${path}[${index}]`, depth + 1);
       if (issue) {
         return issue;
       }
@@ -439,7 +471,7 @@ function serializableIssue(value: unknown, path = "value"): string | undefined {
   }
   if (typeof value === "object" && value !== null) {
     for (const [key, item] of Object.entries(value)) {
-      const issue = serializableIssue(item, `${path}.${key}`);
+      const issue = serializableIssue(item, `${path}.${key}`, depth + 1);
       if (issue) {
         return issue;
       }
@@ -505,12 +537,7 @@ function isSpaceLocationValue(value: unknown): boolean {
   if (typeof x === "number" || typeof y === "number") {
     return typeof x === "number" && Number.isFinite(x) && typeof y === "number" && Number.isFinite(y);
   }
-  const row = value.row;
-  const col = value.col;
-  if (typeof row === "number" || typeof col === "number") {
-    return Number.isInteger(row) && Number.isInteger(col);
-  }
-  return serializableIssue(value) === undefined;
+  return Number.isInteger(value.row) && Number.isInteger(value.col);
 }
 
 export function validateEvent(event: SimulationEvent): SimulationEvent {

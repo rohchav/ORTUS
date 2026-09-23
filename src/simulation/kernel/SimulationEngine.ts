@@ -26,7 +26,12 @@ import { Scheduler } from "./Scheduler";
 import { SimulationRuntime } from "./SimulationRuntime";
 import { SystemRegistry } from "./SystemRegistry";
 import { World } from "./World";
-import { SimulationSerializationError, SimulationValidationError } from "./Errors";
+import {
+  SimulationEngineFailedError,
+  SimulationSerializationError,
+  SimulationValidationError,
+  type SimulationFailure
+} from "./Errors";
 import { assertWorldInvariants } from "./Invariants";
 import { createScenarioExport, createSnapshotExport, createSnapshotView } from "./Snapshot";
 import { deserializeScenario, deserializeSnapshot, serializeScenario, serializeSnapshot } from "./Serialization";
@@ -60,6 +65,7 @@ export class SimulationEngine {
   initialization?: NonNullable<SimulationEngineOptions["initialization"]>;
   scenario?: ScenarioVariantConfig;
   world: World;
+  private failureState: SimulationFailure | undefined;
 
   constructor(template: SimulationTemplate, options: SimulationEngineOptions = {}) {
     validateTemplate(template);
@@ -88,55 +94,63 @@ export class SimulationEngine {
     this.metadata = deepClone(options.metadata ?? {});
     this.debug = options.debug ?? false;
 
-    this.world = template.createInitialWorld({
-      seed: this.seed,
-      params: this.parameters,
-      ...(this.initialization ? { initialization: this.initialization } : {}),
-      ...(this.scenario ? { scenario: this.scenario } : {}),
-      rng: this.rng,
-      fixedDt: this.clock.fixedDt
-    });
+    this.world = this.buildInitialWorld(this.seed, this.parameters, this.rng, this.initialization, this.scenario);
     template.registerSystems(this.registry);
     template.registerMetrics(this.metrics);
-    assertWorldInvariants(this.world);
-    template.validateWorld?.(this.world.view());
-    normalizeSimulationEventLogInWorld(this.world);
-    appendSimulationEventLogToWorld(this.world, {
-      type: "run.initialized",
-      source: "engine",
-      label: `${this.template.name} initialized`,
-      category: "run",
-      severity: "info",
-      payload: {
-        templateId: this.template.id,
-        seed: this.seed
-      }
-    });
+  }
+
+  // Failure contract:
+  // - step() and applyCommands() mutate the live world. If either throws once mutation may have
+  //   begun, the run is failed: pending commands are discarded, playback stops, and step, runSteps,
+  //   applyCommands, play, and snapshot export are refused. The partial world stays readable for
+  //   inspection and is never rolled back. Events due in the failed tick stay consumed, RNG draws
+  //   stay drawn, and no metric record exists for the failed tick.
+  // - A batch passed to applyCommands is validated as a whole before any command is applied; a
+  //   batch rejected at that stage changes nothing and leaves the run usable.
+  // - reset(), restoreSnapshot(), and importScenario() build and validate the replacement run before
+  //   committing it, so they either fully replace the run (clearing any failure) or change nothing.
+  get failure(): SimulationFailure | undefined {
+    return this.failureState;
+  }
+
+  assertOperational(attempted: string): void {
+    if (this.failureState) {
+      throw new SimulationEngineFailedError(attempted, this.failureState);
+    }
   }
 
   step(): void {
+    this.assertOperational("step");
     const stepStarted = this.performanceMonitor.mark();
-    this.clock.advanceOne();
-    this.world.tick = this.clock.tick;
-    this.world.time = this.clock.time;
-    this.runtime.resetStep();
-    this.runtime.setDueEvents(this.world.eventQueue.popDue(this.world.tick));
+    let schedulerMs: number;
+    let metricsMs: number;
+    try {
+      this.clock.advanceOne();
+      this.world.tick = this.clock.tick;
+      this.world.time = this.clock.time;
+      this.runtime.resetStep();
+      this.runtime.setDueEvents(this.world.eventQueue.popDue(this.world.tick));
 
-    const schedulerStarted = this.performanceMonitor.mark();
-    this.scheduler.runTick(this.world, this.registry, {
-      updateMode: this.updateMode,
-      debug: this.debug,
-      commandBuffer: this.commandBuffer,
-      runtime: this.runtime,
-      createContext: (system) => this.createSystemContext(system)
-    });
-    const schedulerMs = this.performanceMonitor.elapsedSince(schedulerStarted);
+      const schedulerStarted = this.performanceMonitor.mark();
+      this.scheduler.runTick(this.world, this.registry, {
+        updateMode: this.updateMode,
+        debug: this.debug,
+        commandBuffer: this.commandBuffer,
+        runtime: this.runtime,
+        createContext: (system) => this.createSystemContext(system)
+      });
+      schedulerMs = this.performanceMonitor.elapsedSince(schedulerStarted);
+      assertWorldInvariants(this.world);
+      this.template.validateWorld?.(this.world.view());
 
-    const metricsStarted = this.performanceMonitor.mark();
-    this.metrics.collect(this.world);
-    const metricsMs = this.performanceMonitor.elapsedSince(metricsStarted);
-    assertWorldInvariants(this.world);
-    this.template.validateWorld?.(this.world.view());
+      // Collected only after the tick has passed validation, so history never records a failed tick.
+      const metricsStarted = this.performanceMonitor.mark();
+      this.metrics.collect(this.world);
+      metricsMs = this.performanceMonitor.elapsedSince(metricsStarted);
+    } catch (error) {
+      this.fail("step", error);
+      throw error;
+    }
     const stepMs = this.performanceMonitor.elapsedSince(stepStarted);
     this.performanceMonitor.recordDuration("ortus.sim.step", stepMs);
     this.performanceMonitor.recordTick({
@@ -150,6 +164,7 @@ export class SimulationEngine {
   }
 
   runSteps(steps: number): void {
+    this.assertOperational("run steps");
     if (!Number.isInteger(steps) || steps < 0) {
       throw new SimulationValidationError("runSteps requires a nonnegative integer");
     }
@@ -159,33 +174,11 @@ export class SimulationEngine {
   }
 
   reset(): void {
+    const rng = new RandomService(this.seed);
+    const world = this.buildInitialWorld(this.seed, this.parameters, rng, this.initialization, this.scenario);
     this.clock.reset();
-    this.rng.setState(new RandomService(this.seed).getState());
     this.metrics.reset();
-    this.commandBuffer.clear();
-    this.runtime.resetAll();
-    this.world = this.template.createInitialWorld({
-      seed: this.seed,
-      params: this.parameters,
-      ...(this.initialization ? { initialization: this.initialization } : {}),
-      ...(this.scenario ? { scenario: this.scenario } : {}),
-      rng: this.rng,
-      fixedDt: this.clock.fixedDt
-    });
-    assertWorldInvariants(this.world);
-    this.template.validateWorld?.(this.world.view());
-    normalizeSimulationEventLogInWorld(this.world);
-    appendSimulationEventLogToWorld(this.world, {
-      type: "run.initialized",
-      source: "engine",
-      label: `${this.template.name} initialized`,
-      category: "run",
-      severity: "info",
-      payload: {
-        templateId: this.template.id,
-        seed: this.seed
-      }
-    });
+    this.commitRun(world, rng);
   }
 
   pause(): void {
@@ -193,6 +186,7 @@ export class SimulationEngine {
   }
 
   play(): void {
+    this.assertOperational("resume playback");
     this.clock.play();
   }
 
@@ -206,17 +200,30 @@ export class SimulationEngine {
       sourceSystemId: "external"
     }
   ): BufferedCommand[] {
-    for (const command of commands) {
-      this.commandBuffer.add(command, {
-        sourceSystemId: metadata.sourceSystemId,
-        tick: this.world.tick,
-        ...(metadata.reason !== undefined ? { reason: metadata.reason } : {})
-      });
+    this.assertOperational("apply commands");
+    try {
+      for (const command of commands) {
+        this.commandBuffer.add(command, {
+          sourceSystemId: metadata.sourceSystemId,
+          tick: this.world.tick,
+          ...(metadata.reason !== undefined ? { reason: metadata.reason } : {})
+        });
+      }
+    } catch (error) {
+      // Nothing has been applied yet: reject the whole batch and leave nothing queued.
+      this.commandBuffer.clear();
+      throw error;
     }
-    const applied = this.commandBuffer.apply(this.world);
-    assertWorldInvariants(this.world);
-    this.template.validateWorld?.(this.world.view());
-    return applied;
+    try {
+      const applied = this.commandBuffer.apply(this.world);
+      assertWorldInvariants(this.world);
+      this.template.validateWorld?.(this.world.view());
+      // The buffer's history retains these entries; callers get their own copies.
+      return applied.map((entry) => deepClone(entry));
+    } catch (error) {
+      this.fail("applyCommands", error);
+      throw error;
+    }
   }
 
   createSnapshot(): SimulationSnapshotView {
@@ -267,14 +274,18 @@ export class SimulationEngine {
     if (scenario.templateId !== this.template.id) {
       throw new SimulationSerializationError(`Scenario template ${scenario.templateId} does not match engine template ${this.template.id}`);
     }
+    const parameters = resolveParameters(this.template.parameterDefinitions, scenario.parameters);
+    this.template.validateParameters?.(parameters);
+    const rng = new RandomService(scenario.seed);
+    const world = this.buildInitialWorld(scenario.seed, parameters, rng);
     this.seed = scenario.seed;
-    this.rng = new RandomService(this.seed);
     this.metadata = deepClone(scenario.metadata);
-    this.parameters = resolveParameters(this.template.parameterDefinitions, scenario.parameters);
-    this.template.validateParameters?.(this.parameters);
+    this.parameters = parameters;
     this.initialization = undefined;
     this.scenario = undefined;
-    this.reset();
+    this.clock.reset();
+    this.metrics.reset();
+    this.commitRun(world, rng);
   }
 
   exportSnapshot(): string {
@@ -282,6 +293,7 @@ export class SimulationEngine {
   }
 
   snapshotExport(): SnapshotExport {
+    this.assertOperational("export a snapshot");
     return createSnapshotExport(this.template, this.parameters, this.seed, this.metadata, this.world, this.rng, this.metrics);
   }
 
@@ -300,22 +312,23 @@ export class SimulationEngine {
     if (snapshot.rng.seed !== snapshot.seed) {
       throw new SimulationSerializationError("Snapshot RNG seed must match snapshot seed");
     }
+    const parameters = resolveParameters(this.template.parameterDefinitions, snapshot.parameters);
+    this.template.validateParameters?.(parameters);
+    const world = World.fromSnapshot(snapshot.world);
+    normalizeSimulationEventLogInWorld(world);
+    assertWorldInvariants(world);
+    this.template.validateWorld?.(world.view());
+    const rng = new RandomService(snapshot.seed);
+    rng.setState(snapshot.rng);
+    // clock.restore validates before assigning, so it is the first mutation.
+    this.clock.restore(snapshot.tick, snapshot.time);
     this.seed = snapshot.seed;
-    this.rng = new RandomService(this.seed);
     this.metadata = deepClone(snapshot.metadata);
-    this.parameters = resolveParameters(this.template.parameterDefinitions, snapshot.parameters);
-    this.template.validateParameters?.(this.parameters);
+    this.parameters = parameters;
     this.initialization = undefined;
     this.scenario = undefined;
-    this.world = World.fromSnapshot(snapshot.world);
-    normalizeSimulationEventLogInWorld(this.world);
-    this.clock.restore(snapshot.tick, snapshot.time);
-    this.rng.setState(snapshot.rng);
     this.metrics.restore(snapshot.metricsHistory);
-    this.commandBuffer.clear();
-    this.runtime.resetAll();
-    assertWorldInvariants(this.world);
-    this.template.validateWorld?.(this.world.view());
+    this.commitRun(world, rng);
   }
 
   debugData(): EngineDebugData {
@@ -350,6 +363,53 @@ export class SimulationEngine {
     });
     engine.restoreSnapshot(snapshot);
     return engine;
+  }
+
+  private buildInitialWorld(
+    seed: string,
+    parameters: ParameterValues,
+    rng: RandomService,
+    initialization?: NonNullable<SimulationEngineOptions["initialization"]>,
+    scenario?: ScenarioVariantConfig
+  ): World {
+    const world = this.template.createInitialWorld({
+      seed,
+      params: parameters,
+      ...(initialization ? { initialization } : {}),
+      ...(scenario ? { scenario } : {}),
+      rng,
+      fixedDt: this.clock.fixedDt
+    });
+    assertWorldInvariants(world);
+    this.template.validateWorld?.(world.view());
+    normalizeSimulationEventLogInWorld(world);
+    appendSimulationEventLogToWorld(world, {
+      type: "run.initialized",
+      source: "engine",
+      label: `${this.template.name} initialized`,
+      category: "run",
+      severity: "info",
+      payload: {
+        templateId: this.template.id,
+        seed
+      }
+    });
+    return world;
+  }
+
+  // Final, non-throwing step of reset/restore/import: install an already-validated run.
+  private commitRun(world: World, rng: RandomService): void {
+    this.world = world;
+    this.rng = rng;
+    this.commandBuffer.clear();
+    this.runtime.resetAll();
+    this.failureState = undefined;
+  }
+
+  private fail(operation: SimulationFailure["operation"], error: unknown): void {
+    this.failureState = { operation, tick: this.world.tick, error };
+    this.commandBuffer.clear();
+    this.clock.pause();
   }
 
   private createSystemContext(system: System): SystemContext {

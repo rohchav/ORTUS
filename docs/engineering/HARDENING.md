@@ -1,4 +1,530 @@
-# ORTUS Hardening Ledger — Phase 1 Forensic Investigation
+# ORTUS Hardening Ledger
+
+This ledger has two parts. **Phase 2 — Execution** (immediately below) records the repairs made
+against the Phase 1 findings. **Phase 1 — Forensic Investigation** (further below) is the original
+audit, preserved as evidence; where Phase 2 changed a conclusion, the Phase 2 entry says so.
+
+## Phase 2 — Execution
+
+Baseline for Phase 2: branch `main`, commit `28dca70` (adds only this ledger on top of the audited
+`8114043`), clean working tree, npm with `package-lock.json`, Node v24.16.0.
+
+Finding map used below: F1 = K1, F2 = K2, F3 = K3, F4 = K8, F5 = SEC1, F6 = SEC2, F7 = GOV1,
+F8 = RUNTIME1, F9 = K5. STATE1/STATE2 are the WP6 items.
+
+| Package | Status |
+| --- | --- |
+| WP1 — Kernel tick/command failure semantics (F1–F4) | VERIFIED |
+| WP2 — Space/command kind safety (F9) | VERIFIED |
+| WP3 — Hostile-input depth hardening (F5) | VERIFIED |
+| Worker detached-buffer repair (F8) | VERIFIED |
+| WP4 — CI enforcement and dependency hygiene (F6, F7) | VERIFIED LOCALLY; GitHub run and required checks unverified |
+| WP5 — Kernel deep-clone cost (K6) | MEASURED; OPTIMIZED (19–50% ms/tick); further reduction deferred |
+| WP6 — Application-state cleanup (STATE1, STATE2) | VERIFIED |
+
+Final disposition and verification: see **Phase 2 — Final Disposition** at the end of Phase 2.
+
+### WP1 — Kernel tick and command failure semantics — VERIFIED
+
+**Revalidation.** F1–F3 reproduced on current code by the new regression tests (18 of 19 failed
+before the repair; the one that passed pins reset-equals-fresh and guards the refactor). One further
+manifestation was found: `RuntimeWorkerHost` classified any `SimulationValidationError` from
+`runtime.step` as a recoverable `runtime.rejected`. A probe using finite-but-extreme Flocking
+velocities showed a mid-tick failure reported as a rejection with playback still `paused`, and the
+next step ran on top of the partial tick (tick 1 → 2). That is F1 reaching the production Worker
+path. `LocalRuntimeDriver` already treated step failures as terminal, so the two drivers disagreed.
+A second F2 path was also found: `applyCommands` queued each command before validating the next, so
+a batch rejected by shape validation on command N left commands 1..N−1 pending for the next tick.
+
+**Contract.**
+- `step()`/`applyCommands()` failing after mutation may have begun marks the run failed:
+  `engine.failure = { operation, tick, error }`, pending commands are cleared, the clock pauses.
+- A failed engine refuses `step`, `runSteps`, `applyCommands`, `play`, `snapshotExport`/`exportSnapshot`,
+  and `executeIntervention` with `SimulationEngineFailedError` (cause = original error, message
+  names tick, operation, and original reason). Views (`createSnapshot`, `debugData`, `world`) stay
+  readable for inspection; `exportScenario` (initial conditions only) stays available.
+- Clock: remains at the failed tick. Events due in the failed tick: consumed, never re-queued.
+  RNG: draws stay drawn and are unreachable (no snapshot export). Metrics: collected only after
+  invariants and `validateWorld` pass, so history never contains a failed tick.
+- `applyCommands` batches are shape-validated as a whole before any command applies; a rejected batch
+  changes nothing, queues nothing, and does not fail the run. A failure during application fails the
+  run; commands after the failing one never apply; commands before it are not rolled back.
+- A single multi-mutation command (`setComponents`, `moveEntities`, `createEntity`) that fails part-way
+  follows the same rule: the run fails and the partial effect is inspectable only.
+- Template post-validation failure (`validateWorld`) follows the same model for ticks and batches.
+- `reset`/`restoreSnapshot`/`importScenario` build and validate the replacement world, parameters,
+  and RNG before committing anything. They either replace the run and clear the failure, or throw
+  and leave the engine exactly as it was (healthy or failed).
+- Runtime drivers treat a failed run as terminal even when the original error is a
+  `SimulationValidationError`.
+
+**Design chosen: C (poison on execution failure) plus validate-then-commit lifecycle.**
+Rejected A/B (rollback or copy/commit): either needs a full world + RNG + event-queue + metrics copy
+per tick on the hot path, where every kernel read already pays a JSON clone (see WP5). The partial
+state has no legitimate use after failure, so rollback would buy only the ability to continue a run
+after a bug, which is not a product requirement. Rejected per-command prevalidation of arbitrary
+batches: commands within a batch depend on each other (create then add component), so it would need a
+dry-run interpreter. Considered and rejected rollback only for external batches: apply-time failures
+of external batches are bugs (intervention preconditions are checked in `build()` before
+`applyCommands`), and a second failure model would add a concept for no user-visible benefit.
+
+**Files changed.** `kernel/SimulationEngine.ts` (failure state, guards, validate-then-commit lifecycle,
+metrics after validation, shared `buildInitialWorld` replacing duplicated constructor/reset code),
+`kernel/Errors.ts` (`SimulationFailure`, `SimulationEngineFailedError`), `kernel/Scheduler.ts`
+(wrapped system errors now include the original message, which previously reached the UI only as
+"System X failed"), `interventions/interventionExecutor.ts` (refuse on failed engine; do not try to
+record into an engine the intervention just failed), `runtime/RuntimeSession.ts` (`runFailed`),
+`runtime/RuntimeWorkerHost.ts` and `runtime/LocalRuntimeDriver.ts` (failed run is never a recoverable
+rejection), `state/simulationStore.ts` (`play`, `clearInterventions`, `exportSnapshot` surface refusal
+as `lastError` instead of throwing out of UI handlers), `simulation/README.md` (Failure Semantics).
+
+**Tests added.** `src/simulation/__tests__/engine.failureSemantics.test.ts` (19) and
+`src/state/simulationStore.failure.test.ts` (1). They detect: stepping, running, applying, playing,
+or exporting a failed engine; a failed tick's queued command surviving; a partially validated external
+batch leaking into the next tick; metrics recorded for a failed tick; due events redelivered;
+RNG draws from a failed tick shifting a rebuilt run; `validateWorld` failures continuing; a restore
+that half-commits before failing validation; a failed rebuild clearing the failure; a Worker mid-tick
+validation failure reported as recoverable; UI actions throwing on a failed engine. Tests removed:
+none.
+
+**Mutation exercise.** Ten single-point mutations were each detected by at least one test and then
+reverted byte-identical: allow step on failed engine (11 tests failed), omit pending-command cleanup
+(1), collect metrics before validation (2), keep a partially-validated batch pending (1), no failure
+on applyCommands (3), restore committing before validation (1), allow play (1), allow snapshot export
+(3), Worker host treating a failed run as recoverable (1), reset not clearing failure (6).
+
+**Verification.** `npm run typecheck` PASS; `npm run lint` PASS (397 files); full `npx vitest run`
+92 files / 793 tests PASS.
+
+**Remaining risk.** P3: `engine.world`, `engine.commandBuffer`, and `engine.registry` remain public
+fields, so code can still mutate a failed engine directly; no production caller does. P3:
+`CommandBuffer.history` (K7) is still not cleared by rebuilds and still has no production consumer.
+P3: the failure-time Worker UI projection reads the selected entity from the failed engine's partial
+world; it is labelled `playback: "failed"`, so it does not present as a successful tick.
+
+### WP2 — Space and command kind safety — VERIFIED
+
+**Revalidation.** Space kinds and accepted locations: `Continuous2DSpace` ↔ finite `{x, y}` (checked
+internally by `assertPoint`), `Grid2DSpace` ↔ integer `{row, col}` (checked by `normalizeCell`),
+`NetworkSpace` ↔ no location. Its `addEntity(entityId, location = entityId)` added `location`, not
+`entityId`, as the node, so any non-default location corrupted membership. Network membership is created
+only by templates calling `network.addEntity(entity.id)` directly (Neural); no template or
+intervention sends network membership through commands, and the command schema could not express a
+string node id anyway. The generic path could therefore only ever send a wrong-shaped value to a
+network. The regression test reproduced the exact Phase 1 crash
+(`TypeError: left.localeCompare is not a function`). Two further pre-mutation gaps: `createEntity`
+created the entity and its components before resolving its spaces, so a missing space or a
+wrong-kind location left a half-created entity; `moveEntities` could move some entities before
+rejecting a later wrong-kind location. `SpaceLocation`'s third arm `Record<string, unknown>` (and the
+matching schema/hot-path arm) accepted any JSON object as a location.
+
+**Contract.** A location is `Point2D | GridCell`; networks have no locations. `createEntity`,
+`moveEntity`, and `moveEntities` resolve the target space and check the location against its kind
+before mutating anything; missing spaces and wrong-kind locations (including any placement into a
+network) throw a named error before the command mutates. Locations that are neither points nor cells
+are rejected at command validation, so an external batch containing one is rejected without applying
+or failing the run (WP1). `NetworkSpace.addEntity` refuses a location other than the entity's own id.
+Apply-time rejections inside a batch still fail the run under WP1; the difference is that the world
+is no longer corrupted and stays inspectable.
+
+**Design.** Chose D + B-lite: network membership is kept off the placement path, and one function,
+`isLocationForSpaceKind(kind, location)` in `spaces/Space.ts`, is the single kind↔shape rule, applied
+in `CommandBuffer` via `requireSpace` + `assertLocationFits`. Rejected: per-space command variants and
+a dedicated network-placement command, because nothing would use them; redesigning `Space<TLocation>`
+(`NetworkSpace.moveEntity` remains an unreachable interface stub); kind-aware validation at
+`CommandBuffer.add` time, which would need world access in the buffer, although spaces are fixed per
+world. The now-redundant shape checks in `SystemCommandSink.moveEntity/moveEntities` were deleted
+because command validation performs the same check.
+
+**Files changed.** `spaces/Space.ts`, `spaces/NetworkSpace.ts`, `kernel/Validation.ts`
+(`spaceLocationSchema`, `isSpaceLocationValue`), `kernel/CommandBuffer.ts`, `simulation/README.md`.
+
+**Tests added.** `src/simulation/__tests__/engine.spaceKindSafety.test.ts` (10). They detect: the
+Phase 1 network corruption path; wrong-kind continuous and grid locations creating an entity or
+components; one invalid location among several creating or placing anything; placement into a
+missing space creating the entity; movement into a network; a batch move partially applying before a
+wrong-kind location; non-point/non-cell locations passing validation; a network node differing from
+its entity id. They also pin that valid placement, edge commands, and schema rejection of wrong-shaped
+imported space state still work. Old code failed 7 of 10. Five mutations (network accepts
+locations, grid accepts points, network stores the location, Record escape hatch restored, no batch
+kind check) were each detected and reverted. Tests removed: none.
+
+**Verification.** `npm run typecheck` PASS; `npm run lint` PASS; full Vitest 93 files / 803 tests
+PASS, including Flocking neighbor-equivalence and determinism suites (trajectories unchanged).
+
+**Remaining risk.** P2 (pre-existing, not F9): `assertWorldInvariants` still does not check that
+space and network entries refer to existing entities; an imported snapshot can reference an absent
+entity id in a space. Kind and representation are schema-checked; membership coherence is not.
+
+### WP3 — Hostile-input depth hardening — VERIFIED
+
+**Revalidation.** Recursion paths over untrusted data: (1) `jsonValueSchema`, the only recursive Zod
+schema in the codebase (`z.lazy` union), shared by the kernel scenario/snapshot/command schemas, the
+Worker protocol, RunConfig/experiment/comparison validation, and about 20 Builder/service artifact
+validators; (2) `serializableIssue` (`assertSerializableValue`/`assertComponentValue`), which the Worker
+protocol reaches on raw message data through `validateCommand`'s hot path and `validateRunConfig`;
+(3) `JSON.stringify`/`structuredClone` clones, which in V8 overflow at extreme depth (measured:
+`JSON.parse` handles 200,000 levels, while `JSON.stringify` and `structuredClone` throw `RangeError`).
+The Builder key scanners are already iterative, and every Builder deserializer clones only after schema
+validation. Reproduced before the fix: `RangeError` from scenario, snapshot, runtime-artifact, Worker
+protocol, RunConfig, command, and **Builder model-schema** imports; infinite recursion on cyclic
+programmatic input; and the pasted-import path reporting `Cannot read properties of null` for `null`.
+
+**Measured legitimate depth.** All seven production templates, run with every applicable
+intervention applied: whole snapshot depth 7; deepest JSON-valued field 4 (globals event log and
+intervention history); components 1; parameters 1.
+
+**Contract / design.** One constant, `maxJsonValueDepth = 64` (`kernel/Validation.ts`). That is 16× the
+measured legitimate maximum, and well under the measured overflow point of the old recursive schema: it
+overflowed Node's default stack between 1,000 and 2,000 nested arrays (2,000–4,000 nested objects), far
+below the 50,000 used in Phase 1, so ordinary hostile input was enough. `jsonValueSchema` is now a
+`z.custom` depth gate piped into the unchanged recursive schema. Zod's pipeline does not run the
+recursive stage on a failed gate, so recursion is bounded, output shape is unchanged, and every consumer of
+`jsonValueSchema` is covered without per-deserializer preflights. The gate function's own recursion is
+bounded by its depth budget, which also rejects cycles. `serializableIssue` got the same bound. Fixed
+positions (non-JSON-value schema fields) already reject nesting at the first mismatch without
+recursing. Rejected: a global size cap on the main-thread import path (not needed for the verified
+defect; the Worker path already has `maxRuntimeArtifactJsonLength`); replacing the Zod schema with a
+hand-written validator (changes output identity and error paths across ~24 modules); per-deserializer
+preflights (easy to miss a path).
+
+**Files changed.** `kernel/Validation.ts`, `state/simulationStore.ts` (`importJson` reads `templateId`
+only from a plain object), `simulation/README.md`.
+
+**Tests added.** `src/simulation/__tests__/engine.hostileInput.test.ts` (8), covering: at-limit
+acceptance with round trip and continuation; limit + 1 rejection naming the limit; 100,000-level arrays,
+objects, and mixed nesting in scenario metadata, snapshot globals, and event payloads; hostile nesting in
+non-JSON-value positions; cyclic programmatic input; runtime artifact, Worker protocol, RunConfig,
+`setGlobal`, and hot-path `setComponents`; Builder model-schema import; and store paste import of
+`null`/`[]`/`42`/deep JSON reporting a payload error while keeping the current engine. Old code failed
+6 of 8. Mutations detected: accept limit + 1, reject at limit, unbounded `serializableIssue`. Tests
+removed: none.
+
+**Verification.** `npm run typecheck` PASS; `npm run lint` PASS; full Vitest 94 files / 811 tests PASS.
+
+**Remaining risk.** P3: the main-thread paste import has no size cap (a very large paste stalls the
+main thread in `JSON.parse`; it does not crash). P3: `assertSafeStarterWorldValue` is recursive, but
+it only sees static module content and ID-only launch queries, never nested user input.
+
+### F8 — Flocking Worker detached-buffer read — VERIFIED
+
+**Revalidation / reproduction.** `RuntimeSession` cached the last `RenderFramePacket` and reused it for
+UI-only publications (`play`, `pause`, `setSpeedMultiplier`, `fail`). The host transfers a frame's
+eight buffers on publication, so the cached frame's `selectedDetail.neighborIds` was often detached and
+read as length 0. New end-to-end test (`WorkerRuntimeDriver` over the host-backed transport, which
+uses `structuredClone` with a real transfer list): select `e000001` in a 500-boid run (true
+proximity count 155), then pause. The published UI reported `currentProximityCount: 0`.
+
+**Contract.** Once `projectFrame()` returns a frame, the session never reads it again. The session
+keeps a plain `FrameFacts` copy (template id, tick, time, entity count, alignment, signature, and
+selected entity id + proximity count), taken at projection time, and UI projections read only that.
+
+**Design.** Rejected "always re-project a frame for UI-only updates": it would add a full 500-entity
+projection and a phantom `framesProjected`/publication id per pause/play/speed change. Rejected copying
+buffers before transfer: unnecessary allocation. No change to Worker generation, backpressure,
+coalescing, or transfer lists (R1–R5 remain rejected).
+
+**Files changed.** `runtime/RuntimeSession.ts`, `runtime/flockingProjection.ts`
+(`createFlockingSelectedUIProjection` takes `SelectedProximity` rather than the transferable detail;
+`selectedProximityOf` reads it before transfer).
+
+**Tests added.** `runtime.performanceArchitectureAudit.test.ts`: "keeps the selected proximity count
+exact in UI updates published after the frame was transferred" (fails with 0 ≠ 155 before the fix,
+and checks that each UI revision advanced, so it cannot pass on a stale UI). Tests removed: none.
+
+**Verification.** Runtime/immersive/production-adoption suites: 72 tests PASS; typecheck PASS.
+
+### WP4 — CI enforcement and dependency hygiene — VERIFIED LOCALLY; GITHUB ENFORCEMENT UNVERIFIED
+
+**State found at session recovery.** `.github/workflows/ci.yml`, `.github/dependabot.yml`, and `.nvmrc`
+existed, but the workflow's main step ran `npm run verify`, which did not exist in `package.json`, so the
+`verify` job would have failed on every run. No dependency had been upgraded: the lockfile was still at
+the `28dca70` versions, so the workflow's `npm audit --audit-level=high` job would also have failed.
+
+**Dependency remediation.** `npm audit fix` (semver-compatible only) moved `next` 15.5.19 → 15.5.26,
+`sharp` 0.34.5 → 0.35.4, `nanoid` 3.3.12 → 3.3.19, `vitest`/`@vitest/*` 4.1.8 → 4.1.11, and Vite's
+`postcss` 8.5.15 → 8.5.28. That left `postcss@8.4.31` (high), which every `next@15.5.x` pins exactly, and
+`next` itself reported moderate only through that dependency; `npm audit fix --force` would have
+installed Next 16 (major). Instead `package.json` has a scoped override, `overrides.next.postcss =
+^8.5.28`, so Next's PostCSS is the patched release of the same major line. Next 15 loads the real
+`postcss` package at build time (`require('postcss')` in its CSS config) through the PostCSS 8 plugin
+API, which 8.5 keeps; the production build and the full Playwright suite below ran on the overridden
+version. The `next` and `vitest` ranges were raised to `^15.5.26` and `^4.1.11` so an install without the
+lockfile cannot resolve a vulnerable version. The lockfile diff against `28dca70` contains only those
+packages, their platform binaries (`@next/swc-*`, `@img/sharp-*`), and three transitive patch bumps
+(`semver` 7.8.5, `tinyrainbow` 3.1.1, `@jridgewell/sourcemap-codec` 1.6.0). No major version changed.
+
+**Dependency state after remediation (`npm audit`, clean `npm ci`):** 0 vulnerabilities (Phase 2 start:
+1 critical, 3 high, 2 moderate).
+
+**CI definition (`.github/workflows/ci.yml`).** Triggers: every `pull_request`, `push` to `main`, and
+manual dispatch. Permissions are read-only. Node comes from `.nvmrc` (`24`, a major-version pin; local
+verification used 24.16.0). Every job installs with `npm ci` from the lockfile. No step or job uses
+`continue-on-error`; every step is a plain command, so a non-zero exit fails the job. Concurrency cancels
+superseded runs of the same PR only. The npm cache (`setup-node` `cache: npm`) caches the download cache,
+not `node_modules`, so it cannot change what `npm ci` installs.
+
+| Job | Runs on | Command | What it gates |
+| --- | --- | --- | --- |
+| `verify` | every PR and `main` push | `npm run verify` = `typecheck` → `lint` (`lint:types`, `lint:architecture`) → `vitest run` → `next build` | types, unused symbols, architecture boundaries and seeded-randomness rule, full unit suite, production build |
+| `e2e` | every PR and `main` push, after `verify` passes | `npx playwright install --with-deps chromium`, `npm run test:ui` | full Playwright + Axe suite (Chromium, against `next dev` started by Playwright's `webServer`); report and traces uploaded on failure |
+| `audit` | every PR and `main` push | `npm audit --audit-level=high` | no high or critical advisory in the lockfile |
+
+With `CI=true`, `playwright.config.ts` forbids `.only`, retries a failed test once, and always starts
+its own server. A test that fails and then passes on retry is reported as flaky but does not fail the job.
+Dependabot opens weekly grouped npm minor/patch PRs (majors separately) and monthly GitHub Actions PRs.
+Nothing runs on a schedule, so a newly published advisory surfaces on the next PR or `main` push, where
+the `audit` job fails even when the PR does not touch dependencies (intended: fail closed).
+
+**Acceptance evidence (local).** Appending `export const injectedNoise = Math.random();` to
+`src/simulation/kernel/EntityStore.ts` made `npm run verify` exit 1 at `lint:architecture`
+("authoritative simulation code must use seeded RandomService streams, not Math.random") before tests
+or build ran; the file was restored. The workflow YAML parses, and every `npm run` target it invokes
+exists in `package.json`.
+
+**Not verified.** The workflow has never run on GitHub: the Phase 2 changes are uncommitted, and `gh` is
+not installed here. Whether `verify`, `e2e`, and `audit` block merges depends on branch protection
+(required status checks on `main`), a repository setting that is not visible from the repository.
+Until one run completes green on GitHub and those checks are marked required, CI reports failures but
+is not proven to block them.
+
+**Baseline audit (Phase 2 start, `npm audit`, lockfile at `28dca70`), kept for comparison:** 6 vulnerabilities
+(1 critical, 3 high, 2 moderate). The set differs from Phase 1: `nanoid` and `vitest` are now listed.
+
+| Package | Installed | Path | Severity | Advisories (fixed in) | Exercised by ORTUS? |
+| --- | --- | --- | --- | --- | --- |
+| `next` | 15.5.19 | direct | critical | GHSA-2xp9-vwfh-vxw4 image-optimizer AVIF RCE, GHSA-p293-qw3h-jr36 Windows RCE (≥15.5.24); GHSA-m99w-x7hq-7vfj Server Actions DoS, GHSA-89xv-2m56-2m9x / GHSA-p9j2-gv94-2wf4 SSRF, 4 moderate cache/Server-Function/SVG issues (≥15.5.21) | Yes: `StartHub` uses `next/image` (Image Optimization API under `next start`); middleware issues a same-origin `NextResponse.rewrite`. No Server Actions (`"use server"` absent). |
+| `postcss` | 8.4.31 (pinned exactly by every `next@15.5.x`), 8.5.15 (via `vite`) | transitive | high | GHSA-6g55-p6wh-862q, GHSA-r28c-9q8g-f849, GHSA-fxqj-rqcc-2cmp source-map file read, GHSA-qx2v-qp2m-jg93 XSS (≥8.5.23) | Build-time only, on first-party CSS. Exploitation needs attacker-controlled CSS in the build input. |
+| `sharp` | 0.34.5 | transitive (optional dep of `next`) | high | libvips/libheif CVEs (≥0.35.4) | Yes: backs `next/image` optimization. |
+| `nanoid` | 3.3.12 | transitive (via `postcss`) | high | GHSA-28wg-ghj8-5hjv, GHSA-2v37-7h3g-55p8 infinite loop on non-positive size (≥3.3.18) | Not with attacker-controlled sizes. |
+| `vitest` / `@vitest/mocker` | 4.1.8 | direct (dev) | moderate | GHSA-82fw-gwwq-j7x9 path traversal via redirect mock (≥4.1.11) | Dev/test only. |
+
+Upgrade constraints: the newest Next 15 patch (15.5.26) still pins `postcss@8.4.31`; only Next 16
+(major) moves to `postcss@8.5.23`. `next@15.5.24+` widens `sharp` to `^0.34.3 || ^0.35.4`. (Resolved
+above with the scoped `postcss` override instead of a Next 16 upgrade.)
+
+### WP5 — Kernel deep-clone cost (K6) — MEASURED; OPTIMIZED 19–50% MS/TICK; FURTHER REDUCTION DEFERRED
+
+**Benchmark review.** The first `npm run perf:clone` reported `msPerTick` measured while the 100 µs
+sampling profiler was running, from one sample per scenario; two runs of that version differed by up to
+49% on the same workload (Flocking 500: 71.7 vs 48.2 ms/tick). It was rewritten: 10 warmup ticks, then the
+median of 5 unprofiled blocks (fastest–slowest block reported as `range`), then a separate profiled pass
+used only for attribution. Engine construction and warmup are excluded. Neural and Schelling were added so
+all seven production templates are covered, and each top clone caller is shown with its own caller. The
+report writes no files. Profiler sample shares are labelled as such and are not wall-time savings.
+
+**Isolation method (A vs B).** A scratch harness outside the repository ran the same deterministic
+workloads, with the same seeds and tick counts, in a fresh process per variant, over 5 interleaved rounds.
+The reported figure is the median of the per-round medians. A SHA-256 of each run's final
+`exportSnapshot()` compares behaviour. Variants: pre-WP5 code (a snapshot of `src/simulation` served by a
+Vite `load` hook), post-WP5 code, and two measurement-only builds that rewrite code at transform time and
+never exist in the repository: `deepClone` as identity (all clone cost removed) and `ComponentStore.get`
+without its copy. Before any change, disabling every clone cut ms/tick by 47–74% on every workload with
+byte-identical final snapshots. Clone cost was therefore the largest single cost in the step, and no
+template's results depended on the copies in these runs. A per-site pass (one round, indicative only)
+ranked the liveness `EntityStore.get`, `ComponentStore.get`, and Neural's `globals` reads highest.
+
+**Per-call-site decisions.**
+
+| Call site | Why it copied | Guarantee needed? | Decision |
+| --- | --- | --- | --- |
+| `EntityStore.get` in `WorldView.entitiesWith` (alive filter, runs for every system query) and `CommandBuffer.requireAlive` | read `.alive` from a copy | No: the copy was discarded after reading one boolean | `EntityStore.isAlive(id)`, no copy |
+| `CommandBuffer.add` | hot-path validation returns the caller's own object; the copy isolates the queued payload | Yes | Kept; now the only copy of an entry |
+| `CommandBuffer.drain` | copy entries being handed over | No: after `splice` the buffer holds no reference to entries it already owns | Removed |
+| `CommandBuffer.apply` → `history`; `SimulationRuntime.recordCommands` → `lastCommands` | keep records independent of callers; each copied every applied command, then trimmed to the last 200 | Only against mutation after read-out | Retain owned entries; copy at the read-outs: `recent()` and `debugData()` (already copying) and `SimulationEngine.applyCommands`' return value (new; external batches are small) |
+| `ComponentStore.add/set/patch`, `EventQueue.schedule`, `setGlobal`, space normalizers | the store owns its values | Yes; it is also what keeps recorded entries from aliasing world state | Kept |
+| `ComponentStore.get` (`getComponent`) | systems may mutate what they read; world changes only through commands | Yes, as the current public contract | Deferred (below) |
+| `EntityStore.all()` (`allEntities`, `aliveEntities`, `serialize`) | same, for entity metadata | Yes | Deferred (below) |
+| `WorldView.globals` | private copy of all globals | Yes, but Neural read it about 30 times per tick (8 in the activation system, 18 in metrics, 4 in `validateWorld`), each copying all globals including up to 12,000 synapses, to use one key | New `WorldView.getGlobal(key)` (private copy of one own-property global). Neural metrics use it; Neural's activation system and world validation read `globals` once per call. Each later read in those functions uses a different key, and different keys of one JSON copy are disjoint, so results are identical |
+| `EventQueue.popDue`, `SimulationRuntime.setDueEvents/due`, `MetricsCollector.collect` | redundant or boundary copies | Partly | Unchanged: within noise |
+
+**What each removed copy was preventing, and what prevents it now.**
+- Liveness copy: nothing (boolean read).
+- `drain` copy: nothing (entries already exclusively owned).
+- `history`/`lastCommands` copies: a caller mutating an entry obtained from `applyCommands`, `recent()`, or
+  `debugData()` would have rewritten the record. The three read-outs now copy. Store writes copy, so an
+  in-place change to a stored value (for example through the trusted `getMutable`) cannot reach a record.
+- Neural `globals`: each function still works on its own private copy.
+
+**Tests added.** `src/simulation/__tests__/engine.ownership.test.ts` (4) makes the previously implicit
+contract explicit:
+- a payload mutated after `setComponents`/`moveEntities` (the hot validation path) applies as queued;
+- a system mutating every read (`getComponent`, `getEntity`, `allEntities`, `aliveEntities`, `globals`,
+  `getGlobal`, `events.due`) changes nothing;
+- destroyed entities are excluded from queries and skipped under `allowMissing`;
+- recorded commands are unchanged by later world updates, by in-place store mutation, and by mutating
+  `recent()`, `debugData()`, or `applyCommands` output.
+
+The pre-`getGlobal` part passed on the pre-WP5 code. Nine single-point mutations were each detected and
+reverted byte-identical: enqueue copy removed (3 tests failed); `applyCommands`, `recent()`, or
+`debugData()` returning retained entries (1 each); component store keeping the payload reference (1);
+`isAlive` ignoring the destroyed flag (2); `getGlobal` returning the live value (1) or reading inherited
+keys (1); `getComponent` returning the live value (3). Tests removed: none.
+
+**Result (5 interleaved rounds; median ms/tick; final snapshot hash identical in all 20 runs per workload
+across the four variants).**
+
+| Workload | Entities | Before | After | Improvement | Paired per round | Clone cost left (share of after) | of which `getComponent` copy |
+| --- | ---: | ---: | ---: | ---: | --- | ---: | ---: |
+| Epidemic 80 | 80 | 9.86 | 7.69 | 22.0% | −3% to 26% | 32% | 18% |
+| Flocking 160 | 160 | 10.32 | 6.83 | 33.8% | 30% to 44% | 51% | 25% |
+| Neural default | 80 | 36.27 | 18.28 | 49.6% | 45% to 52% | 15% | 1% |
+| Opinion 300 | 300 | 30.48 | 23.69 | 22.3% | 15% to 26% | 47% | 25% |
+| Schelling default | 1,339 | 39.23 | 24.90 | 36.5% | 28% to 43% | 59% | 39% |
+| Forest Fire 60×40 | 2,400 | 15.50 | 12.49 | 19.4% | 16% to 25% | 61% | 31% |
+| Flocking 500 | 500 | 49.01 | 34.87 | 28.9% | 24% to 31% | 27% | 12% |
+| Epidemic 1000 | 1,000 | 139.66 | 108.10 | 22.6% | 16% to 26% | 33% | 18% |
+| Predator-Prey 1000 prey | 1,283 | 66.31 | 40.10 | 39.5% | 33% to 45% | 57% | 31% |
+| Forest Fire 160×120 | 19,200 | 130.34 | 102.71 | 21.2% | 12% to 37% | 56% | 29% |
+
+The improvement holds as scale grows: Flocking 34% at 160 boids and 29% at 500; Epidemic 22% at 80 agents
+and 23% at 1,000; Forest Fire 19% at 2,400 cells and 21% at 19,200. One of 50 paired rounds was negative
+(Epidemic 80, −3%). Machine: WSL2, Node 24.16.0; absolute numbers are machine-specific. The committed
+`npm run perf:clone` after WP5 shows Neural's clone sample share at 5.4%; before WP5, disabling every clone
+cut Neural's ms/tick by 57%. Its top remaining clone callers are `ComponentStore.get` via `getComponent`, `EntityStore.all`,
+and `CommandBuffer.add`.
+
+**Production changes.** `kernel/EntityStore.ts` (`isAlive`), `kernel/World.ts` (`entitiesWith` uses
+`isAlive`; `getGlobal`), `kernel/CommandBuffer.ts` (ownership comment, no `drain`/`history` copies,
+`requireAlive` uses `isAlive`), `kernel/SimulationRuntime.ts` (no `lastCommands` copy),
+`kernel/SimulationEngine.ts` (`applyCommands` returns copies), `templates/neuralExcitation.template.ts`
+(read-once `globals`, `getGlobal` in metrics), `simulation/README.md` (ownership contract and
+`perf:clone`), `testing/clonePerformanceReport.ts`.
+
+**Deferred, with reasons.**
+1. The `ComponentStore.get` copy, 12–39% of post-WP5 time on nine of ten workloads (1% on Neural). Returning shared
+   references is safe only with enforced immutability: stored values deep-frozen and `getComponent`
+   returning deep-readonly types. That changes the contract for about 100 read sites across seven
+   templates plus the UI, intervention, and metric consumers of `WorldView`. Any code that mutates its
+   read copy today would throw at runtime. It needs its own design and audit, not a hardening patch.
+2. The `EntityStore.all()` copies behind templates' per-tick `validateWorld` (`componentEntityIds` via
+   `allEntities`). A type-guarded shallow copy of the flat entity record, or template use of
+   `entitiesWith`, would help. The second changes semantics, since `allEntities` includes destroyed
+   entities.
+3. Per-tick `assertWorldInvariants` serializes every space (`Grid2DSpace.serialize` ← `step` was 6% of
+   samples on Forest Fire 160×120). That is invariant-checking cost, not clone ownership.
+
+**Rejected.** `structuredClone`, a custom recursive copier, Immer, persistent structures, and
+copy-on-write worlds. No correctness requirement calls for them. A structural copier would also change
+value semantics: the JSON round trip turns `-0` into `0` and drops `undefined`, while
+`Math.atan2(-0, -1) ≠ Math.atan2(0, -1)`. That would need its own determinism migration.
+
+**Verification.** `npm run typecheck`, `npm run lint` PASS. Full Vitest 96 files / 820 tests PASS (816
+before WP5 + 4 ownership tests). Neural, determinism, failure-semantics, space-kind, validation, and event
+suites PASS with trajectories unchanged.
+
+### WP6 — Application-state error scoping and stale sweep labelling (STATE1, STATE2) — VERIFIED
+
+**Revalidation.** STATE1 confirmed on `28dca70`: `lastError` was one string, and 21 success paths set it to
+`null` (speed change, step, frame advance, run capture, comparison delete/clear, scenario/snapshot export,
+experiment import, intervention clear, and others), so an unread Setup or import error disappeared when
+the user did something unrelated in another panel. The stage banner labelled every error "Engine
+message". STATE2 confirmed: `latestExperimentResultSet` survives `selectTemplate`, and "Add Experiment
+Runs" gave no sign that the sweep came from another model (the imported summaries were already tagged
+with the sweep's own `templateId`, so this was an honesty gap, not data corruption).
+
+**Contract.** `lastError` is `{ area, text }` with area `run | setup | intervention | comparison | file`. A
+successful action clears only an error in its own area; a rebuilt run (reset, seed/parameter/template
+change, scenario apply, import) also clears `run` and `intervention` errors, which referred to the
+discarded run. A failure in any area still replaces the current error (one error slot, not a queue); what
+changed is that successes no longer dismiss other areas' errors. The banner names the area. A retained
+sweep from another model stays available (clearing it would discard the user's sweep on a model
+switch), but the button reads "Add <Model> Sweep Runs", an adjacent note says the sweep ran a different
+model and that cross-model comparison is limited to shared metrics, imported labels start with the
+sweep's model name, and the notice names the model.
+
+**Consequential fixes.** `StarterRemixWorkspace.runRemix` treated any `lastError` after `applyScenario`
+as a remix rejection; with scoping, an unrelated retained error would have blocked a valid remix, so it
+now checks only the `setup` area. The banner's existing suppression of a message already shown by the
+Worker failure alert is kept, now limited to a failed Worker run.
+
+**Files changed.** `state/simulationStore.ts`, `components/WorldStage.tsx`,
+`components/RunComparisonPanel.tsx`, `components/runtime/ProductionRuntimeProvider.tsx` (area on every
+runtime feedback call), `components/builder/remix/StarterRemixWorkspace.tsx`,
+`components/runtime/productionRuntimeAdoption.test.ts` (assertion reads `.text`).
+
+**Tests added.** `src/state/simulationStore.messages.test.ts` (4): a Setup error survives capture, export,
+speed change, and step until Setup succeeds; a failed-run error survives unrelated successes until the
+run is rebuilt; an area's own success clears its stale error; a retained sweep imports under its own
+model with a model-labelled notice and mixed-model comparison warns. `tests/ui/world-state-feedback.spec.ts`
+(2, Playwright): the banner names the area and survives an unrelated Capture Run; after a model switch the
+sweep button, note, and imported run label name the sweep's model. Mutations detected: successes clear
+every area (2 tests fail); a rebuild no longer clears run errors (1 fails). Tests removed: none.
+
+**Remaining risk.** P3: `lastNotice` is still one unscoped slot, so one panel's success notice replaces
+another's (notices are transient information, not unread failures). P3: one error slot means a second
+failure replaces the first; it is replaced visibly, not silently cleared.
+
+### K4 — Same-tick event timing — DOCUMENTED
+
+WP1's plan included deciding the K4 contract, and the ledger had no entry for it. Existing behaviour is
+kept and made explicit: due events are collected once per step before any system runs, so an event
+emitted during tick `t` for tick `t` is delivered at the start of tick `t + 1`. Delivering it later in the
+same tick would change the timing of every event-driven template. Documented in `src/simulation/README.md`
+(Event Queue); pinned by `engine.events.test.ts` "delivers an event emitted for the current tick at the
+start of the next step, not later in the same tick".
+
+## Phase 2 — Final Disposition
+
+### Phase 1 findings
+
+| Finding | Disposition | Executable evidence |
+| --- | --- | --- |
+| F1 (K1) failed tick left partial state and the run continued | FIXED | The failed run is poisoned: step/runSteps/applyCommands/play/export/intervention refuse with `SimulationEngineFailedError`; the partial world is inspectable only. `engine.failureSemantics.test.ts` (19) plus the Worker-host test; 10 mutations detected. No rollback, by design (WP1). |
+| F2 (K2) failed tick's queued commands leaked into the next tick | FIXED | Pending commands are cleared on failure and the failed engine refuses to step. Covered by the failure-semantics tests for leaked queued commands and partially validated batches. |
+| F3 (K3) command batch applied an arbitrary prefix and continued | FIXED | Batches are shape-validated as a whole before any command applies (a rejected batch changes nothing and leaves the run usable). An apply-time failure fails the run; commands before it are not rolled back (documented contract, `src/simulation/README.md` Failure Semantics). |
+| F4 (K8) no adversarial kernel tests | FIXED | 19 failure-semantics + 10 space-kind + 8 hostile-input + 4 ownership kernel tests, and the K4 timing pin; 27 single-point kernel mutations detected (WP1 10, WP2 5, WP3 3, WP5 9). |
+| F5 (SEC1) hostile nested import overflowed the stack | FIXED | `maxJsonValueDepth = 64` depth gate in front of the recursive schema and serializability check. `engine.hostileInput.test.ts` (8): 100,000-level payloads rejected cleanly on every import path. |
+| F6 (SEC2) vulnerable dependencies | FIXED | `npm audit`: 0 vulnerabilities after clean `npm ci` (Phase 2 start: 1 critical, 3 high, 2 moderate). Semver-compatible upgrades plus one scoped `postcss` override; build and full Playwright on the upgraded tree (WP4). |
+| F7 (GOV1) no CI | MITIGATED | Workflow (`verify`, `e2e`, `audit`) and Dependabot defined, YAML parsed, every command resolves to a real script, `npm run verify` fails on an injected `Math.random`. Not yet run on GitHub; required status checks unverified (WP4). |
+| F8 (RUNTIME1) Flocking UI read a transferred (detached) frame buffer | FIXED | `RuntimeSession` keeps a plain `FrameFacts` copy. `runtime.performanceArchitectureAudit.test.ts` "keeps the selected proximity count exact…" (0 ≠ 155 before the fix). |
+| F9 (K5) wrong-kind locations corrupted a network space | FIXED | Kind-checked placement and movement before any mutation; the `Record<string, unknown>` location arm removed. `engine.spaceKindSafety.test.ts` (10). |
+
+Also closed: STATE1/STATE2 (WP6, VERIFIED), K6 (WP5, measured and partly optimized), K4 (documented).
+
+### Final verification (working tree with all Phase 2 changes, uncommitted; Node 24.16.0, npm 11.13.0)
+
+| Command | Result |
+| --- | --- |
+| `rm -rf node_modules && npm ci` | PASS; `found 0 vulnerabilities` |
+| `npm run verify` (canonical local and CI gate) | PASS, exit 0 |
+| ↳ `npm run typecheck` | PASS |
+| ↳ `npm run lint` (`lint:types`, `lint:architecture`) | PASS; "Architecture lint passed (397 production TypeScript files checked)" |
+| ↳ `npm test` (full Vitest) | PASS; 96 files / 821 tests |
+| ↳ `npm run build` | PASS; Next.js 15.5.26, 23/23 static pages |
+| `npx playwright test` (full Playwright + Axe, Chromium) | PASS; 215/215 in 36.2 min, 16 spec files, no retries or flaky results |
+| Focused regression suites: failure semantics, store failure, space kinds, hostile input, runtime audit (F8), store messages, ownership, events, determinism, Flocking neighbor equivalence | PASS; 10 files / 91 tests |
+| `npm run perf:clone` | Runs; results in WP5 |
+| `npm audit` / `npm audit --audit-level=high` | 0 vulnerabilities / exit 0 |
+| `npm run verify` with `Math.random` injected into `kernel/EntityStore.ts` | exit 1 at `lint:architecture` (expected; reverted) |
+| Diff scan (new `.only`, `.skip`, `ts-ignore`, `ts-expect-error`, `as any`, debug logging, empty catch, TODO/FIXME) | none; two `Space<any>` signatures follow the existing `World.spaces` idiom |
+| Profiler/benchmark artifacts in the tree | none; benchmark harnesses and snapshots stayed in the session scratch directory |
+
+Phase 2 is **not complete** under its own standard: CI is not yet proven to enforce the checks. To
+close it, commit the changes, push a branch, confirm one green run of `verify`, `e2e`, and `audit` on
+GitHub, and mark those three checks as required on `main`.
+
+### Remaining risks (no P0 or P1 known)
+
+- P2 (governance): CI is defined and locally verified but has not run on GitHub, and branch protection is
+  unverified. Until both are confirmed, F7 is mitigated, not fixed.
+- P2: `assertWorldInvariants` does not check that space and network entries refer to existing entities
+  (WP2 remaining risk, pre-existing).
+- P2 (performance): after WP5, remaining clone cost is 15–61% of per-tick time. The largest part is the
+  `getComponent` read-copy contract (WP5 deferred item 1), then `allEntities` copies and per-tick space
+  serialization in invariant checks.
+- P3: `engine.world`, `engine.commandBuffer`, `engine.registry` are public; `getMutable` accessors are
+  trusted-code-only by convention (README), not by type.
+- P3: `CommandBuffer.history` (K7) is still not cleared by rebuilds and has no production consumer.
+- P3: main-thread paste import has no size cap (stalls, does not crash).
+- P3: `lastNotice` is one unscoped slot; one error slot (WP6).
+- P3: CI retries a failed Playwright test once, so a flaky test passes as flaky rather than failing.
+  Actions are pinned by major tag, not commit SHA.
+- P3: STATE3 (three hand-written fresh-run paths in `simulationStore.ts`) and ARCH2 unchanged.
+
+---
+
+# Phase 1 — Forensic Investigation
 
 Status: Phase 1 (investigation only). No production code was modified by this pass. Three throwaway
 diagnostic test files were created under `src/simulation/__tests__/zzz-diagnostic-*.test.ts` to obtain

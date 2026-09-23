@@ -8,6 +8,7 @@ import { getInterventionDefinition } from "./interventionRegistry";
 import type { AppliedInterventionRecord, InterventionExecutionResult, InterventionRequest } from "./interventionTypes";
 
 export function executeIntervention(engine: SimulationEngine, request: InterventionRequest): InterventionExecutionResult {
+  engine.assertOperational("apply an intervention");
   const order = nextInterventionOrder(engine);
   const requestId = `intervention-${engine.world.tick}-${order}`;
   const definition = getInterventionDefinition(request.templateId, request.interventionId);
@@ -71,6 +72,10 @@ export function executeIntervention(engine: SimulationEngine, request: Intervent
     });
     return { record, appliedCommandCount: applied.length };
   } catch (error) {
+    if (engine.failure) {
+      // The intervention's commands failed the run; the failed engine cannot record anything more.
+      throw error;
+    }
     const record: AppliedInterventionRecord = {
       ...baseRecord,
       status: "failed",

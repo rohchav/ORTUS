@@ -66,13 +66,23 @@ Randomness in ORTUS should be explicit, seeded, and reproducible. Hidden randomn
 
 Systems receive read-only world access and emit commands. `CommandBuffer` validates commands, applies them in deterministic order, and records debug metadata. Commands cover entity lifecycle, components, spaces, events, and globals.
 
+Ownership: world state changes only through applied commands. `WorldView` reads (`getComponent`, `getEntity`, `allEntities`, `aliveEntities`, `globals`, `getGlobal`, `events.due`) return private copies, so a system may mutate what it reads without affecting the world. `getGlobal(key)` copies one global; prefer it over `globals` when only one key is needed, because `globals` copies every global. `CommandBuffer.add` makes the one copy of each command, so mutating a payload after queueing does not change what is applied. Queued entries are never mutated afterwards and every store write copies what it keeps, so the buffer's history and the scheduler's debug log retain entries without further copies; `recent()`, `debugData()`, and `SimulationEngine.applyCommands` return copies. Liveness checks (`EntityStore.isAlive`) read a boolean rather than copying the entity. `EntityStore.getMutable` and `ComponentStore.getMutable` return live references for trusted kernel and runtime-projection code only; systems and UI must not use them.
+
+## Failure Semantics
+
+A tick either completes or fails the run; the engine does not roll back. If `step()` or `applyCommands()` throws after mutation may have begun, `SimulationEngine.failure` records the operation, tick, and original error; pending commands are discarded; playback stops; and `step`, `runSteps`, `applyCommands`, `play`, `executeIntervention`, and snapshot export throw `SimulationEngineFailedError` until the run is rebuilt. The partial world stays readable for inspection only: events due in the failed tick stay consumed, RNG draws stay drawn, and metrics are recorded only for ticks that passed invariant and template validation. A batch passed to `applyCommands` is shape-validated as a whole before any command applies, so a batch rejected at that stage changes nothing and does not fail the run. `reset()`, `restoreSnapshot()`, and `importScenario()` build and validate the replacement run before committing it: they either replace the run completely, clearing any failure, or leave the engine unchanged. Runtime drivers treat a failed run as terminal rather than as a recoverable request rejection.
+
 ## Event Queue
 
 `EventQueue` schedules typed events by tick. Due events are popped at the start of each engine step and exposed to systems through context. Same-tick events are ordered by scheduled tick, priority, created tick, and id.
 
+Due events are collected once per step, before any system runs, and are not refreshed between phases. An event a system emits during tick `t` with `scheduledTick: t` is therefore delivered at the start of tick `t + 1`, not to later phases of tick `t`; scheduling a tick earlier than the current one is rejected. Templates that need a same-tick reaction should pass state through components or globals instead of events.
+
 ## Spaces
 
 `Continuous2DSpace`, `Grid2DSpace`, and `NetworkSpace` implement real placement and neighbor behavior. They serialize into snapshot state and can be cloned for deterministic restore.
+
+A `SpaceLocation` is a finite `{x, y}` point (continuous spaces) or an integer `{row, col}` cell (grid spaces). Network spaces have no locations: a network node is the entity id itself, added by the template and connected with `addEdge`/`removeEdge`. `createEntity.spaceLocations`, `moveEntity`, and `moveEntities` check each location against the resolved space's kind before mutating anything, and reject any placement into a network space.
 
 ## Metrics
 
@@ -82,7 +92,7 @@ Metric definitions are formal model metadata: id/key, label, description, value 
 
 ## Snapshots And Import/Export
 
-Scenario export stores template id, parameters, seed, and metadata for restarting from initial conditions. Snapshot export stores current time, world state, events, RNG stream states, metrics history, applied intervention history, and metadata for deterministic continuation. JSON import validates nested state and rejects invalid data.
+Scenario export stores template id, parameters, seed, and metadata for restarting from initial conditions. Snapshot export stores current time, world state, events, RNG stream states, metrics history, applied intervention history, and metadata for deterministic continuation. JSON import validates nested state and rejects invalid data. Any JSON-valued field (metadata, parameters, globals, component values, event payloads) may nest at most `maxJsonValueDepth` (64) arrays/objects deep; the check runs before the recursive validator, so hostile nesting fails as a serialization or validation error instead of exhausting the stack. Legitimate artifacts are far shallower (the deepest JSON-valued snapshot field nests 4 levels).
 
 ## Scenarios
 
@@ -482,6 +492,14 @@ The PERF1 strategy/projection comparison can be run with:
 ```bash
 npm run perf:runtime
 ```
+
+The kernel deep-clone attribution report can be run with:
+
+```bash
+npm run perf:clone
+```
+
+It reports unprofiled median ms/tick per workload and, from a separate sampling-profiler pass, the share of samples with `deepClone` on the stack and its top callers. Sample shares are not wall-time savings.
 
 The report is non-asserting and intended for diagnosis. It includes elapsed time, ticks/sec, average scheduler compute time, average metrics time, validation/overhead remainder, snapshot creation time, render-model preparation time where accessible, entity/cell count, metrics-history length, continuous-space query counters, flocking pair checks, and forest-fire changed-cell counters. Timing varies by machine; use operation counters and repeated runs before making scalability claims.
 

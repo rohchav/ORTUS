@@ -237,7 +237,7 @@ describe("I1 production runtime adoption", () => {
     const state = useSimulationStore.getState();
     expect(state.engine).toBeNull();
     expect(state.latestSnapshot).toBeNull();
-    expect(state.lastError).toMatch(/active Worker runtime/i);
+    expect(state.lastError?.text).toMatch(/active Worker runtime/i);
   });
 
   it("captures Worker comparison provenance from the exported run rather than mutable UI state", () => {

@@ -47,6 +47,45 @@ describe("event queue", () => {
     expect(engine.world.globals.fired).toBe("future");
   });
 
+  it("delivers an event emitted for the current tick at the start of the next step, not later in the same tick", () => {
+    const seen: string[] = [];
+    const template: SimulationTemplate = {
+      id: "same-tick-event-template",
+      name: "Same-Tick Event Template",
+      description: "Same-tick event timing test.",
+      version: "1.0.0",
+      parameterDefinitions: [],
+      documentation: docs(),
+      createInitialWorld: () => new World(),
+      registerSystems(registry) {
+        registry.register({
+          id: "Emitter",
+          phase: "sense",
+          priority: 0,
+          update(ctx) {
+            if (ctx.tick === 1) {
+              ctx.commands.emitEvent({ id: "now", type: "test.now", scheduledTick: ctx.tick, payload: null, createdAtTick: ctx.tick });
+            }
+          }
+        });
+        registry.register({
+          id: "LaterPhaseReader",
+          phase: "resolve",
+          priority: 0,
+          update(ctx) {
+            seen.push(`${ctx.tick}:${ctx.events.due("test.now").map((event) => event.id).join(",")}`);
+          }
+        });
+      },
+      registerMetrics: () => undefined,
+      getVisuals: () => ({ components: {} })
+    };
+    const engine = new SimulationEngine(template);
+
+    engine.runSteps(3);
+    expect(seen).toEqual(["1:", "2:now", "3:"]);
+  });
+
   it("orders same-tick events deterministically", () => {
     const queue = new EventQueue();
     queue.schedule({ id: "c", type: "x", scheduledTick: 5, payload: {}, createdAtTick: 1, priority: 1 });

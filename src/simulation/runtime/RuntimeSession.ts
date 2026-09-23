@@ -13,7 +13,12 @@ import {
   withRuntimeArtifactMetadata
 } from "../runs/engineFromRunConfig";
 import { validateRunConfig } from "../runs/runConfig";
-import { createFlockingRenderFramePacket, createFlockingSelectedUIProjection } from "./flockingProjection";
+import {
+  createFlockingRenderFramePacket,
+  createFlockingSelectedUIProjection,
+  selectedProximityOf,
+  type SelectedProximity
+} from "./flockingProjection";
 import { parseRuntimeArtifact } from "./artifacts";
 import {
   maxRuntimeInterventionHistory,
@@ -36,6 +41,13 @@ export interface RuntimePublicationBundle {
   ui?: UIProjection;
 }
 
+// The values a UI projection needs from the latest frame, copied when the frame is projected. Once
+// projected, a frame belongs to the publication path and its buffers may be transferred (detached)
+// at any time, so the session never reads a frame after returning it.
+type FrameFacts = Pick<RenderFramePacket, "templateId" | "tick" | "time" | "entityCount" | "alignment" | "runtimeSignature"> & {
+  readonly selectedProximity: SelectedProximity | undefined;
+};
+
 export class RuntimeSession {
   private engine: ReturnType<typeof createEngineFromRunConfig> | undefined;
   private identity: RuntimeIdentity = { generation: 0, runId: "uninitialized" };
@@ -45,7 +57,7 @@ export class RuntimeSession {
   private instrumentation = false;
   private disposed = false;
   private lastUiAt = Number.NEGATIVE_INFINITY;
-  private latestFrame: RenderFramePacket | undefined;
+  private latestFrameFacts: FrameFacts | undefined;
   private framePublicationId = 0;
   private uiRevision = 0;
   private readonly measures = new BoundedPerformanceRecorder({ enabled: false, maxSamples: 360 });
@@ -102,14 +114,14 @@ export class RuntimeSession {
     const engine = this.requireEngine();
     engine.play();
     this.playback = "running";
-    return this.projectUI(this.latestFrame ?? this.projectFrame());
+    return this.projectUI(this.currentFrameFacts());
   }
 
   pause(): UIProjection {
     const engine = this.requireEngine();
     engine.pause();
     this.playback = "paused";
-    return this.projectUI(this.latestFrame ?? this.projectFrame());
+    return this.projectUI(this.currentFrameFacts());
   }
 
   advance(steps: number, kind: "run" | "step"): RuntimePublicationBundle {
@@ -141,7 +153,7 @@ export class RuntimeSession {
       throw new SimulationValidationError("Runtime speed multiplier must be between 0.25 and 8");
     }
     engine.setSpeed(value);
-    return this.projectUI(this.latestFrame ?? this.projectFrame());
+    return this.projectUI(this.currentFrameFacts());
   }
 
   applyIntervention(request: InterventionRequest): RuntimePublicationBundle {
@@ -228,6 +240,11 @@ export class RuntimeSession {
     return this.playback === "running";
   }
 
+  // True once the engine has failed a tick or command batch; such a run can only be replaced.
+  get runFailed(): boolean {
+    return this.engine?.failure !== undefined;
+  }
+
   recordDuration(name: PerformanceMeasureName, durationMs: number): void {
     this.measures.record(name, durationMs);
   }
@@ -265,7 +282,7 @@ export class RuntimeSession {
     }
     this.engine.pause();
     this.playback = "failed";
-    return this.projectUI(this.latestFrame ?? this.projectFrame());
+    return this.projectUI(this.currentFrameFacts());
   }
 
   dispose(): void {
@@ -274,7 +291,7 @@ export class RuntimeSession {
     }
     this.engine?.pause();
     this.playback = "disposed";
-    this.latestFrame = undefined;
+    this.latestFrameFacts = undefined;
     this.engine = undefined;
     this.selectedEntityId = null;
     this.disposed = true;
@@ -288,7 +305,7 @@ export class RuntimeSession {
       return { frame };
     }
     this.lastUiAt = now;
-    return { frame, ui: this.projectUI(frame) };
+    return { frame, ui: this.projectUI(this.currentFrameFacts()) };
   }
 
   private projectFrame(): RenderFramePacket {
@@ -298,14 +315,18 @@ export class RuntimeSession {
     const frame = createFlockingRenderFramePacket(engine, this.identity, this.selectedEntityId, this.framePublicationId);
     this.recordElapsed("ortus.scene.project", started);
     this.publicationStats.framesProjected += 1;
-    this.latestFrame = frame;
+    this.latestFrameFacts = frameFactsOf(frame);
     return frame;
   }
 
-  private projectUI(frame: RenderFramePacket): UIProjection {
+  private currentFrameFacts(): FrameFacts {
+    return this.latestFrameFacts ?? frameFactsOf(this.projectFrame());
+  }
+
+  private projectUI(frame: FrameFacts): UIProjection {
     const started = this.performanceMark();
     this.uiRevision += 1;
-    const selected = createFlockingSelectedUIProjection(this.requireEngine(), this.selectedEntityId, frame.selectedDetail);
+    const selected = createFlockingSelectedUIProjection(this.requireEngine(), this.selectedEntityId, frame.selectedProximity);
     const engine = this.requireEngine();
     const metricHistory = engine.metrics.historyRecords();
     const interventions = readInterventionHistory(engine);
@@ -379,6 +400,18 @@ function assertRuntimeTemplateSupport(runConfig: Pick<SimulationRunConfig, "temp
       `PERF1 runtime projection support is explicit and currently limited to flocking-boids, not ${runConfig.templateId}`
     );
   }
+}
+
+function frameFactsOf(frame: RenderFramePacket): FrameFacts {
+  return {
+    templateId: frame.templateId,
+    tick: frame.tick,
+    time: frame.time,
+    entityCount: frame.entityCount,
+    alignment: frame.alignment,
+    runtimeSignature: frame.runtimeSignature,
+    selectedProximity: selectedProximityOf(frame)
+  };
 }
 
 function emptyPublicationStats(): RuntimePublicationStats {

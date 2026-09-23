@@ -40,6 +40,9 @@ export function RunComparisonPanel({ collapsed = false, onToggle, embedded = fal
     [savedRuns, selectedRunIds]
   );
   const comparison = useMemo(() => compareRunSummaries(selectedRuns, baselineRunId), [baselineRunId, selectedRuns]);
+  // The latest sweep is kept across World changes; say so when it came from a different model.
+  const sweepTemplateId = latestExperimentResultSet?.config.templateId ?? null;
+  const sweepModelName = sweepTemplateId && sweepTemplateId !== selectedTemplateId ? getTemplateDescriptor(sweepTemplateId).shortName : null;
   const metricKeys = comparison.metricDeltas.map((metric) => metric.key);
   const [traceMetricKey, setTraceMetricKey] = useState(metricKeys[0] ?? "");
 
@@ -117,8 +120,14 @@ export function RunComparisonPanel({ collapsed = false, onToggle, embedded = fal
           <button type="button" onClick={captureRun} disabled={!runtime.isReady} suppressHydrationWarning>
             Capture Run
           </button>
-          <button type="button" onClick={importLatestExperimentRuns} disabled={!latestExperimentResultSet} suppressHydrationWarning>
-            Add Experiment Runs
+          <button
+            type="button"
+            onClick={importLatestExperimentRuns}
+            disabled={!latestExperimentResultSet}
+            aria-describedby={sweepModelName ? "comparison-sweep-source" : undefined}
+            suppressHydrationWarning
+          >
+            {sweepModelName ? `Add ${sweepModelName} Sweep Runs` : "Add Experiment Runs"}
           </button>
           <button type="button" onClick={exportJson} disabled={selectedRuns.length === 0} suppressHydrationWarning>
             Export Comparison JSON
@@ -127,6 +136,12 @@ export function RunComparisonPanel({ collapsed = false, onToggle, embedded = fal
             Export Comparison CSV
           </button>
         </div>
+        {sweepModelName ? (
+          <p id="comparison-sweep-source" className="run-comparison-note">
+            The latest parameter sweep ran the {sweepModelName} model, not the current world. Its summaries keep the {sweepModelName} label,
+            and comparisons across models are limited to shared metrics.
+          </p>
+        ) : null}
         <h3 className="world-section-heading">Saved comparison runs</h3>
         <RunLibrary
           runs={savedRuns}

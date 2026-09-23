@@ -96,10 +96,22 @@ export function createFlockingRenderFramePacket(
   };
 }
 
+export interface SelectedProximity {
+  readonly entityId: number;
+  readonly count: number;
+}
+
+// Must be read before the frame's buffers are transferred: a detached typed array has length 0.
+export function selectedProximityOf(frame: RenderFramePacket): SelectedProximity | undefined {
+  return frame.selectedDetail
+    ? { entityId: frame.selectedDetail.entityId, count: frame.selectedDetail.neighborIds.length }
+    : undefined;
+}
+
 export function createFlockingSelectedUIProjection(
   engine: SimulationEngine,
   selectedEntityId: string | null,
-  selectedDetail: SelectedRenderDetail | undefined
+  selectedProximity: SelectedProximity | undefined
 ): SelectedUIProjection | null {
   if (!selectedEntityId) {
     return null;
@@ -126,8 +138,8 @@ export function createFlockingSelectedUIProjection(
     headingDegrees: ((heading % 360) + 360) % 360,
     neighborCount: boundedUint16(state.neighborCount),
     localDensity: finiteNonNegative(state.localDensity),
-    currentProximityCount: selectedDetail?.entityId === encodedId
-      ? selectedDetail.neighborIds.length
+    currentProximityCount: selectedProximity?.entityId === encodedId
+      ? selectedProximity.count
       : null
   };
 }

@@ -26,7 +26,10 @@ export class NetworkSpace implements Space<EntityId> {
   }
 
   addEntity(entityId: EntityId, location: EntityId = entityId): void {
-    this.addNode(location);
+    if (location !== entityId) {
+      throw new SimulationValidationError(`Network ${this.id} node for ${entityId} must be the entity id itself`, { entityId });
+    }
+    this.addNode(entityId);
   }
 
   removeEntity(entityId: EntityId): void {

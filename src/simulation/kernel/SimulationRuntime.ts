@@ -34,9 +34,11 @@ export class SimulationRuntime {
     this.trim(this.systemExecutionLog);
   }
 
+  // Applied entries are owned by the command buffer and never mutated (see CommandBuffer); they are
+  // retained as-is and copied when read out through SimulationEngine.debugData().
   recordCommands(commands: readonly BufferedCommand[]): void {
     for (const command of commands) {
-      this.lastCommands.push(deepClone(command));
+      this.lastCommands.push(command);
       this.trim(this.lastCommands);
     }
   }

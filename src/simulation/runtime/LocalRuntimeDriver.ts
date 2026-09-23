@@ -143,7 +143,7 @@ export class LocalRuntimeDriver implements SimulationRuntimePort {
       this.publishBundle(this.session.applyIntervention(request));
       return this.requireLatestUI();
     } catch (error) {
-      if (error instanceof SimulationValidationError) {
+      if (error instanceof SimulationValidationError && !this.session.runFailed) {
         this.publishBundle(this.session.projectRejectedRequest());
         throw error;
       }

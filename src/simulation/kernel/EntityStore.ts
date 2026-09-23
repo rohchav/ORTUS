@@ -50,6 +50,11 @@ export class EntityStore {
     return this.entities.has(entityId);
   }
 
+  // Liveness without copying the entity; a boolean exposes nothing a caller could mutate.
+  isAlive(entityId: EntityId): boolean {
+    return this.entities.get(entityId)?.alive === true;
+  }
+
   destroy(entityId: EntityId, tick: number): void {
     const entity = this.entities.get(entityId);
     if (!entity) {

@@ -81,7 +81,7 @@ export class RuntimeWorkerHost {
       this.acknowledgeMessageConsumption(request);
       this.handleRequest(request);
     } catch (error) {
-      if (error instanceof SimulationValidationError && isRecoverableRequest(request)) {
+      if (error instanceof SimulationValidationError && isRecoverableRequest(request) && !this.session.runFailed) {
         this.reportRejection(request, error);
         return;
       }

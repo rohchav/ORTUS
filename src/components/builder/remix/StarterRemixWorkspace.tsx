@@ -222,12 +222,14 @@ export function StarterRemixWorkspace({ source, onMeaningfulChange }: StarterRem
             })
           : null
       );
+      // applyScenario reports its own rejection as a Setup error; errors from other panels are unrelated.
+      const setupError = acceptedState.lastError?.area === "setup" ? acceptedState.lastError.text : null;
       if (
-        acceptedState.lastError ||
+        setupError ||
         acceptedState.selectedTemplateId !== launch.templateId ||
         !starterRemixLaunchMatchesRunConfig(acceptedConfig, launch)
       ) {
-        throw new Error(acceptedState.lastError ?? "The established runtime path did not accept this derivative.");
+        throw new Error(setupError ?? "The established runtime path did not accept this derivative.");
       }
       onMeaningfulChange(false);
       router.push(launch.href);

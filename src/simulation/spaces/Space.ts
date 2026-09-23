@@ -13,7 +13,8 @@ export type GridCell = {
   col: number;
 };
 
-export type SpaceLocation = Point2D | GridCell | Record<string, unknown>;
+// A spatial location. Network spaces have no locations: membership is the node itself.
+export type SpaceLocation = Point2D | GridCell;
 
 export interface NeighborResult<TLocation = SpaceLocation> {
   entityId: EntityId;
@@ -52,6 +53,17 @@ export function isPoint2D(value: unknown): value is Point2D {
     typeof (value as Point2D).y === "number" &&
     Number.isFinite((value as Point2D).y)
   );
+}
+
+export function isLocationForSpaceKind(kind: SpaceKind, location: unknown): boolean {
+  switch (kind) {
+    case "continuous2d":
+      return isPoint2D(location);
+    case "grid2d":
+      return isGridCell(location);
+    case "network":
+      return false;
+  }
 }
 
 export function isGridCell(value: unknown): value is GridCell {

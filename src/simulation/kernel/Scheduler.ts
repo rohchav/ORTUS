@@ -26,7 +26,8 @@ export class Scheduler {
           if (error instanceof SimulationError) {
             throw error;
           }
-          throw new SimulationError(`System ${system.id} failed`, {
+          const reason = error instanceof Error ? error.message : String(error);
+          throw new SimulationError(`System ${system.id} failed: ${reason}`, {
             tick: world.tick,
             phase,
             systemId: system.id,
