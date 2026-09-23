@@ -18,7 +18,7 @@ F8 = RUNTIME1, F9 = K5. STATE1/STATE2 are the WP6 items.
 | WP2 — Space/command kind safety (F9) | VERIFIED |
 | WP3 — Hostile-input depth hardening (F5) | VERIFIED |
 | Worker detached-buffer repair (F8) | VERIFIED |
-| WP4 — CI enforcement and dependency hygiene (F6, F7) | VERIFIED LOCALLY; GitHub run and required checks unverified |
+| WP4 — CI enforcement and dependency hygiene (F6, F7) | CI GREEN ON GITHUB (run 35808522808); required checks NOT enforced on `main` |
 | WP5 — Kernel deep-clone cost (K6) | MEASURED; OPTIMIZED (19–50% ms/tick); further reduction deferred |
 | WP6 — Application-state cleanup (STATE1, STATE2) | VERIFIED |
 
@@ -476,7 +476,7 @@ start of the next step, not later in the same tick".
 | F4 (K8) no adversarial kernel tests | FIXED | 19 failure-semantics + 10 space-kind + 8 hostile-input + 4 ownership kernel tests, and the K4 timing pin; 27 single-point kernel mutations detected (WP1 10, WP2 5, WP3 3, WP5 9). |
 | F5 (SEC1) hostile nested import overflowed the stack | FIXED | `maxJsonValueDepth = 64` depth gate in front of the recursive schema and serializability check. `engine.hostileInput.test.ts` (8): 100,000-level payloads rejected cleanly on every import path. |
 | F6 (SEC2) vulnerable dependencies | FIXED | `npm audit`: 0 vulnerabilities after clean `npm ci` (Phase 2 start: 1 critical, 3 high, 2 moderate). Semver-compatible upgrades plus one scoped `postcss` override; build and full Playwright on the upgraded tree (WP4). |
-| F7 (GOV1) no CI | MITIGATED | Workflow (`verify`, `e2e`, `audit`) and Dependabot defined, YAML parsed, every command resolves to a real script, `npm run verify` fails on an injected `Math.random`. Not yet run on GitHub; required status checks unverified (WP4). |
+| F7 (GOV1) no CI | PARTIALLY VERIFIED | Workflow (`verify`, `e2e`, `audit`) and Dependabot defined; `npm run verify` fails on an injected `Math.random`. All three jobs ran green on GitHub for `2bb7bdc` (Phase 2 — GitHub CI Evidence). `main` has no branch protection and no ruleset, so nothing yet blocks a merge that fails these checks. |
 | F8 (RUNTIME1) Flocking UI read a transferred (detached) frame buffer | FIXED | `RuntimeSession` keeps a plain `FrameFacts` copy. `runtime.performanceArchitectureAudit.test.ts` "keeps the selected proximity count exact…" (0 ≠ 155 before the fix). |
 | F9 (K5) wrong-kind locations corrupted a network space | FIXED | Kind-checked placement and movement before any mutation; the `Record<string, unknown>` location arm removed. `engine.spaceKindSafety.test.ts` (10). |
 
@@ -500,14 +500,51 @@ Also closed: STATE1/STATE2 (WP6, VERIFIED), K6 (WP5, measured and partly optimiz
 | Diff scan (new `.only`, `.skip`, `ts-ignore`, `ts-expect-error`, `as any`, debug logging, empty catch, TODO/FIXME) | none; two `Space<any>` signatures follow the existing `World.spaces` idiom |
 | Profiler/benchmark artifacts in the tree | none; benchmark harnesses and snapshots stayed in the session scratch directory |
 
-Phase 2 is **not complete** under its own standard: CI is not yet proven to enforce the checks. To
-close it, commit the changes, push a branch, confirm one green run of `verify`, `e2e`, and `audit` on
-GitHub, and mark those three checks as required on `main`.
+The changes were later committed and pushed straight to `main` (see Phase 2 — GitHub CI Evidence),
+and the three jobs ran green on GitHub for that exact commit. Phase 2 is still **not complete** under
+its own standard until those three checks are required on `main`.
+
+### Phase 2 — GitHub CI Evidence
+
+**Git state.** The Phase 2 changes are in two commits on `main`, both already pushed to `origin/main`:
+`28dca70` (this ledger) and `2bb7bdc2a1019b6416117ccf28f6e889682ca64b` (all Phase 2 code, tests,
+workflow, Dependabot, dependency upgrades, ledger results). They were pushed to `main` directly, not
+through a hardening branch, and their subject lines ("Implement feature X…", "Refactor neural
+excitation…") do not describe their contents. History was not rewritten because it is published on
+`main`. This entry is carried on branch `phase2/ci-evidence`.
+
+**Workflow run.** `CI` run 35808522808 (push to `main`, head `2bb7bdc`),
+https://github.com/rohchav/ORTUS/actions/runs/35808522808 — conclusion **success**.
+
+| Workflow job id | Check name (as GitHub reports it) | Result | Duration |
+| --- | --- | --- | --- |
+| `verify` | `Verify (types, lint, unit, build)` | success (`npm ci`, `npm run verify`) | 3m22s |
+| `e2e` (needs `verify`) | `Browser and accessibility (Playwright + Axe)` | success (`npm run test:ui`; failure-artifact upload skipped) | 26m45s |
+| `audit` | `Dependency audit (high and critical)` | success (`npm audit --audit-level=high`) | 7s |
+
+The verification method was the public GitHub REST API without authentication, because `gh` is not installed on the
+handoff machine. Job logs return HTTP 403 without authentication, so the per-test Playwright output and
+any retry/flaky count on GitHub were **not** inspected. The job passed, but a test that failed once
+and passed on its retry would not show at this level. No CI-only repairs were needed.
+
+**Annotations (all three jobs).** Warning: `actions/checkout@v4` and `actions/setup-node@v4` target the
+deprecated Node.js 20 Actions runtime and are forced onto Node.js 24. Notice: `ubuntu-latest` migrates to
+Ubuntu 26 from 2026-10-19. Dependabot has opened update branches for `actions/checkout`,
+`actions/setup-node`, and `actions/upload-artifact` v7. These branches are not merged or evaluated here.
+
+**Main protection.** As of this entry, `GET /repos/rohchav/ORTUS/branches/main` reports
+`protected: false`, and `GET /repos/rohchav/ORTUS/rules/branches/main` returns no rules. Required
+status checks are **not enforced**. Configuring them needs repository-admin access, which the handoff
+machine lacks. Remaining action: require the three check names above on `main`, through a ruleset or
+branch protection.
 
 ### Remaining risks (no P0 or P1 known)
 
-- P2 (governance): CI is defined and locally verified but has not run on GitHub, and branch protection is
-  unverified. Until both are confirmed, F7 is mitigated, not fixed.
+- P2 (governance): CI ran green on GitHub (run 35808522808), but `main` has no required status checks,
+  so F7 is partially verified, not fixed. Phase 2 commits went to `main` without passing through CI first.
+- P3: GitHub Playwright retry/flaky count for run 35808522808 not inspected (logs need authentication).
+- P3: `actions/checkout@v4` / `actions/setup-node@v4` run on the deprecated Node.js 20 Actions runtime
+  (GitHub forces Node.js 24); `ubuntu-latest` moves to Ubuntu 26 from 2026-10-19.
 - P2: `assertWorldInvariants` does not check that space and network entries refer to existing entities
   (WP2 remaining risk, pre-existing).
 - P2 (performance): after WP5, remaining clone cost is 15–61% of per-tick time. The largest part is the
