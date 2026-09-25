@@ -15,6 +15,7 @@ import type {
   TemplateSpaceDefinition
 } from "../kernel/types";
 import { SimulationValidationError } from "../kernel/Errors";
+import { assertSpaceHoldsExactly } from "../kernel/Invariants";
 import { World, type WorldView } from "../kernel/World";
 import { Grid2DSpace, type Grid2DSpaceReader } from "../spaces/Grid2DSpace";
 import type { RandomStream } from "../kernel/Random";
@@ -676,7 +677,8 @@ function validateSchellingWorld(world: WorldView): void {
     }
   }
 
-  for (const entityId of world.entitiesWith([GroupIdentity])) {
+  const agentIds = world.entitiesWith([GroupIdentity]);
+  for (const entityId of agentIds) {
     const group = world.getComponent<GroupIdentityComponent>(entityId, GroupIdentity);
     const satisfaction = world.getComponent<SatisfactionStateComponent>(entityId, SatisfactionState);
     if (!group || (group.group !== "A" && group.group !== "B")) {
@@ -685,10 +687,9 @@ function validateSchellingWorld(world: WorldView): void {
     if (!isSatisfactionState(satisfaction)) {
       throw new SimulationValidationError(`Invalid SatisfactionState component on ${entityId}`);
     }
-    if (!cells[entityId]) {
-      throw new SimulationValidationError(`Schelling agent ${entityId} is missing from grid space`);
-    }
   }
+  // Every agent occupies a cell and every occupant is an agent: occupants block moves and count as neighbours.
+  assertSpaceHoldsExactly(space, SCHELLING_SPACE_ID, agentIds, "Schelling agent");
 }
 
 function groupCountMetric(key: string, label: string, description: string, group: GroupIdentityComponent["group"]): MetricDefinition {

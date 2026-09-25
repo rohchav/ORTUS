@@ -14,6 +14,7 @@ import type {
   TemplateSpaceDefinition
 } from "../kernel/types";
 import { SimulationValidationError } from "../kernel/Errors";
+import { assertSpaceHoldsExactly } from "../kernel/Invariants";
 import { World } from "../kernel/World";
 import { Continuous2DSpace, continuous2DQueryDiagnosticsDelta } from "../spaces/Continuous2DSpace";
 import type { RandomStream } from "../kernel/Random";
@@ -454,6 +455,8 @@ export const epidemicTemplate: SimulationTemplate = {
         throw new SimulationValidationError(`Invalid Velocity2D component on ${entityId}`);
       }
     }
+    // Movement and infection sensing address every live positioned agent through the space.
+    assertSpaceHoldsExactly(world.continuous2D(EPIDEMIC_SPACE_ID), EPIDEMIC_SPACE_ID, world.entitiesWith([Position2D]), "Epidemic agent");
   },
   validateParameters(params) {
     const parsed = epidemicParams(params);

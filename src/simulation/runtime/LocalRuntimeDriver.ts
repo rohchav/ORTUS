@@ -2,7 +2,7 @@ import type { Command } from "../kernel/types";
 import type { InterventionRequest } from "../interventions/interventionTypes";
 import { SimulationValidationError } from "../kernel/Errors";
 import { RuntimeAccumulatorScheduler, type RuntimeSchedulerOptions } from "./RuntimeScheduler";
-import { RuntimeSession, type RuntimePublicationBundle } from "./RuntimeSession";
+import { prepareRuntimeArtifactImport, RuntimeSession, type RuntimePublicationBundle } from "./RuntimeSession";
 import type {
   RenderFramePacket,
   RuntimeArtifactImportRequest,
@@ -14,7 +14,6 @@ import type {
   SimulationRuntimePort,
   UIProjection
 } from "./types";
-import { validateRuntimeArtifactJson } from "./protocol";
 
 export class LocalRuntimeDriver implements SimulationRuntimePort {
   readonly executionKind = "local" as const;
@@ -170,7 +169,8 @@ export class LocalRuntimeDriver implements SimulationRuntimePort {
 
   async importArtifact(request: RuntimeArtifactImportRequest): Promise<UIProjection> {
     this.assertCommandable(`import a ${request.kind}`);
-    validateRuntimeArtifactJson(request.kind, request.json);
+    // A rejected import is refused before the generation changes and leaves the active run in place.
+    prepareRuntimeArtifactImport(request);
     this.scheduler.pause();
     this.beginGeneration();
     this.lifecycle = "initializing";

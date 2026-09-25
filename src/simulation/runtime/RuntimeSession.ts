@@ -180,19 +180,8 @@ export class RuntimeSession {
 
   importArtifact(request: RuntimeArtifactImportRequest, identity: RuntimeIdentity): RuntimePublicationBundle {
     this.assertNotDisposed();
-    const snapshot = request.kind === "snapshot" ? parseRuntimeArtifact("snapshot", request.json) : null;
-    const parsed = snapshot ?? parseRuntimeArtifact("scenario", request.json);
-    const runConfig = runConfigFromArtifact(parsed);
-    assertRuntimeTemplateSupport(runConfig);
     const speedMultiplier = this.engine?.clock.speedMultiplier ?? 1;
-    const engine = createEngineFromRunConfig(withRuntimeArtifactMetadata(runConfig));
-    if (snapshot) {
-      const initialization = engine.initialization;
-      const scenario = engine.scenario;
-      engine.restoreSnapshot(snapshot);
-      engine.initialization = initialization;
-      engine.scenario = scenario;
-    }
+    const engine = prepareRuntimeArtifactImport(request);
     engine.enablePerformanceInstrumentation({ enabled: this.instrumentation, maxSamples: 360 });
     engine.setSpeed(speedMultiplier);
     this.engine?.pause();
@@ -392,6 +381,26 @@ export class RuntimeSession {
       throw new SimulationValidationError("Runtime is disposed");
     }
   }
+}
+
+// Builds, restores, and validates the engine that importing `request` would install, without touching any
+// session. It throws for anything the session would reject. Drivers call it before advancing their
+// generation, so a rejected import is an ordinary rejection that leaves the active run in place; the
+// session repeats it when the import is committed (in the Worker, as the authority).
+export function prepareRuntimeArtifactImport(request: Pick<RuntimeArtifactImportRequest, "kind" | "json">): ReturnType<typeof createEngineFromRunConfig> {
+  const snapshot = request.kind === "snapshot" ? parseRuntimeArtifact("snapshot", request.json) : null;
+  const parsed = snapshot ?? parseRuntimeArtifact("scenario", request.json);
+  const runConfig = runConfigFromArtifact(parsed);
+  assertRuntimeTemplateSupport(runConfig);
+  const engine = createEngineFromRunConfig(withRuntimeArtifactMetadata(runConfig));
+  if (snapshot) {
+    const initialization = engine.initialization;
+    const scenario = engine.scenario;
+    engine.restoreSnapshot(snapshot);
+    engine.initialization = initialization;
+    engine.scenario = scenario;
+  }
+  return engine;
 }
 
 function assertRuntimeTemplateSupport(runConfig: Pick<SimulationRunConfig, "templateId">): void {

@@ -15,6 +15,7 @@ import type {
   TemplateSpaceDefinition
 } from "../kernel/types";
 import { SimulationValidationError } from "../kernel/Errors";
+import { assertSpaceHoldsExactly } from "../kernel/Invariants";
 import { World } from "../kernel/World";
 import { Continuous2DSpace, continuous2DQueryDiagnosticsDelta } from "../spaces/Continuous2DSpace";
 import type { Point2D } from "../spaces/Space";
@@ -689,6 +690,8 @@ export const opinionTemplate: SimulationTemplate = {
         throw new SimulationValidationError(`Invalid Position2D component on ${entityId}`);
       }
     }
+    // Neighbour sensing queries the space for every live positioned agent.
+    assertSpaceHoldsExactly(world.continuous2D(OPINION_SPACE_ID), OPINION_SPACE_ID, world.entitiesWith([Position2D]), "Opinion agent");
     opinionBehaviorModeFromWorld(world.globals);
     const sourceCount = world.globals.opinionInformationSourceCount;
     if (

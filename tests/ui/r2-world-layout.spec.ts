@@ -531,7 +531,7 @@ for (const templateId of templateIds) {
         ? "Immersive Flocking world rendered from the current runtime frame"
         : "Simulation world. Agents are rendered from the latest engine snapshot."
     });
-    const pixels = await canvas.evaluate((element) => {
+    const samplePixels = () => canvas.evaluate((element) => {
       const target = element as HTMLCanvasElement;
       const context = target.getContext("2d");
       if (!context || target.width === 0 || target.height === 0) return { colors: 0, nonTransparent: 0 };
@@ -545,8 +545,9 @@ for (const templateId of templateIds) {
       }
       return { colors: colors.size, nonTransparent };
     });
-    expect(pixels.colors).toBeGreaterThan(2);
-    expect(pixels.nonTransparent).toBeGreaterThan(50);
+    // The first frame is drawn asynchronously (for Flocking, from a Worker publication), so wait for it.
+    await expect.poll(async () => (await samplePixels()).colors).toBeGreaterThan(2);
+    await expect.poll(async () => (await samplePixels()).nonTransparent).toBeGreaterThan(50);
     expect((await bounds(page.locator(".world-stage"))).width).toBeGreaterThan(500);
   });
 }

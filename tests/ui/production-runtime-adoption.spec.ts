@@ -121,6 +121,89 @@ test.describe("I1 production runtime adoption", () => {
     expect(axe.violations.map((violation) => violation.id)).toEqual([]);
   });
 
+  test("keeps the Worker run when an imported snapshot is refused", async ({ page }) => {
+    await page.goto(`${flockingPath}&task=compare`, { waitUntil: "domcontentloaded" });
+    const root = await expectProductionReady(page, 160);
+    await page.getByRole("button", { name: "Step exactly one tick" }).click();
+    await expect(root).toHaveAttribute("data-runtime-tick", "1");
+    const generation = await root.getAttribute("data-runtime-generation");
+
+    await page.getByRole("button", { name: "Open exchange" }).click();
+    await page.getByRole("button", { name: "Export Snapshot" }).click();
+    const snapshot = JSON.parse(await page.getByLabel("Latest exported scenario or snapshot JSON").inputValue());
+    // A boid destroyed but still in the space: schema-valid, refused by restore before the generation changes.
+    Object.assign(snapshot.world.entities.entities[0], { alive: false, destroyedAtTick: 1 });
+    await page.getByLabel("Scenario or snapshot JSON to import").fill(JSON.stringify(snapshot));
+    await page.getByRole("button", { name: "Import Snapshot" }).click();
+
+    await expect(root.getByRole("alert")).toContainText("Runtime request not accepted");
+    await expect(root.getByRole("alert")).toContainText("contains destroyed entity");
+    await expect(root).toHaveAttribute("data-runtime-state", "ready");
+    await expect(root).toHaveAttribute("data-runtime-generation", generation ?? "");
+    await expect(root).toHaveAttribute("data-runtime-tick", "1");
+    await page.getByRole("button", { name: "Step exactly one tick" }).click();
+    await expect(root).toHaveAttribute("data-runtime-tick", "2");
+    await expect.poll(() => page.workers().length).toBe(1);
+  });
+
+  test("stays stopped after an engine failure inside the Worker until an explicit Reset starts a fresh Worker", async ({ page }) => {
+    await recordCreatedWorkers(page);
+    await page.goto(flockingPath, { waitUntil: "domcontentloaded" });
+    const root = await expectProductionReady(page, 160);
+    await page.getByRole("button", { name: "Step exactly one tick" }).click();
+    await expect(root).toHaveAttribute("data-runtime-tick", "1");
+    const generation = Number(await root.getAttribute("data-runtime-generation"));
+
+    // A command that fails while it is applied fails the run inside the real production Worker.
+    await page.evaluate((activeGeneration) => {
+      const workers = (window as unknown as { __ortusCreatedWorkers: Worker[] }).__ortusCreatedWorkers;
+      workers.at(-1)!.postMessage({
+        type: "runtime.applyCommands",
+        requestId: 900_001,
+        generation: activeGeneration,
+        commands: [{ type: "destroyEntity", entityId: "e999999" }]
+      });
+    }, generation);
+
+    await expect(root).toHaveAttribute("data-runtime-state", "failed");
+    await expect(root.getByRole("alert")).toContainText("Worker runtime stopped");
+    await expect(root.getByRole("alert")).toContainText("missing or dead entity e999999");
+    await expect(page.getByRole("button", { name: "Run simulation" })).toBeDisabled();
+    await expect(page.getByRole("button", { name: "Step exactly one tick" })).toBeDisabled();
+    await expect.poll(() => page.workers().length).toBe(0);
+
+    await page.getByRole("button", { name: /Prepare reset/ }).click();
+    await page.getByRole("button", { name: "Confirm reset and discard current run state" }).click();
+    await expectProductionReady(page, 160);
+    await expect(root).toHaveAttribute("data-runtime-tick", "0");
+    await expect(root.getByRole("alert")).toHaveCount(0);
+    await expect.poll(() => page.workers().length).toBe(1);
+    await page.getByRole("button", { name: "Step exactly one tick" }).click();
+    await expect(root).toHaveAttribute("data-runtime-tick", "1");
+  });
+
+  test("stays stopped after the Worker itself fails until a Setup rebuild starts a fresh Worker", async ({ page }) => {
+    await recordCreatedWorkers(page);
+    await page.goto(flockingPath, { waitUntil: "domcontentloaded" });
+    const root = await expectProductionReady(page, 160);
+
+    await page.evaluate(() => {
+      const workers = (window as unknown as { __ortusCreatedWorkers: Worker[] }).__ortusCreatedWorkers;
+      workers.at(-1)!.dispatchEvent(new ErrorEvent("error", { message: "Injected Worker failure" }));
+    });
+
+    await expect(root).toHaveAttribute("data-runtime-state", "failed");
+    await expect(root.getByRole("alert")).toContainText("Injected Worker failure");
+    await expect(page.getByRole("button", { name: "Run simulation" })).toBeDisabled();
+    await expect.poll(() => page.workers().length).toBe(0);
+
+    await page.locator("#ortus-setup-seed").fill("p3-worker-recovered");
+    await page.getByRole("button", { name: "Apply Seed" }).click();
+    await expectProductionReady(page, 160);
+    await expect(page.getByLabel("Current run status")).toContainText("p3-worker-recovered");
+    await expect.poll(() => page.workers().length).toBe(1);
+  });
+
   test("characterizes the production route at 100 and 500 boids", async ({ page }, testInfo) => {
     test.setTimeout(120_000);
     await page.goto(flockingPath, { waitUntil: "domcontentloaded" });
@@ -223,6 +306,21 @@ async function expectProductionReady(page: Page, agentCount: number) {
 
 function productionRoot(page: Page) {
   return page.locator("[data-production-runtime='worker']");
+}
+
+// Records every Worker the page constructs so a test can inject a failure into the real runtime Worker.
+async function recordCreatedWorkers(page: Page): Promise<void> {
+  await page.addInitScript(() => {
+    const NativeWorker = window.Worker;
+    const created: Worker[] = [];
+    Object.defineProperty(window, "__ortusCreatedWorkers", { value: created });
+    window.Worker = class extends NativeWorker {
+      constructor(scriptURL: string | URL, options?: WorkerOptions) {
+        super(scriptURL, options);
+        created.push(this);
+      }
+    };
+  });
 }
 
 async function runtimeTick(root: ReturnType<typeof productionRoot>): Promise<number> {

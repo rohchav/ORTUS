@@ -14,6 +14,7 @@ import type {
   TemplateSpaceDefinition
 } from "../kernel/types";
 import { SimulationValidationError } from "../kernel/Errors";
+import { assertSpaceHoldsExactly } from "../kernel/Invariants";
 import { World } from "../kernel/World";
 import { Continuous2DSpace, continuous2DQueryDiagnosticsDelta } from "../spaces/Continuous2DSpace";
 import type { RandomStream } from "../kernel/Random";
@@ -393,6 +394,13 @@ export const predatorPreyTemplate: SimulationTemplate = {
         throw new SimulationValidationError(`Invalid Velocity2D component on ${entityId}`);
       }
     }
+    // Movement and predation address every live positioned agent through the space.
+    assertSpaceHoldsExactly(
+      world.continuous2D(PREDATOR_PREY_SPACE_ID),
+      PREDATOR_PREY_SPACE_ID,
+      world.entitiesWith([Position2D]),
+      "Predator-prey agent"
+    );
   },
   validateParameters(params) {
     predatorPreyParams(params);

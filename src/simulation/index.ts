@@ -22,6 +22,7 @@ export {
   simulationEventLogGlobalKey
 } from "./kernel/EventLog";
 export * from "./kernel/Errors";
+export { assertImportJsonLength, maxImportJsonLength, maxImportJsonValues, parseScenario } from "./kernel/Validation";
 export type * from "./kernel/types";
 
 export { Continuous2DSpace } from "./spaces/Continuous2DSpace";
