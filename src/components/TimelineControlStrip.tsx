@@ -53,7 +53,8 @@ export function TimelineControlStrip() {
           }
           active={resetArmed}
           onClick={handleReset}
-          disabled={!runtime.isReady}
+          // A stopped Worker run can be rebuilt explicitly; Run and Step stay disabled until then.
+          disabled={!runtime.isReady && runtime.state !== "failed"}
         />
       </div>
       <div className="timeline-strip__readout">

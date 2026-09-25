@@ -6,6 +6,7 @@ import {
   validateRuntimeArtifactJson,
   type RuntimeWorkerRequest
 } from "./protocol";
+import { prepareRuntimeArtifactImport } from "./RuntimeSession";
 import {
   maxPendingRuntimeMessages,
   type RenderFramePacket,
@@ -210,7 +211,10 @@ export class WorkerRuntimeDriver implements SimulationRuntimePort {
 
   importArtifact(request: RuntimeArtifactImportRequest): Promise<UIProjection> {
     this.assertCommandable(`import a ${request.kind}`);
-    validateRuntimeArtifactJson(request.kind, request.json);
+    // Build and validate the imported run on this thread first (and discard it): an artifact the Worker
+    // would reject is refused here, before the generation changes, so the active run stays in place. The
+    // Worker repeats the same preparation as the authority when it commits the import.
+    prepareRuntimeArtifactImport(request);
     if (!this.hasTransportCapacity()) {
       return Promise.reject(this.transportCapacityError());
     }

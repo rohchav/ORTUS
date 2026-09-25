@@ -171,7 +171,8 @@ export function ProductionRuntimeProvider({ children }: { children: ReactNode })
       return;
     }
     const state = useSimulationStore.getState();
-    const activeConfig = runtime.getActiveRunConfig();
+    // A runtime that failed before accepting any run has no active config; rebuild the accepted one.
+    const activeConfig = runtime.getActiveRunConfig() ?? state.flockingRuntimeConfig;
     if (!activeConfig || !supportsWorkerRuntime(activeConfig.templateId)) {
       return;
     }

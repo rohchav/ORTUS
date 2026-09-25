@@ -122,6 +122,14 @@ export class ProductionFlockingRuntime {
     if (!this.port) {
       return this.start(request);
     }
+    if (this.port.state === "failed" && !this.options.port) {
+      // A failed driver is terminal: its Worker is terminated and it refuses every request. An explicit
+      // rebuild (Reset, a Setup change, an applied scenario) therefore retires it and starts the requested
+      // run on a fresh driver and Worker. Nothing restarts without such an action, and there is no local
+      // fallback.
+      this.retirePort();
+      return this.start(request);
+    }
     return this.runLifecycleOperation(
       () => this.port!.replaceRun(request),
       () => {
@@ -242,6 +250,15 @@ export class ProductionFlockingRuntime {
     this.adapter = createEmptyFlockingFrameSceneAdapter();
     this.latestUI = null;
     this.listeners.clear();
+  }
+
+  private retirePort(): void {
+    this.operationSequence += 1;
+    this.unsubscribePort?.();
+    this.unsubscribePort = null;
+    this.port?.dispose();
+    this.port = null;
+    this.desiredSelection = null;
   }
 
   private runLifecycleOperation(
