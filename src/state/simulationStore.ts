@@ -2,6 +2,7 @@
 
 import { create } from "zustand";
 import {
+  assertImportJsonLength,
   clearInterventionHistory,
   buildRunSummaryFromSnapshot,
   createEngineFromScenario,
@@ -816,6 +817,7 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
       return;
     }
     try {
+      assertImportJsonLength(text, get().importMode);
       const raw: unknown = JSON.parse(text);
       const importedTemplateId =
         typeof raw === "object" && raw !== null && "templateId" in raw && typeof raw.templateId === "string" ? raw.templateId : undefined;
@@ -825,8 +827,8 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
       }
       const engine =
         get().importMode === "scenario"
-          ? SimulationEngine.fromScenario(descriptor.template, text, { performance: performanceInstrumentationOptions() })
-          : SimulationEngine.fromSnapshot(descriptor.template, text, { performance: performanceInstrumentationOptions() });
+          ? SimulationEngine.fromScenario(descriptor.template, raw, { performance: performanceInstrumentationOptions() })
+          : SimulationEngine.fromSnapshot(descriptor.template, raw, { performance: performanceInstrumentationOptions() });
       engine.setSpeed(get().speedMultiplier);
       set({
         selectedTemplateId: descriptor.id,

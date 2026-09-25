@@ -733,14 +733,35 @@ export function parseSnapshot(json: string | unknown): SnapshotExport {
   return parseWithSchema(json, snapshotSchema, "snapshot");
 }
 
+// Size bounds for imported scenarios and snapshots, checked before schema validation. The largest
+// supported world (Forest Fire at its 160 x 120 grid maximum with a full 1,000-record metric history)
+// exports about 5.3 million characters and 320,000 JSON values; the bounds allow about three times that.
+// Validation work grows with the number of JSON values, not only with characters: a shallow array of
+// numbers costs Zod about 3 seconds per million characters, so without a value bound a payload under the
+// character bound could still block the calling thread for most of a minute.
+export const maxImportJsonLength = 16_000_000;
+export const maxImportJsonValues = 1_000_000;
+
+export function assertImportJsonLength(json: string, label: string): void {
+  if (json.length > maxImportJsonLength) {
+    throw new SimulationSerializationError(
+      `${capitalize(label)} JSON is ${json.length} characters; imports are limited to ${maxImportJsonLength}`
+    );
+  }
+}
+
 function parseWithSchema<T>(json: string | unknown, schema: z.ZodType<T>, label: string): T {
   let raw: unknown = json;
   if (typeof json === "string") {
+    assertImportJsonLength(json, label);
     try {
       raw = JSON.parse(json);
     } catch (error) {
       throw new SimulationSerializationError(`Invalid ${label} JSON`, { cause: error });
     }
+  }
+  if (exceedsJsonValueCount(raw, maxImportJsonValues)) {
+    throw new SimulationSerializationError(`${capitalize(label)} has more than ${maxImportJsonValues} JSON values; imports are limited to that many`);
   }
 
   const result = schema.safeParse(raw);
@@ -748,6 +769,31 @@ function parseWithSchema<T>(json: string | unknown, schema: z.ZodType<T>, label:
     throw new SimulationSerializationError(`Invalid ${label} payload`, { cause: result.error });
   }
   return result.data;
+}
+
+// Counts JSON values (arrays, objects, and primitives) iteratively and stops as soon as the count would
+// pass `limit`, so the check itself costs at most `limit` steps regardless of payload size, depth, or cycles.
+function exceedsJsonValueCount(value: unknown, limit: number): boolean {
+  let counted = 0;
+  const pending: unknown[] = [value];
+  while (pending.length > 0) {
+    const current = pending.pop();
+    counted += 1;
+    if (typeof current === "object" && current !== null) {
+      const children = Array.isArray(current) ? current : Object.values(current);
+      if (counted + pending.length + children.length > limit) {
+        return true;
+      }
+      for (const child of children) {
+        pending.push(child);
+      }
+    }
+  }
+  return counted > limit;
+}
+
+function capitalize(value: string): string {
+  return value.charAt(0).toUpperCase() + value.slice(1);
 }
 
 export function assertPhase(phase: string): asserts phase is (typeof schedulerPhases)[number] {

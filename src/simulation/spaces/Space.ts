@@ -66,6 +66,43 @@ export function isLocationForSpaceKind(kind: SpaceKind, location: unknown): bool
   }
 }
 
+export interface Reflection {
+  readonly value: number;
+  // The wall the coordinate was reflected off last, if it was outside [0, max].
+  readonly lastWall?: "low" | "high";
+}
+
+// Reflects a finite coordinate into [0, max] between walls at 0 and max (max >= 0). A coordinate within
+// two reflections of the range ([-2max, 3max]) keeps the original step-by-step arithmetic, so trajectories
+// are bit-identical; production movement leaves a 100-unit world by at most 10 units per step. A coordinate
+// farther out is first reduced by whole periods (2max) with an exact remainder: reflecting it one wall at a
+// time could take an unbounded number of steps, or never finish once max is below its floating-point
+// precision. Either way the loop below runs at most twice.
+export function reflectCoordinate(value: number, max: number): Reflection {
+  if (max === 0) {
+    return { value: 0 };
+  }
+  let result = value;
+  if (result < -2 * max || result > 3 * max) {
+    const period = 2 * max;
+    const remainder = result % period;
+    // In [0, period]; an exact multiple of the period maps to 0 rather than -0.
+    result = remainder < 0 ? remainder + period : remainder === 0 ? 0 : remainder;
+  }
+  let lastWall: Reflection["lastWall"];
+  while (result < 0 || result > max) {
+    if (result < 0) {
+      result = -result;
+      lastWall = "low";
+    }
+    if (result > max) {
+      result = max - (result - max);
+      lastWall = "high";
+    }
+  }
+  return lastWall === undefined ? { value: result } : { value: result, lastWall };
+}
+
 export function isGridCell(value: unknown): value is GridCell {
   return (
     typeof value === "object" &&

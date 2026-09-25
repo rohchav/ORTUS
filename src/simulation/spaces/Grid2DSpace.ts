@@ -2,7 +2,7 @@ import type { EntityId, SerializedSpace } from "../kernel/types";
 import { SimulationInvariantError, SimulationValidationError } from "../kernel/Errors";
 import { deepClone } from "../kernel/Validation";
 import type { BoundaryMode, GridCell, NeighborResult, ReadonlySpace, Space } from "./Space";
-import { isGridCell } from "./Space";
+import { isGridCell, reflectCoordinate } from "./Space";
 
 export interface Grid2DSpaceReader extends ReadonlySpace<GridCell> {
   readonly rows: number;
@@ -195,15 +195,7 @@ export class Grid2DSpace implements Space<GridCell> {
     if (this.boundaryMode === "clamp") {
       return Math.min(size - 1, Math.max(0, value));
     }
-    let result = value;
-    while (result < 0 || result >= size) {
-      if (result < 0) {
-        result = -result;
-      }
-      if (result >= size) {
-        result = size - 1 - (result - (size - 1));
-      }
-    }
-    return result;
+    // Cells 0..size-1 reflect between walls at 0 and size - 1; a single-cell axis maps everything to 0.
+    return reflectCoordinate(value, size - 1).value;
   }
 }

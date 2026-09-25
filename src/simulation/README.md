@@ -86,6 +86,8 @@ A `SpaceLocation` is a finite `{x, y}` point (continuous spaces) or an integer `
 
 Every space member (continuous position, grid occupant, network node) is a live entity. Execution maintains this, since `destroyEntity` removes the entity from every space and placement requires a live entity; `assertWorldInvariants` checks it for every built, stepped, and restored world, so a snapshot holding a missing or destroyed member is rejected. Network edges always join member nodes because `NetworkSpace` refuses any other edge, including while deserializing. Which live entities must be placed in which space is a template rule: templates whose systems read a space member by member call `assertSpaceHoldsExactly` from `validateWorld` (the space holds exactly the template's live agents).
 
+Bounce boundaries reflect through `reflectCoordinate`. A coordinate within two reflections of the range keeps the original step-by-step arithmetic (trajectories are bit-identical); a coordinate farther out is reduced by whole periods first, so any finite coordinate, including a single-cell grid axis, normalizes in bounded work.
+
 ## Metrics
 
 Templates register metric definitions. `MetricsCollector` records finite numeric metrics at a configurable interval and keeps bounded history, defaulting to 1000 records.
@@ -94,7 +96,7 @@ Metric definitions are formal model metadata: id/key, label, description, value 
 
 ## Snapshots And Import/Export
 
-Scenario export stores template id, parameters, seed, and metadata for restarting from initial conditions. Snapshot export stores current time, world state, events, RNG stream states, metrics history, applied intervention history, and metadata for deterministic continuation. JSON import validates nested state and rejects invalid data. Any JSON-valued field (metadata, parameters, globals, component values, event payloads) may nest at most `maxJsonValueDepth` (64) arrays/objects deep; the check runs before the recursive validator, so hostile nesting fails as a serialization or validation error instead of exhausting the stack. Legitimate artifacts are far shallower (the deepest JSON-valued snapshot field nests 4 levels).
+Scenario export stores template id, parameters, seed, and metadata for restarting from initial conditions. Snapshot export stores current time, world state, events, RNG stream states, metrics history, applied intervention history, and metadata for deterministic continuation. JSON import validates nested state and rejects invalid data. Any JSON-valued field (metadata, parameters, globals, component values, event payloads) may nest at most `maxJsonValueDepth` (64) arrays/objects deep; the check runs before the recursive validator, so hostile nesting fails as a serialization or validation error instead of exhausting the stack. Legitimate artifacts are far shallower (the deepest JSON-valued snapshot field nests 4 levels). Imports are also bounded in size before schema validation, because validation work grows with the number of JSON values: at most `maxImportJsonLength` (16,000,000) characters and `maxImportJsonValues` (1,000,000) JSON values. The largest supported world (Forest Fire at its 160 x 120 maximum with full metric history) exports about 5.3 million characters and 320,000 values. Worker runtime artifacts use the same bounds.
 
 ## Scenarios
 
