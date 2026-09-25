@@ -41,7 +41,11 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx playwright install --with-deps chromium
-      # CI=true (set by GitHub) makes Playwright forbid .only, retry once, and start its own server.
+      # The browser suite runs against the production build, as deployed (`next start`), not the dev server.
+      - run: npm run build
+      # CI=true (set by GitHub) makes Playwright forbid .only, start its own production server, retry a
+      # failure once to tell flaky from consistent, fail the job on any flaky result, and annotate each
+      # failed or flaky test on the check run.
       - run: npm run test:ui
       - if: failure()
         uses: actions/upload-artifact@v4
