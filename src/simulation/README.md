@@ -84,6 +84,8 @@ Due events are collected once per step, before any system runs, and are not refr
 
 A `SpaceLocation` is a finite `{x, y}` point (continuous spaces) or an integer `{row, col}` cell (grid spaces). Network spaces have no locations: a network node is the entity id itself, added by the template and connected with `addEdge`/`removeEdge`. `createEntity.spaceLocations`, `moveEntity`, and `moveEntities` check each location against the resolved space's kind before mutating anything, and reject any placement into a network space.
 
+Every space member (continuous position, grid occupant, network node) is a live entity. Execution maintains this, since `destroyEntity` removes the entity from every space and placement requires a live entity; `assertWorldInvariants` checks it for every built, stepped, and restored world, so a snapshot holding a missing or destroyed member is rejected. Network edges always join member nodes because `NetworkSpace` refuses any other edge, including while deserializing. Which live entities must be placed in which space is a template rule: templates whose systems read a space member by member call `assertSpaceHoldsExactly` from `validateWorld` (the space holds exactly the template's live agents).
+
 ## Metrics
 
 Templates register metric definitions. `MetricsCollector` records finite numeric metrics at a configurable interval and keeps bounded history, defaulting to 1000 records.

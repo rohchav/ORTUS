@@ -17,6 +17,7 @@ import type {
   TemplateSpaceDefinition
 } from "../kernel/types";
 import { SimulationValidationError } from "../kernel/Errors";
+import { assertSpaceHoldsExactly } from "../kernel/Invariants";
 import { World, type WorldView } from "../kernel/World";
 import { Continuous2DSpace, type Continuous2DSpaceReader } from "../spaces/Continuous2DSpace";
 import type { BoundaryMode, Point2D, SpaceLocation } from "../spaces/Space";
@@ -1308,6 +1309,8 @@ function validateFlockingWorld(world: WorldView): void {
       throw new SimulationValidationError(`Invalid BoidGroup component on ${entityId}`);
     }
   }
+  // Movement and neighbour sensing address every live positioned boid through the space.
+  assertSpaceHoldsExactly(world.continuous2D(FLOCKING_SPACE_ID), FLOCKING_SPACE_ID, world.entitiesWith([Position2D]), "Boid");
 }
 
 function velocityValues(world: WorldView): Vec2[] {
