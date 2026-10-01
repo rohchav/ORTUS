@@ -2,7 +2,7 @@ import type { EntityId, SerializedSpace } from "../kernel/types";
 import { SimulationInvariantError, SimulationValidationError } from "../kernel/Errors";
 import { ContinuousSpatialHashIndex } from "../spatialIndex";
 import type { BoundaryMode, NeighborResult, Point2D, ReadonlySpace, Space } from "./Space";
-import { isPoint2D } from "./Space";
+import { isPoint2D, reflectCoordinate } from "./Space";
 
 export interface Continuous2DQueryDiagnostics {
   queryCount: number;
@@ -100,6 +100,14 @@ export class Continuous2DSpace implements Space<Point2D> {
     }
     this.positions.set(entityId, this.normalizePosition(position));
     this.markPositionsChanged();
+  }
+
+  has(entityId: EntityId): boolean {
+    return this.positions.has(entityId);
+  }
+
+  memberCount(): number {
+    return this.positions.size;
   }
 
   getLocation(entityId: EntityId): Point2D | undefined {
@@ -235,6 +243,8 @@ export class Continuous2DSpace implements Space<Point2D> {
       height: this.height,
       boundaryMode: this.boundaryMode,
       getLocation: (entityId) => this.getLocation(entityId),
+      has: (entityId) => this.has(entityId),
+      memberCount: () => this.memberCount(),
       getPosition: (entityId) => this.getPosition(entityId),
       queryRadius: (position, radius) => this.queryRadius(position, radius),
       queryNeighbors: (entityId, radiusOrOptions) => this.queryNeighbors(entityId, radiusOrOptions),
@@ -306,16 +316,7 @@ export class Continuous2DSpace implements Space<Point2D> {
     if (this.boundaryMode === "clamp") {
       return Math.min(max, Math.max(0, value));
     }
-    let result = value;
-    while (result < 0 || result > max) {
-      if (result < 0) {
-        result = -result;
-      }
-      if (result > max) {
-        result = max - (result - max);
-      }
-    }
-    return result;
+    return reflectCoordinate(value, max).value;
   }
 
   private assertPoint(value: unknown): asserts value is Point2D {

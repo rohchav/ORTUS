@@ -52,6 +52,12 @@ describe("validation and invariants", () => {
     }
     entity.alive = false;
     entity.destroyedAtTick = 1;
+    // A destroyed entity leaves every space; only its invalid component should be rejected here.
+    for (const space of snapshot.world.spaces) {
+      if (space.kind === "continuous2d") {
+        delete space.positions.e000001;
+      }
+    }
     infectionComponents.e000001 = { status: "not-a-real-status" };
 
     expect(() => engine.importSnapshot(snapshot)).toThrow(SimulationValidationError);

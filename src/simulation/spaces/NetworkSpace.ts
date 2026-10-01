@@ -46,6 +46,14 @@ export class NetworkSpace implements Space<EntityId> {
     throw new SimulationValidationError("NetworkSpace does not support moveEntity");
   }
 
+  has(entityId: EntityId): boolean {
+    return this.nodes.has(entityId);
+  }
+
+  memberCount(): number {
+    return this.nodes.size;
+  }
+
   getLocation(entityId: EntityId): EntityId | undefined {
     return this.nodes.has(entityId) ? entityId : undefined;
   }
@@ -115,6 +123,8 @@ export class NetworkSpace implements Space<EntityId> {
       id: this.id,
       kind: this.kind,
       getLocation: (entityId) => this.getLocation(entityId),
+      has: (entityId) => this.has(entityId),
+      memberCount: () => this.memberCount(),
       queryNeighbors: (entityId) => this.queryNeighbors(entityId),
       neighbors: (entityId) => this.neighbors(entityId),
       degree: (entityId) => this.degree(entityId),

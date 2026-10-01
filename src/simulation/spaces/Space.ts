@@ -29,6 +29,9 @@ export interface Space<TLocation = SpaceLocation> {
   removeEntity(entityId: EntityId): void;
   moveEntity(entityId: EntityId, location: TLocation): void;
   getLocation(entityId: EntityId): TLocation | undefined;
+  // Membership without copying a location, for whole-space checks.
+  has(entityId: EntityId): boolean;
+  memberCount(): number;
   queryNeighbors(entityId: EntityId, options?: unknown): NeighborResult<TLocation>[];
   queryRegion?(region: unknown): NeighborResult<TLocation>[];
   serialize(): SerializedSpace;
@@ -39,6 +42,8 @@ export interface ReadonlySpace<TLocation = SpaceLocation> {
   readonly id: string;
   readonly kind: SpaceKind;
   getLocation(entityId: EntityId): TLocation | undefined;
+  has(entityId: EntityId): boolean;
+  memberCount(): number;
   queryNeighbors(entityId: EntityId, options?: unknown): NeighborResult<TLocation>[];
   queryRegion?(region: unknown): NeighborResult<TLocation>[];
   serialize(): SerializedSpace;
@@ -64,6 +69,46 @@ export function isLocationForSpaceKind(kind: SpaceKind, location: unknown): bool
     case "network":
       return false;
   }
+}
+
+export interface Reflection {
+  readonly value: number;
+  // The wall the coordinate was reflected off last, if it was outside [0, max].
+  readonly lastWall?: "low" | "high";
+}
+
+// Reflects a finite coordinate into [0, max] between walls at 0 and max (max >= 0). A coordinate within
+// two reflections of the range ([-2max, 3max]) keeps the original step-by-step arithmetic, so trajectories
+// are bit-identical; production movement leaves a 100-unit world by at most 10 units per step. A coordinate
+// farther out is first reduced by whole periods (2max) with an exact remainder: reflecting it one wall at a
+// time could take an unbounded number of steps, or never finish once max is below its floating-point
+// precision. Each removed period is one low and one high reflection, so the reduced coordinate stays on its
+// original side, in [-2max, 0) or (max, 3max], and the reflections that remain end at the same wall as the
+// step-by-step loop would. Either way the loop below runs at most twice.
+export function reflectCoordinate(value: number, max: number): Reflection {
+  if (max === 0) {
+    return { value: 0 };
+  }
+  let result = value;
+  if (result < -2 * max || result > 3 * max) {
+    const period = 2 * max;
+    const remainder = result % period;
+    result = result < 0
+      ? remainder === 0 ? -period : remainder
+      : remainder > max ? remainder : remainder + period;
+  }
+  let lastWall: Reflection["lastWall"];
+  while (result < 0 || result > max) {
+    if (result < 0) {
+      result = -result;
+      lastWall = "low";
+    }
+    if (result > max) {
+      result = max - (result - max);
+      lastWall = "high";
+    }
+  }
+  return lastWall === undefined ? { value: result } : { value: result, lastWall };
 }
 
 export function isGridCell(value: unknown): value is GridCell {

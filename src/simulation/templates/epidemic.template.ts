@@ -14,6 +14,7 @@ import type {
   TemplateSpaceDefinition
 } from "../kernel/types";
 import { SimulationValidationError } from "../kernel/Errors";
+import { assertAgentRole } from "../kernel/Invariants";
 import { World } from "../kernel/World";
 import { Continuous2DSpace, continuous2DQueryDiagnosticsDelta } from "../spaces/Continuous2DSpace";
 import type { RandomStream } from "../kernel/Random";
@@ -361,6 +362,7 @@ export const epidemicTemplate: SimulationTemplate = {
   agentCompositionDefinitions,
   documentation,
   assumptionProfile,
+  fixedByConfiguration: { population: true },
   createInitialWorld(ctx) {
     const params = epidemicParams(ctx.params);
     const world = new World();
@@ -454,6 +456,13 @@ export const epidemicTemplate: SimulationTemplate = {
         throw new SimulationValidationError(`Invalid Velocity2D component on ${entityId}`);
       }
     }
+    // Every live entity is an agent: movement, transmission, and the S/I/R counts each read agents by a
+    // different component, so all of them and the space must agree on who the agents are.
+    assertAgentRole(world, {
+      label: "Epidemic agent",
+      required: [Position2D, Velocity2D, InfectionState],
+      spaces: [{ id: EPIDEMIC_SPACE_ID, space: world.continuous2D(EPIDEMIC_SPACE_ID) }]
+    });
   },
   validateParameters(params) {
     const parsed = epidemicParams(params);

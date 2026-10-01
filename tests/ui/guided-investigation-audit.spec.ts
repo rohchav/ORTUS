@@ -258,9 +258,12 @@ test("additional hostile guide query fields fail before AppShell construction", 
   ];
   for (const field of invalidFields) {
     await page.goto(`${baselinePath}&${field}`, { waitUntil: "domcontentloaded" });
-    await expect(page.getByRole("alert"), field).toContainText("This world could not be prepared safely");
+    // The launch error itself: Next.js's route announcer is also role="alert" once hydration mounts it.
+    const launchError = page.locator("[data-starter-launch-error]");
+    await expect(launchError, field).toHaveAttribute("role", "alert");
+    await expect(launchError, field).toContainText("This world could not be prepared safely");
     if (/constructor|prototype|then|catch|finally/.test(field)) {
-      await expect(page.getByRole("alert"), field).toContainText("unsafe query key");
+      await expect(launchError, field).toContainText("unsafe query key");
     }
     await expect(page.locator(".ortus-shell"), field).toHaveCount(0);
     await expect(page.locator(".world-stage"), field).toHaveCount(0);

@@ -346,8 +346,11 @@ test("invalid recipe requests are announced and stop before any World constructi
   ];
   for (const path of invalidPaths) {
     await page.goto(path, { waitUntil: "domcontentloaded" });
-    await expect(page.locator("[data-starter-launch-error]")).toBeVisible();
-    await expect(page.locator("[role='alert']")).toContainText("This world could not be prepared safely");
+    // The launch error itself: Next.js's route announcer is also role="alert" once hydration mounts it.
+    const launchError = page.locator("[data-starter-launch-error]");
+    await expect(launchError).toBeVisible();
+    await expect(launchError).toHaveAttribute("role", "alert");
+    await expect(launchError).toContainText("This world could not be prepared safely");
     await expect(page.locator(".ortus-shell")).toHaveCount(0);
     await expect(page.locator(".world-stage")).toHaveCount(0);
   }

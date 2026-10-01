@@ -17,9 +17,10 @@ import type {
   TemplateSpaceDefinition
 } from "../kernel/types";
 import { SimulationValidationError } from "../kernel/Errors";
+import { assertAgentRole } from "../kernel/Invariants";
 import { World, type WorldView } from "../kernel/World";
 import { Continuous2DSpace, type Continuous2DSpaceReader } from "../spaces/Continuous2DSpace";
-import type { BoundaryMode, Point2D, SpaceLocation } from "../spaces/Space";
+import { reflectCoordinate, type BoundaryMode, type Point2D, type Reflection, type SpaceLocation } from "../spaces/Space";
 import { ContinuousSpatialHashIndex } from "../spatialIndex";
 import { Position2D, Velocity2D } from "./epidemic.template";
 import { createTemplateAssumptionProfile } from "../assumptions/profiles";
@@ -482,6 +483,7 @@ export const flockingTemplate: SimulationTemplate = {
   environmentOptionDefinitions,
   documentation,
   assumptionProfile,
+  fixedByConfiguration: { globals: ["flockingBehaviorMode", "flockingGroupCount"], population: true },
   createInitialWorld(ctx) {
     const params = flockingParams(ctx.params);
     const behaviorMode = flockingBehaviorModeFromScenario(ctx.scenario?.behaviorMode);
@@ -1257,33 +1259,22 @@ function applyBoundary(position: Vec2, velocity: Vec2, space: Continuous2DSpaceR
 }
 
 function bounce(position: Vec2, velocity: Vec2, width: number, height: number): { position: Vec2; velocity: Vec2 } {
-  let next = { ...position };
-  let nextVelocity = { ...velocity };
-  while (next.x < 0 || next.x > width) {
-    if (next.x < 0) {
-      next.x = -next.x;
-      nextVelocity.x = Math.abs(nextVelocity.x);
-    }
-    if (next.x > width) {
-      next.x = width - (next.x - width);
-      nextVelocity.x = -Math.abs(nextVelocity.x);
-    }
-  }
-  while (next.y < 0 || next.y > height) {
-    if (next.y < 0) {
-      next.y = -next.y;
-      nextVelocity.y = Math.abs(nextVelocity.y);
-    }
-    if (next.y > height) {
-      next.y = height - (next.y - height);
-      nextVelocity.y = -Math.abs(nextVelocity.y);
-    }
-  }
-  return { position: next, velocity: nextVelocity };
+  const x = reflectCoordinate(position.x, width);
+  const y = reflectCoordinate(position.y, height);
+  return {
+    position: { x: x.value, y: y.value },
+    velocity: { x: bouncedVelocity(velocity.x, x.lastWall), y: bouncedVelocity(velocity.y, y.lastWall) }
+  };
+}
+
+// After reflecting off the low wall a boid moves up the axis; off the high wall, down it.
+function bouncedVelocity(component: number, lastWall: Reflection["lastWall"]): number {
+  return lastWall === "low" ? Math.abs(component) : lastWall === "high" ? -Math.abs(component) : component;
 }
 
 function validateFlockingWorld(world: WorldView): void {
-  flockingBehaviorModeFromWorld(world.globals);
+  const groupAware = flockingBehaviorModeFromWorld(world.globals) === "groupAware";
+  const groupCount = world.getGlobal("flockingGroupCount");
   for (const entityId of componentEntityIds(world, Position2D)) {
     const position = world.getComponent<Vec2>(entityId, Position2D);
     if (!isFiniteVector(position)) {
@@ -1304,10 +1295,19 @@ function validateFlockingWorld(world: WorldView): void {
   }
   for (const entityId of componentEntityIds(world, BoidGroup)) {
     const group = world.getComponent<BoidGroupComponent>(entityId, BoidGroup);
-    if (!isBoidGroup(group)) {
+    if (!isBoidGroup(group) || group.groupCount !== groupCount || group.groupIndex > group.groupCount) {
       throw new SimulationValidationError(`Invalid BoidGroup component on ${entityId}`);
     }
   }
+  // Every live entity is a boid: sensing and movement read boids through the space, the frame projection
+  // and boid metrics by component, and group affinity by BoidGroup, which exists exactly in the groupAware
+  // behavior mode.
+  assertAgentRole(world, {
+    label: "Boid",
+    required: groupAware ? [Position2D, Velocity2D, BoidState, BoidGroup] : [Position2D, Velocity2D, BoidState],
+    forbidden: groupAware ? [] : [BoidGroup],
+    spaces: [{ id: FLOCKING_SPACE_ID, space: world.continuous2D(FLOCKING_SPACE_ID) }]
+  });
 }
 
 function velocityValues(world: WorldView): Vec2[] {

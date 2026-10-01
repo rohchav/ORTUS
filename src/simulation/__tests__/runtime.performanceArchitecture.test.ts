@@ -439,6 +439,39 @@ describe("PERF1 runtime performance architecture", () => {
     worker.dispose();
     local.dispose();
   });
+
+  it("refuses a schema-valid import that restore would reject before changing generation, and the run continues", async () => {
+    const transport = new HostBackedWorker();
+    const worker = new WorkerRuntimeDriver(transport);
+    const local = new LocalRuntimeDriver();
+    await worker.initialize({ runId: "restore-guard", runConfig: createImmersiveFlockingRunConfig(100) });
+    await local.initialize({ runId: "local-restore-guard", runConfig: createImmersiveFlockingRunConfig(100) });
+    await Promise.all([worker.step(), local.step()]);
+    const genuine = await worker.exportArtifact("snapshot");
+    // A boid destroyed but still in the space passes the schema; only restore's invariants refuse it.
+    const tampered = JSON.parse(genuine) as { world: { entities: { entities: Array<{ id: string; alive: boolean; destroyedAtTick?: number }> } } };
+    Object.assign(tampered.world.entities.entities[0]!, { alive: false, destroyedAtTick: 1 });
+    const json = JSON.stringify(tampered);
+    await settleMessages();
+    const frame = worker.getLatestFrame();
+
+    expect(() => worker.importArtifact({ runId: "restore-refused", kind: "snapshot", json })).toThrow(/contains destroyed entity/);
+    await expect(local.importArtifact({ runId: "local-restore-refused", kind: "snapshot", json })).rejects.toThrow(/contains destroyed entity/);
+    expect(worker).toMatchObject({ generation: 1, state: "ready" });
+    expect(local).toMatchObject({ generation: 1, state: "ready" });
+    expect(worker.getLatestFrame()).toBe(frame);
+    expect(transport.terminated).toBe(false);
+
+    await Promise.all([worker.step(), local.step()]);
+    await settleMessages();
+    expect(worker.getLatestUI()).toMatchObject({ generation: 1, runId: "restore-guard", tick: 2, playback: "paused" });
+    expect(local.getLatestUI()).toMatchObject({ generation: 1, runId: "local-restore-guard", tick: 2 });
+
+    await worker.importArtifact({ runId: "restore-accepted", kind: "snapshot", json: genuine });
+    expect(worker.getLatestUI()).toMatchObject({ generation: 2, runId: "restore-accepted", tick: 1 });
+    worker.dispose();
+    local.dispose();
+  });
 });
 
 class HostBackedWorker implements RuntimeWorkerLike {

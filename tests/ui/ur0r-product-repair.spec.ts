@@ -19,6 +19,8 @@ test("keyboard flow reaches an exact Flocking exploration, inspection, rebuild, 
   const dismiss = page.getByRole("button", { name: "Dismiss Collective Motion starter steps" });
   await dismiss.focus();
   await page.keyboard.press("Enter");
+  // Dismissal moves focus to the stage on the next animation frame; continue only once it has.
+  await expect(page.getByLabel("Simulation world stage")).toBeFocused();
 
   const inspect = page.locator("[data-boid-inspect-control]");
   await inspect.focus();

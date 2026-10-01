@@ -2,6 +2,7 @@
 
 import { create } from "zustand";
 import {
+  assertImportJsonLength,
   clearInterventionHistory,
   buildRunSummaryFromSnapshot,
   createEngineFromScenario,
@@ -17,6 +18,8 @@ import {
   type InterventionTarget,
   type JsonValue,
   maxSavedRunSummaries,
+  parseScenario,
+  parseSnapshot,
   type ParameterValues,
   type SavedRunSummary,
   type Point2D,
@@ -366,51 +369,32 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
       });
       return;
     }
-    const activeEngine = get().engine;
-    if (activeEngine) {
-      try {
-        const activeConfig = createAcceptedLegacyRunConfig({
-          templateId: get().selectedTemplateId,
-          seed: activeEngine.seed,
-          parameters: activeEngine.parameters,
-          metadata: activeEngine.metadata
-        });
-        const resetConfig = createRemixAwareResetRunConfig(activeConfig);
-        const remixLineage = readStarterRemixLineage(resetConfig.metadata);
-        const starterOrigin = readStarterWorldOrigin(resetConfig.metadata);
-        if (remixLineage || starterOrigin) {
-          const engine = createLegacyUiEngine(resetConfig);
-          configurePerformanceInstrumentation(engine);
-          engine.setSpeed(get().speedMultiplier);
-          set({
-            engine,
-            latestSnapshot: engine.createSnapshot(),
-            flockingRuntimeConfig: null,
-            parameterValues: engine.parameters,
-            seed: engine.seed,
-            selectedEntityId: null,
-            interventionTargetPoint: null,
-            interventionTargetCell: null,
-            interventionHistory: [],
-            isRunning: false,
-            lastError: withoutErrorsIn(get().lastError, "run", "intervention"),
-            lastNotice: remixLineage
-              ? "Run reset to the accepted unsaved remix configuration. Source lineage was preserved; run progress was discarded."
-              : "Run reset to its active configuration. Starter origin was preserved; prepared-recipe identity and run progress were discarded."
-          });
-          return;
-        }
-      } catch (error) {
-        set({ lastError: errorIn("run", `Reset failed: ${errorMessage(error)}`), lastNotice: null });
-        return;
+    // Reset rebuilds the accepted run the same way a Setup change does: from the active run's accepted
+    // configuration, so its model variant (preset and options, behavior mode, composition, environment)
+    // survives with its parameters and seed, and only run progress is discarded.
+    let baseRunConfig: SimulationRunConfig | null;
+    let notice: string | null = null;
+    try {
+      baseRunConfig = currentAcceptedRunConfig(get());
+      const resetConfig = baseRunConfig ? createRemixAwareResetRunConfig(baseRunConfig) : null;
+      if (readStarterRemixLineage(resetConfig?.metadata)) {
+        notice = "Run reset to the accepted unsaved remix configuration. Source lineage was preserved; run progress was discarded.";
+      } else if (readStarterWorldOrigin(resetConfig?.metadata)) {
+        notice = "Run reset to its active configuration. Starter origin was preserved; prepared-recipe identity and run progress were discarded.";
       }
+    } catch (error) {
+      set({ lastError: errorIn("run", `Reset failed: ${errorMessage(error)}`), lastNotice: null });
+      return;
     }
     replaceEngine(set, get, {
       templateId: get().selectedTemplateId,
       parameters: get().parameterValues,
       seed: get().seed,
       keepSelection: false,
-      area: "run"
+      area: "run",
+      errorPrefix: "Reset failed",
+      baseRunConfig,
+      notice
     });
   },
 
@@ -816,6 +800,7 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
       return;
     }
     try {
+      assertImportJsonLength(text, get().importMode);
       const raw: unknown = JSON.parse(text);
       const importedTemplateId =
         typeof raw === "object" && raw !== null && "templateId" in raw && typeof raw.templateId === "string" ? raw.templateId : undefined;
@@ -825,8 +810,8 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
       }
       const engine =
         get().importMode === "scenario"
-          ? SimulationEngine.fromScenario(descriptor.template, text, { performance: performanceInstrumentationOptions() })
-          : SimulationEngine.fromSnapshot(descriptor.template, text, { performance: performanceInstrumentationOptions() });
+          ? engineFromImportedScenario(descriptor.id, raw)
+          : engineFromImportedSnapshot(descriptor.id, raw);
       engine.setSpeed(get().speedMultiplier);
       set({
         selectedTemplateId: descriptor.id,
@@ -898,6 +883,7 @@ function replaceEngine(
     area: "setup" | "run";
     errorPrefix?: string;
     baseRunConfig?: SimulationRunConfig | null;
+    notice?: string | null;
   }
 ): void {
   try {
@@ -931,7 +917,7 @@ function replaceEngine(
         interventionHistory: [],
         isRunning: false,
         lastError: withoutErrorsIn(get().lastError, options.area, "run", "intervention"),
-        lastNotice: null
+        lastNotice: options.notice ?? null
       });
       return;
     }
@@ -959,7 +945,7 @@ function replaceEngine(
       interventionHistory: readInterventionHistory(engine),
       isRunning: false,
       lastError: withoutErrorsIn(get().lastError, options.area, "run", "intervention"),
-      lastNotice: null
+      lastNotice: options.notice ?? null
     });
   } catch (error) {
     const prefix = options.errorPrefix ? `${options.errorPrefix}: ` : "";
@@ -1004,6 +990,31 @@ function createRebuildRunConfig(
     agentComposition: synchronized.agentComposition,
     environmentOptions: synchronized.environmentOptions
   }, template);
+}
+
+// A scenario import restarts the run its file describes: template, parameters, seed, and the model variant
+// recorded in its metadata. That is the accepted configuration Reset and Setup changes rebuild from, so the
+// imported run and every later rebuild agree on the model.
+function engineFromImportedScenario(templateId: TemplateId, raw: unknown): SimulationEngine {
+  const scenario = parseScenario(raw);
+  const engine = createLegacyUiEngine(
+    createAcceptedLegacyRunConfig({ templateId, seed: scenario.seed, parameters: scenario.parameters, metadata: scenario.metadata })
+  );
+  configurePerformanceInstrumentation(engine);
+  return engine;
+}
+
+// A snapshot import continues the run its file describes, as the model recorded in its metadata: the
+// accepted configuration Reset and Setup changes rebuild from. Restore refuses a snapshot that is not a
+// state of that model, so the imported run and every later rebuild are the same model.
+function engineFromImportedSnapshot(templateId: TemplateId, raw: unknown): SimulationEngine {
+  const snapshot = parseSnapshot(raw);
+  const engine = createEngineFromRunConfig(
+    createAcceptedLegacyRunConfig({ templateId, seed: snapshot.seed, parameters: snapshot.parameters, metadata: snapshot.metadata })
+  );
+  engine.restoreSnapshot(snapshot);
+  configurePerformanceInstrumentation(engine);
+  return engine;
 }
 
 function createLegacyUiEngine(config: SimulationRunConfig): SimulationEngine {

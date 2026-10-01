@@ -143,6 +143,10 @@ export class WorldView {
     return this.world.entityStore.alive();
   }
 
+  aliveEntityIds(): EntityId[] {
+    return this.world.entityStore.aliveIds();
+  }
+
   allEntities(): Entity[] {
     return this.world.entityStore.all();
   }
@@ -197,6 +201,8 @@ function readonlySpace(space: Space<any>): ReadonlySpace<any> {
     id: space.id,
     kind: space.kind,
     getLocation: (entityId) => space.getLocation(entityId),
+    has: (entityId) => space.has(entityId),
+    memberCount: () => space.memberCount(),
     queryNeighbors: (entityId, options) => space.queryNeighbors(entityId, options),
     serialize: () => space.serialize()
   };

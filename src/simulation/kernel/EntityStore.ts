@@ -71,6 +71,17 @@ export class EntityStore {
     return this.all().filter((entity) => entity.alive);
   }
 
+  // Live ids in insertion order, without sorting or copying entities, for whole-world checks.
+  aliveIds(): EntityId[] {
+    const ids: EntityId[] = [];
+    for (const entity of this.entities.values()) {
+      if (entity.alive) {
+        ids.push(entity.id);
+      }
+    }
+    return ids;
+  }
+
   aliveCount(): number {
     let count = 0;
     for (const entity of this.entities.values()) {

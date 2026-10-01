@@ -231,7 +231,10 @@ export function ProductionFlockingWorld() {
         <div className="production-flocking-state production-flocking-state--failed" role="alert">
           <strong>Worker runtime stopped</strong>
           <span>{activeRuntime.error}</span>
-          <small>No local fallback was started. Any visible frame is the last accepted presentation, not continued execution.</small>
+          <small>
+            No local fallback was started. Any visible frame is the last accepted presentation, not continued execution. Reset or rebuild from
+            Setup to start a new Worker-owned run.
+          </small>
         </div>
       ) : null}
       {activeRuntime.state === "ready" && activeRuntime.error ? (

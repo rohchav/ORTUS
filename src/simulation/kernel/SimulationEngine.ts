@@ -32,7 +32,7 @@ import {
   SimulationValidationError,
   type SimulationFailure
 } from "./Errors";
-import { assertWorldInvariants } from "./Invariants";
+import { assertParametersMatchConfiguration, assertWorldInvariants, assertWorldMatchesConfiguration } from "./Invariants";
 import { createScenarioExport, createSnapshotExport, createSnapshotView } from "./Snapshot";
 import { deserializeScenario, deserializeSnapshot, serializeScenario, serializeSnapshot } from "./Serialization";
 import { deepClone, resolveParameters, validateTemplate } from "./Validation";
@@ -302,6 +302,11 @@ export class SimulationEngine {
     this.restoreSnapshot(snapshot);
   }
 
+  // A snapshot is a state of one model: this engine's template, parameters, initialization, and scenario
+  // variant. Restore installs that state without changing the model, so a later reset() rebuilds the model
+  // the state belongs to. It refuses a snapshot whose parameters are not the engine's and a world that is
+  // not a valid state of the model (see Invariants.ts). A snapshot of another model needs an engine built
+  // for that model first, as fromSnapshot does.
   restoreSnapshot(snapshot: SnapshotExport): void {
     if (snapshot.templateId !== this.template.id) {
       throw new SimulationSerializationError(`Snapshot template ${snapshot.templateId} does not match engine template ${this.template.id}`);
@@ -312,11 +317,11 @@ export class SimulationEngine {
     if (snapshot.rng.seed !== snapshot.seed) {
       throw new SimulationSerializationError("Snapshot RNG seed must match snapshot seed");
     }
-    const parameters = resolveParameters(this.template.parameterDefinitions, snapshot.parameters);
-    this.template.validateParameters?.(parameters);
+    assertParametersMatchConfiguration(resolveParameters(this.template.parameterDefinitions, snapshot.parameters), this.parameters);
     const world = World.fromSnapshot(snapshot.world);
     normalizeSimulationEventLogInWorld(world);
     assertWorldInvariants(world);
+    assertWorldMatchesConfiguration(world, this.configuredWorld(snapshot.seed), this.template.fixedByConfiguration);
     this.template.validateWorld?.(world.view());
     const rng = new RandomService(snapshot.seed);
     rng.setState(snapshot.rng);
@@ -324,9 +329,6 @@ export class SimulationEngine {
     this.clock.restore(snapshot.tick, snapshot.time);
     this.seed = snapshot.seed;
     this.metadata = deepClone(snapshot.metadata);
-    this.parameters = parameters;
-    this.initialization = undefined;
-    this.scenario = undefined;
     this.metrics.restore(snapshot.metricsHistory);
     this.commitRun(world, rng);
   }
@@ -353,6 +355,8 @@ export class SimulationEngine {
     });
   }
 
+  // The snapshot's model is the template, the snapshot's parameters, and the initialization and scenario
+  // variant in `options` (the default model when they are absent); the snapshot must be a state of it.
   static fromSnapshot(template: SimulationTemplate, json: string | unknown, options: Omit<SimulationEngineOptions, "parameters" | "seed"> = {}): SimulationEngine {
     const snapshot = deserializeSnapshot(json);
     const engine = new SimulationEngine(template, {
@@ -395,6 +399,18 @@ export class SimulationEngine {
       }
     });
     return world;
+  }
+
+  // The tick-0 world of this engine's model for `seed`, built only to read what the configuration fixes.
+  private configuredWorld(seed: string): World {
+    return this.template.createInitialWorld({
+      seed,
+      params: this.parameters,
+      ...(this.initialization ? { initialization: this.initialization } : {}),
+      ...(this.scenario ? { scenario: this.scenario } : {}),
+      rng: new RandomService(seed),
+      fixedDt: this.clock.fixedDt
+    });
   }
 
   // Final, non-throwing step of reset/restore/import: install an already-validated run.

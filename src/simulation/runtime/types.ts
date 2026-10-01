@@ -1,6 +1,7 @@
 import type { Command, MetricRecord, SimulationRunConfig } from "../kernel/types";
 import type { PerformanceMeasureSummary } from "../kernel/Performance";
 import type { InterventionRequest, InterventionStatus } from "../interventions/interventionTypes";
+import { maxImportJsonLength } from "../kernel/Validation";
 
 export const maxRenderFrameEntities = 10_000;
 export const maxSelectedNeighborCount = 2_048;
@@ -10,7 +11,8 @@ export const maxPendingRuntimeMessages = 128;
 export const runtimeUiPublicationIntervalMs = 250;
 export const maxRuntimeMetricHistory = 120;
 export const maxRuntimeInterventionHistory = 6;
-export const maxRuntimeArtifactJsonLength = 16_000_000;
+// The same bound as main-thread scenario and snapshot imports (kernel/Validation).
+export const maxRuntimeArtifactJsonLength = maxImportJsonLength;
 export const workerRuntimeTemplateIds = ["flocking-boids"] as const;
 
 export function supportsWorkerRuntime(templateId: string): templateId is (typeof workerRuntimeTemplateIds)[number] {

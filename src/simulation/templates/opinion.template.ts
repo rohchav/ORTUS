@@ -15,6 +15,7 @@ import type {
   TemplateSpaceDefinition
 } from "../kernel/types";
 import { SimulationValidationError } from "../kernel/Errors";
+import { assertAgentRole } from "../kernel/Invariants";
 import { World } from "../kernel/World";
 import { Continuous2DSpace, continuous2DQueryDiagnosticsDelta } from "../spaces/Continuous2DSpace";
 import type { Point2D } from "../spaces/Space";
@@ -604,6 +605,10 @@ export const opinionTemplate: SimulationTemplate = {
   agentCompositionDefinitions,
   documentation,
   assumptionProfile,
+  fixedByConfiguration: {
+    globals: ["opinionBehaviorMode", "opinionInformationSourceCount", "opinionSocialLearningRuntimeScope"],
+    population: true
+  },
   createInitialWorld(ctx) {
     const params = opinionParams(ctx.params);
     const behaviorMode = opinionBehaviorModeFromScenario(ctx.scenario?.behaviorMode);
@@ -689,7 +694,16 @@ export const opinionTemplate: SimulationTemplate = {
         throw new SimulationValidationError(`Invalid Position2D component on ${entityId}`);
       }
     }
-    opinionBehaviorModeFromWorld(world.globals);
+    // Every live entity is an agent: sensing reads agents through the space, updates and opinion metrics by
+    // OpinionState, and the social-learning metrics by OpinionSocialLearningState, which exists exactly in
+    // the socialLearning behavior mode.
+    const socialLearning = opinionBehaviorModeFromWorld(world.globals) === "socialLearning";
+    assertAgentRole(world, {
+      label: "Opinion agent",
+      required: socialLearning ? [Position2D, OpinionState, OpinionSocialLearningState] : [Position2D, OpinionState],
+      forbidden: socialLearning ? [] : [OpinionSocialLearningState],
+      spaces: [{ id: OPINION_SPACE_ID, space: world.continuous2D(OPINION_SPACE_ID) }]
+    });
     const sourceCount = world.globals.opinionInformationSourceCount;
     if (
       sourceCount !== undefined &&

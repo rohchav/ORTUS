@@ -2,7 +2,7 @@ import type { EntityId, SerializedSpace } from "../kernel/types";
 import { SimulationInvariantError, SimulationValidationError } from "../kernel/Errors";
 import { deepClone } from "../kernel/Validation";
 import type { BoundaryMode, GridCell, NeighborResult, ReadonlySpace, Space } from "./Space";
-import { isGridCell } from "./Space";
+import { isGridCell, reflectCoordinate } from "./Space";
 
 export interface Grid2DSpaceReader extends ReadonlySpace<GridCell> {
   readonly rows: number;
@@ -64,6 +64,14 @@ export class Grid2DSpace implements Space<GridCell> {
       throw new SimulationInvariantError(`Entity ${entityId} is not in grid ${this.id}`, { entityId });
     }
     this.cells.set(entityId, this.normalizeCell(cell));
+  }
+
+  has(entityId: EntityId): boolean {
+    return this.cells.has(entityId);
+  }
+
+  memberCount(): number {
+    return this.cells.size;
   }
 
   getLocation(entityId: EntityId): GridCell | undefined {
@@ -159,6 +167,8 @@ export class Grid2DSpace implements Space<GridCell> {
       cols: this.cols,
       boundaryMode: this.boundaryMode,
       getLocation: (entityId) => this.getLocation(entityId),
+      has: (entityId) => this.has(entityId),
+      memberCount: () => this.memberCount(),
       getCell: (entityId) => this.getCell(entityId),
       entitiesAt: (cell) => this.entitiesAt(cell),
       neighbors: (cell, options) => this.neighbors(cell, options),
@@ -195,15 +205,7 @@ export class Grid2DSpace implements Space<GridCell> {
     if (this.boundaryMode === "clamp") {
       return Math.min(size - 1, Math.max(0, value));
     }
-    let result = value;
-    while (result < 0 || result >= size) {
-      if (result < 0) {
-        result = -result;
-      }
-      if (result >= size) {
-        result = size - 1 - (result - (size - 1));
-      }
-    }
-    return result;
+    // Cells 0..size-1 reflect between walls at 0 and size - 1; a single-cell axis maps everything to 0.
+    return reflectCoordinate(value, size - 1).value;
   }
 }
