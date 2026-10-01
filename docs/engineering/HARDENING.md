@@ -15,7 +15,8 @@ hostile-import depth and size bounds, terminating bounce reflection, Flocking re
 explicit recovery after terminal Worker failure, Worker generation and revision rejection, transferred-frame
 ownership, Reset preserving accepted variants, the WP5 gains, scoped errors, CI behavior, and the E2E race
 fixes. The review artifact is not stored in this repository. Both findings were reproduced on this code
-before any change.
+before any change. A third finding, P2-A, came later from the Codex review of PR #9 and is recorded below
+with the same reproduce-then-fix discipline.
 
 Baseline: branch `phase3/remediation` at `efee56d`, Node 24.16.0, npm 11.13.0. Full Vitest at baseline:
 100 files / 916 tests PASS.
@@ -31,6 +32,7 @@ The Phase 3 entries below are left as written.
 | --- | --- |
 | P1-A A snapshot can restore live "ghost agents" whose model state remains but whose position and space membership are gone | FIXED |
 | P1-B A snapshot can restore geometry, boundary, or model-variant state that contradicts the configuration it declares | FIXED |
+| P2-A Far-out bounce reflection reports the wrong last wall (PR #9 Codex review) | FIXED |
 
 ### P1-A — Ghost agents — FIXED
 
@@ -231,6 +233,31 @@ An A/B run hashed the final `exportSnapshot()` after 60 ticks of every template'
 Flocking in wrap, bounce, and clamp at 20, 160, and 500 boids: all 16 hashes identical to the pre-change
 tree. The repair changes no trajectory.
 
+### P2-A — Far-out bounce reflection wall identity — FIXED
+
+**Finding (Codex review of PR #9, `src/simulation/spaces/Space.ts`).** Phase 3 made `reflectCoordinate`
+terminate by reducing a coordinate outside `[-2max, 3max]` by whole periods before reflecting. The reduction
+mapped every coordinate into `[0, 2max)`, so the wall the remaining reflections recorded no longer matched
+wall-by-wall reflection. Flocking's `bouncedVelocity` sets the velocity sign from that wall, so a boid far
+outside the field left with the wrong heading.
+
+**Reproduction on this code (before the repair).** For `max = 100`, wall-by-wall reflection of `-250`
+ends at `{ value: 50, lastWall: "low" }`, but the reduced path returned `lastWall: "high"`. `-350` returned
+no wall at all instead of `"high"`, leaving the velocity unbounced. The new exact differential test failed
+first on `-20` in `[0, 0.5]` (expected `"high"`, got `undefined`). Coordinates inside `[-2max, 3max]`, which
+is everything production movement produces, were never affected.
+
+**Repair.** Removing one period removes exactly one low and one high reflection, so the reduction now keeps
+the coordinate on its original side: `[-2max, 0)` below the range and `(max, 3max]` above it. The
+reflections that remain end at the same wall as the step-by-step loop, and the loop still runs at most
+twice. The reflected value is unchanged.
+
+**Tests (`engine.resourceBounds.test.ts`).** One new test compares value and last wall with the original
+wall-by-wall loop for every multiple of `max/8` in `[-40max, 40max]` (20 periods each side) for six extents (3,846 coordinates whose
+reference arithmetic is exact), plus the review's `-250` case and four further named cases. It fails on the
+pre-repair code and passes after. The existing bit-for-bit differential test inside `[-2max, 3max]` and the
+hostile-coordinate termination test pass unchanged.
+
 ### Phase 3B — Tests
 
 `src/simulation/__tests__/engine.modelValidity.test.ts` (109 tests):
@@ -326,16 +353,17 @@ removing any one mutation's case would leave that mutation undetected.
 | `npm run verify` (canonical local and CI gate) | PASS, exit 0 |
 | ↳ `npm run typecheck` | PASS |
 | ↳ `npm run lint` (`lint:types`, `lint:architecture`) | PASS; "Architecture lint passed (397 production TypeScript files checked)" |
-| ↳ `npm test` (full Vitest) | PASS; 101 files / 1,025 tests (Phase 3B baseline 100 / 916; +109 new, 0 removed) |
+| ↳ `npm test` (full Vitest) | PASS; 101 files / 1,026 tests after P2-A (1,025 before it; Phase 3B baseline 100 / 916; +110 new, 0 removed) |
 | ↳ `npm run build` | PASS; Next.js 15.5.26, 23/23 static pages |
 | `npm audit` / `npm audit --audit-level=high` | 0 vulnerabilities / exit 0 |
 | `CI=true npm run test:ui` (full Playwright + Axe against the production build, exactly as CI) | 220 of 220 passed in 9.5 min; 0 retries, 0 flaky; exit 0 |
-| Focused suites | model validity 109/109, referential integrity 57/57, resource bounds 14/14, hostile input 8/8, Worker recovery 5/5, runtime architecture 19/19, Reset 18/18, determinism 6/6, serialization 2/2, failure semantics 19/19, validation 12/12, template system 22/22 |
+| Focused suites | model validity 109/109, referential integrity 57/57, resource bounds 15/15 (14 before P2-A), hostile input 8/8, Worker recovery 5/5, runtime architecture 19/19, Reset 18/18, determinism 6/6, serialization 2/2, failure semantics 19/19, validation 12/12, template system 22/22 |
 | Old-vs-new trajectory hashes, 16 workloads | 16 of 16 identical |
 | Per-tick and restore cost | table under P1-B: per-tick validation at parity; restore +1–15% |
 | Temporary mutations | 15 of 15 detected; all restored byte for byte; tree checksums unchanged |
 | CI workflow and Playwright configuration | unchanged |
-| GitHub CI on these changes | NOT RUN: no push access from this environment |
+| `npm run verify` after P2-A | PASS, exit 0; 101 files / 1,026 tests; build 23/23 pages. The Playwright row above predates P2-A, which changes no UI code |
+| GitHub CI on these changes | Runs on the PR #9 push that carries Phase 3B and P2-A; see the PR checks |
 
 ### Model validity boundary
 

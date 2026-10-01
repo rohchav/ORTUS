@@ -75,6 +75,25 @@ describe("bounded boundary reflection", () => {
     }
   });
 
+  it("ends at the same wall as wall-by-wall reflection beyond two reflections of the range", () => {
+    // Multiples of max/8 keep the original loop's arithmetic exact, so it is a reliable reference far out.
+    for (const max of [0.5, 1, 1.25, 3, 7, 100]) {
+      for (let step = -320; step <= 320; step += 1) {
+        const value = (step * max) / 8;
+        const expected = legacyReflect(value, max);
+        const actual = reflectCoordinate(value, max);
+        expect(actual.value, `${value} in [0, ${max}]`).toBe(expected.value);
+        expect(actual.lastWall, `${value} in [0, ${max}]`).toBe(expected.lastWall);
+      }
+    }
+    // The bounce velocity follows the last wall, so a coordinate far below the range must leave moving up.
+    expect(reflectCoordinate(-250, 100)).toEqual({ value: 50, lastWall: "low" });
+    expect(reflectCoordinate(-350, 100)).toEqual({ value: 50, lastWall: "high" });
+    expect(reflectCoordinate(-400, 100)).toEqual({ value: 0, lastWall: "high" });
+    expect(reflectCoordinate(450, 100)).toEqual({ value: 50, lastWall: "low" });
+    expect(reflectCoordinate(500, 100)).toEqual({ value: 100, lastWall: "low" });
+  });
+
   it("keeps ordinary bounces, exact walls, and negative coordinates unchanged", () => {
     expect(reflectCoordinate(105, 100)).toEqual({ value: 95, lastWall: "high" });
     expect(reflectCoordinate(-5, 100)).toEqual({ value: 5, lastWall: "low" });

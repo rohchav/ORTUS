@@ -82,7 +82,9 @@ export interface Reflection {
 // are bit-identical; production movement leaves a 100-unit world by at most 10 units per step. A coordinate
 // farther out is first reduced by whole periods (2max) with an exact remainder: reflecting it one wall at a
 // time could take an unbounded number of steps, or never finish once max is below its floating-point
-// precision. Either way the loop below runs at most twice.
+// precision. Each removed period is one low and one high reflection, so the reduced coordinate stays on its
+// original side, in [-2max, 0) or (max, 3max], and the reflections that remain end at the same wall as the
+// step-by-step loop would. Either way the loop below runs at most twice.
 export function reflectCoordinate(value: number, max: number): Reflection {
   if (max === 0) {
     return { value: 0 };
@@ -91,8 +93,9 @@ export function reflectCoordinate(value: number, max: number): Reflection {
   if (result < -2 * max || result > 3 * max) {
     const period = 2 * max;
     const remainder = result % period;
-    // In [0, period]; an exact multiple of the period maps to 0 rather than -0.
-    result = remainder < 0 ? remainder + period : remainder === 0 ? 0 : remainder;
+    result = result < 0
+      ? remainder === 0 ? -period : remainder
+      : remainder > max ? remainder : remainder + period;
   }
   let lastWall: Reflection["lastWall"];
   while (result < 0 || result > max) {
