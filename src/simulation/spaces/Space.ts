@@ -29,6 +29,9 @@ export interface Space<TLocation = SpaceLocation> {
   removeEntity(entityId: EntityId): void;
   moveEntity(entityId: EntityId, location: TLocation): void;
   getLocation(entityId: EntityId): TLocation | undefined;
+  // Membership without copying a location, for whole-space checks.
+  has(entityId: EntityId): boolean;
+  memberCount(): number;
   queryNeighbors(entityId: EntityId, options?: unknown): NeighborResult<TLocation>[];
   queryRegion?(region: unknown): NeighborResult<TLocation>[];
   serialize(): SerializedSpace;
@@ -39,6 +42,8 @@ export interface ReadonlySpace<TLocation = SpaceLocation> {
   readonly id: string;
   readonly kind: SpaceKind;
   getLocation(entityId: EntityId): TLocation | undefined;
+  has(entityId: EntityId): boolean;
+  memberCount(): number;
   queryNeighbors(entityId: EntityId, options?: unknown): NeighborResult<TLocation>[];
   queryRegion?(region: unknown): NeighborResult<TLocation>[];
   serialize(): SerializedSpace;

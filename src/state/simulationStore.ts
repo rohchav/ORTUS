@@ -19,6 +19,7 @@ import {
   type JsonValue,
   maxSavedRunSummaries,
   parseScenario,
+  parseSnapshot,
   type ParameterValues,
   type SavedRunSummary,
   type Point2D,
@@ -810,7 +811,7 @@ export const useSimulationStore = create<SimulationUiState>((set, get) => ({
       const engine =
         get().importMode === "scenario"
           ? engineFromImportedScenario(descriptor.id, raw)
-          : SimulationEngine.fromSnapshot(descriptor.template, raw, { performance: performanceInstrumentationOptions() });
+          : engineFromImportedSnapshot(descriptor.id, raw);
       engine.setSpeed(get().speedMultiplier);
       set({
         selectedTemplateId: descriptor.id,
@@ -999,6 +1000,19 @@ function engineFromImportedScenario(templateId: TemplateId, raw: unknown): Simul
   const engine = createLegacyUiEngine(
     createAcceptedLegacyRunConfig({ templateId, seed: scenario.seed, parameters: scenario.parameters, metadata: scenario.metadata })
   );
+  configurePerformanceInstrumentation(engine);
+  return engine;
+}
+
+// A snapshot import continues the run its file describes, as the model recorded in its metadata: the
+// accepted configuration Reset and Setup changes rebuild from. Restore refuses a snapshot that is not a
+// state of that model, so the imported run and every later rebuild are the same model.
+function engineFromImportedSnapshot(templateId: TemplateId, raw: unknown): SimulationEngine {
+  const snapshot = parseSnapshot(raw);
+  const engine = createEngineFromRunConfig(
+    createAcceptedLegacyRunConfig({ templateId, seed: snapshot.seed, parameters: snapshot.parameters, metadata: snapshot.metadata })
+  );
+  engine.restoreSnapshot(snapshot);
   configurePerformanceInstrumentation(engine);
   return engine;
 }

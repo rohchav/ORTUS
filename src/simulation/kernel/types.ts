@@ -326,6 +326,16 @@ export interface System {
   update(ctx: SystemContext): void;
 }
 
+// What a run configuration fixes in every world of a model beyond its spaces, whose kinds, extents, and
+// boundary modes are always fixed (no command adds, removes, or resizes a space). Snapshot restore requires
+// a restored world to agree with the world its configuration builds on each of these.
+export interface FixedByConfiguration {
+  // Globals the configuration sets and execution never changes, such as behavior-mode markers.
+  globals?: readonly string[];
+  // The model neither creates nor destroys entities, so the configuration fixes the entity set.
+  population?: boolean;
+}
+
 // A template is a model family definition: rules, setup metadata, metrics,
 // visuals, assumptions, limitations, and validated extension points.
 export interface SimulationTemplate {
@@ -349,6 +359,7 @@ export interface SimulationTemplate {
   environmentOptionDefinitions?: readonly ParameterDefinition[];
   runtimeMetadata?: RuntimePerformanceMetadata;
   assumptionProfile?: ModelAssumptionProfile;
+  fixedByConfiguration?: FixedByConfiguration;
   validateInitializationOptions?(initialization: InitializationConfig, params: ParameterValues): void;
   validateScenarioOptions?(options: ScenarioVariantConfig, params: ParameterValues): void;
   validateWorld?(world: WorldView): void;

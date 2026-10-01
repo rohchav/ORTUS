@@ -14,6 +14,7 @@ import type {
   TemplateSpaceDefinition
 } from "../kernel/types";
 import { SimulationValidationError } from "../kernel/Errors";
+import { assertAgentRole } from "../kernel/Invariants";
 import type { RandomStream } from "../kernel/Random";
 import { World, type WorldView } from "../kernel/World";
 import { Continuous2DSpace } from "../spaces/Continuous2DSpace";
@@ -811,6 +812,7 @@ export const neuralExcitationTemplate: SimulationTemplate = {
   agentCompositionDefinitions,
   documentation,
   assumptionProfile,
+  fixedByConfiguration: { globals: [neuralMaxSignalQueueSizeGlobalKey], population: true },
   createInitialWorld(ctx) {
     const params = neuralExcitationParams(ctx.params);
     const world = new World({ globals: initialNeuralRuntimeGlobals(params, [], []) });
@@ -2022,7 +2024,16 @@ function validateNeuralExcitationWorld(world: WorldView): void {
   if (!field || !network) {
     throw new SimulationValidationError("Neural Excitation world must include continuous field and runtime network spaces");
   }
-  const entityIds = world.entitiesWith([Position2D, NeuralNeuronStateComponent]);
+  // Every live entity is a neuron placed in both spaces: propagation and the firing metrics read neurons by
+  // NeuralNeuronState, and the field and runtime network hold them for rendering and topology.
+  const entityIds = assertAgentRole(world, {
+    label: "Neural neuron",
+    required: [Position2D, NeuralNeuronStateComponent],
+    spaces: [
+      { id: NEURAL_EXCITATION_SPACE_ID, space: field },
+      { id: NEURAL_EXCITATION_NETWORK_ID, space: network }
+    ]
+  });
   if (entityIds.length === 0 || entityIds.length > 250) {
     throw new SimulationValidationError("Neural Excitation world must contain 1 to 250 neuron entities");
   }
@@ -2034,12 +2045,6 @@ function validateNeuralExcitationWorld(world: WorldView): void {
     }
     if (!isNeuralNeuronState(state)) {
       throw new SimulationValidationError(`Invalid NeuralNeuronState component on ${entityId}`);
-    }
-    if (!field.getPosition(entityId)) {
-      throw new SimulationValidationError(`Neural neuron ${entityId} is missing from continuous field`);
-    }
-    if (!network.getLocation(entityId)) {
-      throw new SimulationValidationError(`Neural neuron ${entityId} is missing from runtime network`);
     }
   }
   const globals = world.globals;

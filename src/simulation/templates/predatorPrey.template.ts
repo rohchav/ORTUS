@@ -14,7 +14,7 @@ import type {
   TemplateSpaceDefinition
 } from "../kernel/types";
 import { SimulationValidationError } from "../kernel/Errors";
-import { assertSpaceHoldsExactly } from "../kernel/Invariants";
+import { assertAgentRole } from "../kernel/Invariants";
 import { World } from "../kernel/World";
 import { Continuous2DSpace, continuous2DQueryDiagnosticsDelta } from "../spaces/Continuous2DSpace";
 import type { RandomStream } from "../kernel/Random";
@@ -381,6 +381,10 @@ export const predatorPreyTemplate: SimulationTemplate = {
       if (species.kind === "predator" && (!energy || !Number.isFinite(energy.value) || energy.value < 0)) {
         throw new SimulationValidationError(`Invalid Energy component on predator ${entityId}`);
       }
+      // Only predators carry Energy; the model never gives it to prey.
+      if (species.kind === "prey" && energy) {
+        throw new SimulationValidationError(`Prey ${entityId} holds Energy, which only predators have`);
+      }
     }
     for (const entityId of componentEntityIds(world, Position2D)) {
       const position = world.getComponent<Point2D>(entityId, Position2D);
@@ -394,13 +398,13 @@ export const predatorPreyTemplate: SimulationTemplate = {
         throw new SimulationValidationError(`Invalid Velocity2D component on ${entityId}`);
       }
     }
-    // Movement and predation address every live positioned agent through the space.
-    assertSpaceHoldsExactly(
-      world.continuous2D(PREDATOR_PREY_SPACE_ID),
-      PREDATOR_PREY_SPACE_ID,
-      world.entitiesWith([Position2D]),
-      "Predator-prey agent"
-    );
+    // Every live entity is an agent: movement, predation, reproduction, and the population counts each
+    // read agents by a different component, so all of them and the space must agree on who the agents are.
+    assertAgentRole(world, {
+      label: "Predator-prey agent",
+      required: [Position2D, Velocity2D, Species],
+      spaces: [{ id: PREDATOR_PREY_SPACE_ID, space: world.continuous2D(PREDATOR_PREY_SPACE_ID) }]
+    });
   },
   validateParameters(params) {
     predatorPreyParams(params);

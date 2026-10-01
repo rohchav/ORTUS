@@ -102,6 +102,14 @@ export class Continuous2DSpace implements Space<Point2D> {
     this.markPositionsChanged();
   }
 
+  has(entityId: EntityId): boolean {
+    return this.positions.has(entityId);
+  }
+
+  memberCount(): number {
+    return this.positions.size;
+  }
+
   getLocation(entityId: EntityId): Point2D | undefined {
     return this.getPosition(entityId);
   }
@@ -235,6 +243,8 @@ export class Continuous2DSpace implements Space<Point2D> {
       height: this.height,
       boundaryMode: this.boundaryMode,
       getLocation: (entityId) => this.getLocation(entityId),
+      has: (entityId) => this.has(entityId),
+      memberCount: () => this.memberCount(),
       getPosition: (entityId) => this.getPosition(entityId),
       queryRadius: (position, radius) => this.queryRadius(position, radius),
       queryNeighbors: (entityId, radiusOrOptions) => this.queryNeighbors(entityId, radiusOrOptions),

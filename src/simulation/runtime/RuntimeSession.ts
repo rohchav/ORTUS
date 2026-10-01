@@ -392,13 +392,10 @@ export function prepareRuntimeArtifactImport(request: Pick<RuntimeArtifactImport
   const parsed = snapshot ?? parseRuntimeArtifact("scenario", request.json);
   const runConfig = runConfigFromArtifact(parsed);
   assertRuntimeTemplateSupport(runConfig);
+  // The engine is the model the artifact declares; restore refuses a snapshot that is not a state of it.
   const engine = createEngineFromRunConfig(withRuntimeArtifactMetadata(runConfig));
   if (snapshot) {
-    const initialization = engine.initialization;
-    const scenario = engine.scenario;
     engine.restoreSnapshot(snapshot);
-    engine.initialization = initialization;
-    engine.scenario = scenario;
   }
   return engine;
 }

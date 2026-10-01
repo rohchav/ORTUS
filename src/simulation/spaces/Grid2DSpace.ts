@@ -66,6 +66,14 @@ export class Grid2DSpace implements Space<GridCell> {
     this.cells.set(entityId, this.normalizeCell(cell));
   }
 
+  has(entityId: EntityId): boolean {
+    return this.cells.has(entityId);
+  }
+
+  memberCount(): number {
+    return this.cells.size;
+  }
+
   getLocation(entityId: EntityId): GridCell | undefined {
     return this.getCell(entityId);
   }
@@ -159,6 +167,8 @@ export class Grid2DSpace implements Space<GridCell> {
       cols: this.cols,
       boundaryMode: this.boundaryMode,
       getLocation: (entityId) => this.getLocation(entityId),
+      has: (entityId) => this.has(entityId),
+      memberCount: () => this.memberCount(),
       getCell: (entityId) => this.getCell(entityId),
       entitiesAt: (cell) => this.entitiesAt(cell),
       neighbors: (cell, options) => this.neighbors(cell, options),

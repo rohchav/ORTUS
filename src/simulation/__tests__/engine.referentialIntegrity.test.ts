@@ -123,8 +123,10 @@ describe("space membership referential integrity", () => {
   });
 
   // Templates whose systems read their space member by member also require the reverse direction: every
-  // member is one of the template's live agents. (Forest Fire and Neural index their cells and neurons
-  // directly; an extra live member there is inert, and their existing placement checks are unchanged.)
+  // member is one of the template's live agents. Since the Phase 3B repair every template states this
+  // through assertAgentRole (every live entity is an agent), so a stranger or a stripped agent is now
+  // named by the earlier, more specific check: an entity the configured model does not have, or an agent
+  // missing a component. engine.modelValidity.test.ts covers all seven templates.
   describe.each([
     [epidemicTemplate, EPIDEMIC_SPACE_ID, Position2D],
     [opinionTemplate, OPINION_SPACE_ID, Position2D],
@@ -146,7 +148,11 @@ describe("space membership referential integrity", () => {
       }
 
       expect(() => SimulationEngine.fromSnapshot(template, snapshot)).toThrow(SimulationValidationError);
-      expect(() => SimulationEngine.fromSnapshot(template, snapshot)).toThrow(`Space ${spaceId} contains unexpected member e999999`);
+      // Predator-Prey has births, so the stranger is refused as an agent without components; the other
+      // templates never create entities, so it is refused as an entity their configuration does not have.
+      expect(() => SimulationEngine.fromSnapshot(template, snapshot)).toThrow(
+        /^(Entity e999999 is not one of the configured model's entities|Predator-prey agent e999999 is missing Position2D)$/
+      );
     });
 
     it("rejects a placed agent stripped of the component that makes it an agent", () => {
@@ -154,7 +160,7 @@ describe("space membership referential integrity", () => {
       const member = firstMember(spaceIn(snapshot, spaceId));
       delete snapshot.world.components[agentComponent]![member];
 
-      expect(() => SimulationEngine.fromSnapshot(template, snapshot)).toThrow(`Space ${spaceId} contains unexpected member ${member}`);
+      expect(() => SimulationEngine.fromSnapshot(template, snapshot)).toThrow(new RegExp(` ${member} is missing ${agentComponent}$`));
     });
 
     it("rejects a same-id space of the wrong kind", () => {

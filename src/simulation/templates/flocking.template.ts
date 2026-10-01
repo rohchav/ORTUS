@@ -17,7 +17,7 @@ import type {
   TemplateSpaceDefinition
 } from "../kernel/types";
 import { SimulationValidationError } from "../kernel/Errors";
-import { assertSpaceHoldsExactly } from "../kernel/Invariants";
+import { assertAgentRole } from "../kernel/Invariants";
 import { World, type WorldView } from "../kernel/World";
 import { Continuous2DSpace, type Continuous2DSpaceReader } from "../spaces/Continuous2DSpace";
 import { reflectCoordinate, type BoundaryMode, type Point2D, type Reflection, type SpaceLocation } from "../spaces/Space";
@@ -483,6 +483,7 @@ export const flockingTemplate: SimulationTemplate = {
   environmentOptionDefinitions,
   documentation,
   assumptionProfile,
+  fixedByConfiguration: { globals: ["flockingBehaviorMode", "flockingGroupCount"], population: true },
   createInitialWorld(ctx) {
     const params = flockingParams(ctx.params);
     const behaviorMode = flockingBehaviorModeFromScenario(ctx.scenario?.behaviorMode);
@@ -1272,7 +1273,8 @@ function bouncedVelocity(component: number, lastWall: Reflection["lastWall"]): n
 }
 
 function validateFlockingWorld(world: WorldView): void {
-  flockingBehaviorModeFromWorld(world.globals);
+  const groupAware = flockingBehaviorModeFromWorld(world.globals) === "groupAware";
+  const groupCount = world.getGlobal("flockingGroupCount");
   for (const entityId of componentEntityIds(world, Position2D)) {
     const position = world.getComponent<Vec2>(entityId, Position2D);
     if (!isFiniteVector(position)) {
@@ -1293,12 +1295,19 @@ function validateFlockingWorld(world: WorldView): void {
   }
   for (const entityId of componentEntityIds(world, BoidGroup)) {
     const group = world.getComponent<BoidGroupComponent>(entityId, BoidGroup);
-    if (!isBoidGroup(group)) {
+    if (!isBoidGroup(group) || group.groupCount !== groupCount || group.groupIndex > group.groupCount) {
       throw new SimulationValidationError(`Invalid BoidGroup component on ${entityId}`);
     }
   }
-  // Movement and neighbour sensing address every live positioned boid through the space.
-  assertSpaceHoldsExactly(world.continuous2D(FLOCKING_SPACE_ID), FLOCKING_SPACE_ID, world.entitiesWith([Position2D]), "Boid");
+  // Every live entity is a boid: sensing and movement read boids through the space, the frame projection
+  // and boid metrics by component, and group affinity by BoidGroup, which exists exactly in the groupAware
+  // behavior mode.
+  assertAgentRole(world, {
+    label: "Boid",
+    required: groupAware ? [Position2D, Velocity2D, BoidState, BoidGroup] : [Position2D, Velocity2D, BoidState],
+    forbidden: groupAware ? [] : [BoidGroup],
+    spaces: [{ id: FLOCKING_SPACE_ID, space: world.continuous2D(FLOCKING_SPACE_ID) }]
+  });
 }
 
 function velocityValues(world: WorldView): Vec2[] {

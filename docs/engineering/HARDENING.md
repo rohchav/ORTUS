@@ -1,9 +1,385 @@
 # ORTUS Hardening Ledger
 
-This ledger has three parts, newest first. **Phase 3 — Remediation** records the repairs made against the
-independent Phase 3 adversarial review. **Phase 2 — Execution** records the repairs made against the
-Phase 1 findings. **Phase 1 — Forensic Investigation** is the original audit. Earlier parts are preserved
-as evidence; where a later phase changed a conclusion, the later entry says so.
+This ledger has four parts, newest first. **Phase 3B — Remediation** records the repairs made against the
+independent Phase 3B review of the Phase 3 remediation. **Phase 3 — Remediation** records the repairs made
+against the independent Phase 3 adversarial review. **Phase 2 — Execution** records the repairs made against
+the Phase 1 findings. **Phase 1 — Forensic Investigation** is the original audit. Earlier parts are
+preserved as evidence; where a later phase changed a conclusion, the later entry says so.
+
+## Phase 3B — Remediation
+
+A fresh independent Phase 3B review of the Phase 3 remediation returned **REQUEST CHANGES** with two verified
+P1 findings, and confirmed the other Phase 3 and Phase 2 contracts: failed-run containment, failed-tick
+pending-command cleanup, command-batch validation, space-kind safety, event timing, deterministic replay,
+hostile-import depth and size bounds, terminating bounce reflection, Flocking rejected-import preservation,
+explicit recovery after terminal Worker failure, Worker generation and revision rejection, transferred-frame
+ownership, Reset preserving accepted variants, the WP5 gains, scoped errors, CI behavior, and the E2E race
+fixes. The review artifact is not stored in this repository. Both findings were reproduced on this code
+before any change.
+
+Baseline: branch `phase3/remediation` at `efee56d`, Node 24.16.0, npm 11.13.0. Full Vitest at baseline:
+100 files / 916 tests PASS.
+
+**The Phase 3 remediation was incomplete, and independent review caught it.** Phase 3 P1-1 established
+that every space member is a live entity and added a two-sided membership rule, but five templates named
+their agents by `Position2D`, the component the attack removes. Its adversarial variation removed the
+position *or* the membership, never both. Phase 3 also recorded unchecked snapshot geometry as a P2
+("Remaining risks after Phase 3"); the review showed it produces executable hybrid models, so it is P1.
+The Phase 3 entries below are left as written.
+
+| Finding | Status |
+| --- | --- |
+| P1-A A snapshot can restore live "ghost agents" whose model state remains but whose position and space membership are gone | FIXED |
+| P1-B A snapshot can restore geometry, boundary, or model-variant state that contradicts the configuration it declares | FIXED |
+
+### P1-A — Ghost agents — FIXED
+
+**Phase 3B finding.** With both the position component and the space membership removed, an entity that
+keeps the state its systems and metrics read is accepted. For example, an Opinion agent keeps
+`OpinionState`, an Epidemic agent still counts as infected, a Predator-Prey agent still counts as prey or
+predator, and a boid still counts toward boid metrics while it disappears from rendering and neighbor
+search.
+
+**Reproduction on this code (before the repair).** A throwaway probe restored genuine snapshots with one
+agent's placing component and every space membership removed, all other state kept (for Neural, also its
+synapses), and stepped twice:
+
+| Template | Result |
+| --- | --- |
+| Opinion | accepted and ran; 100 live agents, 99 placed |
+| Epidemic | accepted and ran; 80 live, 79 placed |
+| Predator-Prey | accepted and ran; 129 live, 128 placed |
+| Flocking | accepted and ran; 160 live, 159 placed |
+| Neural (not in the review's list) | accepted and ran; 80 live neurons, 79 placed; propagation and `firingRate` read `NeuralNeuronState` alone |
+| Schelling | rejected: `GroupIdentity` already identified its agents |
+| Forest Fire | a stripped cell was rejected by the cell-count check, but an extra entity holding only `ForestFireCellState` was accepted (the state-count metrics read that component) |
+
+**Root cause.** Agent identity came from a component the attack could remove. Five templates required the
+space to hold exactly `world.entitiesWith([Position2D])`; Neural and Forest Fire identified agents by two
+components together. Once that component was gone, the entity was no longer in the set being checked, but
+systems, metrics, and renderers that read its other components still counted it: `OpinionState` feeds
+`averageOpinion`, `InfectionState` the S/I/R counts, `Species` the population counts, `BoidState` the boid
+count, `NeuralNeuronState` propagation, and `ForestFireCellState` the state counts.
+
+**Which rule is true.** In all seven templates every live entity is an agent. No template creates any
+other entity. Predator-Prey births and its add-prey intervention create complete, placed agents. The only
+other create/destroy intervention (Predator-Prey removal) destroys the entity. For every template and
+behavior mode, the new agreement test confirms that the live entities, the holders of each required
+component, and each space's members are one set. Agent identity can therefore be *liveness*, which no
+component tampering can remove. A few components depend on the model variant or on
+the kind of agent: Opinion's `OpinionSocialLearningState` exists exactly in the `socialLearning` mode,
+Flocking's `BoidGroup` exactly in the `groupAware` mode (with the configured group count), and
+Predator-Prey's `Energy` exactly on predators.
+
+**Why not `entityTypeDefinitions`.** They are presentation metadata, not runtime invariants. Epidemic's
+susceptible, infected, and recovered "types" are states of one agent, Flocking's "boidGroup" type is an
+optional component, and Opinion lists `OpinionSocialLearningState` unconditionally. Making them express
+variant-dependent requirements would change a documentation schema used by the UI and registry. A narrow
+runtime rule stated next to each template's other `validateWorld` checks is the smaller single source of
+truth.
+
+**Repair.**
+- `assertAgentRole(world, role)` (`kernel/Invariants.ts`) checks that every live entity is an agent. Each
+  agent must hold the role's `required` components and none of its `forbidden` ones, and each of the
+  role's spaces must hold exactly the agents. Every template's `validateWorld` states its role:
+
+  | Template | Required | Forbidden | Spaces |
+  | --- | --- | --- | --- |
+  | Epidemic | Position2D, Velocity2D, InfectionState | | epidemic-space |
+  | Opinion | Position2D, OpinionState (+ OpinionSocialLearningState in `socialLearning`) | OpinionSocialLearningState in `default` | opinion-space |
+  | Predator-Prey | Position2D, Velocity2D, Species (the template also requires Energy on predators and forbids it on prey) | | predator-prey-space |
+  | Flocking | Position2D, Velocity2D, BoidState (+ BoidGroup in `groupAware`, with the configured `flockingGroupCount`) | BoidGroup in `default` | flocking-space |
+  | Schelling | PositionGrid, GroupIdentity, SatisfactionState | | schelling-grid |
+  | Forest Fire | ForestFireCellPosition, ForestFireCellState | | forest-fire-grid |
+  | Neural | Position2D, NeuralNeuronState | | neural-excitation-field, neural-excitation-runtime-network |
+
+  The variant is read from the world's own behavior-mode global, the marker its systems execute from;
+  P1-B ties that marker to the declared configuration.
+- `validateWorld` already runs for built worlds, after every tick and external command batch, and on
+  restore. So a command batch that strips or half-creates an agent now fails the run, under the existing
+  fail-closed contract.
+- A template that declares no role, such as the kernel test templates, can still keep live non-agent
+  entities.
+- `assertSpaceHoldsExactly` now reads membership through new non-copying `has`/`memberCount` methods on
+  every space instead of serializing and sorting the whole space each tick. Without this, Forest Fire at its
+  160 × 120 maximum measured +17 ms (+13%) of per-tick validation. With it, per-tick validation is at parity
+  (table under P1-B).
+
+### P1-B — World / configuration identity — FIXED
+
+**Phase 3B finding.** A snapshot can declare one configuration while containing a different executable
+world: changed continuous dimensions, grid rows or columns, or boundary mode, or a behavior variant the
+world does not have. The imported world runs, re-export keeps the altered geometry with unchanged
+provenance, and Reset rebuilds the declared model, a different world. Flocking movement reads the boundary
+*parameter* while its neighbor index and renderer read the *space*, so one import could run a hybrid that no
+configuration produces.
+
+**Reproduction on this code (before the repair).**
+
+| Tampering | Result |
+| --- | --- |
+| Continuous width ×4, height ÷4, or boundary flipped (Opinion, Epidemic, Predator-Prey, Flocking, Neural field) | accepted and ran, all 15 |
+| Schelling rows +50, columns 100,000, or boundary flipped | accepted and ran; each tick then scans every cell of the enlarged grid |
+| Forest Fire rows or columns changed | rejected incidentally (cell count); boundary flipped accepted |
+| Opinion behavior-mode markers set to `socialLearning` on a default world, or to `default` on a `socialLearning` world | accepted |
+| Flocking default world claiming `groupAware` | accepted |
+
+A kernel snapshot of a non-default run also carries no variant declaration at all: `createEngineFromRunConfig`
+records none in metadata.
+
+**Root cause.** Three gaps, one missing contract:
+1. Restore validated the world against itself and the template, never against the configuration the
+   snapshot declares. `validateWorld` receives no parameters.
+2. `restoreSnapshot` discarded the engine's declared variant (it set `initialization` and `scenario` to
+   `undefined`), so the kernel's own `reset()` rebuilt the default model after any restore. The main-thread
+   import built its engine without the variant recorded in metadata. The Worker worked around this by
+   saving and re-setting the variant around `restoreSnapshot`.
+3. A declared run configuration could contradict the snapshot's own parameters. `validateRunConfig` lets
+   agent-composition and environment options override parameters, so a Flocking envelope declaring
+   `environmentOptions.boundaryMode: "bounce"` built a bounce engine, and restore then installed the
+   snapshot's `wrap` parameters.
+
+**Contract.** A snapshot is a state of one model: the engine's template, parameters, initialization, and
+scenario variant. `restoreSnapshot` installs the state without changing the model, so a later Reset rebuilds
+the model the state belongs to. It refuses:
+- a snapshot whose parameters are not the engine's (`assertParametersMatchConfiguration`);
+- a world that disagrees with the tick-0 world the model builds for the snapshot's seed, on what the
+  configuration fixes (`assertWorldMatchesConfiguration`).
+
+**Architecture chosen (option A: build the expected world and compare).** The reference is built by the
+template's own `createInitialWorld` from the declared configuration. Each template declares only *which* of
+its globals, and whether its entity set, the configuration fixes (`fixedByConfiguration` on
+`SimulationTemplate`). Rejected: passing the configuration into `validateWorld` (option B). Every template
+would re-derive its geometry and variant markers from parameters by hand, for example Forest Fire's
+`closed` → `clamp` boundary mapping or Flocking's group-count derivation. That is a second copy of
+`createInitialWorld`'s logic in seven places, free to drift from it.
+
+| Property | Compared | Why fixed |
+| --- | --- | --- |
+| Space ids, kinds, count | every template | no command adds, removes, or re-kinds a space |
+| Continuous width, height, boundary mode | every continuous space | no command resizes a space |
+| Grid rows, columns, boundary mode | every grid space | same |
+| Parameters | every template, all keys, exactly | parameters never change during a run; every change rebuilds |
+| `opinionBehaviorMode`, `opinionInformationSourceCount`, `opinionSocialLearningRuntimeScope` | Opinion | set from the configuration; constant over a run (probed) |
+| `flockingBehaviorMode`, `flockingGroupCount` | Flocking | same |
+| `neuralMaxSignalQueueSize` | Neural | derived from a parameter; bounds the signal queue in validation |
+| Entity set (ids, all alive) | all but Predator-Prey | those models never create or destroy entities |
+
+Not compared, because they evolve: positions, velocities, component values (infection states, opinions,
+cell states), the Predator-Prey population, globals the systems rewrite each tick, the event queue, RNG
+state, metric history, and Neural's topology (see remaining risks). Genuine worlds evolved 12 ticks restore
+for every template × behavior mode × initialization preset and continue deterministically.
+
+**Variant consistency.** The chain has three links. The declared variant builds the reference world. Its
+behavior-mode globals must equal the restored world's. The agent role (P1-A) then requires exactly the
+components that mode uses. A world whose markers were flipped, and a world that is completely and
+consistently `socialLearning` or `groupAware` but declared `default` (or the reverse), are both refused.
+The comparison uses the typed global markers the systems execute from, not metadata strings.
+
+**Initialization.** The reference world is built with the declared initialization, so a preset that shaped
+structure would be checked; a synthetic template whose preset enlarges its grid proves it. No production
+preset changes anything the configuration fixes (tested for every template and preset). Presets set only
+initial state, which cannot be checked against an evolved world; the declared preset remains provenance.
+
+**The same checks on every path.** Each path builds the engine for the model the artifact declares and calls
+the same `restoreSnapshot`:
+- direct: `SimulationEngine.fromSnapshot(template, json, { initialization, scenario })`;
+- main-thread paste import: the run configuration recorded in the snapshot's metadata
+  (`createAcceptedLegacyRunConfig`), the configuration Reset and Setup rebuild from;
+- Worker: the runtime envelope (`runConfigFromArtifact`), the configuration Worker Reset uses. Its
+  variant save-and-restore workaround is removed.
+
+All checks run before `commitRun`, so a refused import leaves the current run, its identity, tick, and
+state unchanged, and it can keep stepping. One consequence on the main-thread path: a snapshot whose
+metadata declares an invalid variant (an unknown behavior mode or preset, say) is refused at import.
+Before, it imported and failed only when Reset or a Setup change tried to rebuild it.
+
+**Flocking dual authority.** Movement reads `params.boundaryMode`; the neighbor index, frame projection, and
+renderer read `space.boundaryMode`. Both come from the same parameter at construction, and nothing changes
+either during a run. Restore now requires the parameter to equal the declared one and the space's mode to
+equal the reference built from it, so an accepted world cannot hold two modes. The dual representation is
+kept: a single-authority refactor would touch movement, neighbor-index, and projection code on the audited
+PERF1 path, while the invariant is one comparison at restore.
+
+**Resource-bound consequence.** A Schelling snapshot declaring a 1,000,000 × 1,000,000 grid is refused at
+restore, before any tick (tested). Parameter definitions already bound every structural extent: Schelling
+10–80 rows, 10–100 columns, and a cell cap; Forest Fire at most 19,200 cells; the continuous worlds fixed at
+100 × 100. New runs, engine scenario imports, authored scenarios, and snapshots all resolve parameters
+through the same definitions, and snapshot geometry was the only route around them. No new limits were
+needed or added.
+
+**Frequency and cost.** The role check (P1-A) is a dynamic invariant and runs wherever `validateWorld`
+runs. The configuration comparison (P1-B) is not: nothing at runtime can change what it compares, so it
+runs only in `restoreSnapshot`. Measured old tree vs new tree (medians of three interleaved rounds; same
+worlds):
+
+| World | Per-tick validation, old → new | Whole step, old → new | Restore, old → new |
+| --- | --- | --- | --- |
+| Forest Fire 160 × 120 | 85.2 → 83.4 ms | 98.2 → 93.7 ms | 1,294 → 1,365 ms |
+| Schelling 60 × 100, density 0.95 | 34.5 → 36.3 ms | 158.5 → 160.0 ms | 532 → 595 ms |
+| Epidemic 1,000 | 9.85 → 9.90 ms | 95.9 → 96.3 ms | 117 → 128 ms |
+| Opinion 1,000 | 6.46 → 6.57 ms | 109.9 → 113.5 ms | 74 → 75 ms |
+| Flocking 500 | 3.52 → 3.43 ms | 36.9 → 35.5 ms | 46 → 47 ms |
+| Neural 250 | 8.34 → 8.49 ms | 121.1 → 127.5 ms | 405 → 440 ms |
+| Predator-Prey default | 0.72 → 0.74 ms | 3.29 → 3.50 ms | 11.0 → 12.5 ms |
+
+Whole-step differences are within run-to-run noise in both directions. Restore costs 1–15% more for the one
+extra tick-0 world. For the largest world that world costs 138 ms and the comparison 30 ms, inside a
+restore dominated by schema parsing.
+
+An A/B run hashed the final `exportSnapshot()` after 60 ticks of every template's default run and of
+Flocking in wrap, bounce, and clamp at 20, 160, and 500 boids: all 16 hashes identical to the pre-change
+tree. The repair changes no trajectory.
+
+### Phase 3B — Tests
+
+`src/simulation/__tests__/engine.modelValidity.test.ts` (109 tests):
+- **P1-A (77 tests).** For every template and each materially distinct agent kind: S, I, and R agents;
+  prey and predator; group A and B; empty, fuel, burning, and burned cells; default and `socialLearning`
+  Opinion agents; default boids and two `groupAware` groups; neurons. Each is tested four ways:
+  - the review's ghost (placing component and every space membership removed, model state kept);
+  - each required component removed alone;
+  - removal from each of its spaces alone;
+  - an entity stripped of *every* component and membership, the combined omission that the Phase 3
+    tests never tried.
+
+  Also: the Phase 3B Opinion ghost exactly; state that contradicts the behavior mode (Opinion and Flocking
+  in both directions, a Flocking group outside the configured count, prey with Energy, a predator without
+  it); command batches that strip or half-create an agent fail the run; the membership helper for every
+  space kind; live non-agent entities kept by a template without a role; and, for every template, that
+  liveness, each required component, each space, the population metrics, and the Flocking frame all see the
+  same agents. Rejection before replacement is tested on the direct, main-thread paste, Worker session,
+  and Worker-driver paths: same engine or identity, same tick, byte-identical export, and stepping
+  continues.
+- **P1-B (32 tests).**
+  - Geometry: continuous width smaller and larger, height, and boundary for all five continuous spaces;
+    grid rows, columns, and boundary for Schelling and Forest Fire; a 10¹²-cell Schelling extent, and the
+    same extent refused as a parameter for a new run, a scenario import, and a snapshot; an extra space, a
+    missing space, and a space of another kind.
+  - Variant: a consistent `socialLearning` world declared `default` and the reverse; flipped markers
+    alone; Flocking mode and group count; Neural's queue bound; the synthetic structural preset; and the
+    check that no production preset is structural.
+  - Parameters and population: a parameter mismatch; an agent removed entirely or destroyed in each of
+    the eight fixed-population models; Predator-Prey births and deaths still accepted.
+  - A Flocking attack combining width, boundary, and mode, and each alone.
+  - Paths: direct, main-thread paste (geometry, variant, and a metadata composition contradicting the
+    parameters), and Worker session and driver (the boundary hybrid, a mode, and an envelope contradicting
+    the parameters), each keeping the current run.
+  - Preservation: every template × behavior mode × preset restores its evolved world and continues
+    deterministically; Flocking wrap, bounce, and clamp through the Worker path with one boundary mode;
+    every main-thread mode and preset through the paste path; and Reset after restore keeps the declared
+    model in the kernel and in the Worker session.
+
+Against the pre-change tree (the new file copied into a worktree at `efee56d`), 86 of the 108 tests that
+existed then fail:
+- 45 because the old code accepted the invalid world or lost the declared model through import or Reset;
+- 31 because the old code already rejected, but with a less specific error (for example Phase 3's
+  "unexpected member" for a stripped placed agent, or Forest Fire's cell count) that the new tests now pin;
+- 10 only because the new `aliveEntityIds` accessor does not exist there.
+
+The 22 that pass pin behavior that was already right: Phase 3's missing-from-space rejection for five
+templates, the preservation round trips, and Predator-Prey births and deaths. (The helper unit test was
+added after this run.) One test was vacuous on the old code, because it filtered models by the new
+`fixedByConfiguration` flag and so looped over nothing. It now enumerates its models and asserts their
+number.
+
+One existing file was adjusted, not weakened: `engine.referentialIntegrity.test.ts` expected
+`Space … contains unexpected member …` for a stranger placed in the space and for a stripped placed agent.
+Both are still refused, now by an earlier and more specific check: `Entity … is not one of the configured
+model's entities` (fixed population), `Predator-prey agent … is missing Position2D`, or `… is missing
+<component>`. The expectations name the entity and the component.
+
+### Phase 3B — Mutation sensitivity
+
+Each mutation was applied alone to the finished code, and the five most relevant files were run:
+`engine.modelValidity`, `engine.referentialIntegrity`, `simulationStore.reset`,
+`runtime.performanceArchitecture`, and `template.system` (225 tests). Each mutated file was then restored
+and compared by SHA-256. All 15 were restored byte for byte, and the whole tree matched its pre-mutation
+checksums afterwards. The full failing-test lists of M1–M6 and M9 come from a second run of those seven
+mutations, which also restored byte for byte.
+
+| Mutation | Failing tests | Examples |
+| --- | ---: | --- |
+| M1 Agent identity inferred from the required components, so a stripped, unplaced agent drops out of the check | 54 | all 17 ghost tests (every template and agent kind); all 17 single-component removals; all 9 fully stripped entities; the Phase 3B Opinion ghost; the command-batch ghost; the direct, main-thread, and Worker P1-A path tests; 6 Phase 3 membership tests |
+| M2 Agent role ignores its spaces | 23 | all 17 missing-from-a-space tests; the 6 Phase 3 live-agent-missing-from-its-space tests |
+| M3 No continuous width or height comparison | 7 | the 5 continuous-geometry tests; the combined Flocking attack; the direct live-engine extent test |
+| M4 No grid rows or columns comparison | 5 | the Schelling and Forest Fire grid tests; the 10¹²-cell extent; the synthetic structural preset; the main-thread paste path (Schelling rows) |
+| M5 No boundary-mode comparison | 9 | the 5 continuous and 2 grid geometry tests; the combined Flocking attack; the Worker path (the boundary hybrid) |
+| M6 No configuration-global (behavior variant) comparison | 7 | consistent `socialLearning` world declared `default` and the reverse; flipped markers; Flocking mode and group count; Neural queue bound; the combined attack; the main-thread paste and Worker paths (variant attempts) |
+| M7 Model validation moved after the imported world is committed | 2 | both direct live-engine imports (the run is no longer byte-identical after refusal) |
+| M8 No parameter comparison | 3 | the parameter mismatch; the main-thread metadata composition; the Worker envelope contradicting the parameters |
+| M9 No fixed-population comparison | 5 | the removed or destroyed agent in the fixed-population models; 4 Phase 3 stranger-in-the-space tests |
+| M10 Restore discards the declared variant (the pre-repair behavior) | 3 | Reset after restore (kernel and Worker session); every main-thread mode and preset; a Phase 2 Worker artifact test |
+| M11 Main-thread import ignores the variant recorded in metadata | 2 | every main-thread mode and preset; the main-thread variant attempt |
+| M12 Forbidden (variant-contradicting) components ignored | 1 | state that contradicts the behavior mode (Opinion and Flocking cases) |
+| M13 Worker preparation ignores the declared behavior mode | 2 | the Worker variant attempt; Reset after restore in the Worker session |
+| M14 Flocking `BoidGroup` not tied to the configured group count | 1 | state that contradicts the behavior mode (group outside the configured count) |
+| M15 Prey may hold Energy | 1 | state that contradicts the behavior mode (prey with Energy) |
+
+M12, M14, and M15 are caught by one test that holds one case per contradiction. Each case is independent:
+removing any one mutation's case would leave that mutation undetected.
+
+### Phase 3B — Verification (working tree with all Phase 3B changes; Node 24.16.0, npm 11.13.0)
+
+| Check | Result |
+| --- | --- |
+| `npm run verify` (canonical local and CI gate) | PASS, exit 0 |
+| ↳ `npm run typecheck` | PASS |
+| ↳ `npm run lint` (`lint:types`, `lint:architecture`) | PASS; "Architecture lint passed (397 production TypeScript files checked)" |
+| ↳ `npm test` (full Vitest) | PASS; 101 files / 1,025 tests (Phase 3B baseline 100 / 916; +109 new, 0 removed) |
+| ↳ `npm run build` | PASS; Next.js 15.5.26, 23/23 static pages |
+| `npm audit` / `npm audit --audit-level=high` | 0 vulnerabilities / exit 0 |
+| `CI=true npm run test:ui` (full Playwright + Axe against the production build, exactly as CI) | 220 of 220 passed in 9.5 min; 0 retries, 0 flaky; exit 0 |
+| Focused suites | model validity 109/109, referential integrity 57/57, resource bounds 14/14, hostile input 8/8, Worker recovery 5/5, runtime architecture 19/19, Reset 18/18, determinism 6/6, serialization 2/2, failure semantics 19/19, validation 12/12, template system 22/22 |
+| Old-vs-new trajectory hashes, 16 workloads | 16 of 16 identical |
+| Per-tick and restore cost | table under P1-B: per-tick validation at parity; restore +1–15% |
+| Temporary mutations | 15 of 15 detected; all restored byte for byte; tree checksums unchanged |
+| CI workflow and Playwright configuration | unchanged |
+| GitHub CI on these changes | NOT RUN: no push access from this environment |
+
+### Model validity boundary
+
+A world is trusted as an executable state of a declared ORTUS model when three layers hold
+(`kernel/Invariants.ts`):
+1. **Kernel invariants** (`assertWorldInvariants`): unique ids, components on existing entities, finite
+   values, every space member a live entity, valid events.
+2. **Template model rules** (`validateWorld`, including `assertAgentRole`): every live entity is an agent
+   with the components its model variant requires and none it forbids, placed exactly in its spaces, with
+   valid component values.
+3. **Configuration identity** (`assertParametersMatchConfiguration` and `assertWorldMatchesConfiguration`,
+   in `restoreSnapshot` only): the snapshot's parameters are the model's, and its spaces, configuration
+   globals, and fixed entity set are those the model's configuration builds.
+
+Layers 1 and 2 run for built worlds, after every tick and external command batch, and on restore. Layer 3
+runs where a world enters from outside. All three run before an imported world replaces the current run,
+and all import paths reach them through the same `restoreSnapshot`.
+
+### Remaining risks after Phase 3B (no P0 or P1 known)
+
+New, found during this remediation and not fixed here:
+- P2: Neural topology (the `neuralSynapses` global and the runtime network's edges) is not compared with
+  the topology the seed and parameters generate. The model has no plasticity, so the topology is in fact
+  fixed by the configuration, and a tampered topology changes dynamics. It is held twice, which is the
+  listed "Neural duplicate topology representation" non-goal. Checking one copy without resolving the
+  duplication would leave the other unchecked.
+- P3: an evolved snapshot's declared initialization preset and options cannot be verified, only their
+  structural consequences (of which production presets have none). The declared preset is provenance, and
+  Reset rebuilds it.
+- P3: restore builds one extra tick-0 world, +1–15% restore time (at most +71 ms, on Forest Fire's
+  maximum).
+
+Closed by this phase: the Phase 3 P2 "an imported snapshot's space geometry (dimensions, boundary mode) is
+not checked against the template", re-rated P1 and fixed as P1-B.
+
+Carried forward unchanged from Phase 3:
+- P3: component position versus space position is not compared;
+- P3: a runaway Predator-Prey run past about tick 900 exceeds the import bounds;
+- P3: a Flocking import is parsed three times on the main thread;
+- P3: immersive-prototype specs wait on wall-clock progress, and ten spec files run in serial mode;
+- P2-4: the GitHub observation of the E2E repair is still missing;
+- and the Phase 3 carried-forward list: `NetworkSpace.serialize` edge aliasing; live `ctx.params`;
+  model version provenance; locale-sensitive ordering; `getComponent` read-copy cost; public engine
+  fields; Zustand decomposition; and the others listed there.
 
 ## Phase 3 — Remediation
 

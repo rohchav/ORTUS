@@ -15,7 +15,7 @@ import type {
   TemplateSpaceDefinition
 } from "../kernel/types";
 import { SimulationValidationError } from "../kernel/Errors";
-import { assertSpaceHoldsExactly } from "../kernel/Invariants";
+import { assertAgentRole } from "../kernel/Invariants";
 import { World, type WorldView } from "../kernel/World";
 import { Grid2DSpace, type Grid2DSpaceReader } from "../spaces/Grid2DSpace";
 import type { RandomStream } from "../kernel/Random";
@@ -323,6 +323,7 @@ export const schellingTemplate: SimulationTemplate = {
   environmentOptionDefinitions,
   documentation,
   assumptionProfile,
+  fixedByConfiguration: { population: true },
   createInitialWorld(ctx) {
     const params = schellingParams(ctx.params);
     const world = new World({ globals: { movedThisTick: 0 } });
@@ -662,6 +663,13 @@ function evaluateSatisfaction(
 
 function validateSchellingWorld(world: WorldView): void {
   const space = requireSchellingGrid(world.grid2D(SCHELLING_SPACE_ID));
+  // Every live entity is an agent occupying one cell, and every occupant is an agent: occupants block moves
+  // and count as neighbours, and the group counts and satisfaction read agents by component.
+  const agentIds = assertAgentRole(world, {
+    label: "Schelling agent",
+    required: [PositionGrid, GroupIdentity, SatisfactionState],
+    spaces: [{ id: SCHELLING_SPACE_ID, space }]
+  });
   const cells = gridCells(space);
   const seen = new Set<string>();
 
@@ -677,7 +685,6 @@ function validateSchellingWorld(world: WorldView): void {
     }
   }
 
-  const agentIds = world.entitiesWith([GroupIdentity]);
   for (const entityId of agentIds) {
     const group = world.getComponent<GroupIdentityComponent>(entityId, GroupIdentity);
     const satisfaction = world.getComponent<SatisfactionStateComponent>(entityId, SatisfactionState);
@@ -688,8 +695,6 @@ function validateSchellingWorld(world: WorldView): void {
       throw new SimulationValidationError(`Invalid SatisfactionState component on ${entityId}`);
     }
   }
-  // Every agent occupies a cell and every occupant is an agent: occupants block moves and count as neighbours.
-  assertSpaceHoldsExactly(space, SCHELLING_SPACE_ID, agentIds, "Schelling agent");
 }
 
 function groupCountMetric(key: string, label: string, description: string, group: GroupIdentityComponent["group"]): MetricDefinition {

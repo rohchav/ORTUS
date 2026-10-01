@@ -14,6 +14,7 @@ import type {
   TemplateSpaceDefinition
 } from "../kernel/types";
 import { SimulationValidationError } from "../kernel/Errors";
+import { assertAgentRole } from "../kernel/Invariants";
 import { World, type WorldView } from "../kernel/World";
 import { Grid2DSpace, type Grid2DSpaceReader } from "../spaces/Grid2DSpace";
 import type { GridCell } from "../spaces/Space";
@@ -423,6 +424,7 @@ export const forestFireTemplate: SimulationTemplate = {
   environmentOptionDefinitions,
   documentation,
   assumptionProfile,
+  fixedByConfiguration: { population: true },
   createInitialWorld(ctx) {
     const params = forestFireParams(ctx.params);
     const presetId = ctx.initialization?.presetId ?? "random-forest";
@@ -819,7 +821,12 @@ export function forestFireNeighbors(
 
 function validateForestFireWorld(world: WorldView): void {
   const space = requireForestFireGrid(world.grid2D(FOREST_FIRE_SPACE_ID));
-  const entityIds = world.entitiesWith([ForestFireCellPosition, ForestFireCellState]);
+  // Every live entity is a cell: spread reads cells by id, and the state counts by ForestFireCellState.
+  const entityIds = assertAgentRole(world, {
+    label: "Forest Fire cell",
+    required: [ForestFireCellPosition, ForestFireCellState],
+    spaces: [{ id: FOREST_FIRE_SPACE_ID, space }]
+  });
   if (entityIds.length !== space.rows * space.cols) {
     throw new SimulationValidationError("Forest Fire world must contain exactly one cell entity per grid cell");
   }
