@@ -1,0 +1,744 @@
+# Codex Working Instructions
+
+- Keep the simulation engine independent from React, Zustand, DOM APIs, Canvas APIs, and rendering.
+- Never use `Math.random` in simulation code.
+- Use deterministic seeded RNG streams through the engine.
+- Use Zod validation for imports, snapshots, scenarios, parameters, commands, events, spaces, and template definitions.
+- Add focused tests for every behavior-changing engine update.
+- Avoid fake features. Adapter contracts may describe future Mesa, NetLogo, or MASON work, but must not pretend those runtimes are implemented.
+- Do not add backend, auth, database, dashboard, or rendering behavior in V1.
+- Keep templates as plugins registered through the template API.
+- Keep renderer concerns separate from engine state and snapshots.
+- UI consumes engine snapshots; simulation rules stay in `src/simulation`.
+- Do not render agents as React components; use canvas or another batched renderer.
+- Do not add fake Mesa, NetLogo, or MASON UI controls.
+- World backgrounds are visual context only, not simulation data unless explicitly wired through the engine.
+- Avoid a generic cold blue/cyan dashboard palette for ORTUS.
+- Use `CornerFramePanel` for major UI panels.
+- Use the sharp ORTUS mark as the primary navigation brand.
+- Use the soft ORTUS mark only for secondary presentation states.
+- Pair the mark with the ORTUS wordmark in primary navigation.
+- Do not use the mark as a world or graph watermark.
+- Do not create separate logos for ORTUS workspaces.
+- Do not stretch or distort source brand assets.
+- Do not destructively recolor source brand assets.
+- Do not replace favicon unless legibility is confirmed.
+- Keep branding isolated from simulation runtime state.
+- Do not implement broad audit recommendations during branding work.
+- Distinguish HCI evidence from aesthetic preference.
+- Preserve runtime-honesty language.
+- Preserve accessibility and keyboard-operation requirements.
+- Preserve the simulation world as the primary visual focus.
+- Do not place all simulation tools in one permanent drawer.
+- Organize simulation tools by user task and workflow stage.
+- Keep persistent run controls outside scrollable configuration panels.
+- Keep the world viewport visually dominant.
+- Do not let fixed headers or footers cover scrollable content.
+- Use one intentional vertical scroll region per workspace panel.
+- Do not use `overflow: hidden` to conceal layout errors.
+- Distinguish setup, execution, observation, intervention, experimentation, and comparison.
+- Do not present service-only primitives as runtime controls.
+- Keep Builder navigation distinct from simulation actions.
+- Preserve keyboard access and visible focus.
+- Preserve runtime-honest metric and capability language near relevant controls and outputs.
+- Do not treat responsive stacking as a complete mobile workflow.
+- Do not let branding obscure current model, scenario, workspace, or runtime state.
+- Destructive run controls must state what is discarded and use staged confirmation when non-trivial run state exists.
+- Hidden panels must not perform expensive tick-based rendering.
+- World Setup parameter and seed edits are drafts until an explicit Apply/Rebuild action; show exact active values, preserve unrelated drafts across a rebuild, and do not let blur or task navigation replace the active engine.
+- World task query changes must create same-document history entries, and browser Back/Forward must preserve the mounted stage and active run.
+- Modal surfaces must contain keyboard focus, return focus on close, and avoid mounting live tick-subscribing children while closed.
+- Avoid unnecessary simulation-store subscriptions in navigation components.
+- Experiment runs must create fresh engine instances through the template registry and should store metrics/outcomes, not full per-run snapshots, unless explicitly requested.
+- Keep experiment execution chunked/cancellable in the UI so local sweeps do not create unbounded browser loops.
+- Leaving or hiding an active Experiment Runner must request cooperative cancellation and must not publish an abandoned result.
+- Existing Experiment Runner sweeps are bounded local World/Experiment model-comparison tooling; they are not Atlas landscape sampling, landscape probe execution, saved sampled regions, run queues, or regime detection.
+- Existing local World comparison storage may preserve bounded run summaries for comparison; it is not persistent Lab evidence, Atlas discovery storage, saved behavioral landscapes, saved probe plans, or real-world validation.
+- Run `npm run lint` for the scoped TypeScript, unused-symbol, architecture-boundary, seeded-randomness, dynamic-execution, and intrinsic-JSX accessibility baseline. Do not describe it as full ESLint, browser, screen-reader, assistive-technology, or WCAG coverage.
+- Treat `docs/CAPABILITIES.md`, `docs/ARCHITECTURE.md`, `docs/SCIENTIFIC_MODEL.md`, and `docs/ROADMAP.md` as the canonical capability, architecture, scientific-contract, and roadmap documents after code/tests. Audits and context/session files are historical evidence and continuity, not competing current authority.
+- Preserve `ModelDefinition != RuntimePlan` and `SimulationSnapshot != RenderFramePacket != UIProjection != CanonicalObservation`; the planned objects are not implemented by A0.
+- Future SystemView representation is a graph with explicit scale/lens/regime scope, not a universal micro/meso/macro hierarchy or mandatory Cartesian cube. Existing multi-scale services remain structural and non-executable.
+- Interventions must be template-defined, validated, and applied through the headless intervention executor or engine command buffer. UI and canvas code may report targets, but must not mutate agents, components, spaces, or engine internals.
+- User-facing intervention copy must not use validation language in a way that implies scientific validation, calibration, or real-world effectiveness. Prefer engine-checked or command-checked language for software command paths.
+- Current-run intervention entries/history are engine/snapshot state, not saved intervention plans, persistent Lab intervention records, Atlas discoveries, or validation evidence.
+- Snapshot export may preserve applied intervention history. Scenario export must not claim mid-run intervention replay unless replay is implemented.
+- Scenario Builder scenarios are initial-condition and supported model-variant recipes, not snapshots or run summaries. Preview and apply must create fresh engine instances, scenarios must not store full world state by default, and behavior modes must be template-defined rather than arbitrary UI-authored rules.
+- Assumption profiles are structured modeling-transparency metadata, not simulation state. They must not affect engine dynamics, claim predictive validation, or duplicate full live run state inside scenarios/runs/results.
+- Network primitives are headless service-level relation artifacts unless a template explicitly declares and uses network topology. Do not mark templates as network-supported or add network claims without real runtime behavior.
+- Resource, stock, and flow primitives are headless service-level quantity artifacts unless a template explicitly declares and uses resource state or stock-flow logic. Do not mark templates as resource-supported or add resource claims without real runtime behavior.
+- Feedback, delay, and event primitives are headless service-level timing and loop artifacts unless a template explicitly declares and uses them. Do not mark templates as feedback/event/delay-supported or add causal claims without real runtime behavior.
+- Do not claim a template supports a primitive unless its runtime actually uses it.
+- Do not treat camera zoom as multi-scale modeling. Multi-scale support requires explicit scale levels, aggregation/disaggregation, cross-scale coupling, and synthetic-detail warnings.
+- Do not treat network edges as causal edges.
+- Do not treat feedback labels as causal proof.
+- Do not treat feedback loop metadata as causal proof.
+- Do not treat uncertainty ensembles as calibrated probabilities.
+- Do not add visual builder features before schema/interpreter/execution-safety foundations.
+- Do not add arbitrary code execution, user-authored formulas, or expression evaluation.
+- Do not treat `ModelSchemaDefinition` as executable.
+- Do not parse, compile, or execute `ruleDescription`.
+- Do not accept formulas, code, scripts, function bodies, compiler payloads, visual-builder state, external-framework code, optimizer payloads, LLM payloads, or live engine state in model schemas.
+- Do not claim visual builder support from model schema support.
+- Do not treat `VisualBuilderWorkspaceDefinition` as UI.
+- Visual builder workspaces are structural planning artifacts; they do not implement runnable visual model authoring or a custom runtime.
+- Workspace nodes and edges are visual descriptors, not executable dataflow or runtime behavior.
+- A valid visual builder workspace does not make a model schema runnable.
+- Prompt 32 does not add drag-and-drop modeling, visual programming, or schema execution.
+- Do not treat the builder UI shell as a runnable visual builder.
+- Do not add Run, Compile, Generate Scenario, Generate RunConfig, or Apply to Template actions to the builder shell.
+- Do not execute workspace node or edge metadata.
+- Do not treat builder edges as executable dataflow.
+- Do not let builder selection mutate simulation state.
+- Do not subscribe the builder shell to live simulation ticks.
+- Do not bypass `deserializeVisualBuilderWorkspace`.
+- Do not render imported metadata as trusted HTML.
+- Do not imply schema execution from the builder shell.
+- Do not imply compatibility conversion from the builder shell.
+- Do not imply social-learning artifact execution from the builder shell.
+- Do not mark `visualModelBuilder` implemented from shell existence alone.
+- Preserve structural-validity versus runtime-readiness language in the shell.
+- Preserve builder-shell accessibility and keyboard-operation requirements.
+- Do not treat schema authoring forms as schema execution.
+- Do not add Run, Compile, Preview Simulation, Generate Scenario, Generate RunConfig, Generate Template, or Apply to Simulation actions to schema authoring.
+- Do not add formula, code, script, function-body, runtime-hook, or expression authoring fields.
+- Do not execute rule declarations or parse `ruleDescription`.
+- Do not bypass model-schema validation, summary, serialization, or deserialization services.
+- Do not duplicate core model-schema validation logic in React components.
+- Preserve the current draft and last valid artifact when an import fails.
+- Keep Builder schema authoring separate from simulation Setup and active simulation state.
+- Do not claim a structurally valid authored schema is runnable.
+- Keep repeated-form editing keyboard-accessible, focus-aware, and confirmation-protected when destructive.
+- Keep unsupported, service-only, and future-only warnings visible near authored structure.
+- Reject oversized model-schema files before full browser reads, then still use the headless deserializer as the authority.
+- Preserve imported non-text JSON value types; do not silently coerce them into strings to fit form controls.
+- Destructive schema confirmations must block background editing and support Escape, focus cycling, and focus return.
+- Schema validation repair suggestions are structural editing assistance only; they do not make a schema runnable.
+- A repaired schema may be structurally valid and still have no runtime implementation.
+- Do not infer correct model behavior from validation repairs.
+- Do not generate templates, scenarios, RunConfigs, snapshots, engines, visual-builder workspaces, compatibility conversions, or social-learning runtime from validation repairs.
+- Validation repairs must mutate only the current Author Schema draft and must validate afterward.
+- Validation repairs must not mutate the last valid artifact, active simulation state, loaded visual workspace, templates, scenarios, RunConfigs, snapshots, engines, compatibility reports, or social-learning artifacts.
+- Every repair suggestion must expose whether it can be applied; manual-only suggestions must not render or execute apply behavior.
+- Safe repair suggestions require an explicit user click; destructive or content-removing repair suggestions require confirmation.
+- Do not apply destructive or content-removing repair suggestions through helper APIs unless confirmation is explicitly supplied.
+- Ambiguous modeling intent, duplicate semantics, broken references, unsupported modeling choices, and missing runtime capabilities must remain manual-only.
+- Reject stale repair suggestions without changing the draft.
+- Keep repair patches deterministic, bounded, named, data-only operations; reject malformed patches and prototype-like targets.
+- Field jumps from validation issues must fail visibly with path text when a target is missing or stale.
+- Do not claim clipboard, browser zoom, rendered responsive, focus-return, screen-reader, assistive-technology, or WCAG readiness without direct verification.
+- Do not add LLM repair, automatic model generation, arbitrary patch/path interpreters, JSON Patch execution, formula parsing, code/script execution, dynamic imports, external API calls, or hidden schema interpreter behavior to validation repairs.
+- Render validation messages, metadata, paths, and repair diagnostics as text only.
+- Do not treat Visual Builder Graph View as visual programming.
+- Do not add drag/drop node authoring, edge creation, connect handles, or graph mutation without an explicit future prompt.
+- Do not execute graph nodes or edges, and do not interpret graph edges as runtime dataflow.
+- Do not add Run, Compile, Preview, Generate, or Apply actions to Graph View.
+- Graph selection, filtering, neighborhood highlighting, panning, and zooming must remain UI-only state and must not mutate source artifacts.
+- Do not mutate active simulation state, templates, scenarios, RunConfigs, snapshots, engines, or schema drafts from Graph View.
+- Keep graph layout deterministic; do not add force-layout randomness or continuous graph animation.
+- Render graph labels, notes, warnings, and metadata as text only.
+- Preserve unsupported, future-only, service-only, warning, and missing-capability markers in graph summaries and inspectors.
+- Provide keyboard-accessible node inspection and a text edge list or equivalent accessible graph outline.
+- Use bounded visual graph thresholds with an outline fallback instead of rendering unbounded graphs.
+- Do not add a major graph dependency unless an explicit prompt approves it.
+- Do not imply runtime support, validation, or run readiness from graph completeness.
+- Do not claim rendered responsive or WCAG readiness for Graph View without browser and assistive-technology verification.
+- Safe Builder UI Shell V1 displays structural workspace artifacts; it does not execute workspace nodes or edges.
+- The builder shell is not a compiler, interpreter, visual programming environment, or custom simulation runtime.
+- A structurally valid workspace is still not a runnable model.
+- Importing a workspace artifact does not activate model schemas, compatibility mappings, or social-learning semantics.
+- Do not treat workspace nodes as runtime objects.
+- Do not treat workspace edges as executable dataflow.
+- Do not infer visual builder support from workspace schema support.
+- Do not add drag/drop, graph editing, or visual programming before the proper UI prompts.
+- Do not let workspaces generate scenarios, RunConfigs, snapshots, templates, or engines.
+- Do not parse or execute node metadata.
+- Do not claim external framework compatibility from workspace references.
+- Do not claim social/cognitive runtime from social-learning workspace nodes.
+- Preserve valid-vs-runnable distinction.
+- Do not claim NetLogo, Mesa, or MASON interop from model schema support.
+- Do not claim current templates are generated from schemas.
+- Do not mark templates modelSchema-capable unless their runtime actually uses `ModelSchemaDefinition`.
+- Do not let model schemas create scenarios, RunConfigs, snapshots, engines, or template runtime behavior without a specific future runtime prompt.
+- Template/schema compatibility reports are structural fit analyses; they do not convert schemas into runnable models.
+- A strong template fit does not mean a schema can run.
+- Unsupported and lossy mappings must remain visible; they must not be silently dropped.
+- Compatibility mapping does not generate scenarios, RunConfigs, snapshots, templates, or engines.
+- Do not treat compatibility as conversion.
+- Do not treat strong fit as runnable.
+- Do not treat templateExact fit as runnable.
+- Do not hide unsupported concepts.
+- Do not silently drop lossy mappings.
+- Do not generate scenarios/RunConfigs/snapshots/templates/engines from compatibility reports.
+- Do not mutate templates from compatibility reports.
+- Do not claim template support for service-only primitives.
+- Do not claim validation/calibration from compatibility mapping.
+- Do not claim visual builder runtime from compatibility reports.
+- Do not treat schema-to-template fit as conversion.
+- Do not call strong fit runtime readiness.
+- Do not generate templates, scenarios, RunConfigs, snapshots, engines, agents, or code from fit reports.
+- Do not execute schema rules for fit reporting.
+- Do not hide unsupported or lossy mappings.
+- Do not mutate schemas from fit report findings.
+- Do not turn fit findings into repair patches.
+- Do not activate simulation runtime from fit reports.
+- Do not activate Neural Strategy Adaptation from schema fit.
+- Do not treat MR0 roadmap concepts as implemented capabilities.
+- Keep fit scores labeled as structural summaries, not readiness scores.
+- Mark generated fit reports stale when the current Author Schema draft changes after report generation.
+- The exact stale-report warning is: This fit report may be stale because the schema changed after it was generated. Refresh the report before using it.
+- Invalid current drafts must not display a previous valid fit report as if it applies to the current schema.
+- Fit-report refresh must recompute from the current structurally valid draft only.
+- Fit-report ranking must be deterministic by score, fit label, then template id.
+- Fit-report diagnostics must preserve stale warnings, unsupported concepts, lossy mappings, future-only gaps, rule non-execution copy, and no-runtime-readiness copy.
+- Do not treat scenario planning as scenario generation.
+- Do not create RunConfigs, snapshots, engines, agents, templates, code, or simulation state from scenario plans.
+- Do not execute schema rules for scenario planning.
+- Do not mutate schemas from scenario planning findings.
+- Do not turn scenario questions into predictions.
+- Do not turn conceptual interventions into executable controls.
+- Do not call suggested metrics empirical measurements.
+- Do not use stale fit reports for scenario planning without warning/refresh.
+- Prompt 39B marks existing scenario plans stale when the schema or fit-report source changes, and copied stale reports must not present old output as current.
+- Refresh scenario plans only from the current structurally valid draft and current non-stale fit-report context when available.
+- Assumption checks identify what the modeler should clarify. They do not resolve the assumption.
+- Do not treat MR0 roadmap concepts as implemented scenario capabilities.
+- Do not activate Neural Strategy Adaptation from scenario planning.
+- Do not call scenario plans policy recommendations or validated conclusions.
+- Do not use scenario planning for medical/public-health prediction, weather forecasting, real-human-behavior prediction, persuasion optimization, targeting logic, or gambling assistance.
+- Do not claim rendered UI, clipboard, focus-return, zoom, screen-reader, AT, or WCAG readiness without direct verification.
+- Keep Builder graphs structural and non-executable.
+- Keep Model Schemas non-runnable unless future runtime prompt changes that.
+- Do not treat belief, memory, or social-learning rule declarations as runtime cognition.
+- Do not collapse observability into internal state. Observability must distinguish simulated state and runtime metrics from measured, partial, noisy, proxy, synthetic, or empirical observation definitions.
+- Do not skip audit prompts after feature prompts.
+- Prefer small audited phases over broad rewrites, especially for reserved roadmap pillars.
+- Keep service primitives headless unless a prompt explicitly asks for UI.
+- Check `src/simulation/registry` before claiming primitive or template support.
+- Update registry entries when adding a real primitive, artifact family, or support-status change.
+- Do not mark `runtimeActive` true unless the template runtime actually uses that primitive.
+- Distinguish global service availability from template runtime support.
+- Do not add import/export support for reserved artifact families.
+- Keep registry descriptions concise and maintain audit tests when registry status changes.
+- Do not treat HybridModelComposition as a compiler.
+- Do not claim `runnableNow` unless capability checks prove runtime support.
+- Do not treat attached composition artifacts as active runtime behavior.
+- Do not use composition to bypass template capability limitations.
+- Keep composition validation strict and conservative.
+- Do not mark a template multi-scale capable unless its runtime uses explicit scale levels and cross-scale rules.
+- Do not treat aggregate metrics as multi-scale support.
+- Do not treat synthetic disaggregation as observed detail.
+- Do not implement scale-aware UI before Prompt 22.
+- Do not implement runtime aggregation/disaggregation before a specific runtime prompt.
+- Do not treat scale view state as runtime scale execution.
+- Do not treat camera zoom as model-scale zoom.
+- Do not mark templates scale-aware unless runtime/view integration truly exists.
+- Do not let scale view attachments bypass template capability checks.
+- Preserve warning semantics for information loss and synthetic detail.
+- Keep scale view state separate from scale model definitions.
+- Do not treat world bounds, grid edges, or canvas limits as full boundary models.
+- Do not mark templates boundary/environment capable unless runtime uses `BoundaryEnvironmentModel`.
+- Do not execute boundary exchanges, external forcings, or exogenous shocks without a specific runtime prompt.
+- Do not treat active boundary/environment declarations as executed behavior.
+- Do not treat boundary models as causal proof.
+- Do not treat world coordinates, grids, or positions as full spatial field support.
+- Do not mark templates spatial-field capable unless runtime uses `SpatialFieldModel`.
+- Do not execute field sampling, interpolation, diffusion, or advection without a specific runtime prompt.
+- Do not treat probability-like fields as calibrated probabilities.
+- Do not treat synthetic spatial fields as observed data.
+- Do not treat runtime metrics as empirical observations.
+- Do not mark templates observability-capable unless runtime uses `ObservabilityModel`.
+- Do not execute measurement schedules or measurement processes without a specific runtime prompt.
+- Do not treat synthetic observations as observed evidence.
+- Do not treat empirical `sourceType` as trustworthy without provenance and later calibration/validation work.
+- Do not treat runtime metrics or observations as causal evidence by themselves.
+- Do not mark templates causal-assumption-capable unless runtime uses `CausalAssumptionModel`.
+- Do not execute causal edges or intervention links without a specific runtime prompt.
+- Do not claim causal discovery, do-calculus, inference, structural equation solving, causal proof, or intervention optimization.
+- Do not treat parameter labels/ranges as full unit semantics.
+- Do not treat metric labels as measurement units unless `QuantitySemanticsModel` defines them.
+- Do not mark templates quantity-semantics-capable unless runtime uses `QuantitySemanticsModel`.
+- Do not execute conversions or dimensional equation solving without a specific runtime prompt.
+- Do not treat probabilities as calibrated probabilities.
+- Do not treat per-tick rates as physical-time rates without explicit mapping.
+- Do not treat visible patterns as emergence proof.
+- Do not treat runtime metrics as empirical pattern evidence.
+- Do not mark templates emergence-detection-capable unless runtime uses `EmergencePatternModel`.
+- Do not execute pattern detection without a specific runtime prompt.
+- Do not claim statistical significance, ML detection, validation, proof, consciousness, or intelligence.
+- Do not treat multi-scale structure as proof of emergence.
+- Do not treat causal assumptions as proof of emergence.
+- Do not treat quantity consistency as proof of emergence.
+- Do not treat visible persistence, collapse, or recovery as resilience proof.
+- Do not treat runtime metrics as empirical robustness evidence.
+- Do not treat uncertainty ensembles as robustness validation.
+- Do not mark templates robustness/resilience-capable unless runtime uses `RobustnessResilienceModel`.
+- Do not execute stressors or stress-test plans without a specific runtime prompt.
+- Do not claim statistical validation, certification, operational safety, operational readiness, or robustness proof.
+- Do not treat interventions as general robustness testing unless explicitly modeled/evaluated.
+- Do not treat template-owned interventions as general strategy/control support.
+- Do not execute `ControlStrategyModel` policies, triggers, objectives, stopping rules, or interventions without a specific runtime prompt.
+- Do not claim strategy effectiveness, optimality, safety, certification, operational readiness, or policy recommendation.
+- Do not claim causal intervention effects or treatment effects from causal assumption models.
+- Do not treat runtime metrics as empirical strategy evidence.
+- Do not treat uncertainty ensembles or robustness descriptors as policy validation.
+- Do not mark templates controlStrategy/interventionStrategy-capable unless runtime uses `ControlStrategyModel`.
+- Keep validation/calibration reserved for later prompts.
+- Do not model full human cognition by default.
+- Do not add LLM-per-agent runtime, natural-language reasoning per tick, or agent minds that depend on external model calls.
+- Do not use unbounded memory, free-text biographies, embeddings, model weights, or arbitrary documents as runtime agent state unless a later audited primitive explicitly designs that support.
+- Knowledge, memory, and social-learning descriptors are structural semantics; they do not implement human cognition.
+- Background profiles are compressed prior descriptors, not simulated life histories.
+- Crowd and stranger exposure should usually be modeled as aggregate signals, representative agents, or fields rather than thousands of throwaway individuals.
+- LLM-per-agent runtime is not implemented and must not be implied.
+- Social/cognitive models must use bounded symbolic or numeric representations with explicit validation.
+- Crowd or stranger exposure may be represented as aggregate exposure or future structural field-style metadata, but must not imply `SpatialFieldModel` runtime support unless implemented.
+- Background initialization is compressed prior seeding, not full life-history simulation, pretraining, or real-person reconstruction.
+- Do not claim human prediction, mind simulation, psychological diagnosis, manipulation guidance, or real-person trait inference.
+- Do not encode stereotypes or protected attributes without explicit ethical review, purpose, and modeling need.
+- Social learning runtime must start narrowly, likely with Opinion Dynamics, and remain template-defined, bounded, and audited.
+- Do not treat social-learning descriptors as runtime behavior.
+- Opinion Dynamics social learning is a stylized template-owned runtime mode, not a model of full human cognition.
+- Social-learning semantic artifacts are not executed directly by the Opinion Dynamics template.
+- Opinion values and social-learning metrics are model outputs, not measured human beliefs.
+- Information-source credibility is a model parameter, not a verified truth score.
+- No LLM agents, real-person profiling, protected-class inference, persuasion optimization, or psychological diagnosis are implemented.
+- Do not generalize the Opinion Dynamics `socialLearning` behavior mode into generic social-learning runtime, model-schema execution, compatibility-report execution, visual-builder execution, or human-cognition runtime.
+- Keep Opinion social-learning state bounded, numeric/symbolic, deterministic, template-defined, and validated.
+- Do not add arbitrary information-source payloads, documents, biographies, embeddings, model weights, truth-scoring, misinformation detection, recommendation logic, targeting logic, or persuasion optimization to Opinion social learning.
+- Treat Opinion information-source labels as display labels only; do not use them as identity, profiling, protected-class, truth-scoring, recommender, targeting, or persuasion fields.
+- Do not mark the global `socialLearningRuntime` primitive implemented unless a later audited registry prompt adds explicit template-specific nuance.
+- Do not use knowledge/memory/social-learning semantics for persuasion or microtargeting optimization.
+- Do not infer real-person traits, protected classes, psychological diagnoses, or real-person profiles from this structural layer.
+- Do not describe the Neural Excitation Network template as a biological brain simulation, cognitive model, consciousness model, clinical model, seizure model, neuroscience evidence generator, connectome model, or mental-health tool.
+- Neural Excitation Network Template V1 is a stylized runtime network model, not a biological brain simulation.
+- Activation is a model variable, not measured membrane voltage.
+- Synapse weights are abstract influence strengths, not biological synaptic measurements.
+- The Neural Excitation Network model does not simulate ion channels, neurotransmitters, morphology, learning, plasticity, STDP, backpropagation, cognition, consciousness, diagnosis, treatment, or real brain regions.
+- This runtime graph belongs only to the Neural Excitation Network template and does not make Builder graphs executable.
+- Do not generalize Neural runtime graph support into visual-builder graph execution, model-schema graph execution, network artifact execution, generic graph runtime, or template generation.
+- Keep Neural Excitation runtime state bounded, deterministic, numeric/symbolic, template-defined, and validated; do not add unbounded signal queues, arbitrary documents, embeddings, external model calls, LLM agents, or biological data imports.
+- Neural interventions must remain template-defined perturbations through the headless intervention executor or command buffer; do not add clinical control, persuasion optimization, or selected-synapse controls without an explicit selectable-edge contract and audit.
+- Neural metrics are model-output history, not empirical neural recordings; activation and synchrony are stylized runtime variables, not biological measurements.
+- Do not call Neural Decision Readout cognition or reasoning.
+- Decision Readout V1 maps labeled output assemblies to bounded categorical choices. It is not cognition or reasoning.
+- Rock-Paper-Scissors labels are semantic labels assigned by the model designer, not meanings understood by the network.
+- Template RPS payoff is observational and does not train, optimize, mutate synapses, or update biological/plasticity fields.
+- The model does not infer intentions, beliefs, preferences, personality, or human decision-making.
+- Keep output labels assigned by the model designer.
+- Keep decision metrics labeled as readouts, not beliefs or intentions.
+- Neural Strategy Adaptation V1 is allowed only as local Neural Runtime Lab RPS/readout game-state adaptation.
+- Do not describe Neural Strategy Adaptation as cognition, reasoning, understanding, mind reading, human learning, or biological plasticity.
+- Do not infer beliefs, intentions, preferences, personality, human decision-making, psychological traits, or real-person profiles from Neural Strategy Adaptation.
+- Learned strategy state must remain local, bounded, resettable, and non-persistent unless a future prompt explicitly scopes user-controlled persistence.
+- Keep adaptation scoped to Neural RPS/readout mode; do not generalize it into generic adaptive agents, social-learning runtime, strategy/control runtime, Builder graph execution, Model Schema execution, or compatibility conversion.
+- Do not update core neural synapse weights from RPS payoff in V1.
+- Do not add biological plasticity, STDP, backpropagation, deep learning, or reinforcement-learning claims without a dedicated future prompt and audit.
+- Do not claim the adaptive readout can beat truly random optimal play over time.
+- Keep reset learned strategy and clear round history controls visible.
+- Reset learned strategy must not rehydrate old bounded RPS history or suppress new rounds after history truncation.
+- Keep Neural Strategy Adaptation explanations non-anthropomorphic.
+- Prompt MR0 is documentation only; do not implement future templates, decision-cluster runtime, blackjack logic, external-stimulus runtime, observed cluster discovery, UI behavior, source runtime code, primitives, casino support, wearable support, camera input, live-card input, or gambling-advice features from MR0 alone.
+- Return to Prompt 38 after Prompt MR0 unless the user explicitly redirects.
+- Do not add future templates or decision-cluster runtime without dedicated implementation prompts and audits.
+- Decision clusters model observable state-action patterns, not thoughts.
+- Prediction outputs are probabilities, not certainties.
+- Cluster labels are assigned modeling labels, not meanings understood by the system.
+- External stimuli are modeled inputs, not evidence of internal mental state.
+- Observed clusters are analytical groupings, not psychological profiles.
+- Blackjack work is offline simulation only, not gambling advice, live casino assistance, or wearable card-counting support.
+- Do not use wearable devices, camera input, or software assistance for live casino play.
+- Prompt F0 is documentation only; do not implement fractal metrics, fractal generators, Scale Lens UI, network scaling analytics, trajectory motif analytics, schema fields, template capabilities, primitives, or runtime behavior from F0 alone.
+- Do not implement F1, F1B, F2, F2B, F3, F3B, F4, F4B, F5, or F5B without dedicated prompts and audits.
+- Measure multiscale structure before generating synthetic fractal structure.
+- Fractal and multiscale tools describe how measured structure changes across scale. They do not prove that a system is fundamentally fractal.
+- A complex-looking, nested, branching, or irregular pattern is not automatically fractal.
+- Power-law behavior may indicate scale-free structure, but a power-law fit alone does not establish fractality.
+- Finite-resolution fractal dimensions are estimators over a chosen scale range, not intrinsic truths about the modeled system.
+- Statistical self-similarity must be supported across an explicit scale range; it should not be inferred from visual resemblance alone.
+- Scale-free distributional evidence is not identical to geometric fractality.
+- Visual resemblance to a fractal is not evidence of scale invariance.
+- Fractal metrics are structural summaries of simulation output. They are not proof of biological, ecological, social, meteorological, or empirical validity.
+- Fractal spatial generators create synthetic structure. They do not reproduce real geography, ecology, urban form, climate, terrain, or weather without calibration and validation.
+- Fractal analysis requires a defined object, scale operation, and measurement. ORTUS must not apply one generic fractal score to unrelated spatial, network, temporal, and trajectory data.
+- Clustering groups similar observations. Fractal analysis measures how structure changes across scale. One does not imply the other.
+- Synthetic fractal generators create model inputs, not observed reality.
+- Coarse-graining may discard information and alter apparent dynamics.
+- Coarse-graining changes what is represented. Similar aggregate behavior does not mean the underlying microstates are equivalent.
+- Scale Lens views are analytical projections, not separate validated models.
+- A scale-free degree distribution is not the same as a fractal network.
+- A hierarchical community structure is not automatically self-similar.
+- Network fractality requires a defined network-scale method and evidence across a supported scale range.
+- Hierarchical trajectory motifs describe repeated observable state-action sequences. They do not reveal thoughts, intentions, beliefs, personality, or subconscious mental states.
+- Repeated motifs across time windows are not automatically evidence of temporal fractality.
+- Fractal and multiscale metrics are structural summaries, not causal explanations, forecasts, validation results, or proof of universal laws.
+- Do not treat Prompt F0 future items as implemented capabilities, template support, registry support, visual-builder support, scenario-planning support, or schema/runtime execution.
+- Do not change Prompt 39 scenario-planning boundaries for F0: future fractal metrics may be mentioned only as possible future observation targets, not computed outputs.
+- Prompt P0 is documentation only; do not implement Research World progression, persistent model labs, discovery atlases, behavioral landscapes, contextual guidance, model composition frontiers, grand challenges, missions, XP, streaks, unlocks, scoring, achievements, persistence, accounts, social features, UI flows, templates, dependencies, or runtime behavior from P0 alone.
+- Preserve ORTUS as an exploratory complex-systems sandbox, not an oracle.
+- ORTUS is a sandbox for exploring how interacting mechanisms, constraints, feedback, stochasticity, adaptation, selection, and history can produce complex, path-dependent, and sometimes chaotic system-level behavior.
+- Do not describe complexity as rulelessness.
+- Complexity does not mean the absence of rules. It means that interacting rules, constraints, feedback, and history can produce outcomes that cannot be understood from one mechanism in isolation.
+- ORTUS should challenge context-free certainty, not the existence of evidence, mechanisms, or constraints.
+- Prefer historical contingency over arbitrary coincidence.
+- Outcomes can be historically contingent without being causeless or arbitrary.
+- Chance operates within structural, environmental, and historical constraints.
+- Do not imply adaptation or evolution guarantees progress, optimality, fairness, efficiency, stability, or moral improvement.
+- Adaptation is local and conditional. It does not guarantee global improvement, fairness, efficiency, stability, or progress.
+- Evolutionary processes have no required destination and may produce both resilience and fragility.
+- Encourage epistemic tolerance without factual or moral relativism.
+- Be tolerant of uncertainty, heterogeneity, and competing plausible mechanisms while remaining strict about evidence, harm, and unsupported claims.
+- Do not treat all explanations as equally supported.
+- Do not use complexity to dismiss evidence, responsibility, causality, or intervention.
+- Treat simulation output as evidence about model behavior, not automatically evidence about the world.
+- Do not call one successful run robust.
+- Do not imply aggregate similarity proves mechanism.
+- Do not imply small changes always have large effects.
+- Make uncertainty, scale, assumptions, unsupported claims, and validation needs visible.
+- Prefer soft contextual guidance over artificial feature locks.
+- Do not implement GW1, GW2, GW3, GW4, GW5, or GW6 without dedicated prompts and audits.
+- ORTUS progression should emerge from building a capable laboratory, discovering system behavior, and reaching new modeling frontiers—not from completing a prescribed checklist.
+- The user progresses by gaining reusable understanding and modeling capability, not by accumulating arbitrary points.
+- Do not add XP, streaks, grinding, or engagement manipulation by default.
+- Future progression should reward reusable understanding, reproducibility, stronger comparison, and honest interpretation.
+- Preserve model/runtime/template boundaries while applying product-philosophy language.
+- Prompt GW0 is documentation, product architecture, information architecture, and roadmap planning only.
+- Do not implement World, Lab, Atlas, Workshop, routes, navigation, pages, shell behavior, persistence, accounts, cloud storage, local storage, database schemas, progression state, unlocks, XP, levels, achievements, badges, streaks, missions, quests, daily rewards, discovery detection, regime classification, behavioral landscapes, contextual recommendations, notebooks, saved research assets, model composition, grand-system scenarios, design tokens, CSS, components, runtime behavior, simulation behavior, template behavior, dependencies, assets, or mockups during GW0.
+- ORTUS progression should emerge from building a capable laboratory, discovering system behavior, and reaching new modeling frontiers—not from completing a prescribed checklist.
+- Progression must organize learning and discovery without implying that the user has mastered reality, proven a mechanism, or completed a scientific domain.
+- Research World progression is a flexible expansion of investigative capability, not a universal curriculum or player-level system.
+- Progression means reusable understanding, modeling capability, and investigative depth; it does not mean clicks, time, completed tasks, XP, levels, ranks, badges, streaks, daily rewards, grinding, randomized rewards, or leaderboards.
+- Disproving an interpretation, documenting uncertainty, finding a non-robust result, preserving contradictions, or finding that a model cannot support a conclusion are meaningful progress.
+- Do not hard-lock essential scientific tools for Research World progression.
+- Progressive guidance and expert access must coexist.
+- Contextual capability guidance may respond to model state, workspace state, stale artifacts, unresolved questions, unsupported gaps, and template capabilities; it must not profile the user.
+- Do not infer user psychology, protected classes, personality, diagnoses, intentions, vulnerabilities, or real-world identity from Research World guidance.
+- Do not use Research World progression for persuasion optimization, microtargeting, protected-class inference, manipulation guidance, psychological diagnosis, or real-person profiling.
+- A Discovery Atlas records investigated model behavior, not certified real-world discoveries.
+- A visually compelling pattern is not automatically supported.
+- Contradictory runs are evidence.
+- Behavioral landscapes must distinguish sampled, sparsely sampled, unsampled, stale, contradictory, and unsupported regions.
+- Do not imply unsampled behavioral-landscape regions are known.
+- Future persistent artifacts must preserve provenance, model boundaries, source versions, stale state, runnable-versus-planning-only state, and compatibility limits.
+- Artifact attachment is not runtime activation.
+- Valid artifact is not runnable artifact.
+- Runnable artifact is not scientifically validated model.
+- Successful run is not robust result.
+- Structural fit is not semantic correctness.
+- Scenario plan is not executable scenario.
+- Simulation output is not empirical truth.
+- Composition is not automatic scientific coherence.
+- Two valid components can still be incompatible.
+- A connected graph is not proof that coupled runtime is meaningful.
+- Grand Systems Challenges must not be scripted victory states, score maximizers, optimization tracks, policy games, or leaderboards.
+- Preserve current `/` and `/builder` workflows while planning Research World architecture.
+- The Research World architecture must wrap and reorganize validated workflows before attempting to replace them.
+- GW0 defines destination responsibilities. It does not implement destination navigation or persistence.
+- Do not start GW1, GW1B, GW2, GW2B, GW3, GW3B, GW4, GW4B, GW5, GW5B, GW6, or GW6B without a dedicated prompt.
+- GW0 defines what the product must communicate. UX2 defines how shared design foundations communicate it. GW1 implements the first structural shell using both.
+- Prompt UX2 establishes shared visual semantics and bounded primitive migration only.
+- UX2 establishes shared visual semantics. It does not perform the Research World shell transformation.
+- UX2 prepares the visual language. GW1 performs the structural shell transformation.
+- Do not add World, Lab, Atlas, Workshop, destination routes, destination navigation, shell behavior, persistence, notebooks, reusable assets, Discovery Atlas, behavioral landscapes, contextual capability guidance, progression, onboarding, new simulation behavior, template behavior, model-schema behavior, visual-builder execution, or runtime behavior during UX2.
+- Preserve `/` and `/builder` as the implemented routes during UX2.
+- Do not add styling frameworks, component libraries, icon libraries, chart libraries, graph libraries, animation libraries, Tailwind, Sass, CSS-in-JS, theme providers, token-generation build steps, remote fonts, local font files, `next/font/google`, dependencies, assets, light-mode controls, or broad redesign during UX2.
+- Keep one canonical semantic-token source in `src/app/globals.css`.
+- Preserve legacy visual variables until their consumers are known and migrated.
+- Distinguish raw palette values, semantic tokens, component-role tokens, and component styles.
+- A visual state must communicate what kind of state it represents: operational, interaction, evidence, uncertainty, or capability.
+- Operational success means the requested software operation completed. It does not mean the modeled conclusion was scientifically validated.
+- Selected is not supported; active is not validated; hovered is not important.
+- Contradicted is not failure; unresolved is not error; stale is not unsupported; planning-only is not non-runnable for the same reason; future-only is not disabled functionality.
+- Domain color identifies modeled content. Semantic color communicates interface and evidence state.
+- Use color with explicit text and non-color cues; never rely on color alone for status.
+- Keep focus visible, keyboard-reachable, and distinct from selection.
+- Reduced motion should remove nonessential interface motion without erasing the modeled information the user is studying.
+- UX2 may migrate no more than four shared primitive families; do not redesign specialized simulation, chart, graph, schema, Neural Runtime Lab, template, or Builder feature surfaces without a dedicated prompt.
+- Do not claim rendered responsive behavior, browser zoom behavior, keyboard walkthrough completion, screen-reader behavior, assistive-technology behavior, forced-colors readiness, WCAG conformance, or complete accessibility from UX2 source work unless directly verified.
+- Playwright and Axe are authorized only as dev audit tooling for UX2B and later rendered audit prompts.
+- Do not expose Playwright/Axe harness routes or controls in production UI.
+- Keep Playwright-generated artifacts ignored: `playwright-report/`, `test-results/`, and `blob-report/`.
+- Viewport automation is not actual browser UI zoom, and Axe automation is not WCAG, screen-reader, or assistive-technology verification.
+- Do not silence Axe rules without narrow documented justification.
+- Preserve existing `/` and `/builder` routes during UX2B rendered audit work.
+- Do not start GW1 unless UX2B's successful rendered browser audit is committed and the user provides a dedicated GW1 prompt, or the user explicitly redirects.
+- UX2B conditionally readies GW1; it does not implement GW1, verify actual browser zoom, verify screen-reader or assistive-technology behavior, verify forced-colors behavior, or establish WCAG conformance.
+- Do not redesign unrelated legacy surfaces while adding or repairing the UX2B harness.
+- Do not claim rendered UX, accessibility, responsive, browser, zoom, screen-reader, assistive-technology, or WCAG readiness for Research World work without direct evidence.
+- GW1 implements the shared World/Lab/Atlas/Workshop destination shell only.
+- In GW1, "persistent" means structurally present across routes, not persistent user data.
+- Preserve `/` as World.
+- Preserve `/builder` as Workshop.
+- In GW1, Lab and Atlas were future-only informational destinations; after GW4, Atlas is a non-persistent foundation route; after GW5, Lab is a non-persistent foundation route.
+- Do not fabricate experiments, discoveries, maps, evidence, counts, or user activity.
+- Do not describe Lab or Atlas as locked.
+- Do not add XP, levels, achievements, progress bars, or unlock systems.
+- Do not add localStorage, IndexedDB, databases, accounts, or cloud persistence for the destination shell.
+- Do not modify simulation, template, or Builder execution behavior from GW1 shell work.
+- Keep World runtime controls inside World.
+- Keep Builder-specific controls inside Workshop.
+- Do not create duplicate global headers, navigation, main landmarks, or route-level headings.
+- Use native route links and `aria-current="page"` for destination navigation.
+- Preserve visible keyboard focus.
+- Shell skip links and focused destination controls must be fully visible inside the viewport immediately on focus; do not hide focused elements behind reveal transitions.
+- Future-only status must be visible and accessible.
+- Current destination must remain distinct from active, selected, supported, and validated states.
+- Use the UX2 semantic-token system for the Research World shell.
+- Do not add remote fonts, CSS frameworks, component libraries, icon libraries, or state-management dependencies for GW1.
+- Preserve current validated workflows before reorganizing them further.
+- Use the existing Playwright/Axe harness for rendered destination-shell verification.
+- Do not claim screen-reader, AT, forced-colors, browser-zoom, or WCAG verification without evidence.
+- Do not start a Research World implementation slice from a prior shell prompt without a dedicated implementation prompt and its required audit.
+- UX3 is audit and planning only. Do not implement UX4, UX5, UX6, GW9, sandbox visual overhaul, beginner mode, advanced mode, guided builder, preferences, onboarding, persistence, Lab records, Atlas discoveries, probes, sweeps, sampling, regime detection, runtime behavior, template behavior, or Builder execution from UX3 alone.
+- UX4 visual language is presentational only. Do not treat softer sandbox/workbench styling, rounded panels, route accents, or quieter caveat/status treatments as new runtime, template, Builder, Lab, Atlas, sampling, persistence, progression, or validation capability.
+- Treat implementation/audit prompt pairs as gates; do not infer later capability from an unaudited presentation milestone.
+- UX5 changes route orientation, copy layering, disclosure, and component-local view state only. Do not treat progressive disclosure as runtime, template, Builder, Lab, Atlas, sampling, persistence, progression, validation, or calibration capability.
+- UX5 disclosure state must remain non-persistent. Do not store it in localStorage, sessionStorage, IndexedDB, cookies, Zustand persistence, panel persistence, user profiles, preferences, onboarding records, or analytics.
+- Keep plain-language orientation first and exact technical language visible or one explicit disclosure away. Do not delete runtime-honesty, model-vs-world, valid-vs-runnable, non-persistence, or no-execution boundaries to reduce density.
+- No introductory sequence may gate World or Workshop expert tools. Workshop remains the Advanced Builder; UX5 does not implement Guided Builder, model-authoring wizards, compilation, preview, generation, or Apply-to-Simulation behavior.
+- Capability guidance must remain source-backed and non-personalized. Its disclosure changes presentation only; full available, planning-only, not-implemented, do-not-assume, and related-destination content must remain reachable.
+- Lab and Atlas disclosures reorganize existing static conceptual semantics only. They must not create forms, records, timestamps, ids, notebooks, maps, samples, probe controls, sweep controls, queues, scores, regimes, discoveries, publication actions, or World transfer actions.
+- Preserve the exact visible Lab boundary: `Nothing on this route is a saved experiment, evidence record, notebook, or run history.`
+- Preserve the exact visible Atlas boundary: `No sampled landscape, saved map, probe execution, regime detection, or discovery record exists here yet.`
+- UX5B adds no production behavior, persistence, personalization, progression, runtime/template/Builder execution, Lab/Atlas behavior, sampling, or probe execution.
+- UX6/UX6B add bounded structural authoring UX only; they do not activate runtime/template/Builder execution, Lab/Atlas behavior, sampling, persistence, or progression.
+- Guided Builder is the default local Workshop authoring view; Advanced Builder remains immediately available and retains Workspace Inspector, Author Schema, Graph View, import/export, validation assistance, repair suggestions, fit reports, scenario planning, exact metadata, and accessible graph outlines.
+- Guided Builder supports only a bounded subset of `ortus.modelSchema`: identity and description, limitation notes, entity types, state attributes, zero or one structural space, descriptive non-executable rules, parameter declarations, and one starting-condition assumption note. Components, metrics, artifact/scope references, exact metadata, multiple spaces, boundary references, update order, stochastic semantics, observability, and provenance remain Advanced-only or unsupported.
+- Guided Builder draft, current step, selected Guided/Advanced view, validation presentation, and handoff state are component-local page-session state. Do not persist them in localStorage, sessionStorage, IndexedDB, cookies, Zustand persistence, server storage, profiles, onboarding records, or analytics.
+- Guided artifact identity must remain deterministic from normalized user names, stable declaration order, documented static defaults, and collision suffixes. Do not add timestamps, `Math.random`, UUIDs, AI generation, hidden inference, behavior-derived recommendations, or silent coercion.
+- Guided-generated identifiers must satisfy the authoritative bound of each target schema field independently of longer user-facing labels. Maximum valid input must not create an invalid handoff artifact.
+- Guided field checks supplement representability and usability only; existing Zod-backed model-schema validation remains the structural authority. Structural validity does not mean runtime support, scientific validity, calibration, or real-world accuracy.
+- Guided rules and defaults remain descriptive structural fields. Do not parse or execute rule descriptions, formulas, scripts, code, expressions, defaults, ranges, coordinates, names, or notes.
+- Guided-to-Advanced handoff must be explicit, existing-validator-approved, and limited to the Advanced Author Schema draft. Confirm before replacing any meaningful Advanced draft, preserve both drafts on Cancel, and never mutate World, templates, scenarios, RunConfigs, engines, snapshots, visual workspaces, Lab, or Atlas.
+- Guided Start over must require accessible confirmation for meaningful local data, preserve the draft on Cancel, and reset only Guided state on confirmation. Removing referenced entities must surface broken references rather than silently deleting or repairing them.
+- Meaningful Guided drafts must receive an explicit data-loss decision before destination-link navigation, client-side browser Back, reload, or close can discard them. Cancel must preserve the draft and restore a logical focus target.
+- When a Workshop action hides the panel containing focus, move focus to a visible selected tab or documented destination. Never leave focus on `BODY` or inside hidden content.
+- Canceling a Guided-to-Advanced handoff must clear any staged/pending status, preserve both drafts, and report the cancellation truthfully on later Advanced visits.
+- At responsive Workshop breakpoints, capability guidance must remain after the active authoring surface in normal scroll flow and must not cover or intercept Guided or Advanced controls.
+- Repeated Advanced report landmarks must have unique accessible names. Intentional scroll regions must be keyboard-scrollable; avoid nested vertical scroll regions when the parent workspace panel already owns scrolling.
+- UX6 adds no compiler, interpreter, simulation preview, runtime-template creation, scenario generation, RunConfig generation, active World mutation, scientific validation, personalization, profiling, recommendation, progression, or onboarding behavior.
+- Lab evidence-record semantics are non-persistent information architecture until a later audited prompt implements storage. Do not treat `LabRecordLifecycleState`, conceptual ledger scaffolds, or Lab route copy as saved evidence records, experiment histories, notebooks, saved comparisons, run history, reusable assets, or validation evidence.
+- GW5 Lab does not save active World runs, import active-run provenance, create experiment ledgers, create notebooks, create saved comparisons, publish to Atlas, create discoveries, add storage, add timestamps, generate ids, add progression, or change simulation/template/Builder runtime behavior.
+- Lab records will organize evidence about model investigations. They will not certify discoveries about the real world.
+- Do not add `Save this run`, `Send to Lab`, `Create evidence record`, `Record experiment`, `Open notebook`, `Publish to Atlas`, `Create discovery`, or `Map evidence` actions without a dedicated future implementation prompt and audit.
+- GW2 live provenance belongs only in World Observe; do not turn it into saved Lab records, Atlas discoveries, notebooks, reusable assets, storage, route state, or evidence claims.
+- Active run provenance describes current model configuration; it is not a saved experiment record.
+- Active run observations describe model state; they are not measured real-world data.
+- If active-run observation has no current snapshot, show missing/no-snapshot labels rather than fabricating tick, time, entity, or metric zero values.
+- Visual patterns in a run are evidence about that model under that configuration, not automatically evidence about the real system.
+- Do not generate GW2 timestamps, UUIDs, random ids, storage keys, or decorative fingerprints for active run provenance.
+- Preserve Paused as an operational paused state when showing active run observation status.
+- GW3 live intervention readiness belongs only in World Intervene; do not turn it into saved intervention plans, saved experiments, Lab intervention records, Atlas discoveries, notebooks, reusable assets, behavioral landscapes, progression, storage, route state, or evidence claims.
+- Intervention readiness describes available model perturbation controls. It is not a saved intervention plan or experiment record.
+- Intervention in ORTUS means changing or inspecting model conditions. It does not certify real-world causal power, policy effectiveness, or empirical truth.
+- A response to an intervention is evidence about this model under this configuration. It is not automatic proof that the same intervention would work in the real system.
+- GW3 readiness may derive only from existing registered template-owned intervention definitions, selected target state, active engine presence, and current active-run intervention count; do not fabricate controls, targets, outcomes, evidence scores, or discovery records.
+- Do not generate GW3 timestamps, UUIDs, random ids, storage keys, saved plans, Lab records, Atlas records, sampled regions, behavioral landscapes, progression state, or decorative fingerprints for intervention readiness.
+- GW4 Atlas is non-persistent information architecture and evidence semantics only.
+- GW4 Atlas evidence states describe model-behavior interpretation, not real-world truth.
+- Atlas sampled evidence remains unresolved until a future source-backed Atlas record system exists; do not label sampled Atlas concepts as observed/current data without real provenance and a dedicated audit.
+- Do not add saved Atlas discoveries, saved evidence records, persistent maps, behavioral landscapes, sampled-region maps from fake data, discovery history, run history, Lab records, storage, export/import, or Atlas save/map actions from GW4.
+- Do not use progress, unlocks, achievements, fake discovery counts, evidence scores, regime confidence, recent activity, or sampled coverage percentages in Atlas.
+- GW7 behavioral landscape foundation is non-persistent Atlas vocabulary and conceptual scaffolding only.
+- GW7 conceptual scaffolds are not sampled run data.
+- GW7B audits and hardens the behavioral landscape foundation; it does not add persistent maps, sampled data, run sweeps, regime detection, runtime behavior, template behavior, Builder execution behavior, validation, calibration, or real-world discovery certification.
+- Do not add fake maps, heatmaps, contours, sampled regions, evidence scores, confidence scores, coverage percentages, run sweeps, batch execution, or regime detection from GW7.
+- Do not add saved landscape records, Atlas discoveries, Lab records, persistence, progression, runtime behavior, template behavior, Builder execution behavior, or route aliases from GW7.
+- Do not frame model regions as real-world regimes, policy effects, empirical proof, validation, calibration, or discovery certification.
+- Preserve the current route shell contract when adding or auditing behavioral-landscape vocabulary.
+- GW8 landscape probe planning is non-executable and non-persistent.
+- GW8 conceptual probe plans are not saved plans, run queues, sampled data, evidence records, Lab records, Atlas discoveries, or runtime behavior.
+- Planned comparison is not a comparison result.
+- Do not add run-probe, run-sweep, save-probe, save-landscape, send-to-Lab, or publish-to-Atlas actions from GW8.
+- Do not add fake sampled results, fake evidence scores, fake confidence scores, fake coverage percentages, fake regimes, fake run history, fake timestamps, or fake ids from GW8.
+- Do not add run queues, job queues, batch execution, parameter sweep execution, regime detection, progression, persistence, runtime behavior, template behavior, Builder execution behavior, or route aliases from GW8.
+- Do not frame planned probes as real-world validation, policy evidence, causal evidence, empirical proof, or discovery certification.
+- Preserve the current route shell contract when adding or auditing landscape probe planning vocabulary.
+- GW6 guidance is source-backed and non-personalized.
+- Capability guidance describes capabilities; it does not create them.
+- Do not add persistent guidance, dismissed-tip state, onboarding progress, analytics, telemetry, or stored guidance preferences.
+- Do not add recommendation language based on user profiling.
+- Do not add save-to-Lab, publish-to-Atlas, create-discovery, or fake action guidance from capability guidance.
+- Do not use progression, unlocks, achievements, badges, gamified steps, missions, quests, streaks, XP, levels, ranks, or smart-recommendation language in capability guidance.
+- Preserve the World / Workshop / Lab / Atlas route shell contracts when adding or auditing guidance.
+- Future-only is capability status, not evidence support; do not use operational statuses for epistemic support.
+- Preserve the R1/C1 route contract: `/` is Start, `/worlds` is its runnable-world catalog, `/worlds/[slug]` is Starter World detail, `/world` is World, `/lab` is Lab, `/atlas` is Atlas, `/builder` is Workshop, and `/workshop` remains absent.
+- Keep Start task-centered. Do not restore equal-weight destination architecture, capability matrices, artifact taxonomy, or a disclaimer wall above the featured starter.
+- Derive Start and Explore Worlds availability from validated Starter World definitions that revalidate authoritative production template/runtime metadata. Presentation metadata must not invent runnable support or mutate registries.
+- Keep the featured starter on an existing tested runtime. Starter content must not create hidden parameter defaults, new mechanics, analytics, personalization, persistence, progression, or forced onboarding.
+- Keep the World model surface visually and structurally dominant. Persistent playback controls must remain reachable outside task-panel scrolling.
+- Present direct World tasks as Setup, Observe, Change, Compare, and Explain. Keep Experiment Runner and Diagnostics purpose-grouped under More. UI labels do not change the underlying workspace-mode or runtime semantics.
+- Compact Setup controls must reference the same authoritative parameter definitions and executed values as All parameters; do not create alternate defaults or shadow configuration.
+- Keep Understand model-specific and concise by default. Unrelated global product limitations do not belong in selected-model explanation.
+- Keep complete model notes, capability references, technical foundations, exact parameters, scenarios, experiments, comparisons, diagnostics, Atlas, Lab, and Advanced Workshop reachable through explicit disclosure or navigation.
+- Keep World Stage and persistent playback mounted outside task rendering. Task switching must preserve active runtime state and stable desktop stage geometry.
+- Keep one bounded active-tool scroll region. Persistent playback must stay outside it; desktop collapse/restore must preserve local tool state; mobile World must not clip deeper controls or create document overflow.
+- Full model references and technical run details must use focus-managed modal surfaces rather than shrinking the live stage.
+- Keep current-run Change actions visibly distinct from Setup actions that rebuild a fresh paused tick-0 run.
+- Capability guidance should lead with one relevant contextual note and keep the complete source-backed matrix subordinate. Do not remove a limitation at the point where it affects interpretation.
+- Starter World definitions are strict versioned data-only content. They are not templates, scenarios, RunConfigs, schemas, Builder workspaces, executable rules, or evidence of new runtime support.
+- Only `runnable` Starter Worlds may launch. Revalidate template, initialization-preset, metric, parameter, and intervention references against authoritative registries before launch.
+- Starter World launch context must remain strict and ID-only. Do not accept arbitrary parameter objects, RunConfigs, code, formulas, or hidden defaults in URLs or content.
+- Starter World launches must use existing scenario services to create the documented fresh paused tick-0 run. Unknown, stale, or mismatched references must fail visibly without fallback.
+- Keep `/worlds` limited to currently runnable definitions. Planned and concept-only portfolio candidates belong in documentation, not disabled or misleading product cards.
+- Starter World research sources provide conceptual connections; they do not validate, calibrate, predict, or prove an implementation.
+- Keep Starter World browsing, filters, search, nudge dismissal, and launch context non-persistent. Do not add storage, progress, completion, XP, achievements, profiling, recommendations, or step locks.
+- Keep remix status explicit: runtime-now, current Advanced structural tools, or future capability. Do not expose fake Builder, generate, compile, apply, or run actions.
+- C1 portfolio candidates are documentation only. Tier A is not implemented content; Tier B and C do not become runtime support until dedicated implementation and audit prompts.
+- Current milestone status and dependency order live only in `docs/ROADMAP.md`. Do not encode a competing current sequence in contributor guidance or infer an unconditional immersive chain; C4 has no I5B dependency.
+- Do not start or generalize a roadmap capability without its dedicated prompt and required audit.
+- Treat UX0 as documentation and design planning only.
+- Do not implement World/Lab/Atlas/Workshop without a dedicated prompt.
+- Preserve ORTUS as a living laboratory, not a tactical command interface.
+- ORTUS should feel like a living system observed through precise scientific instruments, not a system under tactical command.
+- Retire military, targeting, tactical HUD, and combat-console metaphors.
+- Preserve useful hierarchy, precision, clear contrast, disciplined spacing, strong silhouettes, high-quality motion, distinctive identity, and dark-mode strengths from the earlier direction.
+- The metaphor may organize the experience, but precise scientific labels must remain visible.
+- Do not use color as the only status cue.
+- Do not let organic backgrounds reduce readability.
+- Do not add decorative motion without informational purpose.
+- Motion should communicate state, information flow, or system change—not decorate an otherwise static interface.
+- Honor reduced-motion preferences.
+- Do not introduce remote font dependencies.
+- Do not reintroduce `next/font/google`.
+- Do not distribute font files.
+- Keep domain accents subordinate to the shared design system.
+- Do not depict unexplored or weakly sampled behavior as established knowledge.
+- Discovery styling should represent evidence accumulation, not achievement acquisition.
+- Tie future visual progression to real modeling capability and accumulated understanding.
+- Do not lock essential scientific tools solely for gamified progression.
+- Do not implement discovery, persistence, behavioral-landscape logic, or Research World progression during UX0.
+- Migrate future UI incrementally rather than through one uncontrolled rewrite.
+- Do not claim responsive, zoom, keyboard, screen-reader, assistive-technology, reduced-motion, or WCAG verification without direct evidence.
+- UX1 is source-level audit and documentation only.
+- Do not modify production CSS or UI components during UX1.
+- Do not add or change design tokens during UX1.
+- Do not add routes or navigation during UX1.
+- Do not implement World/Lab/Atlas/Workshop during UX1.
+- Classify UX1 components as retain, adapt, replace, or retire with evidence.
+- Preserve working behavior while planning visual migration.
+- Do not treat all Marathon-derived patterns as automatically invalid.
+- Retire tactical ornament without flattening ORTUS into generic SaaS.
+- Distinguish semantic tokens from repeated raw values.
+- Distinguish source evidence from rendered behavior.
+- Do not claim accessibility, responsiveness, contrast, keyboard, screen-reader, reduced-motion, or WCAG verification from source inspection alone.
+- Do not reintroduce remote fonts or `next/font/google`.
+- Do not add font files.
+- Do not add dependencies.
+- Do not weaken tests.
+- Do not treat UX1 as UX2 or GW1, and do not start GW1 without a dedicated prompt.
+- Do not make Builder graphs executable or Model Schemas runnable while documenting or later implementing fractal/multiscale analysis.
+- Keep Neural runtime graph scoped only to the Neural template.
+- Keep Neural Runtime Lab scenario-first but scientifically honest.
+- Do not add learning/adaptation in NUX1.
+- Do not claim the network understands RPS labels.
+- No cognition, belief, intention, preference, or personality language for Neural Runtime Lab outputs.
+- No biological neuron, brain simulation, clinical, neuroscience evidence, or mental-health claims for Neural Runtime Lab.
+- Keep RPS payoff observational until N2.
+- Cards must not imply learning before N2.
+- Neural Runtime Lab direct actions must remain template-scoped and use supported interventions or explicit fresh-run rebuilds.
+- Neural Runtime Lab Advanced config must remain available; scenario cards and plain-English controls must not hide exact parameters permanently.
+- Neural Runtime Lab timelines and RPS histories must remain bounded.
+- Neural Runtime Lab explanations must be metric/snapshot-derived and non-anthropomorphic.
+- Neural Runtime Lab must not make Builder graphs executable or Model Schemas runnable.
+- Do not claim rendered responsive, browser zoom, screen-reader, assistive-technology, or WCAG readiness for Neural Runtime Lab without direct verification.
+- Production build must pass before committing Neural Runtime Lab prompt work.
+- Do not make Builder graphs executable.
+- Do not make model schemas runnable.
+- Do not describe the Forest Fire / Landscape Spread template as wildfire prediction, GIS/weather/wind/humidity/terrain/suppression/firefighting modeling, calibrated fire behavior, generic control strategy support, SpatialFieldModel runtime support, or BoundaryEnvironmentModel runtime support.
+- Preserve valid-vs-runnable distinction for structural primitives.
+- Run comparison stores bounded run summaries for local comparison. Do not store full snapshots by default, and do not treat comparison workspace state as authoritative simulation state.
+- Update `src/simulation/README.md` when architecture changes.
+- Do not claim scientific prediction accuracy for templates or outputs.
+- Never add movement-heavy behavior using all-pairs search without documenting why and adding focused tests or benchmark evidence.
+- Never claim scalability or high-scale readiness without benchmark evidence from the current runtime.
+- Keep simulation hot loops headless and independent from React, Zustand, DOM, Canvas, browser storage, and renderer code.
+- Prefer reusable spatial index/projection services over template-specific neighbor-search hacks.
+- Keep rendering separate from simulation stepping; renderer optimization is not the same as engine scalability.
+- Do not treat camera, canvas, or visual optimization as multi-agent engine scalability.
+- When changing `Continuous2DSpace.queryNeighbors`, add brute-force parity tests for deterministic ordering and boundary behavior.
+- When optimizing hot loops, keep performance reports separated across scheduler compute, metrics, snapshot creation, and render-model preparation where practical.
+- Treat Forest Fire hot-loop optimizations as template implementation details, not SpatialFieldModel or BoundaryEnvironmentModel runtime support.
+- Atlas Ephemeral Landscape Preview V1 may execute only capabilities explicitly declared in `src/simulation/atlasPreview/capabilities.ts`; do not infer preview support from every numeric template parameter, metric, template, or scenario.
+- Landscape probe plans remain non-executable planning artifacts. Do not silently map, discard, invent, or execute probe-plan fields; the current GW8 scaffold cannot create a GW9 request.
+- Atlas preview requests must remain canonical, strictly validated, bounded to one or two axes, canonical ascending explicit seeds, final-tick numeric observation, and the declared grid/tick/work limits.
+- Every Atlas sample run must use a fresh headless engine through the validated RunConfig path. Execute sequentially, yield only between samples, retain no engines, and never access or mutate World, Experiment Runner, comparison, Builder, scenario source, template registry, or browser-storage state.
+- Atlas preview results are component-memory-only exact sampled coordinates. Do not add storage, saved records, history, publication, interpolation, smoothing, contours, inferred unsampled values, regime/transition/tipping-point detection, confidence/coverage/evidence scores, or scientific-validation claims.
+- Keep cancellation language honest: `Cancel after current sample` means the current synchronous sample finishes before cancellation is effective. Unstarted runs remain unsampled and partial results remain visibly partial. Route unmount must cancel remaining cooperative work and suppress post-unmount UI updates.
+- Multiple preview seeds show selected deterministic model variation only; they are not confidence intervals, calibrated probabilities, or real-world uncertainty estimates.
+- GW9/GW9B do not generalize Atlas sampling, make the conceptual behavioral-landscape scaffold runtime-backed, make probe plans executable, or create Discovery Atlas/Lab persistence.
+- A featured starter launch must create the documented fresh prepared run once per starter page mount. It must not silently resume modified parameters, an advanced tick, or a running state beneath baseline instructions.
+- Parameter controls that rebuild the run must remain drafts until explicit apply and state that apply produces a fresh paused tick-0 run; do not imply live mutation.
+- World visible task, `task` query, top-navigation current state, and task heading must remain coherent without resetting active runtime state.
+- Reset the shared World task-panel scroll when its task changes. Direct task controls retain focus; selecting a More task moves focus to the selected panel heading.
+- Keep Research tools and World More keyboard focus deterministic under rapid Arrow input and Escape/reopen sequences; do not focus unmounted menu content.
+- Default Understand content must prioritize selected-model questions, mechanisms, assumptions, and limitations. Keep unrelated Builder/schema/external-framework implementation boundaries in full notes.
+- Keep the real Atlas preview action visible in the first short desktop viewport without changing GW9/GW9B request or executor semantics.
+- Preserve the sharp ORTUS mark and visible ORTUS wordmark in the primary mobile navigation lockup.
+- Starter World canonical C1 launch links may carry only the Starter World ID. C2 recipe links may additionally carry one strict recipe ID. Derive and revalidate template, preset, recipe ownership, parameters, task, and outputs from frozen registries; reject template, scenario, RunConfig, parameter-payload, duplicate, and unknown public handoff overrides.
+- Keep validated Starter World definitions recursively immutable, including nested runtime references and content arrays.
+- Keep Starter World packs, launch recipes, and prepared comparisons strict, versioned, data-only, deterministically ordered, and recursively immutable. They are not templates, RunConfigs, result records, progression, or runtime capabilities.
+- Derive prepared-comparison differences and shared conditions from effective validated scenarios. Do not accept authored comparison claims that disagree with executable recipe values, and do not treat a prepared pair as a result, controlled experiment, robustness finding, causal finding, or validation artifact.
+- Matching effective scenario fields do not prove matching initialized worlds. Audit and disclose material tick-zero count, geometry, topology, and state differences, including initialization-owned quantity changes.
+- Every flagship recipe launch and sibling navigation must construct a fresh paused tick-0 run through existing scenario services. Never mutate or resume the current run implicitly, auto-run, auto-save, or create a second comparison system.
+- Explicit sibling-recipe activation must transfer focus to the replacement recipe context. Preserve any Setup edit as a draft and keep it visibly distinct from the new active recipe value.
+- The Forest Fire `firebreak-corridor` preset is a bounded template-owned initialization arrangement using existing empty-cell state and spread mechanics. Do not generalize it into environmental-field, suppression, terrain, weather, safety, or wildfire-prediction support.
+- Keep flagship collection guidance, recipe context, and nudge dismissal non-persistent. Do not add progress, completion, profiles, recommendations, analytics, Lab evidence, Atlas discoveries, or new storage keys.
+- User-facing Starter World content must use authoritative preset, parameter, intervention, and metric labels rather than internal IDs.
+- Verify Starter World source type, relationship, destination, and DOI metadata. Research connections are context, not validation or calibration.
+- A documented Starter World first activity needs a deterministic engine regression and a rendered control, rebuild, and output path before it is called supported.
+- Static Starter World visuals are illustrative. They must not resemble or claim quantitative runtime output unless backed by an actual labelled output.
+- Guided Investigation definitions must remain strict, versioned, data-only, deterministic, recursively frozen instructional metadata over existing authoritative packs, worlds, comparisons, recipes, tasks, outputs, and horizons.
+- A Guided Investigation is not a template, scenario, RunConfig, result, experiment, evidence record, learner record, progression record, curriculum engine, or runtime capability.
+- Support only explicitly scoped bounded investigation modes, actions, and factual checks. Do not add arbitrary workflow conditions, callbacks, authored runtime payloads, automatic execution, automatic pause, automatic capture, hard gates, scoring, quizzes, completion percentages, profiles, recommendations, analytics, or learning inference.
+- Derive guide recipe roles, controlled differences, shared settings, tick-zero claims, output labels, horizons, and canonical URLs from audited source registries. Reject authority drift rather than falling back to stale guide copy.
+- Guide-aware World URLs may add only one strict guide ID to a valid owned starter/recipe pair. Reject missing, malformed, duplicated, mismatched, guide-state, runtime-override, encoded-object, and unsafe-key queries before AppShell or engine construction.
+- Current guide step and collapse state are mounted-page state only. Add no guide storage key, module-level mutable progress, browser-history completion state, learner record, or hidden persistence.
+- Guide exit must remove only guide presentation and URL state while preserving active run state, tick, playback, Setup drafts, current task where possible, and existing comparison summaries. Reload must reset guide state and reconstruct the recipe under established fresh paused tick-zero semantics.
+- Direct contrast guide entry must remain valid without claiming a baseline run or saved baseline. Generic World comparison-summary availability must not be relabeled as guide provenance.
+- Guided investigations may use only the existing explicit World Compare workflow. Do not auto-save, auto-name, auto-overwrite, add a guide result table/schema/store, change `ortus.runComparison.v1`, or turn model output into evidence.
+- Guided investigation copy must not claim learning, mastery, correctness, causality, robustness, significance, validation, real-world applicability, or a universal threshold. Two prepared runs remain seed- and configuration-specific stylized model outputs.
+- Keep guided World UI optional and compact inside the existing active-tool flow. Do not add a permanent column, modal tour, forced sequence, replacement task rail, or obstruction over the dominant stage and persistent playback.
+- A guided prepared-run reference is not the active runtime after template, recipe provenance, initialization, seed, parameter, or intervention divergence. Suspend the controlled-pair claim, show active facts, and keep continue, explicit restore, and exit available.
+- Do not infer a prepared baseline, guide ownership, completion, or a controlled pair from the existence of any saved World comparison summary. Use generic availability and existing bounded provenance unless every stronger claim is proved.
+- Reject promise/prototype-like public World query names before Next.js async search-parameter interpretation. Invalid guided requests must not partially construct AppShell, a stage, a template, or an engine.
+- I0/I0B immersive prototypes are isolated presentation evidence. Do not link them from normal navigation, treat them as the production World renderer, or infer I1-I5B completion from their existence.
+- All immersive concepts must read the same authoritative validated template runtime through a canonical snapshot or audited bounded frame projection. The adapter/projector must not contain model rules, mutate engine state, create a second model, or imply cross-template support.
+- Camera, hover, selection, focus, pointer presence, tool state, and model-output lenses are presentation state only. They must not change ticks, parameters, metrics, RNG, snapshots, scenarios, comparisons, Starter World state, Atlas, Lab, Builder, or persistence.
+- React must not render one continuously updating component per model entity. Keep batched entity projection in Canvas or an explicitly audited renderer and keep React notifications coarse.
+- Preserve production scheduler semantics for immersive runtime slices. Under load, degrade atmosphere, trails, effects, shadows, distant detail, or visual cadence before agent count, deterministic steps, model rules, RNG, metrics, or scenario fidelity.
+- Keep immersive trails, effects, timing samples, and any future visual histories explicitly bounded. Do not add storage keys, saved prototype state, unbounded trajectories, arbitrary event payloads, biographies, documents, or per-agent histories.
+- Keep immersive detail selection-oriented. The audited Flocking prototype retains at most one selected trajectory, bounded to 12/8/5 points by High/Balanced/Performance quality; do not restore arbitrary cohort-wide trajectories or merely hide data that remains retained.
+- Automatic immersive quality is presentation-only. It may cap DPR and reduce decorative grid, shadows, strokes, selected-trail density/frequency, and transient effects, but it must never change agent count, deterministic steps, rules, RNG, metrics, scenario fidelity, or persistence.
+- Immersive overlays must distinguish snapshot-derived model information from decorative presentation. Do not invent collisions, wind, turbulence, force fields, terrain, emotions, intent, awareness, or relationships the runtime does not expose.
+- A current-position proximity query is not an engine relationship, perception record, force, or causal edge. Do not render proximity as radial influence spokes or label it as sensed behavior without authoritative model state.
+- God-Hand does not authorize arbitrary manipulation. Add only template-defined, validated interventions through existing engine paths in a later dedicated prompt; selection itself must never move or mutate an entity.
+- I0B retires the God-Hand/Hand production metaphor. Use non-manipulative Navigate, Inspect, and Measure semantics with shape-distinct feedback; direct pointer presence does not imply grab, force, or control.
+- System, Local, and Follow are visual camera modes, not multi-scale runtime, agent point of view, awareness, or perception unless explicit model state supports those claims.
+- The I0 Alignment lens is a Flocking model-output view, not measured animal coordination, empirical truth, validation, or a simulation-changing instrument.
+- I0B revises and retires the I0 50/20/30 percentages. Living Diorama owns the primary world surface, spatial presence, restrained depth, boundary, whole-system camera, and selected-only trajectory. Field Scientist owns observation information architecture, System/Local/Follow semantics, exact inspection, selected proximity framing, model-output lenses, runtime-honesty language, and accessibility authority. The former God-Hand concept contributes only immediate pointer feedback, selection, and contextual instrument switching.
+- The generic read-only immersive scene-adapter base is an interface boundary, not cross-template support. Epidemic, Predator-Prey, and Opinion still require template adapters; Forest Fire, Schelling, and Neural require new rendering primitives, and Neural also requires a template-specific adapter.
+- At the audited 500-boid bound, Flocking engine work and cloning/snapshot allocation dominated measured main-thread pressure; Canvas draw was not the primary cost. PERF1 implements Worker execution only for the isolated Flocking prototype and demonstrates local main-thread pressure reduction. Do not generalize this to production World, other templates, browser/mobile diversity, or high-scale readiness.
+- Keep `SimulationRuntimePort` as a bounded ownership boundary. Consumers may request validated deterministic operations and subscribe to publications; they must not receive arbitrary engine/world mutation access.
+- Keep `LocalRuntimeDriver` and `WorkerRuntimeDriver` on the same `RuntimeSession`, validated RunConfig/template path, scheduler contract, and projection logic. Do not create a second simulation implementation for Worker execution.
+- `RenderFramePacket` is ephemeral renderer state, not a canonical snapshot, persistence format, comparison record, Lab/Atlas evidence, or `CanonicalObservation`. It must contain only bounded presentation-required values and no engine objects, full metric history, RNG state, or methods.
+- `UIProjection` is coarse React/accessibility state. Do not route per-entity motion arrays through React state or treat UI projection as authoritative simulation state.
+- Keep Worker requests and publications strictly validated and identified by generation/run/tick plus request/publication identity where applicable. Stale generations must be dropped deterministically and must not update current presentation.
+- Runtime projection support must be explicit and projection-kind registered. PERF1B implements only `flocking-v1`; a generic port/base packet does not imply another template is supported.
+- Runtime driver lifecycle must remain explicit as idle, initializing, ready, failed, or disposed. Commands before first readiness reject; do not queue them ambiguously or infer readiness from Worker construction.
+- Require active generation, run id, template id, projection kind, and strictly increasing same-generation revisions before accepting frame/UI state. A stale current-generation publication must never become current.
+- Bound all Worker ingress, including promise requests and fire-and-forget controls, to the audited maximum of 128 unconsumed messages. Release capacity only on host consumption acknowledgement; reject overflow before accepting a command or changing generation.
+- Never coalesce accepted authoritative commands, model steps, interventions, comparison captures, or future evidence. Only bounded ephemeral frame/UI publications may use latest-value coalescing.
+- Worker failure must be explicit, fail closed, preserve the last complete publication where safe, and never silently start a local run or a new seed. Do not use `eval`, user-authored Worker scripts, arbitrary script URLs, dynamic runtime code, or plugin execution.
+- Worker failure is terminal for that driver. Remove listeners, terminate the Worker, reject pending work, and release frame/UI references; do not silently restart or preserve a false ready/running state.
+- Start browser Workers from a mounted lifecycle, not a React render-time initializer. Dispose schedulers, message listeners, pending requests, publication gates, and Workers on replacement/unmount without relying only on stale React closure timing.
+- Bound visual backpressure to one in-flight and one newest pending frame/UI publication unless a later measured audit approves another limit. Visual coalescing may drop obsolete packets but must never skip simulation steps, commands, interventions, comparison captures, or future evidence records.
+- Keep transferable frame buffers ownership-safe. Do not add `SharedArrayBuffer`, cross-origin-isolation requirements, `OffscreenCanvas`, or shared mutable engine state without a dedicated measured prompt and audit.
+- Treat transferred frame buffers as one-way ownership. Do not mutate source arrays in renderer/camera/lens code, recycle detached buffers, duplicate a buffer in one transfer list, or retain an unbounded packet history.
+- `RenderFramePacket` and `UIProjection` are not canonical engine state. Exact semantic UI values that matter for inspection must come from authoritative runtime projection, not rounded renderer arrays.
+- Keep `SimulationSnapshotView` and `SnapshotExport` distinct. The former is a detached broad read model and is not exact continuation state; only validated `SnapshotExport` preserves RNG and queued-event state for restore.
+- Keep exact snapshot exports available for continuation and explicit export; do not construct or deep-clone them for every visual frame when a bounded read view or projector is sufficient.
+- Distinguish external wall-clock cadence from engine-owned step semantics. Documentation must name the current cadence owner instead of granting UI code model-step, RNG, or mutation authority.
+- Flocking automatic neighbor execution preserves the pre-PERF1 spatial-hash threshold, nominal-cell behavior, and all-pairs fallback for deterministic compatibility. PERF1's corrected `uniformCoverage` index path is differential/benchmark-only because adopting it would migrate affected trajectories and it measured slower despite fewer candidate checks. Do not mark it automatic or call it an optimization without an explicit semantic migration, new repeatable benefit, and exact wrap/order/trajectory evidence.
+- Neighbor-index correctness must cover non-divisible world dimensions, wrap corners/edges, exact/inside/outside radii, same-position agents, duplicate/self behavior, stable pair order, 500-agent generated states, and full deterministic evolution before adoption.
+- PERF1 does not implement `CanonicalObservation`, evidence persistence, Arrow/Parquet, cross-template Worker support, production immersive World, `OffscreenCanvas`, WebGL/WebGPU, Wasm, or a user-facing Worker toggle.
+- I1 may consume the audited runtime port, drivers, Flocking frame/UI/selected projections, generation/revision identity, bounded visual backpressure, ingress cap, and terminal lifecycle. It must not reintroduce continuous full snapshot exports, React entity animation, renderer mutation, Canvas authority, camera-to-model coupling, RNG/model-step semantic changes, fake cross-template support, or `CanonicalObservation` conflation.
