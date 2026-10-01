@@ -204,30 +204,39 @@ export function assertParametersMatchConfiguration(parameters: ParameterValues, 
 // (((x % w) + w) % w) and is not idempotent, and restore normalizes every stored location again, so a genuine
 // restored location can be one step past the component's first normalization; both sides are therefore compared
 // after normalizing twice, which no further normalization changes. Different places never compare equal.
+// Members are found from the live entities without copying the space, and component values are read in place;
+// a template's location mapping receives a copy.
 export function assertPlacementsAgree(world: World, placements: readonly PlacementDefinition[]): void {
   for (const placement of placements) {
     const space = world.getSpace(placement.spaceId);
-    const serialized = space?.serialize();
-    if (!space || !serialized || serialized.kind === "network") {
+    if (!(space instanceof Continuous2DSpace) && !(space instanceof Grid2DSpace)) {
       throw new SimulationValidationError(`Placement space ${placement.spaceId} is missing or has no locations`);
     }
     const normalizeTwice = (location: SpaceLocation): SpaceLocation =>
       space instanceof Grid2DSpace
         ? space.normalizeCell(space.normalizeCell(location as GridCell))
-        : (space as Continuous2DSpace).normalizePosition((space as Continuous2DSpace).normalizePosition(location as Point2D));
-    const stored: Record<EntityId, SpaceLocation> = serialized.kind === "continuous2d" ? serialized.positions : serialized.cells;
-    for (const [entityId, location] of Object.entries(stored)) {
-      const value = world.componentStore.get(entityId, placement.component);
+        : space.normalizePosition(space.normalizePosition(location as Point2D));
+    let placed = 0;
+    for (const entityId of world.entityStore.aliveIds()) {
+      const location = space.getLocation(entityId);
+      if (!location) {
+        continue;
+      }
+      placed += 1;
+      const value = world.componentStore.getMutable(entityId, placement.component);
       if (!value) {
         throw new SimulationValidationError(`Entity ${entityId} in ${placement.spaceId} is missing ${placement.component}`, { entityId });
       }
-      const named = placement.location ? placement.location(value) : (value as unknown as SpaceLocation);
+      const named = placement.location ? placement.location({ ...value }) : (value as unknown as SpaceLocation);
       if (!sameLocation(normalizeTwice(named), normalizeTwice(location))) {
         throw new SimulationValidationError(
           `Entity ${entityId} ${placement.component} ${JSON.stringify(value)} does not match its location ${JSON.stringify(location)} in ${placement.spaceId}`,
           { entityId }
         );
       }
+    }
+    if (placed !== space.memberCount()) {
+      throw new SimulationValidationError(`Space ${placement.spaceId} holds a member that is not a live entity`);
     }
   }
 }
