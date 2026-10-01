@@ -716,7 +716,6 @@ export function createBoidMovementSystem(): System {
     priority: 0,
     query: [Position2D, Velocity2D, BoidState],
     update(ctx) {
-      const params = flockingParams(ctx.params);
       const space = requireFlockingSpace(ctx.spaces.continuous2D(FLOCKING_SPACE_ID));
       const positionUpdates: Record<string, ComponentValue> = {};
       const velocityUpdates: Record<string, ComponentValue> = {};
@@ -727,7 +726,9 @@ export function createBoidMovementSystem(): System {
         if (!position || !velocity) {
           continue;
         }
-        const bounded = applyBoundary(add(position, multiply(velocity, ctx.dt)), velocity, space, params.boundaryMode);
+        // The space is the one boundary authority at runtime: neighbour search, normalization, and the frame
+        // read its mode too. The boundaryMode parameter only declares the mode the space is built with.
+        const bounded = applyBoundary(add(position, multiply(velocity, ctx.dt)), velocity, space, space.boundaryMode);
         moveUpdates[entityId] = bounded.position;
         positionUpdates[entityId] = bounded.position;
         if (!sameVector(velocity, bounded.velocity)) {

@@ -287,6 +287,20 @@ describe("flocking boids template", () => {
     expect(velocity(bounced, "bounce").x).toBeCloseTo(-3);
   });
 
+  it("bounds movement by the space's boundary mode, the one runtime authority, whatever the parameter says", () => {
+    // Neighbour search, normalization, and the frame read the space; movement must not read a second copy.
+    const expected = { bounce: { x: 98, vx: -3 }, clamp: { x: 100, vx: 0 }, wrap: { x: 2, vx: 3 } };
+    for (const [spaceMode, parameterMode] of [["bounce", "wrap"], ["clamp", "wrap"], ["wrap", "bounce"]] as const) {
+      const engine = new SimulationEngine(
+        manualTemplate([{ id: "edge", position: { x: 99, y: 50 }, velocity: { x: 3, y: 0 } }], { systems: "movement", boundaryMode: spaceMode }),
+        { parameters: params({ boundaryMode: parameterMode }) }
+      );
+      engine.step();
+      expect(position(engine, "edge").x, `${spaceMode} space, ${parameterMode} parameter`).toBeCloseTo(expected[spaceMode].x);
+      expect(velocity(engine, "edge").x, `${spaceMode} space, ${parameterMode} parameter`).toBeCloseTo(expected[spaceMode].vx);
+    }
+  });
+
   it("senses and steers from the start-of-tick state before movement", () => {
     const engine = new SimulationEngine(
       manualTemplate(
