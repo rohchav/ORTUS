@@ -316,6 +316,7 @@ export const predatorPreyTemplate: SimulationTemplate = {
   agentCompositionDefinitions,
   documentation,
   assumptionProfile,
+  placements: [{ spaceId: PREDATOR_PREY_SPACE_ID, component: Position2D }],
   createInitialWorld(ctx) {
     const params = predatorPreyParams(ctx.params);
     const world = new World();

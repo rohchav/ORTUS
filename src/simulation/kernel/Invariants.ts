@@ -1,20 +1,44 @@
-import type { ComponentType, ComponentValue, EntityId, FixedByConfiguration, JsonValue, ParameterValues, SerializedSpace } from "./types";
+import type {
+  ComponentType,
+  ComponentValue,
+  EntityId,
+  FixedByConfiguration,
+  JsonValue,
+  ParameterValues,
+  PlacementDefinition,
+  SerializedSpace,
+  SimulationTemplate
+} from "./types";
 import type { World, WorldView } from "./World";
 import { SimulationInvariantError, SimulationValidationError } from "./Errors";
 import { eventSchema } from "./Validation";
-import type { ReadonlySpace, Space } from "../spaces/Space";
+import type { GridCell, Point2D, ReadonlySpace, Space, SpaceLocation } from "../spaces/Space";
 import { Continuous2DSpace } from "../spaces/Continuous2DSpace";
 import { Grid2DSpace } from "../spaces/Grid2DSpace";
 
-// A world can be trusted as an executable state of a declared model when it passes three checks:
+// A world can be trusted as an executable state of a declared model when it passes four checks:
 // 1. assertWorldInvariants: kernel structure that execution maintains for every model (unique ids,
 //    components on existing entities, finite values, every space member a live entity, valid events).
-// 2. The template's validateWorld: the model's own rules for its entities and component values, including
+// 2. assertWorldMatchesConfiguration: what the model configuration fixes and execution never changes.
+// 3. The template's validateWorld: the model's own rules for its entities and component values, including
 //    which live entities are agents and where they must be (assertAgentRole).
-// These two run for built worlds, after every tick and external command batch, and on restore.
-// 3. assertWorldMatchesConfiguration: what the model configuration fixes and execution never changes.
-//    A world built from its configuration satisfies it by construction and no command can break it, so it
-//    runs only where a world arrives from outside, in snapshot restore.
+// 4. assertPlacementsAgree: each placed entity's position component and its location in the space name
+//    the same place.
+// All four run at the trust boundary, through assertModelState: for a built world (checks 1, 3, and 4; it is
+// the world its configuration builds) and where a world arrives from outside, in snapshot restore. Checks 1
+// and 3 also run after every tick and external command batch. Checks 2 and 4 do not, because execution keeps
+// what they compare: no command resizes, re-kinds, or adds a space, no system or intervention rewrites a
+// configuration global, and every system that moves an entity writes its component and its space location
+// together.
+export function assertModelState(world: World, template: SimulationTemplate, configured?: World): void {
+  assertWorldInvariants(world);
+  if (configured) {
+    assertWorldMatchesConfiguration(world, configured, template.fixedByConfiguration);
+  }
+  template.validateWorld?.(world.view());
+  assertPlacementsAgree(world, template.placements ?? []);
+}
+
 export function assertWorldInvariants(world: World): void {
   const ids = new Set<string>();
   for (const entity of world.entityStore.all()) {
@@ -173,6 +197,45 @@ export function assertParametersMatchConfiguration(parameters: ParameterValues, 
       );
     }
   }
+}
+
+// Every member of each placement's space holds its placement component, and the two name the same place: the
+// location the space stores is the space's normalization of the component value. Wrap normalization rounds
+// (((x % w) + w) % w) and is not idempotent, and restore normalizes every stored location again, so a genuine
+// restored location can be one step past the component's first normalization; both sides are therefore compared
+// after normalizing twice, which no further normalization changes. Different places never compare equal.
+export function assertPlacementsAgree(world: World, placements: readonly PlacementDefinition[]): void {
+  for (const placement of placements) {
+    const space = world.getSpace(placement.spaceId);
+    const serialized = space?.serialize();
+    if (!space || !serialized || serialized.kind === "network") {
+      throw new SimulationValidationError(`Placement space ${placement.spaceId} is missing or has no locations`);
+    }
+    const normalizeTwice = (location: SpaceLocation): SpaceLocation =>
+      space instanceof Grid2DSpace
+        ? space.normalizeCell(space.normalizeCell(location as GridCell))
+        : (space as Continuous2DSpace).normalizePosition((space as Continuous2DSpace).normalizePosition(location as Point2D));
+    const stored: Record<EntityId, SpaceLocation> = serialized.kind === "continuous2d" ? serialized.positions : serialized.cells;
+    for (const [entityId, location] of Object.entries(stored)) {
+      const value = world.componentStore.get(entityId, placement.component);
+      if (!value) {
+        throw new SimulationValidationError(`Entity ${entityId} in ${placement.spaceId} is missing ${placement.component}`, { entityId });
+      }
+      const named = placement.location ? placement.location(value) : (value as unknown as SpaceLocation);
+      if (!sameLocation(normalizeTwice(named), normalizeTwice(location))) {
+        throw new SimulationValidationError(
+          `Entity ${entityId} ${placement.component} ${JSON.stringify(value)} does not match its location ${JSON.stringify(location)} in ${placement.spaceId}`,
+          { entityId }
+        );
+      }
+    }
+  }
+}
+
+function sameLocation(left: SpaceLocation, right: SpaceLocation): boolean {
+  return "row" in left && "row" in right
+    ? left.row === right.row && left.col === right.col
+    : (left as Point2D).x === (right as Point2D).x && (left as Point2D).y === (right as Point2D).y;
 }
 
 // Kind first, so that a same-id space of another kind is reported as a kind mismatch.

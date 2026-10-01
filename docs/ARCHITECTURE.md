@@ -226,7 +226,7 @@ The A0B static gate enforces current truths only: simulation implementation cann
 | RunConfig | Scenario/setup services | Until replaced or discarded | Explicit rebuild/replacement |
 | Active run | Engine/runtime session | Initialization to disposal | Replacement, terminal failure, disposal |
 | `SimulationSnapshotView` | Engine snapshot projector | Detached value for a particular tick; consumers must treat it as read-only, but it is not deep-frozen | Becomes stale when the run advances; never persisted implicitly |
-| `SnapshotExport` | Engine serializer | Detached explicit export for exact restore | Import may fail on schema/template/compatibility checks, or when the world is not a valid state of the model the artifact declares (agent roles, space geometry, configuration globals, parameters, fixed population); never produced by visual publication |
+| `SnapshotExport` | Engine serializer | Detached explicit export for exact restore | Import may fail on schema/template/compatibility checks, or when the world is not a valid state of the model the artifact declares (agent roles, space geometry, configuration globals, parameters, fixed population, position components that disagree with space locations); never produced by visual publication |
 | RenderFramePacket/UIProjection | Runtime projector/driver | Latest identified publication | Newer revision, generation change, failure, disposal |
 | Camera/selection/tool state | UI | Mounted workflow or documented local persistence | Navigation, explicit reset, target destruction, unmount |
 | `ModelDefinition` | PLANNED model-authoring/import authority | Versioned declarative artifact; immutable once identified | Explicit validated import/export only; source/schema/capability change creates a new version |

@@ -3,6 +3,7 @@ import { SimulationEngine } from "../kernel/SimulationEngine";
 import { SimulationError } from "../kernel/Errors";
 import { RandomService, type RandomStream } from "../kernel/Random";
 import type { ComponentType, JsonValue, SerializedSpace, SimulationRunConfig, SimulationTemplate, SnapshotExport } from "../kernel/types";
+import { Continuous2DSpace } from "../spaces/Continuous2DSpace";
 import { createFlockingRenderFramePacket } from "../runtime/flockingProjection";
 import { createEngineFromRunConfig } from "../runs/engineFromRunConfig";
 import { createDefaultRunConfig } from "../runs/runConfig";
@@ -462,6 +463,68 @@ describe("Finding 2: a restored world agrees with its declared configuration on 
 });
 
 // ---------------------------------------------------------------------------------------------------------
+// Finding 3: a placed agent's position component and its space location name the same place.
+// ---------------------------------------------------------------------------------------------------------
+
+describe("Finding 3: position components agree with space locations on every import path", { timeout: 60_000 }, () => {
+  it.each([
+    [opinion.name, opinion, OPINION_SPACE_ID],
+    [epidemic.name, epidemic, EPIDEMIC_SPACE_ID],
+    [predatorPrey.name, predatorPrey, PREDATOR_PREY_SPACE_ID],
+    [neural.name, neural, NEURAL_EXCITATION_SPACE_ID],
+    [flocking.name, flocking, FLOCKING_SPACE_ID]
+  ] as const)("%s: refuses a Position2D moved away from its space location, and a space location moved away from Position2D", async (_name, model, spaceId) => {
+    const message = new RegExp(`Entity \\S+ Position2D \\{.*\\} does not match its location \\{.*\\} in ${spaceId}`);
+    await expectRefusedOnEveryPath(model, (snapshot) => {
+      const entityId = firstMember(spaceIn(snapshot, spaceId));
+      const position = snapshot.world.components[Position2D]![entityId] as { x: number; y: number };
+      position.x = elsewhere(position.x, continuousIn(snapshot, spaceId).width);
+    }, message);
+    await expectRefusedOnEveryPath(model, (snapshot) => {
+      const space = continuousIn(snapshot, spaceId);
+      const location = space.positions[firstMember(space)]!;
+      location.y = elsewhere(location.y, space.height);
+    }, message);
+  });
+
+  it.each([
+    [schelling.name, schelling, SCHELLING_SPACE_ID, PositionGrid, /Invalid PositionGrid component/],
+    [forestFire.name, forestFire, FOREST_FIRE_SPACE_ID, ForestFireCellPosition, /Invalid ForestFireCellPosition component/]
+  ] as const)("%s: refuses a grid position component moved off its cell", async (_name, model, spaceId, component, message) => {
+    // Grid templates already compared these every tick; the shared placement check now states it for all.
+    await expectRefusedOnEveryPath(model, (snapshot) => {
+      const entityId = firstMember(spaceIn(snapshot, spaceId));
+      const value = snapshot.world.components[component]![entityId] as Record<string, number>;
+      const key = "row" in value ? "row" : "y";
+      value[key] = value[key]! === 0 ? 1 : value[key]! - 1;
+    }, message);
+  });
+
+  it("accepts a genuine wrap position whose normalization a second normalization moves, as a newborn's can be", () => {
+    // Predator-Prey births place a child at its raw jittered position, which can be just below 0; the space
+    // stores its wrap normalization, and restore normalizes that stored location once more.
+    const engine = createEngineFromRunConfig(predatorPrey.runConfig());
+    engine.runSteps(2);
+    const snapshot = engine.snapshotExport();
+    const space = continuousIn(snapshot, PREDATOR_PREY_SPACE_ID);
+    const normalizer = new Continuous2DSpace({ id: "normalizer", width: space.width, height: space.height, boundaryMode: space.boundaryMode });
+    const raw = { x: -0.0007699040269944817, y: 50.25 };
+    const stored = normalizer.normalizePosition(raw);
+    expect(normalizer.normalizePosition(stored).x).not.toBe(stored.x);
+    const entityId = firstMember(space);
+    snapshot.world.components[Position2D]![entityId] = raw;
+    space.positions[entityId] = stored;
+
+    const restored = SimulationEngine.fromSnapshot(predatorPreyTemplate, snapshot, { ...(engine.initialization ? { initialization: engine.initialization } : {}), ...(engine.scenario ? { scenario: engine.scenario } : {}) });
+    const reexported = restored.snapshotExport();
+    expect(continuousIn(reexported, PREDATOR_PREY_SPACE_ID).positions[entityId]).toEqual(normalizer.normalizePosition(stored));
+    expect(() => SimulationEngine.fromSnapshot(predatorPreyTemplate, reexported, { ...(engine.initialization ? { initialization: engine.initialization } : {}), ...(engine.scenario ? { scenario: engine.scenario } : {}) })).not.toThrow();
+    restored.runSteps(2);
+    expect(restored.world.tick).toBe(4);
+  });
+});
+
+// ---------------------------------------------------------------------------------------------------------
 // Legitimate worlds keep importing through the Worker, for every Flocking behavior mode, preset, and boundary.
 // ---------------------------------------------------------------------------------------------------------
 
@@ -522,6 +585,11 @@ function extentMessage(spaceId: string, property: string): RegExp {
   return new RegExp(`Space ${spaceId} ${property} \\S+ does not match the configured model`);
 }
 
+// A coordinate inside [0, extent] a quarter of the extent away.
+function elsewhere(value: number, extent: number): number {
+  return value + extent / 4 <= extent ? value + extent / 4 : value - extent / 4;
+}
+
 function removeEntity(snapshot: SnapshotExport, entityId: string): void {
   for (const component of Object.keys(snapshot.world.components)) {
     delete snapshot.world.components[component]![entityId];
@@ -559,6 +627,10 @@ function gridIn(snapshot: SnapshotExport, spaceId: string): Extract<SerializedSp
 
 function memberIds(space: SerializedSpace): string[] {
   return space.kind === "continuous2d" ? Object.keys(space.positions) : space.kind === "grid2d" ? Object.keys(space.cells) : space.nodes;
+}
+
+function firstMember(space: SerializedSpace): string {
+  return sorted(memberIds(space))[0]!;
 }
 
 function removeMember(space: SerializedSpace, entityId: string): void {

@@ -32,7 +32,7 @@ import {
   SimulationValidationError,
   type SimulationFailure
 } from "./Errors";
-import { assertParametersMatchConfiguration, assertWorldInvariants, assertWorldMatchesConfiguration } from "./Invariants";
+import { assertModelState, assertParametersMatchConfiguration, assertWorldInvariants } from "./Invariants";
 import { createScenarioExport, createSnapshotExport, createSnapshotView } from "./Snapshot";
 import { deserializeScenario, deserializeSnapshot, serializeScenario, serializeSnapshot } from "./Serialization";
 import { deepClone, resolveParameters, validateTemplate } from "./Validation";
@@ -320,9 +320,7 @@ export class SimulationEngine {
     assertParametersMatchConfiguration(resolveParameters(this.template.parameterDefinitions, snapshot.parameters), this.parameters);
     const world = World.fromSnapshot(snapshot.world);
     normalizeSimulationEventLogInWorld(world);
-    assertWorldInvariants(world);
-    assertWorldMatchesConfiguration(world, this.configuredWorld(snapshot.seed), this.template.fixedByConfiguration);
-    this.template.validateWorld?.(world.view());
+    assertModelState(world, this.template, this.configuredWorld(snapshot.seed));
     const rng = new RandomService(snapshot.seed);
     rng.setState(snapshot.rng);
     // clock.restore validates before assigning, so it is the first mutation.
@@ -384,8 +382,7 @@ export class SimulationEngine {
       rng,
       fixedDt: this.clock.fixedDt
     });
-    assertWorldInvariants(world);
-    this.template.validateWorld?.(world.view());
+    assertModelState(world, this.template);
     normalizeSimulationEventLogInWorld(world);
     appendSimulationEventLogToWorld(world, {
       type: "run.initialized",

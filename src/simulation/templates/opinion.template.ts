@@ -609,6 +609,7 @@ export const opinionTemplate: SimulationTemplate = {
     globals: ["opinionBehaviorMode", "opinionInformationSourceCount", "opinionSocialLearningRuntimeScope"],
     population: true
   },
+  placements: [{ spaceId: OPINION_SPACE_ID, component: Position2D }],
   createInitialWorld(ctx) {
     const params = opinionParams(ctx.params);
     const behaviorMode = opinionBehaviorModeFromScenario(ctx.scenario?.behaviorMode);

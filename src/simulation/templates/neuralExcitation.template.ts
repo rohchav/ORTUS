@@ -813,6 +813,7 @@ export const neuralExcitationTemplate: SimulationTemplate = {
   documentation,
   assumptionProfile,
   fixedByConfiguration: { globals: [neuralMaxSignalQueueSizeGlobalKey], population: true },
+  placements: [{ spaceId: NEURAL_EXCITATION_SPACE_ID, component: Position2D }],
   createInitialWorld(ctx) {
     const params = neuralExcitationParams(ctx.params);
     const world = new World({ globals: initialNeuralRuntimeGlobals(params, [], []) });

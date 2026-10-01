@@ -363,6 +363,7 @@ export const epidemicTemplate: SimulationTemplate = {
   documentation,
   assumptionProfile,
   fixedByConfiguration: { population: true },
+  placements: [{ spaceId: EPIDEMIC_SPACE_ID, component: Position2D }],
   createInitialWorld(ctx) {
     const params = epidemicParams(ctx.params);
     const world = new World();

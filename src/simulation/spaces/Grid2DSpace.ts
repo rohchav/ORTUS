@@ -188,7 +188,7 @@ export class Grid2DSpace implements Space<GridCell> {
     return space;
   }
 
-  private normalizeCell(cell: GridCell): GridCell {
+  normalizeCell(cell: GridCell): GridCell {
     if (!isGridCell(cell)) {
       throw new SimulationValidationError("Expected integer grid cell");
     }

@@ -324,6 +324,7 @@ export const schellingTemplate: SimulationTemplate = {
   documentation,
   assumptionProfile,
   fixedByConfiguration: { population: true },
+  placements: [{ spaceId: SCHELLING_SPACE_ID, component: PositionGrid }],
   createInitialWorld(ctx) {
     const params = schellingParams(ctx.params);
     const world = new World({ globals: { movedThisTick: 0 } });

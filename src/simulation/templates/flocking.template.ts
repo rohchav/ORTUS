@@ -484,6 +484,7 @@ export const flockingTemplate: SimulationTemplate = {
   documentation,
   assumptionProfile,
   fixedByConfiguration: { globals: ["flockingBehaviorMode", "flockingGroupCount"], population: true },
+  placements: [{ spaceId: FLOCKING_SPACE_ID, component: Position2D }],
   createInitialWorld(ctx) {
     const params = flockingParams(ctx.params);
     const behaviorMode = flockingBehaviorModeFromScenario(ctx.scenario?.behaviorMode);

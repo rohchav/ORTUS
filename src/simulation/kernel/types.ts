@@ -336,6 +336,17 @@ export interface FixedByConfiguration {
   population?: boolean;
 }
 
+// A component that holds the same location as an entity's place in a space. Every system that moves an entity
+// writes both, so the space holds its normalization of the component value. Build and restore require every
+// member of the space to agree with its component (see assertPlacementsAgree).
+export interface PlacementDefinition {
+  spaceId: string;
+  component: ComponentType;
+  // The location a component value names, when its shape differs from the space's (for example {x, y} for a
+  // grid cell). Omitted when the component value is itself the location.
+  location?(value: ComponentValue): SpaceLocation;
+}
+
 // A template is a model family definition: rules, setup metadata, metrics,
 // visuals, assumptions, limitations, and validated extension points.
 export interface SimulationTemplate {
@@ -360,6 +371,7 @@ export interface SimulationTemplate {
   runtimeMetadata?: RuntimePerformanceMetadata;
   assumptionProfile?: ModelAssumptionProfile;
   fixedByConfiguration?: FixedByConfiguration;
+  placements?: readonly PlacementDefinition[];
   validateInitializationOptions?(initialization: InitializationConfig, params: ParameterValues): void;
   validateScenarioOptions?(options: ScenarioVariantConfig, params: ParameterValues): void;
   validateWorld?(world: WorldView): void;

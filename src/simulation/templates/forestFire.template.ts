@@ -425,6 +425,8 @@ export const forestFireTemplate: SimulationTemplate = {
   documentation,
   assumptionProfile,
   fixedByConfiguration: { population: true },
+  // A cell position is {x: column, y: row}.
+  placements: [{ spaceId: FOREST_FIRE_SPACE_ID, component: ForestFireCellPosition, location: (value) => ({ row: value.y as number, col: value.x as number }) }],
   createInitialWorld(ctx) {
     const params = forestFireParams(ctx.params);
     const presetId = ctx.initialization?.presetId ?? "random-forest";
