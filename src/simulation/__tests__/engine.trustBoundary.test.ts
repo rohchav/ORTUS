@@ -167,6 +167,31 @@ describe("Finding 1: consistency oracle over agents stripped of parts of their r
       expect(refused).toBeGreaterThan(oracleCasesPerModel / 2);
     }
   );
+
+  it("refuses the review's Opinion ghost exactly as reported, through the paste import", () => {
+    // Seed ghost-user-path, three ticks, e000050 stripped of Position2D and of its spaces[0] entry. Before the
+    // repair this import replaced the run, and the ghost kept drawing noise RNG while no neighbour saw it.
+    const store = useSimulationStore;
+    store.getState().selectTemplate("opinion-dynamics");
+    store.getState().setSeed("ghost-user-path");
+    const engine = store.getState().engine!;
+    store.getState().runFrameSteps(3);
+    store.getState().exportSnapshot();
+    const snapshot = JSON.parse(store.getState().exportText) as SnapshotExport;
+    delete snapshot.world.components[Position2D]!.e000050;
+    expect(snapshot.world.spaces[0]!.id).toBe(OPINION_SPACE_ID);
+    delete continuousIn(snapshot, OPINION_SPACE_ID).positions.e000050;
+
+    store.getState().setImportMode("snapshot");
+    store.getState().setImportText(JSON.stringify(snapshot));
+    store.getState().importJson();
+
+    expect(store.getState().lastError).toEqual({ area: "file", text: "Import failed: Opinion agent e000050 is missing Position2D" });
+    expect(store.getState().engine).toBe(engine);
+    expect(engine.world.tick).toBe(3);
+    store.getState().runFrameSteps(1);
+    expect(engine.world.tick).toBe(4);
+  });
 });
 
 // One of: no change (a control); a live entity removed entirely, which only Predator-Prey's model allows; or
