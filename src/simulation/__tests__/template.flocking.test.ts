@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { SimulationEngine } from "../kernel/SimulationEngine";
+import { RandomService } from "../kernel/Random";
 import type { ModelDocumentation, ParameterDefinition, SimulationTemplate } from "../kernel/types";
 import { World } from "../kernel/World";
 import { Continuous2DSpace } from "../spaces/Continuous2DSpace";
@@ -18,6 +19,7 @@ import {
   type BoidGroupComponent,
   type BoidStateComponent
 } from "../templates/flocking.template";
+import { exactWallByWallReflection } from "./fixtures/exactReflection";
 
 interface Vec2 extends Record<string, number> {
   x: number;
@@ -299,6 +301,31 @@ describe("flocking boids template", () => {
       expect(position(engine, "edge").x, `${spaceMode} space, ${parameterMode} parameter`).toBeCloseTo(expected[spaceMode].x);
       expect(velocity(engine, "edge").x, `${spaceMode} space, ${parameterMode} parameter`).toBeCloseTo(expected[spaceMode].vx);
     }
+  });
+
+  it("turns a bounced boid by the parity of its reflections, up to ten periods beyond either wall", () => {
+    // Each reflection reverses the heading, so a boid that left the field moving outward heads back after an
+    // odd number of reflections and keeps its heading after an even number.
+    const stream = new RandomService("bounce-parity").fork("positions");
+    const headings = { reversed: 0, kept: 0 };
+    for (let index = 0; index < 400; index += 1) {
+      const below = stream.bool(0.5);
+      const outward = (below ? -1 : 1) * (0.5 + stream.float() * 2.5);
+      const x = below ? -stream.float() * 2_000 : 100 + stream.float() * 2_000;
+      const engine = new SimulationEngine(
+        manualTemplate([{ id: "far", position: { x, y: 50 }, velocity: { x: outward, y: 0 } }], { systems: "movement", boundaryMode: "bounce" }),
+        { parameters: params({ boundaryMode: "bounce" }) }
+      );
+      engine.step();
+
+      const reflection = exactWallByWallReflection(x + outward * engine.clock.fixedDt, 100);
+      const reversed = reflection.reflections % 2 === 1;
+      const bounced = velocity(engine, "far").x;
+      expect(Math.sign(bounced), `${x} moving ${outward}`).toBe(reversed ? -Math.sign(outward) : Math.sign(outward));
+      expect(Math.abs(bounced)).toBe(Math.abs(outward));
+      headings[reversed ? "reversed" : "kept"] += 1;
+    }
+    expect(Math.min(headings.reversed, headings.kept)).toBeGreaterThan(100);
   });
 
   it("senses and steers from the start-of-tick state before movement", () => {

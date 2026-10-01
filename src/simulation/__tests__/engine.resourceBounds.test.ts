@@ -16,6 +16,7 @@ import { epidemicTemplate } from "../templates/epidemic.template";
 import { flockingTemplate } from "../templates/flocking.template";
 import { forestFireTemplate } from "../templates/forestFire.template";
 import { useSimulationStore } from "../../state/simulationStore";
+import { exactUnits, exactWallByWallReflection, floatingWallByWallReflection } from "./fixtures/exactReflection";
 
 // The pre-Phase-3 reflection loops, kept as references: within two reflections of the range the
 // canonical function must reproduce them bit for bit, so existing trajectories do not change.
@@ -33,6 +34,25 @@ function legacyReflect(value: number, max: number): Reflection {
     }
   }
   return lastWall === undefined ? { value: result } : { value: result, lastWall };
+}
+
+// The double `ulps` representable steps above (positive) or below (negative) `value`.
+function adjacentDouble(value: number, ulps: number): number {
+  let result = value;
+  for (let step = 0; step < Math.abs(ulps); step += 1) {
+    result = ulps > 0 ? nextUp(result) : -nextUp(-result);
+  }
+  return result;
+}
+
+function nextUp(value: number): number {
+  if (value === 0) {
+    return Number.MIN_VALUE;
+  }
+  const float = new Float64Array([value]);
+  const bits = new BigInt64Array(float.buffer);
+  bits[0] = bits[0]! + (value > 0 ? 1n : -1n);
+  return float[0]!;
 }
 
 function legacyGridReflect(value: number, size: number): number {
@@ -92,6 +112,52 @@ describe("bounded boundary reflection", () => {
     expect(reflectCoordinate(-400, 100)).toEqual({ value: 0, lastWall: "high" });
     expect(reflectCoordinate(450, 100)).toEqual({ value: 50, lastWall: "low" });
     expect(reflectCoordinate(500, 100)).toEqual({ value: 100, lastWall: "low" });
+  });
+
+  it("is exact wall-by-wall reflection, value and last wall, up to ten periods beyond either wall", () => {
+    // The reference is the original loop run in exact arithmetic. The floating-point loop is not a reliable
+    // reference this far out: wherever one of its steps rounds, it can drift to the other wall.
+    const stream = new RandomService("reflection-exact").fork("values");
+    let driftedFloatingWalls = 0;
+    for (const max of [100, 99.37, 0.1, 1 / 3, Math.PI, 7.5, 1e-3, 123_456.789]) {
+      const values: number[] = [];
+      for (let index = 0; index < 1_500; index += 1) {
+        values.push((stream.float() * 41 - 20) * max);
+      }
+      // Every wall crossing out to ten periods, as a product and as a running sum, and the doubles around it.
+      for (let crossing = -20; crossing <= 21; crossing += 1) {
+        let sum = 0;
+        for (let step = 0; step < Math.abs(crossing); step += 1) {
+          sum += max;
+        }
+        for (const wall of [crossing * max, Math.sign(crossing) * sum]) {
+          for (let ulps = -6; ulps <= 6; ulps += 1) {
+            values.push(adjacentDouble(wall, ulps));
+          }
+        }
+      }
+      for (const value of values) {
+        const label = `${value} in [0, ${max}]`;
+        const actual = reflectCoordinate(value, max);
+        const exact = exactWallByWallReflection(value, max);
+        const floating = floatingWallByWallReflection(value, max);
+        expect(actual.lastWall, label).toBe(exact.lastWall);
+        if (value >= -2 * max && value <= 3 * max) {
+          // Within two reflections the original loop runs, bit for bit.
+          expect(Object.is(actual.value, floating.value), label).toBe(true);
+        } else {
+          expect(exactUnits(actual.value), label).toBe(exact.units);
+        }
+        if (floating.exact) {
+          expect(Object.is(actual.value, floating.value), label).toBe(true);
+          expect(actual.lastWall, label).toBe(floating.lastWall);
+        } else if (floating.lastWall !== exact.lastWall) {
+          driftedFloatingWalls += 1;
+        }
+      }
+    }
+    // The case set reaches coordinates where the floating-point loop itself ends at the wrong wall.
+    expect(driftedFloatingWalls).toBeGreaterThan(0);
   });
 
   it("keeps ordinary bounces, exact walls, and negative coordinates unchanged", () => {
