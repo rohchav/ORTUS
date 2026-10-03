@@ -1,10 +1,337 @@
 # ORTUS Hardening Ledger
 
-This ledger has four parts, newest first. **Phase 3B — Remediation** records the repairs made against the
+This ledger has five parts, newest first. **Phase 3B — Second pass** re-verifies the first Phase 3B repair
+against the same review and completes it. **Phase 3B — Remediation** records the repairs made against the
 independent Phase 3B review of the Phase 3 remediation. **Phase 3 — Remediation** records the repairs made
 against the independent Phase 3 adversarial review. **Phase 2 — Execution** records the repairs made against
 the Phase 1 findings. **Phase 1 — Forensic Investigation** is the original audit. Earlier parts are
 preserved as evidence; where a later phase changed a conclusion, the later entry says so.
+
+## Phase 3B — Second pass
+
+A first Phase 3B pass (`f358874`, `f47b720`, below) was already on the branch when the review's request
+was taken up again. This pass treated it as evidence, not authority: every claim was re-checked against the
+source and against `efee56d` (the reviewed head) before anything changed. What held is kept; what did not
+is completed here. The review artifact is still not stored in this repository.
+
+Baseline: `phase3/remediation` at `f47b720`, Node 24.16.0, npm 11.13.0. Full Vitest at baseline: 101 files /
+1,026 tests PASS. Trees compared: `efee56d` (reviewed), `f47b720` (first pass), and the final commits.
+
+**Contracts.**
+- *Role.* An imported or restored world becomes executable only if it is a valid state of the model
+  configuration it declares: every entity occupying a template's agent role has that role's required
+  components and placements.
+- *Configuration.* Every structural property the declared configuration determines agrees with it: space
+  ids, kinds and count, extents, boundary modes, the behavior variant and initialization where they are
+  structural, and template-specific structural globals. Evolved trajectory state (positions, velocities,
+  opinions, infection state, births and deaths, histories) is never compared with, or reset to, initial
+  values.
+- *Placement* (finding 3). A placed agent's position component and its space location name the same place.
+- *Reflection* (finding 4). `lastWall` is the last wall of wall-by-wall reflection. Within two reflections
+  the value is bit-identical to the original loop; the exactness beyond that is stated under finding 4.
+- All of them are enforced at the trust boundary (build, restore, import), implemented once in the engine,
+  and reached by the direct restore, the main-thread paste import, and the Worker import alike. A refused
+  import changes nothing: the current run, its tick, and its generation stay, and it keeps stepping.
+
+| Finding | Status after this pass |
+| --- | --- |
+| 1 (P1-A) Agent role inferred from the component being validated | FIXED by the first pass; verified; consistency oracle added |
+| 2 (P1-B) Executable world can contradict its declared configuration | FIXED by the first pass; verified on every import path; Flocking boundary now has one runtime authority |
+| 3 Position component can disagree with space position (ledgered P3 since Phase 3) | FIXED in this pass |
+| 4 `reflectCoordinate` wall identity beyond one period (PR #9 Codex review) | Wall fixed by the first pass for exact arithmetic; completed here: exact value and wall beyond two reflections |
+
+### What the first pass got right, and what it left open
+
+| First-pass claim | Checked how | Result |
+| --- | --- | --- |
+| Liveness as agent identity closes the review's ghost | The review's reproduction through the paste import (Opinion, seed `ghost-user-path`, 3 ticks, `e000050` stripped of `Position2D` and its `opinion-space` entry) | `efee56d` imports it and replaces the run; `f47b720` refuses ("Opinion agent e000050 is missing Position2D") and keeps the run at tick 3 |
+| 86 of its tests fail on `efee56d` | Its `engine.modelValidity.test.ts` copied into an `efee56d` worktree | 86 of 109 fail (one test was added after its count of 108) |
+| No production template keeps legitimate non-agent entities | Every `createInitialWorld`, system, and intervention read | Confirmed: only Predator-Prey creates entities (births, the add-prey intervention), always complete and placed; destroyed entities are not live and keep only inert components |
+| `entityTypeDefinitions` is presentation metadata | Every template's definitions and every consumer read | Confirmed (see finding 1) |
+| Configuration comparison refuses geometry, variant, and the huge grid | Its tests, and new tests on every path | Confirmed on the direct path; the paste and Worker paths were tested for some cases only, now for all |
+| Trajectories unchanged | Final-export hashes after 60 ticks of 16 workloads on all three trees | 16 of 16 identical on `efee56d`, `f47b720`, and the final tree |
+| Far-out reflection "ends at the same wall as the step-by-step loop" | Differential against the floating-point loop and against exact arithmetic | True only in exact arithmetic; its test used only coordinates where the loop is exact (finding 4) |
+| Flocking's two boundary copies are kept because one authority "would touch movement, neighbor-index, and projection code" | Every reader of either copy traced | Inaccurate: neighbour search, normalization, and the frame already read the space; only movement read the parameter (finding 2) |
+| Position agreement | — | Not implemented; carried as P3 (finding 3) |
+| Test coverage | — | No consistency oracle; no bounced-velocity test |
+
+### Finding 1 — Agent role — VERIFIED; ORACLE ADDED
+
+**Role per template.** Agent identity is liveness in every production template: no component, which tampering
+could remove, decides who is checked. `assertAgentRole` in each template's `validateWorld` is the one authority
+for what an agent holds and where it is; the new `placements` declaration (finding 3) states which component
+mirrors which space.
+
+| Template | Kinds of agent, told apart by | Required components | Spaces (placement component) | Non-agent entities |
+| --- | --- | --- | --- | --- |
+| Epidemic | one kind; susceptible, infected, recovered are `InfectionState` values | Position2D, Velocity2D, InfectionState | epidemic-space (Position2D) | none |
+| Opinion | one kind | Position2D, OpinionState; `socialLearning` adds OpinionSocialLearningState, `default` forbids it | opinion-space (Position2D) | none; information sources are parameters |
+| Predator-Prey | prey and predator, by `Species.kind` | Position2D, Velocity2D, Species; predators also Energy, prey never | predator-prey-space (Position2D) | none |
+| Flocking | one kind; groups by `BoidGroup` | Position2D, Velocity2D, BoidState; `groupAware` adds BoidGroup (with the configured group count), `default` forbids it | flocking-space (Position2D) | none |
+| Schelling | group A and B, by `GroupIdentity.group` | PositionGrid, GroupIdentity, SatisfactionState | schelling-grid (PositionGrid) | none; empty cells are not entities |
+| Forest Fire | one cell per grid cell; cell states are `ForestFireCellState` values | ForestFireCellPosition, ForestFireCellState | forest-fire-grid (ForestFireCellPosition, as `{x: column, y: row}`) | none |
+| Neural | neurons | Position2D, NeuralNeuronState | neural-excitation-field (Position2D), neural-excitation-runtime-network (node) | none; synapses and output assemblies are globals |
+
+**Why not `entityTypeDefinitions`.** Its "types" mix entities, states, and cells: Epidemic's S/I/R and Forest
+Fire's four cell types are values of one component, Schelling lists `emptyCell`, which is no entity, and
+Neural lists synapses and output assemblies, which are globals. It lists variant-only components
+unconditionally (Opinion's social-learning state, Flocking's `BoidGroup`), and it says neither how a type is
+recognised nor where it is placed. Its consumers are the Builder's schema/template fit reports
+(`supportedEntityKinds`, `supportedEntityTypeIds`, `supportedComponentTypeIds`) and template-shape
+validation, so making it a runtime rule would change what fit reports say. It is left as it is.
+
+**Consistency oracle (new).** A seeded property test (`engine.trustBoundary.test.ts`) runs 250 cases for each
+of nine template variants (Epidemic; Opinion default and `socialLearning`; Predator-Prey; Flocking default and
+`groupAware`; Schelling; Forest Fire; Neural). Each case leaves the snapshot unchanged (a control), removes a
+live entity entirely, or strips one to three live agents of a random non-empty subset of their role's
+components and space memberships, then restores it. Every accepted world is stepped once and must show one
+agent set to liveness, to each required component's holders, to each space's members, to the count metrics
+(S + I + R, prey + predators, the boid count, group A + B), and to the Flocking frame. Every refusal must be a
+typed `SimulationError`, never a crash. On `efee56d` it fails for 7 of the 9 variants: for example Opinion
+case 1, an agent stripped of `Position2D` and its space entry, was accepted with 39 `Position2D` holders among
+40 live agents. Forest Fire and Neural pass there, because their cell-count and synapse checks already refused
+this class.
+
+The role check stays per tick, as the first pass made it: it replaced Phase 3's per-tick membership check,
+Predator-Prey's agent set changes every tick, and an external command batch that strips or half-creates an
+agent must fail the run under the fail-closed contract. Per-tick time is at parity with `efee56d` (see
+verification).
+
+The oracle found one instance the review did not list: on `efee56d` a Schelling agent stripped of
+`GroupIdentity` (the component Schelling identified agents by) and of its cell was accepted while it kept
+`SatisfactionState` (Schelling case 19). The first pass's liveness role already refuses it.
+
+The review's exact reproduction is pinned as a test through the paste import: Opinion with seed
+`ghost-user-path`, three ticks, `e000050` stripped of `Position2D` and of its `spaces[0]` entry. It is refused
+with "Import failed: Opinion agent e000050 is missing Position2D", and the run stays at tick 3 and keeps
+stepping. `efee56d` accepted it.
+
+### Finding 2 — Configuration agreement — VERIFIED ON EVERY PATH; FLOCKING HAS ONE BOUNDARY AUTHORITY
+
+**Paths and atomicity (new tests).** Each case below is refused twice: by a direct restore into a live engine
+of the declared model, and by the template's user path, which is the main-thread paste import or, for
+Flocking, the production Worker runtime (`ProductionFlockingRuntime` → `WorkerRuntimeDriver` →
+structured-clone transport → `RuntimeWorkerHost` → `RuntimeSession`). After every refusal the current run is
+still in place at the same tick: byte-identical export (direct), the same engine object (paste), or the same
+run id and generation with one unterminated Worker (Worker). It then steps.
+
+| Case | Templates | Paths |
+| --- | --- | --- |
+| Continuous width ×0.25 and ×4, height ×0.5, boundary flipped | Opinion, Epidemic, Predator-Prey, Neural; Flocking | direct + paste; direct + Worker |
+| Grid rows +1, columns +5, boundary flipped | Schelling, Forest Fire | direct + paste |
+| The review's Schelling snapshot declaring a 30,000 × 30,000 grid (416,211 characters) | Schelling | direct + paste |
+| A `socialLearning` world declared `default`, and the reverse | Opinion | direct (the engine's model) + paste (the snapshot's metadata) |
+| A `groupAware` world declared `default`, and the reverse | Flocking | direct + Worker (the runtime envelope) |
+| A space boundary that differs from the `boundaryMode` parameter, and a declared parameter that differs from the world | Flocking | direct + Worker |
+
+All 11 tests fail on `efee56d`. Nothing before the comparison does work proportional to a declared extent:
+`World.fromSnapshot` allocates no cells, the kernel invariants read members only, and the reference world is
+built from the declared parameters, which bound every extent (Schelling 10–80 × 10–100 with at most 6,000
+cells, Forest Fire 10–160 × 10–120, continuous worlds fixed). No new parameter bounds were needed.
+
+**Flocking boundary authority (new repair).** Movement read the `boundaryMode` parameter; neighbour search,
+position normalization (`space.normalizePosition`, used by wrap movement and by every stored location), and
+the frame read the space's mode. Restore already required the two to agree, but execution still had two
+authorities: in a bounce space with a wrap parameter a boid was reflected by the space's normalization while
+its velocity kept its sign. Movement now reads the space's mode as well
+(`flocking.template.ts`, `createBoidMovementSystem`), so the space is the single runtime authority and the
+parameter only declares the mode the space is built with. The snapshot format is unchanged and so is every
+trajectory (16 of 16 hashes). The other configuration values held twice are not unified: Opinion's and
+Flocking's behavior markers, Flocking's group count, and Neural's queue bound are world globals that systems
+or validation read, and removing them would change the snapshot format, so restore keeps comparing them with
+the declared configuration. Forest Fire's spread reads the parameter and its grid's mode only normalizes cells
+that never move, so it has no executable hybrid. Test: a boid crosses the edge with the space and the
+parameter set to different modes, and moves by the space's mode; it fails on `efee56d` and on `f47b720`.
+
+### Finding 3 — Position component versus space position — FIXED
+
+**Finding.** A snapshot could give an agent a position component that disagrees with its location in the
+space. Neighbour and region queries, interventions, and the main-thread renderer read the space; movement,
+Flocking's sensing, and the Flocking frame read the component. Templates that move rewrite both from the
+component on the next tick, so the agent has two positions for one tick; Opinion and Neural agents never
+move, so they keep two positions for the whole run.
+
+**Reproduction on this code (before the repair).** A genuine snapshot with one agent's `Position2D` moved by a
+quarter of the extent, or with its space location moved instead, is accepted by `efee56d` and by `f47b720` for
+Opinion, Epidemic, Predator-Prey, Neural, and Flocking. Schelling and Forest Fire already refused, through the
+per-tick checks in their `validateWorld`.
+
+**Root cause.** The position is held twice and every system that moves an entity writes both copies, but
+nothing compared them where a world enters from outside. Exact equality is not the relation either, which is
+why Phase 3 left this open. Wrap normalization `((x % w) + w) % w` is not the identity on in-range values (at
+width 100, 0.1 becomes 0.09999999999999432), and it is not idempotent: a coordinate in `[0, w)` lands on the
+grid of `[w, 2w)` and stays there, but one below 0 can land off it, so a second normalization moves it again
+(about 10% of a million sampled coordinates). Restore normalizes every stored location once more. Measured on
+the five continuous-space templates over 60 ticks, three seeds, every behavior mode, and Flocking's three
+boundary modes: live worlds always held space location = normalize(component) (0 exceptions in 275,074
+checks); after a restore, 3 of 33,514 Predator-Prey locations had moved one unit in the last place (newborns
+placed just below 0), and all of them equalled normalize(normalize(component)).
+
+**Repair.**
+- `SimulationTemplate.placements` declares, per template, which component holds the same location as which
+  space (with a mapping where shapes differ: Forest Fire's `{x, y}` cell position).
+- `assertPlacementsAgree` (`kernel/Invariants.ts`) requires every member of a placement space to hold the
+  component, and the component and the stored location to agree after normalizing both twice in the space's
+  geometry, a form no further normalization changes. Different places never compare equal.
+- `assertModelState` is the single validator for a world at the trust boundary. Build runs kernel
+  invariants, the template's rules and agent role, and placements; restore also compares the world with the
+  one its declared configuration builds, before the template's rules. The per-tick path is unchanged (kernel
+  invariants and the template's rules): no system or intervention can separate a component from its location,
+  so placements add no per-tick cost. At build and restore the check walks the live entities with the space's
+  own lookup and reads components in place: medians of 25 runs pinned to one core are 14.4 ms for Forest
+  Fire 160 × 120 (19,200 cells, the largest supported world), 3.8 ms for Schelling 60 × 100, and at most 0.5 ms
+  for the continuous-space templates. (The first version serialized the space and copied every component:
+  33–50 ms at the same size.)
+
+**Tests (`engine.trustBoundary.test.ts`, 8).** For each continuous-space template, a moved component and a
+moved space location are refused on the direct path and on the paste or Worker path, keeping the run; both
+grid templates refuse a moved cell position through their existing checks; and a genuine position whose
+normalization moves under a second normalization, as a newborn's can, is accepted, restores, re-exports, and
+restores again. The 5 continuous-space tests fail on `efee56d` and on `f47b720`.
+
+### Finding 4 — Far-out reflection wall identity — COMPLETED
+
+**How it was found.** Phase 3 made `reflectCoordinate` terminate by reducing far-out coordinates by whole
+periods. The independent Phase 3B review then confirmed termination with an 84,000-case bounce fuzz that
+checked termination and range, not the wall the reflection reports. The wall defect was found afterwards by
+the automated Codex review of PR #9 (the first pass's P2-A). The first pass fixed the reported case
+(`reflectCoordinate(-250, 100)` now ends at the low wall), but its test used only coordinates at which the
+step-by-step loop's arithmetic is exact (multiples of `max/8`), and its comment claimed agreement with "the
+step-by-step loop" in general.
+
+**Reproduction on `f47b720`.** Against the floating-point wall-by-wall loop, over 249,018 coordinates (random
+ones up to ten periods beyond either wall, every wall crossing out to twenty periods ± 6 units in the last
+place, and running sums of `max`, for 11 extents), the reported wall differed in 3,086 cases, all near walls:
+`-3974.8` at `max = 99.37` gave `high, 0` where the loop gives `low, 3.3e-12`. `-3974.8` is exactly twenty
+periods, so its exact reflection is `0` off the high wall, and it is the loop that drifted. Against wall-by-wall
+reflection in exact (BigInt) arithmetic over 100,139 coordinates (up to ten periods beyond either wall, 13
+extents), `f47b720`'s wall was always right and its value was not exact in 4,183. The floating-point loop's own
+wall differed from the exact one in 841 of the 38,541 coordinates where its arithmetic rounded.
+
+**Root cause.** Beyond two reflections the floating-point loop is not a reliable reference: every step rounds,
+so it drifts (at `1e17` with `max = 100` each step removes 96, not 100) and near a wall it can end at the other
+one. The first pass's reduction got the exact wall but still reflected the reduced coordinate with up to
+three roundings.
+
+**Repair (`spaces/Space.ts`).** Within two reflections (`[-2max, 3max]`) the original loop runs unchanged.
+Beyond, each period `2max` is one reflection off each wall, so the result is the remainder of `|value|` after
+whole periods, reached off the low wall, or its mirror `2max - remainder`, reached off the high wall (a zero
+remainder ends at 0 off the high wall). The remainder is exact (fmod) and so is the mirror (Sterbenz's lemma),
+so value and wall are exactly those of wall-by-wall reflection, whose result is always representable.
+
+**Exactness that holds.**
+- Within two reflections: value and wall bit-identical to the original loop, as before, and the wall is
+  always the exact one.
+- Beyond: value and wall exactly those of wall-by-wall reflection without rounding, and therefore bit-identical
+  to the floating-point loop wherever that loop's arithmetic is exact (61,598 such coordinates in the sample,
+  0 differences).
+- Deliberately not reproduced: the floating-point loop's rounding drift beyond two reflections, including the
+  841 sampled cases where it ends at the wrong wall. The review asked for the loop's wall "wherever that loop
+  terminates"; the loop terminates at `1e17` with `max = 100`, but after about 10^15 drifting steps. Matching
+  it there would contradict the exact reflection and the Phase 3 hostile-coordinate test, which requires the
+  exact-remainder value, so this pass holds the wall to exact wall-by-wall reflection instead. This differs
+  from the literal wording, deliberately.
+
+**Tests.** `engine.resourceBounds.test.ts`: up to ten periods beyond either wall for eight extents
+(including non-dyadic ones: 99.37, 0.1, 1/3, π, 123,456.789), random coordinates plus every wall crossing ± 6
+units in the last place, compared exactly with the BigInt reference (value beyond two reflections, wall
+everywhere), with bit-identity to the floating-point loop within two reflections and wherever its arithmetic
+is exact; it also asserts that the set reaches coordinates where the floating-point loop drifts to the other
+wall. `template.flocking.test.ts`: 400 boids bounced from up to ten periods out turn by the parity of their
+exact reflection count (an odd count reverses the outward heading). Both fail on `efee56d`; the differential
+also fails on `f47b720` (value exactness).
+
+### Second pass — Tests
+
+| File | Tests | Fail on `efee56d` | Fail on `f47b720` |
+| --- | ---: | ---: | ---: |
+| `engine.trustBoundary.test.ts` (new) | 30 | 24 | 5 |
+| ↳ finding 1: consistency oracle, nine variants, and the review's exact reproduction | 10 | 8 | 0 |
+| ↳ finding 2: configuration on every path | 11 | 11 | 0 |
+| ↳ finding 3: placements | 8 | 5 | 5 |
+| ↳ Flocking round trips: every behavior mode × preset × boundary through the Worker | 1 | 0 | 0 |
+| `engine.resourceBounds.test.ts`: exact reflection differential (new) | 1 | 1 | 1 |
+| `template.flocking.test.ts`: one boundary authority; bounced velocity follows reflection parity (new) | 2 | 2 | 1 |
+
+Supporting tests that already passed on the older trees (the Forest Fire and Neural oracles, the grid
+placement cases, the newborn position, the round trips) pin behavior that was already right and guard against
+an over-strict check. The first pass's tests stay unchanged: `engine.modelValidity.test.ts` (109, of which 86
+fail on `efee56d`) and its reflection test. No existing test was changed, skipped, or weakened.
+
+### Second pass — Mutation sensitivity
+
+Each mutation was applied alone to the final code and nine suites were run: `engine.trustBoundary`,
+`engine.modelValidity`, `engine.referentialIntegrity`, `engine.resourceBounds`, `template.flocking`,
+`template.system`, `simulationStore.reset`, `runtime.performanceArchitecture`, and
+`productionRuntimeRecovery` (297 tests). Each file was restored and compared by SHA-256, and the
+source tree's checksums were compared before and after the whole run.
+
+| Mutation (applied alone) | Failing tests | Caught by |
+| --- | ---: | --- |
+| 1 Role required-component check disabled | 52 | `modelValidity` 39 (each required component removed alone); `trustBoundary` 7 (the oracle for six variants and the review's exact reproduction); `referentialIntegrity` 6 |
+| 2 A stripped, unplaced agent allowed: agents identified by their first required component, as before Phase 3B | 61 | `modelValidity` 48 (every ghost); `trustBoundary` 8 (the oracle for seven variants and the exact reproduction); `referentialIntegrity` 5 |
+| 3 Continuous extent check skipped | 12 | `trustBoundary` 5 (continuous geometry on every path); `modelValidity` 7 |
+| 4 Grid extent check skipped | 8 | `trustBoundary` 3 (grid geometry and the 30,000 × 30,000 grid on every path); `modelValidity` 5 |
+| 5 Boundary comparison skipped | 17 | `trustBoundary` 8 (every boundary case, including the Flocking hybrid, on every path); `modelValidity` 9 |
+| 6 Variant agreement skipped (configuration globals not compared) | 9 | `trustBoundary` 2 (Opinion and Flocking declarations on every path); `modelValidity` 7 |
+| 7 Validation moved after the import commit | 26 | `trustBoundary` 18 (every direct-path refusal: the run had changed); `referentialIntegrity` 6; `modelValidity` 2 |
+| 8 Component/space position agreement dropped | 5 | `trustBoundary` 5 (every continuous-space placement test) |
+| 9 `lastWall` parity handling reverted to the `efee56d` reduction | 3 | `resourceBounds` 2 (the exact differential and the first pass's wall test); `template.flocking` 1 (bounced-velocity parity) |
+| 10 Flocking boundary authority re-split: movement reads the parameter again | 1 | `template.flocking` 1 (the one-authority movement test) |
+
+All 10 were detected, all 10 files were restored byte for byte, and the source tree's checksums matched
+before and after. Mutation 10 is caught by one test only: restore refuses every world whose two boundary
+copies disagree, so the movement test, which builds such a world directly, is the only place a re-split
+shows.
+
+### Second pass — Verification (final commits; Node 24.16.0, npm 11.13.0)
+
+| Check | Result |
+| --- | --- |
+| `npm run verify` (canonical local and CI gate) at `9cc0147` | PASS, exit 0 |
+| ↳ `npm run typecheck` | PASS |
+| ↳ `npm run lint` (`lint:types`, `lint:architecture`) | PASS; "Architecture lint passed (397 production TypeScript files checked)" |
+| ↳ `npm test` (full Vitest) | PASS; 102 files / 1,059 tests (second-pass baseline 101 / 1,026; +33 new, 0 removed or changed) |
+| ↳ `npm run build` | PASS; Next.js 15.5.26, 23/23 static pages |
+| `npm run build`, then `CI=true npm run test:ui`, as the CI e2e job runs them (full Playwright + Axe against the production server) | 220 of 220 passed in 8.6 min; 0 failed, 0 retried, 0 flaky; exit 0 |
+| `npm audit` / `npm audit --audit-level=high` | 0 vulnerabilities / 0 vulnerabilities, exit 0 |
+| Trajectory hashes, 16 workloads: the final export after 60 ticks of every template's default run and of Flocking in wrap, bounce, and clamp at 20, 160, and 500 boids | 16 of 16 identical on `efee56d`, `f47b720`, and `9cc0147` |
+| `npm run perf:simulation`, `9cc0147` against `efee56d`, pinned to one core, three interleaved runs each (median of the mean step) | Flocking 500: 26.47 → 26.56 ms (+0.10 ms, +0.4%), of which validation and overhead 3.03 → 2.82 ms. Forest Fire 80 × 60, the script's largest Forest Fire case: 15.92 → 15.41 ms (−0.52 ms, −3.3%), validation and overhead 12.48 → 11.94 ms |
+| The same, unpinned, three interleaved runs each at `5688f9c` (identical per-step code) | Flocking 500: 38.23 → 38.06 ms (−0.4%); Forest Fire 80 × 60: 25.32 → 24.69 ms (−2.5%) |
+| Forest Fire 160 × 120, the largest supported world: median step over 60 ticks, pinned, five rotated rounds (per-step code identical to `9cc0147`) | `efee56d` 110.6 ms, `f47b720` 108.2 ms, final 108.7 ms (−1.9 ms, −1.7%) |
+| Placement check alone, at build and restore (pinned, median of 25) | Forest Fire 160 × 120: 14.4 ms; Schelling 60 × 100: 3.8 ms; Epidemic 1,000: 0.51 ms; Opinion 1,000: 0.32 ms; Flocking 500: 0.19 ms; Neural 250: 0.07 ms |
+| Temporary mutations | 10 of 10 detected on `9cc0147`; all restored byte for byte; source-tree checksums unchanged |
+| CI workflow, Playwright configuration, snapshot format | unchanged |
+| GitHub CI | Runs on the PR #9 push of these commits; its result is reported with the push |
+
+Measurement note: this machine is a hybrid-core laptop (Intel Core Ultra 7 258V) under WSL2, where separate
+unpinned runs of the same tree differed by up to ±40%. Per-step comparisons are therefore pinned to one core
+and interleaved between trees; the pinned runs agree within about 2%. Per-step time is at parity: the new
+checks run at build and restore only.
+
+### Remaining risks after the second pass (no P0 or P1 known)
+
+New, found during this pass and not fixed here:
+- P2: Neural structure held in globals is not compared with the configuration. Synapse topology (also held by
+  the runtime network) is the listed "Neural topology duplication" non-goal. The decision readout's
+  output-assembly membership is derived from the parameters and neuron ids, but lives inside the evolving
+  `neuralDecisionReadout` global and is checked only for shape; a tampered membership changes the readout's
+  observational outputs (choice, confidence, RPS payoff), not neuron dynamics. It belongs with the Neural
+  structure work.
+- P3: restore normalizes every stored location again, and wrap normalization is not idempotent, so a
+  Predator-Prey newborn placed just below 0 restores one unit in the last place away (3 of 33,514 sampled
+  locations). An export and import between its birth and its next move is therefore not bit-exact for that
+  location; the next movement rewrites it. The placement check accepts it on purpose.
+- P3: placements are checked at build and restore only. A raw `moveEntity` or `setComponent` command from
+  the runtime port could separate an agent's two positions until its next move; no production system or
+  intervention issues one. Schelling and Forest Fire also check every tick.
+
+Carried forward unchanged from the first pass: an evolved snapshot's declared initialization preset cannot be
+verified, only its structural consequences; restore builds one extra tick-0 world; and the Phase 3 list (a
+runaway Predator-Prey run past about tick 900 exceeds the import bounds; a Flocking import is parsed three
+times on the main thread; immersive-prototype specs wait on wall-clock progress; the GitHub observation of the
+E2E repair; and the others listed there). Template versioning and locale-independent ordering are the next
+PR's.
 
 ## Phase 3B — Remediation
 
