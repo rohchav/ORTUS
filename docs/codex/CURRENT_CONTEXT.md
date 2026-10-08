@@ -1,6 +1,6 @@
 # ORTUS Current Context
 
-Last updated: 2026-09-22 for S2 Visual Systems Workbench closure
+Last updated: 2026-10-07, resynced to `c4c5980` (hardening Phases 1–3B and layered agent instructions merged after S2 closure)
 
 This file is continuation context, not canonical project authority. Use `docs/CAPABILITIES.md`, `docs/ARCHITECTURE.md`, `docs/SCIENTIFIC_MODEL.md`, and `docs/ROADMAP.md` after code/tests when current status or terminology conflicts with historical detail below.
 
@@ -30,7 +30,11 @@ This file is continuation context, not canonical project authority. Use `docs/CA
 - S1B Starter -> Remix Bridge Audit is complete.
 - S2 Visual Systems Workbench is complete; its primary Workbench, cross-template explanation, materials/questions and contextual S1 controls are implemented. Three rendered passes and direct keyboard/mobile/reduced-motion checks are accepted; the secondary-editor layout repair also passed its browser matrix.
 - S2B is next and unstarted. S3 remains blocked; SA0/O1/E1/I2 are not begun.
+- Hardening Phase 1 (forensic investigation, `28dca70`), Phase 2 (execution, `2bb7bdc`; GitHub CI evidence `cd97cae`), Phase 3 and Phase 3B (remediation, PR #9, merged as `80d9060`) are complete. `docs/engineering/HARDENING.md` is the ledger; it records no known P0 or P1.
+- Layered agent instructions (PR #10, merged as `c4c5980`) are complete: `AGENTS.md` holds standing invariants only, `CLAUDE.md` adds Claude Code workflow, path-scoped rules live in `.claude/rules/`, the audit procedure is the `ortus-audit` skill, and the retired rule log moved to `docs/history/AGENTS_RULE_LOG_THROUGH_I1.md`.
 - I2 through I5B are not an unconditional contiguous sequence; C4 has no I5B dependency.
+
+Post-S2 resync (2026-10-07). After S2 closed at `8114043`, the hardening program ran directly on `main` and then through PRs. Phase 1 (`28dca70`) is a forensic investigation recorded only in `docs/engineering/HARDENING.md`. Phase 2 (`2bb7bdc`) changed kernel tick/command failure semantics, space-kind safety, hostile-input depth bounds, the Flocking Worker detached-buffer read, CI enforcement, deep-clone cost, and scoped application-state errors; it also narrowed `StarterRemixWorkspace.runRemix()` so that only a `setup`-area error counts as a rejected apply. The subjects of `28dca70` ("Implement feature X…") and `2bb7bdc` ("Refactor neural excitation…") do not describe their contents; HARDENING records this, and history was not rewritten because it is published. Phase 3 and Phase 3B (PR #9) fixed snapshot referential integrity, hostile-import resource bounds, terminating bounce reflection, Flocking failed-import recovery, Reset preserving the accepted model variant, ghost agents, and snapshot/configuration identity, and moved the required E2E suite onto the production server with flaky results failing CI. The Phase 3B ledger reports `npm run verify` passing with `101 files / 1,026 tests`, lint over `397` production TypeScript files, a `23`-page build, and `CI=true npm run test:ui` `220/220` with zero retries or flaky results. PR #10 then layered the agent instructions. Open hardening items (P2 Neural topology not compared with its configuration; the still-missing GitHub observation of the P2-4 E2E repair; and several P3 items) are listed under "Remaining risks after Phase 3B" in HARDENING and are not S2B scope. ROADMAP status is unchanged by the hardening work: S2 complete, S2B next and unstarted.
 
 A0 establishes four canonical sources, the Model/Run-Observation/Research-Representation/Experience planes, explicit fundamental-versus-derived objects, a strict authority map, SystemView graph direction, post-PERF1B branch gates, and a passing scoped lint/static architecture baseline. It implements no `ModelDefinition`, `RuntimePlan`, `CanonicalObservation`, SystemView runtime, research persistence, model family, or production Worker migration.
 
