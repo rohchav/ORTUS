@@ -5,6 +5,16 @@ paths:
   - "src/components/atlas/**"
   - "src/components/researchWorld/**"
   - "src/lib/capabilityGuidance.ts"
+  - "src/lib/labFoundation.ts"
+  - "src/lib/labFoundation.test.ts"
+  - "src/lib/atlasFoundation.ts"
+  - "src/lib/atlasFoundation.test.ts"
+  - "src/lib/behavioralLandscapeFoundation.ts"
+  - "src/lib/behavioralLandscapeFoundation.test.ts"
+  - "src/lib/landscapeProbePlanningFoundation.ts"
+  - "src/lib/landscapeProbePlanningFoundation.test.ts"
+  - "src/lib/researchDestinations.ts"
+  - "src/lib/researchDestinations.test.ts"
   - "src/simulation/atlasPreview/**"
 ---
 

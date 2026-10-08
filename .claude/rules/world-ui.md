@@ -2,6 +2,12 @@
 paths:
   - "src/app/world/**"
   - "src/components/World*.tsx"
+  - "src/components/AppShell.tsx"
+  - "src/components/RunSettingsPanel.tsx"
+  - "src/components/ParameterPanel.tsx"
+  - "src/components/InterventionPanel.tsx"
+  - "src/components/RunComparisonPanel.tsx"
+  - "src/components/TimelineControlStrip.tsx"
   - "src/components/SimulationCanvas.tsx"
   - "src/components/ExperimentPanel.tsx"
   - "src/components/ScenarioBuilderPanel.tsx"
