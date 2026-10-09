@@ -27,7 +27,7 @@ const orientationContracts = {
   },
   Workshop: {
     id: "workshop",
-    purpose: "Take apart working systems and remix supported pieces.",
+    purpose: "Take apart working systems and remix supported properties.",
     boundary: "A valid structure is not automatically runnable.",
     technicalTerm: "ortus.modelSchema structural artifact."
   },

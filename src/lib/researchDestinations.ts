@@ -54,7 +54,7 @@ export const researchDestinations: readonly ResearchDestinationDefinition[] = Ob
     id: "workshop",
     label: "Workshop",
     route: "/builder",
-    purpose: "Take apart working systems and remix supported pieces.",
+    purpose: "Take apart working systems and remix supported properties.",
     availability: "available",
     navigationOrder: 4
   }

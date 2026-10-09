@@ -51,7 +51,7 @@ export const routeOrientations: readonly RouteOrientationDefinition[] = [
   {
     destinationId: "workshop",
     routeName: "Workshop",
-    purpose: "Take apart working systems and remix supported pieces.",
+    purpose: "Take apart working systems and remix supported properties.",
     startLabel: "Start here",
     startHere: "choose an example, inspect its pieces, or browse the systems materials shelf.",
     boundary: "A valid structure is not automatically runnable.",
