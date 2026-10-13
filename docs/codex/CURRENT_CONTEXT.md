@@ -1,6 +1,6 @@
 # ORTUS Current Context
 
-Last updated: 2026-09-22 for S2 Visual Systems Workbench closure
+Last updated: 2026-10-13 for S2B Visual Systems Workbench Audit closure (resynced to `c4c5980` on 2026-10-07)
 
 This file is continuation context, not canonical project authority. Use `docs/CAPABILITIES.md`, `docs/ARCHITECTURE.md`, `docs/SCIENTIFIC_MODEL.md`, and `docs/ROADMAP.md` after code/tests when current status or terminology conflicts with historical detail below.
 
@@ -29,8 +29,13 @@ This file is continuation context, not canonical project authority. Use `docs/CA
 - S1 Starter -> Remix Bridge is complete.
 - S1B Starter -> Remix Bridge Audit is complete.
 - S2 Visual Systems Workbench is complete; its primary Workbench, cross-template explanation, materials/questions and contextual S1 controls are implemented. Three rendered passes and direct keyboard/mobile/reduced-motion checks are accepted; the secondary-editor layout repair also passed its browser matrix.
-- S2B is next and unstarted. S3 remains blocked; SA0/O1/E1/I2 are not begun.
+- S2B Visual Systems Workbench Audit is complete; its record is `docs/product/VISUAL_SYSTEMS_WORKBENCH_AUDIT.md`.
+- SA0 (Scientific Architecture Contract Pass) is next and unstarted and needs its dedicated prompt. S3 remains blocked; O1/E1/I2 are not begun.
+- Hardening Phase 1 (forensic investigation, `28dca70`), Phase 2 (execution, `2bb7bdc`; GitHub CI evidence `cd97cae`), Phase 3 and Phase 3B (remediation, PR #9, merged as `80d9060`) are complete. `docs/engineering/HARDENING.md` is the ledger; it records no known P0 or P1.
+- Layered agent instructions (PR #10, merged as `c4c5980`) are complete: `AGENTS.md` holds standing invariants only, `CLAUDE.md` adds Claude Code workflow, path-scoped rules live in `.claude/rules/`, the audit procedure is the `ortus-audit` skill, and the retired rule log moved to `docs/history/AGENTS_RULE_LOG_THROUGH_I1.md`.
 - I2 through I5B are not an unconditional contiguous sequence; C4 has no I5B dependency.
+
+Post-S2 resync (2026-10-07). After S2 closed at `8114043`, the hardening program ran directly on `main` and then through PRs. Phase 1 (`28dca70`) is a forensic investigation recorded only in `docs/engineering/HARDENING.md`. Phase 2 (`2bb7bdc`) changed kernel tick/command failure semantics, space-kind safety, hostile-input depth bounds, the Flocking Worker detached-buffer read, CI enforcement, deep-clone cost, and scoped application-state errors; it also narrowed `StarterRemixWorkspace.runRemix()` so that only a `setup`-area error counts as a rejected apply. The subjects of `28dca70` ("Implement feature X…") and `2bb7bdc` ("Refactor neural excitation…") do not describe their contents; HARDENING records this, and history was not rewritten because it is published. Phase 3 and Phase 3B (PR #9) fixed snapshot referential integrity, hostile-import resource bounds, terminating bounce reflection, Flocking failed-import recovery, Reset preserving the accepted model variant, ghost agents, and snapshot/configuration identity, and moved the required E2E suite onto the production server with flaky results failing CI. The Phase 3B ledger reports `npm run verify` passing with `101 files / 1,026 tests`, lint over `397` production TypeScript files, a `23`-page build, and `CI=true npm run test:ui` `220/220` with zero retries or flaky results. PR #10 then layered the agent instructions. Open hardening items (P2 Neural topology not compared with its configuration; the still-missing GitHub observation of the P2-4 E2E repair; and several P3 items) are listed under "Remaining risks after Phase 3B" in HARDENING and are not S2B scope. ROADMAP status is unchanged by the hardening work: S2 complete, S2B next and unstarted.
 
 A0 establishes four canonical sources, the Model/Run-Observation/Research-Representation/Experience planes, explicit fundamental-versus-derived objects, a strict authority map, SystemView graph direction, post-PERF1B branch gates, and a passing scoped lint/static architecture baseline. It implements no `ModelDefinition`, `RuntimePlan`, `CanonicalObservation`, SystemView runtime, research persistence, model family, or production Worker migration.
 
@@ -79,6 +84,16 @@ S2: COMPLETE
 S2B: NEXT / UNSTARTED
 PRIMARY WORKSHOP: VISUAL SYSTEMS WORKBENCH
 FORM-FIRST GUIDED/ADVANCED: SECONDARY STRUCTURAL TOOLING
+GENERAL EXECUTABLE COMPOSITION: NOT IMPLEMENTED
+UR0 HUMAN COMPREHENSION GATE: PENDING
+```
+
+S2B completion (2026-10-13): `docs/product/VISUAL_SYSTEMS_WORKBENCH_AUDIT.md` records the independent audit, which started at `4a0a1e7`. It found no P0 or P1. Two P2 families were observed and fixed with failing-first tests. First, relationship-trace buttons exposed run-together accessible names ("PositionNearby neighbors"); a visually hidden " to " now separates the labels (`cbede3d`). Second, orientation copy said Workshop could "Change what it can do" and "remix supported pieces"; it now says Remix changes supported properties (`6adf036`). New contract tests prove identical same-seed replay of a modified derivative for all eleven runnable Starters, paused tick-0 acceptance with the modification and derivative lineage, no main-thread Flocking engine, and no engine/store/Worker/storage authority in the Workbench presentation layer. Hostile `/builder` and `/world` Remix queries fail closed. The thirteen P3 items are recorded, not fixed; they include the S1-era `/builder` promise-like-key guard outside the middleware matcher, the stale active-World handoff risk, the narrow material Back state, the shared-shell 320 px header overlap, and loose explanatory wording. No runtime, Worker, simulation, or kernel file changed. Final gates passed: typecheck; lint over `397` production TypeScript files; `103 files / 1,034` unit tests; a `23`-page production build; and `CI=1 npm run test:ui` `221/221` in 13.4m on the production server, with zero retries, flaky results, failures or skips. `git diff --check` is clean. `perf:runtime` was not required. Screen reader, forced colors, real browser zoom, touch hardware, and participant comprehension remain unverified.
+
+```text
+S2B: COMPLETE
+SA0: NEXT / UNSTARTED
+S3: BLOCKED
 GENERAL EXECUTABLE COMPOSITION: NOT IMPLEMENTED
 UR0 HUMAN COMPREHENSION GATE: PENDING
 ```
@@ -349,12 +364,13 @@ UR0R: complete.
 S1 Starter -> Remix Bridge: complete.
 S1B Starter -> Remix Bridge Audit: complete.
 S2 Visual Systems Workbench: complete.
-S2B Visual Systems Workbench Audit: next / unstarted.
+S2B Visual Systems Workbench Audit: complete.
+SA0 Scientific Architecture Contract Pass: next / unstarted.
 I2 through I5B are not an unconditional contiguous sequence. C4 has no I5B dependency.
 
-Completed implementation/audit sequence: UX6B -> GW9 -> GW9B -> R1 -> R1B -> R2 -> R2B -> C1 -> C1B -> C2 -> C2B -> C3 -> C3B -> I0 -> I0B -> PERF1 -> PERF1B -> A0 -> A0B -> I1 -> I1B -> UR0 technical/expert -> UR0R -> S1 -> S1B -> S2. The broader UR0 human gate remains pending.
+Completed implementation/audit sequence: UX6B -> GW9 -> GW9B -> R1 -> R1B -> R2 -> R2B -> C1 -> C1B -> C2 -> C2B -> C3 -> C3B -> I0 -> I0B -> PERF1 -> PERF1B -> A0 -> A0B -> I1 -> I1B -> UR0 technical/expert -> UR0R -> S1 -> S1B -> S2 -> S2B. The broader UR0 human gate remains pending.
 
-S2 is complete. S2B is the next independent audit and remains unstarted. Do not start S2B, SA0, I2, C4, S3, O1/E1, composition runtime, SystemView runtime, multiscale runtime, adaptive-controller generalization, Lab/Atlas persistence, E3, F1, or another roadmap capability automatically. Rendered Playwright/Axe evidence does not establish actual browser zoom, screen-reader, assistive-technology, forced-colors, full WCAG, complete touch workflow, browser/mobile diversity, or user-comprehension readiness.
+S2 and S2B are complete. SA0 (Scientific Architecture Contract Pass) is the named next handoff and remains unstarted. Do not start SA0, I2, C4, S3, O1/E1, composition runtime, SystemView runtime, multiscale runtime, adaptive-controller generalization, Lab/Atlas persistence, E3, F1, or another roadmap capability automatically. Rendered Playwright/Axe evidence does not establish actual browser zoom, screen-reader, assistive-technology, forced-colors, full WCAG, complete touch workflow, browser/mobile diversity, or user-comprehension readiness.
 
 Implemented runtime foundations include scenarios, snapshots, template-defined behavior modes, agent composition, interventions, experiments, run summaries/comparison, seeded randomness, metrics, spaces, template metadata, and a narrow Opinion Dynamics `socialLearning` behavior mode audited in Prompt 33D.
 
@@ -467,7 +483,7 @@ Prompt 35 and Prompt 35B were committed together in `7696381 feat: Implement Mod
 
 ## Next Recommended Prompt
 
-Prompt I0/I0B, PERF1/PERF1B, A0/A0B, I1/I1B, UR0R, S1/S1B, and S2 are complete. UR0's technical/expert layer is complete and its human comprehension gate remains pending. S2B: Visual Systems Workbench Audit is next and unstarted. Continue broader formative study separately. Do not begin S2B, SA0, I2, S3, O1/E1, C4, F1, or another roadmap capability automatically; I2 through I5B are not an unconditional sequence; C4 has no I5B dependency; F1 remains paused under E3 Analytical Lenses.
+Prompt I0/I0B, PERF1/PERF1B, A0/A0B, I1/I1B, UR0R, S1/S1B, S2, and S2B are complete. UR0's technical/expert layer is complete and its human comprehension gate remains pending. SA0 (Scientific Architecture Contract Pass) is the named next handoff and remains unstarted. Continue broader formative study separately. Do not begin SA0, I2, S3, O1/E1, C4, F1, or another roadmap capability automatically; I2 through I5B are not an unconditional sequence; C4 has no I5B dependency; F1 remains paused under E3 Analytical Lenses.
 
 Next recommended UI/design-system prompt after UX2B: `UI-DESIGN-SYSTEM-1: Rendered Responsive, Typography + Visualization Accessibility Audit`.
 

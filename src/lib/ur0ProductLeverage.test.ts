@@ -29,7 +29,8 @@ describe("UR0 product leverage and comprehension gate", () => {
     expect(roadmap).toContain("S1 - Starter -> Remix Bridge | COMPLETE");
     expect(roadmap).toContain("S1B - Starter -> Remix Bridge Audit | COMPLETE");
     expect(roadmap).toContain("S2 - Visual Systems Workbench | COMPLETE");
-    expect(roadmap).toContain("S2B - Visual Systems Workbench Audit | NEXT / UNSTARTED");
+    expect(roadmap).toContain("S2B - Visual Systems Workbench Audit | COMPLETE");
+    expect(roadmap).toContain("SA0 - Scientific Architecture Contract Pass | NEXT / UNSTARTED");
     expect(roadmap).toContain("O1/E1 remain high-priority scientific infrastructure");
   });
 
@@ -44,7 +45,7 @@ describe("UR0 product leverage and comprehension gate", () => {
     expect(start).not.toContain('label: "Build a system"');
     expect(start).not.toContain("what Lab can record today");
     expect(destinations).toContain("Lab does not save records");
-    expect(destinations).toContain("Take apart working systems and remix supported pieces.");
+    expect(destinations).toContain("Take apart working systems and remix supported properties.");
     expect(comparison).toContain('placeholder="Run notes"');
     expect(comparison).not.toContain('placeholder="Observation notes"');
   });

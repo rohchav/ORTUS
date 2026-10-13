@@ -2,6 +2,7 @@
 paths:
   - "src/simulation/templates/**"
   - "src/simulation/socialLearning/**"
+  - "src/simulation/assumptions/profiles.ts"
   - "src/components/NeuralRuntimeLabPanel.tsx"
   - "src/components/neuralRuntimeLab.ts"
 ---
