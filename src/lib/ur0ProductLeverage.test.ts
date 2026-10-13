@@ -29,7 +29,8 @@ describe("UR0 product leverage and comprehension gate", () => {
     expect(roadmap).toContain("S1 - Starter -> Remix Bridge | COMPLETE");
     expect(roadmap).toContain("S1B - Starter -> Remix Bridge Audit | COMPLETE");
     expect(roadmap).toContain("S2 - Visual Systems Workbench | COMPLETE");
-    expect(roadmap).toContain("S2B - Visual Systems Workbench Audit | NEXT / UNSTARTED");
+    expect(roadmap).toContain("S2B - Visual Systems Workbench Audit | COMPLETE");
+    expect(roadmap).toContain("SA0 - Scientific Architecture Contract Pass | NEXT / UNSTARTED");
     expect(roadmap).toContain("O1/E1 remain high-priority scientific infrastructure");
   });
 

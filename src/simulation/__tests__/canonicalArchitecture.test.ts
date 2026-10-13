@@ -147,7 +147,7 @@ describe("A0 canonical architecture and source hierarchy", () => {
     expect(capabilities).toContain("Global service availability does not grant template support.");
   });
 
-  it("records the implemented Workbench and pending S2B audit without closing the human gate", () => {
+  it("records the implemented Workbench and completed S2B audit without closing the human gate", () => {
     const roadmap = source(canonicalPaths.roadmap);
     const activeStatus = [
       source(join(repoRoot, "README.md")),
@@ -164,7 +164,8 @@ describe("A0 canonical architecture and source hierarchy", () => {
     expect(roadmap).toContain("S1 - Starter -> Remix Bridge | COMPLETE");
     expect(roadmap).toContain("S1B - Starter -> Remix Bridge Audit | COMPLETE");
     expect(roadmap).toContain("S2 - Visual Systems Workbench | COMPLETE");
-    expect(roadmap).toContain("S2B - Visual Systems Workbench Audit | NEXT / UNSTARTED");
+    expect(roadmap).toContain("S2B - Visual Systems Workbench Audit | COMPLETE");
+    expect(roadmap).toContain("SA0 - Scientific Architecture Contract Pass | NEXT / UNSTARTED");
     expect(roadmap).toContain("UR0 HUMAN COMPREHENSION PENDING");
     expect(roadmap).toContain("S1B COMPLETE");
     expect(roadmap).toContain("S2 COMPLETE");

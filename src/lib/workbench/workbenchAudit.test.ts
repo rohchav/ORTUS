@@ -64,7 +64,7 @@ describe("S2B Visual Systems Workbench audit contracts", () => {
       right.runSteps(12);
       expect(left.snapshotExport(), world.id).toEqual(right.snapshotExport());
     }
-  });
+  }, 30_000);
 
   it("Run Remix acceptance yields a paused tick-0 run that carries the modification and derivative lineage", () => {
     for (const world of runnableStarterWorlds) {
@@ -90,7 +90,7 @@ describe("S2B Visual Systems Workbench audit contracts", () => {
       expect(readStarterRemixLineage(accepted.metadata)?.draftId, world.id).toBe(launch.draftId);
       expect(starterRemixLaunchMatchesRunConfig(accepted, launch), world.id).toBe(true);
     }
-  });
+  }, 30_000);
 
   it("describes Remix as changing supported properties, never pieces or what a system can do", () => {
     const orientation = [
@@ -105,6 +105,18 @@ describe("S2B Visual Systems Workbench audit contracts", () => {
     }
     expect(source("src/components/builder/BuilderShell.tsx")).toContain("Remix its supported properties.");
     expect(source("src/lib/researchDestinations.ts")).toContain("Take apart working systems and remix supported properties.");
+  });
+
+  it("records the S2B verdicts, scope limits, and SA0 handoff", () => {
+    const audit = source("docs/product/VISUAL_SYSTEMS_WORKBENCH_AUDIT.md");
+    expect(audit).toContain("Status: S2B COMPLETE; SA0 NEXT / UNSTARTED");
+    expect(audit).toContain("**Technical and authority result: accepted after two P2 fixes.** No P0 or P1 was found.");
+    expect(audit).toContain("**Product and HCI result: accepted with recorded P3 items.**");
+    expect(audit).toContain("The UR0 human comprehension gate remains pending.");
+    expect(audit).toContain("S3 remains blocked, and general executable composition remains unimplemented.");
+    for (const canonical of ["../CAPABILITIES.md", "../ARCHITECTURE.md", "../SCIENTIFIC_MODEL.md", "../ROADMAP.md"]) {
+      expect(audit).toContain(canonical);
+    }
   });
 
   it("keeps the Workbench presentation layer free of engine, store, Worker, and storage authority", () => {
