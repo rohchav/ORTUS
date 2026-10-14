@@ -4,6 +4,10 @@ Last updated: 2026-09-22 for S2 Visual Systems Workbench closure
 
 This file is continuation context, not canonical project authority. Use `docs/CAPABILITIES.md`, `docs/ARCHITECTURE.md`, `docs/SCIENTIFIC_MODEL.md`, and `docs/ROADMAP.md` after code/tests when current status or terminology conflicts with historical detail below.
 
+
+## CI Unblock (2026-10-14)
+
+Branch `chore/ci-unblock` (from `main` `c4c5980`) holds the dependency-audit fix, `next` 15.5.28, node24 action majors with `ubuntu-24.04` runners, Dependabot major-ignore rules, `@types/node` 24 and the CLAUDE.md backlog trace. It is pushed with a PR; merging waits for the user. Nothing under `src/` changed. Next steps after merge: close or rebase the superseded Dependabot PRs, merge `main` into `audit/s2b` (#11), then resume S2B. Gates still to run: CI on the PR. See the 2026-10-14 entry in `SESSION_LOG.md`.
 ## Current Prompt Status
 
 - R1 complete.
