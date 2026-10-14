@@ -16,3 +16,10 @@ Use the `ortus-audit` skill (`.claude/skills/ortus-audit/SKILL.md`) for every au
 
 ## Memory
 Auto memory is disabled for this project (`.claude/settings.json`). Durable decisions, corrections, and conventions go into the repository: AGENTS.md or a `.claude/rules/` file for standing rules, the canonical docs for capability, architecture, and roadmap facts, and milestone records or `docs/engineering/HARDENING.md` for evidence. If it isn't in the repository, the next session doesn't know it.
+
+## Backlog trace
+When a prompt names backlog IDs (e.g. ORT-012):
+- Add a trailer line to every commit for that work: `Backlog: ORT-012, ORT-015`.
+- Repeat that line in the session's SESSION_LOG.md entry (heading format stays `## YYYY-MM-DD - Title`, newest first).
+- End that entry with a `### Follow-ups` list: one bullet per new action item you found but didn't do, written as an outcome under 120 characters, or "None".
+Never create, renumber or close backlog IDs yourself.
