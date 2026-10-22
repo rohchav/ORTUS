@@ -4,6 +4,11 @@ Last updated: 2026-10-13 for S2B Visual Systems Workbench Audit closure (resynce
 
 This file is continuation context, not canonical project authority. Use `docs/CAPABILITIES.md`, `docs/ARCHITECTURE.md`, `docs/SCIENTIFIC_MODEL.md`, and `docs/ROADMAP.md` after code/tests when current status or terminology conflicts with historical detail below.
 
+
+## CI Unblock (2026-10-14)
+
+PR #13 merged to `main`: dependency-audit fix (`sharp`, `source-map-js`), `next` 15.5.28, node24 action majors with `ubuntu-24.04` runners, Dependabot major-ignore rules, `@types/node` 24, and the CLAUDE.md backlog trace. `main` is merged into `audit/s2b` (#11); the SESSION_LOG conflict kept both entries, newest first. See the 2026-10-14 entry in `SESSION_LOG.md`.
+
 ## Current Prompt Status
 
 - R1 complete.

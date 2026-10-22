@@ -1,5 +1,21 @@
 # ORTUS Codex Session Log
 
+## 2026-10-14 - CI unblock: dependency audit, runners and Dependabot
+
+Backlog: ORT-061, ORT-062, ORT-017, ORT-060
+
+Resumed from a clean `fix/next-15.5.27` worktree, checked `git status`, then branched `chore/ci-unblock` from `main` (`c4c5980`). Root cause of the failing "Dependency audit (high and critical)" check: two advisories published after Oct 1 against transitive production dependencies of `next`, with an unchanged lockfile. `sharp` 0.35.4 (GHSA-wq5f-xc86-pv6w, high, fixed 0.35.5) and `source-map-js` 1.2.1 (GHSA-68fv-2mgg-jv7q, high, fixed 1.2.2, via `next > postcss`). `next` 15.5.26 also carried two moderate cache-poisoning advisories that do not trip the gate. Reproduced on Node 24.16.0 / npm 11.13.0 after a clean `npm ci`; PR #12 failed because its lockfile still pinned both. Fixes: lockfile-only update of both packages, `next` ^15.5.28, `actions/checkout`, `setup-node` and `upload-artifact` v7 (node24), every job on `ubuntu-24.04`, Dependabot ignores semver-major for `next`, `zod`, `typescript` and `@types/node`, `@types/node` ^24 (typecheck passes), and the Backlog trace section in CLAUDE.md. The postcss override is kept. Nothing under `src/` changed.
+
+Gates run: `npm run verify` (typecheck, lint, unit, build) and `npm audit --audit-level=high` (0 vulnerabilities). `npm run test:ui` was not run locally; CI runs it on the PR.
+
+### Follow-ups
+
+- Move CI from `ubuntu-24.04` to the Ubuntu 26 runner image in its own change.
+- Plan the Next 16 migration (Dependabot #7 closed by the ignore rule).
+- Plan the Zod 4 migration (Dependabot #6 closed by the ignore rule).
+- Plan the TypeScript 7 migration (Dependabot #5 closed by the ignore rule).
+- Plan the @types/node major bump to follow any future `.nvmrc` change.
+
 ## 2026-10-13 — S2B Visual Systems Workbench Audit
 
 Prompt ID: S2B (Visual Systems Workbench audit and hardening, with state resync). Dates: 2026-10-07 to 2026-10-13.
@@ -81,7 +97,6 @@ S3: BLOCKED
 GENERAL EXECUTABLE COMPOSITION: NOT IMPLEMENTED
 UR0 HUMAN COMPREHENSION GATE: PENDING
 ```
-
 
 ## 2026-09-22 — S2 Visual Systems Workbench closure
 
