@@ -237,7 +237,7 @@ export function BuilderShell({ initialWorkspace, remixSource }: BuilderShellProp
         </div>
         <p>
           {activeExperience === "workbench"
-            ? "Open a working system. Discover its pieces. Change what it can do."
+            ? "Open a working system. Take it apart. Remix its supported properties."
             : "Describe and inspect non-runnable model structure. A valid structure is not automatically runnable."}
         </p>
       </header>

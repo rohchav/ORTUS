@@ -22,14 +22,15 @@ describe("S1B Starter Remix audit handoff", () => {
     expect(capabilities).toContain("secondary, structural, and non-executable");
   });
 
-  it("preserves the S1B handoff while recording the implemented S2 Workbench and pending audit", () => {
+  it("preserves the S1B handoff while recording the implemented S2 Workbench and its completed audit", () => {
     const roadmap = source("docs/ROADMAP.md");
     const audit = source("docs/product/STARTER_REMIX_BRIDGE_AUDIT.md");
     const combined = `${roadmap}\n${audit}`;
 
     expect(roadmap).toContain("S1B - Starter -> Remix Bridge Audit | COMPLETE");
     expect(roadmap).toContain("S2 - Visual Systems Workbench | COMPLETE");
-    expect(roadmap).toContain("S2B - Visual Systems Workbench Audit | NEXT / UNSTARTED");
+    expect(roadmap).toContain("S2B - Visual Systems Workbench Audit | COMPLETE");
+    expect(roadmap).toContain("SA0 - Scientific Architecture Contract Pass | NEXT / UNSTARTED");
     for (const phrase of [
       "taking working systems apart visually",
       "agents, cells, nodes, edges, fields, spaces, processes, and interactions",

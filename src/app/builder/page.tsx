@@ -5,7 +5,7 @@ import { resolveStarterRemixRequest } from "../../lib/starterWorlds";
 
 export const metadata: Metadata = {
   title: "Workshop | ORTUS",
-  description: "Take apart working systems and remix supported pieces in the Visual Systems Workbench."
+  description: "Take apart working systems and remix supported properties in the Visual Systems Workbench."
 };
 
 interface BuilderPageProps {
