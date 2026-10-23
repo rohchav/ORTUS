@@ -19,6 +19,10 @@ updates:
       # One weekly PR for all minor and patch updates; other major updates stay their own PR.
       npm-minor-and-patch:
         update-types: [minor, patch]
+        # axe-core ships new accessibility rules in minor releases, so these updates need their own review.
+        exclude-patterns:
+          - "@axe-core/*"
+          - "axe-core"
   - package-ecosystem: github-actions
     directory: /
     schedule:
