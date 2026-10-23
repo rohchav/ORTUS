@@ -91,6 +91,18 @@ test("nested decomposition and relationship navigation preserve inspectable piec
   await expect(inspector.getByRole("heading", { name: "Position", exact: true })).toBeVisible();
 });
 
+test("relationship trace buttons name both connected pieces as separate words", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await openWorkbench(page, "/builder");
+  const trace = page.getByRole("navigation", { name: "A path through this model" });
+  await expect(trace.getByRole("button")).toHaveCount(3);
+  await expect(trace.getByRole("button").nth(0)).toHaveAccessibleName("Position to Nearby neighbors");
+  await expect(trace.getByRole("button").nth(1)).toHaveAccessibleName("Nearby neighbors to Steering balance");
+  await expect(trace.getByRole("button").nth(2)).toHaveAccessibleName("Alignment to Velocity");
+  await trace.getByRole("button", { name: "Position to Nearby neighbors", exact: true }).click();
+  await expect(page.getByRole("button", { name: "Inspect Position", exact: true })).toBeFocused();
+});
+
 test("shared materials and curated questions expose capability boundaries without executable composition", async ({ page }) => {
   await openWorkbench(page, "/builder");
   await page.getByRole("button", { name: /Browse building blocks/ }).click();

@@ -6,7 +6,7 @@ export const builderExperiences = [
   {
     id: "workbench",
     label: "Workbench",
-    description: "Take apart examples and remix supported pieces."
+    description: "Take apart examples and remix supported properties."
   },
   {
     id: "guided",

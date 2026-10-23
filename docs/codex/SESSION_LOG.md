@@ -16,6 +16,88 @@ Gates run: `npm run verify` (typecheck, lint, unit, build) and `npm audit --audi
 - Plan the TypeScript 7 migration (Dependabot #5 closed by the ignore rule).
 - Plan the @types/node major bump to follow any future `.nvmrc` change.
 
+## 2026-10-13 — S2B Visual Systems Workbench Audit
+
+Prompt ID: S2B (Visual Systems Workbench audit and hardening, with state resync). Dates: 2026-10-07 to 2026-10-13.
+
+Starting state: `main` was clean at `c4c5980` (merge of PR #10), equal to `origin/main`. Node 24.16.0, npm 11.13.0. ROADMAP named S2B NEXT / UNSTARTED. HARDENING's latest phase was 3B, with no known P0 or P1 and nothing sequenced before S2B. No stop condition applied. `docs/codex/CURRENT_CONTEXT.md` lagged git history: it omitted hardening Phases 1–3B (PR #9) and the layered agent instructions (PR #10).
+
+HEAD before: `c4c5980`. HEAD after: the docs commit below.
+
+Commits (local only; nothing pushed):
+
+- `6ba2479` docs(codex): resync context to c4c5980
+- `4a0a1e7` chore(rules): widen path scopes flagged in PR #10 review
+- `cbede3d` fix(workbench): name both pieces in relationship trace buttons
+- `6adf036` fix(builder): describe Remix as changing supported properties
+- docs(s2b): record visual systems workbench audit (this entry's commit)
+
+Resync: CURRENT_CONTEXT now records Phase 1 (`28dca70`), Phase 2 (`2bb7bdc`, CI evidence `cd97cae`), Phase 3/3B (PR #9, `80d9060`; `101 files / 1,026 tests` at Phase 3B), and PR #10. It also records the resolved contradiction that the Phase 2 commit subjects do not describe their contents, which HARDENING already stated. ROADMAP status was not changed by the resync.
+
+Carry-over: `world-ui.md` now scopes the six root World components. `lab-atlas.md` scopes the five `src/lib` foundation and destination modules and their tests. `templates.md` scopes `src/simulation/assumptions/profiles.ts`. Every added path exists, and `agentInstructions.test.ts` passed `3/3`.
+
+Audit: the `ortus-audit` procedure was followed, with partial blindness, because orientation required reading the S2 record first. The record is `docs/product/VISUAL_SYSTEMS_WORKBENCH_AUDIT.md`.
+
+- P0: none. P1: none.
+- P2, fixed:
+  - Relationship-trace buttons had run-together accessible names.
+  - Orientation copy promised "Change what it can do" and "remix supported pieces".
+  - 2 of 2 new regression tests failed before their repairs.
+- P3: thirteen items recorded and not fixed (F3–F15 in the record). They include:
+  - the S1-era `/builder` promise-like-key guard: the middleware matcher excludes `/builder`, and the guard still fails closed
+  - the stale active-World handoff risk
+  - the narrow material Back state
+  - the shared-shell 320 px header overlap
+  - loose explanatory wording
+- Contract tests added in `src/lib/workbench/workbenchAudit.test.ts` (5):
+  - same-seed replay of a modified derivative for all 11 runnable Starters
+  - paused tick-0 acceptance with the modification and lineage, and no main-thread Flocking engine
+  - Remix copy limited to supported properties
+  - the audit-record pins
+  - Workbench presentation-layer authority
+- Rejected:
+  - the Phase 2 setup-only filter masking a failed apply
+  - ticking on `/builder`
+  - background-layer authority
+  - inaccurate template copy
+  - forged Remix identifiers substituting a run
+  - prototype keys reaching registry lookup
+- Rendered evidence: a production-build throwaway Playwright diagnostic (`7/7`, deleted before closure) covered:
+  - keyboard-only Workbench → Remix → World, ending "Paused · Tick 0 · Unsaved remix…"
+  - 320, 768 and 1280 px at DPR 2, and 390 px
+  - reduced motion
+  - narrow drill-in and return
+  - Axe with zero violations
+  - inspected screenshots
+
+Gates (final tree):
+
+| Gate | Result |
+| --- | --- |
+| `npm run typecheck` | PASS (18.1s) |
+| `npm run lint` | PASS; scoped TypeScript/unused-symbol baseline plus "Architecture lint passed (397 production TypeScript files checked)" (20.0s) |
+| `npm test` | PASS; `103 files / 1,034 tests` (68.9s); determinism and per-template same-seed tests unchanged since `c4c5980` |
+| `npm run build` | PASS; Next.js 15.5.26 compiled in 8.0s; 23/23 pages |
+| `CI=1 npm run test:ui` (production server, 1 retry, flaky fails) | PASS; `221/221` in 13.4m; 0 retries, 0 flaky, 0 failed, 0 skipped; exit 0 |
+| `npm run perf:runtime` | Not run: no runtime, Worker, kernel, template or simulation file changed |
+| `git diff --check` | Clean |
+
+Not verified: screen reader and assistive technology, forced colors, real browser zoom, touch hardware, participant comprehension, and formal WCAG. The Flocking Worker-rejection path after Run Remix was not re-run in S2B. `npm run perf:runtime` was not run because no runtime, Worker, kernel or template file changed.
+
+Interruptions: an earlier complete-browser invocation on 2026-10-09 passed its first 60 cases. It was then cut off when the session and machine ended, and produced no result. It is recorded as an infrastructure interruption, not as a pass or a retry.
+
+Deferred: F3–F15. F7 (extend the unsafe-key middleware to `/builder`) and F10 (stale active-World handoff) suit a later hardening pass.
+
+Recommended next prompt: SA0 — Scientific Architecture Contract Pass, as a dedicated prompt with no implementation by taxonomy alone. S3 stays blocked. The UR0 human comprehension gate remains pending.
+
+```text
+S2B: COMPLETE
+SA0: NEXT / UNSTARTED
+S3: BLOCKED
+GENERAL EXECUTABLE COMPOSITION: NOT IMPLEMENTED
+UR0 HUMAN COMPREHENSION GATE: PENDING
+```
+
 ## 2026-09-22 — S2 Visual Systems Workbench closure
 
 Continued the preserved S2 worktree on `main` from `fbc0622274df59a7472b042478ad33e8fe0e5831`. Resume checks found all intentional changes unstaged, no partial S2 commit, and no unrelated work. No reset, restore, stash, clean or milestone restart was performed. Normal `/builder` now opens the assembled Visual Systems Workbench, and Starter → Remix uses the same surface. Guided/Advanced remain secondary structural tooling. Seven template explanations share deterministic pieces, hierarchy, relationships and reusable materials. Contextual property references resolve existing authoritative template/scenario contracts; the original S1/S1B bridge owns derivative acceptance and launch. Workshop owns no simulation state, engine/RNG/scheduler, generic composition, executable graph, compiler or persistence. Flocking retains one Worker authority and legacy template paths remain unchanged.

@@ -1,6 +1,6 @@
 # ORTUS Canonical Roadmap
 
-Status: CURRENT future-sequencing source of truth after S2
+Status: CURRENT future-sequencing source of truth after S2B
 
 This roadmap controls milestone status and dependency order. It is not a capability claim. `CAPABILITIES.md` determines what exists now, and every implementation milestone requires its dedicated scope and audit.
 
@@ -18,7 +18,8 @@ This roadmap controls milestone status and dependency order. It is not a capabil
 | S1 - Starter -> Remix Bridge | COMPLETE | Existing Starter-backed scenarios can be forked into unsaved, configuration-only derivatives and launched through established runtime authority without generic model execution; see `product/STARTER_REMIX_BRIDGE.md` |
 | S1B - Starter -> Remix Bridge Audit | COMPLETE | Hardened canonical lineage, accepted-run isolation, one-use active-World transfer, reset/rebuild semantics, runtime authority, query rejection, accessibility evidence, and capability truth; see `product/STARTER_REMIX_BRIDGE_AUDIT.md` |
 | S2 - Visual Systems Workbench | COMPLETE | Primary assembled-system Workshop with accepted rendered product review, contextual S1 controls and explicit capability states; no generic executable composition; see `product/VISUAL_SYSTEMS_WORKBENCH.md` |
-| S2B - Visual Systems Workbench Audit | NEXT / UNSTARTED | Independent audit is the next handoff; not begun |
+| S2B - Visual Systems Workbench Audit | COMPLETE | Independent audit found no P0/P1, fixed two P2 families (relationship-trace accessible names; orientation copy overstating Remix), and recorded P3 items; see `product/VISUAL_SYSTEMS_WORKBENCH_AUDIT.md` |
+| SA0 - Scientific Architecture Contract Pass | NEXT / UNSTARTED | Named handoff after S2B; requires its dedicated prompt; not begun |
 
 Canonical immediate dependency:
 
@@ -34,10 +35,11 @@ PERF1B COMPLETE
   -> S1 COMPLETE
   -> S1B COMPLETE
   -> S2 COMPLETE
-  -> S2B NEXT / UNSTARTED
+  -> S2B COMPLETE
+  -> SA0 NEXT / UNSTARTED
 ```
 
-I1 does not automatically trigger I2, I3, I4, or I5. The former unconditional immersive sequence is superseded. C4 is not deferred until I5B. The human gate remains pending. S1/S1B establish only the bounded audited Starter derivative bridge; they do not validate beginner comprehension, endorse the former form-first Workshop as the future product, or authorize generic executable authoring. S2 is complete and makes the Visual Systems Workbench primary; S2B is next and remains unstarted. S3 remains blocked on explicit executable-composition foundations.
+I1 does not automatically trigger I2, I3, I4, or I5. The former unconditional immersive sequence is superseded. C4 is not deferred until I5B. The human gate remains pending. S1/S1B establish only the bounded audited Starter derivative bridge; they do not validate beginner comprehension, endorse the former form-first Workshop as the future product, or authorize generic executable authoring. S2 is complete and makes the Visual Systems Workbench primary; S2B audited it and is complete. SA0 (Scientific Architecture Contract Pass) is next and unstarted. S3 remains blocked on explicit executable-composition foundations.
 
 ## Status Vocabulary
 
@@ -199,4 +201,4 @@ All future work must pass the relevant gates:
 
 ## Next Action
 
-S2B — Visual Systems Workbench Audit is next and unstarted. Its dedicated prompt should independently review the completed S2 product and authority boundaries. Do not begin S2B, SA0, S3, O1/E1, or I2 automatically. S3 remains blocked; general executable composition remains unimplemented. Continue broader UR0 formative study separately because the human comprehension gate remains pending.
+S2B — Visual Systems Workbench Audit is complete; its record is `product/VISUAL_SYSTEMS_WORKBENCH_AUDIT.md`. SA0 — Scientific Architecture Contract Pass is next and unstarted; it requires its own dedicated prompt and implements nothing by taxonomy alone. Do not begin SA0, S3, O1/E1, or I2 automatically. S3 remains blocked; general executable composition remains unimplemented. Continue broader UR0 formative study separately because the human comprehension gate remains pending.

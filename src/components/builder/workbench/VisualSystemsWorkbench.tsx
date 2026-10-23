@@ -260,7 +260,7 @@ export function VisualSystemsWorkbench({ world, scenario, initialPieceId, render
                 const from = model.pieces.find(piece => piece.id === relation.from)!;
                 const to = model.pieces.find(piece => piece.id === relation.to)!;
                 return <button type="button" key={relation.id} onClick={() => inspect(from, true)}>
-                  {from.label}<i aria-hidden="true">→</i>{to.label}
+                  {from.label}<i aria-hidden="true">→</i><span className="sr-only"> to </span>{to.label}
                 </button>;
               })}
             </nav> : null}
